@@ -13,10 +13,10 @@ def test_get_application_statuses_csv(flask_test_client, seed_application_record
     )
 
     lines = response.text.split("\r\n")
-    assert lines[0] == "fund_id,round_id,NOT_STARTED,IN_PROGRESS,COMPLETED,SUBMITTED"
-    assert f"{test_application_data[0]['fund_id']},{test_application_data[0]['round_id']},1,0,0,0" in lines
-    assert f"{test_application_data[1]['fund_id']},{test_application_data[1]['round_id']},1,0,0,0" in lines
-    assert f"{test_application_data[2]['fund_id']},{test_application_data[2]['round_id']},1,0,0,0" in lines
+    assert lines[0] == "fund_id,round_id,NOT_STARTED,IN_PROGRESS,COMPLETED,SUBMITTED,CHANGES_REQUESTED"
+    assert f"{test_application_data[0]['fund_id']},{test_application_data[0]['round_id']},1,0,0,0,0" in lines
+    assert f"{test_application_data[1]['fund_id']},{test_application_data[1]['round_id']},1,0,0,0,0" in lines
+    assert f"{test_application_data[2]['fund_id']},{test_application_data[2]['round_id']},1,0,0,0,0" in lines
 
     app = get_row_by_pk(Applications, seed_application_records[0].id)
     app.status = "IN_PROGRESS"
@@ -29,10 +29,10 @@ def test_get_application_statuses_csv(flask_test_client, seed_application_record
     )
 
     lines = response.text.split("\r\n")
-    assert lines[0] == "fund_id,round_id,NOT_STARTED,IN_PROGRESS,COMPLETED,SUBMITTED"
-    assert f"{test_application_data[0]['fund_id']},{test_application_data[0]['round_id']},0,1,0,0" in lines
-    assert f"{test_application_data[1]['fund_id']},{test_application_data[1]['round_id']},1,0,0,0" in lines
-    assert f"{test_application_data[2]['fund_id']},{test_application_data[2]['round_id']},1,0,0,0" in lines
+    assert lines[0] == "fund_id,round_id,NOT_STARTED,IN_PROGRESS,COMPLETED,SUBMITTED,CHANGES_REQUESTED"
+    assert f"{test_application_data[0]['fund_id']},{test_application_data[0]['round_id']},0,1,0,0,0" in lines
+    assert f"{test_application_data[1]['fund_id']},{test_application_data[1]['round_id']},1,0,0,0,0" in lines
+    assert f"{test_application_data[2]['fund_id']},{test_application_data[2]['round_id']},1,0,0,0,0" in lines
 
 
 user_lang = {

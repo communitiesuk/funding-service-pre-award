@@ -27,6 +27,7 @@ from application_store.db.queries import (
     upsert_feedback,
 )
 from application_store.db.queries.application import create_qa_base64file
+from application_store.db.queries.application.queries import patch_application
 from application_store.db.queries.feedback import (
     retrieve_all_feedbacks_and_surveys,
     retrieve_end_of_application_survey_data,
@@ -401,6 +402,30 @@ class ApplicationResearchView(MethodView):
         }, 404
 
 
+class RequestChangesView(MethodView):
+    def post(self, application_id: str):
+        try:
+            application = get_application(
+                application_id,
+                include_forms=True,
+            )
+        except NoResultFound:
+            return {
+                "code": 404,
+                "message": f"Application {application_id} not found",
+            }, 404
+
+        args = request.get_json()
+
+        patch_application(
+            application=application,
+            field_ids=args["field_ids"],
+            message=args["feedback_message"],
+        )
+
+        return {}, 204
+
+
 application_store_bp.add_url_rule(
     "/application/feedback", view_func=ApplicationFeedbackView.as_view("application_feedback")
 )
@@ -437,4 +462,9 @@ application_store_bp.add_url_rule(
 application_store_bp.add_url_rule(
     "/applications/get_all_feedbacks_and_survey_report",
     view_func=GetAllFeedbacksAndSurveyReportView.as_view("get_all_feedbacks_and_survey_report"),
+)
+
+application_store_bp.add_url_rule(
+    "/application/<application_id>/request_changes",
+    view_func=RequestChangesView.as_view("post_request_changes"),
 )

@@ -117,3 +117,7 @@ dev = [
     "requests-mock==1.11.0",
     "ruff==0.8.4",
 ]
+
+[tool.mypy]
+ignore_missing_imports = true
+disable_error_code = ["import-untyped"]
