@@ -1,8 +1,25 @@
+import dataclasses
 import os
+import uuid
 
 from flask import current_app
 from fsd_utils import NotifyConstants
 from notifications_python_client import NotificationsAPIClient
+from notifications_python_client.errors import APIError, TokenError
+
+
+class NotificationError(Exception):
+    def __init__(
+        self,
+        message="There was a problem sending the email through GOV.UK Notify",
+    ):
+        self.message = message
+        super().__init__(self.message)
+
+
+@dataclasses.dataclass(frozen=True)
+class Notification:
+    id: uuid.UUID
 
 
 class NotificationService:
@@ -97,21 +114,47 @@ class NotificationService:
         govuk_notify_reference: str | None = None,
         email_reply_to_id: str | None = None,
         one_click_unsubscribe_url: str | None = None,
-    ):
+    ) -> Notification:
         if self.disabled:
             current_app.logger.info(
                 "Notification service is disabled. Would have sent email to {email_address}",
                 extra=dict(email_address=email_address),
             )
-            return
+            return Notification(id=uuid.UUID("00000000-0000-0000-0000-000000000000"))
 
-        return self.client.send_email_notification(
+        try:
+            notification_data = self.client.send_email_notification(
+                email_address,
+                template_id,
+                personalisation=personalisation,
+                reference=govuk_notify_reference,
+                email_reply_to_id=email_reply_to_id,
+                one_click_unsubscribe_url=one_click_unsubscribe_url,
+            )
+            return Notification(id=uuid.UUID(notification_data["id"]))
+        except (TokenError, APIError) as e:
+            raise NotificationError() from e
+
+    def send_magic_link(
+        self,
+        email_address: str,
+        magic_link_url: str,
+        fund_name: str,
+        contact_help_email: str,
+        request_new_link_url: str,
+        govuk_notify_reference: str | None = None,
+    ) -> Notification:
+        return self._send_email(
             email_address,
-            template_id,
-            personalisation=personalisation,
-            reference=govuk_notify_reference,
-            email_reply_to_id=email_reply_to_id,
-            one_click_unsubscribe_url=one_click_unsubscribe_url,
+            self.MAGIC_LINK_TEMPLATE_ID,
+            personalisation={
+                "name of fund": fund_name,
+                "link to application": magic_link_url,
+                "contact details": contact_help_email,
+                "request new link url": request_new_link_url,
+            },
+            govuk_notify_reference=govuk_notify_reference,
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
         )
 
 

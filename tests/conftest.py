@@ -39,3 +39,15 @@ def mock_redis(session_mocker):
 def flask_test_client(app):
     with app.test_client() as test_client:
         yield test_client
+
+
+@pytest.fixture(scope="function")
+def mock_notification_service_calls(mocker):
+    calls = []
+
+    mocker.patch(
+        "services.notify.NotificationService._send_email",
+        side_effect=lambda *args, **kwargs: calls.append(mocker.call(*args, **kwargs)),
+    )
+
+    yield calls

@@ -840,6 +840,7 @@ dev = [
     { name = "pytest-html" },
     { name = "pytest-mock" },
     { name = "requests-mock" },
+    { name = "responses" },
     { name = "ruff" },
 ]
 
@@ -918,6 +919,7 @@ dev = [
     { name = "pytest-html", specifier = "==4.1.1" },
     { name = "pytest-mock", specifier = "==3.14.0" },
     { name = "requests-mock", specifier = "==1.11.0" },
+    { name = "responses", specifier = ">=0.25.3" },
     { name = "ruff", specifier = "==0.8.4" },
 ]
 
