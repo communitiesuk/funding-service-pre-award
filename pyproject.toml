@@ -55,6 +55,7 @@ dependencies = [
     "sqlalchemy-utils==0.41.2",
     "sqlalchemy[mypy]==2.0.36",
     "xhtml2pdf==0.2.16",
+    "notifications-python-client>=10.0.1",
 ]
 
 [tool.djlint]
