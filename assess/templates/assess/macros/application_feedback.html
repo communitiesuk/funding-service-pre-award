@@ -1,0 +1,28 @@
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
+
+{% macro application_feedback(application_id, sub_criteria, current_theme_id) %}
+    <div class="govuk-!-margin-top-7">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+            Request application changes
+        </h2>
+        <p class="govuk-body govuk-!-margin-bottom-7">
+            Do you have feedback for this section to the applicant.
+        </p>
+        <div class="govuk-button-group">
+            <a href="#" class="govuk-button primary-button">
+                Approve
+            </a>
+            <a
+                href="{{ url_for(
+                    'assessment_bp.request_changes',
+                    application_id=application_id,
+                    sub_criteria_id=sub_criteria.id,
+                    theme_id=current_theme_id,
+                )}}"
+                class="govuk-button secondary-button">
+                Request changes
+            </a>
+        </div>
+    </div>
+{% endmacro %}

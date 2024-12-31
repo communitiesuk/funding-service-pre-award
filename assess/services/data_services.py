@@ -549,6 +549,8 @@ def submit_flag(
     section: str = None,
     allocation: str = None,
     flag_id: str = None,
+    field_ids: str = "",
+    is_change_request: bool = False,
 ) -> Flag | None:
     """Submits a new flag to the assessment store for an application.
     Returns Flag if a flag is created
@@ -559,7 +561,7 @@ def submit_flag(
     :param justification: The justification for raising the flag
     :param section: The assessment section the flag has been raised for.
     """
-    flag_type = FlagType[flag_type]
+
     if flag_id:
         flag = requests.put(
             Config.ASSESSMENT_FLAGS_POST_ENDPOINT,
@@ -568,7 +570,9 @@ def submit_flag(
                 "justification": justification,
                 "user_id": user_id,
                 "allocation": allocation,
-                "status": flag_type.value,
+                "status": FlagType[flag_type].value,
+                "is_change_request": is_change_request,
+                "field_ids": field_ids,
             },
         )
     else:
@@ -580,12 +584,17 @@ def submit_flag(
                 "sections_to_flag": section,
                 "user_id": user_id,
                 "allocation": allocation,
-                "status": flag_type.value,
+                "status": FlagType[flag_type].value,
+                "is_change_request": is_change_request,
+                "field_ids": field_ids,
             },
         )
+
     if flag:
         flag_json = flag.json()
         return Flag.from_dict(flag_json)
+
+    return None
 
 
 def get_all_uploaded_documents_theme_answers(

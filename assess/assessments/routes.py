@@ -90,6 +90,7 @@ from assess.config.display_value_mappings import (
     landing_filters,
     search_params_default,
 )
+from assess.flagging.forms.request_changes_form import RequestChangesForm
 from assess.scoring.helpers import get_scoring_class
 from assess.services.aws import get_file_for_download_from_aws
 from assess.services.data_services import (
@@ -120,8 +121,10 @@ from assess.services.data_services import (
     get_users_for_fund,
     match_comment_to_theme,
     submit_comment,
+    submit_flag,
 )
 from assess.services.models.comment import CommentType
+from assess.services.models.flag import FlagType
 from assess.services.models.fund import Fund
 from assess.services.models.round import Round
 from assess.services.models.theme import Theme
@@ -1230,6 +1233,7 @@ def display_sub_criteria(
 
     common_template_config = {
         "sub_criteria": sub_criteria,
+        "fund": get_fund(sub_criteria.fund_id),
         "application_id": application_id,
         "comments": theme_matched_comments,
         "is_flaggable": False,  # Flag button is disabled in sub-criteria page,
@@ -1253,6 +1257,60 @@ def display_sub_criteria(
         state=state,
         migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
         **common_template_config,
+    )
+
+
+@assessment_bp.route(
+    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/request_change",
+    methods=["GET", "POST"],
+)
+@check_access_application_id
+def request_changes(application_id, sub_criteria_id, theme_id):
+    sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
+    current_theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
+    state = get_state_for_tasklist_banner(application_id)
+    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
+
+    form = RequestChangesForm(
+        question_choices=[(question["field_id"], question["question"]) for question in theme_answers_response]
+    )
+
+    if request.method == "POST" and form.validate_on_submit():
+        submit_flag(
+            application_id=application_id,
+            flag_type=FlagType.RAISED.name,
+            user_id=g.account_id,
+            justification=form.justification.data,
+            field_ids=form.field_ids.data,
+            section=[sub_criteria_id],
+            is_change_request=True,
+        )
+
+        # update apply.status apply.forms[].status and each form.question[].status
+
+        return redirect(
+            url_for(
+                "assessment_bp.display_sub_criteria",
+                application_id=application_id,
+                sub_criteria_id=sub_criteria_id,
+                theme_id=theme_id,
+            )
+        )
+
+    return render_template(
+        "assessments/request_changes.html",
+        form=form,
+        question_choices=[
+            {"text": label, "value": value, "checked": value in (form.field_ids.data or [])}
+            for value, label in form.field_ids.choices
+        ],
+        state=state,
+        sub_criteria=sub_criteria,
+        fund=get_fund(sub_criteria.fund_id),
+        application_id=application_id,
+        current_theme=current_theme,
+        assessment_status=assessment_status,
     )
 
 
