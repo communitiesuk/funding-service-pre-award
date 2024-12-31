@@ -295,6 +295,35 @@ class NotificationService:
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
         )
 
+    def send_incomplete_application_email(
+        self,
+        email_address: str,
+        fund_name: str,
+        application_reference: str,
+        round_name: str,
+        questions: str,
+        contact_help_email: str,
+        govuk_notify_reference: str | None = None,
+    ) -> Notification:
+        return self._send_email(
+            email_address,
+            self.APPLICATION_INCOMPLETE_TEMPLATE_ID,
+            personalisation={
+                "name of fund": fund_name,
+                "application reference": application_reference,
+                "round name": round_name,
+                "question": {
+                    "file": questions,
+                    "filename": None,
+                    "confirm_email_before_download": None,
+                    "retention_period": None,
+                },
+                "contact email": contact_help_email,
+            },
+            govuk_notify_reference=govuk_notify_reference,
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
+        )
+
 
 def get_notification_service() -> NotificationService:
     return current_app.extensions["notification_service"]
