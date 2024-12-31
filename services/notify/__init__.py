@@ -99,12 +99,10 @@ class NotificationService:
 
     def __init__(self):
         self.client: NotificationsAPIClient | None = None
-        self.disabled = False
 
     def init_app(self, app):
         app.extensions["notification_service"] = self
-        self.client = NotificationsAPIClient(app.config["GOV_NOTIFY_API_KEY"])
-        self.disabled = app.config["DISABLE_NOTIFICATION_SERVICE"]
+        app.extensions["notification_service.client"] = NotificationsAPIClient(app.config["GOV_NOTIFY_API_KEY"])
 
     def _send_email(
         self,
@@ -115,7 +113,7 @@ class NotificationService:
         email_reply_to_id: str | None = None,
         one_click_unsubscribe_url: str | None = None,
     ) -> Notification:
-        if self.disabled:
+        if current_app.config["DISABLE_NOTIFICATION_SERVICE"]:
             current_app.logger.info(
                 "Notification service is disabled. Would have sent email to {email_address}",
                 extra=dict(email_address=email_address),
@@ -123,7 +121,7 @@ class NotificationService:
             return Notification(id=uuid.UUID("00000000-0000-0000-0000-000000000000"))
 
         try:
-            notification_data = self.client.send_email_notification(
+            notification_data = current_app.extensions["notification_service.client"].send_email_notification(
                 email_address,
                 template_id,
                 personalisation=personalisation,
