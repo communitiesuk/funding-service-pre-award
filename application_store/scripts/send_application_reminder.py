@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import sys
 
+from services.notify import get_notification_service
+
 sys.path.insert(1, ".")
 
 from datetime import datetime  # noqa: E402
@@ -13,9 +15,6 @@ from application_store import external_services  # noqa: E402
 from application_store.db.queries import search_applications  # noqa: E402
 from application_store.external_services.exceptions import (
     NotificationError,  # noqa: E402
-)
-from application_store.external_services.models.notification import (
-    Notification,  # noqa: E402
 )
 from config import Config  # noqa: E402
 
@@ -92,14 +91,20 @@ def application_deadline_reminder(flask_app):  # noqa:C901 from before ruff
                             )
 
                             try:
-                                message_id = Notification.send(
-                                    template_type=Config.NOTIFY_TEMPLATE_APPLICATION_DEADLINE_REMINDER,  # noqa: E501
-                                    to_email=email.get("email"),
-                                    content=application,
+                                notification = get_notification_service().send_application_deadline_reminder_email(
+                                    email.get("email"),
+                                    fund_name=application["application"]["fund_name"],
+                                    application_reference=application["application"]["reference"],
+                                    round_name=application["application"]["round_name"],
+                                    deadline=application["application"]["deadline_date"],
+                                    contact_help_email=application["application"]["contact_help_email"],
                                 )
                                 current_app.logger.info(
-                                    "Message added to the queue msg_id: [{message_id}]",
-                                    extra=dict(message_id=message_id),
+                                    "Sent notification {notification_id} for application {application_reference}",
+                                    extra=dict(
+                                        notification_id=notification.id,
+                                        application_reference=application["application"]["reference"],
+                                    ),
                                 )
                                 if len(unique_application_email_addresses) == count:
                                     try:

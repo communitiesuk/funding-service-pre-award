@@ -324,6 +324,29 @@ class NotificationService:
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
         )
 
+    def send_application_deadline_reminder_email(
+        self,
+        email_address: str,
+        fund_name: str,
+        application_reference: str,
+        round_name: str,
+        deadline: str,
+        contact_help_email: str,
+        govuk_notify_reference: str | None = None,
+    ) -> Notification:
+        return self._send_email(
+            email_address,
+            self.APPLICATION_DEADLINE_REMINDER_TEMPLATE_ID,
+            personalisation={
+                "name of fund": fund_name,
+                "application reference": application_reference,
+                "round name": round_name,
+                "application deadline": deadline,
+            },
+            govuk_notify_reference=govuk_notify_reference,
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
+        )
+
 
 def get_notification_service() -> NotificationService:
     return current_app.extensions["notification_service"]
