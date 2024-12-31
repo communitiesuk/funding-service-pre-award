@@ -25,6 +25,19 @@ class Notification:
     id: uuid.UUID
 
 
+def _format_submitted_datetime(submission_date):
+    if submission_date is None:
+        return submission_date
+
+    UTC_timezone = pytz.timezone("UTC")
+    UK_timezone = pytz.timezone("Europe/London")
+    UK_datetime = UTC_timezone.localize(datetime.strptime(submission_date, "%Y-%m-%dT%H:%M:%S.%f")).astimezone(
+        UK_timezone
+    )
+
+    return UK_datetime.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
+
+
 class NotificationService:
     MAGIC_LINK_TEMPLATE_ID = os.environ.get("MAGIC_LINK_TEMPLATE_ID", "02a6d48a-f227-4b9a-9dd7-9e0cf203c8a2")
 
@@ -176,16 +189,7 @@ class NotificationService:
             "template_id"
         ].get(language, "en")
 
-        if submission_date is not None:
-            UTC_timezone = pytz.timezone("UTC")
-            UK_timezone = pytz.timezone("Europe/London")
-            UK_datetime = UTC_timezone.localize(datetime.strptime(submission_date, "%Y-%m-%dT%H:%M:%S.%f")).astimezone(
-                UK_timezone
-            )
-
-            submission_date = (
-                UK_datetime.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
-            )
+        submission_date = _format_submitted_datetime(submission_date)
 
         return self._send_email(
             email_address,
@@ -226,16 +230,7 @@ class NotificationService:
             NotifyConstants.TEMPLATE_TYPE_EOI_PASS_W_CAVEATS
         ]["template_id"].get(language, "en")
 
-        if submission_date is not None:
-            UTC_timezone = pytz.timezone("UTC")
-            UK_timezone = pytz.timezone("Europe/London")
-            UK_datetime = UTC_timezone.localize(datetime.strptime(submission_date, "%Y-%m-%dT%H:%M:%S.%f")).astimezone(
-                UK_timezone
-            )
-
-            submission_date = (
-                UK_datetime.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
-            )
+        submission_date = _format_submitted_datetime(submission_date)
 
         return self._send_email(
             email_address,
@@ -277,16 +272,7 @@ class NotificationService:
             else self.APPLICATION_SUBMISSION_TEMPLATE_ID_EN
         )
 
-        if submission_date is not None:
-            UTC_timezone = pytz.timezone("UTC")
-            UK_timezone = pytz.timezone("Europe/London")
-            UK_datetime = UTC_timezone.localize(datetime.strptime(submission_date, "%Y-%m-%dT%H:%M:%S.%f")).astimezone(
-                UK_timezone
-            )
-
-            submission_date = (
-                UK_datetime.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
-            )
+        submission_date = _format_submitted_datetime(submission_date)
 
         return self._send_email(
             email_address,
