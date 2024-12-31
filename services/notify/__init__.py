@@ -1,7 +1,10 @@
 import dataclasses
 import os
 import uuid
+from datetime import datetime
+from typing import Literal
 
+import pytz
 from flask import current_app
 from fsd_utils import NotifyConstants
 from notifications_python_client import NotificationsAPIClient
@@ -150,6 +153,157 @@ class NotificationService:
                 "link to application": magic_link_url,
                 "contact details": contact_help_email,
                 "request new link url": request_new_link_url,
+            },
+            govuk_notify_reference=govuk_notify_reference,
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
+        )
+
+    def send_eoi_pass_email(
+        self,
+        email_address: str,
+        contact_name: str,
+        language: Literal["en", "cy"],
+        fund_id: str,
+        fund_name: str,
+        application_reference: str,
+        submission_date: str,
+        round_name: str,
+        questions: str,
+        contact_help_email: str,
+        govuk_notify_reference: str | None = None,
+    ) -> Notification:
+        template_id = self.EXPRESSION_OF_INTEREST_TEMPLATE_ID[fund_id][NotifyConstants.TEMPLATE_TYPE_EOI_PASS][
+            "template_id"
+        ].get(language, "en")
+
+        if submission_date is not None:
+            UTC_timezone = pytz.timezone("UTC")
+            UK_timezone = pytz.timezone("Europe/London")
+            UK_datetime = UTC_timezone.localize(datetime.strptime(submission_date, "%Y-%m-%dT%H:%M:%S.%f")).astimezone(
+                UK_timezone
+            )
+
+            submission_date = (
+                UK_datetime.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
+            )
+
+        return self._send_email(
+            email_address,
+            template_id,
+            personalisation={
+                "name of fund": fund_name,
+                "application reference": application_reference,
+                "date submitted": submission_date,
+                "round name": round_name,
+                "question": {
+                    "file": questions,
+                    "filename": None,
+                    "confirm_email_before_download": None,
+                    "retention_period": None,
+                },
+                "full name": contact_name,
+            },
+            govuk_notify_reference=govuk_notify_reference,
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
+        )
+
+    def send_eoi_pass_with_caveats_email(
+        self,
+        email_address: str,
+        contact_name: str,
+        language: Literal["en", "cy"],
+        fund_id: str,
+        fund_name: str,
+        application_reference: str,
+        submission_date: str,
+        round_name: str,
+        questions: str,
+        caveats: str,
+        contact_help_email: str,
+        govuk_notify_reference: str | None = None,
+    ) -> Notification:
+        template_id = self.EXPRESSION_OF_INTEREST_TEMPLATE_ID[fund_id][
+            NotifyConstants.TEMPLATE_TYPE_EOI_PASS_W_CAVEATS
+        ]["template_id"].get(language, "en")
+
+        if submission_date is not None:
+            UTC_timezone = pytz.timezone("UTC")
+            UK_timezone = pytz.timezone("Europe/London")
+            UK_datetime = UTC_timezone.localize(datetime.strptime(submission_date, "%Y-%m-%dT%H:%M:%S.%f")).astimezone(
+                UK_timezone
+            )
+
+            submission_date = (
+                UK_datetime.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
+            )
+
+        return self._send_email(
+            email_address,
+            template_id,
+            personalisation={
+                "name of fund": fund_name,
+                "application reference": application_reference,
+                "date submitted": submission_date,
+                "round name": round_name,
+                "question": {
+                    "file": questions,
+                    "filename": None,
+                    "confirm_email_before_download": None,
+                    "retention_period": None,
+                },
+                "caveats": caveats,
+                "full name": contact_name,
+            },
+            govuk_notify_reference=govuk_notify_reference,
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
+        )
+
+    def send_submit_application_email(
+        self,
+        email_address: str,
+        language: Literal["en", "cy"],
+        fund_name: str,
+        application_reference: str,
+        submission_date: str,
+        round_name: str,
+        questions: str,
+        prospectus_url: str,
+        contact_help_email: str,
+        govuk_notify_reference: str | None = None,
+    ) -> Notification:
+        template_id = (
+            self.APPLICATION_SUBMISSION_TEMPLATE_ID_CY
+            if language == "cy"
+            else self.APPLICATION_SUBMISSION_TEMPLATE_ID_EN
+        )
+
+        if submission_date is not None:
+            UTC_timezone = pytz.timezone("UTC")
+            UK_timezone = pytz.timezone("Europe/London")
+            UK_datetime = UTC_timezone.localize(datetime.strptime(submission_date, "%Y-%m-%dT%H:%M:%S.%f")).astimezone(
+                UK_timezone
+            )
+
+            submission_date = (
+                UK_datetime.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
+            )
+
+        return self._send_email(
+            email_address,
+            template_id,
+            personalisation={
+                "name of fund": fund_name,
+                "application reference": application_reference,
+                "date submitted": submission_date,
+                "round name": round_name,
+                "question": {
+                    "file": questions,
+                    "filename": None,
+                    "confirm_email_before_download": None,
+                    "retention_period": None,
+                },
+                "URL of prospectus": prospectus_url,
+                "contact email": contact_help_email,
             },
             govuk_notify_reference=govuk_notify_reference,
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
