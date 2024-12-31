@@ -38,7 +38,7 @@ def application_deadline_reminder(flask_app):  # noqa:C901 from before ruff
                 if not reminder_date_str:
                     current_app.logger.info(
                         "No reminder is set for the round {round_title}",
-                        extra=round.get("title"),
+                        extra=dict(round_title=round.get("title")),
                     )
                     continue
 
