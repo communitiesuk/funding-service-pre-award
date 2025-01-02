@@ -71,6 +71,7 @@ class AssessmentRecord(BaseModel):
         "AssessmentFlag",
         primaryjoin="and_(AssessmentFlag.application_id == AssessmentRecord.application_id, "
         "AssessmentFlag.is_change_request == True)",
+        overlaps="flags",
     )
     # These are defined as column_properties not as hybrid_property due to performance
     # Using column_property below forces the json parsing to be done on the DB side which is quicker than in python
