@@ -378,15 +378,15 @@ wheels = [
 
 [[package]]
 name = "dataclass-dict-convert"
-version = "1.7.3"
+version = "1.7.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "python-dateutil" },
     { name = "stringcase" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/60/64/6c54cb0ba925cfc2acc496a7b3d28b4a4fbddc8e92dd11633a1e31b9c87b/dataclass-dict-convert-1.7.3.tar.gz", hash = "sha256:80dbcf625afa03fcc16f0a03f1a52a6e03b83d751b2550b5cef373e9f71758e1", size = 21574 }
+sdist = { url = "https://files.pythonhosted.org/packages/23/61/813d6eaa91a1e902ee1178e61852694ddc52f7eb2118ac209e755ac2244e/dataclass_dict_convert-1.7.4.tar.gz", hash = "sha256:66bfa54c68410d6b996d3b23c94d1dc5ed51450ed097745caa876240b0be020c", size = 21614 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8f/e4/99779d9bf0b9bbc77b09e7b62b763161032a9955e16e782a57b9d21dcf7d/dataclass_dict_convert-1.7.3-py3-none-any.whl", hash = "sha256:23c161cec19fe469cfddcec1c317fc426ea902454b222c4f44812d66b8cd52ad", size = 15545 },
+    { url = "https://files.pythonhosted.org/packages/67/1c/9f3280c0abc096d189563c3815ce153c8e84f8b68f728e9071af49ff0902/dataclass_dict_convert-1.7.4-py3-none-any.whl", hash = "sha256:7fae1595611d635f33683ea9de500417c42d3a420f79e5c879fd425b9a34cd00", size = 15540 },
 ]
 
 [[package]]
@@ -851,7 +851,7 @@ requires-dist = [
     { name = "boto3", specifier = "==1.35.7" },
     { name = "colored", specifier = "==2.2.4" },
     { name = "cssmin", specifier = "==0.2.0" },
-    { name = "dataclass-dict-convert", specifier = "==1.7.3" },
+    { name = "dataclass-dict-convert", specifier = "==1.7.4" },
     { name = "email-validator", specifier = "==2.2.0" },
     { name = "flask", specifier = "==3.0.3" },
     { name = "flask-assets", specifier = "==2.1.0" },

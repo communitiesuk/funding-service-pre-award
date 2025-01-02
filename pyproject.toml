@@ -14,7 +14,7 @@ dependencies = [
     "boto3==1.35.7",
     "colored==2.2.4",
     "cssmin==0.2.0",
-    "dataclass-dict-convert==1.7.3",
+    "dataclass-dict-convert==1.7.4",
     "email-validator==2.2.0",
     "flask-assets==2.1.0",
     "flask-babel==4.0.0",
