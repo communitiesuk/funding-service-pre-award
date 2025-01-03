@@ -1175,6 +1175,19 @@ def display_sub_criteria(
     state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
 
+    user_id_list = []
+    change_requests = []
+    for flag_data in flags_list:
+        if sub_criteria_id not in flag_data.sections_to_flag or not flag_data.is_change_request:
+            continue
+
+        change_requests.append(flag_data)
+        for flag_item in flag_data.updates:
+            if flag_item["user_id"] not in user_id_list:
+                user_id_list.append(flag_item["user_id"])
+
+    accounts_list = get_bulk_accounts_dict(user_id_list, state.fund_short_name)
+
     comment_response = get_comments(
         application_id=application_id,
         sub_criteria_id=sub_criteria_id,
@@ -1236,6 +1249,8 @@ def display_sub_criteria(
         "fund": get_fund(sub_criteria.fund_id),
         "application_id": application_id,
         "comments": theme_matched_comments,
+        "flags_list": change_requests,
+        "accounts_list": accounts_list,
         "is_flaggable": False,  # Flag button is disabled in sub-criteria page,
         "display_comment_box": add_comment_argument,
         "display_comment_edit_box": edit_comment_argument,
@@ -1254,6 +1269,7 @@ def display_sub_criteria(
     return render_template(
         "assessments/sub_criteria.html",
         answers_meta=answers_meta,
+        questions={question["field_id"]: question["question"] for question in theme_answers_response},
         state=state,
         migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
         **common_template_config,
@@ -1512,7 +1528,6 @@ def application(application_id):
         )
 
     state = get_state_for_tasklist_banner(application_id)
-    flags_list = get_flags(application_id)
 
     comment_response = get_comments(
         application_id=application_id,
@@ -1579,7 +1594,7 @@ def application(application_id):
         application_id=application_id,
         accounts_list=accounts_list,
         teams_flag_stats=teams_flag_stats,
-        flags_list=flags_list,
+        flags_list=[flag for flag in flags_list if not flag.is_change_request],
         is_flaggable=is_flaggable(flag_status),
         is_qa_complete=state.is_qa_complete,
         qa_complete=qa_complete,
