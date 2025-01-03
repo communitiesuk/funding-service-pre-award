@@ -62,6 +62,7 @@ from common.locale_selector.get_lang import get_lang
 from common.locale_selector.set_lang import LanguageSelector
 from config import Config
 from fund_store.api.routes import fund_store_bp
+from services.notify import NotificationService
 
 
 # TODO: Remove this when we have stripped out the HTTP/JSON interface between "pre-award-stores" and
@@ -141,6 +142,8 @@ def create_app() -> Flask:  # noqa: C901
             PrefixLoader({"govuk_frontend_jinja": PackageLoader("govuk_frontend_jinja")}),
         ]
     )
+
+    NotificationService().init_app(flask_app)
 
     flask_app.jinja_env.trim_blocks = True
     flask_app.jinja_env.lstrip_blocks = True

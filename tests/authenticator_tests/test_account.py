@@ -3,6 +3,7 @@ import pytest
 from authenticator.models.account import Account, AccountMethods
 from authenticator.models.fund import Fund
 from authenticator.models.round import Round
+from tests.utils import AnyStringMatching
 
 test_user_id = "test_id"
 test_user_email = "john@example.com"
@@ -94,7 +95,14 @@ class TestAccountMethods(object):
         )
         assert result.email == "john@example.com"
 
-    def test_create_magic_link(self, mocker, mock_get_account, authenticator_test_client, mock_redis_magic_links):
+    def test_create_magic_link(
+        self,
+        mocker,
+        mock_get_account,
+        authenticator_test_client,
+        mock_redis_magic_links,
+        mock_notification_service_calls,
+    ):
         mocker.patch(
             "authenticator.models.account.FundMethods.get_fund",
             return_value=Fund(
@@ -106,7 +114,6 @@ class TestAccountMethods(object):
             ),
         )
         mocker.patch("authenticator.models.account.get_round_data", return_value=Round(contact_email="asdf@asdf.com"))
-        mock_send_notification = mocker.patch("authenticator.models.account.Notification.send", return_value=True)
 
         result = AccountMethods.get_magic_link(
             email=test_user_email,
@@ -115,11 +122,19 @@ class TestAccountMethods(object):
             govuk_notify_reference="1f829816-b7e5-4cf7-bbbb-1b062e5ee399",
         )
         assert result.endswith("?fund=COF&round=R1W1")
-        assert mock_send_notification.call_args_list == [
+        assert mock_notification_service_calls == [
             mocker.call(
-                "MAGIC_LINK",
                 "john@example.com",
-                mocker.ANY,
+                "02a6d48a-f227-4b9a-9dd7-9e0cf203c8a2",
+                personalisation={
+                    "name of fund": "test fund",
+                    "link to application": AnyStringMatching(
+                        r"https://authenticator.levellingup.gov.localhost:4004/service/magic-links/landing/[A-Za-z]{8}\?fund=COF&round=R1W1"
+                    ),
+                    "contact details": "asdf@asdf.com",
+                    "request new link url": "https://authenticator.levellingup.gov.localhost:4004/service/magic-links/new?fund=COF&round=R1W1",
+                },
                 govuk_notify_reference="1f829816-b7e5-4cf7-bbbb-1b062e5ee399",
+                email_reply_to_id=None,
             )
         ]

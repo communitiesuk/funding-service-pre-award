@@ -8,7 +8,6 @@ from authenticator.models.account import AccountError, AccountMethods
 from authenticator.models.data import get_round_data
 from authenticator.models.fund import FundMethods
 from authenticator.models.magic_link import MagicLinkError, MagicLinkMethods
-from authenticator.models.notification import NotificationError
 from common.blueprints import Blueprint
 from config import Config
 
@@ -163,8 +162,6 @@ def new():
             )
 
         except MagicLinkError as e:
-            form.email.errors.append(str(e.message))
-        except NotificationError as e:
             form.email.errors.append(str(e.message))
         except AccountError as e:
             form.email.errors.append(str(e.message))

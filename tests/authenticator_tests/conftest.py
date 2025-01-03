@@ -21,7 +21,7 @@ def app_context(app):
 
 
 @pytest.fixture(scope="function")
-def create_magic_link(mocker):
+def create_magic_link(mocker, mock_notification_service_calls):
     from authenticator.models.fund import Fund
     from authenticator.models.round import Round
 
@@ -32,7 +32,6 @@ def create_magic_link(mocker):
         ),
     )
     mocker.patch("authenticator.models.account.get_round_data", return_value=Round(contact_email="asdf@asdf.com"))
-    mocker.patch("authenticator.models.account.Notification.send", return_value=True)
     auth_landing = AccountMethods.get_magic_link("a@example.com", "cof", "r1w1")
     link_key_end = auth_landing.index("?fund=")
     link_key = auth_landing[link_key_end - 8 : link_key_end]  # noqa:E203

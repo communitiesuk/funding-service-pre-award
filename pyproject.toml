@@ -55,6 +55,7 @@ dependencies = [
     "sqlalchemy-utils==0.41.2",
     "sqlalchemy[mypy]==2.0.36",
     "xhtml2pdf==0.2.16",
+    "notifications-python-client>=10.0.1",
 ]
 
 [tool.djlint]
@@ -118,4 +119,5 @@ dev = [
     "ruff==0.8.4",
     "flask-debugtoolbar==0.16.0",
     "freezegun>=1.5.1",
+    "responses>=0.25.3",
 ]

@@ -2,14 +2,13 @@ from dataclasses import dataclass
 from typing import List
 
 from flask import current_app
-from fsd_utils.config.notify_constants import NotifyConstants
 
 import config
 from authenticator.models.data import get_account_data, get_data, get_round_data, post_data, put_data
 from authenticator.models.fund import FundMethods
 from authenticator.models.magic_link import MagicLinkMethods
-from authenticator.models.notification import Notification
 from config import Config
+from services.notify import get_notification_service
 
 
 @dataclass
@@ -201,30 +200,27 @@ class AccountMethods(Account):
                 round_short_name,
             )
 
-            notification_content = {
-                NotifyConstants.MAGIC_LINK_REQUEST_NEW_LINK_URL_FIELD: Config.AUTHENTICATOR_HOST  # noqa
-                + Config.NEW_LINK_ENDPOINT
-                + "?fund="
-                + fund_short_name
-                + "&round="
-                + round_short_name,  # noqa
-                NotifyConstants.MAGIC_LINK_CONTACT_HELP_EMAIL_FIELD: round_for_fund.contact_email,  # noqa
-                NotifyConstants.MAGIC_LINK_FUND_NAME_FIELD: fund.name,
-            }
-
             # Create a fresh link
             new_link_json = MagicLinkMethods().create_magic_link(
                 account,
                 fund_short_name=fund_short_name if fund_short_name else "",
                 round_short_name=round_short_name if round_short_name else "",
             )
-            notification_content.update({NotifyConstants.MAGIC_LINK_URL_FIELD: new_link_json.get("link")})  # noqa
             current_app.logger.debug("Magic Link URL: {link}", extra=dict(link=new_link_json.get("link")))
-            # Send notification
-            Notification.send(
-                NotifyConstants.TEMPLATE_TYPE_MAGIC_LINK,
-                account.email,
-                notification_content,
+
+            get_notification_service().send_magic_link(
+                email_address=account.email,
+                magic_link_url=new_link_json.get("link"),
+                contact_help_email=round_for_fund.contact_email,
+                fund_name=fund.name,
+                request_new_link_url=(
+                    Config.AUTHENTICATOR_HOST
+                    + Config.NEW_LINK_ENDPOINT
+                    + "?fund="
+                    + fund_short_name
+                    + "&round="
+                    + round_short_name
+                ),
                 govuk_notify_reference=govuk_notify_reference,
             )
 

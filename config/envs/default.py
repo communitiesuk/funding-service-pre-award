@@ -504,3 +504,5 @@ class DefaultConfig(object):
     # You can find the proper permission names from this document
     # https://docs.microsoft.com/en-us/graph/permissions-reference
     MS_GRAPH_PERMISSIONS_SCOPE = ["User.ReadBasic.All"]
+
+    GOV_NOTIFY_API_KEY = getenv("GOV_NOTIFY_API_KEY")
