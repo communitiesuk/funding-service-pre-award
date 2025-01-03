@@ -28,50 +28,80 @@
       "name": "COF",
       "short_name": "COF",
       "id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
-      "description": "An example fund for testing the funding service"
+      "description": "An example fund for testing the funding service",
+      "welsh_available": false,
+      "name_json": {"en": "Community Ownership Fund", "cy": ""},
+      "funding_type": "COMPETITIVE"
     },
     {
       "name": "Fund B",
       "short_name": "FUB",
       "id": "fund-b",
-      "description": "An example fund for testing the funding service"
+      "description": "An example fund for testing the funding service",
+      "welsh_available": false,
+      "name_json": {"en": "Fund B", "cy": ""},
+      "funding_type": "COMPETITIVE"
     },
     {
       "name": "Funding Service Design",
       "short_name": "FSD",
       "id": "funding-service-design",
-      "description": "An example fund for testing the funding service"
+      "description": "An example fund for testing the funding service",
+      "welsh_available": false,
+      "name_json": {"en": "Funding Service Design", "cy": ""},
+      "funding_type": "COMPETITIVE"
     },
     {
       "name": "Community Ownership Fund",
       "short_name": "CON",
       "id": "community-ownership-fund",
-      "description": "An example Community Ownership Fund for testing the funding service"
+      "description": "An example Community Ownership Fund for testing the funding service",
+      "welsh_available": true,
+      "name_json": {
+          "en": "Community Ownership Fund",
+          "cy": "Y Cronfa Perchnogaeth Gymunedol"
+      },
+      "funding_type": "COMPETITIVE"
     }
   ],
   "fund_store/funds/47aef2f5-3fcb-4d45-acb5-f0152b5f03c4": {
     "name": "COF",
     "short_name": "COF",
     "id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
-    "description": "An example fund for testing the funding service"
+    "description": "An example fund for testing the funding service",
+    "welsh_available": false,
+    "name_json": {"en": "Community Ownership Fund", "cy": ""},
+      "funding_type": "COMPETITIVE"
   },
   "fund_store/funds/fund-b": {
     "name": "Fund B",
     "short_name": "FUB",
     "id": "fund-b",
-    "description": "An example fund for testing the funding service"
+    "description": "An example fund for testing the funding service",
+    "welsh_available": false,
+    "name_json": {"en": "Fund B", "cy": ""},
+      "funding_type": "COMPETITIVE"
   },
   "fund_store/funds/funding-service-design": {
     "name": "Funding Service Design",
     "short_name": "FSD",
     "id": "funding-service-design",
-    "description": "An example fund for testing the funding service"
+    "description": "An example fund for testing the funding service",
+    "welsh_available": false,
+    "name_json": {"en": "Funding Service Design", "cy": ""},
+      "funding_type": "COMPETITIVE"
   },
   "fund_store/funds/community-ownership-fund": {
     "name": "COF",
     "short_name": "CON",
     "id": "community-ownership-fund",
-    "description": "An example Community Ownership Fund for testing the funding service"
+    "description": "An example Community Ownership Fund for testing the funding service",
+    "welsh_available": true,
+    "name_json": {
+        "en": "Community Ownership Fund",
+        "cy": "Y Cronfa Perchnogaeth Gymunedol"
+    },
+    "funding_type": "COMPETITIVE"
   },
   "fund_store/funds/47aef2f5-3fcb-4d45-acb5-f0152b5f03c4/rounds": [
     {

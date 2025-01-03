@@ -6,7 +6,7 @@ from uuid import uuid4
 
 import pytest
 from click.testing import CliRunner
-from fsd_utils import Decision
+from fsd_utils import Decision, NotifyConstants
 
 from application_store._helpers.application import send_submit_notification
 from application_store.db.exceptions.submit import SubmitError
@@ -15,11 +15,13 @@ from application_store.db.models.application.enums import Status as ApplicationS
 from application_store.db.queries.application.queries import (
     create_application,
     get_application,
+    get_fund_id,
     submit_application,
     update_application_fields,
 )
 from application_store.db.queries.form.queries import add_new_forms
 from application_store.db.queries.updating.queries import update_form
+from application_store.external_services import get_fund
 from application_store.external_services.exceptions import NotificationError
 from assessment_store.config.mappings.assessment_mapping_fund_round import COF_ROUND_4_W2_ID
 from assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
@@ -28,6 +30,7 @@ from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
 from assessment_store.scripts.derive_assessment_values import derive_assessment_values
 from tests.assessment_store_tests.test_assessment_mapping_fund_round import COF_FUND_ID
+from tests.utils import AnyStringMatching
 
 
 @pytest.fixture
@@ -113,6 +116,10 @@ def setup_completed_application(_db, app, clear_test_data, mocker, mock_get_file
         account_id=uuid4(), fund_id=COF_FUND_ID, round_id=COF_ROUND_4_W2_ID, language="en"
     )
     target_application.project_name = "test"
+    target_application.date_submitted = datetime.fromisoformat(cof_application["date_submitted"])
+    _db.session.add(target_application)
+    _db.session.commit()
+
     application_id = target_application.id
     add_new_forms(forms=empty_forms, application_id=application_id)
 
@@ -280,9 +287,8 @@ def test_submit_application_route_succeeds_on_notify_error(
 
 
 @pytest.mark.parametrize("eoi_result", [({"decision": "BAD_VALUE"}), ({"decision": Decision.FAIL})])
-def test_send_submit_notification_do_not_send(mocker, app, mock_get_files, eoi_result):
+def test_send_submit_notification_do_not_send(mocker, app, mock_get_files, eoi_result, mock_notification_service_calls):
     mocker.patch("application_store._helpers.application.create_qa_base64file", return_value={"forms": []})
-    mock_notifier = mocker.patch("application_store._helpers.application.Notification.send")
     send_submit_notification(
         application={},
         eoi_results=eoi_result,
@@ -291,58 +297,126 @@ def test_send_submit_notification_do_not_send(mocker, app, mock_get_files, eoi_r
         application_with_form_json_and_fund_name={},
         round_data=MagicMock(),
     )
-    mock_notifier.assert_not_called()
+    assert len(mock_notification_service_calls) == 0
 
 
 @pytest.mark.parametrize(
-    "eoi_result, exp_template, exp_contents",
+    "eoi_result, exp_template, exp_personalisation",
     [
         (
             None,
-            "APPLICATION_RECORD_OF_SUBMISSION",
+            "00000000-0000-0000-0000-000000000001",
             {
-                "application": {},
-                "contact_help_email": "contact@test.com",
+                "name of fund": "Community Ownership Fund",
+                "application reference": AnyStringMatching(r"TEST-TEST-[A-Z]{6}"),
+                "date submitted": "13 December 2024 at 01:58pm",
+                "round name": "round title",
+                "question": mock.ANY,
+                "URL of prospectus": "https://prospectus",
+                "contact email": "contact@test.com",
             },
         ),
         (
             {"decision": Decision.PASS},
-            "Full pass",
+            "00000000-0000-0000-0000-000000000002",
             {
-                "application": {},
-                "contact_help_email": "contact@test.com",
+                "name of fund": "Community Ownership Fund",
+                "application reference": AnyStringMatching(r"TEST-TEST-[A-Z]{6}"),
+                "date submitted": "13 December 2024 at 01:58pm",
+                "round name": "round title",
+                "question": mock.ANY,
+                "full name": "Test User",
             },
         ),
         (
             {"decision": Decision.PASS_WITH_CAVEATS, "caveats": ["a", "b", "c"]},
-            "Pass with caveats",
-            {"application": {}, "contact_help_email": "contact@test.com", "caveats": ["a", "b", "c"]},
+            "00000000-0000-0000-0000-000000000003",
+            {
+                "name of fund": "Community Ownership Fund",
+                "application reference": AnyStringMatching(r"TEST-TEST-[A-Z]{6}"),
+                "date submitted": "13 December 2024 at 01:58pm",
+                "round name": "round title",
+                "question": mock.ANY,
+                "caveats": ["a", "b", "c"],
+                "full name": "Test User",
+            },
         ),
     ],
 )
-def test_send_submit_notification(mocker, app, mock_get_files, eoi_result, exp_template, exp_contents):
-    mocker.patch("application_store._helpers.application.create_qa_base64file", return_value={"forms": []})
-    mock_notifier = mocker.patch("application_store._helpers.application.Notification.send")
-    mock_account = MagicMock()
-    mock_account.email = "test@test.com"
-    mock_account.full_name = "Test User"
-    mock_round = MagicMock()
-    mock_round.contact_email = "contact@test.com"
+def test_send_submit_notification(
+    mocker,
+    _db,
+    app,
+    setup_completed_application,
+    mock_get_files,
+    eoi_result,
+    exp_template,
+    exp_personalisation,
+    mock_notification_service_calls,
+):
+    # mocker.patch("application_store._helpers.application.create_qa_base64file", return_value={"forms": []})
+    mock_account = MagicMock(email="test@test.com", full_name="Test User")
+    mock_round = MagicMock(contact_email="contact@test.com")
+    mocker.patch(
+        "services.notify.NotificationService.APPLICATION_SUBMISSION_TEMPLATE_ID_EN",
+        "00000000-0000-0000-0000-000000000001",
+    )
+    mocker.patch.dict(
+        "services.notify.NotificationService.EXPRESSION_OF_INTEREST_TEMPLATE_ID",
+        {
+            "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4": {
+                NotifyConstants.TEMPLATE_TYPE_EOI_PASS: {
+                    "fund_name": "COF",
+                    "template_id": {
+                        "en": "00000000-0000-0000-0000-000000000002",
+                        "cy": "",
+                    },
+                },
+                NotifyConstants.TEMPLATE_TYPE_EOI_PASS_W_CAVEATS: {
+                    "fund_name": "COF",
+                    "template_id": {
+                        "en": "00000000-0000-0000-0000-000000000003",
+                        "cy": "",
+                    },
+                },
+            }
+        },
+    )
+
+    application = _db.session.get(Applications, setup_completed_application)
+    application_with_form_json = get_application(setup_completed_application, as_json=True, include_forms=True)
+
+    if eoi_result:
+        application_with_form_json |= {**eoi_result}
+
+    fund_id = get_fund_id(setup_completed_application)
+    fund_data = get_fund(fund_id)
+    language = application_with_form_json["language"]
+    application_with_form_json_and_fund_name = {
+        **application_with_form_json,
+        "fund_name": fund_data.name_json[language],
+        "round_name": "round title",
+        "prospectus_url": "https://prospectus",
+    }
+
     send_submit_notification(
-        application={},
+        application=application,
         eoi_results=eoi_result,
         account=mock_account,
-        application_with_form_json={},
-        application_with_form_json_and_fund_name={},
+        application_with_form_json=application_with_form_json,
+        application_with_form_json_and_fund_name=application_with_form_json_and_fund_name,
         round_data=mock_round,
     )
-    mock_notifier.assert_called_once()
-    mock_notifier.assert_called_with(
-        exp_template,
-        "test@test.com",
-        "Test User",
-        exp_contents,
-    )
+    assert len(mock_notification_service_calls) == 1
+    assert mock_notification_service_calls == [
+        mocker.call(
+            "test@test.com",
+            exp_template,
+            personalisation=exp_personalisation,
+            govuk_notify_reference=None,
+            email_reply_to_id=None,
+        )
+    ]
 
 
 @pytest.fixture
