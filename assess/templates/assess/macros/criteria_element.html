@@ -3,6 +3,19 @@
 
     {% set rows = [] %}
     {% for sub_criteria in criteria.sub_criterias %}
+        {% set status %}
+            {% if sub_criteria.status == 'NOT_STARTED' %}
+                <span class="govuk-tag--scored-criteria">Not started</span>
+            {% elif sub_criteria.status == 'COMPLETED' %}
+                <span class="">Complete</span>
+            {% elif sub_criteria.status == 'CHANGE_REQUESTED' %}
+                <span class="govuk-tag--orange">{{ sub_criteria.status|all_caps_to_human }}</span>
+            {% elif sub_criteria.status == 'CHANGE_RECEIVED' %}
+                <span class="govuk-tag--yellow">{{ sub_criteria.status|all_caps_to_human }}</span>
+            {% else %}
+                <span class="govuk-tag govuk-tag--yellow">{{ sub_criteria.status|all_caps_to_human }}</span>
+            {% endif %}
+        {% endset %}
         {% set _ = rows.append([
             {
                 "html": '<a class="govuk-link" data-qa="sub_criteria_name" href="{}">{}</a>'.format(
@@ -15,8 +28,10 @@
                 )
             },
             { "text": sub_criteria.score if sub_criteria.score is not none or "", "format": "numeric" } if g.access_controller.has_any_assessor_role else None,
-            { "html": '<span class="{}">{}</span>'.format('govuk-tag--scored-criteria' if sub_criteria.status == 'NOT_STARTED' else '', 'Complete' if sub_criteria.status=='COMPLETED' else sub_criteria.status|all_caps_to_human),
-                "format": "numeric" }
+            {
+                "html": status,
+                "format": "numeric"
+            }
         ]) %}
     {% endfor %}
 

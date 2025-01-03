@@ -6,6 +6,7 @@ from flask import request
 from assess.config.display_value_mappings import LandingFilters, assessment_statuses
 from assess.services.models.flag import Flag, FlagType
 from assess.services.models.fund import Fund
+from assessment_store.db.models.assessment_record.enums import Status
 
 
 def process_assessments_stats(application_overviews) -> Dict:
@@ -81,6 +82,16 @@ def determine_flag_status(Flags: List[Flag]) -> str:
     flag_status = ""
     flags_list = [(Flag.from_dict(flag) if isinstance(flag, dict) else flag) for flag in Flags] if Flags else []
     all_latest_status = [flag.latest_status for flag in flags_list]
+
+    has_flag_with_raised_status = False
+    for flag in flags_list:
+        if flag.is_change_request:
+            if flag.latest_status.name == FlagType.RAISED.name:
+                has_flag_with_raised_status = True
+                break
+
+    if has_flag_with_raised_status:
+        return Status.CHANGE_REQUESTED.name
 
     if FlagType.STOPPED in all_latest_status:
         flag_status = "Stopped"

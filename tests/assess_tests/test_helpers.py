@@ -24,6 +24,8 @@ RAISED_FLAG = [
             "latest_allocation": "TEAM_1",
             "id": "flagid",
             "sections_to_flag": ["community"],
+            "field_ids": [],
+            "is_change_request": False,
             "updates": [
                 {
                     "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
@@ -45,6 +47,8 @@ RESOLVED_FLAG = [
             "latest_allocation": "TEAM_1",
             "id": "flagid",
             "sections_to_flag": ["community"],
+            "field_ids": [],
+            "is_change_request": False,
             "updates": [
                 {
                     "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
@@ -66,6 +70,8 @@ STOPPED_FLAG = [
             "latest_allocation": "TEAM_1",
             "id": "flagid",
             "sections_to_flag": ["community"],
+            "field_ids": [],
+            "is_change_request": False,
             "updates": [
                 {
                     "id": "316f607a-03b7-4592-b927-5021a28b7d6a",

@@ -18,8 +18,8 @@ class Flag:
     latest_allocation: str
     application_id: str
     updates: list
-    field_ids: list
-    is_change_request: bool
+    field_ids: list | None = None
+    is_change_request: bool = False
 
     def __post_init__(self):
         self.latest_status = self.get_enum_status(self.latest_status)

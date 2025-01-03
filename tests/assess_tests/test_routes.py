@@ -1075,6 +1075,8 @@ class TestRoutes:
                     "latest_allocation": None,
                     "id": "flagged_app",
                     "sections_to_flag": ["Test section"],
+                    "field_ids": [],
+                    "is_change_request": False,
                     "updates": [
                         {
                             "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
@@ -1160,6 +1162,8 @@ class TestRoutes:
                     "latest_allocation": None,
                     "id": "stopped_app",
                     "sections_to_flag": ["Test section"],
+                    "field_ids": [],
+                    "is_change_request": False,
                     "updates": [
                         {
                             "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
