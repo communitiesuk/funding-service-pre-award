@@ -423,3 +423,25 @@ def attempt_to_find_and_update_project_name(question_json, application) -> None:
         for field in question["fields"]:
             if field["key"] == project_name_field_id and "answer" in field.keys():
                 return field["answer"]
+
+
+def mark_application_with_requested_changes(application_id: str, field_ids: list):
+    application = db.session.query(Applications).filter_by(id=application_id).first()
+    application_should_update = False
+    for form in application.forms:
+        form_should_update = False
+        for category in form.json:
+            for field in category["fields"]:
+                if field["key"] in field_ids:
+                    form.status = "CHANGE_REQUESTED"
+                    form.has_completed = False
+                    form_should_update = True
+                    application_should_update = True
+
+                if field["key"] == "markAsComplete" and form_should_update:
+                    field["answer"] = False
+
+    if application_should_update:
+        application.status = "CHANGE_REQUESTED"
+
+    db.session.commit()
