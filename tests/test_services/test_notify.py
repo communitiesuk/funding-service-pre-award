@@ -47,6 +47,47 @@ class TestNotificationService:
         assert request_matcher.call_count == 1
 
     @responses.activate
+    def test_send_incomplete_application_email(self, app):
+        request_matcher = responses.post(
+            url="https://api.notifications.service.gov.uk/v2/notifications/email",
+            status=201,
+            match=[
+                matchers.json_params_matcher(
+                    {
+                        "email_address": "test@test.com",
+                        "template_id": "944cb37d-c9e0-4731-88f5-d752514da57f",
+                        "personalisation": {
+                            "name of fund": "test fund",
+                            "application reference": "appref-123",
+                            "round name": "test round",
+                            "question": {
+                                "file": "YWJjZGVm",  # base64 'abcdef'
+                                "filename": None,
+                                "confirm_email_before_download": None,
+                                "retention_period": None,
+                            },
+                            "contact email": "contact@test.com",
+                        },
+                        "reference": "abc123",
+                    }
+                )
+            ],
+            json={"id": "00000000-0000-0000-0000-000000000004"},  # partial GOV.UK Notify response
+        )
+
+        resp = get_notification_service().send_incomplete_application_email(
+            "test@test.com",
+            fund_name="test fund",
+            application_reference="appref-123",
+            round_name="test round",
+            questions="YWJjZGVm",
+            contact_help_email="contact@test.com",
+            govuk_notify_reference="abc123",
+        )
+        assert resp == Notification(id=uuid.UUID("00000000-0000-0000-0000-000000000004"))
+        assert request_matcher.call_count == 1
+
+    @responses.activate
     def test_send_eoi_pass_email(self, app):
         request_matcher = responses.post(
             url="https://api.notifications.service.gov.uk/v2/notifications/email",

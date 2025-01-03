@@ -4,6 +4,8 @@ import sys
 from datetime import datetime
 from distutils.util import strtobool
 
+from services.notify import get_notification_service
+
 sys.path.insert(1, ".")
 
 from flask import current_app  # noqa: E402
@@ -16,9 +18,6 @@ from application_store.db.queries import (
 )
 from application_store.db.queries.application import create_qa_base64file  # noqa: E402
 from application_store.external_services.data import get_fund  # noqa: E402
-from application_store.external_services.models.notification import (
-    Notification,  # noqa: E402
-)
 from config import Config  # noqa: E402
 
 
@@ -114,18 +113,20 @@ def send_incomplete_applications_after_deadline(
                         ),
                     )
                     application["contact_help_email"] = fund_rounds.get("contact_email")
-                    message_id = Notification.send(
-                        template_type=Config.NOTIFY_TEMPLATE_INCOMPLETE_APPLICATION,  # noqa
-                        to_email=email.get("email"),
-                        full_name=application["application"]["account_name"],
-                        content={
-                            "application": create_qa_base64file(application["application"], True),
-                            "contact_help_email": application["contact_help_email"],
-                        },
+                    application_data = create_qa_base64file(application["application"], True)
+                    notification = get_notification_service().send_incomplete_application_email(
+                        email.get("email"),
+                        fund_name=application_data["fund_name"],
+                        application_reference=application_data["reference"],
+                        round_name=application_data["round_name"],
+                        questions=application_data["questions_file"],
+                        contact_help_email=application["contact_help_email"],
                     )
                     current_app.logger.info(
-                        "Message added to the queue msg_id: [{message_id}]",
-                        extra=dict(message_id=message_id),
+                        "Sent notification {notification_id} for application {application_reference}",
+                        extra=dict(
+                            notification_id=notification.id, application_reference=application_data["reference"]
+                        ),
                     )
                 current_app.logger.info(
                     "Sent {count} {emails}",
