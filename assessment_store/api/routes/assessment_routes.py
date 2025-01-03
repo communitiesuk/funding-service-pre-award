@@ -23,6 +23,7 @@ from assessment_store.db.queries.assessment_records.queries import (
     update_status_to_completed,
 )
 from assessment_store.db.queries.comments.queries import get_sub_criteria_to_has_comment_map
+from assessment_store.db.queries.flags.queries import get_flags_for_application
 from assessment_store.db.queries.qa_complete.queries import (
     get_qa_complete_record_for_application,
 )
@@ -190,8 +191,9 @@ def get_assessor_task_list_state(application_id: str) -> dict:
     metadata = find_assessor_task_list_state(application_id)
     score_map = get_sub_criteria_to_latest_score_map(application_id)
     comment_map = get_sub_criteria_to_has_comment_map(application_id)
+    change_requests = [flag for flag in get_flags_for_application(application_id) if flag.is_change_request]
     sections, criterias = transform_to_assessor_task_list_metadata(
-        metadata["fund_id"], metadata["round_id"], score_map, comment_map
+        metadata["fund_id"], metadata["round_id"], score_map, comment_map, change_requests, metadata["workflow_status"]
     )
     qa_complete = get_qa_complete_record_for_application(application_id)
 

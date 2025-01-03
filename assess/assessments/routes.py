@@ -90,6 +90,7 @@ from assess.config.display_value_mappings import (
     landing_filters,
     search_params_default,
 )
+from assess.flagging.forms.request_changes_form import RequestChangesForm
 from assess.scoring.helpers import get_scoring_class
 from assess.services.aws import get_file_for_download_from_aws
 from assess.services.data_services import (
@@ -120,8 +121,10 @@ from assess.services.data_services import (
     get_users_for_fund,
     match_comment_to_theme,
     submit_comment,
+    submit_flag,
 )
 from assess.services.models.comment import CommentType
+from assess.services.models.flag import FlagType
 from assess.services.models.fund import Fund
 from assess.services.models.round import Round
 from assess.services.models.theme import Theme
@@ -1172,6 +1175,19 @@ def display_sub_criteria(
     state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
 
+    user_id_list = []
+    change_requests = []
+    for flag_data in flags_list:
+        if sub_criteria_id not in flag_data.sections_to_flag or not flag_data.is_change_request:
+            continue
+
+        change_requests.append(flag_data)
+        for flag_item in flag_data.updates:
+            if flag_item["user_id"] not in user_id_list:
+                user_id_list.append(flag_item["user_id"])
+
+    accounts_list = get_bulk_accounts_dict(user_id_list, state.fund_short_name)
+
     comment_response = get_comments(
         application_id=application_id,
         sub_criteria_id=sub_criteria_id,
@@ -1230,8 +1246,11 @@ def display_sub_criteria(
 
     common_template_config = {
         "sub_criteria": sub_criteria,
+        "fund": get_fund(sub_criteria.fund_id),
         "application_id": application_id,
         "comments": theme_matched_comments,
+        "flags_list": change_requests,
+        "accounts_list": accounts_list,
         "is_flaggable": False,  # Flag button is disabled in sub-criteria page,
         "display_comment_box": add_comment_argument,
         "display_comment_edit_box": edit_comment_argument,
@@ -1250,9 +1269,64 @@ def display_sub_criteria(
     return render_template(
         "assessments/sub_criteria.html",
         answers_meta=answers_meta,
+        questions={question["field_id"]: question["question"] for question in theme_answers_response},
         state=state,
         migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
         **common_template_config,
+    )
+
+
+@assessment_bp.route(
+    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/request_change",
+    methods=["GET", "POST"],
+)
+@check_access_application_id
+def request_changes(application_id, sub_criteria_id, theme_id):
+    sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
+    current_theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
+    state = get_state_for_tasklist_banner(application_id)
+    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
+
+    form = RequestChangesForm(
+        question_choices=[(question["field_id"], question["question"]) for question in theme_answers_response]
+    )
+
+    if request.method == "POST" and form.validate_on_submit():
+        submit_flag(
+            application_id=application_id,
+            flag_type=FlagType.RAISED.name,
+            user_id=g.account_id,
+            justification=form.justification.data,
+            field_ids=form.field_ids.data,
+            section=[sub_criteria_id],
+            is_change_request=True,
+        )
+
+        # update apply.status apply.forms[].status and each form.question[].status
+
+        return redirect(
+            url_for(
+                "assessment_bp.display_sub_criteria",
+                application_id=application_id,
+                sub_criteria_id=sub_criteria_id,
+                theme_id=theme_id,
+            )
+        )
+
+    return render_template(
+        "assessments/request_changes.html",
+        form=form,
+        question_choices=[
+            {"text": label, "value": value, "checked": value in (form.field_ids.data or [])}
+            for value, label in form.field_ids.choices
+        ],
+        state=state,
+        sub_criteria=sub_criteria,
+        fund=get_fund(sub_criteria.fund_id),
+        application_id=application_id,
+        current_theme=current_theme,
+        assessment_status=assessment_status,
     )
 
 
@@ -1454,7 +1528,6 @@ def application(application_id):
         )
 
     state = get_state_for_tasklist_banner(application_id)
-    flags_list = get_flags(application_id)
 
     comment_response = get_comments(
         application_id=application_id,
@@ -1521,7 +1594,7 @@ def application(application_id):
         application_id=application_id,
         accounts_list=accounts_list,
         teams_flag_stats=teams_flag_stats,
-        flags_list=flags_list,
+        flags_list=[flag for flag in flags_list if not flag.is_change_request],
         is_flaggable=is_flaggable(flag_status),
         is_qa_complete=state.is_qa_complete,
         qa_complete=qa_complete,

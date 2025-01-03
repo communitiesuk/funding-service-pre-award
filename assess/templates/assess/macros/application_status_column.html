@@ -27,6 +27,14 @@
     <span class="flagged-tag">
         {{ assessment_statuses[application_status] }}
     </span>
+    {% elif application_status == "CHANGE_REQUESTED" %}
+    <span class="govuk-tag--orange">
+        {{ assessment_statuses[application_status] }}
+    </span>
+    {% elif application_status == "CHANGE_RECEIVED" %}
+    <span class="govuk-tag--yellow">
+        {{ assessment_statuses[application_status] }}
+    </span>
     {% else %}
     <span>
         {{ assessment_statuses[application_status] }}

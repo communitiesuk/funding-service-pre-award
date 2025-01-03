@@ -4,7 +4,9 @@ from uuid import UUID
 
 from flask import current_app, make_response
 
+from assess.services.models.flag import FlagType
 from assessment_store.db.models.assessment_record.enums import Status
+from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from config import Config
 
 
@@ -22,9 +24,33 @@ def compress_response(data):
     return response
 
 
-def _derive_status(score_map: dict, comment_map: dict, sub_criteria_id: str) -> str:
+def _derive_status(
+    score_map: dict,
+    comment_map: dict,
+    change_requests: list[AssessmentFlag],
+    workflow_status: str,
+    sub_criteria_id: str,
+) -> str:
     if sub_criteria_id in score_map:
         return Status.COMPLETED.name  # if we've scored, we've completed
+
+    has_flag_with_raised_status = False
+    has_flag_with_received_status = False
+    for change_request in change_requests:
+        if sub_criteria_id in change_request.sections_to_flag:
+            if change_request.latest_status.name == FlagType.RAISED.name:
+                has_flag_with_raised_status = True
+                break
+
+            if change_request.latest_status.name == FlagType.RESOLVED.name:
+                has_flag_with_received_status = True
+
+    if has_flag_with_raised_status:
+        return Status.CHANGE_REQUESTED.name
+
+    if has_flag_with_received_status and workflow_status == Status.CHANGE_RECEIVED.name:
+        return Status.CHANGE_RECEIVED.name
+
     if sub_criteria_id in comment_map:
         return Status.IN_PROGRESS.name  # if we've commented, but not scored, we're in progress
 
@@ -33,8 +59,13 @@ def _derive_status(score_map: dict, comment_map: dict, sub_criteria_id: str) -> 
 
 
 def transform_to_assessor_task_list_metadata(
-    fund_id: str, round_id: str, score_map: dict, comment_map: dict
-) -> tuple[dict, dict]:
+    fund_id: str,
+    round_id: str,
+    score_map: dict,
+    comment_map: dict,
+    change_requests: list[AssessmentFlag],
+    workflow_status: str,
+) -> tuple[list[dict], list[dict]]:
     current_app.logger.info("Configured fund-rounds:")
     current_app.logger.info(Config.ASSESSMENT_MAPPING_CONFIG.keys())
     mapping = copy.deepcopy(Config.ASSESSMENT_MAPPING_CONFIG[f"{fund_id}:{round_id}"])
@@ -65,7 +96,7 @@ def transform_to_assessor_task_list_metadata(
                     "id": sc["id"],
                     "score": score_map.get(sc["id"]),
                     "theme_count": len(sc["themes"]),
-                    "status": _derive_status(score_map, comment_map, sc["id"]),
+                    "status": _derive_status(score_map, comment_map, change_requests, workflow_status, sc["id"]),
                 }
                 for sc in c["sub_criteria"]
             ],

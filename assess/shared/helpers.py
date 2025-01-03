@@ -82,6 +82,16 @@ def determine_flag_status(Flags: List[Flag]) -> str:
     flags_list = [(Flag.from_dict(flag) if isinstance(flag, dict) else flag) for flag in Flags] if Flags else []
     all_latest_status = [flag.latest_status for flag in flags_list]
 
+    has_flag_with_raised_status = False
+    for flag in flags_list:
+        if flag.is_change_request:
+            if flag.latest_status.name == FlagType.RAISED.name:
+                has_flag_with_raised_status = True
+                break
+
+    if has_flag_with_raised_status:
+        return "Change requested"
+
     if FlagType.STOPPED in all_latest_status:
         flag_status = "Stopped"
     elif all_latest_status.count(FlagType.RAISED) > 1:
