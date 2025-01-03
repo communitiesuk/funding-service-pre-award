@@ -5,6 +5,7 @@ from unittest import mock
 from uuid import uuid4
 
 import pytest
+from sqlalchemy import select
 
 from assessment_store.api.routes.assessment_routes import (
     calculate_overall_score_percentage_for_application,
@@ -12,9 +13,11 @@ from assessment_store.api.routes.assessment_routes import (
 from assessment_store.config.mappings.assessment_mapping_fund_round import (
     applicant_info_mapping,
 )
+from assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from assessment_store.db.models.flags.flag_update import FlagStatus
 from assessment_store.db.models.tag.tags import Tag
+from assessment_store.db.queries.assessment_records.queries import get_export_data
 from assessment_store.db.queries.flags.queries import add_flag_for_application, add_update_to_assessment_flag
 from assessment_store.db.queries.qa_complete.queries import create_qa_complete_record
 from tests.assessment_store_tests._expected_responses import APPLICATION_METADATA_RESPONSE
@@ -444,6 +447,48 @@ def test_get_application_fields_export(flask_test_client, seed_application_recor
     assert result["en_list"][0]["Do you need to do any further feasibility work?"] is False
     assert result["en_list"][0]["Project name"] == "Save the humble pub in Bangor"
     assert result["en_list"][0]["Risks to your project (document upload)"] == "sample1.doc"
+
+
+@pytest.mark.apps_to_insert([test_input_data[0].copy() for x in range(4)])
+@pytest.mark.unique_fund_round(True)
+def test_get_export_data_with_and_without_timezone(_db, seed_application_records):
+    round_id = seed_application_records[0]["round_id"]
+    assessment_records = _db.session.execute(select(AssessmentRecord)).scalars().all()
+
+    # Date strings with and without timezone information
+    date_strings = [
+        "2023-10-10T14:48:00+00:00",  # UTC with explicit timezone
+        "2023-10-10T14:48:00",  # UTC without explicit timezone
+        "2023-10-11T10:30:00+00:00",
+        "2023-10-11T10:30:00",
+    ]
+    for record, date_string in zip(assessment_records, date_strings, strict=False):
+        record.jsonb_blob["date_submitted"] = date_string
+
+    list_of_fields = {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "aHIGbK": {"en": {"title": "Charity number "}},
+                "aAeszH": {"en": {"title": "Do you need to do any further feasibility work?"}},
+                "ozgwXq": {"en": {"title": "Risks to your project (document upload)"}},
+                "KAgrBz": {"en": {"title": "Project name"}},
+            }
+        }
+    }
+
+    result = get_export_data(
+        round_id=round_id,
+        report_type="ASSESSOR_EXPORT",
+        list_of_fields=list_of_fields,
+        assessment_metadatas=assessment_records,
+        language="en",
+    )
+
+    assert len(result) == 4
+    assert result[0]["Date Submitted"] == "10/10/2023 14:48:00"
+    assert result[1]["Date Submitted"] == "10/10/2023 14:48:00"
+    assert result[2]["Date Submitted"] == "11/10/2023 10:30:00"
+    assert result[3]["Date Submitted"] == "11/10/2023 10:30:00"
 
 
 def test_get_all_users_associated_with_application(flask_test_client):

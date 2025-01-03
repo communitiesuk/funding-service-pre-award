@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from typing import Dict, List
 
 from bs4 import BeautifulSoup
+from dateutil import parser
 from flask import current_app
 from sqlalchemy import String, and_, cast, desc, exc, func, or_, select
 from sqlalchemy.orm import aliased, defer, load_only, selectinload
@@ -741,8 +742,7 @@ def get_export_data(  # noqa: C901 - historical sadness
     final_list = []
 
     for assessment in assessment_metadatas:
-        iso_format = "%Y-%m-%dT%H:%M:%S.%f"
-        iso_datetime = datetime.strptime(assessment.jsonb_blob["date_submitted"], iso_format)
+        iso_datetime = parser.isoparse(assessment.jsonb_blob["date_submitted"])
         formatted_date = iso_datetime.strftime("%d/%m/%Y %H:%M:%S")
 
         applicant_info = {
