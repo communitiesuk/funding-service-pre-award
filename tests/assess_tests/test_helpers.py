@@ -39,6 +39,29 @@ RAISED_FLAG = [
         }
     )
 ]
+RAISED_CHANGE_REQUEST = [
+    Flag.from_dict(
+        {
+            "application_id": "app_123",
+            "latest_status": "RAISED",
+            "latest_allocation": None,
+            "id": "flagid",
+            "sections_to_flag": ["community"],
+            "field_ids": ["asdasd"],
+            "is_change_request": True,
+            "updates": [
+                {
+                    "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
+                    "user_id": "test@example.com",
+                    "date_created": "2023-01-01T00:00:00",
+                    "justification": "Test flag",
+                    "status": "RAISED",
+                    "allocation": None,
+                }
+            ],
+        }
+    )
+]
 RESOLVED_FLAG = [
     Flag.from_dict(
         {
@@ -57,6 +80,29 @@ RESOLVED_FLAG = [
                     "justification": "Test flag",
                     "status": "RESOLVED",
                     "allocation": "TEAM_1",
+                }
+            ],
+        }
+    )
+]
+RESOLVED_CHANGE_REQUEST = [
+    Flag.from_dict(
+        {
+            "application_id": "app_123",
+            "latest_status": "RESOLVED",
+            "latest_allocation": "TEAM_1",
+            "id": "flagid",
+            "sections_to_flag": None,
+            "field_ids": ["asdasd"],
+            "is_change_request": True,
+            "updates": [
+                {
+                    "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
+                    "user_id": "test@example.com",
+                    "date_created": "2023-01-01T00:00:00",
+                    "justification": "Test flag",
+                    "status": "RESOLVED",
+                    "allocation": None,
                 }
             ],
         }
@@ -104,6 +150,33 @@ def test_determine_display_status():
             is_qa_complete=False,
         )
         == "In progress"
+    )
+
+
+def test_determine_display_status_for_change_requests():
+    assert (
+        determine_display_status(
+            workflow_status="CHANGE_RECEIVED",
+            Flags=None,
+            is_qa_complete=False,
+        )
+        == "Change received"
+    )
+    assert (
+        determine_display_status(
+            workflow_status="NOT_STARTED",
+            Flags=RAISED_CHANGE_REQUEST,
+            is_qa_complete=False,
+        )
+        == "Change requested"
+    )
+    assert (
+        determine_display_status(
+            workflow_status="CHANGE_RECEIVED",
+            Flags=RESOLVED_CHANGE_REQUEST,
+            is_qa_complete=False,
+        )
+        == "Change received"
     )
 
 
