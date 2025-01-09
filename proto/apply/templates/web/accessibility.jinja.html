@@ -1,0 +1,45 @@
+{% extends "template.jinja" %}
+
+{% block pageTitle %}{% trans %}Accessibility statement{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{% trans %}Accessibility statement{% endtrans %}</h1>
+
+        <p class="govuk-body">
+            {% trans %}The Department for Levelling Up, Housing and Communities is committed to making our online services accessible to all users by meeting{% endtrans %} <a href="https://www.gov.uk/guidance/accessibility-requirements-for-public-sector-websites-and-apps" class="govuk-link govuk-link--no-visited-state">The Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018</a>.
+        </p>
+        <p class="govuk-body">
+            {% trans %}This accessibility statement applies to content on the access-funding.levellingup.gov.uk domain.{% endtrans %}
+        </p>
+
+        <h2 class="govuk-heading-m">{% trans %}Compliance status{% endtrans %}</h1>
+
+        <p class="govuk-body">
+            {% trans %}The Access Funding online application website is fully compliant with the Web Content Accessibility Guidelines version 2.1 AA standard.{% endtrans %}
+        </p>
+
+        <h2 class="govuk-heading-m">{% trans %}Preparation of this accessibility statement{% endtrans %}</h2>
+
+        <p class="govuk-body">
+            {% trans %}This statement was prepared in November 2022 and was last updated on 7th February 2023 following an accessibility audit carried out by{% endtrans %} <a href="https://digitalaccessibilitycentre.org/" class="govuk-link govuk-link--no-visited-state">{% trans %}The Digital Accessibility Centre (DAC){% endtrans %}</a>, {% trans %}additional manual testing and our responses to the findings of these activities.{% endtrans %}
+        </p>
+
+        <h2 class="govuk-heading-m">{% trans %}Feedback and contact information{% endtrans %}</h2>
+
+        <p class="govuk-body">
+            {% trans %}If you find any problems that are not listed on this page or you think we’re not meeting the accessibility requirements,{% endtrans %} <a href="#" target="_blank" class="govuk-link govuk-link--no-visited-state">{% trans %}contact us{% endtrans %}</a>.
+        </p>
+
+        <h2 class="govuk-heading-m">{% trans %}Enforcement procedure{% endtrans %}</h2>
+
+        <p class="govuk-body">
+            {% trans %}The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’).{% endtrans %}
+        </p>
+        <p class="govuk-body">
+            {% trans %}If you’re not happy with how we respond to your complaint,{% endtrans %} <a href="https://www.equalityadvisoryservice.com/" class="govuk-link govuk-link--no-visited-state">{% trans %}contact the Equality Advisory and Support Service (EASS){% endtrans %}</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}

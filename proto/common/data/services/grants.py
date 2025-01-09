@@ -19,6 +19,7 @@ def get_active_round(grant_short_code: str):
         .filter(
             Fund.short_name == grant_short_code,
             # probably want some way of having rounds that are always open especially for uncompeted grants
+            # note you might want to show funds that have been live in the past - they want to be able to log in?
             Round.proto_start_date <= date.today(),
             Round.proto_end_date >= date.today(),
         )

@@ -33,8 +33,11 @@
             "text": _("Enter your email address")
         }) }}
         {% else %}
+        {% set grantNotOpen %}
+            {% trans %}This grant is not open for applications for fuding, you can {% endtrans %}<a class="govuk-link govuk-link--no-visited-state" href="#">view any previous applications</a>.
+        {% endset %}
         {{ govukInsetText({
-            "text": _("This grant is not open for applications for funding.")
+            "text": grantNotOpen
         }) }}
         {% endif %}
 

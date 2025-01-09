@@ -1,5 +1,6 @@
 {% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
 {% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
+{% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
 
 
 {% extends "govuk_frontend_jinja/template.html" %}
@@ -29,5 +30,13 @@
 }) }}
 {% endblock beforeContent %}
 
-{% block content %}
-{% endblock content %}
+{% block footer %}
+{{ govukFooter({
+    "meta": {
+        "items": [
+            { "href": url_for("proto_apply_blueprint.web_blueprint.cookies_handler"), "text": _("Cookies") },
+            { "href": url_for("proto_apply_blueprint.web_blueprint.accessibility_statement_handler"), "text": _("Accessibility statement") }
+        ]
+    }
+}) }}
+{% endblock footer %}

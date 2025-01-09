@@ -1,0 +1,46 @@
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+
+{% extends "template.jinja" %}
+
+{% block pageTitle %}{% trans %}Cookies{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{% trans %}Cookies{% endtrans %}</h1>
+
+        <p class="govuk-body">{% trans %}Cookies are small files saved on your phone, tablet or computer when you visit a website.{% endtrans %}</p>
+
+        <p class="govuk-body">{% trans %}We use cookies to make the Apply for funding service work.{% endtrans %}</p>
+
+        <h2 class="govuk-heading-m">{% trans %}Essential cookies{% endtrans %}</h2>
+        <p class="govuk-body">Essential cookies keep your information secure while you use the Apply for funding service. We do not need to ask permission to use them.</p>
+
+        {{ govukTable({
+            "head": [
+                { "text": _("Name") },
+                { "text": _("Purpose") },
+                { "text": _("Expires") }
+            ],
+            "rows": [[
+                    { "text": "session_cookie" },
+                    { "text": _("Used to keep you connected to your current session") },
+                    { "text": _("When you close your browser") },
+                ], [
+                    { "text": "fsd_user_token" },
+                    { "text": _("Used to keep you signed in") },
+                    { "text": _("24 hours") },
+                ], [
+                    { "text": "session" },
+                    { "text": _("Set to remember information you've entered into a form") },
+                    { "text": _("When you close your browser") },
+                ], [
+                    { "text": "language" },
+                    { "text": _("Used to remember the language you've chosen to display page information") },
+                    { "text": _("30 days") },
+                ]
+            ]
+        }) }}
+    </div>
+</div>
+{% endblock content %}
