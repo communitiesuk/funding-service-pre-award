@@ -14,6 +14,16 @@ from sqlalchemy.orm.exc import NoResultFound
 from pre_award.assessment_store.db.models import AssessmentRecord
 from pre_award.assessment_store.db.models.score import AssessmentRound, Score, ScoringSystem
 from pre_award.assessment_store.db.schemas import AssessmentRoundMetadata, ScoreMetadata, ScoringSystemMetadata
+
+from pre_award.assessment_store.db.models.assessment_record.enums import Status as ApplicationStatus
+from pre_award.assessment_store.db.queries.assessment_records.queries import (
+    check_all_change_requests_accepted,
+    update_application_status,
+)
+from pre_award.assessment_store.db.queries.flags.queries import (
+    resolve_open_change_requests_for_sub_criteria,
+)
+
 from pre_award.db import db
 
 
@@ -175,3 +185,21 @@ def insert_scoring_system_for_round_id(round_id: str, scoring_system_id: str) ->
     metadata_serialiser = AssessmentRoundMetadata()
     inserted_assessment_round = metadata_serialiser.dump(assessment_round)
     return inserted_assessment_round
+
+
+def approve_sub_criteria(application_id, sub_criteria_id, user_id):
+    # Temporary solution to "accept" a sub-criteria is to provide it a non-zero score
+    create_score_for_app_sub_crit(
+        score=1,
+        justification="Approved by assessor",
+        application_id=application_id,
+        user_id=user_id,
+        sub_criteria_id=sub_criteria_id,
+    )
+
+    resolve_open_change_requests_for_sub_criteria(
+        application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=user_id
+    )
+
+    if check_all_change_requests_accepted(application_id=application_id):
+        update_application_status(application_id=application_id, status=ApplicationStatus.IN_PROGRESS)
