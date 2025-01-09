@@ -7,7 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.event import listens_for
 from sqlalchemy.orm import relationship, validates
 
-from db import db
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

@@ -1,6 +1,6 @@
 import pytest
 
-from application_store.external_services.aws import list_files_by_prefix
+from pre_award.application_store.external_services.aws import list_files_by_prefix
 
 
 # You can use this for testing the function if doing tdd.
@@ -28,7 +28,7 @@ def test_list_files_by_prefix_multiple_files(mocker):
         ]
     }
     mocker.patch(
-        "application_store.external_services.aws._S3_CLIENT.list_objects_v2",
+        "pre_award.application_store.external_services.aws._S3_CLIENT.list_objects_v2",
         return_value=objects_response,
     )
 

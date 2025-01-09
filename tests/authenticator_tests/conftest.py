@@ -9,9 +9,9 @@ from flask.sessions import SessionMixin
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
-from apply.models.application_summary import ApplicationSummary
-from authenticator.models.account import AccountMethods
-from config.envs.unit_test import UnitTestConfig
+from pre_award.apply.models.application_summary import ApplicationSummary
+from pre_award.authenticator.models.account import AccountMethods
+from pre_award.config.envs.unit_test import UnitTestConfig
 from tests.authenticator_tests.testing.mocks.mocks import *  # noqa
 
 
@@ -24,18 +24,21 @@ def app_context(app):
 
 @pytest.fixture(scope="function")
 def create_magic_link(mocker, mock_notification_service_calls):
-    from authenticator.models.fund import Fund
-    from authenticator.models.round import Round
+    from pre_award.authenticator.models.fund import Fund
+    from pre_award.authenticator.models.round import Round
 
     mocker.patch(
-        "authenticator.models.account.FundMethods.get_fund",
+        "pre_award.authenticator.models.account.FundMethods.get_fund",
         return_value=Fund(
             name="test fund", fund_title="hello", short_name="COF", identifier="asdfasdf", description="asdfasdfasdf"
         ),
     )
-    mocker.patch("authenticator.models.account.get_round_data", return_value=Round(contact_email="asdf@asdf.com"))
     mocker.patch(
-        "authenticator.api.magic_links.routes.get_round_data", return_value=Round(contact_email="asdf@asdf.com")
+        "pre_award.authenticator.models.account.get_round_data", return_value=Round(contact_email="asdf@asdf.com")
+    )
+    mocker.patch(
+        "pre_award.authenticator.api.magic_links.routes.get_round_data",
+        return_value=Round(contact_email="asdf@asdf.com"),
     )
     auth_landing = AccountMethods.get_magic_link("a@example.com", "cof", "r1w1")
     link_key_end = auth_landing.index("?fund=")

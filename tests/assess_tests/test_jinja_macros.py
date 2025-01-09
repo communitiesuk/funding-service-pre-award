@@ -7,8 +7,8 @@ from flask import g, get_template_attribute, render_template_string
 from flask_wtf.csrf import generate_csrf
 from fsd_utils.authentication.models import User
 
-from assess.assessments.forms.comments_form import CommentsForm
-from assess.assessments.models.applicants_response import (
+from pre_award.assess.assessments.forms.comments_form import CommentsForm
+from pre_award.assess.assessments.models.applicants_response import (
     AboveQuestionAnswerPair,
     AboveQuestionAnswerPairHref,
     AboveQuestionAnswerPairHtml,
@@ -20,12 +20,12 @@ from assess.assessments.models.applicants_response import (
     QuestionAboveHrefAnswerList,
     QuestionHeading,
 )
-from assess.assessments.models.round_status import RoundStatus
-from assess.authentication.validation import AssessmentAccessController
-from assess.scoring.forms.rescore_form import RescoreForm
-from assess.scoring.forms.scores_and_justifications import OneToFiveScoreForm, ZeroToThreeScoreForm
-from assess.services.models.assessor_task_list import _Criteria, _CriteriaSubCriteria, _SubCriteria
-from assess.shared.filters import format_address
+from pre_award.assess.assessments.models.round_status import RoundStatus
+from pre_award.assess.authentication.validation import AssessmentAccessController
+from pre_award.assess.scoring.forms.rescore_form import RescoreForm
+from pre_award.assess.scoring.forms.scores_and_justifications import OneToFiveScoreForm, ZeroToThreeScoreForm
+from pre_award.assess.services.models.assessor_task_list import _Criteria, _CriteriaSubCriteria, _SubCriteria
+from pre_award.assess.shared.filters import format_address
 
 
 def default_flask_g():

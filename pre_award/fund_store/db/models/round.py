@@ -5,7 +5,7 @@ from sqlalchemy import JSON, Column, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.types import Boolean
 
-from db import db
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

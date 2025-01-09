@@ -1,9 +1,9 @@
 from unittest import mock
 
+import assess
 from fsd_utils import extract_questions_and_answers, generate_text_of_application
 
-import assess
-from assess.assessments.helpers import get_files_for_application_upload_fields
+from pre_award.assess.assessments.helpers import get_files_for_application_upload_fields
 from tests.assess_tests.api_data.example_application_answers import test_application_answers
 from tests.assess_tests.api_data.example_application_json_blob import single_application_json_blob
 
@@ -51,7 +51,7 @@ class TestExport:
         )
 
         with mock.patch(
-            "assess.assessments.helpers.url_for",
+            "pre_award.assess.assessments.helpers.url_for",
             return_value="dummy/path/to/file.dmp",
         ):
             ans = get_files_for_application_upload_fields(

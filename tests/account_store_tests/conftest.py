@@ -10,10 +10,10 @@ from flask import Flask
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
-from account_store.db.models.account import Account
-from account_store.db.models.role import Role
 from app import create_app  # noqa: E402
-from config import Config
+from pre_award.account_store.db.models.account import Account
+from pre_award.account_store.db.models.role import Role
+from pre_award.config import Config
 
 
 @pytest.fixture(scope="session")

@@ -5,7 +5,7 @@ from os import getenv
 
 from fsd_utils import configclass
 
-from config.envs.aws import AwsConfig
+from pre_award.config.envs.aws import AwsConfig
 
 
 @configclass

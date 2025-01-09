@@ -3,8 +3,8 @@ from functools import partial
 
 from fsd_utils.mapping.application.application_utils import format_answer
 
-from assess.assessments.pdf_generator import generate_pdf
-from assess.shared.filters import utc_to_bst
+from pre_award.assess.assessments.pdf_generator import generate_pdf
+from pre_award.assess.shared.filters import utc_to_bst
 
 
 @dataclass

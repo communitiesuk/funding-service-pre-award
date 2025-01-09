@@ -1,7 +1,7 @@
 import datetime
 from uuid import uuid4
 
-from assessment_store.db.models.flags.flag_update import FlagStatus
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
 
 now = datetime.datetime.now()
 earlier = now - datetime.timedelta(days=1)

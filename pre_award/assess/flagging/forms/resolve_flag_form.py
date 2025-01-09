@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import RadioField, TextAreaField
 from wtforms.validators import InputRequired, length
 
-from config import Config
+from pre_award.config import Config
 
 
 class ResolveFlagForm(FlaskForm):

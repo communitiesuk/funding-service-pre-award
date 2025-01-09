@@ -1,14 +1,14 @@
-from fund_store.db.queries import (
+from pre_award.fund_store.db.queries import (
     get_application_sections_for_round,
     get_fund_by_id,
     get_round_by_id,
 )
-from fund_store.db.schemas.fund import FundSchema
-from fund_store.db.schemas.round import RoundSchema
-from fund_store.db.schemas.section import SectionSchema
-from fund_store.scripts.data_updates.FS2910_ns_links import update_rounds_with_links
-from fund_store.scripts.data_updates.FS2956_ns_weightings import update_section_weightings
-from fund_store.scripts.data_updates.patch_cyp_name import update_fund_name
+from pre_award.fund_store.db.schemas.fund import FundSchema
+from pre_award.fund_store.db.schemas.round import RoundSchema
+from pre_award.fund_store.db.schemas.section import SectionSchema
+from pre_award.fund_store.scripts.data_updates.FS2910_ns_links import update_rounds_with_links
+from pre_award.fund_store.scripts.data_updates.FS2956_ns_weightings import update_section_weightings
+from pre_award.fund_store.scripts.data_updates.patch_cyp_name import update_fund_name
 
 
 def test_update_section_weightings(seed_dynamic_data):

@@ -3,19 +3,19 @@ from flask import current_app, g, make_response, redirect, render_template, requ
 from flask_babel import force_locale
 from fsd_utils.authentication.decorators import login_required
 
-from apply.default.data import (
+from pre_award.apply.default.data import (
     RoundStatus,
     determine_round_status,
     get_all_funds,
     get_all_rounds_for_fund,
     search_applications,
 )
-from apply.helpers import get_fund, get_fund_and_round, get_ttl_hash
-from apply.models.application_summary import ApplicationSummary
-from common.blueprints import Blueprint
-from common.locale_selector.get_lang import get_lang
-from common.locale_selector.set_lang import LanguageSelector
-from config import Config
+from pre_award.apply.helpers import get_fund, get_fund_and_round, get_ttl_hash
+from pre_award.apply.models.application_summary import ApplicationSummary
+from pre_award.common.blueprints import Blueprint
+from pre_award.common.locale_selector.get_lang import get_lang
+from pre_award.common.locale_selector.set_lang import LanguageSelector
+from pre_award.config import Config
 
 account_bp = Blueprint("account_routes", __name__, template_folder="templates")
 TEMPLATE_SINGLE_FUND = "apply/dashboard_single_fund.html"

@@ -2,8 +2,8 @@ import uuid  # noqa
 
 from sqlalchemy.dialects.postgresql import UUID
 
-from db import db
-from account_store.db.models.account import Account
+from pre_award.db import db
+from pre_award.account_store.db.models.account import Account
 
 
 class Role(db.Model):

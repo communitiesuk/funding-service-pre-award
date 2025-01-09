@@ -4,7 +4,7 @@ from typing import List
 
 from dataclass_dict_convert import dataclass_dict_convert
 
-from assessment_store.api.models.answer import Answer
+from pre_award.assessment_store.api.models.answer import Answer
 
 
 @dataclass_dict_convert()

@@ -7,8 +7,8 @@ from sqlalchemy import ForeignKey, func
 from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import relationship
 
-from assessment_store.db.models.comment.enums import CommentType
-from db import db
+from pre_award.assessment_store.db.models.comment.enums import CommentType
+from pre_award.db import db
 
 
 class Comment(db.Model):

@@ -4,14 +4,14 @@ import uuid
 from flask import abort, current_app, g, redirect, render_template, request, url_for
 from fsd_utils.authentication.decorators import login_requested
 
-from apply.default.data import get_applications_for_account
-from authenticator.frontend.magic_links.forms import EmailForm
-from authenticator.models.account import AccountError, AccountMethods
-from authenticator.models.data import get_round_data
-from authenticator.models.fund import FundMethods
-from authenticator.models.magic_link import MagicLinkError, MagicLinkMethods
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.apply.default.data import get_applications_for_account
+from pre_award.authenticator.frontend.magic_links.forms import EmailForm
+from pre_award.authenticator.models.account import AccountError, AccountMethods
+from pre_award.authenticator.models.data import get_round_data
+from pre_award.authenticator.models.fund import FundMethods
+from pre_award.authenticator.models.magic_link import MagicLinkError, MagicLinkMethods
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 magic_links_bp = Blueprint(
     "magic_links_bp",

@@ -6,11 +6,11 @@ from flask.views import MethodView
 from fsd_utils import evaluate_response
 from sqlalchemy.orm.exc import NoResultFound
 
-from application_store._helpers import get_blank_forms, order_applications
-from application_store._helpers.application import send_submit_notification
-from application_store.db.exceptions.submit import SubmitError
-from application_store.db.models.application.enums import Status
-from application_store.db.queries import (
+from pre_award.application_store._helpers import get_blank_forms, order_applications
+from pre_award.application_store._helpers.application import send_submit_notification
+from pre_award.application_store.db.exceptions.submit import SubmitError
+from pre_award.application_store.db.models.application.enums import Status
+from pre_award.application_store.db.queries import (
     add_new_forms,
     create_application,
     export_json_to_csv,
@@ -26,33 +26,33 @@ from application_store.db.queries import (
     update_form,
     upsert_feedback,
 )
-from application_store.db.queries.application import create_qa_base64file
-from application_store.db.queries.feedback import (
+from pre_award.application_store.db.queries.application import create_qa_base64file
+from pre_award.application_store.db.queries.feedback import (
     retrieve_all_feedbacks_and_surveys,
     retrieve_end_of_application_survey_data,
     upsert_end_of_application_survey_data,
 )
-from application_store.db.queries.reporting.queries import (
+from pre_award.application_store.db.queries.reporting.queries import (
     export_application_statuses_to_csv,
 )
-from application_store.db.queries.research import (
+from pre_award.application_store.db.queries.research import (
     retrieve_research_survey_data,
     upsert_research_survey_data,
 )
-from application_store.db.queries.statuses import (
+from pre_award.application_store.db.queries.statuses import (
     check_is_fund_round_open,
     update_statuses,
 )
-from application_store.external_services import (
+from pre_award.application_store.external_services import (
     get_account,
     get_fund,
     get_round,
     get_round_eoi_schema,
 )
-from application_store.external_services.exceptions import (
+from pre_award.application_store.external_services.exceptions import (
     NotificationError,
 )
-from common.blueprints import Blueprint
+from pre_award.common.blueprints import Blueprint
 
 application_store_bp = Blueprint("application_store_bp", __name__)
 

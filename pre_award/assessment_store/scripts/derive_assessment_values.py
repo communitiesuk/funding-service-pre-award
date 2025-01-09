@@ -2,9 +2,9 @@ import json
 
 import click
 
-from application_store.db.queries.application.queries import get_application
-from assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
-from assessment_store.db.queries.assessment_records._helpers import derive_application_values
+from pre_award.application_store.db.queries.application.queries import get_application
+from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
+from pre_award.assessment_store.db.queries.assessment_records._helpers import derive_application_values
 
 
 @click.command()
@@ -17,7 +17,7 @@ from assessment_store.db.queries.assessment_records._helpers import derive_appli
 def derive_assessment_values(application_id):
     from flask import current_app
 
-    from db import db
+    from pre_award.db import db
 
     current_app.logger.info(
         "Deriving values for %(application_id)s",

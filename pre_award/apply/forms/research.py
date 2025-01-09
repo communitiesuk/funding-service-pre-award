@@ -2,7 +2,7 @@ from flask_babel import gettext, lazy_gettext
 from wtforms import RadioField, StringField
 from wtforms.validators import Email, InputRequired
 
-from apply.forms.base import PrepopulatedForm
+from pre_award.apply.forms.base import PrepopulatedForm
 
 
 class ResearchOptForm(PrepopulatedForm):

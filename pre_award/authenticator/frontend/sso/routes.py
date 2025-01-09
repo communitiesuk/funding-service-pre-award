@@ -1,6 +1,6 @@
 from flask import render_template, request, url_for
 
-from common.blueprints import Blueprint
+from pre_award.common.blueprints import Blueprint
 
 sso_bp = Blueprint(
     "sso_bp",

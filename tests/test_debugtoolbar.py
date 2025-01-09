@@ -1,6 +1,6 @@
 import pytest
 
-from config.envs.default import DefaultConfig
+from pre_award.config.envs.default import DefaultConfig
 
 
 @pytest.mark.parametrize(

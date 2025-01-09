@@ -1,7 +1,7 @@
 import requests
 from flask import current_app
 
-from config import Config
+from pre_award.config import Config
 
 
 def get_status(questions):

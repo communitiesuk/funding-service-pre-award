@@ -8,7 +8,7 @@ import pytest
 from jwt import decode
 from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
 
-from authenticator.security.utils import create_token, validate_token
+from pre_award.authenticator.security.utils import create_token, validate_token
 
 
 class TestSecurityUtils:

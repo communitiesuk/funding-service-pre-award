@@ -3,18 +3,18 @@ from collections import OrderedDict
 import pytest
 from werkzeug.exceptions import HTTPException
 
-from assess.assessments.helpers import (
+from pre_award.assess.assessments.helpers import (
     generate_assessment_info_csv,
     generate_csv_of_application,
     generate_maps_from_form_names,
     set_assigned_info_in_overview,
     sort_assigned_column,
 )
-from assess.scoring.forms.scores_and_justifications import OneToFiveScoreForm, ZeroToThreeScoreForm
-from assess.scoring.helpers import get_scoring_class
-from assess.services.models.flag import Flag
-from assess.services.models.fund import Fund
-from assess.shared.helpers import determine_display_status, is_flaggable, process_assessments_stats
+from pre_award.assess.scoring.forms.scores_and_justifications import OneToFiveScoreForm, ZeroToThreeScoreForm
+from pre_award.assess.scoring.helpers import get_scoring_class
+from pre_award.assess.services.models.flag import Flag
+from pre_award.assess.services.models.fund import Fund
+from pre_award.assess.shared.helpers import determine_display_status, is_flaggable, process_assessments_stats
 
 RAISED_FLAG = [
     Flag.from_dict(
@@ -368,7 +368,7 @@ def test_get_scoring_class(
     scoring_class,
 ):
     mocker.patch(
-        "assess.scoring.helpers.get_scoring_system",
+        "pre_award.assess.scoring.helpers.get_scoring_system",
         return_value=returned_scoring_system,
     )
 

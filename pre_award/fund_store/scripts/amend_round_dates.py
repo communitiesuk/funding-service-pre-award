@@ -3,18 +3,18 @@ from datetime import datetime, timedelta
 
 import click
 
-from db import db
-from fund_store.config.fund_loader_config.cof.cof_r2 import rounds_config as cof_r2_configs
-from fund_store.config.fund_loader_config.cof.cof_r3 import round_config as cof_r3w1_config
-from fund_store.config.fund_loader_config.cof.cof_r3 import round_config_w2 as cof_r3w2_config
-from fund_store.config.fund_loader_config.cof.cof_r3 import round_config_w3 as cof_r3w3_config
-from fund_store.config.fund_loader_config.cof.cof_r4 import round_config_w1 as cof_r4w1_config
-from fund_store.config.fund_loader_config.cof.cof_r4 import round_config_w2 as cof_r4w2_config
-from fund_store.config.fund_loader_config.cof.eoi import round_config_eoi as cof_eoi_configs
-from fund_store.config.fund_loader_config.cyp.cyp_r1 import round_config as cyp_config
-from fund_store.config.fund_loader_config.digital_planning.dpi_r2 import round_config as dpif_config
-from fund_store.config.fund_loader_config.night_shelter.ns_r2 import round_config as nstf_config
-from fund_store.db.models import Round
+from pre_award.db import db
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import rounds_config as cof_r2_configs
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r3 import round_config as cof_r3w1_config
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r3 import round_config_w2 as cof_r3w2_config
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r3 import round_config_w3 as cof_r3w3_config
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r4 import round_config_w1 as cof_r4w1_config
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r4 import round_config_w2 as cof_r4w2_config
+from pre_award.fund_store.config.fund_loader_config.cof.eoi import round_config_eoi as cof_eoi_configs
+from pre_award.fund_store.config.fund_loader_config.cyp.cyp_r1 import round_config as cyp_config
+from pre_award.fund_store.config.fund_loader_config.digital_planning.dpi_r2 import round_config as dpif_config
+from pre_award.fund_store.config.fund_loader_config.night_shelter.ns_r2 import round_config as nstf_config
+from pre_award.fund_store.db.models import Round
 
 ROUND_IDS = {
     "COF_R2W2": "c603d114-5364-4474-a0c4-c41cbf4d3bbd",
@@ -263,7 +263,7 @@ def reset_round_dates(round_id, round_short_name):
 def reset_round_dates_fab(round_id, fund_short_name, round_short_name):
     """Resets the dates for the supplied round to the dates in the fund loader config"""
     if not round_id:
-        from fund_store.config.fund_loader_config.FAB import FAB_FUND_ROUND_CONFIGS
+        from pre_award.fund_store.config.fund_loader_config.FAB import FAB_FUND_ROUND_CONFIGS
 
         round_id = FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name]["id"]
 
@@ -343,7 +343,7 @@ def update_round_dates_fab(
     assessment_start=None,
     assessment_deadline=None,
 ):
-    from fund_store.config.fund_loader_config.FAB import FAB_FUND_ROUND_CONFIGS
+    from pre_award.fund_store.config.fund_loader_config.FAB import FAB_FUND_ROUND_CONFIGS
 
     round_id = FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name]["id"]
 

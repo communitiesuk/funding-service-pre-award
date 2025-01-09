@@ -3,7 +3,7 @@ import os
 
 from fsd_utils import configclass
 
-from config.envs.default import DefaultConfig
+from pre_award.config.envs.default import DefaultConfig
 
 
 def get_database_url() -> str:

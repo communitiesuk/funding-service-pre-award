@@ -1,8 +1,8 @@
 from flask import current_app, jsonify, redirect, render_template, request
 from fsd_utils.authentication.decorators import login_requested
 
-from assess.authentication.auth import auth_protect
-from config import Config
+from pre_award.assess.authentication.auth import auth_protect
+from pre_award.config import Config
 
 
 def not_found(error):

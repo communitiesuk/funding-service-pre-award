@@ -2,8 +2,8 @@ import traceback
 
 from flask import current_app, render_template
 
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 default_bp = Blueprint("default_bp", __name__, template_folder="templates")
 

@@ -1,9 +1,9 @@
 from flask import abort, current_app, redirect, render_template
 
-from apply.default.data import determine_round_status, get_default_round_for_fund, get_ttl_hash
-from apply.helpers import get_all_fund_short_names, get_fund_and_round
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.apply.default.data import determine_round_status, get_default_round_for_fund, get_ttl_hash
+from pre_award.apply.helpers import get_all_fund_short_names, get_fund_and_round
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 default_bp = Blueprint("routes", __name__, template_folder="templates")
 

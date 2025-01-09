@@ -2,9 +2,9 @@ import json
 
 from bs4 import BeautifulSoup
 
-from apply.default.data import RoundStatus
-from apply.models.application_display_mapping import ApplicationMapping
-from config.envs.default import DefaultConfig
+from pre_award.apply.default.data import RoundStatus
+from pre_award.apply.models.application_display_mapping import ApplicationMapping
+from pre_award.config.envs.default import DefaultConfig
 from tests.apply_tests.api_data.test_data import TEST_APPLICATIONS
 
 file = open("tests/apply_tests/api_data/endpoint_data.json")
@@ -22,19 +22,19 @@ class TestUserValidation:
 
     def test_continue_application_correct_user(self, apply_test_client, mocker, mock_login):
         mocker.patch(
-            "apply.default.application_routes.get_application_data",
+            "pre_award.apply.default.application_routes.get_application_data",
             return_value=TEST_APPLICATIONS[0],
         )
         mocker.patch(
-            "apply.default.application_routes.format_rehydrate_payload",
+            "pre_award.apply.default.application_routes.format_rehydrate_payload",
             return_value="rehydrate_payload",
         )
         mocker.patch(
-            "apply.default.application_routes.get_token_to_return_to_application",
+            "pre_award.apply.default.application_routes.get_token_to_return_to_application",
             return_value=self.REHYDRATION_TOKEN,
         )
         mocker.patch(
-            "apply.default.application_routes.determine_round_status",
+            "pre_award.apply.default.application_routes.determine_round_status",
             return_value=RoundStatus(False, False, True),
         )
         expected_redirect_url = DefaultConfig.FORM_REHYDRATION_URL.format(rehydration_token=self.REHYDRATION_TOKEN)
@@ -53,7 +53,7 @@ class TestUserValidation:
             },
         )
         mocker.patch(
-            "apply.default.application_routes.get_application_data",
+            "pre_award.apply.default.application_routes.get_application_data",
             return_value=TEST_APPLICATIONS[0],
         )
 
@@ -66,15 +66,15 @@ class TestUserValidation:
 
     def test_tasklist_correct_user(self, apply_test_client, mocker, mock_login):
         mocker.patch(
-            "apply.default.application_routes.get_application_data",
+            "pre_award.apply.default.application_routes.get_application_data",
             return_value=TEST_APPLICATIONS[0],
         )
         mocker.patch(
-            "apply.default.application_routes.get_application_display_config",
+            "pre_award.apply.default.application_routes.get_application_display_config",
             return_value=[ApplicationMapping.from_dict(section) for section in TEST_APPLICATION_DISPLAY_RESPONSE],
         )
         mocker.patch(
-            "apply.default.application_routes.determine_round_status",
+            "pre_award.apply.default.application_routes.determine_round_status",
             return_value=RoundStatus(False, False, True),
         )
 
@@ -94,7 +94,7 @@ class TestUserValidation:
             },
         )
         mocker.patch(
-            "apply.default.application_routes.get_application_data",
+            "pre_award.apply.default.application_routes.get_application_data",
             return_value=TEST_APPLICATIONS[0],
         )
 
@@ -107,15 +107,15 @@ class TestUserValidation:
 
     def test_submit_correct_user(self, apply_test_client, mocker, mock_login):
         mocker.patch(
-            "apply.default.application_routes.get_application_data",
+            "pre_award.apply.default.application_routes.get_application_data",
             return_value=TEST_APPLICATIONS[0],
         )
         mocker.patch(
-            "apply.default.application_routes.determine_round_status",
+            "pre_award.apply.default.application_routes.determine_round_status",
             return_value=RoundStatus(False, False, True),
         )
         mocker.patch(
-            "apply.default.application_routes." + "format_payload_and_submit_application",
+            "pre_award.apply.default.application_routes." + "format_payload_and_submit_application",
             return_value={
                 "id": self.TEST_ID,
                 "email": "test@test.com",
@@ -134,11 +134,11 @@ class TestUserValidation:
 
     def test_submit_correct_user_bad_dates(self, apply_test_client, mocker, mock_login):
         mocker.patch(
-            "apply.default.application_routes.get_application_data",
+            "pre_award.apply.default.application_routes.get_application_data",
             return_value=TEST_APPLICATIONS[0],
         )
         mocker.patch(
-            "apply.default.application_routes.determine_round_status",
+            "pre_award.apply.default.application_routes.determine_round_status",
             return_value=RoundStatus(True, True, False),
         )
 
@@ -161,7 +161,7 @@ class TestUserValidation:
             },
         )
         mocker.patch(
-            "apply.default.application_routes.get_application_data",
+            "pre_award.apply.default.application_routes.get_application_data",
             return_value=TEST_APPLICATIONS[0],
         )
 

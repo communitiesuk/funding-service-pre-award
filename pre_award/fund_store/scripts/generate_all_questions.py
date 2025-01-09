@@ -9,15 +9,15 @@ sys.path.insert(1, ".")
 from airium import Airium  # noqa: E402
 
 from app import create_app  # noqa: E402
-from fund_store.db.models.section import Section  # noqa: E402
-from fund_store.db.queries import (
+from pre_award.fund_store.db.models.section import Section  # noqa: E402
+from pre_award.fund_store.db.queries import (
     get_application_sections_for_round,  # noqa: E402
     get_round_by_short_name,  # noqa: E402
 )
-from fund_store.scripts.all_questions.metadata_utils import (  # noqa: E402
+from pre_award.fund_store.scripts.all_questions.metadata_utils import (  # noqa: E402
     generate_print_data_for_sections,
 )
-from fund_store.scripts.all_questions.read_forms import (  # noqa: E402; , build_form  # noqa: E402
+from pre_award.fund_store.scripts.all_questions.read_forms import (  # noqa: E402; , build_form  # noqa: E402
     find_forms_dir,
 )
 

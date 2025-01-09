@@ -11,11 +11,11 @@ from urllib.parse import urljoin
 from flask import current_app
 from flask_redis import FlaskRedis
 
-from authenticator.security.utils import create_token
-from config import Config
+from pre_award.authenticator.security.utils import create_token
+from pre_award.config import Config
 
 if TYPE_CHECKING:
-    from authenticator.models.account import Account as Account
+    from pre_award.authenticator.models.account import Account as Account
 
 
 @dataclass

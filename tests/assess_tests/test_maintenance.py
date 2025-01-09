@@ -8,10 +8,10 @@ from tests.assess_tests.conftest import create_valid_token
 @pytest.mark.mock_parameters(
     {
         "get_assessment_stats_path": [
-            "assess.assessments.models.round_summary.get_assessments_stats",
+            "pre_award.assess.assessments.models.round_summary.get_assessments_stats",
         ],
         "get_rounds_path": [
-            "assess.assessments.models.round_summary.get_rounds",
+            "pre_award.assess.assessments.models.round_summary.get_rounds",
         ],
         "fund_id": "test-fund",
         "round_id": "test-round",

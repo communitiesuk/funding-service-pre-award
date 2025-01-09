@@ -2,18 +2,18 @@ from marshmallow import Schema, fields
 from marshmallow.fields import UUID, Boolean, Enum, Field, Integer, Method, Nested, String
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 
-from assessment_store.db.models.assessment_record import AssessmentRecord
-from assessment_store.db.models.assessment_record.allocation_association import AllocationAssociation
-from assessment_store.db.models.assessment_record.enums import Language, Status
-from assessment_store.db.models.assessment_record.tag_association import TagAssociation
-from assessment_store.db.models.comment import Comment, CommentsUpdate
-from assessment_store.db.models.comment.enums import CommentType
-from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
-from assessment_store.db.models.flags.flag_update import FlagUpdate
-from assessment_store.db.models.qa_complete import QaComplete
-from assessment_store.db.models.score import AssessmentRound, Score, ScoringSystem
-from assessment_store.db.models.tag.tag_types import TagType
-from assessment_store.db.models.tag.tags import Tag
+from pre_award.assessment_store.db.models.assessment_record import AssessmentRecord
+from pre_award.assessment_store.db.models.assessment_record.allocation_association import AllocationAssociation
+from pre_award.assessment_store.db.models.assessment_record.enums import Language, Status
+from pre_award.assessment_store.db.models.assessment_record.tag_association import TagAssociation
+from pre_award.assessment_store.db.models.comment import Comment, CommentsUpdate
+from pre_award.assessment_store.db.models.comment.enums import CommentType
+from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
+from pre_award.assessment_store.db.models.flags.flag_update import FlagUpdate
+from pre_award.assessment_store.db.models.qa_complete import QaComplete
+from pre_award.assessment_store.db.models.score import AssessmentRound, Score, ScoringSystem
+from pre_award.assessment_store.db.models.tag.tag_types import TagType
+from pre_award.assessment_store.db.models.tag.tags import Tag
 
 
 class AssessmentRecordMetadata(SQLAlchemyAutoSchema):

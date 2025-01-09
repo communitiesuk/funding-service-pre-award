@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 import pytest
 
-from assess.assessments.models.location_data import LocationData
+from pre_award.assess.assessments.models.location_data import LocationData
 
 # Given data
 input_data_list = [

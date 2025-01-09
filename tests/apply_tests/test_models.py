@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
-from apply.constants import ApplicationStatus
-from apply.models.application import Application
+from pre_award.apply.constants import ApplicationStatus
+from pre_award.apply.models.application import Application
 
 
 def test_match_forms_to_state_all_forms_complete(apply_test_client):

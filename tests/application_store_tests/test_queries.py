@@ -4,40 +4,40 @@ from uuid import uuid4
 
 import pytest
 
-from application_store.config.key_report_mappings.cof_eoi_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof_eoi_key_report_mapping import (
     COF_EOI_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.cof_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof_key_report_mapping import (
     COF_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.cof_r2_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof_r2_key_report_mapping import (
     COF_R2_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.cof_r3w2_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof_r3w2_key_report_mapping import (
     COF_R3W2_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.mappings import (
+from pre_award.application_store.config.key_report_mappings.mappings import (
     ROUND_ID_TO_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.model import (
+from pre_award.application_store.config.key_report_mappings.model import (
     KeyReportMapping,
     extract_postcode,
 )
-from application_store.db.models import Applications, Forms
-from application_store.db.models.application.enums import Status as ApplicationStatus
-from application_store.db.models.forms.enums import Status as FormStatus
-from application_store.db.queries.application import (
+from pre_award.application_store.db.models import Applications, Forms
+from pre_award.application_store.db.models.application.enums import Status as ApplicationStatus
+from pre_award.application_store.db.models.forms.enums import Status as FormStatus
+from pre_award.application_store.db.queries.application import (
     create_application,
     create_qa_base64file,
     mark_application_with_requested_changes,
     process_files,
 )
-from application_store.db.queries.reporting.queries import (
+from pre_award.application_store.db.queries.reporting.queries import (
     export_application_statuses_to_csv,
     map_application_key_fields,
 )
-from application_store.external_services.aws import FileData
-from application_store.external_services.models.fund import Fund
+from pre_award.application_store.external_services.aws import FileData
+from pre_award.application_store.external_services.models.fund import Fund
 from tests.application_store_tests.seed_data.application_data import expected_application_json
 
 
@@ -61,9 +61,9 @@ def test_create_application_language_choice(mocker, fund_supports_welsh, request
         "COMPETED",
         [],
     )
-    mocker.patch("application_store.db.queries.application.queries.get_fund", return_value=mock_fund)
+    mocker.patch("pre_award.application_store.db.queries.application.queries.get_fund", return_value=mock_fund)
     mock_create_app_try = mocker.patch(
-        "application_store.db.queries.application.queries._create_application_try",
+        "pre_award.application_store.db.queries.application.queries._create_application_try",
         return_value="new application",
     )
 
@@ -98,7 +98,7 @@ def test_application_map_contents_and_base64_convertor(mocker, app):
             "COMPETED",
             [],
         )
-        mocker.patch("application_store.db.queries.application.queries.get_fund", return_value=mock_fund)
+        mocker.patch("pre_award.application_store.db.queries.application.queries.get_fund", return_value=mock_fund)
         expected_json = create_qa_base64file(expected_json["content"]["application"], True)
 
         assert "Jack-Simon" in base64.b64decode(expected_json["questions_file"]).decode()

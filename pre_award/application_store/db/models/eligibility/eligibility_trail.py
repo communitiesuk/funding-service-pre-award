@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 
-from db import db
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 import prance
 
-from config import Config
+from pre_award.config import Config
 
 
 def get_bundled_specs(main_file: str) -> Dict[str, Any]:

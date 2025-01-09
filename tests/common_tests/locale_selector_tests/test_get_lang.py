@@ -1,4 +1,4 @@
-from common.locale_selector.get_lang import get_lang
+from pre_award.common.locale_selector.get_lang import get_lang
 
 
 class TestGetLang:

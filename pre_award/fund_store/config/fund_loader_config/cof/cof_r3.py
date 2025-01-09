@@ -3,15 +3,15 @@ import textwrap
 from datetime import datetime
 from datetime import timezone
 
-from fund_store.config.fund_loader_config.cof.shared import COF_APPLICATION_GUIDANCE
-from fund_store.config.fund_loader_config.cof.shared import fund_config
-from fund_store.config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
+from pre_award.fund_store.config.fund_loader_config.cof.shared import COF_APPLICATION_GUIDANCE
+from pre_award.fund_store.config.fund_loader_config.cof.shared import fund_config
+from pre_award.fund_store.config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
     COF_R3_W1_BASE_PATH,
 )
-from fund_store.config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
+from pre_award.fund_store.config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
     COF_R3_W2_BASE_PATH,
 )
-from fund_store.config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
+from pre_award.fund_store.config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
     COF_R3_W3_BASE_PATH,
 )
 

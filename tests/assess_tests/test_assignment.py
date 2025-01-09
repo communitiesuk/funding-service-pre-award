@@ -175,7 +175,7 @@ def test_assessor_type_post(
     }
 
     with mock.patch(
-        "assess.assessments.routes.get_application_assignments",
+        "pre_award.assess.assessments.routes.get_application_assignments",
         return_value=[{"user_id": "user2"}],
     ):
         response = assess_test_client.post(
@@ -274,7 +274,7 @@ def test_assessor_type_post_existing_assignment(
     }
 
     with mock.patch(
-        "assess.assessments.routes.get_application_assignments",
+        "pre_award.assess.assessments.routes.get_application_assignments",
         return_value=[{"user_id": "cof-lead-assessor"}],
     ):
         response = assess_test_client.post(
@@ -585,11 +585,11 @@ def test_assignment_overview_post_new_and_exising(
     }
     with (
         mock.patch(
-            "assess.assessments.routes.get_application_assignments",
+            "pre_award.assess.assessments.routes.get_application_assignments",
             return_value=[{"user_id": user_2}],
         ),
         mock.patch(
-            "assess.assessments.routes.assign_user_to_assessment",
+            "pre_award.assess.assessments.routes.assign_user_to_assessment",
         ) as mock_assign_user_to_assessment_1,
     ):
         response = assess_test_client.post(
@@ -709,11 +709,11 @@ def test_assignment_overview_post_add_and_remove(
     }
     with (
         mock.patch(
-            "assess.assessments.routes.get_application_assignments",
+            "pre_award.assess.assessments.routes.get_application_assignments",
             return_value=[{"user_id": user_2}, {"user_id": user_3}],
         ),
         mock.patch(
-            "assess.assessments.routes.assign_user_to_assessment",
+            "pre_award.assess.assessments.routes.assign_user_to_assessment",
         ) as mock_assign_user_to_assessment_1,
     ):
         response = assess_test_client.post(

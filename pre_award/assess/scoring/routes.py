@@ -1,10 +1,10 @@
 from flask import abort, current_app, g, render_template, request
 
-from assess.authentication.validation import check_access_application_id
-from assess.flagging.helpers import get_flags
-from assess.scoring.forms.rescore_form import RescoreForm
-from assess.scoring.helpers import get_scoring_class
-from assess.services.data_services import (
+from pre_award.assess.authentication.validation import check_access_application_id
+from pre_award.assess.flagging.helpers import get_flags
+from pre_award.assess.scoring.forms.rescore_form import RescoreForm
+from pre_award.assess.scoring.helpers import get_scoring_class
+from pre_award.assess.services.data_services import (
     get_comments,
     get_score_and_justification,
     get_sub_criteria,
@@ -12,11 +12,11 @@ from assess.services.data_services import (
     match_score_to_user_account,
     submit_score_and_justification,
 )
-from assess.services.models.sub_criteria import SubCriteria
-from assess.services.shared_data_helpers import get_state_for_tasklist_banner
-from assess.shared.helpers import determine_assessment_status, determine_flag_status
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.assess.services.models.sub_criteria import SubCriteria
+from pre_award.assess.services.shared_data_helpers import get_state_for_tasklist_banner
+from pre_award.assess.shared.helpers import determine_assessment_status, determine_flag_status
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 scoring_bp = Blueprint(
     "scoring_bp",

@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-import apply.filters as filters
+import pre_award.apply.filters as filters
 
 
 def test_date_format_short_month(app):

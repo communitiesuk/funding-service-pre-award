@@ -6,8 +6,8 @@ from datetime import datetime
 
 from deepdiff import DeepDiff
 
-from application_store.db.models.application.enums import Language
-from config import Config
+from pre_award.application_store.db.models.application.enums import Language
+from pre_award.config import Config
 
 
 def get_row_by_pk(table, primary_key):

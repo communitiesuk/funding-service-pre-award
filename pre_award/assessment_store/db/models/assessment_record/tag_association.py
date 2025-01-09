@@ -5,7 +5,7 @@ from sqlalchemy import Column, ForeignKey, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-from db import db
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

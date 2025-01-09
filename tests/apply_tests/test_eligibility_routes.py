@@ -1,5 +1,5 @@
-from apply.models.fund import Fund
-from apply.models.round import Round
+from pre_award.apply.models.fund import Fund
+from pre_award.apply.models.round import Round
 
 default_hsra_round_fields = {
     "opens": "2022-09-01T00:00:01",
@@ -35,11 +35,11 @@ default_hsra_fund_fields = {
 def test_eligibility_result(apply_test_client, mocker, mock_login, templates_rendered):
     def mock_fund_and_round(short_name, round_id, title):
         mocker.patch(
-            "apply.helpers.get_fund_data_by_short_name",
+            "pre_award.apply.helpers.get_fund_data_by_short_name",
             return_value=Fund.from_dict(default_hsra_fund_fields),
         )
         mocker.patch(
-            "apply.helpers.get_round_data_by_short_names",
+            "pre_award.apply.helpers.get_round_data_by_short_names",
             return_value=Round.from_dict(
                 {
                     **default_hsra_round_fields,

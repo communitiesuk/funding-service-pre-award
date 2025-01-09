@@ -3,14 +3,14 @@ from unittest import mock
 import pytest
 from bs4 import BeautifulSoup
 
-from assess.services.data_services import (
+from pre_award.assess.services.data_services import (
     get_associated_tags_for_application,
     get_tags_for_fund_round,
     post_new_tag_for_fund_round,
     update_associated_tags,
 )
-from assess.tagging.models.tag import Tag
-from assess.tagging.routes import FLAG_ERROR_MESSAGE
+from pre_award.assess.tagging.models.tag import Tag
+from pre_award.assess.tagging.routes import FLAG_ERROR_MESSAGE
 from tests.assess_tests.api_data.test_data import test_fund_id, test_round_id
 
 test_tags_inactive = [
@@ -155,11 +155,11 @@ def test_change_tags_route_no_tags(
     mock_get_round,
 ):
     mocker.patch(
-        "assess.tagging.routes.get_tags_for_fund_round",
+        "pre_award.assess.tagging.routes.get_tags_for_fund_round",
         return_value=[],
     )
     mocker.patch(
-        "assess.tagging.routes.get_associated_tags_for_application",
+        "pre_award.assess.tagging.routes.get_associated_tags_for_application",
         return_value=[],
     )
     response = client_with_valid_session.get("/assess/application/app_id/tags")
@@ -505,7 +505,7 @@ def test_create_tag_shows_error_if_valid_form_post_but_request_fails(
     mocker,
 ):
     mocker.patch(
-        "assess.tagging.routes.post_new_tag_for_fund_round",
+        "pre_award.assess.tagging.routes.post_new_tag_for_fund_round",
         return_value=lambda *_: False,
     )
 
@@ -533,7 +533,7 @@ def test_create_tag_valid_form_post(
     mocker,
 ):
     mocker.patch(
-        "assess.tagging.routes.post_new_tag_for_fund_round",
+        "pre_award.assess.tagging.routes.post_new_tag_for_fund_round",
         return_value=lambda *_: True,
     )
 
@@ -561,7 +561,7 @@ def test_create_tag_valid_form_go_back_post(
     mocker,
 ):
     mocker.patch(
-        "assess.tagging.routes.post_new_tag_for_fund_round",
+        "pre_award.assess.tagging.routes.post_new_tag_for_fund_round",
         return_value=lambda *_: True,
     )
 
@@ -579,7 +579,7 @@ def test_create_tag_valid_form_go_back_post(
 
 def test_get_available_active_tags(assess_test_client):
     with mock.patch(
-        "assess.services.data_services.get_data",
+        "pre_award.assess.services.data_services.get_data",
         return_value=test_tags_active,
     ) as mock_get_data:
         result = get_tags_for_fund_round("test_fund", "test_round", {"tag_status": "True"})
@@ -591,7 +591,7 @@ def test_get_available_active_tags(assess_test_client):
 
 def test_get_available_inactive_tags(assess_test_client):
     with mock.patch(
-        "assess.services.data_services.get_data",
+        "pre_award.assess.services.data_services.get_data",
         return_value=test_tags_inactive,
     ) as mock_get_data:
         result = get_tags_for_fund_round("test_fund", "test_round", {"tag_status": "False"})
@@ -602,14 +602,14 @@ def test_get_available_inactive_tags(assess_test_client):
 
 
 def test_get_available_tags_no_tags(assess_test_client):
-    with mock.patch("assess.services.data_services.get_data", return_value=[]):
+    with mock.patch("pre_award.assess.services.data_services.get_data", return_value=[]):
         result = get_tags_for_fund_round("test_fund", "test_round", "")
         assert len(result) == 0
 
 
 def test_get_associated_tags_for_applications(assess_test_client):
     with mock.patch(
-        "assess.services.data_services.get_data",
+        "pre_award.assess.services.data_services.get_data",
         return_value=[
             {
                 "application_id": "155df6dc-541e-4d7c-82bb-9d8e3b7e52ef",
@@ -658,7 +658,7 @@ def mock_get_fund_round(
     mock_get_fund,
 ):
     mocker.patch(
-        "assess.tagging.routes.get_fund_round",
+        "pre_award.assess.tagging.routes.get_fund_round",
         return_value={
             "fund_name": "test-fund",
             "round_name": "round 1",
@@ -681,7 +681,7 @@ def mock_get_tag_and_count(mocker):
         type_id="abcabc",
         tag_association_count=count,
     )
-    mocker.patch("assess.tagging.routes.get_tag", return_value=mock_tag)
+    mocker.patch("pre_award.assess.tagging.routes.get_tag", return_value=mock_tag)
     yield (tag_id, count)
 
 
@@ -722,7 +722,7 @@ def test_edit_tag_post(
     mock_get_round,
 ):
     mocker.patch(
-        "assess.tagging.routes.update_tag",
+        "pre_award.assess.tagging.routes.update_tag",
         return_value=return_from_data,
     )
     response = client_with_valid_session.post(

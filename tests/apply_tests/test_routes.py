@@ -5,9 +5,9 @@ from bs4 import BeautifulSoup
 from flask import render_template
 from requests import HTTPError
 
-from apply.default.data import get_round_data_fail_gracefully
-from apply.helpers import find_fund_in_request, find_round_in_request
-from apply.models.fund import Fund
+from pre_award.apply.default.data import get_round_data_fail_gracefully
+from pre_award.apply.helpers import find_fund_in_request, find_round_in_request
+from pre_award.apply.models.fund import Fund
 from tests.apply_tests.api_data.test_data import TEST_APPLICATION_SUMMARIES, TEST_FUNDS_DATA, TEST_ROUNDS_DATA
 
 
@@ -43,8 +43,8 @@ def test_page_footer_includes_correct_title_and_link_text(apply_test_client):
 
 
 def test_get_round_data_fail_gracefully(app, mocker):
-    mocker.patch("apply.default.data.get_lang", return_value="en")
-    with mock.patch("apply.default.data.get_data") as get_data_mock, app.app_context():
+    mocker.patch("pre_award.apply.default.data.get_lang", return_value="en")
+    with mock.patch("pre_award.apply.default.data.get_data") as get_data_mock, app.app_context():
         get_data_mock.side_effect = HTTPError()
         round_data = get_round_data_fail_gracefully("cof", "r2w2")
         assert round_data.id == ""
@@ -174,20 +174,20 @@ def test_find_fund_in_request(
     app,
     mocker,
 ):
-    mocker.patch("apply.helpers.get_all_fund_short_names", return_value=["TEST"])
+    mocker.patch("pre_award.apply.helpers.get_all_fund_short_names", return_value=["TEST"])
     mocker.patch(
-        "apply.helpers.get_fund_data_by_short_name",
+        "pre_award.apply.helpers.get_fund_data_by_short_name",
         return_value=short_name_fund,
     )
     mocker.patch(
-        "apply.helpers.get_fund_data",
+        "pre_award.apply.helpers.get_fund_data",
         return_value=id_fund,
     )
     mocker.patch(
-        "apply.helpers.get_application_data",
+        "pre_award.apply.helpers.get_application_data",
         return_value=TEST_APPLICATION_SUMMARIES[0],
     )
-    request_mock = mocker.patch("apply.helpers.request")
+    request_mock = mocker.patch("pre_award.apply.helpers.request")
     request_mock.view_args.get = lambda key: view_args_value if key == key_name else None
     request_mock.args.get = lambda key: args_value if key == key_name else None
     request_mock.form.get = lambda key: form_value if key == key_name else None
@@ -227,22 +227,22 @@ def test_find_round_in_request(
     mocker,
 ):
     mocker.patch(
-        "apply.helpers.get_round_data_by_short_names",
+        "pre_award.apply.helpers.get_round_data_by_short_names",
         return_value=short_name_round,
     )
     mocker.patch(
-        "apply.helpers.get_application_data",
+        "pre_award.apply.helpers.get_application_data",
         return_value=TEST_APPLICATION_SUMMARIES[0],
     )
     mocker.patch(
-        "apply.helpers.get_round_data",
+        "pre_award.apply.helpers.get_round_data",
         return_value=app_id_round,
     )
     mocker.patch(
-        "apply.helpers.get_default_round_for_fund",
+        "pre_award.apply.helpers.get_default_round_for_fund",
         return_value=TEST_ROUNDS_DATA[3],
     )
-    request_mock = mocker.patch("apply.helpers.request")
+    request_mock = mocker.patch("pre_award.apply.helpers.request")
     request_mock.view_args.get = lambda key: view_args_value if key == key_name else None
     request_mock.args.get = lambda key: args_value if key == key_name else None
     request_mock.form.get = lambda key: form_value if key == key_name else None

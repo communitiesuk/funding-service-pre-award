@@ -6,8 +6,8 @@ from unittest.mock import PropertyMock, patch
 
 import pytest
 
-from authenticator.security.utils import validate_token
-from config.envs.default import SafeAppConfig
+from pre_award.authenticator.security.utils import validate_token
+from pre_award.config.envs.default import SafeAppConfig
 
 
 @pytest.mark.usefixtures("authenticator_test_client")
@@ -43,7 +43,7 @@ class TestSignout:
         authenticator_test_client.set_cookie(key="fsd_user_token", value="invalid_token")
         authenticator_test_client.set_cookie(key="user_fund_and_round", value="fund_round")
 
-        with patch("authenticator.api.session.auth_session.validate_token") as mock_validate_token:  # noqa
+        with patch("pre_award.authenticator.api.session.auth_session.validate_token") as mock_validate_token:  # noqa
             mock_validate_token.return_value = {
                 "fund": "test_fund",
                 "round": "test_round",
@@ -115,7 +115,7 @@ class TestSignout:
         :param authenticator_test_client:
         """
         mocker.patch(
-            "config.Config.SAFE_RETURN_APPS",
+            "pre_award.config.Config.SAFE_RETURN_APPS",
             new_callable=PropertyMock,
             return_value={
                 "test-app": SafeAppConfig(

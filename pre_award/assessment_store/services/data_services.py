@@ -3,7 +3,7 @@ from typing import Dict
 import requests
 from flask import current_app
 
-from config import Config
+from pre_award.config import Config  # noqa: E402
 
 
 def get_data(endpoint: str, payload: Dict = None):

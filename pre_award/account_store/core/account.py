@@ -10,11 +10,11 @@ from flask import abort, request
 from sqlalchemy import any_, delete, or_, select
 from sqlalchemy.orm import selectinload
 
-from account_store.db.models.account import Account
-from account_store.db.models.role import Role
-from account_store.db.schemas.account import AccountSchema
-from common.blueprints import Blueprint
-from db import db
+from pre_award.account_store.db.models.account import Account
+from pre_award.account_store.db.models.role import Role
+from pre_award.account_store.db.schemas.account import AccountSchema
+from pre_award.common.blueprints import Blueprint
+from pre_award.db import db
 
 account_core_bp = Blueprint("account_core_bp", __name__)
 

@@ -1,7 +1,7 @@
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 
-from fund_store.db.models.event import Event, EventType
+from pre_award.fund_store.db.models.event import Event, EventType
 
 
 class EventSchema(SQLAlchemyAutoSchema):

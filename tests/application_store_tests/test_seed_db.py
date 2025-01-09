@@ -4,11 +4,11 @@ from uuid import uuid4
 
 import pytest
 
-from application_store.db.models.application.applications import Status
-from application_store.db.queries.application import get_application_status
-from application_store.db.queries.form import get_forms_by_app_id
-from application_store.scripts.seed_db_test_data import FUND_CONFIG
-from config import Config
+from pre_award.application_store.db.models.application.applications import Status
+from pre_award.application_store.db.queries.application import get_application_status
+from pre_award.application_store.db.queries.form import get_forms_by_app_id
+from pre_award.application_store.scripts.seed_db_test_data import FUND_CONFIG
+from pre_award.config import Config
 from tests.application_store_tests.seed_data.seed_db import (
     seed_completed_application,
     seed_in_progress_application,

@@ -1,8 +1,8 @@
 from flask import redirect, render_template, request, url_for
 
-from assess.services.data_services import get_flags, get_fund, get_sub_criteria_banner_state, submit_flag
-from assess.shared.helpers import determine_assessment_status, determine_flag_status, get_ttl_hash
-from config import Config
+from pre_award.assess.services.data_services import get_flags, get_fund, get_sub_criteria_banner_state, submit_flag
+from pre_award.assess.shared.helpers import determine_assessment_status, determine_flag_status, get_ttl_hash
+from pre_award.config import Config
 
 
 def resolve_application(

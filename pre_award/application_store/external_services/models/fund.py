@@ -3,7 +3,7 @@ from typing import Optional
 
 from flask import current_app
 
-from application_store.external_services.models.round import Round
+from pre_award.application_store.external_services.models.round import Round
 
 
 @dataclass

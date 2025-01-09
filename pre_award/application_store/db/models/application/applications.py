@@ -6,8 +6,8 @@ from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from application_store.db.models.application.enums import Language, Status
-from db import db
+from pre_award.application_store.db.models.application.enums import Language, Status
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

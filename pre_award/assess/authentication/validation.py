@@ -6,10 +6,10 @@ from typing import Callable, List, Mapping, Sequence
 from flask import abort, g
 from fsd_utils.authentication.decorators import login_required
 
-from assess.assessments.models.round_status import RoundStatus, determine_round_status
-from assess.services.data_services import get_application_metadata, get_fund, get_round
-from assess.shared.helpers import get_ttl_hash, get_value_from_request
-from config import Config
+from pre_award.assess.assessments.models.round_status import RoundStatus, determine_round_status
+from pre_award.assess.services.data_services import get_application_metadata, get_fund, get_round
+from pre_award.assess.shared.helpers import get_ttl_hash, get_value_from_request
+from pre_award.config import Config
 
 _UK_COUNTRIES: list[str] = [
     "ENGLAND",

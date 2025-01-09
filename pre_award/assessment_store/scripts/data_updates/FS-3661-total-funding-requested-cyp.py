@@ -1,11 +1,11 @@
 from flask import current_app
 from sqlalchemy import select, update
 
-from assessment_store.config.mappings.assessment_mapping_fund_round import (
+from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
     fund_round_data_key_mappings,
 )
-from assessment_store.db.models import AssessmentRecord
-from db import db
+from pre_award.assessment_store.db.models import AssessmentRecord
+from pre_award.db import db
 
 
 def update_funding_amount_requested_for_cyp():

@@ -3,8 +3,8 @@ from datetime import datetime, timezone
 
 import pytest
 
-from assessment_store.db.models.assessment_record.allocation_association import AllocationAssociation
-from assessment_store.db.queries.assessment_records.queries import (
+from pre_award.assessment_store.db.models.assessment_record.allocation_association import AllocationAssociation
+from pre_award.assessment_store.db.queries.assessment_records.queries import (
     create_user_application_association,
     get_user_application_associations,
     update_user_application_association,

@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from apply.models.application import Application
-from apply.models.application_summary import ApplicationSummary
-from apply.models.round import Round
+from pre_award.apply.models.application import Application
+from pre_award.apply.models.application_summary import ApplicationSummary
+from pre_award.apply.models.round import Round
 from tests.apply_tests.api_data.test_data_forms import COF_TEST_FORMS
 
 common_round_data = {

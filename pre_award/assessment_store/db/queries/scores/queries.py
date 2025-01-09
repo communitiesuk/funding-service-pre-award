@@ -11,10 +11,10 @@ from flask import current_app as app
 from sqlalchemy import select
 from sqlalchemy.orm.exc import NoResultFound
 
-from assessment_store.db.models import AssessmentRecord
-from assessment_store.db.models.score import AssessmentRound, Score, ScoringSystem
-from assessment_store.db.schemas import AssessmentRoundMetadata, ScoreMetadata, ScoringSystemMetadata
-from db import db
+from pre_award.assessment_store.db.models import AssessmentRecord
+from pre_award.assessment_store.db.models.score import AssessmentRound, Score, ScoringSystem
+from pre_award.assessment_store.db.schemas import AssessmentRoundMetadata, ScoreMetadata, ScoringSystemMetadata
+from pre_award.db import db
 
 
 def get_scores_for_app_sub_crit(

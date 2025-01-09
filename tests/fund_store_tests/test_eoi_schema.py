@@ -3,7 +3,7 @@ import json
 import pytest
 from fsd_utils import Decision, evaluate_response
 
-from fund_store.config.fund_loader_config.cof.eoi_r1_schema import (
+from pre_award.fund_store.config.fund_loader_config.cof.eoi_r1_schema import (
     COF_PLANNING_PERMISSION_CAVEAT_EN,
     COF_PLANNING_PERMISSION_IF_NEEDED_CAVEAT_EN,
     COF_R3_EOI_SCHEMA_EN,

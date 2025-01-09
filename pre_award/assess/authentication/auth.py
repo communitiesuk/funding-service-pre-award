@@ -1,9 +1,9 @@
 from flask import g, redirect, request
 from fsd_utils.authentication.models import User
 
-from assess.services.data_services import get_funds
-from assess.shared.helpers import get_ttl_hash
-from config import Config
+from pre_award.assess.services.data_services import get_funds
+from pre_award.assess.shared.helpers import get_ttl_hash
+from pre_award.config import Config
 
 
 def auth_protect(minimum_roles_required: list, unprotected_routes: list):

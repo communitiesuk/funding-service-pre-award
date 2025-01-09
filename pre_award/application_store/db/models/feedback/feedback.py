@@ -6,9 +6,9 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from sqlalchemy_json import NestedMutableJson
 
-from application_store.db.models.application.applications import Applications
-from application_store.db.models.application.enums import Status
-from db import db
+from pre_award.application_store.db.models.application.applications import Applications
+from pre_award.application_store.db.models.application.enums import Status
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

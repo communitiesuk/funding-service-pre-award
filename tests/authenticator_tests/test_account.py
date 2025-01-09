@@ -1,8 +1,8 @@
 import pytest
 
-from authenticator.models.account import Account, AccountMethods
-from authenticator.models.fund import Fund
-from authenticator.models.round import Round
+from pre_award.authenticator.models.account import Account, AccountMethods
+from pre_award.authenticator.models.fund import Fund
+from pre_award.authenticator.models.round import Round
 from tests.utils import AnyStringMatching
 
 test_user_id = "test_id"
@@ -17,7 +17,7 @@ def mock_get_account(mocker, request):
     new_account = request.node.get_closest_marker("new_account")
 
     mocker.patch(
-        "authenticator.models.account.AccountMethods.get_account",
+        "pre_award.authenticator.models.account.AccountMethods.get_account",
         return_value=Account.from_json(
             {
                 "account_id": test_user_id,
@@ -36,7 +36,7 @@ def mock_get_account(mocker, request):
 @pytest.fixture(scope="function")
 def mock_create_account(mocker):
     mocker.patch(
-        "authenticator.models.account.post_data",
+        "pre_award.authenticator.models.account.post_data",
         return_value={
             "account_id": test_user_id,
             "email_address": test_user_email,
@@ -49,7 +49,7 @@ def mock_create_account(mocker):
 @pytest.fixture(scope="function")
 def mock_update_account(mocker):
     mocker.patch(
-        "authenticator.models.account.put_data",
+        "pre_award.authenticator.models.account.put_data",
         return_value={
             "account_id": test_user_id,
             "email_address": "john.Doe@example.com",
@@ -104,7 +104,7 @@ class TestAccountMethods(object):
         mock_notification_service_calls,
     ):
         mocker.patch(
-            "authenticator.models.account.FundMethods.get_fund",
+            "pre_award.authenticator.models.account.FundMethods.get_fund",
             return_value=Fund(
                 name="test fund",
                 fund_title="hello",
@@ -113,7 +113,9 @@ class TestAccountMethods(object):
                 description="asdfasdfasdf",
             ),
         )
-        mocker.patch("authenticator.models.account.get_round_data", return_value=Round(contact_email="asdf@asdf.com"))
+        mocker.patch(
+            "pre_award.authenticator.models.account.get_round_data", return_value=Round(contact_email="asdf@asdf.com")
+        )
 
         result = AccountMethods.get_magic_link(
             email=test_user_email,

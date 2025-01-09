@@ -5,8 +5,8 @@ import pytest
 import werkzeug
 from werkzeug.exceptions import HTTPException
 
-from assess.assessments.models.round_status import RoundStatus
-from assess.authentication.validation import (
+from pre_award.assess.assessments.models.round_status import RoundStatus
+from pre_award.assess.authentication.validation import (
     _get_all_country_roles,
     _get_all_users_roles,
     _get_roles_by_fund_short_name,
@@ -19,7 +19,7 @@ from assess.authentication.validation import (
     has_devolved_authority_validation,
     has_relevant_country_role,
 )
-from assess.services.models.fund import Fund
+from pre_award.assess.services.models.fund import Fund
 
 
 class _MockUser:
@@ -60,7 +60,7 @@ def test__get_all_country_roles():
 
 def test__get_all_users_roles(monkeypatch):
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(
             roles=[
                 "COF_LEAD_ASSESSOR",
@@ -82,7 +82,7 @@ def test__get_all_users_roles(monkeypatch):
 
 def test_get_valid_country_roles(monkeypatch):
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(roles=["COF_ENGLAND", "COF_SCOTLAND"]),
     )
     valid_country_roles = get_valid_country_roles("COF")
@@ -110,14 +110,14 @@ def test_get_valid_country_roles(monkeypatch):
     ],
 )
 def test_get_countries_from_roles(monkeypatch, roles, expected):
-    monkeypatch.setattr("assess.authentication.validation.g", _MockGlobal(roles=roles))
+    monkeypatch.setattr("pre_award.assess.authentication.validation.g", _MockGlobal(roles=roles))
     countries = get_countries_from_roles("COF")
     assert countries == expected
 
 
 def test_has_relevant_country_role(monkeypatch):
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(roles=["COF_ENGLAND"]),
     )
     assert has_relevant_country_role("ENGLAND", "COF") is True
@@ -158,7 +158,7 @@ def test_has_devolved_authority_validation_ids(fund_id, expected):
 )
 def test_has_access_to_fund(monkeypatch, short_name, roles, expected):
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(roles=roles),
     )
     assert has_access_to_fund(short_name) == expected
@@ -184,11 +184,11 @@ def test_check_access_application_id_cant_access_application_when_no_country_rol
     # WHEN the user has no COF_ENGLAND role
     # THEN the user cannot access the application
     monkeypatch.setattr(
-        "assess.authentication.validation.get_value_from_request",
+        "pre_award.assess.authentication.validation.get_value_from_request",
         lambda _: "00000000-0000-0000-0000-000000000000",
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.get_application_metadata",
+        "pre_award.assess.authentication.validation.get_application_metadata",
         lambda _: {
             "location_json_blob": {"country": "England"},
             "fund_id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
@@ -196,11 +196,11 @@ def test_check_access_application_id_cant_access_application_when_no_country_rol
         },
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.determine_round_status",
+        "pre_award.assess.authentication.validation.determine_round_status",
         lambda *args, **kwargs: RoundStatus(False, False, False, False, True, False),
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.get_fund",
+        "pre_award.assess.authentication.validation.get_fund",
         lambda *_, **__: Fund.from_json(
             {
                 "id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
@@ -211,7 +211,7 @@ def test_check_access_application_id_cant_access_application_when_no_country_rol
         ),
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(roles=["COF_SCOTLAND", "COF_WALES", "COF_NORTHERNIRELAND"]),
     )
 
@@ -226,16 +226,16 @@ def test_check_access_application_id_can_access_application_when_has_country_rol
 
     # we're not testing the decorator here, so we can just mock it out
     monkeypatch.setattr(
-        "assess.authentication.validation.login_required",
+        "pre_award.assess.authentication.validation.login_required",
         lambda *_, **__: lambda *_, **__: ...,
     )
 
     monkeypatch.setattr(
-        "assess.authentication.validation.get_value_from_request",
+        "pre_award.assess.authentication.validation.get_value_from_request",
         lambda _: "00000000-0000-0000-0000-000000000000",
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.get_application_metadata",
+        "pre_award.assess.authentication.validation.get_application_metadata",
         lambda _: {
             "location_json_blob": {"country": "England"},
             "fund_id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
@@ -243,11 +243,11 @@ def test_check_access_application_id_can_access_application_when_has_country_rol
         },
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.determine_round_status",
+        "pre_award.assess.authentication.validation.determine_round_status",
         lambda *args, **kwargs: RoundStatus(False, False, False, False, True, False),
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.get_fund",
+        "pre_award.assess.authentication.validation.get_fund",
         lambda *_, **__: Fund.from_json(
             {
                 "id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
@@ -258,7 +258,7 @@ def test_check_access_application_id_can_access_application_when_has_country_rol
         ),
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(roles=["COF_ENGLAND", "COF_COMMENTER"]),
     )
 
@@ -274,16 +274,16 @@ def test_check_access_application_id_can_access_application_when_fund_has_no_dev
 
     # we're not testing the decorator here, so we can just mock it out
     monkeypatch.setattr(
-        "assess.authentication.validation.login_required",
+        "pre_award.assess.authentication.validation.login_required",
         lambda *_, **__: lambda *_, **__: ...,
     )
 
     monkeypatch.setattr(
-        "assess.authentication.validation.get_value_from_request",
+        "pre_award.assess.authentication.validation.get_value_from_request",
         lambda _: "00000000-0000-0000-0000-000000000000",
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.get_application_metadata",
+        "pre_award.assess.authentication.validation.get_application_metadata",
         lambda _: {
             "location_json_blob": {"country": "England"},
             "fund_id": "13b95669-ed98-4840-8652-d6b7a19964db",
@@ -291,11 +291,11 @@ def test_check_access_application_id_can_access_application_when_fund_has_no_dev
         },
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.determine_round_status",
+        "pre_award.assess.authentication.validation.determine_round_status",
         lambda *args, **kwargs: RoundStatus(False, False, False, False, True, False),
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.get_fund",
+        "pre_award.assess.authentication.validation.get_fund",
         lambda *_, **__: Fund.from_json(
             {
                 "id": "mock-nstf-fund-id",
@@ -306,7 +306,7 @@ def test_check_access_application_id_can_access_application_when_fund_has_no_dev
         ),
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(roles=["NSTF_COMMENTER"]),
     )
 
@@ -319,11 +319,11 @@ def test_check_access_application_id_cant_access_application_when_no_relevant_fu
     # WHEN the user has no COF role
     # THEN the user cannot access the application
     monkeypatch.setattr(
-        "assess.authentication.validation.get_value_from_request",
+        "pre_award.assess.authentication.validation.get_value_from_request",
         lambda _: "00000000-0000-0000-0000-000000000000",
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.get_application_metadata",
+        "pre_award.assess.authentication.validation.get_application_metadata",
         lambda _: {
             "location_json_blob": {"country": "England"},
             "fund_id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
@@ -331,11 +331,11 @@ def test_check_access_application_id_cant_access_application_when_no_relevant_fu
         },
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.determine_round_status",
+        "pre_award.assess.authentication.validation.determine_round_status",
         lambda *args, **kwargs: RoundStatus(False, False, False, False, True, False),
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.get_fund",
+        "pre_award.assess.authentication.validation.get_fund",
         lambda *_, **__: Fund.from_json(
             {
                 "id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",
@@ -346,7 +346,7 @@ def test_check_access_application_id_cant_access_application_when_no_relevant_fu
         ),
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(roles=["NSTF_COMMENTER"]),  # no COF role
     )
 
@@ -375,11 +375,11 @@ def test_check_access_fund_short_name_round_sn_cant_access(monkeypatch, mock_get
     # WHEN the user has no COF role
     # THEN the user cannot the page
     monkeypatch.setattr(
-        "assess.authentication.validation.get_value_from_request",
+        "pre_award.assess.authentication.validation.get_value_from_request",
         lambda _: "cof",
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(roles=["NSTF_COMMENTER"]),  # no COF role
     )
 
@@ -394,20 +394,20 @@ def test_check_access_fund_short_name_round_sn_can_access(monkeypatch, mock_get_
 
     # we're not testing the decorator here, so we can just mock it out
     monkeypatch.setattr(
-        "assess.authentication.validation.login_required",
+        "pre_award.assess.authentication.validation.login_required",
         lambda *_, **__: lambda *_, **__: ...,
     )
 
     monkeypatch.setattr(
-        "assess.authentication.validation.get_value_from_request",
+        "pre_award.assess.authentication.validation.get_value_from_request",
         lambda _: "cof",
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.determine_round_status",
+        "pre_award.assess.authentication.validation.determine_round_status",
         lambda *args, **kwargs: RoundStatus(False, False, False, False, True, False),
     )
     monkeypatch.setattr(
-        "assess.authentication.validation.g",
+        "pre_award.assess.authentication.validation.g",
         _MockGlobal(roles=["COF_COMMENTER"]),
     )
 
@@ -426,15 +426,15 @@ def test_check_access_application_id_decorator_returns_403_for_inactive_assessme
 ):
     # check that the check_access_application_id decorator returns a 403 when the assessment is inactive
     mocker.patch(
-        "assess.authentication.validation.get_value_from_request",
+        "pre_award.assess.authentication.validation.get_value_from_request",
         return_value="test",
     )
     mocker.patch(
-        "assess.authentication.validation.determine_round_status",
+        "pre_award.assess.authentication.validation.determine_round_status",
         lambda *args, **kwargs: RoundStatus(False, False, False, False, False, False),
     )
     mocker.patch(
-        "assess.authentication.validation.get_round",
+        "pre_award.assess.authentication.validation.get_round",
         return_value=MagicMock(deadline=(datetime.now() + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S")),
     )
 

@@ -2,7 +2,7 @@ from flask_babel import gettext
 from wtforms import FloatField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, InputRequired, NumberRange
 
-from apply.forms.base import ApplicationFlaskForm, PrepopulatedForm
+from pre_award.apply.forms.base import ApplicationFlaskForm, PrepopulatedForm
 
 
 class DefaultSectionFeedbackForm(ApplicationFlaskForm):

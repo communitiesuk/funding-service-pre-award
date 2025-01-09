@@ -1,9 +1,9 @@
 from flask import current_app
 from sqlalchemy import update
 
-import fund_store.config.fund_loader_config.night_shelter.ns_r2 as ns_r2
-from db import db
-from fund_store.db.models.round import Round
+import pre_award.fund_store.config.fund_loader_config.night_shelter.ns_r2 as ns_r2
+from pre_award.db import db
+from pre_award.fund_store.db.models.round import Round
 
 
 def update_rounds_with_links(rounds):

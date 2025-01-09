@@ -1,16 +1,16 @@
 # flake8: noqa
-from fund_store.config.fund_loader_config.cof.cof_r4 import (
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r4 import (
     APPLICATION_BASE_PATH_COF_R4_W2,
 )
-from fund_store.config.fund_loader_config.cof.cof_r4 import (
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r4 import (
     ASSESSMENT_BASE_PATH_COF_R4_W2,
 )
-from fund_store.config.fund_loader_config.cof.cof_r4 import COF_ROUND_4_WINDOW_2_ID
-from fund_store.config.fund_loader_config.cof.cof_r4 import cof_r4w2_sections
-from fund_store.config.fund_loader_config.cof.cof_r4 import round_config_w2
-from fund_store.db.queries import insert_base_sections
-from fund_store.db.queries import insert_or_update_application_sections
-from fund_store.db.queries import upsert_round_data
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r4 import COF_ROUND_4_WINDOW_2_ID
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r4 import cof_r4w2_sections
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r4 import round_config_w2
+from pre_award.fund_store.db.queries import insert_base_sections
+from pre_award.fund_store.db.queries import insert_or_update_application_sections
+from pre_award.fund_store.db.queries import upsert_round_data
 
 
 def main() -> None:

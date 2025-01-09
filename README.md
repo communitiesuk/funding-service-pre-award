@@ -47,7 +47,7 @@ Whenever you make changes to database models, please run:
 
 The `message` should be a short description of the DB changes made. Don't specify a revision id (using `--rev-id`) - it will be generated automatically.
 
-The migration file for your changes will be created in ./db/migrations/versions. Please then commit and push these to github
+The migration file for your changes will be created in ./pre_award/db/migrations/versions. Please then commit and push these to github
 so that the migrations will be run in the pipelines to correctly upgrade the deployed db instances with your changes.
 
 ## Builds and Deploys

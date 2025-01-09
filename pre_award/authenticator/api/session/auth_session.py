@@ -6,15 +6,15 @@ from flask import current_app, make_response, redirect, request, session, url_fo
 from flask.views import MethodView
 from fsd_utils import clear_sentry
 
-from authenticator.api.responses import error_response
-from authenticator.api.session.exceptions import SessionCreateError
-from authenticator.models.magic_link import MagicLinkMethods
-from authenticator.security.utils import create_token, decode_with_options, validate_token
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.authenticator.api.responses import error_response
+from pre_award.authenticator.api.session.exceptions import SessionCreateError
+from pre_award.authenticator.models.magic_link import MagicLinkMethods
+from pre_award.authenticator.security.utils import create_token, decode_with_options, validate_token
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 if TYPE_CHECKING:
-    from authenticator.models.account import Account as Account
+    from pre_award.authenticator.models.account import Account as Account
 
 
 api_sessions_bp = Blueprint("api_sessions", __name__)

@@ -4,7 +4,7 @@ routes need to be tested and their expected
 content.
 """
 
-from assess.services.data_services import get_local_data
+from pre_award.assess.services.data_services import get_local_data
 
 intro_routes_and_test_content = {
     "/": [{"tag": "h1", "name": None, "contains": "Assessment Hub"}],

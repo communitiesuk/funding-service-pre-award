@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from assessment_store.db.queries.assessment_records._helpers import (
+from pre_award.assessment_store.db.queries.assessment_records._helpers import (
     derive_application_values,
     get_location_json_from_postcode,
 )
@@ -19,7 +19,7 @@ def mock_data_key_mappings(monkeypatch):
         }
     }
     monkeypatch.setattr(
-        "assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
+        "pre_award.assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
         fund_round_data_key_mappings,
     )
     yield
@@ -107,7 +107,7 @@ def test_derive_funding(app, exp_total, field_one, field_two, funding_field_type
         }
     }
     monkeypatch.setattr(
-        "assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
+        "pre_award.assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
         fund_round_data_key_mappings,
     )
     single_application_json = "tests/assessment_store_tests/test_data/single_application_no_location.json"
@@ -119,6 +119,8 @@ def test_derive_funding(app, exp_total, field_one, field_two, funding_field_type
 
 
 def test_get_location_request_error(app, mocker):
-    mocker.patch("assessment_store.db.queries.assessment_records._helpers.requests.post", side_effect=Exception())
+    mocker.patch(
+        "pre_award.assessment_store.db.queries.assessment_records._helpers.requests.post", side_effect=Exception()
+    )
     location_data = get_location_json_from_postcode("AA12 1DB")
     assert location_data is None

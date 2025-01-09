@@ -6,7 +6,7 @@ from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.sql import func
 
-from db import db
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

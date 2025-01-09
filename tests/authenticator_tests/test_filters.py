@@ -1,6 +1,6 @@
 import pytest
 
-import authenticator.frontend.magic_links.filters as filters
+import pre_award.authenticator.frontend.magic_links.filters as filters
 
 
 @pytest.mark.parametrize(

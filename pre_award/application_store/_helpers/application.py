@@ -3,11 +3,11 @@ from operator import itemgetter
 from flask import current_app
 from fsd_utils import Decision
 
-from application_store.config.key_report_mappings.mappings import (
+from pre_award.application_store.config.key_report_mappings.mappings import (
     ROUND_ID_TO_KEY_REPORT_MAPPING,
 )
-from application_store.db.queries.application import create_qa_base64file
-from application_store.db.queries.reporting.queries import (
+from pre_award.application_store.db.queries.application import create_qa_base64file
+from pre_award.application_store.db.queries.reporting.queries import (
     map_application_key_fields,
 )
 from services.notify import NotificationError, get_notification_service

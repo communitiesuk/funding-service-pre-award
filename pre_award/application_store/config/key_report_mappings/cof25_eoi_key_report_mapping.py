@@ -1,4 +1,4 @@
-from application_store.config.key_report_mappings.model import (
+from pre_award.application_store.config.key_report_mappings.model import (
     FormMappingItem,
     KeyReportMapping,
     extract_postcode,

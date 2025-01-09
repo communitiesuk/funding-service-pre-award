@@ -1,5 +1,5 @@
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 from .assessment_routes import assessment_assessment_bp
 from .comment_routes import assessment_comment_bp

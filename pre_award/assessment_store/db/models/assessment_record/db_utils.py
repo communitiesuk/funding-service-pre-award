@@ -3,8 +3,8 @@ from alembic_utils.pg_function import PGFunction
 from alembic_utils.pg_trigger import PGTrigger
 from sqlalchemy import event, text
 
-from assessment_store.db.models.comment import Comment
-from assessment_store.db.models.score import Score
+from pre_award.assessment_store.db.models.comment import Comment
+from pre_award.assessment_store.db.models.score import Score
 
 # A method of imposing a database level block to mutating application json.
 

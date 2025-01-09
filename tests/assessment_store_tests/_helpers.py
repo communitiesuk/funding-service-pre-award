@@ -5,8 +5,8 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import defer
 
-from assessment_store.db.models.assessment_record import AssessmentRecord
-from db import db
+from pre_award.assessment_store.db.models.assessment_record import AssessmentRecord
+from pre_award.db import db
 from tests.assessment_store_tests._db_seed_data import get_dynamic_rows
 from tests.assessment_store_tests.conftest import bulk_insert_application_record
 

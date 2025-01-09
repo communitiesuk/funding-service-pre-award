@@ -9,8 +9,8 @@ from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.types import Boolean
 from sqlalchemy.types import Enum as SQLAEnum
 
-from db import db
-from fund_store.db.models.round import Round
+from pre_award.db import db
+from pre_award.fund_store.db.models.round import Round
 
 BaseModel: DefaultMeta = db.Model
 

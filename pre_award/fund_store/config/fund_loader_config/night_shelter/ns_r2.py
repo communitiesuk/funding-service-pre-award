@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
 
-from fund_store.config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
+from pre_award.fund_store.config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
     NSTF_R2_BASE_PATH,
 )
-from fund_store.config.fund_loader_config.logo import DLUHC_LOGO_PNG
-from fund_store.db.models.fund import FundingType
+from pre_award.fund_store.config.fund_loader_config.logo import DLUHC_LOGO_PNG
+from pre_award.fund_store.db.models.fund import FundingType
 
 NIGHT_SHELTER_FUND_ID = "13b95669-ed98-4840-8652-d6b7a19964db"
 NIGHT_SHELTER_ROUND_2_ID = "fc7aa604-989e-4364-98a7-d1234271435a"

@@ -5,7 +5,7 @@ from typing import Optional
 
 from pytz import timezone
 
-from apply.models.language import get_formatted
+from pre_award.apply.models.language import get_formatted
 
 
 @dataclass

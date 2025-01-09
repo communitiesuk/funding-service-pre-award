@@ -2,7 +2,7 @@ import copy
 
 from flask import abort, current_app
 
-from config import Config
+from pre_award.config import Config
 
 
 def get_all_subcriteria(fund_id, round_id, language):

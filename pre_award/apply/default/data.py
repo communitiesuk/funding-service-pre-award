@@ -14,16 +14,16 @@ from fsd_utils.simple_utils.date_utils import (
     current_datetime_before_given_iso_string,
 )
 
-from apply.models.account import Account
-from apply.models.application import Application
-from apply.models.application_display_mapping import ApplicationMapping
-from apply.models.application_summary import ApplicationSummary
-from apply.models.feedback import EndOfApplicationSurveyData, FeedbackSubmission
-from apply.models.fund import Fund
-from apply.models.research import ResearchSurveyData
-from apply.models.round import Round
-from common.locale_selector.get_lang import get_lang
-from config import Config
+from pre_award.apply.models.account import Account
+from pre_award.apply.models.application import Application
+from pre_award.apply.models.application_display_mapping import ApplicationMapping
+from pre_award.apply.models.application_summary import ApplicationSummary
+from pre_award.apply.models.feedback import EndOfApplicationSurveyData, FeedbackSubmission
+from pre_award.apply.models.fund import Fund
+from pre_award.apply.models.research import ResearchSurveyData
+from pre_award.apply.models.round import Round
+from pre_award.common.locale_selector.get_lang import get_lang
+from pre_award.config import Config
 
 
 def get_ttl_hash(seconds=300) -> int:

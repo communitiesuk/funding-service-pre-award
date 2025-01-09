@@ -3,7 +3,7 @@
 # ruff: noqa
 from dataclasses import dataclass
 
-from assess.services.models.flag import FlagType
+from pre_award.assess.services.models.flag import FlagType
 
 test_fund_id = "test-fund"
 test_round_id = "test-round"

@@ -1,7 +1,7 @@
 import pytest
 from invoke import MockContext, Result
 
-from common.tasks import find_missing_trans, fix_trans_tags
+from pre_award.common.tasks import find_missing_trans, fix_trans_tags
 
 
 @pytest.mark.parametrize(

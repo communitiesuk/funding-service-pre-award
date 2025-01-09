@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 from werkzeug.exceptions import NotFound
 
-from assess.assessments.models.file_factory import (
+from pre_award.assess.assessments.models.file_factory import (
     ApplicationFileRepresentationArgs,
     generate_file_content,
 )
@@ -44,11 +44,11 @@ def test_generate_file_content_supported_types(file_type, expected_function, app
     mocked_response = MagicMock()
     mocked_response.seek = lambda _: None
     mocker.patch(
-        f"assess.assessments.models.file_factory.{expected_function}",
+        f"pre_award.assess.assessments.models.file_factory.{expected_function}",
         return_value=mocked_response,
     )
     mocker.patch(
-        "assess.assessments.models.file_factory.send_file",
+        "pre_award.assess.assessments.models.file_factory.send_file",
         return_value=MagicMock(),
     )
     with app.test_request_context(headers={"Host": app.config["ASSESS_HOST"]}):

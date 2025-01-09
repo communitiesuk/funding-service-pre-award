@@ -1,4 +1,4 @@
-from application_store._helpers.form import get_forms_from_sections
+from pre_award.application_store._helpers.form import get_forms_from_sections
 
 section_config = [
     {

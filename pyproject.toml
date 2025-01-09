@@ -85,11 +85,11 @@ select = [
 ]
 ignore = []
 exclude = [
-    "db/migrations/versions/",
+    "pre_award/db/migrations/versions/",
     "venv*",
     ".venv*",
     "__pycache__",
-    "fund_store/config/fund_loader_config/FAB/*"
+    "pre_award/fund_store/config/fund_loader_config/FAB/*"
 ]
 mccabe.max-complexity = 12
 

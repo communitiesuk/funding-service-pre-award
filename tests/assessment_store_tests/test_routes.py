@@ -8,19 +8,19 @@ from uuid import uuid4
 import pytest
 from sqlalchemy import select
 
-from assessment_store.api.routes.assessment_routes import (
+from pre_award.assessment_store.api.routes.assessment_routes import (
     calculate_overall_score_percentage_for_application,
 )
-from assessment_store.config.mappings.assessment_mapping_fund_round import (
+from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
     applicant_info_mapping,
 )
-from assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
-from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
-from assessment_store.db.models.flags.flag_update import FlagStatus
-from assessment_store.db.models.tag.tags import Tag
-from assessment_store.db.queries.assessment_records.queries import get_export_data
-from assessment_store.db.queries.flags.queries import add_flag_for_application, add_update_to_assessment_flag
-from assessment_store.db.queries.qa_complete.queries import create_qa_complete_record
+from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
+from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
+from pre_award.assessment_store.db.models.tag.tags import Tag
+from pre_award.assessment_store.db.queries.assessment_records.queries import get_export_data
+from pre_award.assessment_store.db.queries.flags.queries import add_flag_for_application, add_update_to_assessment_flag
+from pre_award.assessment_store.db.queries.qa_complete.queries import create_qa_complete_record
 from services.notify import NotificationError
 from tests.assessment_store_tests._expected_responses import APPLICATION_METADATA_RESPONSE
 from tests.assessment_store_tests.conftest import test_input_data
@@ -289,7 +289,7 @@ expected_flag = AssessmentFlag(
 
 def test_get_flags(flask_test_client, mocker):
     mocker.patch(
-        "assessment_store.api.routes.flag_routes.get_flags_for_application",
+        "pre_award.assessment_store.api.routes.flag_routes.get_flags_for_application",
         return_value=[expected_flag],
     )
     response = flask_test_client.get("/assessment/flags/app_id")
@@ -364,7 +364,7 @@ def test_create_flag(flask_test_client):
         "application_id": str(uuid4()),
     }
     with mock.patch(
-        "assessment_store.api.routes.flag_routes.add_flag_for_application",
+        "pre_award.assessment_store.api.routes.flag_routes.add_flag_for_application",
         return_value=expected_flag,
     ) as create_mock:
         response = flask_test_client.post(
@@ -383,7 +383,7 @@ def test_update_flag(flask_test_client):
         "assessment_flag_id": str(uuid4()),
     }
     with mock.patch(
-        "assessment_store.api.routes.flag_routes.add_update_to_assessment_flag",
+        "pre_award.assessment_store.api.routes.flag_routes.add_update_to_assessment_flag",
         return_value=expected_flag,
     ) as update_mock:
         response = flask_test_client.put(
@@ -407,7 +407,7 @@ def test_get_tag(flask_test_client, mocker):
         round_id=uuid4(),
         type_id=uuid4(),
     )
-    with mocker.patch("assessment_store.api.routes.tag_routes.get_tag_by_id", return_value=mock_tag):
+    with mocker.patch("pre_award.assessment_store.api.routes.tag_routes.get_tag_by_id", return_value=mock_tag):
         response = flask_test_client.get("/assessment/funds/test-fund/rounds/round-id/tags/tag-id")
         assert response.status_code == 200
         assert response.json
@@ -415,7 +415,7 @@ def test_get_tag(flask_test_client, mocker):
 
 
 def test_get_tag_none_exists(flask_test_client, mocker):
-    with mocker.patch("assessment_store.api.routes.tag_routes.get_tag_by_id", return_value=None):
+    with mocker.patch("pre_award.assessment_store.api.routes.tag_routes.get_tag_by_id", return_value=None):
         response = flask_test_client.get("/assessment/funds/test-fund/rounds/round-id/tags/tag-id")
         assert response.status_code == 404
 
@@ -518,7 +518,7 @@ def test_get_all_users_associated_with_application(flask_test_client):
     expected_response[1]["created_at"] = expected_response[1]["created_at"].isoformat()
 
     with mock.patch(
-        "assessment_store.api.routes.user_routes.get_user_application_associations",
+        "pre_award.assessment_store.api.routes.user_routes.get_user_application_associations",
         return_value=mock_users,
     ) as mock_get_users:
         response = flask_test_client.get("/assessment/application/app1/users")
@@ -542,7 +542,7 @@ def test_get_user_application_association(flask_test_client):
     expected_response["created_at"] = expected_response["created_at"].isoformat()
 
     with mock.patch(
-        "assessment_store.api.routes.user_routes.get_user_application_associations",
+        "pre_award.assessment_store.api.routes.user_routes.get_user_application_associations",
         return_value=[mock_association],
     ) as mock_get_association:
         response = flask_test_client.get("/assessment/application/app1/user/user1")
@@ -570,13 +570,13 @@ def test_add_user_application_association(flask_test_client, send_email_value, m
 
     with (
         mock.patch(
-            "assessment_store.api.routes.user_routes.create_user_application_association",
+            "pre_award.assessment_store.api.routes.user_routes.create_user_application_association",
             return_value=mock_association,
         ) as mock_create_association,
-        mock.patch("assessment_store.api.routes.user_routes.get_metadata_for_application"),
-        mock.patch("assessment_store.api.routes.user_routes.get_account_data"),
-        mock.patch("assessment_store.api.routes.user_routes.get_fund_data"),
-        mock.patch("assessment_store.api.routes.user_routes.create_assessment_url_for_application"),
+        mock.patch("pre_award.assessment_store.api.routes.user_routes.get_metadata_for_application"),
+        mock.patch("pre_award.assessment_store.api.routes.user_routes.get_account_data"),
+        mock.patch("pre_award.assessment_store.api.routes.user_routes.get_fund_data"),
+        mock.patch("pre_award.assessment_store.api.routes.user_routes.create_assessment_url_for_application"),
     ):
         mock_notification_service = mock.MagicMock()
         mocker.patch(
@@ -623,13 +623,13 @@ def test_update_user_application_association(flask_test_client, send_email_value
 
     with (
         mock.patch(
-            "assessment_store.api.routes.user_routes.update_user_application_association_db",
+            "pre_award.assessment_store.api.routes.user_routes.update_user_application_association_db",
             return_value=mock_association,
         ) as mock_update_association,
-        mock.patch("assessment_store.api.routes.user_routes.get_metadata_for_application"),
-        mock.patch("assessment_store.api.routes.user_routes.get_account_data"),
-        mock.patch("assessment_store.api.routes.user_routes.get_fund_data"),
-        mock.patch("assessment_store.api.routes.user_routes.create_assessment_url_for_application"),
+        mock.patch("pre_award.assessment_store.api.routes.user_routes.get_metadata_for_application"),
+        mock.patch("pre_award.assessment_store.api.routes.user_routes.get_account_data"),
+        mock.patch("pre_award.assessment_store.api.routes.user_routes.get_fund_data"),
+        mock.patch("pre_award.assessment_store.api.routes.user_routes.create_assessment_url_for_application"),
     ):
         mock_notification_service = mock.MagicMock()
         mocker.patch(
@@ -692,7 +692,7 @@ def test_get_all_applications_associated_with_user(flask_test_client):
     expected_response[1]["created_at"] = expected_response[1]["created_at"].isoformat()
 
     with mock.patch(
-        "assessment_store.api.routes.user_routes.get_user_application_associations",
+        "pre_award.assessment_store.api.routes.user_routes.get_user_application_associations",
         return_value=mock_applications,
     ) as mock_get_applications:
         response = flask_test_client.get("/assessment/user/user1/applications")
@@ -727,7 +727,7 @@ def test_get_all_applications_assigned_by_user(flask_test_client):
     expected_response[1]["created_at"] = expected_response[1]["created_at"].isoformat()
 
     with mock.patch(
-        "assessment_store.api.routes.user_routes.get_user_application_associations",
+        "pre_award.assessment_store.api.routes.user_routes.get_user_application_associations",
         return_value=mock_applications,
     ) as mock_get_applications:
         response = flask_test_client.get("/assessment/user/assigner1/assignees")
@@ -760,7 +760,7 @@ mapping_config = {
 @pytest.fixture
 def mock_get_scoring_system(mocker):
     return mocker.patch(
-        "assessment_store.api.routes.assessment_routes.get_scoring_system_for_round_id",
+        "pre_award.assessment_store.api.routes.assessment_routes.get_scoring_system_for_round_id",
         return_value=scoring_system,
     )
 
@@ -768,13 +768,13 @@ def mock_get_scoring_system(mocker):
 @pytest.fixture
 def mock_get_scores(mocker):
     return mocker.patch(
-        "assessment_store.api.routes.assessment_routes.get_sub_criteria_to_latest_score_map",
+        "pre_award.assessment_store.api.routes.assessment_routes.get_sub_criteria_to_latest_score_map",
         return_value=sub_criteria_scores,
     )
 
 
 def test_calculate_overall_score_percentage_for_application(mocker, mock_get_scores, mock_get_scoring_system):
-    mock_config = mocker.patch("assessment_store.api.routes.assessment_routes.Config")
+    mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
     mock_config.ASSESSMENT_MAPPING_CONFIG = mapping_config
     result = calculate_overall_score_percentage_for_application(app)
     expected_score = ((3 * 2 + 4 * 2 + 5 * 1) / (5 * 2 * 2 + 5 * 1 * 1)) * 100
@@ -782,7 +782,7 @@ def test_calculate_overall_score_percentage_for_application(mocker, mock_get_sco
 
 
 def test_with_no_sub_criteria_scores(mocker, mock_get_scores, mock_get_scoring_system):
-    mock_config = mocker.patch("assessment_store.api.routes.assessment_routes.Config")
+    mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
     mock_config.ASSESSMENT_MAPPING_CONFIG = mapping_config
     mock_get_scores.return_value = {}
     result = calculate_overall_score_percentage_for_application(app)
@@ -790,7 +790,7 @@ def test_with_no_sub_criteria_scores(mocker, mock_get_scores, mock_get_scoring_s
 
 
 def test_with_invalid_application_id(mocker, mock_get_scores, mock_get_scoring_system):
-    mock_config = mocker.patch("assessment_store.api.routes.assessment_routes.Config")
+    mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
     mock_config.ASSESSMENT_MAPPING_CONFIG = mapping_config
     mock_get_scores.side_effect = KeyError("Invalid application ID")
     with pytest.raises(KeyError):
@@ -798,7 +798,7 @@ def test_with_invalid_application_id(mocker, mock_get_scores, mock_get_scoring_s
 
 
 def test_no_scored_criteria_exists(mocker, mock_get_scores, mock_get_scoring_system):
-    mock_config = mocker.patch("assessment_store.api.routes.assessment_routes.Config")
+    mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
     mock_config.ASSESSMENT_MAPPING_CONFIG = {f"{COF_FUND_ID}:{COF_ROUND_2_ID}": {"scored_criteria": []}}
     result = calculate_overall_score_percentage_for_application(app)
     assert result is None, "The result should be 0 when there are no scored criteria"

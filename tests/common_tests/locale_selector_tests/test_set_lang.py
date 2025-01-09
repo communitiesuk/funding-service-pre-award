@@ -1,6 +1,6 @@
 from unittest.mock import ANY, Mock
 
-from common.locale_selector.set_lang import LanguageSelector
+from pre_award.common.locale_selector.set_lang import LanguageSelector
 
 
 def test_set_lang(app):

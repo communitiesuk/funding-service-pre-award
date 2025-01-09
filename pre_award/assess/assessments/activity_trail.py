@@ -6,10 +6,10 @@ from flask import current_app
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, StringField
 
-from assess.services.data_services import get_bulk_accounts_dict
-from assess.services.models.assessor_task_list import AssessorTaskList
-from assess.services.models.flag import Flag, FlagType
-from assess.tagging.models.tag import AssociatedTag
+from pre_award.assess.services.data_services import get_bulk_accounts_dict
+from pre_award.assess.services.models.assessor_task_list import AssessorTaskList
+from pre_award.assess.services.models.flag import Flag, FlagType
+from pre_award.assess.tagging.models.tag import AssociatedTag
 
 
 @dataclass

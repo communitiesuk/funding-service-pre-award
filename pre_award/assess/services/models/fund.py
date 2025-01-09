@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from assess.config.display_value_mappings import ALL_VALUE
-from assess.services.models.round import Round
+from pre_award.assess.config.display_value_mappings import ALL_VALUE
+from pre_award.assess.services.models.round import Round
 
 
 @dataclass

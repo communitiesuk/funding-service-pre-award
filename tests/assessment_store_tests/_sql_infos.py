@@ -9,8 +9,8 @@ from rich.text import Text
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 
-from config import Config
-from db import db
+from pre_award.config import Config
+from pre_award.db import db
 
 query_info = {
     "queries_types": defaultdict(int),

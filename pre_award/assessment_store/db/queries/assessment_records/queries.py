@@ -13,25 +13,25 @@ from flask import current_app
 from sqlalchemy import String, and_, cast, desc, exc, func, or_, select
 from sqlalchemy.orm import aliased, defer, load_only, selectinload
 
-from assessment_store.db.models.assessment_record import AssessmentRecord, TagAssociation
-from assessment_store.db.models.assessment_record.allocation_association import AllocationAssociation
-from assessment_store.db.models.assessment_record.enums import Status
-from assessment_store.db.models.flags.flag_update import FlagStatus
-from assessment_store.db.models.score import Score
-from assessment_store.db.models.tag.tag_types import TagType
-from assessment_store.db.models.tag.tags import Tag
-from assessment_store.db.queries.assessment_records._helpers import (
+from pre_award.assessment_store.db.models.assessment_record import AssessmentRecord, TagAssociation
+from pre_award.assessment_store.db.models.assessment_record.allocation_association import AllocationAssociation
+from pre_award.assessment_store.db.models.assessment_record.enums import Status
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
+from pre_award.assessment_store.db.models.score import Score
+from pre_award.assessment_store.db.models.tag.tag_types import TagType
+from pre_award.assessment_store.db.models.tag.tags import Tag
+from pre_award.assessment_store.db.queries.assessment_records._helpers import (
     filter_tags,
     get_existing_tags,
     update_tag_associations,
 )
-from assessment_store.db.schemas import (
+from pre_award.assessment_store.db.schemas import (
     AssessmentRecordMetadata,
     AssessmentSubCriteriaMetadata,
     AssessorTaskListMetadata,
 )
-from assessment_store.services.data_services import get_account_name
-from db import db
+from pre_award.assessment_store.services.data_services import get_account_name
+from pre_award.db import db
 
 
 def get_metadata_for_application(

@@ -6,9 +6,9 @@ Joins allowed.
 
 from sqlalchemy import func
 
-from assessment_store.db.models.score import Score
-from assessment_store.db.schemas.schemas import ProgressSchema
-from db import db
+from pre_award.assessment_store.db.models.score import Score
+from pre_award.assessment_store.db.schemas.schemas import ProgressSchema
+from pre_award.db import db
 
 
 def get_progress_for_app(application_ids=None):

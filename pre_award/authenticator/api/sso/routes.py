@@ -6,10 +6,10 @@ from flask import abort, current_app, make_response, redirect, request, session
 from flask.views import MethodView
 from fsd_utils import clear_sentry
 
-from authenticator.api.session.auth_session import AuthSessionBase
-from authenticator.models.account import AccountMethods
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.authenticator.api.session.auth_session import AuthSessionBase
+from pre_award.authenticator.models.account import AccountMethods
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 api_sso_bp = Blueprint("api_sso", __name__, url_prefix="/sso")
 

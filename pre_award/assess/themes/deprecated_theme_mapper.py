@@ -3,7 +3,7 @@ from typing import Any
 
 from flask import current_app
 
-from assess.config.themes_mapping import ordered_themes
+from pre_award.assess.config.themes_mapping import ordered_themes
 
 
 # This code was copied directly from the assessments store in an attempt to consolidate all the transformation logic

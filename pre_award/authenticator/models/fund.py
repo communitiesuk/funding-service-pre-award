@@ -3,10 +3,10 @@ from typing import List
 
 from flask import request
 
-from authenticator.models.data import get_data
-from authenticator.models.round import Round
-from common.locale_selector.get_lang import get_lang
-from config import Config
+from pre_award.authenticator.models.data import get_data
+from pre_award.authenticator.models.round import Round
+from pre_award.common.locale_selector.get_lang import get_lang
+from pre_award.config import Config
 
 
 @dataclass

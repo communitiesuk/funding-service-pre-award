@@ -12,30 +12,30 @@ from sqlalchemy.dialects.postgresql import insert as postgres_insert
 from werkzeug.test import TestResponse
 
 from app import create_app
-from assessment_store.config.mappings.assessment_mapping_fund_round import (
+from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
     fund_round_mapping_config_with_round_id,
 )
-from assessment_store.db.models import AssessmentRound
-from assessment_store.db.models.assessment_record import AssessmentRecord
-from assessment_store.db.models.assessment_record.allocation_association import (
+from pre_award.assessment_store.db.models import AssessmentRound
+from pre_award.assessment_store.db.models.assessment_record import AssessmentRecord
+from pre_award.assessment_store.db.models.assessment_record.allocation_association import (
     AllocationAssociation,
 )
-from assessment_store.db.models.assessment_record.tag_association import TagAssociation
-from assessment_store.db.models.comment import Comment, CommentsUpdate
-from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
-from assessment_store.db.models.flags.flag_update import FlagUpdate
-from assessment_store.db.models.qa_complete import QaComplete
-from assessment_store.db.models.score import Score
-from assessment_store.db.models.tag.tag_types import TagType
-from assessment_store.db.queries.assessment_records._helpers import derive_application_values
-from assessment_store.db.queries.scores.queries import (
+from pre_award.assessment_store.db.models.assessment_record.tag_association import TagAssociation
+from pre_award.assessment_store.db.models.comment import Comment, CommentsUpdate
+from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
+from pre_award.assessment_store.db.models.flags.flag_update import FlagUpdate
+from pre_award.assessment_store.db.models.qa_complete import QaComplete
+from pre_award.assessment_store.db.models.score import Score
+from pre_award.assessment_store.db.models.tag.tag_types import TagType
+from pre_award.assessment_store.db.queries.assessment_records._helpers import derive_application_values
+from pre_award.assessment_store.db.queries.scores.queries import (
     _insert_scoring_system,
     insert_scoring_system_for_round_id,
 )
-from assessment_store.db.queries.tags.queries import insert_tags
-from assessment_store.db.schemas.schemas import TagSchema, TagTypeSchema
-from config import Config
-from db import db
+from pre_award.assessment_store.db.queries.tags.queries import insert_tags
+from pre_award.assessment_store.db.schemas.schemas import TagSchema, TagTypeSchema
+from pre_award.config import Config
+from pre_award.db import db
 from tests.assessment_store_tests._sql_infos import attach_listeners
 
 with open("tests/assessment_store_tests/test_data/hand-crafted-apps.json", "r") as f:

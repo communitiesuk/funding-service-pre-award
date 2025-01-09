@@ -1,6 +1,6 @@
 import pytest
 
-from assessment_store.db.queries.qa_complete.queries import (
+from pre_award.assessment_store.db.queries.qa_complete.queries import (
     create_qa_complete_record,
     get_qa_complete_record_for_application,
 )

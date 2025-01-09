@@ -3,8 +3,8 @@ from unittest import mock
 import pytest
 from bs4 import BeautifulSoup
 
-from apply.default.data import RoundStatus, get_default_round_for_fund
-from apply.models.round import Round
+from pre_award.apply.default.data import RoundStatus, get_default_round_for_fund
+from pre_award.apply.models.round import Round
 
 default_round_fields = {
     "assessment_deadline": "",
@@ -32,26 +32,26 @@ def test_old_index_redirect(apply_test_client):
 
 
 def test_start_page_unknown_fund(apply_test_client, mocker):
-    mocker.patch("apply.default.routes.get_fund_and_round", return_value=(None, None))
+    mocker.patch("pre_award.apply.default.routes.get_fund_and_round", return_value=(None, None))
     result = apply_test_client.get("funding-round/bad_fund/r2w2")
     assert result.status_code == 404
 
 
 def test_start_page_without_namespace(apply_test_client, mocker):
-    mocker.patch("apply.default.routes.get_fund_and_round", return_value=(None, None))
+    mocker.patch("pre_award.apply.default.routes.get_fund_and_round", return_value=(None, None))
     result = apply_test_client.get("cof/r2w2")
     assert result.status_code == 404
 
 
 def test_start_page_unknown_round(apply_test_client, mocker):
-    mocker.patch("apply.default.routes.get_fund_and_round", return_value=(None, None))
+    mocker.patch("pre_award.apply.default.routes.get_fund_and_round", return_value=(None, None))
     result = apply_test_client.get("/cof/bad_round_id")
     assert result.status_code == 404
 
 
 def test_start_page_not_yet_open(apply_test_client, mocker):
     mocker.patch(
-        "apply.default.routes.determine_round_status",
+        "pre_award.apply.default.routes.determine_round_status",
         return_value=RoundStatus(False, True, False),
     )
     result = apply_test_client.get("/cof/r2w1")
@@ -60,7 +60,7 @@ def test_start_page_not_yet_open(apply_test_client, mocker):
 
 def test_start_page_open(apply_test_client, mocker, templates_rendered):
     mocker.patch(
-        "apply.default.routes.determine_round_status",
+        "pre_award.apply.default.routes.determine_round_status",
         return_value=RoundStatus(False, False, True),
     )
     result = apply_test_client.get("funding-round/cof/r2w3")
@@ -82,7 +82,7 @@ def test_start_page_open(apply_test_client, mocker, templates_rendered):
 )
 def test_start_page_translations(apply_test_client, mocker, templates_rendered, lang, expected_content):
     mocker.patch(
-        "apply.default.routes.determine_round_status",
+        "pre_award.apply.default.routes.determine_round_status",
         return_value=RoundStatus(False, False, True),
     )
     result = apply_test_client.get(f"funding-round/cof/r2w3?lang={lang}")
@@ -94,7 +94,7 @@ def test_start_page_translations(apply_test_client, mocker, templates_rendered, 
 
 def test_start_page_closed(apply_test_client, mocker, templates_rendered):
     mocker.patch(
-        "apply.default.routes.determine_round_status",
+        "pre_award.apply.default.routes.determine_round_status",
         return_value=RoundStatus(True, False, False),
     )
     result = apply_test_client.get("funding-round/cof/r2w3")
@@ -164,22 +164,22 @@ def test_start_page_closed(apply_test_client, mocker, templates_rendered):
     ],
 )
 def test_get_default_round_for_fund(rounds, expected_default_id, mocker):
-    mocker.patch("apply.default.data.get_lang", return_value="en")
-    mocker.patch("apply.default.data.get_all_rounds_for_fund", return_value=rounds)
+    mocker.patch("pre_award.apply.default.data.get_lang", return_value="en")
+    mocker.patch("pre_award.apply.default.data.get_all_rounds_for_fund", return_value=rounds)
     result = get_default_round_for_fund("fund")
     assert result.id == expected_default_id
 
 
 def test_get_default_round_for_fund_no_rounds(mocker):
-    mocker.patch("apply.default.data.get_lang", return_value="en")
-    mocker.patch("apply.default.data.get_all_rounds_for_fund", return_value=[])
+    mocker.patch("pre_award.apply.default.data.get_lang", return_value="en")
+    mocker.patch("pre_award.apply.default.data.get_all_rounds_for_fund", return_value=[])
     result = get_default_round_for_fund("fund")
     assert result is None
 
 
 def test_fund_only_start_page(apply_test_client, mocker):
     mocker.patch(
-        "apply.default.routes.get_default_round_for_fund",
+        "pre_award.apply.default.routes.get_default_round_for_fund",
         return_value=Round(id="111", deadline="", opens="", **default_round_fields),
     )
     result = apply_test_client.get("funding-round/cof", follow_redirects=False)
@@ -188,13 +188,13 @@ def test_fund_only_start_page(apply_test_client, mocker):
 
 
 def test_fund_only_start_page_no_rounds(apply_test_client, mocker):
-    mocker.patch("apply.default.routes.get_default_round_for_fund", return_value=None)
+    mocker.patch("pre_award.apply.default.routes.get_default_round_for_fund", return_value=None)
     result = apply_test_client.get("/cof", follow_redirects=False)
     assert result.status_code == 404
 
 
 def test_fund_only_start_page_bad_fund(apply_test_client):
-    with mock.patch("apply.default.data.get_all_rounds_for_fund") as mock_get_rounds:
+    with mock.patch("pre_award.apply.default.data.get_all_rounds_for_fund") as mock_get_rounds:
         mock_get_rounds.side_effect = Exception
         result = apply_test_client.get("/asdf", follow_redirects=False)
         assert result.status_code == 404

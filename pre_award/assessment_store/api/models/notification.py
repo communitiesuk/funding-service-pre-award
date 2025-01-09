@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from flask import current_app
 
-from config import Config
+from pre_award.config import Config
 
 NOTIFICATION_CONST = "notification"
 NOTIFICATION_S3_KEY_CONST = "application/notification"

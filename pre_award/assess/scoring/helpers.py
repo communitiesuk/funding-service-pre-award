@@ -1,11 +1,11 @@
 from flask import abort, current_app
 
-from assess.scoring.forms.scores_and_justifications import (
+from pre_award.assess.scoring.forms.scores_and_justifications import (
     OneToFiveScoreForm,
     ZeroToOneScoreForm,
     ZeroToThreeScoreForm,
 )
-from assess.services.data_services import get_scoring_system  # noqa
+from pre_award.assess.services.data_services import get_scoring_system  # noqa
 
 
 def get_scoring_class(round_id):

@@ -2,7 +2,7 @@ import pytest
 from bs4 import BeautifulSoup
 from flask import g
 
-from config import Config
+from pre_award.config import Config
 from tests.assess_tests.conftest import (
     create_invalid_token,
     create_valid_token,
@@ -101,9 +101,9 @@ class TestAuthorisation:
     @pytest.mark.mock_parameters(
         {
             "get_assessment_stats_path": [
-                "assess.assessments.models.round_summary.get_assessments_stats",
+                "pre_award.assess.assessments.models.round_summary.get_assessments_stats",
             ],
-            "get_rounds_path": ["assess.assessments.models.round_summary.get_rounds"],
+            "get_rounds_path": ["pre_award.assess.assessments.models.round_summary.get_rounds"],
             "fund_id": "test-fund",
             "round_id": "test-round",
         }
@@ -342,7 +342,7 @@ class TestAuthorisation:
 
         (
             mocker.patch(
-                "assess.assessments.routes.get_comments",
+                "pre_award.assess.assessments.routes.get_comments",
                 return_value=[
                     {
                         "id": "test_id_1",

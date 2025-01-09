@@ -1,8 +1,8 @@
 from flask import g, render_template, request, url_for
 from fsd_utils.authentication.decorators import login_requested
 
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 user_bp = Blueprint(
     "user_bp",

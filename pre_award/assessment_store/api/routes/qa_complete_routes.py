@@ -1,9 +1,9 @@
-from assessment_store.db.queries.assessment_records.queries import get_metadata_for_application
-from assessment_store.db.queries.qa_complete.queries import (
+from pre_award.assessment_store.db.queries.assessment_records.queries import get_metadata_for_application
+from pre_award.assessment_store.db.queries.qa_complete.queries import (
     create_qa_complete_record,
     get_qa_complete_record_for_application,
 )
-from common.blueprints import Blueprint
+from pre_award.common.blueprints import Blueprint
 
 assessment_qa_bp = Blueprint("assessment_qa_bp", __name__)
 

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from config import Config
+from pre_award.config import Config
 
 
 def test_404(apply_test_client):

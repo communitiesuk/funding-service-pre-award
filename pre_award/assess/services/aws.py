@@ -6,7 +6,7 @@ from boto3 import client
 from botocore.exceptions import ClientError
 from flask import current_app, url_for
 
-from config import Config
+from pre_award.config import Config
 
 _S3_CLIENT = client(
     "s3",

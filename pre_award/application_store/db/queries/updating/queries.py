@@ -2,14 +2,14 @@ import sqlalchemy
 from flask import abort, current_app
 from sqlalchemy import func
 
-from application_store.db.models.application.enums import Status as ApplicationStatus
-from application_store.db.queries.application import (
+from pre_award.application_store.db.models.application.enums import Status as ApplicationStatus
+from pre_award.application_store.db.queries.application import (
     attempt_to_find_and_update_project_name,
     get_application,
 )
-from application_store.db.queries.form import get_form
-from application_store.db.queries.statuses import update_statuses
-from db import db
+from pre_award.application_store.db.queries.form import get_form
+from pre_award.application_store.db.queries.statuses import update_statuses
+from pre_award.db import db
 
 
 def update_application_and_related_form(application_id, question_json, form_name, is_summary_page_submit):

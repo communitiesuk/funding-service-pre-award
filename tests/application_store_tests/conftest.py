@@ -8,11 +8,11 @@ from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
 from app import create_app
-from application_store.db.models.application.applications import Applications
-from application_store.db.queries.application import create_application
-from application_store.db.queries.form import add_new_forms
-from application_store.external_services.models.fund import Fund, Round
-from config import Config
+from pre_award.application_store.db.models.application.applications import Applications
+from pre_award.application_store.db.queries.application import create_application
+from pre_award.application_store.db.queries.form import add_new_forms
+from pre_award.application_store.external_services.models.fund import Fund, Round
+from pre_award.config import Config
 from tests.application_store_tests.helpers import (
     APPLICATION_DISPLAY_CONFIG,
     local_api_call,
@@ -274,14 +274,14 @@ def mock_get_fund(request, mocker):
 
         generator = generate_specific_fund
 
-    mocker.patch("application_store.api.routes.application.routes.get_fund", new=generator)
-    mocker.patch("application_store.db.queries.application.queries.get_fund", new=generator)
+    mocker.patch("pre_award.application_store.api.routes.application.routes.get_fund", new=generator)
+    mocker.patch("pre_award.application_store.db.queries.application.queries.get_fund", new=generator)
 
 
 @pytest.fixture(scope="function")
 def mock_get_application_display_config(mocker):
     mocker.patch(
-        "application_store._helpers.form.get_application_sections",
+        "pre_award.application_store._helpers.form.get_application_sections",
         return_value=APPLICATION_DISPLAY_CONFIG,
     )
 
@@ -309,11 +309,11 @@ def mock_get_round(mocker):
     Used with unique_fund_round to ensure when the fund and
     round are retrieved, they match what's expected
     """
-    mocker.patch("application_store.db.queries.application.queries.get_round", new=generate_mock_round)
-    mocker.patch("application_store.db.queries.statuses.queries.get_round", new=generate_mock_round)
-    mocker.patch("application_store.api.routes.application.routes.get_round", new=generate_mock_round)
+    mocker.patch("pre_award.application_store.db.queries.application.queries.get_round", new=generate_mock_round)
+    mocker.patch("pre_award.application_store.db.queries.statuses.queries.get_round", new=generate_mock_round)
+    mocker.patch("pre_award.application_store.api.routes.application.routes.get_round", new=generate_mock_round)
     mocker.patch(
-        "application_store.db.schemas.application.get_round_name",
+        "pre_award.application_store.db.schemas.application.get_round_name",
         return_value="Generated test round",
     )
 
@@ -322,7 +322,7 @@ def mock_get_round(mocker):
 def mock_get_data_fix(mocker):
     # mock the function in the file it is invoked (not where it is declared)
     mocker.patch(
-        "application_store.external_services.get_data",
+        "pre_award.application_store.external_services.get_data",
         new=mock_get_data,
     )
 
@@ -337,7 +337,7 @@ def mock_random_choices(mocker):
 def mock_successful_submit_notification(mocker):
     # mock the function in the file it is invoked (not where it is declared)
     mocker.patch(
-        "application_store.api.routes.application.routes.send_submit_notification",
+        "pre_award.application_store.api.routes.application.routes.send_submit_notification",
         return_value=None,
     )
 
@@ -346,7 +346,7 @@ def mock_successful_submit_notification(mocker):
 def mock_post_data_fix(mocker):
     # mock the function in the file it is invoked (not where it is declared)
     mocker.patch(
-        "application_store.external_services.post_data",
+        "pre_award.application_store.external_services.post_data",
         new=mock_post_data,
     )
 
@@ -354,7 +354,7 @@ def mock_post_data_fix(mocker):
 @pytest.fixture(autouse=False)
 def mock_get_fund_data(mocker):
     mocker.patch(
-        "application_store.api.routes.application.routes.get_fund",
+        "pre_award.application_store.api.routes.application.routes.get_fund",
         return_value=Fund(
             name="COF",
             short_name="COF",
@@ -370,7 +370,7 @@ def mock_get_fund_data(mocker):
 @pytest.fixture(autouse=False)
 def mocked_get_fund(mocker):
     return mocker.patch(
-        "application_store.scripts.send_application_on_closure.get_fund",
+        "pre_award.application_store.scripts.send_application_on_closure.get_fund",
         return_value=Fund(
             name="Community Ownership Fund",
             identifier="47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",

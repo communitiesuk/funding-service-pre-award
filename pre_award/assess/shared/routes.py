@@ -1,8 +1,8 @@
 from flask import current_app, render_template
 
-from assess.services.data_services import get_default_round_data
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.assess.services.data_services import get_default_round_data
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 shared_bp = Blueprint("shared_bp", __name__, template_folder="templates")
 

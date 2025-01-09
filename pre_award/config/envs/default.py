@@ -13,7 +13,7 @@ import redis
 from fsd_utils import CommonConfig, configclass
 from fsd_utils.authentication.config import SupportedApp
 
-from assessment_store.config.mappings.assessment_mapping_fund_round import (
+from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
     fund_round_to_assessment_mapping,
 )
 
@@ -25,7 +25,7 @@ class DefaultConfig(object):
     #  Application Config
     FLASK_ENV = CommonConfig.FLASK_ENV
     SECRET_KEY = CommonConfig.SECRET_KEY
-    FLASK_ROOT = str(Path(__file__).parent.parent.parent)
+    FLASK_ROOT = str(Path(__file__).parent.parent.parent.parent)
 
     # Logging
     FSD_LOG_LEVEL = logging.WARNING

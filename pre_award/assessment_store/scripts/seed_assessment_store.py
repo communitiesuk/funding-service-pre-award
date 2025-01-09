@@ -2,7 +2,7 @@ import os
 
 from invoke import Context
 
-from assessment_store.tasks.db_tasks import seed_assessment_store_db
+from pre_award.assessment_store.tasks.db_tasks import seed_assessment_store_db
 
 
 def main():

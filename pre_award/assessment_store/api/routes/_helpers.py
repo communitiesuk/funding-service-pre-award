@@ -4,10 +4,10 @@ from uuid import UUID
 
 from flask import current_app, make_response
 
-from assess.services.models.flag import FlagType
-from assessment_store.db.models.assessment_record.enums import Status
-from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
-from config import Config
+from pre_award.assess.services.models.flag import FlagType
+from pre_award.assessment_store.db.models.assessment_record.enums import Status
+from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
+from pre_award.config import Config
 
 
 def compress_response(data):

@@ -11,9 +11,9 @@ from fsd_utils.simple_utils.date_utils import (
     current_datetime_after_given_iso_string,
 )
 
-from application_store.db.models.application.enums import Status
-from apply.constants import ApplicationStatus
-from apply.default.data import (
+from pre_award.application_store.db.models.application.enums import Status
+from pre_award.apply.constants import ApplicationStatus
+from pre_award.apply.default.data import (
     determine_round_status,
     get_application_data,
     get_application_display_config,
@@ -28,12 +28,12 @@ from apply.default.data import (
     post_research_survey_to_store,
     submit_feedback,
 )
-from apply.forms.feedback import (
+from pre_award.apply.forms.feedback import (
     END_OF_APPLICATION_FEEDBACK_SURVEY_PAGE_NUMBER_MAP,
     DefaultSectionFeedbackForm,
 )
-from apply.forms.research import ResearchContactDetailsForm, ResearchOptForm
-from apply.helpers import (
+from pre_award.apply.forms.research import ResearchContactDetailsForm, ResearchOptForm
+from pre_award.apply.helpers import (
     format_rehydrate_payload,
     get_feedback_survey_data,
     get_fund,
@@ -43,10 +43,10 @@ from apply.helpers import (
     get_section_feedback_data,
     get_token_to_return_to_application,
 )
-from apply.models.statuses import get_formatted
-from common.blueprints import Blueprint
-from common.locale_selector.set_lang import LanguageSelector
-from config import Config
+from pre_award.apply.models.statuses import get_formatted
+from pre_award.common.blueprints import Blueprint
+from pre_award.common.locale_selector.set_lang import LanguageSelector
+from pre_award.config import Config
 
 application_bp = Blueprint("application_routes", __name__, template_folder="templates")
 

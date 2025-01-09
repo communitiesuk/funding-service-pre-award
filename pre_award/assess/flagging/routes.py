@@ -1,24 +1,24 @@
 from flask import abort, current_app, g, redirect, render_template, request, url_for
 
-from assess.authentication.validation import check_access_application_id
-from assess.flagging.forms.continue_application_form import (
+from pre_award.assess.authentication.validation import check_access_application_id
+from pre_award.assess.flagging.forms.continue_application_form import (
     ContinueApplicationForm,
 )
-from assess.flagging.forms.flag_form import FlagApplicationForm
-from assess.flagging.forms.resolve_flag_form import ResolveFlagForm
-from assess.flagging.helpers import resolve_application
-from assess.services.data_services import (
+from pre_award.assess.flagging.forms.flag_form import FlagApplicationForm
+from pre_award.assess.flagging.forms.resolve_flag_form import ResolveFlagForm
+from pre_award.assess.flagging.helpers import resolve_application
+from pre_award.assess.services.data_services import (
     get_available_teams,
     get_flag,
     get_flags,
     get_sub_criteria_banner_state,
     submit_flag,
 )
-from assess.services.models.flag import FlagType
-from assess.services.shared_data_helpers import get_state_for_tasklist_banner
-from assess.shared.helpers import determine_assessment_status, determine_flag_status, get_ttl_hash
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.assess.services.models.flag import FlagType
+from pre_award.assess.services.shared_data_helpers import get_state_for_tasklist_banner
+from pre_award.assess.shared.helpers import determine_assessment_status, determine_flag_status, get_ttl_hash
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 flagging_bp = Blueprint(
     "flagging_bp",

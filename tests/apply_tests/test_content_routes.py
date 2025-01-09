@@ -1,7 +1,7 @@
 import pytest
 from bs4 import BeautifulSoup
 
-from config import Config
+from pre_award.config import Config
 
 
 @pytest.mark.parametrize(

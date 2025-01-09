@@ -13,11 +13,11 @@ from sqlalchemy_utils import Ltree
 from werkzeug.test import TestResponse
 
 from app import create_app
-from config import Config
-from fund_store.db.models.fund import Fund, FundingType
-from fund_store.db.models.round import Round
-from fund_store.db.models.section import Section
-from fund_store.db.queries import insert_fund_data, insert_sections, upsert_round_data
+from pre_award.config import Config
+from pre_award.fund_store.db.models.fund import Fund, FundingType
+from pre_award.fund_store.db.models.round import Round
+from pre_award.fund_store.db.models.section import Section
+from pre_award.fund_store.db.queries import insert_fund_data, insert_sections, upsert_round_data
 
 
 @pytest.fixture(scope="session")
@@ -240,13 +240,13 @@ def mock_get_fund_round(mocker):
         "support_times": "",
     }
     mock_round: Round = Round(title_json={"en": "Round 1"}, short_name="RND1", **round_config)
-    mocker.patch("fund_store.api.routes.get_all_funds", return_value=[mock_fund])
-    mocker.patch("fund_store.api.routes.get_fund_by_id", return_value=mock_fund)
-    mocker.patch("fund_store.api.routes.get_fund_by_short_name", return_value=mock_fund)
-    mocker.patch("fund_store.api.routes.get_round_by_id", return_value=mock_round)
-    mocker.patch("fund_store.api.routes.get_round_by_short_name", return_value=mock_round)
-    mocker.patch("fund_store.api.routes.get_rounds_for_fund_by_id", return_value=[mock_round])
-    mocker.patch("fund_store.api.routes.get_rounds_for_fund_by_short_name", return_value=[mock_round])
+    mocker.patch("pre_award.fund_store.api.routes.get_all_funds", return_value=[mock_fund])
+    mocker.patch("pre_award.fund_store.api.routes.get_fund_by_id", return_value=mock_fund)
+    mocker.patch("pre_award.fund_store.api.routes.get_fund_by_short_name", return_value=mock_fund)
+    mocker.patch("pre_award.fund_store.api.routes.get_round_by_id", return_value=mock_round)
+    mocker.patch("pre_award.fund_store.api.routes.get_round_by_short_name", return_value=mock_round)
+    mocker.patch("pre_award.fund_store.api.routes.get_rounds_for_fund_by_id", return_value=[mock_round])
+    mocker.patch("pre_award.fund_store.api.routes.get_rounds_for_fund_by_short_name", return_value=[mock_round])
 
 
 @pytest.fixture(scope="function")
@@ -270,5 +270,5 @@ def mock_get_sections(mocker):
             ),
         ],
     )
-    mocker.patch("fund_store.api.routes.get_application_sections_for_round", return_value=[mock_sections])
-    mocker.patch("fund_store.api.routes.get_assessment_sections_for_round", return_value=[mock_sections])
+    mocker.patch("pre_award.fund_store.api.routes.get_application_sections_for_round", return_value=[mock_sections])
+    mocker.patch("pre_award.fund_store.api.routes.get_assessment_sections_for_round", return_value=[mock_sections])

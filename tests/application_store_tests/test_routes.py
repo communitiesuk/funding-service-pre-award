@@ -5,12 +5,12 @@ from uuid import uuid4
 
 import pytest
 
-from application_store.db.models import Applications, ResearchSurvey
-from application_store.db.queries.application import get_all_applications
-from application_store.db.schemas import ApplicationSchema
-from application_store.external_services.models.fund import Fund
-from application_store.external_services.models.round import Round
-from db import db
+from pre_award.application_store.db.models import Applications, ResearchSurvey
+from pre_award.application_store.db.queries.application import get_all_applications
+from pre_award.application_store.db.schemas import ApplicationSchema
+from pre_award.application_store.external_services.models.fund import Fund
+from pre_award.application_store.external_services.models.round import Round
+from pre_award.db import db
 from tests.application_store_tests.helpers import (
     application_expected_data,
     count_fund_applications,
@@ -73,17 +73,17 @@ def test_create_application_language_choice(
         "COMPETED",
         [],
     )
-    mocker.patch("application_store.api.routes.application.routes.get_fund", return_value=mock_fund)
+    mocker.patch("pre_award.application_store.api.routes.application.routes.get_fund", return_value=mock_fund)
     blank_forms_mock = mocker.patch(
-        "application_store.api.routes.application.routes.get_blank_forms",
+        "pre_award.application_store.api.routes.application.routes.get_blank_forms",
         return_value=MagicMock(),
     )
     test_application = Applications(**application_expected_data[2])
     create_application_mock = mocker.patch(
-        "application_store.api.routes.application.routes.create_application",
+        "pre_award.application_store.api.routes.application.routes.create_application",
         return_value=test_application,
     )
-    mocker.patch("application_store.api.routes.application.routes.add_new_forms")
+    mocker.patch("pre_award.application_store.api.routes.application.routes.add_new_forms")
 
     # Post one application and check it's created in the expected language
     application_data_a1 = {
@@ -584,8 +584,8 @@ def test_form_data_save_with_closed_round(flask_test_client, seed_application_re
     match the PUT'ed JSON and be marked as in-progress.
     and if the round is closed then it will give a 301 to redirect the user to fund closure notification page
     """
-    mocker.patch("application_store.db.queries.application.queries.get_round", new=generate_mock_round_closed)
-    mocker.patch("application_store.db.queries.statuses.queries.get_round", new=generate_mock_round_closed)
+    mocker.patch("pre_award.application_store.db.queries.application.queries.get_round", new=generate_mock_round_closed)
+    mocker.patch("pre_award.application_store.db.queries.statuses.queries.get_round", new=generate_mock_round_closed)
     section_put = {
         "questions": test_question_data,
         "metadata": {
@@ -672,10 +672,10 @@ def test_post_research_survey_data(flask_test_client, mocker):
     retrieved_survey_data.date_submitted = expected_survey_data["date_submitted"]
 
     mock_upsert_research_survey_data = mocker.patch(
-        "application_store.api.routes.application.routes.upsert_research_survey_data",
+        "pre_award.application_store.api.routes.application.routes.upsert_research_survey_data",
         return_value=retrieved_survey_data,
     )
-    mock_update_statuses = mocker.patch("application_store.api.routes.application.routes.update_statuses")
+    mock_update_statuses = mocker.patch("pre_award.application_store.api.routes.application.routes.update_statuses")
 
     response = flask_test_client.post(
         "/application/application/research",
@@ -717,7 +717,7 @@ def test_get_research_survey_data(flask_test_client, mocker):
     retrieved_survey_data.date_submitted = expected_survey_data["date_submitted"]
 
     mock_retrieve_research_survey_data = mocker.patch(
-        "application_store.api.routes.application.routes.retrieve_research_survey_data",
+        "pre_award.application_store.api.routes.application.routes.retrieve_research_survey_data",
         return_value=retrieved_survey_data,
     )
 
@@ -732,7 +732,7 @@ def test_get_research_survey_data_not_found(flask_test_client, mocker):
     application_id = "app123"
 
     mock_retrieve_research_survey_data = mocker.patch(
-        "application_store.api.routes.application.routes.retrieve_research_survey_data", return_value=None
+        "pre_award.application_store.api.routes.application.routes.retrieve_research_survey_data", return_value=None
     )
 
     response = flask_test_client.get(f"/application/application/research?application_id={application_id}")

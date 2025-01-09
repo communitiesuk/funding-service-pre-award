@@ -1,7 +1,7 @@
-from assess.assessments.form_lists_generated_translations import (
+from pre_award.assess.assessments.form_lists_generated_translations import (
     _LIST_TRANSLATIONS_GENERATED,
 )
-from assess.shared.filters import (
+from pre_award.assess.shared.filters import (
     remove_dashes_underscores_capitalize_keep_uppercase,
 )
 

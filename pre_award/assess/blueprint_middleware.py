@@ -1,12 +1,12 @@
 from flask import current_app, render_template, request
 from fsd_utils.authentication.decorators import login_requested
 
-from assess.assessments.routes import assessment_bp
-from assess.authentication.auth import auth_protect
-from assess.flagging.routes import flagging_bp
-from assess.scoring.routes import scoring_bp
-from assess.shared.routes import shared_bp
-from assess.tagging.routes import tagging_bp
+from pre_award.assess.assessments.routes import assessment_bp
+from pre_award.assess.authentication.auth import auth_protect
+from pre_award.assess.flagging.routes import flagging_bp
+from pre_award.assess.scoring.routes import scoring_bp
+from pre_award.assess.shared.routes import shared_bp
+from pre_award.assess.tagging.routes import tagging_bp
 
 
 @assessment_bp.errorhandler(404)

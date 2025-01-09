@@ -8,40 +8,40 @@ import pytest
 from click.testing import CliRunner
 from fsd_utils import Decision, NotifyConstants
 
-from application_store._helpers.application import send_submit_notification
-from application_store.db.exceptions.submit import SubmitError
-from application_store.db.models.application.applications import Applications
-from application_store.db.models.application.enums import Status as ApplicationStatus
-from application_store.db.queries.application.queries import (
+from pre_award.application_store._helpers.application import send_submit_notification
+from pre_award.application_store.db.exceptions.submit import SubmitError
+from pre_award.application_store.db.models.application.applications import Applications
+from pre_award.application_store.db.models.application.enums import Status as ApplicationStatus
+from pre_award.application_store.db.queries.application.queries import (
     create_application,
     get_application,
     get_fund_id,
     submit_application,
     update_application_fields,
 )
-from application_store.db.queries.form.queries import add_new_forms
-from application_store.db.queries.updating.queries import update_form
-from application_store.external_services import get_fund
-from application_store.external_services.exceptions import NotificationError
-from assessment_store.config.mappings.assessment_mapping_fund_round import COF_ROUND_4_W2_ID
-from assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
-from assessment_store.db.models.assessment_record.enums import Status
-from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
-from assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
-from assessment_store.scripts.derive_assessment_values import derive_assessment_values
+from pre_award.application_store.db.queries.form.queries import add_new_forms
+from pre_award.application_store.db.queries.updating.queries import update_form
+from pre_award.application_store.external_services import get_fund
+from pre_award.application_store.external_services.exceptions import NotificationError
+from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import COF_ROUND_4_W2_ID
+from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
+from pre_award.assessment_store.db.models.assessment_record.enums import Status
+from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
+from pre_award.assessment_store.scripts.derive_assessment_values import derive_assessment_values
 from tests.assessment_store_tests.test_assessment_mapping_fund_round import COF_FUND_ID
 from tests.utils import AnyStringMatching
 
 
 @pytest.fixture
 def mock_get_files(mocker):
-    mocker.patch("application_store.db.queries.application.queries.list_files_by_prefix", new=lambda _: [])
+    mocker.patch("pre_award.application_store.db.queries.application.queries.list_files_by_prefix", new=lambda _: [])
 
 
 @pytest.fixture
 def mock_successful_location_call(mocker):
     mocker.patch(
-        "assessment_store.db.queries.assessment_records._helpers.get_location_json_from_postcode",
+        "pre_award.assessment_store.db.queries.assessment_records._helpers.get_location_json_from_postcode",
         return_value={
             "error": False,
             "postcode": "GU1 1LY",
@@ -64,7 +64,7 @@ def mock_data_key_mappings(monkeypatch):
         }
     }
     monkeypatch.setattr(
-        "assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
+        "pre_award.assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
         fund_round_data_key_mappings,
     )
     yield
@@ -148,7 +148,7 @@ def test_submit_application_with_location_bad_key(
         }
     }
     monkeypatch.setattr(
-        "assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
+        "pre_award.assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
         fund_round_data_key_mappings,
     )
     application_id = setup_completed_application
@@ -172,7 +172,7 @@ def test_submit_application_with_location(_db, setup_completed_application, monk
         }
     }
     monkeypatch.setattr(
-        "assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
+        "pre_award.assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
         fund_round_data_key_mappings,
     )
 
@@ -236,7 +236,7 @@ def test_submit_route_submit_error(flask_test_client, seed_application_records, 
     target_application = seed_application_records[0]
     application_id = target_application.id
     mocker.patch(
-        "application_store.api.routes.application.routes.submit_application",
+        "pre_award.application_store.api.routes.application.routes.submit_application",
         side_effect=SubmitError(application_id=application_id),
     )
 
@@ -280,7 +280,7 @@ def test_submit_application_route_succeeds_on_notify_error(
     _db.session.commit()
 
     mocker.patch(
-        "application_store.api.routes.application.routes.send_submit_notification",
+        "pre_award.application_store.api.routes.application.routes.send_submit_notification",
         side_effect=NotificationError(),
     )
 
@@ -293,7 +293,7 @@ def test_submit_application_route_succeeds_on_notify_error(
 
 @pytest.mark.parametrize("eoi_result", [({"decision": "BAD_VALUE"}), ({"decision": Decision.FAIL})])
 def test_send_submit_notification_do_not_send(mocker, app, mock_get_files, eoi_result, mock_notification_service_calls):
-    mocker.patch("application_store._helpers.application.create_qa_base64file", return_value={"forms": []})
+    mocker.patch("pre_award.application_store._helpers.application.create_qa_base64file", return_value={"forms": []})
     send_submit_notification(
         application={},
         eoi_results=eoi_result,
@@ -359,7 +359,7 @@ def test_send_submit_notification(
     exp_personalisation,
     mock_notification_service_calls,
 ):
-    # mocker.patch("application_store._helpers.application.create_qa_base64file", return_value={"forms": []})
+    # mocker.patch("pre_award.application_store._helpers.application.create_qa_base64file", return_value={"forms": []})
     mock_account = MagicMock(email="test@test.com", full_name="Test User")
     mock_round = MagicMock(contact_email="contact@test.com")
     mocker.patch(
@@ -435,7 +435,7 @@ def setup_submitted_application(_db, setup_completed_application, monkeypatch, m
         }
     }
     monkeypatch.setattr(
-        "assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
+        "pre_award.assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
         fund_round_data_key_mappings,
     )
 
@@ -474,7 +474,7 @@ def test_derive_values_script(
         }
     }
     monkeypatch.setattr(
-        "assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
+        "pre_award.assessment_store.db.queries.assessment_records._helpers.fund_round_data_key_mappings",
         fund_round_data_key_mappings,
     )
 

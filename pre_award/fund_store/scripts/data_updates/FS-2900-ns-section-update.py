@@ -1,9 +1,9 @@
 from flask import current_app
 from sqlalchemy import update
 
-import fund_store.config.fund_loader_config.night_shelter.ns_r2 as nstf_config
-from db import db
-from fund_store.db.models.section import Section
+import pre_award.fund_store.config.fund_loader_config.night_shelter.ns_r2 as nstf_config
+from pre_award.db import db
+from pre_award.fund_store.db.models.section import Section
 
 
 def update_section_titles(section_config):

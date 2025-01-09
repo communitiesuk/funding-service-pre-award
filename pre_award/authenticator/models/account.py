@@ -3,11 +3,10 @@ from typing import List
 
 from flask import current_app
 
-import config
-from authenticator.models.data import get_account_data, get_data, get_round_data, post_data, put_data
-from authenticator.models.fund import FundMethods
-from authenticator.models.magic_link import MagicLinkMethods
-from config import Config
+from pre_award.authenticator.models.data import get_account_data, get_data, get_round_data, post_data, put_data
+from pre_award.authenticator.models.fund import FundMethods
+from pre_award.authenticator.models.magic_link import MagicLinkMethods
+from pre_award.config import Config
 from services.notify import get_notification_service
 
 
@@ -101,7 +100,7 @@ class AccountMethods(Account):
         """
         url = Config.ACCOUNT_STORE_API_HOST + "/accounts/{account_id}".format(account_id=id)
 
-        if config.FLASK_ENV == "development" and not roles:
+        if Config.FLASK_ENV == "development" and not roles:
             account = get_account_data(email)
             roles = account.get("roles")
         params = {

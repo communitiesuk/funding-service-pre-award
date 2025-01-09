@@ -1,5 +1,6 @@
 import assess
-from assess.services.aws import FileData, generate_url, list_files_in_folder
+
+from pre_award.assess.services.aws import FileData, generate_url, list_files_in_folder
 
 
 def test_generate_url_short_id(app):

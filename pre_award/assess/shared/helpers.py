@@ -3,9 +3,9 @@ from typing import Dict, List
 
 from flask import request
 
-from assess.config.display_value_mappings import LandingFilters, assessment_statuses
-from assess.services.models.flag import Flag, FlagType
-from assess.services.models.fund import Fund
+from pre_award.assess.config.display_value_mappings import LandingFilters, assessment_statuses
+from pre_award.assess.services.models.flag import Flag, FlagType
+from pre_award.assess.services.models.fund import Fund
 
 
 def process_assessments_stats(application_overviews) -> Dict:

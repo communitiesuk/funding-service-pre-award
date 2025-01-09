@@ -1,6 +1,6 @@
 import pytest
 
-from assess.assessments.models.full_application import FullApplicationPdfContext
+from pre_award.assess.assessments.models.full_application import FullApplicationPdfContext
 
 
 @pytest.fixture

@@ -1,7 +1,7 @@
 import pytest
 
-from assess.services.models.assessor_task_list import AssessorTaskList
-from assess.services.shared_data_helpers import get_state_for_tasklist_banner
+from pre_award.assess.services.models.assessor_task_list import AssessorTaskList
+from pre_award.assess.services.shared_data_helpers import get_state_for_tasklist_banner
 
 
 def mock_task_list(sections=None, criterias=None):

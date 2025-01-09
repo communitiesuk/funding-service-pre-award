@@ -3,10 +3,10 @@ from uuid import uuid4
 import pytest
 from sqlalchemy import select
 
-from assessment_store.db.models.assessment_record import AssessmentRecord
-from assessment_store.db.models.assessment_record.enums import Status
-from assessment_store.db.models.flags.flag_update import FlagStatus
-from assessment_store.db.queries.flags.queries import (
+from pre_award.assessment_store.db.models.assessment_record import AssessmentRecord
+from pre_award.assessment_store.db.models.assessment_record.enums import Status
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
+from pre_award.assessment_store.db.queries.flags.queries import (
     add_flag_for_application,
     add_update_to_assessment_flag,
     get_flags_for_application,
@@ -126,7 +126,7 @@ def test_get_flags_for_application(_db, seed_application_records):
 def test_get_most_recent_metadata_statuses_for_fund_round_id(
     _db, status_or_flag, expected_application_count, seed_application_records
 ):
-    from assessment_store.db.queries.assessment_records.queries import (
+    from pre_award.assessment_store.db.queries.assessment_records.queries import (
         get_metadata_for_fund_round_id,
     )
 

@@ -1,5 +1,5 @@
-from assess.assessments.models.flag_teams import TeamsFlagData
-from assess.services.models.flag import Flag
+from pre_award.assess.assessments.models.flag_teams import TeamsFlagData
+from pre_award.assess.services.models.flag import Flag
 
 
 class TestTeamsFlagData:

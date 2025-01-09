@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from dataclass_dict_convert import dataclass_dict_convert
 
-from assessment_store.api.models.theme import Theme
+from pre_award.assessment_store.api.models.theme import Theme
 
 
 @dataclass_dict_convert()

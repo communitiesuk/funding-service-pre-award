@@ -1,7 +1,7 @@
 import pytest
 from flask import Flask
 
-from assess.assessments.activity_trail import AssociatedTags, BaseModel, add_user_info, get_user_info
+from pre_award.assess.assessments.activity_trail import AssociatedTags, BaseModel, add_user_info, get_user_info
 
 
 class TestActivityTrail:
@@ -26,7 +26,7 @@ class TestActivityTrail:
     def test_get_user_info(self, list_data, mocker):
         # Patching the get_bulk_accounts_dict function
         mocker.patch(
-            "assess.assessments.activity_trail.get_bulk_accounts_dict",
+            "pre_award.assess.assessments.activity_trail.get_bulk_accounts_dict",
             return_value=self._accounts_list,
         )
 
@@ -37,7 +37,7 @@ class TestActivityTrail:
     def test_add_user_info(self, mocker):
         with self.test_app.app_context():
             mocker.patch(
-                "assess.assessments.activity_trail.get_user_info",
+                "pre_award.assess.assessments.activity_trail.get_user_info",
                 return_value=self._accounts_list,
             )
             result = add_user_info(self.list_data_class, self.state)

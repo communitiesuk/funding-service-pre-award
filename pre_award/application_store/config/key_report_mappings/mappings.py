@@ -1,24 +1,24 @@
 from collections import defaultdict
 
-from application_store.config.key_report_mappings.cof25_eoi_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof25_eoi_key_report_mapping import (
     COF25_EOI_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.cof_eoi_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof_eoi_key_report_mapping import (
     COF_EOI_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.cof_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof_key_report_mapping import (
     COF_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.cof_r2_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof_r2_key_report_mapping import (
     COF_R2_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.cof_r3w2_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof_r3w2_key_report_mapping import (
     COF_R3W2_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.cyp_r1_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cyp_r1_key_report_mapping import (
     CYP_R1_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.dpif_r2_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.dpif_r2_key_report_mapping import (
     DPIF_R2_KEY_REPORT_MAPPING,
 )
 from application_store.config.key_report_mappings.gbrf_r1_key_report_mapping import GBRF_R1_KEY_REPORT_MAPPING

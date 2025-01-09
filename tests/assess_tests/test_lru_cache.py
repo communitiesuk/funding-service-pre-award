@@ -1,7 +1,7 @@
 import time
 
-from assess.services.data_services import get_fund
-from assess.shared.helpers import get_ttl_hash
+from pre_award.assess.services.data_services import get_fund
+from pre_award.assess.shared.helpers import get_ttl_hash
 
 
 def test_get_fund_lru_cache(mocker):
@@ -14,7 +14,7 @@ def test_get_fund_lru_cache(mocker):
         "id": "222",
     }
     mocker.patch(
-        "assess.services.data_services.get_data",
+        "pre_award.assess.services.data_services.get_data",
         return_value=fund_args,
     )
     # `get_fund`'s output is cached for 2 sec's
@@ -25,7 +25,7 @@ def test_get_fund_lru_cache(mocker):
     # Now let's make another call to `get_fund` with modified fund data(in db) in less than 2 sec
     fund_args["name"] = "Testing Fund 2"
     mocker.patch(
-        "assess.services.data_services.get_data",
+        "pre_award.assess.services.data_services.get_data",
         return_value=fund_args,
     )
     fund = get_fund(fid="222", ttl_hash=get_ttl_hash(seconds=2))

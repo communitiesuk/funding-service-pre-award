@@ -5,9 +5,9 @@ import pytest
 from bs4 import BeautifulSoup
 from flask import session
 
-from assess.assessments.models.round_status import RoundStatus
-from assess.assessments.models.round_summary import RoundSummary, Stats
-from assess.services.models.flag import Flag
+from pre_award.assess.assessments.models.round_status import RoundStatus
+from pre_award.assess.assessments.models.round_summary import RoundSummary, Stats
+from pre_award.assess.services.models.flag import Flag
 from tests.assess_tests.api_data.test_data import fund_specific_claim_map
 from tests.assess_tests.conftest import create_valid_token, test_commenter_claims, test_lead_assessor_claims
 
@@ -16,10 +16,10 @@ class TestRoutes:
     @pytest.mark.mock_parameters(
         {
             "get_assessment_stats_path": [
-                "assess.assessments.models.round_summary.get_assessments_stats",
+                "pre_award.assess.assessments.models.round_summary.get_assessments_stats",
             ],
             "get_rounds_path": [
-                "assess.assessments.models.round_summary.get_rounds",
+                "pre_award.assess.assessments.models.round_summary.get_rounds",
             ],
             "fund_id": "test-fund",
             "round_id": "test-round",
@@ -89,7 +89,7 @@ class TestRoutes:
         access_controller_mock = mock.MagicMock()
         access_controller_mock.is_lead_assessor = mock_is_lead_assessor
         mocker.patch(
-            "assess.assessments.routes.create_round_summaries",
+            "pre_award.assess.assessments.routes.create_round_summaries",
             return_value=[
                 RoundSummary(
                     status=RoundStatus(False, False, True, True, True, False),
@@ -1081,7 +1081,7 @@ class TestRoutes:
             )
         }
     )
-    @pytest.mark.submit_flag_paths(["assess.flagging.helpers.submit_flag"])
+    @pytest.mark.submit_flag_paths(["pre_award.assess.flagging.helpers.submit_flag"])
     @pytest.mark.application_id("flagged_app")
     @pytest.mark.flag_id("flagged_app")
     def test_post_resolved_flag(
@@ -1168,7 +1168,7 @@ class TestRoutes:
             )
         }
     )
-    @pytest.mark.submit_flag_paths(["assess.flagging.helpers.submit_flag"])
+    @pytest.mark.submit_flag_paths(["pre_award.assess.flagging.helpers.submit_flag"])
     @pytest.mark.application_id("stopped_app")
     @pytest.mark.flag_id("stopped_app")
     def test_post_continue_application(
@@ -1369,11 +1369,11 @@ class TestRoutes:
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
         mocker.patch(
-            "assess.assessments.routes.get_application_json",
+            "pre_award.assess.assessments.routes.get_application_json",
             return_value={"jsonb_blob": "mock"},
         )
         with mock.patch(
-            "assess.assessments.routes.get_files_for_application_upload_fields",
+            "pre_award.assess.assessments.routes.get_files_for_application_upload_fields",
             return_value=[
                 ("sample1.doc", "mock/url/for/get/file"),
                 ("sample2.doc", "mock/url/for/get/file"),
@@ -1418,10 +1418,10 @@ class TestRoutes:
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
         mocker.patch(
-            "assess.assessments.routes.get_file_for_download_from_aws",
+            "pre_award.assess.assessments.routes.get_file_for_download_from_aws",
             return_value=("some file contents", "mock_mimetype"),
         )
-        with mock.patch("assess.assessments.routes.download_file", return_value="") as mock_download_file:
+        with mock.patch("pre_award.assess.assessments.routes.download_file", return_value="") as mock_download_file:
             assess_test_client.get("/assess/application/abc123/export/business_plan.txt?short_id=QWERTY")  # noqa
             mock_download_file.assert_called_once_with(
                 "some file contents",
@@ -1440,15 +1440,15 @@ class TestRoutes:
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
         mocker.patch(
-            "assess.assessments.routes.get_file_for_download_from_aws",
+            "pre_award.assess.assessments.routes.get_file_for_download_from_aws",
             return_value=("some file contents", "mock_mimetype"),
         )
-        with mock.patch("assess.assessments.routes.download_file", return_value="") as mock_download_file:
+        with mock.patch("pre_award.assess.assessments.routes.download_file", return_value="") as mock_download_file:
             assess_test_client.get("/assess/application/abc123/export/business_plan.txt")
             mock_download_file.assert_called_once_with("some file contents", "mock_mimetype", "business_plan.txt")
 
     def test_get_file(self, assess_test_client):
-        from assess.assessments.routes import download_file
+        from pre_award.assess.assessments.routes import download_file
 
         response = download_file("file_data", "text/plain", "file_name.abc")
         assert "text/plain" in response.content_type

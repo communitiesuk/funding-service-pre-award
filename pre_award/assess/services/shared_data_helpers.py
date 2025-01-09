@@ -1,7 +1,7 @@
-from assess.services.data_services import get_assessor_task_list_state, get_fund, get_round
-from assess.services.models.assessor_task_list import AssessorTaskList
-from assess.shared.helpers import get_ttl_hash
-from config import Config
+from pre_award.assess.services.data_services import get_assessor_task_list_state, get_fund, get_round
+from pre_award.assess.services.models.assessor_task_list import AssessorTaskList
+from pre_award.assess.shared.helpers import get_ttl_hash
+from pre_award.config import Config
 
 
 def get_state_for_tasklist_banner(application_id) -> AssessorTaskList:

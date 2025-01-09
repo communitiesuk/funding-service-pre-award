@@ -4,12 +4,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from assessment_store.api.routes.progress_routes import get_progress_for_applications
-from assessment_store.api.routes.score_routes import get_scoring_system_name_for_round_id
-from assessment_store.db.models import AssessmentFlag, AssessmentRecord, Score
-from assessment_store.db.models.flags import FlagStatus
-from assessment_store.db.queries.assessment_records.queries import check_all_change_requests_accepted
-from assessment_store.db.queries.scores.queries import (
+from pre_award.assessment_store.api.routes.progress_routes import get_progress_for_applications
+from pre_award.assessment_store.api.routes.score_routes import get_scoring_system_name_for_round_id
+from pre_award.assessment_store.db.models import AssessmentFlag, AssessmentRecord, Score
+from pre_award.assessment_store.db.models.flags import FlagStatus
+from pre_award.assessment_store.db.queries.scores.queries import (
     create_score_for_app_sub_crit,
     get_scores_for_app_sub_crit,
     get_sub_criteria_to_latest_score_map,

@@ -1,6 +1,6 @@
 import jwt
 
-from config import Config
+from pre_award.config import Config
 
 algorithm = "RS256"
 

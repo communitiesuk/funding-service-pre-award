@@ -1,8 +1,8 @@
 import pytest
 
-from fund_store.db.models import FormName
-from fund_store.db.models.section import Section
-from fund_store.db.schemas.section import (
+from pre_award.fund_store.db.models import FormName
+from pre_award.fund_store.db.models.section import Section
+from pre_award.fund_store.db.schemas.section import (
     SECTION_SCHEMA_MAP,
     EnglishSectionSchema,
     WelshSectionSchema,

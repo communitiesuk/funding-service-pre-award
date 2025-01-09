@@ -7,24 +7,24 @@ import requests
 from flask import abort, current_app
 from sqlalchemy import select
 
-from assess.scoring.models.score import Score
-from assess.services.models.application import Application
-from assess.services.models.banner import Banner
-from assess.services.models.comment import Comment, CommentType
-from assess.services.models.flag import Flag, FlagType
-from assess.services.models.fund import Fund
-from assess.services.models.round import Round
-from assess.services.models.sub_criteria import SubCriteria
-from assess.shared.helpers import get_ttl_hash
-from assess.tagging.models.tag import AssociatedTag, Tag, TagType
-from assess.themes.deprecated_theme_mapper import (
+from pre_award.assess.scoring.models.score import Score
+from pre_award.assess.services.models.application import Application
+from pre_award.assess.services.models.banner import Banner
+from pre_award.assess.services.models.comment import Comment, CommentType
+from pre_award.assess.services.models.flag import Flag, FlagType
+from pre_award.assess.services.models.fund import Fund
+from pre_award.assess.services.models.round import Round
+from pre_award.assess.services.models.sub_criteria import SubCriteria
+from pre_award.assess.shared.helpers import get_ttl_hash
+from pre_award.assess.tagging.models.tag import AssociatedTag, Tag, TagType
+from pre_award.assess.themes.deprecated_theme_mapper import (
     map_application_with_sub_criteria_themes_fields,
 )
-from assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
-from assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
-from common.locale_selector.get_lang import get_lang
-from config import Config
-from db import db
+from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
+from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
+from pre_award.common.locale_selector.get_lang import get_lang
+from pre_award.config import Config
+from pre_award.db import db
 
 
 def get_data(endpoint: str, payload: Dict = None):

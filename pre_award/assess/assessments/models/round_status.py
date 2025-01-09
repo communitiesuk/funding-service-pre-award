@@ -5,10 +5,10 @@ from fsd_utils.simple_utils.date_utils import (
     current_datetime_before_given_iso_string,
 )
 
-from assess.services.data_services import get_round
-from assess.services.models.round import Round
-from assess.shared.helpers import get_ttl_hash
-from config import Config
+from pre_award.assess.services.data_services import get_round
+from pre_award.assess.services.models.round import Round
+from pre_award.assess.shared.helpers import get_ttl_hash
+from pre_award.config import Config
 
 
 @dataclass

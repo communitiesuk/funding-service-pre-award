@@ -1,9 +1,9 @@
 from flask import current_app, redirect, request, url_for
 from fsd_utils.authentication.decorators import login_required
 
-from apply.helpers import format_rehydrate_payload, get_fund_and_round, get_token_to_return_to_application
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.apply.helpers import format_rehydrate_payload, get_fund_and_round, get_token_to_return_to_application
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 eligibility_bp = Blueprint("eligibility_routes", __name__, template_folder="templates")
 

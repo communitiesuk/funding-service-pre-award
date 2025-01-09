@@ -3,18 +3,18 @@ from typing import Dict, List
 
 from flask import Response, current_app, request
 
-from assessment_store.api.models.sub_criteria import SubCriteria
-from assessment_store.api.routes._helpers import compress_response, transform_to_assessor_task_list_metadata
-from assessment_store.api.routes.subcriterias.get_sub_criteria import (
+from pre_award.assessment_store.api.models.sub_criteria import SubCriteria
+from pre_award.assessment_store.api.routes._helpers import compress_response, transform_to_assessor_task_list_metadata
+from pre_award.assessment_store.api.routes.subcriterias.get_sub_criteria import (
     get_all_subcriteria,
     return_subcriteria_from_mapping,
 )
-from assessment_store.config.mappings.assessment_mapping_fund_round import (
+from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
     applicant_info_mapping,
 )
-from assessment_store.db.models.flags.flag_update import FlagStatus
-from assessment_store.db.queries import get_metadata_for_fund_round_id
-from assessment_store.db.queries.assessment_records.queries import (
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
+from pre_award.assessment_store.db.queries import get_metadata_for_fund_round_id
+from pre_award.assessment_store.db.queries.assessment_records.queries import (
     find_assessor_task_list_state,
     get_application_jsonb_blob,
     get_assessment_export_data,
@@ -22,17 +22,17 @@ from assessment_store.db.queries.assessment_records.queries import (
     get_metadata_for_application,
     update_status_to_completed,
 )
-from assessment_store.db.queries.comments.queries import get_sub_criteria_to_has_comment_map
-from assessment_store.db.queries.flags.queries import get_flags_for_application
-from assessment_store.db.queries.qa_complete.queries import (
+from pre_award.assessment_store.db.queries.comments.queries import get_sub_criteria_to_has_comment_map
+from pre_award.assessment_store.db.queries.flags.queries import get_flags_for_application
+from pre_award.assessment_store.db.queries.qa_complete.queries import (
     get_qa_complete_record_for_application,
 )
-from assessment_store.db.queries.scores.queries import (
+from pre_award.assessment_store.db.queries.scores.queries import (
     get_scoring_system_for_round_id,
     get_sub_criteria_to_latest_score_map,
 )
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 assessment_assessment_bp = Blueprint("assessment_assessment_bp", __name__)
 

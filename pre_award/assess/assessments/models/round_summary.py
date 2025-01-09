@@ -4,17 +4,17 @@ from dataclasses import dataclass
 import pytz
 from flask import current_app, url_for
 
-from assess.assessments.models.round_status import RoundStatus, determine_round_status
-from assess.authentication.validation import (
+from pre_award.assess.assessments.models.round_status import RoundStatus, determine_round_status
+from pre_award.assess.authentication.validation import (
     AssessmentAccessController,
     get_countries_from_roles,
     has_devolved_authority_validation,
 )
-from assess.config.display_value_mappings import LandingFilters
-from assess.services.data_services import get_application_stats, get_assessments_stats, get_rounds
-from assess.services.models.fund import Fund
-from assess.shared.helpers import get_ttl_hash
-from config import Config
+from pre_award.assess.config.display_value_mappings import LandingFilters
+from pre_award.assess.services.data_services import get_application_stats, get_assessments_stats, get_rounds
+from pre_award.assess.services.models.fund import Fund
+from pre_award.assess.shared.helpers import get_ttl_hash
+from pre_award.config import Config
 
 
 @dataclass

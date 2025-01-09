@@ -3,12 +3,12 @@ from datetime import datetime
 
 import click
 
-from assessment_store.db.models.assessment_record import AssessmentRecord, TagAssociation
-from assessment_store.db.models.comment import Comment, CommentsUpdate
-from assessment_store.db.models.flags import AssessmentFlag, FlagUpdate
-from assessment_store.db.models.qa_complete import QaComplete
-from assessment_store.db.models.score import Score
-from db import db
+from pre_award.assessment_store.db.models.assessment_record import AssessmentRecord, TagAssociation
+from pre_award.assessment_store.db.models.comment import Comment, CommentsUpdate
+from pre_award.assessment_store.db.models.flags import AssessmentFlag, FlagUpdate
+from pre_award.assessment_store.db.models.qa_complete import QaComplete
+from pre_award.assessment_store.db.models.score import Score
+from pre_award.db import db
 
 
 def delete_single_assessment(application_id: str, do_commit: bool = False):
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     from app import create_app
 
     app = create_app()
-    from config import Config
+    from pre_award.config import Config
 
     with app.app_context():
         if Config.FLASK_ENV.casefold() == "production":

@@ -3,26 +3,26 @@ from unittest.mock import patch
 
 import pytest
 
-from assess.assessments.pdf_generator import PDFCreationException, generate_pdf
+from pre_award.assess.assessments.pdf_generator import PDFCreationException, generate_pdf
 
 
 @pytest.fixture
 def mock_render_template():
-    with patch("assess.assessments.pdf_generator.render_template") as mock:
+    with patch("pre_award.assess.assessments.pdf_generator.render_template") as mock:
         mock.return_value = "<html><body>Test PDF</body></html>"
         yield mock
 
 
 @pytest.fixture
 def mock_convert_html_to_pdf_error():
-    with patch("assess.assessments.pdf_generator._convert_html_to_pdf") as mock:
+    with patch("pre_award.assess.assessments.pdf_generator._convert_html_to_pdf") as mock:
         mock.side_effect = PDFCreationException("Mocked Error")
         yield mock
 
 
 @pytest.fixture
 def mock_convert_html_to_pdf_success():
-    with patch("assess.assessments.pdf_generator._convert_html_to_pdf") as mock:
+    with patch("pre_award.assess.assessments.pdf_generator._convert_html_to_pdf") as mock:
         yield mock
 
 

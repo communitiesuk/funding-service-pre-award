@@ -8,17 +8,17 @@ from services.notify import get_notification_service
 
 sys.path.insert(1, ".")
 
+from application_store import external_services  # noqa: E402
 from flask import current_app  # noqa: E402
 
 from app import create_app  # noqa: E402
-from application_store import external_services  # noqa: E402
-from application_store.db.queries import (
+from pre_award.application_store.db.queries import (
     get_forms_by_app_id,  # noqa: E402
     search_applications,  # noqa: E402
 )
-from application_store.db.queries.application import create_qa_base64file  # noqa: E402
-from application_store.external_services.data import get_fund  # noqa: E402
-from config import Config  # noqa: E402
+from pre_award.application_store.db.queries.application import create_qa_base64file  # noqa: E402
+from pre_award.application_store.external_services.data import get_fund  # noqa: E402
+from pre_award.config import Config  # noqa: E402
 
 
 def send_incomplete_applications_after_deadline(

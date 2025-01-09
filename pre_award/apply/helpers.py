@@ -5,7 +5,7 @@ from functools import lru_cache
 import requests
 from flask import current_app, request
 
-from apply.default.data import (
+from pre_award.apply.default.data import (
     get_all_funds,
     get_application_data,
     get_default_round_for_fund,
@@ -18,10 +18,10 @@ from apply.default.data import (
     get_round_data_by_short_names,
     get_ttl_hash,
 )
-from apply.models.fund import Fund
-from apply.models.round import Round
-from common.locale_selector.get_lang import get_lang
-from config import Config
+from pre_award.apply.models.fund import Fund
+from pre_award.apply.models.round import Round
+from pre_award.common.locale_selector.get_lang import get_lang
+from pre_award.config import Config
 
 
 @lru_cache(maxsize=1)

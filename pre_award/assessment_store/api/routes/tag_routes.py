@@ -2,26 +2,26 @@ from distutils.util import strtobool
 
 from flask import Response, abort, current_app, request
 
-from assessment_store.db.queries.assessment_records.queries import (
+from pre_award.assessment_store.db.queries.assessment_records.queries import (
     associate_assessment_tags,
     select_active_tags_associated_with_assessment,
     select_all_tags_associated_with_application,
 )
-from assessment_store.db.queries.tags.queries import (
+from pre_award.assessment_store.db.queries.tags.queries import (
     get_tag_by_id,
     insert_tags,
     select_tags_for_fund_round,
     select_tags_types,
     update_tags,
 )
-from assessment_store.db.schemas.schemas import (
+from pre_award.assessment_store.db.schemas.schemas import (
     JoinedTagAssociationSchema,
     JoinedTagSchema,
     TagAssociationSchema,
     TagSchema,
     TagTypeSchema,
 )
-from common.blueprints import Blueprint
+from pre_award.common.blueprints import Blueprint
 
 assessment_tag_bp = Blueprint("assessment_tag_bp", __name__)
 

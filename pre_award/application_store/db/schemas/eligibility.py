@@ -1,8 +1,8 @@
 from marshmallow import post_dump
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
-from application_store.db.models import Eligibility
-from application_store.db.models.eligibility.eligibility_trail import EligibilityUpdate
+from pre_award.application_store.db.models import Eligibility
+from pre_award.application_store.db.models.eligibility.eligibility_trail import EligibilityUpdate
 
 
 class EligibilitySchema(SQLAlchemyAutoSchema):

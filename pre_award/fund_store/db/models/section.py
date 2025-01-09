@@ -4,7 +4,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import foreign, relationship, remote
 from sqlalchemy_utils import LtreeType
 
-from db import db
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

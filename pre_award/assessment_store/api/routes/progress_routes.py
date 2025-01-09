@@ -3,9 +3,9 @@ from typing import List
 
 from flask import request
 
-from assessment_store.db.queries.progress.queries import get_progress_for_app
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.assessment_store.db.queries.progress.queries import get_progress_for_app
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 assessment_progress_bp = Blueprint("assessment_progress_bp", __name__)
 

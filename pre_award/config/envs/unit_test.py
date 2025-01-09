@@ -7,8 +7,8 @@ from os import environ, getenv
 
 from fsd_utils import CommonConfig, configclass
 
-from config.envs.default import DefaultConfig
-from config.envs.default import DefaultConfig as Config
+from pre_award.config.envs.default import DefaultConfig
+from pre_award.config.envs.default import DefaultConfig as Config
 
 
 @configclass

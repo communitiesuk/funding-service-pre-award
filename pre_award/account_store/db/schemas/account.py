@@ -2,7 +2,7 @@ from marshmallow import fields
 from marshmallow.fields import Function
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 
-from account_store.db.models.account import Account
+from pre_award.account_store.db.models.account import Account
 
 
 class AccountSchema(SQLAlchemyAutoSchema):

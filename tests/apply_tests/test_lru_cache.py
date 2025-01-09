@@ -1,6 +1,6 @@
 import time
 
-from apply.default.data import get_all_funds, get_fund_data, get_ttl_hash
+from pre_award.apply.default.data import get_all_funds, get_fund_data, get_ttl_hash
 
 
 def test_get_fund_data_lru_cache(mocker):
@@ -14,7 +14,7 @@ def test_get_fund_data_lru_cache(mocker):
         "funding_type": "COMPETITIVE",
     }
     mocker.patch(
-        "apply.default.data.get_data",
+        "pre_award.apply.default.data.get_data",
         return_value=fund_args,
     )
     # `get_fund_data`'s output is cached for 2 sec's
@@ -25,7 +25,7 @@ def test_get_fund_data_lru_cache(mocker):
     # Now let's make another call to `get_fund_data` with modified fund data(in db) in less than 2 sec
     fund_args["name"] = "Testing Fund 2"
     mocker.patch(
-        "apply.default.data.get_data",
+        "pre_award.apply.default.data.get_data",
         return_value=fund_args,
     )
     fund = get_fund_data(fund_id="222", language="en", ttl_hash=get_ttl_hash(seconds=2))
@@ -39,7 +39,7 @@ def test_get_fund_data_lru_cache(mocker):
 
 def test_get_all_funds_cache_with_language(mocker):
     mocker.patch(
-        "apply.default.data.get_data",
+        "pre_award.apply.default.data.get_data",
         return_value=[
             {
                 "name": "Testing Fund",
@@ -54,7 +54,7 @@ def test_get_all_funds_cache_with_language(mocker):
 
     # Now let's make another call to `get_all_funds` with modified fund data(in db) in less than 5 sec
     mocker.patch(
-        "apply.default.data.get_data",
+        "pre_award.apply.default.data.get_data",
         return_value=[
             {
                 "name": "Testing Fund 2",

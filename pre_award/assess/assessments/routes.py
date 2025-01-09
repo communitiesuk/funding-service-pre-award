@@ -26,8 +26,8 @@ from fsd_utils.sqs_scheduler.context_aware_executor import ContextAwareExecutor
 from markupsafe import escape
 from werkzeug.datastructures import ImmutableMultiDict, MultiDict
 
-from application_store.db.queries.application.queries import mark_application_with_requested_changes
-from assess.assessments.activity_trail import (
+from pre_award.application_store.db.queries.application.queries import mark_application_with_requested_changes
+from pre_award.assess.assessments.activity_trail import (
     AssociatedTags,
     CheckboxForm,
     Comments,
@@ -38,17 +38,17 @@ from assess.assessments.activity_trail import (
     filter_all_activities,
     select_filters,
 )
-from assess.assessments.forms.assessment_form import AssessmentCompleteForm
-from assess.assessments.forms.assignment_forms import (
+from pre_award.assess.assessments.forms.assessment_form import AssessmentCompleteForm
+from pre_award.assess.assessments.forms.assignment_forms import (
     AssessmentAssignmentForm,
     AssessorChoiceForm,
     AssessorCommentForm,
     AssessorTypeForm,
     AssignmentOverviewForm,
 )
-from assess.assessments.forms.comments_form import CommentsForm
-from assess.assessments.forms.mark_qa_complete_form import MarkQaCompleteForm
-from assess.assessments.helpers import (
+from pre_award.assess.assessments.forms.comments_form import CommentsForm
+from pre_award.assess.assessments.forms.mark_qa_complete_form import MarkQaCompleteForm
+from pre_award.assess.assessments.helpers import (
     convert_datetime_to_bst,
     determine_display_status,
     download_file,
@@ -62,26 +62,26 @@ from assess.assessments.helpers import (
     set_assigned_info_in_overview,
     sort_assigned_column,
 )
-from assess.assessments.models import applicants_response
-from assess.assessments.models.file_factory import (
+from pre_award.assess.assessments.models import applicants_response
+from pre_award.assess.assessments.models.file_factory import (
     FILE_GENERATORS,
     ApplicationFileRepresentationArgs,
     generate_file_content,
 )
-from assess.assessments.models.flag_teams import TeamsFlagData
-from assess.assessments.models.location_data import LocationData
-from assess.assessments.models.round_summary import create_round_summaries, is_after_today
-from assess.assessments.status import (
+from pre_award.assess.assessments.models.flag_teams import TeamsFlagData
+from pre_award.assess.assessments.models.location_data import LocationData
+from pre_award.assess.assessments.models.round_summary import create_round_summaries, is_after_today
+from pre_award.assess.assessments.status import (
     all_status_completed,
     update_ar_status_to_completed,
     update_ar_status_to_qa_completed,
 )
-from assess.authentication.validation import (
+from pre_award.assess.authentication.validation import (
     check_access_application_id,
     check_access_fund_short_name_round_sn,
     has_access_to_fund,
 )
-from assess.config.display_value_mappings import (
+from pre_award.assess.config.display_value_mappings import (
     assessment_statuses,
     asset_types,
     cohort,
@@ -91,10 +91,10 @@ from assess.config.display_value_mappings import (
     landing_filters,
     search_params_default,
 )
-from assess.flagging.forms.request_changes_form import RequestChangesForm
-from assess.scoring.helpers import get_scoring_class
-from assess.services.aws import get_file_for_download_from_aws
-from assess.services.data_services import (
+from pre_award.assess.flagging.forms.request_changes_form import RequestChangesForm
+from pre_award.assess.scoring.helpers import get_scoring_class
+from pre_award.assess.services.aws import get_file_for_download_from_aws
+from pre_award.assess.services.data_services import (
     assign_user_to_assessment,
     get_all_associated_tags_for_application,
     get_all_sub_criterias_with_application_json,
@@ -126,14 +126,14 @@ from assess.services.data_services import (
     submit_comment,
     update_assessment_record_status,
 )
-from assess.services.models.comment import CommentType
-from assess.services.models.flag import FlagType
-from assess.services.models.fund import Fund
-from assess.services.models.round import Round
-from assess.services.models.theme import Theme
-from assess.services.shared_data_helpers import get_state_for_tasklist_banner
-from assess.shared.filters import utc_to_bst
-from assess.shared.helpers import (
+from pre_award.assess.services.models.comment import CommentType
+from pre_award.assess.services.models.flag import FlagType
+from pre_award.assess.services.models.fund import Fund
+from pre_award.assess.services.models.round import Round
+from pre_award.assess.services.models.theme import Theme
+from pre_award.assess.services.shared_data_helpers import get_state_for_tasklist_banner
+from pre_award.assess.shared.filters import utc_to_bst
+from pre_award.assess.shared.helpers import (
     determine_assessment_status,
     determine_flag_status,
     fund_matches_filters,
@@ -142,13 +142,13 @@ from assess.shared.helpers import (
     match_search_params,
     process_assessments_stats,
 )
-from assess.themes.deprecated_theme_mapper import (
+from pre_award.assess.themes.deprecated_theme_mapper import (
     map_application_with_sub_criterias_and_themes,
     order_entire_application_by_themes,
 )
-from assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 ASSESSMENT_TOOL_DASHBOARD_PATH = "/assess/assessor_tool_dashboard/"
 

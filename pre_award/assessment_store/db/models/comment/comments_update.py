@@ -6,7 +6,7 @@ import uuid
 from sqlalchemy import Column, ForeignKey, func
 from sqlalchemy.dialects.postgresql import UUID
 
-from db import db
+from pre_award.db import db
 
 
 class CommentsUpdate(db.Model):

@@ -1,6 +1,6 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 
-from account_store.db.models.role import Role
+from pre_award.account_store.db.models.role import Role
 
 
 class RoleSchema(SQLAlchemyAutoSchema):

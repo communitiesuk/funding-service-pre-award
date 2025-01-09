@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask_babel import format_datetime, gettext
 
-from apply.models.statuses import get_formatted
+from pre_award.apply.models.statuses import get_formatted
 
 
 def date_format_short_month(value: datetime, format="dd MMM yyyy"):

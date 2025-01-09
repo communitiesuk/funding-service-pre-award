@@ -3,7 +3,7 @@ from typing import List
 
 from num2words import num2words
 
-from assess.services.models.flag import Flag, FlagType
+from pre_award.assess.services.models.flag import Flag, FlagType
 
 # TODO : Check if there is better way to do it?
 

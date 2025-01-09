@@ -1,1 +1,1 @@
-from application_store.db.queries.research.queries import *  # noqa
+from pre_award.application_store.db.queries.research.queries import *  # noqa

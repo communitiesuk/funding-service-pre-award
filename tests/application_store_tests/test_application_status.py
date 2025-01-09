@@ -2,8 +2,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from application_store.db.models.forms.enums import Status as FormStatus
-from application_store.db.queries.statuses.queries import (
+from pre_award.application_store.db.models.forms.enums import Status as FormStatus
+from pre_award.application_store.db.queries.statuses.queries import (
     _determine_question_page_status_from_answers,
     _is_all_sections_feedback_complete,
     _is_feedback_survey_complete,
@@ -13,7 +13,7 @@ from application_store.db.queries.statuses.queries import (
     update_form_status,
     update_question_page_statuses,
 )
-from application_store.external_services.models.round import FeedbackSurveyConfig
+from pre_award.application_store.external_services.models.round import FeedbackSurveyConfig
 
 
 @pytest.mark.parametrize(
@@ -50,11 +50,11 @@ def test_is_field_answered(field_json, exp_result):
 
 def test_update_question_statuses_with_mocks(mocker):
     mock_question_status = mocker.patch(
-        "application_store.db.queries.statuses.queries._determine_question_page_status_from_answers",
+        "pre_award.application_store.db.queries.statuses.queries._determine_question_page_status_from_answers",
         return_value="NOT_STARTED",
     )
     mock_answer_status = mocker.patch(
-        "application_store.db.queries.statuses.queries._determine_answer_status_for_fields"
+        "pre_award.application_store.db.queries.statuses.queries._determine_answer_status_for_fields"
     )
 
     test_json = [{"fields": [], "status": None}, {"fields": [], "status": None}]
@@ -297,11 +297,11 @@ def test_update_form_status(
 )
 def test_is_all_sections_feedback_complete(mocker, app_sections, feedback_for_sections, exp_result):
     mocker.patch(
-        "application_store.db.queries.statuses.queries.get_application_sections",
+        "pre_award.application_store.db.queries.statuses.queries.get_application_sections",
         return_value=app_sections,
     )
     mocker.patch(
-        "application_store.db.queries.statuses.queries.get_feedback",
+        "pre_award.application_store.db.queries.statuses.queries.get_feedback",
         new=lambda application_id, section_id: feedback_for_sections[int(section_id)],
     )
     result = _is_all_sections_feedback_complete("123", "123", "123", "en")
@@ -327,7 +327,7 @@ def test_is_all_sections_feedback_complete(mocker, app_sections, feedback_for_se
 )
 def test_is_feedback_survey_complete(mocker, end_survey_data, exp_result):
     mocker.patch(
-        "application_store.db.queries.statuses.queries.retrieve_end_of_application_survey_data",
+        "pre_award.application_store.db.queries.statuses.queries.retrieve_end_of_application_survey_data",
         new=lambda application_id, page_number: end_survey_data[int(page_number) - 1],
     )
     result = _is_feedback_survey_complete("123")
@@ -385,7 +385,7 @@ def test_is_feedback_survey_complete(mocker, end_survey_data, exp_result):
 )
 def test_is_research_survey_complete(mocker, research_survey_data, exp_result):
     mocker.patch(
-        "application_store.db.queries.statuses.queries.retrieve_research_survey_data",
+        "pre_award.application_store.db.queries.statuses.queries.retrieve_research_survey_data",
         new=lambda application_id: research_survey_data,
     )
     result = _is_research_survey_complete("123")
@@ -632,15 +632,15 @@ def test_update_application_status(
     exp_status,
 ):
     mock_fb = mocker.patch(
-        "application_store.db.queries.statuses.queries._is_all_sections_feedback_complete",
+        "pre_award.application_store.db.queries.statuses.queries._is_all_sections_feedback_complete",
         return_value=feedback_complete,
     )
     mocker.patch(
-        "application_store.db.queries.statuses.queries._is_feedback_survey_complete",
+        "pre_award.application_store.db.queries.statuses.queries._is_feedback_survey_complete",
         return_value=survey_complete,
     )
     mocker.patch(
-        "application_store.db.queries.statuses.queries._is_research_survey_complete",
+        "pre_award.application_store.db.queries.statuses.queries._is_research_survey_complete",
         return_value=research_complete,
     )
     app_with_forms = MagicMock()

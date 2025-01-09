@@ -1,15 +1,15 @@
 import pytest
 
-from application_store.config.key_report_mappings.cof_r3w2_key_report_mapping import (
+from pre_award.application_store.config.key_report_mappings.cof_r3w2_key_report_mapping import (
     COF_R3W2_KEY_REPORT_MAPPING,
 )
-from application_store.db.models import (
+from pre_award.application_store.db.models import (
     Applications,
     EndOfApplicationSurveyFeedback,
     Feedback,
     Forms,
 )
-from application_store.db.queries.feedback import retrieve_all_feedbacks_and_surveys
+from pre_award.application_store.db.queries.feedback import retrieve_all_feedbacks_and_surveys
 
 app_sections = [
     {"id": 62, "title": "1. About your organisation"},
@@ -84,15 +84,15 @@ applications = [
 )
 def test_retrieve_all_feedbacks_and_surveys(mocker, app_sections, applications, report_mapping):
     mocker.patch(
-        "application_store.db.queries.feedback.queries.get_application_sections",
+        "pre_award.application_store.db.queries.feedback.queries.get_application_sections",
         return_value=app_sections,
     )
     mocker.patch(
-        "application_store.db.queries.feedback.queries.get_applications",
+        "pre_award.application_store.db.queries.feedback.queries.get_applications",
         return_value=applications,
     )
     mocker.patch(
-        "application_store.db.queries.feedback.queries.get_report_mapping_for_round",
+        "pre_award.application_store.db.queries.feedback.queries.get_report_mapping_for_round",
         return_value=report_mapping,
     )
 
@@ -124,11 +124,11 @@ def test_api_get_all_feedbacks_and_survey_report(
     applications,
 ):
     mocker.patch(
-        "application_store.db.queries.feedback.queries.get_application_sections",
+        "pre_award.application_store.db.queries.feedback.queries.get_application_sections",
         return_value=app_sections,
     )
     mocker.patch(
-        "application_store.db.queries.feedback.queries.get_applications",
+        "pre_award.application_store.db.queries.feedback.queries.get_applications",
         return_value=applications,
     )
     response = flask_test_client.get(

@@ -1,12 +1,12 @@
 import pytest
 from sqlalchemy import select
 
-from assessment_store.api.routes.tag_routes import (
+from pre_award.assessment_store.api.routes.tag_routes import (
     get_active_tags_associated_with_assessment,
     update_tags_for_fund_round,
 )
-from assessment_store.db.models.assessment_record import AssessmentRecord
-from assessment_store.db.queries.assessment_records.queries import associate_assessment_tags
+from pre_award.assessment_store.db.models.assessment_record import AssessmentRecord
+from pre_award.assessment_store.db.queries.assessment_records.queries import associate_assessment_tags
 from tests.assessment_store_tests.conftest import test_input_data
 
 

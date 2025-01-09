@@ -7,7 +7,7 @@ sys.path.insert(1, ".")
 import argparse  # noqa: E402
 from distutils.util import strtobool  # noqa: E402
 
-from assessment_store.db.queries.assessment_records.queries import (  # noqa: E402
+from pre_award.assessment_store.db.queries.assessment_records.queries import (  # noqa: E402
     get_assessment_records_score_data_by_round_id,
 )
 

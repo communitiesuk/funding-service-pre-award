@@ -3,9 +3,9 @@ import os
 
 import click
 
-from db import db
-from fund_store.config.fund_loader_config.FAB import FAB_FUND_ROUND_CONFIGS
-from fund_store.db.queries import (
+from pre_award.db import db
+from pre_award.fund_store.config.fund_loader_config.FAB import FAB_FUND_ROUND_CONFIGS
+from pre_award.fund_store.db.queries import (
     insert_base_sections,
     insert_fund_data,
     insert_or_update_application_sections,

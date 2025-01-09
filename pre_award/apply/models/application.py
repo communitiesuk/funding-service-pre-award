@@ -5,8 +5,8 @@ from typing import List
 
 from flask import current_app
 
-from apply.constants import ApplicationStatus
-from apply.models.application_parts.form import Form
+from pre_award.apply.constants import ApplicationStatus
+from pre_award.apply.models.application_parts.form import Form
 
 
 @dataclass

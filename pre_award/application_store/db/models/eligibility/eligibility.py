@@ -5,8 +5,8 @@ from sqlalchemy import Column, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy_json import NestedMutableJson
 
-from application_store.db.models.application.applications import Applications
-from db import db
+from pre_award.application_store.db.models.application.applications import Applications
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

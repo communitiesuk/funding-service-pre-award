@@ -185,7 +185,7 @@ def test_sso_get_token_prevents_overwrite_of_existing_azure_subject_id(authentic
 
 
 def test_sso_get_token_500_when_error_in_auth_code_flow(authenticator_test_client, mocker, caplog):
-    mock_build_msal_app = mocker.patch("authenticator.api.sso.routes.SsoBase._build_msal_app")
+    mock_build_msal_app = mocker.patch("pre_award.authenticator.api.sso.routes.SsoBase._build_msal_app")
     mock_msal_app = mock_build_msal_app.return_value
     mock_msal_app.acquire_token_by_auth_code_flow.return_value = {"error": "some_error"}
 

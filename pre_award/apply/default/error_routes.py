@@ -2,10 +2,10 @@ from flask import current_app, g, redirect, render_template
 from flask_wtf.csrf import CSRFError
 from fsd_utils.authentication.decorators import login_requested
 
-from apply.default.account_routes import account_bp
-from apply.default.application_routes import application_bp
-from apply.default.content_routes import content_bp
-from apply.default.routes import default_bp
+from pre_award.apply.default.account_routes import account_bp
+from pre_award.apply.default.application_routes import application_bp
+from pre_award.apply.default.content_routes import content_bp
+from pre_award.apply.default.routes import default_bp
 
 
 @application_bp.errorhandler(404)

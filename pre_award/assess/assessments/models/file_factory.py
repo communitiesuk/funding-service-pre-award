@@ -4,13 +4,13 @@ from typing import NamedTuple
 from flask import abort, send_file
 from fsd_utils import generate_text_of_application
 
-from assess.assessments.helpers import download_file, generate_csv_of_application
-from assess.assessments.models.full_application import (
+from pre_award.assess.assessments.helpers import download_file, generate_csv_of_application
+from pre_award.assess.assessments.models.full_application import (
     FullApplicationPdfContext,
     generate_full_application_pdf,
 )
-from assess.services.models.fund import Fund
-from assess.services.models.round import Round
+from pre_award.assess.services.models.fund import Fund
+from pre_award.assess.services.models.round import Round
 
 
 class ApplicationFileRepresentationArgs(NamedTuple):

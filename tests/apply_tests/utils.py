@@ -6,7 +6,7 @@ import os
 
 from flask import url_for
 
-from config import Config
+from pre_award.config import Config
 
 
 def get_language_cookie_value(response):

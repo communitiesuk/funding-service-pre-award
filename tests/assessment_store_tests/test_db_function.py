@@ -3,25 +3,25 @@ import random
 import pytest
 import sqlalchemy
 
-from assessment_store.config.mappings.assessment_mapping_fund_round import COF_FUND_ID, applicant_info_mapping
-from assessment_store.db.models import Comment, Score
-from assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
-from assessment_store.db.models.assessment_record.enums import Status
-from assessment_store.db.models.comment import CommentsUpdate
-from assessment_store.db.models.comment.enums import CommentType
-from assessment_store.db.queries import find_answer_by_key_runner
-from assessment_store.db.queries.assessment_records.queries import (
+from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import COF_FUND_ID, applicant_info_mapping
+from pre_award.assessment_store.db.models import Comment, Score
+from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
+from pre_award.assessment_store.db.models.assessment_record.enums import Status
+from pre_award.assessment_store.db.models.comment import CommentsUpdate
+from pre_award.assessment_store.db.models.comment.enums import CommentType
+from pre_award.assessment_store.db.queries import find_answer_by_key_runner
+from pre_award.assessment_store.db.queries.assessment_records.queries import (
     find_assessor_task_list_state,
     get_assessment_export_data,
     get_export_data,
 )
-from assessment_store.db.queries.comments.queries import (
+from pre_award.assessment_store.db.queries.comments.queries import (
     create_comment,
     get_comments_from_db,
     get_sub_criteria_to_has_comment_map,
     update_comment,
 )
-from assessment_store.db.queries.scores.queries import create_score_for_app_sub_crit
+from pre_award.assessment_store.db.queries.scores.queries import create_score_for_app_sub_crit
 from tests.assessment_store_tests._helpers import get_assessment_record
 from tests.assessment_store_tests.conftest import test_input_data
 
@@ -349,7 +349,7 @@ def test_update_workflow_status_on_insert(_db, insertion_object, seed_applicatio
 @pytest.mark.apps_to_insert([test_input_data[0]])
 def test_output_tracker_data(seed_application_records, mocker):
     mocker.patch(
-        "assessment_store.db.queries.assessment_records.queries.get_account_name",
+        "pre_award.assessment_store.db.queries.assessment_records.queries.get_account_name",
         return_value="Test user",
     )
     # TODO expand this test with more scenarios
@@ -403,7 +403,7 @@ def test_output_tracker_data(seed_application_records, mocker):
 @pytest.mark.apps_to_insert([test_input_data[0]])
 def test_output_tracker_with_no_scores_data(seed_application_records, mocker):
     mocker.patch(
-        "assessment_store.db.queries.assessment_records.queries.get_account_name",
+        "pre_award.assessment_store.db.queries.assessment_records.queries.get_account_name",
         return_value="Test user",
     )
 
@@ -441,7 +441,7 @@ def test_output_tracker_with_no_scores_data(seed_application_records, mocker):
 @pytest.mark.apps_to_insert([test_input_data[0]])
 def test_output_tracker_columns_remain_same_for_scored_and_unscored_reports(seed_application_records, mocker):
     mocker.patch(
-        "assessment_store.db.queries.assessment_records.queries.get_account_name",
+        "pre_award.assessment_store.db.queries.assessment_records.queries.get_account_name",
         return_value="Test user",
     )
 

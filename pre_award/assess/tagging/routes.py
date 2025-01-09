@@ -3,9 +3,9 @@ from typing import Dict
 
 from flask import current_app, flash, g, redirect, render_template, request, url_for
 
-from assess.authentication.validation import check_access_application_id, check_access_fund_id_round_id
-from assess.config.display_value_mappings import search_params_tag
-from assess.services.data_services import (
+from pre_award.assess.authentication.validation import check_access_application_id, check_access_fund_id_round_id
+from pre_award.assess.config.display_value_mappings import search_params_tag
+from pre_award.assess.services.data_services import (
     get_associated_tags_for_application,
     get_fund,
     get_round,
@@ -18,18 +18,18 @@ from assess.services.data_services import (
     update_tag,
     update_tags,
 )
-from assess.services.shared_data_helpers import get_state_for_tasklist_banner
-from assess.shared.helpers import determine_assessment_status, get_ttl_hash, match_search_params
-from assess.tagging.forms.tags import (
+from pre_award.assess.services.shared_data_helpers import get_state_for_tasklist_banner
+from pre_award.assess.shared.helpers import determine_assessment_status, get_ttl_hash, match_search_params
+from pre_award.assess.tagging.forms.tags import (
     DeactivateTagForm,
     EditTagForm,
     NewTagForm,
     ReactivateTagForm,
     TagAssociationForm,
 )
-from assess.tagging.models.tag import TagType
-from common.blueprints import Blueprint
-from config import Config
+from pre_award.assess.tagging.models.tag import TagType
+from pre_award.common.blueprints import Blueprint
+from pre_award.config import Config
 
 TAG_DEACTIVATE_ERROR_MESSAGE = "Tag not deactivated."
 TAG_REACTIVATE_ERROR_MESSAGE = "Tag not reactivated."

@@ -1,7 +1,7 @@
 from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy import Column, Integer
 
-from db import db
+from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
 

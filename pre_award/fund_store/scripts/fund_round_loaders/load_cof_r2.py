@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # flake8: noqa
-from fund_store.config.fund_loader_config.cof.cof_r2 import APPLICATION_BASE_PATH
-from fund_store.config.fund_loader_config.cof.cof_r2 import ASSESSMENT_BASE_PATH
-from fund_store.config.fund_loader_config.cof.cof_r2 import COF_ROUND_2_WINDOW_2_ID
-from fund_store.config.fund_loader_config.cof.cof_r2 import COF_ROUND_2_WINDOW_3_ID
-from fund_store.config.fund_loader_config.cof.cof_r2 import cof_r2_sections
-from fund_store.config.fund_loader_config.cof.cof_r2 import fund_config
-from fund_store.config.fund_loader_config.cof.cof_r2 import rounds_config
-from fund_store.db.queries import insert_base_sections
-from fund_store.db.queries import insert_fund_data
-from fund_store.db.queries import insert_or_update_application_sections
-from fund_store.db.queries import upsert_round_data
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import APPLICATION_BASE_PATH
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import ASSESSMENT_BASE_PATH
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import COF_ROUND_2_WINDOW_2_ID
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import COF_ROUND_2_WINDOW_3_ID
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import cof_r2_sections
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import fund_config
+from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import rounds_config
+from pre_award.fund_store.db.queries import insert_base_sections
+from pre_award.fund_store.db.queries import insert_fund_data
+from pre_award.fund_store.db.queries import insert_or_update_application_sections
+from pre_award.fund_store.db.queries import upsert_round_data
 
 
 def main() -> None:
