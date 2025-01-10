@@ -130,6 +130,8 @@ flagged_app = {
             "latest_allocation": "test_team",
             "application_id": flagged_app_id,
             "sections_to_flag": ["Test section"],
+            "field_ids": [],
+            "is_change_request": False,
             "updates": [
                 {
                     "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
@@ -188,6 +190,8 @@ resolved_app = {
             "latest_allocation": "test_team",
             "application_id": resolved_app_id,
             "sections_to_flag": ["Test section"],
+            "field_ids": [],
+            "is_change_request": False,
             "updates": [
                 {
                     "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
@@ -257,6 +261,8 @@ stopped_app = {
             "latest_allocation": "test_team",
             "application_id": stopped_app_id,
             "sections_to_flag": ["Test section"],
+            "field_ids": [],
+            "is_change_request": False,
             "updates": [
                 {
                     "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
@@ -329,6 +335,8 @@ flagged_qa_completed_app = {
             "application_id": flagged_qa_completed_app_id,
             "justification": "Test",
             "sections_to_flag": ["Test section"],
+            "field_ids": [],
+            "is_change_request": False,
             "updates": [
                 {
                     "id": "316f607a-03b7-4592-b927-5021a28b7d6b",
