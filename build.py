@@ -52,11 +52,11 @@ def build_apply_assets():
 
     # Copy css
     os.makedirs("./static/apply/styles")
-    shutil.copyfile("apply/static/src/styles/tasklist.css", "./static/apply/styles/tasklist.css")
+    shutil.copyfile("pre_award/apply/static/src/styles/tasklist.css", "./static/apply/styles/tasklist.css")
 
     # Copy over JS source
     os.makedirs("./static/apply/js")
-    shutil.copyfile("apply/static/src/js/fsd_cookies.js", "./static/apply/js/fsd_cookies.js")
+    shutil.copyfile("pre_award/apply/static/src/js/fsd_cookies.js", "./static/apply/js/fsd_cookies.js")
 
     print("Deleting temp files")
     # Deletes temp. files.
@@ -112,21 +112,21 @@ def build_some_assess_assets(static_dist_root="static/assess"):
     # Copy css
     os.makedirs("./static/assess/styles")
     shutil.copyfile(
-        "assess/static/src/styles/landing.css",
+        "pre_award/assess/static/src/styles/landing.css",
         "./static/assess/styles/landing.css",
     )
     shutil.copyfile(
-        "assess/static/src/styles/govuk-overrides.css",
+        "pre_award/assess/static/src/styles/govuk-overrides.css",
         "./static/assess/styles/govuk-overrides.css",
     )
     shutil.copyfile(
-        "assess/static/src/styles/comments.css",
+        "pre_award/assess/static/src/styles/comments.css",
         "./static/assess/styles/comments.css",
     )
 
     # Copy over JS source
     os.makedirs("./static/assess/js")
-    shutil.copyfile("assess/static/src/assess/js/fsd_cookies.js", "./static/assess/js/fsd_cookies.js")
+    shutil.copyfile("pre_award/assess/static/src/assess/js/fsd_cookies.js", "./static/assess/js/fsd_cookies.js")
 
     # Delete temp files
     print("Deleting " + ASSETS_PATH)
