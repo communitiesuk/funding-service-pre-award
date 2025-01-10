@@ -8,11 +8,11 @@ from services.notify import get_notification_service
 
 sys.path.insert(1, ".")
 
-from application_store import external_services  # noqa: E402
 from flask import current_app  # noqa: E402
 
 from app import create_app  # noqa: E402
-from pre_award.application_store.db.queries import (
+from pre_award.application_store import external_services  # noqa: E402
+from pre_award.application_store.db.queries import (  # noqa: E402
     get_forms_by_app_id,  # noqa: E402
     search_applications,  # noqa: E402
 )

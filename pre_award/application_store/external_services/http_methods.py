@@ -42,7 +42,7 @@ def post_data(endpoint: str, json_payload: Optional[dict] = None) -> dict:
 
 def post_local_data(endpoint):
     api_data_json = os.path.join(
-        Config.FLASK_ROOT, "tests", "application_store_tests", "api_data", "post_endpoint_data.json"
+        Config.FLASK_ROOT, "tests", "pre_award", "application_store_tests", "api_data", "post_endpoint_data.json"
     )
     with open(api_data_json) as json_file:
         api_data = json.load(json_file)

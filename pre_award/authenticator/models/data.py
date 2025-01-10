@@ -68,6 +68,7 @@ def local_api_call(endpoint: str, params: dict = None, method: str = "get"):
     api_data_json = os.path.join(
         Config.FLASK_ROOT,
         "tests",
+        "pre_award",
         "authenticator_tests",
         "api_data",
         method.lower() + "_endpoint_data.json",

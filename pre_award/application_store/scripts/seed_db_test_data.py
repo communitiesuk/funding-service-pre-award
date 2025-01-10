@@ -10,7 +10,7 @@ from app import create_app
 
 app = create_app()  # noqa: E402
 from pre_award.application_store.db.models.application.applications import Status  # noqa: E402
-from tests.application_store_tests.seed_data.seed_db import (  # noqa: E402
+from tests.pre_award.application_store_tests.seed_data.seed_db import (  # noqa: E402
     seed_completed_application,
     seed_in_progress_application,  # noqa: E402
     seed_not_started_application,
