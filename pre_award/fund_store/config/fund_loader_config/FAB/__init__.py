@@ -29,7 +29,7 @@ FAB_FUND_ROUND_CONFIGS example:
 
 FAB_FUND_ROUND_CONFIGS = {}
 
-this_dir = Path("fund_store") / "config" / "fund_loader_config" / "FAB"
+this_dir = Path("pre_award") / "fund_store" / "config" / "fund_loader_config" / "FAB"
 
 for file in os.listdir(this_dir):
     if file.startswith("__") or not file.endswith(".py"):

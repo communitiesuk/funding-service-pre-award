@@ -24,7 +24,7 @@ def load_fund_from_fab_impl(fund_short_code="", seed_all_funds=False):
         # Get a list of all Python files in the fund_round_loaders directory
         loader_module_names = [
             fund_config_file
-            for fund_config_file in os.listdir("fund_store/config/fund_loader_config/FAB")
+            for fund_config_file in os.listdir("pre_award/fund_store/config/fund_loader_config/FAB")
             if fund_config_file.endswith(".py")
         ]
 
