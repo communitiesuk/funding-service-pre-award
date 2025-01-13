@@ -171,7 +171,6 @@ def build_some_authenticator_assets(static_dist_root="static/authenticator", rem
         zip_ref.extractall(DIST_PATH)
 
     # Move files from ASSETS_PATH to DIST_PATH
-
     print("Moving files from " + ASSETS_PATH + " to " + DIST_PATH)
     for file_to_move in os.listdir(ASSETS_PATH):
         shutil.move("/".join([ASSETS_PATH, file_to_move]), DIST_PATH)
