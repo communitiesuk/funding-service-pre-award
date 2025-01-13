@@ -171,7 +171,6 @@ def build_some_authenticator_assets(static_dist_root="static/authenticator", rem
         zip_ref.extractall(DIST_PATH)
 
     # Move files from ASSETS_PATH to DIST_PATH
-
     print("Moving files from " + ASSETS_PATH + " to " + DIST_PATH)
     for file_to_move in os.listdir(ASSETS_PATH):
         shutil.move("/".join([ASSETS_PATH, file_to_move]), DIST_PATH)
@@ -193,6 +192,79 @@ def build_assess_authenticator_assets(remove_existing=False):
     static_assets.build_bundles(static_folder="static")
 
 
+def build_monolith_assets(static_dist_root="static/monolith", remove_existing=False) -> None:
+    MONOLITH_DIST_PATH = "./" + static_dist_root
+    MAIN_DIST_PATH = "./static"
+    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v5.8.0/release-v5.8.0.zip"
+    ZIP_FILE = "./monolith_govuk_frontend.zip"
+
+    ASSETS_DIR = "/assets"
+    ASSETS_PATH = MONOLITH_DIST_PATH + ASSETS_DIR
+
+    # Checks if GovUK Frontend Assets already built
+    if os.path.exists(MONOLITH_DIST_PATH) and not remove_existing:
+        print("GovUK Frontend assets already built.")
+        return True
+
+    # Download zips from GOVUK_URL
+    # There is a known problem on Mac where one must manually
+    # run the script "Install Certificates.command" found
+    # in the python application folder for this to work.
+
+    print("Downloading static file zip.")
+    urllib.request.urlretrieve(GOVUK_URL, ZIP_FILE)  # nosec
+
+    # Attempts to delete the old files, states if
+    # one doesn't exist.
+
+    print("Deleting old " + MONOLITH_DIST_PATH)
+    try:
+        shutil.rmtree(MONOLITH_DIST_PATH)
+    except FileNotFoundError:
+        print("No old " + MONOLITH_DIST_PATH + " to remove.")
+
+    # Extract the previously downloaded zip to DIST_PATH
+
+    print("Unzipping file to " + MONOLITH_DIST_PATH + "...")
+    with zipfile.ZipFile(ZIP_FILE, "r") as zip_ref:
+        zip_ref.extractall(MONOLITH_DIST_PATH)
+
+    dest_images_path = "/".join([MAIN_DIST_PATH, "images"])
+    dest_fonts_path = "/".join([MAIN_DIST_PATH, "fonts"])
+    if not os.path.exists(dest_images_path):
+        os.makedirs(dest_images_path)
+    if not os.path.exists(dest_fonts_path):
+        os.makedirs(dest_fonts_path)
+    # Move files into main static dir
+    src_fonts_path = "/".join([ASSETS_PATH, "fonts"])
+    print(f"Moving files from {src_fonts_path} to {MAIN_DIST_PATH}/fonts")
+    for file_to_move in os.listdir(src_fonts_path):
+        shutil.move("/".join([src_fonts_path, file_to_move]), "/".join([MAIN_DIST_PATH, "fonts", file_to_move]))
+    shutil.rmtree(src_fonts_path)
+
+    src_images_path = "/".join([ASSETS_PATH, "images"])
+    print(f"Moving files from {src_images_path} to {MAIN_DIST_PATH}/images")
+    for file_to_move in os.listdir(src_images_path):
+        dest_file = "/".join([MAIN_DIST_PATH, "images", file_to_move])
+        shutil.copy("/".join([src_images_path, file_to_move]), dest_file)
+
+    src_manifest_path = "/".join([ASSETS_PATH, "manifest.json"])
+    dest_file = "/".join([MAIN_DIST_PATH, "manifest.json"])
+    shutil.copy(src_manifest_path, dest_file)
+
+    # Move files from ASSETS_PATH to DIST_PATH
+    print("Moving files from " + ASSETS_PATH + " to " + MONOLITH_DIST_PATH)
+    for file_to_move in os.listdir(ASSETS_PATH):
+        shutil.move("/".join([ASSETS_PATH, file_to_move]), MONOLITH_DIST_PATH)
+
+    # Delete temp files
+    print("Deleting " + ASSETS_PATH)
+    shutil.rmtree(ASSETS_PATH)
+    os.remove(ZIP_FILE)
+    static_assets.build_bundles(static_folder="static")
+
+
 if __name__ == "__main__":
-    build_apply_assets()
-    build_assess_authenticator_assets()
+    # build_apply_assets()
+    # build_assess_authenticator_assets()
+    build_monolith_assets(remove_existing=False)

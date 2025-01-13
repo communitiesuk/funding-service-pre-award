@@ -1,0 +1,18 @@
+{% extends "govuk_frontend_jinja/template.html" %}
+
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='monolith/govuk-frontend-5.8.0.min.css' ) }}"> </link>
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Default page template</h1>
+{% endblock %}
+
+{% block bodyEnd %}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+  <script nonce="{{ csp_nonce() }}" type="module">
+    import { initAll } from "{{ url_for('static', filename='monolith/govuk-frontend-5.8.0.min.js') }}"
+    initAll()
+  </script>
+{% endblock %}
