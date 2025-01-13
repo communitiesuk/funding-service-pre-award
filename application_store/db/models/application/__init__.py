@@ -1,1 +1,1 @@
-from application_store.db.models.application.applications import Applications  # noqa
+from proto.common.data.models.applications import Applications  # noqa

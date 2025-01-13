@@ -6,8 +6,8 @@ from datetime import datetime
 
 from deepdiff import DeepDiff
 
-from application_store.db.models.application.enums import Language
 from config import Config
+from proto.common.data.models.applications import Language
 
 
 def get_row_by_pk(table, primary_key):

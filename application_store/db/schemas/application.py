@@ -4,9 +4,9 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 from marshmallow_sqlalchemy.fields import Nested
 
 from application_store.db.models import Applications
-from application_store.db.models.application.enums import Language, Status
 from application_store.db.schemas.form import FormsRunnerSchema
 from application_store.external_services import get_round_name
+from proto.common.data.models.applications import Language, Status
 
 
 class ApplicationSchema(SQLAlchemyAutoSchema):

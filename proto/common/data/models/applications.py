@@ -1,4 +1,5 @@
 import uuid
+from enum import Enum
 
 from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy import Column, DateTime
@@ -6,10 +7,21 @@ from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from application_store.db.models.application.enums import Language, Status
 from db import db
 
 BaseModel: DefaultMeta = db.Model
+
+
+class Language(Enum):
+    en = 0
+    cy = 1
+
+
+class Status(Enum):
+    NOT_STARTED = 0
+    IN_PROGRESS = 1
+    SUBMITTED = 2
+    COMPLETED = 3
 
 
 class Applications(BaseModel):

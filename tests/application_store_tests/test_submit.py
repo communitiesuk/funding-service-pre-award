@@ -10,8 +10,6 @@ from fsd_utils import Decision, NotifyConstants
 
 from application_store._helpers.application import send_submit_notification
 from application_store.db.exceptions.submit import SubmitError
-from application_store.db.models.application.applications import Applications
-from application_store.db.models.application.enums import Status as ApplicationStatus
 from application_store.db.queries.application.queries import (
     create_application,
     get_application,
@@ -29,6 +27,8 @@ from assessment_store.db.models.assessment_record.enums import Status
 from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
 from assessment_store.scripts.derive_assessment_values import derive_assessment_values
+from proto.common.data.models.applications import Applications
+from proto.common.data.models.applications import Status as ApplicationStatus
 from tests.assessment_store_tests.test_assessment_mapping_fund_round import COF_FUND_ID
 from tests.utils import AnyStringMatching
 

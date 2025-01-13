@@ -9,7 +9,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from application_store._helpers import get_blank_forms, order_applications
 from application_store._helpers.application import send_submit_notification
 from application_store.db.exceptions.submit import SubmitError
-from application_store.db.models.application.enums import Status
 from application_store.db.queries import (
     add_new_forms,
     create_application,
@@ -53,6 +52,7 @@ from application_store.external_services.exceptions import (
     NotificationError,
 )
 from common.blueprints import Blueprint
+from proto.common.data.models.applications import Status
 
 application_store_bp = Blueprint("application_store_bp", __name__)
 

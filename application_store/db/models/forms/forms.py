@@ -4,9 +4,9 @@ from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy_json import NestedMutableJson
 from sqlalchemy_utils.types import UUIDType
 
-from application_store.db.models.application.applications import Applications
 from application_store.db.models.forms.enums import Status
 from db import db
+from proto.common.data.models.applications import Applications
 
 BaseModel: DefaultMeta = db.Model
 

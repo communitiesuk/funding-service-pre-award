@@ -1,7 +1,6 @@
 import pytest
 
-from application_store.db.models import Applications
-from application_store.db.models.application.enums import Status
+from proto.common.data.models.applications import Applications, Status
 from tests.application_store_tests.helpers import get_row_by_pk, test_application_data
 
 
