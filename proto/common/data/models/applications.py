@@ -3,8 +3,9 @@ from enum import Enum
 
 from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy import Column, DateTime
+from sqlalchemy import Enum as SQLAlchemyEnum
 from sqlalchemy.dialects.postgresql import ENUM, UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.sql import func
 
 from db import db
@@ -22,6 +23,35 @@ class Status(Enum):
     IN_PROGRESS = 1
     SUBMITTED = 2
     COMPLETED = 3
+
+
+# this will encapsulate the entire process through to an applicant becoming a
+# grant recipient
+# there's the chance that the uncompeted workflow will want to see applications immediately as they're created (potentially filtering for the ones that have started providing values)
+# vs. competative funds that should only be able to see applications after the user has submitted them
+
+
+# Steven _wants_ to use StrEnum but ran into a final hurdle making python upgrade to 3.11 work and can't be bothered
+# class ProtoApplicationStatus(StrEnum):
+class ProtoApplicationStatus(Enum):
+    CREATED = "CREATED"
+    APPLYING = "APPLYING"
+
+    # this is the submitted state
+    SUBMITTED = "SUBMITTED"
+    CHANGES_REQUESTED = "CHANGES_RREQUESTED"
+    AWARDED = "AWARDED"
+    REJECTED = "REJECTED"
+    CLOSED = "CLOSED"
+
+
+# Created -> Applying -> Submitted -> Awarded
+#                        Submitted -> Rejected
+#                        Submitted -> Closed
+#                        Submitted -> Changes requested
+#            Applying -> Changes Requested
+# Created -> Applying -> Closed
+# Created -> Closed
 
 
 class Applications(BaseModel):
@@ -79,3 +109,14 @@ class Applications(BaseModel):
             else (self.started_at.isoformat() if self.started_at else None),
             "date_submitted": date_submitted,
         }
+
+    proto_account: Mapped["Account"] = relationship("Account")
+    proto_status = Column(SQLAlchemyEnum(ProtoApplicationStatus))
+    # this implies the fund, don't reference both! joining should be cheap here so we'll probably always return it
+    proto_round: Mapped["Round"] = relationship("Round")
+
+    # I think I'd prefer if this was somehow managed by updated_date but I can see why assessors would want to order by when the applicant submitted, for exmaple
+    proto_updated_by_applicant_date = Column("proto_updated_by_applicant_date", DateTime(), server_default=func.now())
+
+    proto_created_date = Column("proto_created_date", DateTime(), server_default=func.now())
+    proto_updated_date = Column("proto_updated_date", DateTime(), server_default=func.now(), onupdate=func.now())
