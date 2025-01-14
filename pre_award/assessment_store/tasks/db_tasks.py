@@ -51,7 +51,7 @@ def bootstrap_dev_db(c):
 def generate_test_data(c):
     import json
 
-    from pre_award.assessment_store.tests._db_seed_data import get_dynamic_rows
+    from tests.pre_award.assessment_store_tests._db_seed_data import get_dynamic_rows
 
     _echo_print("Generating data.")
     rows = [json.loads(row) for row in get_dynamic_rows(3, 3, 10)]
@@ -78,8 +78,8 @@ def seed_dev_db(c, fundround=None, appcount=None):
             from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
                 fund_round_mapping_config,
             )
-            from pre_award.assessment_store.tests._helpers import seed_database_for_fund_round
             from pre_award.config import Config
+            from tests.pre_award.assessment_store_tests._helpers import seed_database_for_fund_round
 
             choosing = not bool(fundround and appcount)
             if not choosing:
@@ -130,7 +130,7 @@ def seed_assessment_store_db_impl(environment: Literal["local", "cloud"]):
     from pre_award.assessment_store.db.models.score import AssessmentRound, ScoringSystem
     from pre_award.assessment_store.db.models.tag import TagType
     from pre_award.db import db
-    from pre_award.fund_store.db.models.round import Round
+    from services.data.models.round import Round
 
     # Define scoring systems
     scoring_system_data = [

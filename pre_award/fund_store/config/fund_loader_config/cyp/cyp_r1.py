@@ -4,7 +4,7 @@ from pre_award.fund_store.config.fund_loader_config.common_fund_config.fund_base
     CYP_R1_BASE_PATH,
 )
 from pre_award.fund_store.config.fund_loader_config.logo import DLUHC_LOGO_PNG
-from pre_award.fund_store.db.models.fund import FundingType
+from services.data.models.fund import FundingType
 
 CYP_FUND_ID = "1baa0f68-4e0a-4b02-9dfe-b5646f089e65"
 CYP_ROUND_1_ID = "888aae3d-7e2c-4523-b9c1-95952b3d1644"

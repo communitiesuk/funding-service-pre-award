@@ -1,5 +1,5 @@
 from pre_award.fund_store.config.fund_loader_config.logo import DLUHC_LOGO_PNG
-from pre_award.fund_store.db.models.fund import FundingType
+from services.data.models.fund import FundingType
 
 fund_config = {
     "id": "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4",

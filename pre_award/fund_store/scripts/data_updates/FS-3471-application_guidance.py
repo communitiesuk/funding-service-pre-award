@@ -3,7 +3,7 @@ from sqlalchemy import update
 
 import pre_award.fund_store.config.fund_loader_config.cyp.cyp_r1 as cyp_r1
 from pre_award.db import db
-from pre_award.fund_store.db.models.round import Round
+from services.data.models.round import Round
 
 
 def update_rounds_with_application_guidance(rounds):

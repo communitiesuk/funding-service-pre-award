@@ -10,7 +10,7 @@ from sqlalchemy.types import Boolean
 from sqlalchemy.types import Enum as SQLAEnum
 
 from pre_award.db import db
-from pre_award.fund_store.db.models.round import Round
+from services.data.models.round import Round
 
 BaseModel: DefaultMeta = db.Model
 
