@@ -1,6 +1,5 @@
 import pytest
 
-from pre_award.fund_store.db.models.fund import FundingType
 from pre_award.fund_store.db.queries import (
     get_all_funds,
     get_fund_by_id,
@@ -10,6 +9,7 @@ from pre_award.fund_store.db.queries import (
     get_rounds_for_fund_by_id,
     get_rounds_for_fund_by_short_name,
 )
+from services.data.models.fund import FundingType
 
 
 def test_get_fund_by_id(seed_dynamic_data):

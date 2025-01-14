@@ -7,7 +7,6 @@ from fsd_utils.locale_selector.get_lang import get_lang
 
 from pre_award.common.blueprints import Blueprint
 from pre_award.db import db
-from pre_award.fund_store.db.models import Round
 from pre_award.fund_store.db.models.event import EventType
 from pre_award.fund_store.db.queries import create_event as create_event_in_db
 from pre_award.fund_store.db.queries import (
@@ -28,6 +27,7 @@ from pre_award.fund_store.db.schemas.event import EventSchema
 from pre_award.fund_store.db.schemas.fund import FundSchema
 from pre_award.fund_store.db.schemas.round import RoundSchema
 from pre_award.fund_store.db.schemas.section import SECTION_SCHEMA_MAP
+from services.data.models import Round
 
 fund_store_bp = Blueprint("fund_store_bp", __name__)
 
