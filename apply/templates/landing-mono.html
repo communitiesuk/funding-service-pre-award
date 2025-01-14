@@ -1,0 +1,28 @@
+{% extends "page-template.jinja.html" %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+
+
+
+{% block pageTitle %}Apply for a grant{% endblock %}
+
+
+
+{% block content %}
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-l"> {{ fund.name_json[get_lang()] }} {{ round.title_json[get_lang()] }}</span>
+            <h1 class="govuk-heading-xl">{%trans fund_title=fund.title_json[get_lang()]%}Start or continue an application for {{ fund_title }}{%endtrans%}</h1>
+
+            {% set availableInLanguageHtml%}
+                {% trans url=url_for('select_language', locale=('cy' if get_lang() == 'en' else 'en' )) %} This service is also available <a href="{{ url }}" class="govuk-link">in Welsh (Cymraeg){% endtrans %}</a>.</p>
+            {% endset %}
+#TODO check if available in welsh
+            {{ govukInsetText({
+            "html": availableInLanguageHtml
+            }) }}
+        </div>
+      </div>
+
+
+{% endblock %}

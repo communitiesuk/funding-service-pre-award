@@ -686,8 +686,8 @@ msgid "Start or continue an"
 msgstr "Gwneud cais am"
 
 #: apply/templates/apply/fund_start_page.html:7
-msgid "Start or continue an application for"
-msgstr "Gwneud cais am"
+msgid "Start or continue an application for %(fund_title)s"
+msgstr "Gwneud cais am %(fund_title)s"
 
 #: apply/templates/apply/fund_start_page.html:48
 msgid "Read the fund's prospectus"
