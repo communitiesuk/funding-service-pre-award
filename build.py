@@ -265,6 +265,6 @@ def build_monolith_assets(static_dist_root="static/monolith", remove_existing=Fa
 
 
 if __name__ == "__main__":
-    # build_apply_assets()
-    # build_assess_authenticator_assets()
+    build_apply_assets()
+    build_assess_authenticator_assets()
     build_monolith_assets(remove_existing=False)
