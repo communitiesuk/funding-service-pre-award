@@ -32,6 +32,11 @@ class Applications(BaseModel):
         primary_key=True,
         nullable=False,
     )
+    # foreign key accounts in
+    # bring account model over
+    # lookup applications by account
+    # bring forms in
+    # either rename or add something else form "forms", more specific name
     account_id = Column("account_id", db.String(), nullable=False)
     fund_id = Column("fund_id", db.String(), nullable=False)
     round_id = Column("round_id", db.String(), nullable=False)
