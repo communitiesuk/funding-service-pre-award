@@ -4298,8 +4298,8 @@ msgstr "Pwysig"
 
 #: apply/templates/apply/partials/round_closed_warning.html:12
 #: apply/templates/apply/partials/round_closed_warning.html:20
-msgid "Window closed"
-msgstr "Ffenestr ar gau"
+msgid "Window closed - %(fund_round_names)s"
+msgstr "Ffenestr ar gau - %(fund_round_names)s"
 
 #: apply/templates/apply/partials/round_closed_warning.html:14
 #: apply/templates/apply/partials/round_closed_warning.html:22

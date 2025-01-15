@@ -1,26 +1,66 @@
 {% extends "page-template.jinja.html" %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 
 
 
 {% block pageTitle %}Apply for a grant{% endblock %}
-
-
+{% set fund_name %}
+{{fund.name_json[get_lang()] or fund.name_json["en"]}}
+{% endset %}
+{% set fund_title %}
+{{fund.title_json[get_lang()] or fund.title_json["en"]}}
+{%endset%}
+{% set round_title %}
+{{round.title_json[get_lang()] or round.title_json["en"]}}
+{% endset%}
 
 {% block content %}
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <span class="govuk-caption-l"> {{ fund.name_json[get_lang()] }} {{ round.title_json[get_lang()] }}</span>
-            <h1 class="govuk-heading-xl">{%trans fund_title=fund.title_json[get_lang()]%}Start or continue an application for {{ fund_title }}{%endtrans%}</h1>
+            <span class="govuk-caption-l"> {{ fund_name}} {{ round_title }}</span>
+            <h1 class="govuk-heading-xl">{%trans fund_title=fund_title%}Start or continue an application for {{ fund_title }}{%endtrans%}</h1>
+
+            {% if round.is_past_submission_deadline %}
+                {% set closed_title %}
+                    {%trans%}Important{%endtrans%}
+                {% endset %}
+                {% set closed_html %}
+                    <p class="govuk-notification-banner__heading">{%trans fund_round_names = fund_name + " " + round_title%}Window closed - {{fund_round_names}}{% endtrans %}</p>
+                    <p class="govuk-body">
+                        ({% trans closed_date = round.deadline|datetime_format %}Closed: {{ closed_date }}{% endtrans %})
+                    </p>
+                    <p class="govuk-body">{% trans %}You can no longer submit applications in this window. Any you had in progress will be
+            emailed to you.{% endtrans %}
+                    </p>
+                {%endset%}
+                {{govukNotificationBanner({
+                    "titleText": closed_title,
+                    "html": closed_html
+                })}}
+            {% endif %}
 
             {% set availableInLanguageHtml%}
-                {% trans url=url_for('select_language', locale=('cy' if get_lang() == 'en' else 'en' )) %} This service is also available <a href="{{ url }}" class="govuk-link">in Welsh (Cymraeg){% endtrans %}</a>.</p>
+                {% trans url=url_for('select_language', locale=('cy' if get_lang() == 'en' else 'en' )) %} This service is also available <a href="{{ url }}" class="govuk-link">in Welsh (Cymraeg){% endtrans %}</a>.
             {% endset %}
-#TODO check if available in welsh
-            {{ govukInsetText({
-            "html": availableInLanguageHtml
-            }) }}
+            {% if fund.welsh_available %}
+                {{ govukInsetText({
+                "html": availableInLanguageHtml
+                }) }}
+            {% endif %}
+            {% if round.instructions_json %}
+            {% set instructions %}
+                round.instructions_json[get_lang()] or round.instructions_json["en"]
+            {% endset %}
+            <p class="govuk-body">
+                {{ instructions|safe }}
+            </p>
+            {% endif %}
+            <p class="govuk-body">
+                <a class="govuk-link" href="{{ prospectus_link }}">{% trans %}Read the fund's prospectus{% endtrans %}</a>
+                {% trans %}before you start.{% endtrans %}
+            </p>
         </div>
       </div>
 
