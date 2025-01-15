@@ -1,0 +1,98 @@
+# The manifest for the "email-reminders" job.
+# Read the full specification for the "Scheduled Job" type at:
+#  https://aws.github.io/copilot-cli/docs/manifest/scheduled-job/
+
+# Your job name will be used in naming your resources like log groups, ECS Tasks, etc.
+name: email-reminders
+type: Scheduled Job
+
+# Trigger for your task.
+on:
+  # The scheduled trigger for your job. You can specify a Unix cron schedule or keyword (@weekly) or a rate (@every 1h30m)
+  # AWS Schedule Expressions are also accepted: https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
+  schedule: "none"
+#retries: 3        # Optional. The number of times to retry the job before failing.
+#timeout: 1h30m    # Optional. The timeout after which to stop the job if it's still running. You can use the units (h, m, s).
+
+# Configuration for your container and task.
+image:
+  # Docker build arguments. For additional overrides: https://aws.github.io/copilot-cli/docs/manifest/scheduled-job/#image-build
+  build: Dockerfile
+command: invoke common.reminder-emails
+
+cpu: 256       # Number of CPU units for the task.
+memory: 512    # Amount of memory in MiB used by the task.
+platform: linux/x86_64   # See https://aws.github.io/copilot-cli/docs/manifest/scheduled-job/#platform
+
+network:
+  vpc:
+    security_groups:
+      - from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-fsdpreawardstoresclusterSecurityGroup
+
+# storage:
+# readonly_fs: true       # Limit to read-only access to mounted root filesystems.
+
+# Optional fields for more advanced use-cases.
+# Pass environment variables as key value pairs.
+variables:
+  FLASK_ENV: ${COPILOT_ENVIRONMENT_NAME}
+  SENTRY_DSN: "https://80c7f65b54f0eff535777a66b375adf0@o1432034.ingest.us.sentry.io/4508324370317312"
+  AWS_BUCKET_NAME:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-FormUploadsBucket
+  AWS_MSG_BUCKET_NAME:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-MessageBucket
+  AWS_SQS_NOTIF_APP_PRIMARY_QUEUE_URL:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-NotificationQueueURL
+  AWS_SQS_NOTIF_APP_SECONDARY_QUEUE_URL:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-NotificationDeadLetterQueueURL
+  ASSESSMENT_FRONTEND_HOST: "https://assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  SENTRY_TRACES_SAMPLE_RATE: 1.0
+  API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local"
+
+  ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: false
+  APPLICANT_FRONTEND_HOST: "https://frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk" # TODO: remove me when all frontends combined
+  APPLY_HOST: "frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  ASSESS_HOST: "assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  AUTH_HOST: "authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  COOKIE_DOMAIN: ".test.levellingup.gov.uk"
+  FORM_DESIGNER_HOST: "https://form-designer.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  FORMS_SERVICE_PUBLIC_HOST: "https://forms.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  POST_AWARD_FRONTEND_HOST: "https://find-monitoring-data.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  POST_AWARD_SUBMIT_HOST: "https://submit-monitoring-data.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  COPILOT_AWS_BUCKET_NAME:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-FormUploadsBucket
+  REDIS_INSTANCE_URI:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-MagicLinksRedisInstanceURI
+
+secrets:
+  FUND_STORE_API_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_PRE_AWARD_FUND_STORE_API_HOST
+  ACCOUNT_STORE_API_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_PRE_AWARD_ACCOUNT_STORE_API_HOST
+  APPLICATION_STORE_API_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_PRE_AWARD_APPLICATION_STORE_API_HOST
+  ASSESSMENT_STORE_API_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_PRE_AWARD_ASSESSMENT_STORE_API_HOST
+  SECRET_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SECRET_KEY
+  PREAWARD_DB_SECRET:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-fsdpreawardstoresclusterAuroraSecret
+  AUTHENTICATOR_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AUTHENTICATOR_HOST
+  AZURE_AD_CLIENT_ID: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AZURE_AD_CLIENT_ID
+  AZURE_AD_CLIENT_SECRET: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AZURE_AD_CLIENT_SECRET
+  AZURE_AD_TENANT_ID: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AZURE_AD_TENANT_ID
+  MAINTENANCE_MODE: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_FRONTEND_MAINTENANCE_MODE
+  MAINTENANCE_END_TIME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_FRONTEND_MAINTENANCE_END_TIME
+  RSA256_PUBLIC_KEY_BASE64: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/RSA256_PUBLIC_KEY_BASE64
+  RSA256_PRIVATE_KEY_BASE64: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/RSA256_PRIVATE_KEY_BASE64
+  GOV_NOTIFY_API_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/GOV_NOTIFY_API_KEY
+
+
+# Optional fields for more advanced use-cases.
+#
+#variables:                    # Pass environment variables as key value pairs.
+#  LOG_LEVEL: info
+
+#secrets:                      # Pass secrets from AWS Systems Manager (SSM) Parameter Store.
+#  GITHUB_TOKEN: GITHUB_TOKEN  # The key is the name of the environment variable, the value is the name of the SSM parameter.
+
+# You can override any of the values defined above by environment.
+#environments:
+#  prod:
+#    cpu: 2048               # Larger CPU value for prod environment.
