@@ -5,6 +5,8 @@ import re
 from invoke import task
 
 from app import create_app
+from fund_store.db.models.fund import Fund
+from fund_store.db.queries import get_all_funds
 
 _VALID_JINJA_EXTENSIONS = (".html", ".jinja", ".jinja2", ".j2")
 
@@ -117,3 +119,5 @@ def reminder_emails(c):
     app = create_app()
     with app.app_context():
         print("IN APP CONTEXT")
+        funds: list[Fund] = get_all_funds()
+        print(funds[0].rounds)
