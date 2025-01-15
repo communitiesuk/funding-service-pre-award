@@ -7,6 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.types import Boolean
 
+from pre_award.common.locale_selector.get_lang import get_lang
 from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
@@ -96,15 +97,6 @@ class Round(BaseModel):
     eligibility_config = Column("eligibility_config", JSON(none_as_null=True), nullable=True, unique=False)
     eoi_decision_schema = Column("eoi_decision_schema ", JSON(none_as_null=True), nullable=True, unique=False)
 
-    # def determine_round_status(round: Round):
-    #     round_status = RoundStatus(
-    #         past_submission_deadline=current_datetime_after_given_iso_string(round.deadline),
-    #         not_yet_open=current_datetime_before_given_iso_string(round.opens),
-    #         is_open=current_datetime_after_given_iso_string(round.opens)
-    #         and current_datetime_before_given_iso_string(round.deadline),
-    #     )
-    #     return round_status
-
     @hybrid_property
     def is_past_submission_deadline(self):
         return datetime.now() > self.deadline
@@ -113,6 +105,10 @@ class Round(BaseModel):
     def is_not_yet_open(self):
         return datetime.now() < self.opens
 
+    @hybrid_property
+    def is_open(self):
+        return self.opens < datetime.now() < self.deadline
+
     @property
-    def round_name(self):
-        pass
+    def round_title(self):
+        return self.title_json[get_lang()] or self.title_json["en"]

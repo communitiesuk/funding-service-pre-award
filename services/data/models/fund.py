@@ -9,6 +9,7 @@ from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.types import Boolean
 from sqlalchemy.types import Enum as SQLAEnum
 
+from pre_award.common.locale_selector.get_lang import get_lang
 from pre_award.db import db
 from services.data.models.round import Round
 
@@ -45,3 +46,11 @@ class Fund(BaseModel):
         unique=False,
     )
     ggis_scheme_reference_number = Column("ggis_scheme_reference_number", db.String(255), nullable=True, unique=False)
+
+    @property
+    def fund_name(self):
+        return self.name_json[get_lang()] or self.name_json["en"]
+
+    @property
+    def fund_title(self):
+        return self.title_json[get_lang()] or self.title_json["en"]
