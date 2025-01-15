@@ -112,3 +112,7 @@ class Round(BaseModel):
     @hybrid_property
     def is_not_yet_open(self):
         return datetime.now() < self.opens
+
+    @property
+    def round_name(self):
+        pass
