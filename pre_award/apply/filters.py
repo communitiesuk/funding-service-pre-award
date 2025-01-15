@@ -49,10 +49,7 @@ def datetime_format(value: str) -> str:
     Reference:
     - https://www.gov.uk/guidance/style-guide/a-to-z-of-gov-uk-style#times
     """
-    if isinstance(value, datetime):
-        parsed = value
-    else:
-        parsed = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+    parsed = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
 
     if parsed.time().hour == 0 and parsed.time().minute == 0:
         time_str = "midnight"

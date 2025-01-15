@@ -9,6 +9,8 @@ from flask_assets import Environment
 from flask_babel import Babel, gettext, pgettext
 from flask_compress import Compress
 
+from frontend.filters import datetime_format_respect_lang
+
 try:
     from flask_debugtoolbar import DebugToolbarExtension
 
@@ -176,6 +178,9 @@ def create_app() -> Flask:  # noqa: C901
         remove_dashes_underscores_capitalize_keep_uppercase
     )
     flask_app.jinja_env.filters["format_address"] = format_address
+
+    # new monolith filters
+    flask_app.jinja_env.filters["datetime_format_respect_lang"] = datetime_format_respect_lang
 
     # This section is needed for url_for("foo", _external=True) to
     # automatically generate http scheme when this sample is
