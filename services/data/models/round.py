@@ -108,3 +108,7 @@ class Round(BaseModel):
     @hybrid_property
     def is_past_submission_deadline(self):
         return datetime.now() > self.deadline
+
+    @hybrid_property
+    def is_not_yet_open(self):
+        return datetime.now() < self.opens
