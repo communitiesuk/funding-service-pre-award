@@ -107,3 +107,8 @@ def pybabel_update(c):
 @task
 def pybabel_compile(c):
     c.run("pybabel compile -d translations")
+
+
+@task
+def reminder_emails(c):
+    print("Building!")
