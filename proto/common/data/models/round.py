@@ -6,8 +6,18 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.types import Boolean
 
+# from proto.common.data.models.fund import Fund
 from db import db
 
+# if TYPE_CHECKING:
+# from proto.common.data.models.fund import Fund
+# from proto.common.data.models.applications import Applications
+# else:
+# Fund = "Fund"
+# Applications = "Applications"
+from proto.common.data.models.fund import Fund
+
+Applications = "Applications"
 BaseModel: DefaultMeta = db.Model
 
 
@@ -103,4 +113,6 @@ class Round(BaseModel):
 
     # whenever we get the round we're going to want the fund information - we _might_ want to be able to override this
     # but this feels like a very sensible way around for most of applies use case
-    proto_grant: Mapped["Fund"] = relationship("Fund", lazy=False)
+    proto_grant: Mapped[Fund] = relationship("Fund", lazy=False)
+
+    # proto_applications: Mapped[List[Applications]] = relationship("Applications", lazy=True)

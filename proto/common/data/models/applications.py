@@ -1,15 +1,25 @@
 import uuid
 from enum import Enum
+from typing import TYPE_CHECKING
 
 from flask_sqlalchemy.model import DefaultMeta
-from sqlalchemy import Column, DateTime
+from sqlalchemy import Column, DateTime, ForeignKey
 from sqlalchemy import Enum as SQLAlchemyEnum
 from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.sql import func
 
-from db import db
+if TYPE_CHECKING:
+    from account_store.db.models.account import Account
+else:
+    Round = "Round"
+    Account = "Account"
 
+# Round = "Round"
+from db import db
+from proto.common.data.models.round import Round
+
+# Base = declarative_base()
 BaseModel: DefaultMeta = db.Model
 
 
@@ -67,9 +77,9 @@ class Applications(BaseModel):
     # lookup applications by account
     # bring forms in
     # either rename or add something else form "forms", more specific name
-    account_id = Column("account_id", db.String(), nullable=False)
+    account_id = Column("account_id", UUID(), ForeignKey("account.id"), nullable=False)
     fund_id = Column("fund_id", db.String(), nullable=False)
-    round_id = Column("round_id", db.String(), nullable=False)
+    round_id = Column("round_id", db.String(), ForeignKey("round.id"), nullable=False)
     key = Column("key", db.String(), nullable=False)
     language = Column("language", ENUM(Language), nullable=True)
     reference = Column("reference", db.String(), nullable=False, unique=True)
@@ -110,10 +120,11 @@ class Applications(BaseModel):
             "date_submitted": date_submitted,
         }
 
-    proto_account: Mapped["Account"] = relationship("Account")
-    proto_status = Column(SQLAlchemyEnum(ProtoApplicationStatus))
+    proto_round: Mapped[Round] = relationship("Round")
+    proto_account: Mapped[Account] = relationship("Account")
+
+    proto_status = Column(SQLAlchemyEnum(ProtoApplicationStatus, name="protoapplicationstatus"))
     # this implies the fund, don't reference both! joining should be cheap here so we'll probably always return it
-    proto_round: Mapped["Round"] = relationship("Round")
 
     # I think I'd prefer if this was somehow managed by updated_date but I can see why assessors would want to order by when the applicant submitted, for exmaple
     proto_updated_by_applicant_date = Column("proto_updated_by_applicant_date", DateTime(), server_default=func.now())
