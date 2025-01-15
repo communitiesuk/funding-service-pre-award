@@ -1,6 +1,9 @@
+import enum
+
+import sqlalchemy
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import MetaData
+from sqlalchemy import JSON, MetaData
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -10,8 +13,19 @@ convention = {
     "pk": "pk_%(table_name)s",
 }
 
+
+class FundingType(enum.Enum):
+    COMPETITIVE = "COMPETITIVE"
+    UNCOMPETED = "UNCOMPETED"
+    EOI = "EOI"
+
+
 metadata = MetaData(naming_convention=convention)
 
 db = SQLAlchemy(metadata=metadata)
+
+db.Model.registry.update_type_annotation_map(
+    {dict[str, str]: JSON(none_as_null=True), FundingType: sqlalchemy.Enum(FundingType, native_enum=False)}
+)
 
 migrate = Migrate()

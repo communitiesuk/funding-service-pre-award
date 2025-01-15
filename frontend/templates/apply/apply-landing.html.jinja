@@ -2,73 +2,60 @@
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 {% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
-
-
-
-{% block pageTitle %}Apply for a grant{% endblock %}
-
+{% block pageTitle %}
+    Apply for a grant
+{% endblock pageTitle %}
 {% block content %}
-
-      <div class="govuk-grid-row">
+    <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <span class="govuk-caption-l"> {{ fund.fund_name}} {{ round.round_title }}</span>
-            <h1 class="govuk-heading-xl">{%trans fund_title=fund.fund_title%}Start or continue an application for {{ fund_title }}{%endtrans%}</h1>
-
+            <span class="govuk-caption-l">{{ fund.fund_name }} {{ round.round_title }}</span>
+            <h1 class="govuk-heading-xl">{% trans fund_title=fund.fund_title %}Start or continue an application for {{ fund_title }}{% endtrans %}</h1>
             {% if round.is_past_submission_deadline %}
-
                 {% set closed_html %}
-                    <p class="govuk-notification-banner__heading">{%trans fund_round_names = fund.fund_name + " " + round.round_title%}Window closed - {{fund_round_names}}{% endtrans %}</p>
+                    <p class="govuk-notification-banner__heading">{% trans fund_round_names = fund.fund_name + " " + round.round_title %}Window closed - {{ fund_round_names }}{% endtrans %}</p>
+                    <p class="govuk-body">({% trans closed_date = round.deadline|datetime_format_respect_lang %}Closed: {{ closed_date }}{% endtrans %})</p>
                     <p class="govuk-body">
-                        ({% trans closed_date = round.deadline|datetime_format_respect_lang %}Closed: {{ closed_date }}{% endtrans %})
+                        {% trans %}You can no longer submit applications in this window. Any you had in progress will be
+                        emailed to you.{% endtrans %}
                     </p>
-                    <p class="govuk-body">{% trans %}You can no longer submit applications in this window. Any you had in progress will be
-            emailed to you.{% endtrans %}
-                    </p>
-                {%endset%}
-                {{govukNotificationBanner({
-                    "titleText": gettext("Important"),
-                    "html": closed_html
+                {% endset %}
+                {{ govukNotificationBanner({
+                                "titleText": gettext("Important") ,
+                "html": closed_html
                 })}}
             {% endif %}
-
-            {% set availableInLanguageHtml%}
+            {% set availableInLanguageHtml %}
                 {% trans url=url_for('select_language', locale=('cy' if get_lang() == 'en' else 'en' )) %} This service is also available <a href="{{ url }}" class="govuk-link">in Welsh (Cymraeg){% endtrans %}</a>.
             {% endset %}
             {% if fund.welsh_available %}
                 {{ govukInsetText({
-                "html": availableInLanguageHtml
-                }) }}
+                                "html": availableInLanguageHtml
+                                }) }}
             {% endif %}
             {% if round.instructions_json %}
-            {% set instructions %}
-                {{round.instructions_json[get_lang()] or round.instructions_json["en"]}}
-            {% endset %}
-            <p class="govuk-body">
-                {{ instructions|safe }}
-            </p>
+                {% set instructions %}
+                    {{ round.instructions_json[get_lang() ] or round.instructions_json["en"] }}
+                {% endset %}
+                <p class="govuk-body">{{ instructions|safe }}</p>
             {% endif %}
             <p class="govuk-body">
                 {% trans %}<a class="govuk-link" href="{{ prospectus_link }}">Read the fund's prospectus</a> before you start.{% endtrans %}
             </p>
             {% if not round.is_expression_of_interest %}
                 <p class="govuk-body">
-                    <strong>{% trans %}Submission deadline:{% endtrans %} </strong>{{round.deadline|datetime_format_respect_lang}}
+                    <strong>{% trans %}Submission deadline:{% endtrans %}</strong>{{ round.deadline|datetime_format_respect_lang }}
                 </p>
             {% endif %}
             {{ govukButton({
-                "isStartButton": True,
-                "href" : url_for("magic_links_bp.new", fund=fund.short_name, round=round.short_name),
-                "text": gettext("Enter your email address")
+                        "isStartButton": True,
+                        "href" : url_for("magic_links_bp.new", fund=fund.short_name, round=round.short_name) ,
+            "text": gettext("Enter your email address")
             }) }}
-            <h2 class="govuk-heading-m">{% trans %}Get help{% endtrans %} </h2>
+            <h2 class="govuk-heading-m">{% trans %}Get help{% endtrans %}</h2>
             <p class="govuk-body">
                 {% trans %}If you need help, contact us through our <a class="govuk-link" href="{{ support_desk_apply }}" target="_blank">support desk</a>{% endtrans %}.
             </p>
-            <p class="govuk-body">
-                {% trans %}Do not send any applications or attachments from the service desk portal. We'll only accept applications through this service.{% endtrans %}
-            </p>
+            <p class="govuk-body">{% trans %}Do not send any applications or attachments from the service desk portal. We'll only accept applications through this service.{% endtrans %}</p>
         </div>
-      </div>
-
-
+    </div>
 {% endblock %}

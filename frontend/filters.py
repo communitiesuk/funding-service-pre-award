@@ -34,7 +34,7 @@ def datetime_format_respect_lang(value: datetime) -> str:
     else:
         time_str = value.strftime("%I:%M%p").lstrip("0").lower()
 
-    formatted_date = format_datetime(value, format="dd MMMM yyyy ")
+    formatted_date: str = format_datetime(value, format="dd MMMM yyyy ")
     formatted_date += gettext("at")
     formatted_date += " " + time_str
     return formatted_date

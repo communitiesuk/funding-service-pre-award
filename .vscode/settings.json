@@ -4,17 +4,20 @@
   ],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
-    "editor.quickSuggestions": {
-        "other": true,
-        "comments": false,
-        "strings": false
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  },
+  "editor.quickSuggestionsDelay": 10,
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
     },
-    "editor.quickSuggestionsDelay": 10,
-    "[python]": {
-      "editor.codeActionsOnSave": {
-        "source.organizeImports": "explicit",
-      },
-      "editor.formatOnSave": true,
-      "editor.defaultFormatter": "charliermarsh.ruff"
-    }
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
+    "editor.defaultFormatter": "monosans.djlint"
+  }
 }
