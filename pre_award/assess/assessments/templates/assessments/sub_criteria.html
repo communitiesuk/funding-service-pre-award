@@ -10,6 +10,7 @@
 {% from "assess/macros/sub_criteria_heading.html" import sub_criteria_heading %}
 {% from "assess/macros/migration_banner.html" import migration_banner %}
 {% from "assess/macros/assessment_change_request.html" import assessment_change_request %}
+{% from "assess/macros/assessment_subcriteria_accepted.html" import assessment_subcriteria_accepted %}
 {%- from "govuk_frontend_jinja/components/pagination/macro.html" import govukPagination -%}
 
 {% set pageHeading -%}
@@ -63,10 +64,13 @@ Error:
         {% for change_request in change_requests %}
             {{ assessment_change_request(change_request, questions, accounts_list[change_request.latest_user_id], application_id) }}
         {% endfor %}
+        {% if fund.funding_type == 'UNCOMPETED' and score %}
+            {{ assessment_subcriteria_accepted(score.date_created, accounts_list[score.user_id]) }}
+        {% endif %}
         <h3 class="govuk-heading-m response-title">Applicant's response</h3>
         {{ theme(answers_meta)}}
         {% if fund.funding_type == 'UNCOMPETED' %}
-            {{ application_feedback(application_id, sub_criteria, current_theme.id) }}
+            {{ application_feedback(application_id, sub_criteria, current_theme.id, approval_form) }}
         {% endif %}
         {{ comment(comments, False) }}
         {% if display_comment_box != True and not display_comment_edit_box %}

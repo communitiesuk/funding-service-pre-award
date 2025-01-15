@@ -92,6 +92,7 @@ from pre_award.assess.config.display_value_mappings import (
     search_params_default,
 )
 from pre_award.assess.flagging.forms.request_changes_form import RequestChangesForm
+from pre_award.assess.scoring.forms.scores_and_justifications import ApprovalForm
 from pre_award.assess.scoring.helpers import get_scoring_class
 from pre_award.assess.services.aws import get_file_for_download_from_aws
 from pre_award.assess.services.data_services import (
@@ -147,6 +148,7 @@ from pre_award.assess.themes.deprecated_theme_mapper import (
     order_entire_application_by_themes,
 )
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
+from pre_award.assessment_store.db.queries.scores.queries import approve_sub_criteria
 from pre_award.common.blueprints import Blueprint
 from pre_award.config import Config
 
@@ -1135,7 +1137,7 @@ def fund_dashboard(fund_short_name: str, round_short_name: str):
     methods=["POST", "GET"],
 )
 @check_access_application_id
-def display_sub_criteria(
+def display_sub_criteria(  # noqa: C901
     application_id,
     sub_criteria_id,
 ):
@@ -1147,8 +1149,12 @@ def display_sub_criteria(
     """
     current_app.logger.info("Processing GET to %(request_path)s.", dict(request_path=request.path))
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
+    score = get_score_and_justification(
+        application_id=application_id, sub_criteria_id=sub_criteria_id, score_history=False
+    )
     theme_id = request.args.get("theme_id", sub_criteria.themes[0].id)
     comment_form = CommentsForm()
+    approval_form = ApprovalForm()
     try:
         current_theme: Theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
     except StopIteration:
@@ -1173,6 +1179,18 @@ def display_sub_criteria(
                 sub_criteria_id=sub_criteria_id,
                 theme_id=theme_id,
                 _anchor="comments",
+            )
+        )
+
+    if approval_form.validate_on_submit():
+        approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=g.account_id)
+
+        return redirect(
+            url_for(
+                "assessment_bp.display_sub_criteria",
+                application_id=application_id,
+                sub_criteria_id=sub_criteria_id,
+                theme_id=theme_id,
             )
         )
 
@@ -1251,6 +1269,7 @@ def display_sub_criteria(
 
     common_template_config = {
         "sub_criteria": sub_criteria,
+        "score": score[0] if score else None,
         "fund": get_fund(sub_criteria.fund_id),
         "application_id": application_id,
         "comments": theme_matched_comments,
@@ -1261,6 +1280,7 @@ def display_sub_criteria(
         "display_comment_edit_box": edit_comment_argument,
         "comment_id": comment_id,
         "comment_form": comment_form,
+        "approval_form": approval_form,
         "current_theme": current_theme,
         "flag_status": flag_status,
         "assessment_status": assessment_status,

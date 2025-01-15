@@ -109,12 +109,3 @@ def score(
         migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
         pagination=state.get_pagination_from_sub_criteria_id(sub_criteria_id),
     )
-
-
-@scoring_bp.route(
-    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/approve",
-    methods=["POST"],
-)
-@check_access_application_id(roles_required=["LEAD_ASSESSOR", "ASSESSOR"])
-def approve_sub_criteria(application_id, sub_criteria_id):
-    _approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=g.account_id)

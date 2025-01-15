@@ -1,0 +1,26 @@
+{% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
+
+{% macro assessment_subcriteria_accepted(score_date, user_info) %}
+    {% set title_html %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            Acceptance
+        </div>
+        <div class="govuk-grid-column-one-half govuk-!-text-align-right">
+            <span class="govuk-!-font-weight-regular">{{ score_date | utc_to_bst }}</span>
+        </div>
+    </div>
+    {% endset %}
+    {% set notification_banner_html %}
+    <p class="govuk-body">
+        <strong>Approved by</strong><br>
+        {{ user_info["full_name"] or "N/A" }} ({{ user_info["highest_role"] | all_caps_to_human }}) {{ user_info["email_address"] }}
+    </p>
+    {% endset %}
+
+    {{ govukNotificationBanner({
+        "html": notification_banner_html,
+        "titleHtml": title_html,
+        "type": "success"
+    }) }}
+{% endmacro %}
