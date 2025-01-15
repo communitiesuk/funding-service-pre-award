@@ -4,6 +4,8 @@ import re
 
 from invoke import task
 
+from app import create_app
+
 _VALID_JINJA_EXTENSIONS = (".html", ".jinja", ".jinja2", ".j2")
 
 
@@ -112,3 +114,6 @@ def pybabel_compile(c):
 @task
 def reminder_emails(c):
     print("Building!")
+    app = create_app()
+    with app.app_context():
+        print("IN APP CONTEXT")
