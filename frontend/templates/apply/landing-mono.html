@@ -57,8 +57,7 @@
             </p>
             {% endif %}
             <p class="govuk-body">
-                <a class="govuk-link" href="{{ prospectus_link }}">{% trans %}Read the fund's prospectus{% endtrans %}</a>
-                {% trans %}before you start.{% endtrans %}
+                {% trans %}<a class="govuk-link" href="{{ prospectus_link }}">Read the fund's prospectus</a> before you start.{% endtrans %}
             </p>
             {% if not round.is_expression_of_interest %}
                 <p class="govuk-body">
