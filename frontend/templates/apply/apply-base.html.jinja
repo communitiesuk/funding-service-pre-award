@@ -1,6 +1,8 @@
-{% extends "base.jinja.html" %}
+{% extends "fs-base.html.jinja" %}
 
-
+<meta name="description" content="Apply for a Grant">
+<meta name="keywords" content="Apply for a Grant">
+<meta name="author" content="Ministry of Housing, Communities and Local Government">
 
 {% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
 {% from "govuk_frontend_jinja/components/cookie-banner/macro.html" import govukCookieBanner %}
@@ -9,20 +11,10 @@
 {% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
 {% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
 
-{% set htmlClasses = "app-html-class" %}
-{% set htmlLang = "en" %}
-{% set assetUrl = "YOUR-DOMAIN" %}
-{% set themeColor = "blue" %}
-{% set bodyClasses = "app-body-class" %}
-{% set bodyAttributes = {
-"data-test": "My value",
-"data-other": "report:details"
-} %}
-{% set containerClasses = "app-width-container" %}
 {# TODO sort out service name #}
 {% set serviceName = "Apply for a grant" %}
 
-{% block pageTitle %}GOV.UK - Customised page template{% endblock pageTitle %}
+{% block pageTitle %}{{serviceName}}{% endblock pageTitle %}
 {% block headIcons %}
   {{ super() }}
 {% endblock headIcons %}
@@ -59,17 +51,12 @@
       "html": 'This is a new service.'
     })
   }}
-  {{ govukBackLink({
-      "href": "#",
-      "text": "Back"
-    })
-  }}
 {% endblock beforeContent %}
 
-{% include 'cookies.html' %}
+{% include 'fs-cookies.html.jinja' %}
 
 {% block content %}
-<h1 class="govuk-heading-xl">Customised page template</h1>
+<h1 class="govuk-heading-xl">Funding Service Apply Template</h1>
 {% endblock content %}
 
 {% block footer %}
