@@ -1,0 +1,163 @@
+{% block bodyStart %}
+{% set acceptHtml %}
+<p class="govuk-body">{% trans %}You've accepted analytics cookies. You can{% endtrans %} <a class="govuk-link"
+        href="{{ url_for('content_routes.cookie_policy') }}">{% trans %}change your cookie settings{% endtrans %}</a> {%
+    trans %}at any time.{% endtrans %}</p>
+{% endset %}
+
+{% set denyHtml %}
+<p class="govuk-body">{% trans %}You've rejected analytics cookies. You can{% endtrans %} <a class="govuk-link"
+        href="{{ url_for('content_routes.cookie_policy') }}">{% trans %}change your cookie settings{% endtrans %}</a> {%
+    trans %}at any time.{% endtrans %}</p>
+
+{% endset %}
+
+{% set cookiesChoiceHtml %}
+<p class="govuk-body">We use some essential cookies to make this service work.</p>
+<p class="govuk-body">We'd also like to use analytics cookies so we can understand how you use the service and make
+    improvements.</p>
+{% endset %}
+
+{{ govukCookieBanner({
+    "ariaLabel": "Cookies on " + serviceName,
+    "hidden": true,
+    "attributes": {"id": "cookies-accepted-banner"},
+    "messages": [
+        {
+            "html": acceptHtml,
+            "actions": [
+                {
+                    "text": "Hide cookie message",
+                    "type": "submit",
+                    "name": "cookies-hide-btn",
+                    "value": "yes"
+                }
+            ]
+        }
+    ]
+    })
+}}
+{{ govukCookieBanner({
+    "ariaLabel": "Cookies on " + serviceName,
+    "hidden": true,
+    "attributes": {"id": "cookies-denied-banner"},
+    "messages": [
+        {
+        "html": denyHtml,
+        "actions": [
+            {
+                "text": "Hide cookie message",
+                "type": "submit",
+                "name": "cookies-hide-btn",
+                "value": "yes"
+            }
+            ]
+        }
+    ]
+    })
+}}
+{{ govukCookieBanner({
+    "ariaLabel": "Cookies on " + serviceName,
+    "attributes":{"id":"cookies-choice-banner"},
+    "hidden": true,
+    "messages": [
+        {
+            "headingText": "Cookies on " + serviceName,
+            "html": cookiesChoiceHtml,
+            "actions": [
+                {
+                    "attributes":{"id":"accept-cookies-btn"},
+                    "text": "Accept analytics cookies",
+                    "type": "submit",
+                    "name": "cookies[analytics]",
+                    "value": "yes"
+                },
+                {
+                    "attributes":{"id":"deny-cookies-btn"},
+                    "text": "Reject analytics cookies",
+                    "type": "submit",
+                    "name": "cookies[analytics]",
+                    "value": "no"
+                },
+                {
+                    "text": "View cookies",
+                    "href": url_for('content_routes.cookie_policy')
+                }
+            ]
+        }
+    ]
+}) }}
+{% endblock bodyStart %}
+
+{% block bodyEnd %}
+
+
+{# Run JavaScript at end of the body to avoid blocking the initial render. #}
+  <!-- Google Tag Manager -->
+  <script nonce="{{ csp_nonce() }}">(function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true;
+      j.src =
+        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-M5J9Q8HV');
+  </script>
+  <!-- End Google Tag Manager -->
+
+  <script nonce="{{ csp_nonce() }}" type="text/javascript"
+    src="{{ url_for('static', filename='apply/js/fsd_cookies.js') }}"></script>
+
+  <script nonce="{{ csp_nonce() }}">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments) }
+    <!--Re-implemented these from fsd_cookies.js to avoid conflicts and use a better structure for the elements that utilises the gov uk frontend macros-->
+
+    function acceptCookiesMono() {
+        updateCookieConsent('granted');
+        hideCookiesMessageMono();
+        document.getElementById("cookies-accepted-banner").removeAttribute("hidden");
+    }
+
+    function denyCookiesMono() {
+        updateCookieConsent('denied');
+        hideCookiesMessageMono();
+        document.getElementById("cookies-denied-banner").removeAttribute("hidden");
+    }
+
+    function unhideCookiesMessageMono() {
+        document.getElementById("cookies-choice-banner").removeAttribute("hidden");
+    }
+
+    function hideCookiesMessageMono() {
+        document.getElementById("cookies-choice-banner").setAttribute("hidden", "true");
+        document.getElementById("cookies-accepted-banner").setAttribute("hidden", "true");
+        document.getElementById("cookies-denied-banner").setAttribute("hidden", "true");
+    }
+
+    function initCookieStateMono() {
+      const localConsentMode = readConsentCookie();
+
+      if (!localConsentMode) {
+        gtag('consent', 'default', DEFAULT_CONSENT);
+        unhideCookiesMessageMono();
+      } else {
+        gtag('consent', 'default', readConsentCookie());
+      }
+
+      document.getElementById("accept-cookies-btn").addEventListener("click", acceptCookiesMono);
+      document.getElementById("deny-cookies-btn").addEventListener("click", denyCookiesMono);
+      document.getElementsByName("cookies-hide-btn").forEach(element => {
+        element.addEventListener("click", hideCookiesMessageMono);
+      });
+    }
+
+    initCookieStateMono();
+
+  </script>
+{% endblock bodyEnd %}

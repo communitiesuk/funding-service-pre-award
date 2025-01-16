@@ -1,19 +1,21 @@
 {% extends "govuk_frontend_jinja/template.html" %}
 
-{% set serviceName = "Apply for a grant" %}
 
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='monolith/govuk-frontend-5.8.0.min.css' ) }}"> </link>
-{% endblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='monolith/govuk-frontend-5.8.0.min.css' ) }}">
+</link>
+{% endblock head %}
 
 {% block content %}
-  <h1 class="govuk-heading-xl">Default page template</h1>
-{% endblock %}
+<h1 class="govuk-heading-xl">Default page template</h1>
+{% endblock content %}
 
 {% block bodyEnd %}
-  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
+{# Run JavaScript at end of the
+
+<body>, to avoid blocking the initial render. #}
   <script nonce="{{ csp_nonce() }}" type="module">
     import { initAll } from "{{ url_for('static', filename='monolith/govuk-frontend-5.8.0.min.js') }}"
     initAll()
   </script>
-{% endblock %}
+  {% endblock bodyEnd %}
