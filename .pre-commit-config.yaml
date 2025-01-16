@@ -36,3 +36,11 @@ repos:
 #     hooks:
 #       - id: djlint-jinja
 #         types_or: ['html', 'jinja']
+  - repo: local
+    hooks:
+      - id: mypy
+        name: Run type checks
+        language: system
+        types: [python]
+        entry: mypy
+        pass_filenames: false
