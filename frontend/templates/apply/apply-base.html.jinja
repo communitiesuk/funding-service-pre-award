@@ -64,7 +64,7 @@
     "meta": {
       "items": [
         {
-          "href": url_for("content_routes.privacy"),
+          "href": url_for("content_routes.privacy", fund_short_name=fund.short_name, round_short_name=round.short_name),
           "text": gettext("Privacy")
         },
         {
@@ -72,11 +72,11 @@
           "text": gettext("Cookies")
         },
         {
-          "href": url_for("content_routes.accessibility_statement"),
+          "href": url_for("content_routes.accessibility_statement", fund_short_name=fund.short_name, round_short_name=round.short_name),
           "text": gettext("Accessibility Statement")
         },
         {
-          "href": url_for("content_routes.contact_us"),
+          "href": url_for("content_routes.contact_us", fund_short_name=fund.short_name, round_short_name=round.short_name),
           "text": gettext("Contact us")
         }
       ]

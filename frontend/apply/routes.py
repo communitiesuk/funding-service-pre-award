@@ -11,4 +11,4 @@ def landing_page(fund_short_name: str, round_short_name: str):
     fund, round = get_fund_and_round(fund_short_name, round_short_name)
     if not fund or not round:
         return abort(404)
-    return render_template("apply/landing-mono.html", fund=fund, round=round)
+    return render_template("apply/apply-landing.html.jinja", fund=fund, round=round)
