@@ -1,0 +1,86 @@
+{% extends "fs-base.html.jinja" %}
+
+<meta name="description" content="Apply for a Grant">
+<meta name="keywords" content="Apply for a Grant">
+<meta name="author" content="Ministry of Housing, Communities and Local Government">
+
+{% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
+{% from "govuk_frontend_jinja/components/cookie-banner/macro.html" import govukCookieBanner %}
+{% from "govuk_frontend_jinja/components/skip-link/macro.html" import govukSkipLink %}
+{% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
+{% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
+{% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
+
+{# TODO sort out service name #}
+{% set serviceName = "Apply for a grant" %}
+
+{% block pageTitle %}{{serviceName}}{% endblock pageTitle %}
+{% block headIcons %}
+  {{ super() }}
+{% endblock headIcons %}
+
+{% block skipLink %}
+{{ govukSkipLink({
+    "href": "#main-content",
+    "text": "Skip to main content"
+  })
+}}
+{% endblock skipLink %}
+
+{% block header %}
+  {{ govukHeader({
+      "homepageUrl": "#",
+      "containerClasses": "app-width-container",
+      "serviceName": serviceName,
+      "serviceUrl": "/monolith",
+    })
+  }}
+{% endblock header %}
+
+{% set mainClasses = "app-main-class" %}
+
+{% block main %}
+  {{ super() }}
+{% endblock main %}
+
+{% block beforeContent %}
+  {{ govukPhaseBanner({
+      "tag": {
+        "text": "Beta"
+      },
+      "html": 'This is a new service.'
+    })
+  }}
+{% endblock beforeContent %}
+
+{% include 'fs-cookies.html.jinja' %}
+
+{% block content %}
+<h1 class="govuk-heading-xl">Funding Service Apply Template</h1>
+{% endblock content %}
+
+{% block footer %}
+  {{ govukFooter({
+    meta: {
+      items: [
+        {
+          "href": "#",
+          "text": "Help"
+        },
+        {
+          "href": "#",
+          "text": "Cookies"
+        },
+        {
+          "href": "#",
+          "text": "Contact"
+        },
+        {
+          "href": "#",
+          "text": "Terms and conditions"
+        }
+      ]
+    }
+  })
+  }}
+{% endblock footer %}
