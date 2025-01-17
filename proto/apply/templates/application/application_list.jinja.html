@@ -1,10 +1,78 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+
 {% extends "template.jinja" %}
 
-{% block pageTitle %}{% trans %}My applications{% endtrans %} - {{ grant.proto_name }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+{% block pageTitle %}{% trans %}Your applications{% endtrans %} - {{ grant.proto_name }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+
+        {# Your applications #}
+        {# My applications #}
+        {# Applications for funding #}
+        <h1 class="govuk-caption-l">{{ grant.proto_name }}</h1>
+        <h2 class="govuk-heading-l">{% trans %}Your applications{% endtrans %}</h2>
+        {# <h2 class="govuk-caption-l">{% trans %}Your applications{% endtrans %}</h2> #}
+        {# <h1 class="govuk-heading-l">{{ grant.proto_name }}</h1> #}
+
+        {# rephrease depending on if we consider any other access control options here #}
+        {# <p class="govuk-body">{% trans number_of_applications=(applications | length) %}You have started {{ number_of_applications }} applications using this email address{% endtrans %}.</p> #}
+        <p class="govuk-body">{% trans number_of_applications=(applications | length) %}You have started {{ number_of_applications }} applications for funding to {% endtrans %}{{ grant.proto_apply_action_description }}.</p>
+
+        {# should I show the submission deadline here if theres an active round? or should the submission deadline be highlighted on the tasklist application page #}
+        {% if active_round %}
+        <ul class="govuk-list">
+            {# these default flask-babel date formatters have a comma between day and year which the gov uk style guide doesn't suggest https://www.gov.uk/guidance/style-guide/a-to-z#dates #}
+            <li><strong>{% trans %}Opening date:{% endtrans %}</strong> {{ active_round.proto_start_date | dateformat }}</li>
+            <li><strong>{% trans %}Submission deadline:{% endtrans %}</strong> {{ active_round.proto_end_date | dateformat }}</li>
+        </ul>
+        {% else %}
+        {{ govukInsetText({
+            "text": _("This grant is not open for applications for funding.")
+        }) }}
+        {% endif %}
+
+        {% if applications %}
+            {# if the h1 for this page is the name of the grant  #}
+            {# <h2 class="govuk-heading-m">Your applications</h2> #}
+            {% set rows = [] %}
+            {% for application in applications %}
+                {% set referenceLink %}
+                    {# either auto generated human readable reference or the project unique identifier if its been set? #}
+                    <a class="govuk-link govuk-link--no-visited-state" href="#">{{ application.reference }}</a>
+                {% endset %}
+                {% set statusTag %}
+                    <strong class="govuk-tag govuk-tag--grey">Started</strong>
+                {% endset %}
+                {% set rows = rows.append([
+                    { "html": referenceLink },
+                    { "html": statusTag },
+                    { "text": application.proto_created_date | dateformat },
+                    { "text": application.proto_updated_date | dateformat }
+                ]) %}
+            {% endfor %}
+            {{ govukTable({
+                "head": [
+                    { "text": _("Reference") },
+                    { "text": _("Status") },
+                    { "text": _("Started") },
+                    { "text": _("Last updated") }
+                ],
+                "rows": rows
+            }) }}
+        {% endif %}
+
+        {% if active_round %}
+        {# is the conditional styling too much? #}
+        {{ govukButton({
+            "text": _("Start a new application"),
+            "classes": "govuk-button--secondary" if applications
+        }) }}
+        {% endif %}
+        {# _either_ show the start an application button AND the submission date OR that its closed #}
     </div>
 </div>
 {% endblock content %}
