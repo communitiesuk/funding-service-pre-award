@@ -1,4 +1,5 @@
 import ast
+import copy
 import os
 from pathlib import Path
 
@@ -50,14 +51,34 @@ for file in os.listdir(this_dir):
             print("No round config found in the loader config.")
             raise ValueError(f"No round_config found in {file}")
         fund_short_name = loader_config["fund_config"]["short_name"]
-        round_short_name = loader_config["round_config"]["short_name"]
 
         # Ensure the fund exists in the main config
         if fund_short_name not in FAB_FUND_ROUND_CONFIGS:
             FAB_FUND_ROUND_CONFIGS[fund_short_name] = loader_config["fund_config"]
             FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"] = {}
-        FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name] = loader_config["round_config"]
-        FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name]["sections_config"] = loader_config[
-            "sections_config"
-        ]
-        FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name]["base_path"] = loader_config["base_path"]
+        if isinstance(loader_config["round_config"], dict):
+            round_short_name = loader_config["round_config"]["short_name"]
+            FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name] = loader_config["round_config"]
+            FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name]["sections_config"] = loader_config[
+                "sections_config"
+            ]
+            FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name]["base_path"] = loader_config[
+                "base_path"
+            ]
+
+        # Allows for one file per fund and not redefining the fund information each time
+        if isinstance(loader_config["round_config"], list):
+            for round_config in loader_config["round_config"]:
+                round_short_name = round_config["short_name"]
+                FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name] = round_config
+                # assumes the same section config for each round but updates with a fresh base path each time
+                updated_sections = copy.deepcopy(loader_config["sections_config"])
+                for section in updated_sections:
+                    tree_path = section["tree_path"]
+                    path_elements = str(tree_path).split(".")
+                    tree_path = path_elements[1:]
+                    tree_path = str(round_config["base_path"]) + "." + ".".join(tree_path)
+                    section["tree_path"] = tree_path
+                FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"][round_short_name]["sections_config"] = (
+                    updated_sections
+                )
