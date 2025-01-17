@@ -1137,7 +1137,7 @@ def fund_dashboard(fund_short_name: str, round_short_name: str):
     methods=["POST", "GET"],
 )
 @check_access_application_id
-def display_sub_criteria(  # noqa: C901
+def display_sub_criteria(
     application_id,
     sub_criteria_id,
 ):
@@ -1196,20 +1196,15 @@ def display_sub_criteria(  # noqa: C901
 
     state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
-    change_requests_list = get_change_requests(application_id)
+    all_change_requests = get_change_requests(application_id)
+    sub_criteria_change_requests = [
+        change_request for change_request in all_change_requests if sub_criteria_id in change_request.sections_to_flag
+    ]
+    change_request_user_ids = set(
+        flag_item["user_id"] for change_request in sub_criteria_change_requests for flag_item in change_request.updates
+    )
 
-    user_id_list = []
-    change_requests = []
-    for change_request in change_requests_list:
-        if sub_criteria_id not in change_request.sections_to_flag:
-            continue
-
-        change_requests.append(change_request)
-        for flag_item in change_request.updates:
-            if flag_item["user_id"] not in user_id_list:
-                user_id_list.append(flag_item["user_id"])
-
-    accounts_list = get_bulk_accounts_dict(user_id_list, state.fund_short_name)
+    change_request_users = get_bulk_accounts_dict(change_request_user_ids, state.fund_short_name)
 
     comment_response = get_comments(
         application_id=application_id,
@@ -1273,8 +1268,8 @@ def display_sub_criteria(  # noqa: C901
         "fund": get_fund(sub_criteria.fund_id),
         "application_id": application_id,
         "comments": theme_matched_comments,
-        "change_requests": change_requests,
-        "accounts_list": accounts_list,
+        "change_requests": sub_criteria_change_requests,
+        "accounts_list": change_request_users,
         "is_flaggable": False,  # Flag button is disabled in sub-criteria page,
         "display_comment_box": add_comment_argument,
         "display_comment_edit_box": edit_comment_argument,
