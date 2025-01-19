@@ -22,6 +22,8 @@
         {# <p class="govuk-body">{% trans number_of_applications=(applications | length) %}You have started {{ number_of_applications }} applications using this email address{% endtrans %}.</p> #}
         <p class="govuk-body">{% trans number_of_applications=(applications | length) %}You have started {{ number_of_applications }} applications for funding to {% endtrans %}{{ grant.proto_apply_action_description }}.</p>
 
+        {# the submission deadline looks a bit strange on its own here - would this want to be a separate subheading with "Apply for funding" which has the call to action buttion and the deadline dates - could also include prospectus etc. #}
+
         {# should I show the submission deadline here if theres an active round? or should the submission deadline be highlighted on the tasklist application page #}
         {% if active_round %}
         <ul class="govuk-list">

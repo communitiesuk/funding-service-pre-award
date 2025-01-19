@@ -1,6 +1,7 @@
 from flask import render_template
 
 from common.blueprints import Blueprint
+from proto.common.auth import is_authenticated
 from proto.common.data.services.applications import get_applications
 from proto.common.data.services.grants import get_active_round, get_grant
 
@@ -8,6 +9,7 @@ application_blueprint = Blueprint("application_blueprint", __name__)
 
 
 @application_blueprint.get("/grant/<short_code>/apply")
+@is_authenticated
 def application_list_handler(short_code):
     # ideally this would be application join rounds (which might even subsequently join fund?)
     # if we want to individually fetch that separately anyway thats fine

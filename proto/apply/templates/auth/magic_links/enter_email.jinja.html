@@ -1,0 +1,42 @@
+{% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
+
+{% extends "template.jinja" %}
+
+{# add a back link if theres something in the session that says they've come from the grant page #}
+{% block beforeContent %}
+{{ super() }}
+{% if magic_links_back_path %}
+    {{ govukBackLink({
+        "text": _("Back"),
+        "href": magic_links_back_path
+    }) }}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post">
+            {# values to be replaced with wtfform setup on base branch #}
+            {{ govukInput ({
+                "id": "email",
+                "name": "email",
+                "label": {
+                    "text": _("Email address"),
+                    "isPageHeading": true,
+                    "classes": "govuk-label--l"
+                },
+                "hint": {
+                    "text": _("We'll email you a link to start a new application, or continue any applications you have in progress.")
+                }
+            }) }}
+
+            {{ govukButton({
+                "text": _("Continue")
+            }) }}
+        </form>
+    </div>
+</div>
+{% endblock %}
