@@ -4,7 +4,12 @@ from flask import redirect, render_template, request, session, url_for
 
 from common.blueprints import Blueprint
 from config import Config
-from proto.common.data.services.magic_links import create_magic_link, get_magic_link, get_magic_link_by_id, set_used
+from proto.common.data.services.magic_links import (
+    claim_magic_link,
+    create_magic_link,
+    get_magic_link,
+    get_magic_link_by_id,
+)
 from services.notify import get_notification_service
 
 web_blueprint = Blueprint("web_blueprint", __name__)
@@ -18,6 +23,10 @@ def cookies_handler():
 @web_blueprint.get("/accessibility")
 def accessibility_statement_handler():
     return render_template("web/accessibility.jinja.html")
+
+
+# note I did not look at something like https://flask-login.readthedocs.io/en/latest/ which might provide some of the hooks and a standard approach for this
+# it seems otherwise quite simple so might not be needed
 
 
 # happy to move this to an auth_routes if people think thats cleaner
@@ -78,16 +87,37 @@ def magic_links_return_handler(token):
 
     # update magic link to say its been used - I can probably include upserting an account for that email and marking the link as used together
     # in a transaction to make claiming it feel a bit more robust
-    set_used(magic_link=magic_link)
+    account = claim_magic_link(magic_link=magic_link)
 
-    session.pop("magic_links_back_path")
-    session.pop("magic_links_forward_path")
+    origin_path = session.pop("magic_links_back_path", None)
+    session.pop("magic_links_forward_path", None)
 
     # assuming this is cleared after a configured amount of time - would need to go in and fact check this
     session["is_authenticated"] = True
+
+    # for now I'm just going to set the account details on the session directly - to make this properly robust we _probably_ want to only set the account id and the have a context processor lookup the account
+    # (and make sure it has access to whatever it might be loading, for example)
+    # this would be a good candidate for a serialised thing too
+    session["magic_links_account_id"] = account.id
+    session["magic_links_account_email"] = account.email
+    session["magic_links_origin_path"] = origin_path
+
     return redirect(urljoin(Config.APPLICANT_FRONTEND_HOST, magic_link.path))
     # clear anything to do with magic links from the session
 
     # check the magic links line in the table for this token
     # upsert an account for this email
     # redirect to forward path
+
+
+@web_blueprint.get("/auth/sign_out")
+def magic_links_sign_out_handler():
+    origin_path = session.pop("magic_links_origin_path", None)
+    session.clear()
+    if origin_path:
+        return redirect(urljoin(Config.APPLICANT_FRONTEND_HOST, origin_path))
+    else:
+        # the apply process is designed to be linked to from other tools/ catalogues - there is no default place to send the user so there should be page saying follow the original link to start again
+        # (or it could remember where you started for the duration of the session - that wouldn't be too bad)
+        # this should redirect the user to the page which tells them to follow their original link back to the fund page
+        return redirect("/")

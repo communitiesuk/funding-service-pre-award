@@ -2,8 +2,10 @@ from datetime import datetime
 from secrets import token_urlsafe
 
 from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert as postgres_insert
 
 from db import db
+from proto.common.data.models.account import Account
 from proto.common.data.models.magic_link import MagicLink
 
 
@@ -27,10 +29,28 @@ def get_magic_link_by_id(id):
 
 # don't really like the idea of passing in fully formed db models just to be acted no but happy to work out how this interface feels nice
 # and easy to test
-def set_used(magic_link: MagicLink):
+def claim_magic_link(magic_link: MagicLink):
     magic_link.used = True
+    # account = Account(email=magic_link.email, is_magic_link=True)
+    # if this doesn't let us do upsert then it would have to be a prepared `insert` statement with on conflict described, which hopefully could be added to the session
+    # look at https://github.com/sqlalchemy/sqlalchemy/discussions/9675#discussioncomment-5673326 for being able to do this in the ORM style class objects - would much prefer to do that but
+    # it doesn't look like its been around for very long
+    # for now just prepare the statement in postgres specific statements (the reason for it not being long-supported)
+    stmt = (
+        postgres_insert(Account)
+        .values(email=magic_link.email, is_magic_link=True)
+        .on_conflict_do_nothing()
+        .returning(Account.id, Account.email)
+    )
+    # account_result = db.session.execute(stmt)
+    db.session.execute(stmt)
+
+    # db.session.add(account)
     db.session.commit()
-    return magic_link
+
+    # this is a wasted extra statement but I can't be bothered to look into why going through the id, email tuple above isn't working as I'd expect
+    account = db.session.scalars(select(Account).filter(Account.email == magic_link.email)).one()
+    return account
 
 
 def create_magic_link(email, path):

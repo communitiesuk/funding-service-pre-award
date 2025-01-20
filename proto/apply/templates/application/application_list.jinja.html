@@ -6,6 +6,31 @@
 
 {% block pageTitle %}{% trans %}Your applications{% endtrans %} - {{ grant.proto_name }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
 
+{% block beforeContent %}
+{{ super() }}
+
+{# note this doesn't use the component as it requires having a tag element #}
+{# maybe just use the service nav component when merging with proto/base and using the new version of the design system #}
+<div class="govuk-phase-banner">
+    <style nonce="{{ csp_nonce() }}">
+    .proto-phase {
+        display: flex;
+        justify-content: space-between;
+    }
+    </style>
+    <div class="proto-phase govuk-!-padding-top-1 govuk-!-padding-bottom-1">
+        <p class="govuk-phase-banner__content">
+            {% set email %}<strong class="govuk-!-font-weight-bold">{{ account.email }}</strong>{% endset %}
+            <span class="govuk-phase-banner__text">{% trans email=email %}You are applying as {{ email }}{% endtrans %}</span>
+        </p>
+        <p class="govuk-phase-banner__content">
+            <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-2" href="#">{% trans %}View all applications{% endtrans %}</a>
+            <a class="govuk-link govuk-link--no-visited-state" href={{ url_for("proto_apply_blueprint.web_blueprint.magic_links_sign_out_handler") }}>{% trans %}Sign out{% endtrans %}</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
