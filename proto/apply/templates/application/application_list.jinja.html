@@ -1,6 +1,7 @@
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
 
 {% extends "template.jinja" %}
 
@@ -24,7 +25,7 @@
             <span class="govuk-phase-banner__text">{% trans email=email %}You are applying as {{ email }}{% endtrans %}</span>
         </p>
         <p class="govuk-phase-banner__content">
-            <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-2" href="#">{% trans %}View all applications{% endtrans %}</a>
+            <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-2" href="#">{% trans %}View all of your grants{% endtrans %}</a>
             <a class="govuk-link govuk-link--no-visited-state" href={{ url_for("proto_apply_blueprint.web_blueprint.magic_links_sign_out_handler") }}>{% trans %}Sign out{% endtrans %}</a>
         </p>
     </div>
@@ -51,11 +52,18 @@
 
         {# should I show the submission deadline here if theres an active round? or should the submission deadline be highlighted on the tasklist application page #}
         {% if active_round %}
-        <ul class="govuk-list">
-            {# these default flask-babel date formatters have a comma between day and year which the gov uk style guide doesn't suggest https://www.gov.uk/guidance/style-guide/a-to-z#dates #}
-            <li><strong>{% trans %}Opening date:{% endtrans %}</strong> {{ active_round.proto_start_date | dateformat }}</li>
-            <li><strong>{% trans %}Submission deadline:{% endtrans %}</strong> {{ active_round.proto_end_date | dateformat }}</li>
-        </ul>
+        {% set submissionHtml %}
+            <ul class="govuk-list">
+                {# these default flask-babel date formatters have a comma between day and year which the gov uk style guide doesn't suggest https://www.gov.uk/guidance/style-guide/a-to-z#dates #}
+                <li><strong>{% trans %}Prospectus:{% endtrans %}</strong> <a class="govuk-link govuk-link--no-visited-state" href={{ grant.proto_prospectus_link }}>{{ grant.proto_prospectus_link }}</a></li>
+                <li><strong>{% trans %}Opening date:{% endtrans %}</strong> {{ active_round.proto_start_date | dateformat }}</li>
+                <li><strong>{% trans %}Submission deadline:{% endtrans %}</strong> {{ active_round.proto_end_date | dateformat }}</li>
+            </ul>
+        {% endset %}
+        {{ govukDetails({
+            "summaryText": _("Grant submission details"),
+            "html": submissionHtml
+        }) }}
         {% else %}
         {{ govukInsetText({
             "text": _("This grant is not open for applications for funding.")

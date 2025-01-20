@@ -93,6 +93,9 @@ def magic_links_return_handler(token):
     session.pop("magic_links_forward_path", None)
 
     # assuming this is cleared after a configured amount of time - would need to go in and fact check this
+    # NOTE that now this is no longer decoding a JWT w/ expiry once per request we'll need to be sure we're no longer using "Session" cookie age (default) which will only remove and invalidate the cookie after the browser is closed
+    # we should use something like https://flask.palletsprojects.com/en/stable/config/#PERMANENT_SESSION_LIFETIME to make sure that the server is validating that this isn't an old or expired cookie (that could continually be used by malicious actors if they ever gained access)
+    # it looks like these can be tweaked through the environment and using session.permanent and app.permanent_session_lifetime
     session["is_authenticated"] = True
 
     # for now I'm just going to set the account details on the session directly - to make this properly robust we _probably_ want to only set the account id and the have a context processor lookup the account
