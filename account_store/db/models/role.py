@@ -3,7 +3,7 @@ import uuid  # noqa
 from sqlalchemy.dialects.postgresql import UUID
 
 from db import db
-from account_store.db.models.account import Account
+from proto.common.data.models.account import Account
 
 
 class Role(db.Model):

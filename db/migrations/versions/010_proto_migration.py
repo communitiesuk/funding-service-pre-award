@@ -110,6 +110,15 @@ def upgrade():
         with op.batch_alter_table("magic_link", schema=None) as batch_op:
             batch_op.create_index(batch_op.f("ix_magic_link_token"), ["token"], unique=True)
 
+        with op.batch_alter_table("account", schema=None) as batch_op:
+            batch_op.add_column(sa.Column("is_magic_link", sa.Boolean(), nullable=True))
+            batch_op.add_column(
+                sa.Column("proto_created_date", sa.DateTime(), server_default=sa.text("now()"), nullable=True)
+            )
+            batch_op.add_column(
+                sa.Column("proto_updated_date", sa.DateTime(), server_default=sa.text("now()"), nullable=True)
+            )
+
     # ### end Alembic commands ###
 
 
@@ -144,4 +153,9 @@ def downgrade():
         batch_op.drop_index(batch_op.f("ix_magic_link_token"))
 
     op.drop_table("magic_link")
+
+    with op.batch_alter_table("account", schema=None) as batch_op:
+        batch_op.drop_column("proto_updated_date")
+        batch_op.drop_column("proto_created_date")
+        batch_op.drop_column("is_magic_link")
     # ### end Alembic commands ###

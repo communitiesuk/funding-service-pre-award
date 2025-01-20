@@ -10,7 +10,7 @@ from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.sql import func
 
 if TYPE_CHECKING:
-    from account_store.db.models.account import Account
+    from proto.common.data.models.account import Account
 else:
     Round = "Round"
     Account = "Account"
