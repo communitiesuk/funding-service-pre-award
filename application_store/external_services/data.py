@@ -164,11 +164,10 @@ def get_account(email: Optional[str] = None, account_id: Optional[str] = None) -
 
 @functools.lru_cache(maxsize=1)
 def get_round_name(fund_id, round_id):
-    response = get_data(
-        Config.FUND_STORE_API_HOST + Config.FUND_ROUND_ENDPOINT.format(fund_id=fund_id, round_id=round_id)
-    )
-    if response:
-        return response.get("title")
+    round = Round.query.filter_by(id=round_id).first()
+    if round:
+        return round.title
+    return None
 
 
 def get_round_eoi_schema(fund_id, round_id, language=None):
