@@ -8,8 +8,8 @@ from fund_store.db.models.round import Round
 
 def update_rounds_with_links(round_config):
     current_app.logger.warning(
-        "\tRound: {round_short_name} ({round_id})",
-        extra=dict(
+        "\tRound: %(round_short_name)s (%(round_id)s)",
+        dict(
             round_short_name=round_config[0]["short_name"],
             round_id=str(round_config[0]["id"]),
         ),

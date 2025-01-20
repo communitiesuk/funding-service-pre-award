@@ -84,7 +84,7 @@ LOADER_CONFIG = {
         },
         "guidance_url": "https://www.gov.uk/government/publications/local-plan-delivery-and-green-belt-reviews-expression-of-interest",
         "all_uploaded_documents_section_available": False,
-        "application_fields_download_available": False,
+        "application_fields_download_available": True,
         "display_logo_on_pdf_exports": False,
         "mark_as_complete_enabled": True,
         "is_expression_of_interest": False,

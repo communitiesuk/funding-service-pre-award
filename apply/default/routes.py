@@ -16,8 +16,8 @@ def index():
 @default_bp.route("/funding-round/<fund_short_name>/<round_short_name>")
 def index_fund_round(fund_short_name, round_short_name):
     current_app.logger.info(
-        "In fund-round start page {fund_short_name} {round_short_name}",
-        extra=dict(fund_short_name=fund_short_name, round_short_name=round_short_name),
+        "In fund-round start page %(fund_short_name)s %(round_short_name)s",
+        dict(fund_short_name=fund_short_name, round_short_name=round_short_name),
     )
 
     fund_data, round_data = get_fund_and_round(fund_short_name=fund_short_name, round_short_name=round_short_name)
@@ -51,14 +51,14 @@ def index_fund_round(fund_short_name, round_short_name):
 def index_fund_only(fund_short_name):
     if str.upper(fund_short_name) in get_all_fund_short_names(get_ttl_hash(Config.LRU_CACHE_TIME)):
         current_app.logger.info(
-            "In fund-only start page route for {fund_short_name}", extra=dict(fund_short_name=fund_short_name)
+            "In fund-only start page route for %(fund_short_name)s", dict(fund_short_name=fund_short_name)
         )
         default_round = get_default_round_for_fund(fund_short_name=fund_short_name)
         if default_round:
             return redirect(f"/funding-round/{fund_short_name}/{default_round.short_name}")
 
         current_app.logger.warning(
-            "Unable to retrieve default round for fund {fund_short_name}", extra=dict(fund_short_name=fund_short_name)
+            "Unable to retrieve default round for fund %(fund_short_name)s", dict(fund_short_name=fund_short_name)
         )
     return (
         render_template(

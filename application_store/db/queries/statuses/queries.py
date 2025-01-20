@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from application_store.db.models import Applications
+from application_store.db.models.application.enums import Status as ApplicationStatus
+from application_store.db.models.forms.enums import Status as FormStatus
 from application_store.db.models.forms.forms import Forms
 from application_store.db.queries import get_feedback
 from application_store.db.queries.application import get_application
@@ -79,7 +81,9 @@ def update_application_status(
         )
 
     form_statuses = [form.status.name for form in application_with_forms.forms]
-    if "IN_PROGRESS" in form_statuses:
+    if "CHANGE_REQUESTED" in form_statuses:
+        status = ApplicationStatus.CHANGE_REQUESTED.name
+    elif "IN_PROGRESS" in form_statuses:
         status = "IN_PROGRESS"
     elif "COMPLETED" in form_statuses and ("NOT_STARTED" in form_statuses or not all_feedback_and_survey_completed):
         status = "IN_PROGRESS"
@@ -131,7 +135,11 @@ def update_form_status(
                 form_to_update.status = "COMPLETED"
                 form_to_update.has_completed = True
             else:
-                form_to_update.status = "IN_PROGRESS"
+                form_to_update.status = (
+                    FormStatus.CHANGE_REQUESTED.name
+                    if form_to_update.status == FormStatus.CHANGE_REQUESTED
+                    else "IN_PROGRESS"
+                )
                 form_to_update.has_completed = False
         else:
             form_to_update.status = "COMPLETED"
@@ -140,7 +148,9 @@ def update_form_status(
         # All question pages have answers and form has previously completed
         form_to_update.status = "COMPLETED"
     else:
-        form_to_update.status = "IN_PROGRESS"
+        form_to_update.status = (
+            FormStatus.CHANGE_REQUESTED.name if form_to_update.status == FormStatus.CHANGE_REQUESTED else "IN_PROGRESS"
+        )
 
 
 def _is_field_answered(field: dict) -> bool:

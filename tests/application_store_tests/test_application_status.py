@@ -2,6 +2,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from application_store.db.models.forms.enums import Status as FormStatus
 from application_store.db.queries.statuses.queries import (
     _determine_question_page_status_from_answers,
     _is_all_sections_feedback_complete,
@@ -87,7 +88,7 @@ def test_update_question_statuses(form_json, exp_status):
 
 
 @pytest.mark.parametrize(
-    "form_json,form_has_completed,is_summary_submit,round_mark_as_complete_enabled,"
+    "form_json,form_status,form_has_completed,is_summary_submit,round_mark_as_complete_enabled,"
     " mark_as_complete, exp_status,exp_has_completed",
     [
         (  # Previously marked as complete, want to mark as not complete
@@ -95,6 +96,7 @@ def test_update_question_statuses(form_json, exp_status):
                 {"status": "COMPLETED", "question": "abc"},
                 {"status": "COMPLETED", "question": "abc"},
             ],
+            "ANY",
             True,
             True,
             True,
@@ -107,6 +109,7 @@ def test_update_question_statuses(form_json, exp_status):
                 {"status": "COMPLETED", "question": "abc"},
                 {"status": "COMPLETED", "question": "abc"},
             ],
+            "ANY",
             False,
             True,
             True,
@@ -119,6 +122,7 @@ def test_update_question_statuses(form_json, exp_status):
                 {"status": "COMPLETED", "question": "abc"},
                 {"status": "COMPLETED", "question": "abc"},
             ],
+            "ANY",
             False,
             True,
             True,
@@ -128,6 +132,7 @@ def test_update_question_statuses(form_json, exp_status):
         ),
         (
             [{"status": "NOT_STARTED", "question": "abc"}],
+            "ANY",
             False,
             False,
             False,
@@ -140,6 +145,7 @@ def test_update_question_statuses(form_json, exp_status):
                 {"status": "IN_PROGRESS", "question": "abc"},
                 {"status": "COMPLETED", "question": "abc"},
             ],
+            "ANY",
             False,
             False,
             False,
@@ -152,6 +158,7 @@ def test_update_question_statuses(form_json, exp_status):
                 {"status": "NOT_STARTED", "question": "abc"},
                 {"status": "COMPLETED", "question": "abc"},
             ],
+            "ANY",
             False,
             False,
             False,
@@ -164,6 +171,7 @@ def test_update_question_statuses(form_json, exp_status):
                 {"status": "COMPLETED", "question": "abc"},
                 {"status": "COMPLETED", "question": "abc"},
             ],
+            "ANY",
             False,
             False,
             False,
@@ -176,6 +184,7 @@ def test_update_question_statuses(form_json, exp_status):
                 {"status": "COMPLETED", "question": "abc"},
                 {"status": "COMPLETED", "question": "abc"},
             ],
+            "ANY",
             False,
             True,
             False,
@@ -185,6 +194,7 @@ def test_update_question_statuses(form_json, exp_status):
         ),
         (
             [{"status": "NOT_STARTED", "question": "abc"}],
+            "ANY",
             True,
             False,
             False,
@@ -194,6 +204,7 @@ def test_update_question_statuses(form_json, exp_status):
         ),
         (
             [{"status": "COMPLETED", "question": "abc"}],
+            "ANY",
             True,
             False,
             False,
@@ -201,10 +212,21 @@ def test_update_question_statuses(form_json, exp_status):
             "COMPLETED",
             True,
         ),
+        (
+            [{"status": "COMPLETED", "question": "abc"}],
+            FormStatus.CHANGE_REQUESTED,
+            False,
+            False,
+            False,
+            None,
+            "CHANGE_REQUESTED",
+            False,
+        ),
     ],
 )
 def test_update_form_status(
     form_json,
+    form_status,
     form_has_completed,
     is_summary_submit,
     round_mark_as_complete_enabled,
@@ -214,6 +236,7 @@ def test_update_form_status(
 ):
     form_to_update = MagicMock()
     form_to_update.json = form_json
+    form_to_update.status = form_status
     form_to_update.has_completed = form_has_completed
 
     # If a round doesn't use mark_as_complete, the question is not in the json
@@ -581,6 +604,21 @@ def test_is_research_survey_complete(mocker, research_survey_data, exp_result):
                 is_research_survey_optional=True,
             ),
             "COMPLETED",
+        ),
+        (
+            ["CHANGE_REQUESTED"],
+            False,
+            False,
+            False,
+            FeedbackSurveyConfig(
+                has_feedback_survey=False,
+                is_feedback_survey_optional=False,
+                has_section_feedback=False,
+                is_section_feedback_optional=False,
+                has_research_survey=False,
+                is_research_survey_optional=False,
+            ),
+            "CHANGE_REQUESTED",
         ),
     ],
 )

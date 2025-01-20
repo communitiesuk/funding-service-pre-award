@@ -37,8 +37,8 @@ def application_deadline_reminder(flask_app):  # noqa:C901 from before ruff
 
                 if not reminder_date_str:
                     current_app.logger.info(
-                        "No reminder is set for the round {round_title}",
-                        extra=dict(round_title=round.get("title")),
+                        "No reminder is set for the round %(round_title)s",
+                        dict(round_title=round.get("title")),
                     )
                     continue
 
@@ -86,8 +86,8 @@ def application_deadline_reminder(flask_app):  # noqa:C901 from before ruff
                             email = {"email": application["application"]["account_email"]}
 
                             current_app.logger.info(
-                                "Sending reminder {count} of {total}",
-                                extra=dict(count=count, total=len(unique_email_account)),
+                                "Sending reminder %(count)s of %(total)s",
+                                dict(count=count, total=len(unique_email_account)),
                             )
 
                             try:
@@ -100,8 +100,8 @@ def application_deadline_reminder(flask_app):  # noqa:C901 from before ruff
                                     contact_help_email=application["application"]["contact_help_email"],
                                 )
                                 current_app.logger.info(
-                                    "Sent notification {notification_id} for application {application_reference}",
-                                    extra=dict(
+                                    "Sent notification %(notification_id)s for application %(application_reference)s",
+                                    dict(
                                         notification_id=notification.id,
                                         application_reference=application["application"]["reference"],
                                     ),
@@ -117,15 +117,15 @@ def application_deadline_reminder(flask_app):  # noqa:C901 from before ruff
                                             current_app.logger.info(
                                                 "The application reminder has been"
                                                 " sent successfully for round_id"
-                                                " {round_id}",
-                                                extra=dict(found_id=round_id),
+                                                " %(round_id)s",
+                                                dict(found_id=round_id),
                                             )
                                     except Exception as e:
                                         current_app.logger.info(
                                             "There was an issue updating the"
                                             " application_reminder_sent column in the"
-                                            " Round store for {round_id}. Errro {errno}",
-                                            extra=dict(round_id=round_id, errno=e),
+                                            " Round store for %(round_id)s. Errro %(errno)s",
+                                            dict(round_id=round_id, errno=e),
                                         )
 
                             except NotificationError as e:

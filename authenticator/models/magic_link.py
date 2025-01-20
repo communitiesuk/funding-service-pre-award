@@ -175,7 +175,7 @@ class MagicLinkMethods(object):
         :param redirect_url: (str, optional) An optional redirect_url
         :return:
         """
-        current_app.logger.info("Creating magic link for {account}", extra=dict(account=account))
+        current_app.logger.info("Creating magic link for %(account)s", dict(account=account))
 
         if not redirect_url:
             redirect_url = urljoin(
@@ -213,8 +213,8 @@ class MagicLinkMethods(object):
                     "link": magic_link_url,
                 }
             )
-            current_app.logger.info("Magic link created for {account}", extra=dict(account=account))
+            current_app.logger.info("Magic link created for %(account)s", dict(account=account))
             return new_link_json
 
-        current_app.logger.error("Magic link for account {account} could not be created", extra=dict(account=account))
+        current_app.logger.error("Magic link for account %(account)s could not be created", dict(account=account))
         raise MagicLinkError(message="Could not create a magic link")

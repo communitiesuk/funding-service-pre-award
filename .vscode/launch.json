@@ -5,6 +5,24 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python Debugger: Current File with Arguments",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder:funding-service-pre-award}",
+                    "remoteRoot": ""
+                }
+            ],
+            "args": [
+                "--seed_all_funds",
+                "True"
+            ],
+            "env": {"FLASK_ENV":"development"}
+        },
+        {
             "name": "Docker runner Pre-award",
             "type": "debugpy",
             "request": "attach",

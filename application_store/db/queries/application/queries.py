@@ -17,6 +17,7 @@ from sqlalchemy.sql.expression import Select
 from application_store.db.exceptions import ApplicationError, SubmitError
 from application_store.db.models import Applications
 from application_store.db.models.application.enums import Status as ApplicationStatus
+from application_store.db.models.forms.enums import Status as FormStatus
 from application_store.db.schemas import ApplicationSchema
 from application_store.external_services import get_fund, get_round
 from application_store.external_services.aws import FileData, list_files_by_prefix
@@ -97,10 +98,10 @@ def _create_application_try(account_id, fund_id, round_id, key, language, refere
     except IntegrityError:
         db.session.remove()
         current_app.logger.error(
-            "Failed {attempt} attempt(s) to create application with"
-            " application reference {reference}, for fund_id"
-            " {fund_id} and round_id {round_id}",
-            extra=dict(attempt=attempt, reference=reference, fund_id=fund_id, round_id=round_id),
+            "Failed %(attempt)s attempt(s) to create application with"
+            " application reference %(reference)s, for fund_id"
+            " %(fund_id)s and round_id %(round_id)s",
+            dict(attempt=attempt, reference=reference, fund_id=fund_id, round_id=round_id),
         )
 
 
@@ -267,8 +268,8 @@ def update_application_fields(existing_json_blob, new_json_blob) -> set:
 
 def submit_application(application_id) -> Applications:  # noqa: C901
     current_app.logger.info(
-        "Submitting application {application_id} and importing to assessment store",
-        extra=dict(application_id=application_id),
+        "Submitting application %(application_id)s and importing to assessment store",
+        dict(application_id=application_id),
     )
     try:
         application = get_application(application_id, include_forms=True)
@@ -343,19 +344,18 @@ def submit_application(application_id) -> Applications:  # noqa: C901
             inserted_application_ids = [item.application_id for item in result]
             if not len(inserted_application_ids):
                 current_app.logger.warning(
-                    "Application already exists in the database: {app_id}", extra=dict(app_id=row["application_id"])
+                    "Application already exists in the database: %(app_id)s", dict(app_id=row["application_id"])
                 )
             else:
                 current_app.logger.info(
-                    "Successfully inserted application: {app_id}", extra=dict(app_id=row["application_id"])
+                    "Successfully inserted application: %(app_id)s", dict(app_id=row["application_id"])
                 )
             db.session.commit()
     except exc.SQLAlchemyError as e:
         db.session.rollback()
-        current_app.logger.error(
-            msg="Error occurred while submitting application {application_id}",
-            exc_info=e,
-            extra=dict(application_id=row["application_id"]),
+        current_app.logger.exception(
+            "Error occurred while submitting application %(application_id)s}",
+            dict(application_id=row["application_id"]),
         )
         raise SubmitError(application_id=application_id) from e
 
@@ -396,8 +396,8 @@ def get_fund_id(application_id):
             return None
     except Exception:
         current_app.logger.error(
-            "Incorrect application id: {application_id}",
-            extra=dict(application_id=application_id),
+            "Incorrect application id: %(application_id)s",
+            dict(application_id=application_id),
         )
         return None
 
@@ -414,3 +414,25 @@ def attempt_to_find_and_update_project_name(question_json, application) -> None:
         for field in question["fields"]:
             if field["key"] == project_name_field_id and "answer" in field.keys():
                 return field["answer"]
+
+
+def mark_application_with_requested_changes(application_id: str, field_ids: list):
+    application = db.session.query(Applications).filter_by(id=application_id).first()
+    application_should_update = False
+    for form in application.forms:
+        form_should_update = False
+        for category in form.json:
+            for field in category["fields"]:
+                if field["key"] in field_ids:
+                    form.status = FormStatus.CHANGE_REQUESTED
+                    form.has_completed = False
+                    form_should_update = True
+                    application_should_update = True
+
+                if field["key"] == "markAsComplete" and form_should_update:
+                    field["answer"] = False
+
+    if application_should_update:
+        application.status = ApplicationStatus.CHANGE_REQUESTED
+
+    db.session.commit()

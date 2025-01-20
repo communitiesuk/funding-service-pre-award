@@ -10,12 +10,12 @@ def get_data(endpoint: str, payload: Dict = None):
     try:
         if payload:
             current_app.logger.info(
-                "Fetching data from '{endpoint}', with payload: {payload}.",
-                extra=dict(endpoint=endpoint, payload=payload),
+                "Fetching data from '%(endpoint)s', with payload: %(payload)s.",
+                dict(endpoint=endpoint, payload=payload),
             )
             response = requests.get(endpoint, payload)
         else:
-            current_app.logger.info("Fetching data from '{endpoint}'.", extra=dict(endpoint=endpoint))
+            current_app.logger.info("Fetching data from '%(endpoint)s'.", dict(endpoint=endpoint))
             response = requests.get(endpoint)
         if response.status_code == 200:
             if "application/json" == response.headers["Content-Type"]:
@@ -24,10 +24,10 @@ def get_data(endpoint: str, payload: Dict = None):
                 return response.content
         elif response.status_code == 204:
             current_app.logger.warning(
-                "Request successful but no resources returned for endpoint '{endpoint}'.", extra=dict(endpoint=endpoint)
+                "Request successful but no resources returned for endpoint '%(endpoint)s'.", dict(endpoint=endpoint)
             )
         else:
-            current_app.logger.error("Could not get data for endpoint '{endpoint}' ", extra=dict(endpoint=endpoint))
+            current_app.logger.error("Could not get data for endpoint '%(endpoint)s' ", dict(endpoint=endpoint))
     except requests.exceptions.RequestException:
         current_app.logger.exception("Unable to get_data")
 

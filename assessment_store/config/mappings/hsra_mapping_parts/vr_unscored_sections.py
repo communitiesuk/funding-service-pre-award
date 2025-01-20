@@ -29,6 +29,19 @@ unscored_sections = [
                 "name": "Organisation information",
                 "themes": [
                     {
+                        "id": "which-local-authority-are-you-applying-from?",
+                        "name": "Which local authority are you applying from?",
+                        "answers": [
+                            {
+                                "field_id": "WLddBt",
+                                "form_name": "organisation-information-hsra-vr",
+                                "field_type": "textField",
+                                "presentation_type": "text",
+                                "question": "Which local authority are you applying from?",
+                            }
+                        ],
+                    },
+                    {
                         "id": "who-is-your-section-151-officer?",
                         "name": "Who is your section 151 officer?",
                         "answers": [
@@ -53,19 +66,6 @@ unscored_sections = [
                                 "presentation_type": "text",
                                 "question": "Telephone number",
                             },
-                        ],
-                    },
-                    {
-                        "id": "which-local-authority-are-you-applying-from?",
-                        "name": "Which local authority are you applying from?",
-                        "answers": [
-                            {
-                                "field_id": "WLddBt",
-                                "form_name": "organisation-information-hsra-vr",
-                                "field_type": "textField",
-                                "presentation_type": "text",
-                                "question": "Which local authority are you applying from?",
-                            }
                         ],
                     },
                 ],

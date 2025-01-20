@@ -21,6 +21,8 @@ from application_store.config.key_report_mappings.cyp_r1_key_report_mapping impo
 from application_store.config.key_report_mappings.dpif_r2_key_report_mapping import (
     DPIF_R2_KEY_REPORT_MAPPING,
 )
+from application_store.config.key_report_mappings.gbrf_r1_key_report_mapping import GBRF_R1_KEY_REPORT_MAPPING
+from application_store.config.key_report_mappings.lpdf_r1_key_report_mapping import LPDF_R1_KEY_REPORT_MAPPING
 
 ROUND_ID_TO_KEY_REPORT_MAPPING = defaultdict(
     lambda: COF_R2_KEY_REPORT_MAPPING.mapping,
@@ -31,6 +33,8 @@ ROUND_ID_TO_KEY_REPORT_MAPPING = defaultdict(
         COF25_EOI_KEY_REPORT_MAPPING.round_id: COF25_EOI_KEY_REPORT_MAPPING.mapping,
         COF_R2_KEY_REPORT_MAPPING.round_id: COF_R2_KEY_REPORT_MAPPING.mapping,
         COF_R3W2_KEY_REPORT_MAPPING.round_id: COF_R3W2_KEY_REPORT_MAPPING.mapping,
+        GBRF_R1_KEY_REPORT_MAPPING.round_id: GBRF_R1_KEY_REPORT_MAPPING.mapping,
+        LPDF_R1_KEY_REPORT_MAPPING.round_id: LPDF_R1_KEY_REPORT_MAPPING.mapping,
         **({key: COF_KEY_REPORT_MAPPING.mapping for key in COF_KEY_REPORT_MAPPING.round_id}),
     },
 )

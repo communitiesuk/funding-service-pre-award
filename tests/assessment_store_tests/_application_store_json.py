@@ -13659,13 +13659,13 @@ hsra_vr_application_store_json_template = Template(
                         {
                             "key": "KFjxBs",
                             "type": "date",
-                            "title": "When do you expect to submit your post-payment verification (PPV)?",
+                            "title": "When do you expect to submit your post-payment assurance form to be submitted?",
                             "answer": "2008-01-11"
                         }
                     ],
                     "status": "COMPLETED",
                     "category": "wtecPW",
-                    "question": "When do you expect the post payment verification (PPV) form to be submitted?"
+                    "question": "When do you expect the post payment assurance form to be submitted?"
                 },
                 {
                     "fields": [

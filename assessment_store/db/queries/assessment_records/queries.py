@@ -101,8 +101,8 @@ def get_metadata_for_fund_round_id(  # noqa: C901 - historical sadness
     )
     if search_term != "":
         current_app.logger.info(
-            "Performing assessment search on search term: {search_term} in fields {search_in}",
-            extra=dict(search_term=search_term, search_in=search_in),
+            "Performing assessment search on search term: %(search_term)s in fields %(search_in)s",
+            dict(search_term=search_term, search_in=search_in),
         )
         search_term = search_term.replace(" ", "%")
 
@@ -134,34 +134,32 @@ def get_metadata_for_fund_round_id(  # noqa: C901 - historical sadness
         statement = statement.where(AssessmentRecord.application_id.in_(record_ids_with_tag_id))
 
     if "all" not in countries:
-        current_app.logger.info(
-            "Performing assessment search on countries: {countries}.", extra=dict(countries=countries)
-        )
+        current_app.logger.info("Performing assessment search on countries: %(countries)s.", dict(countries=countries))
         statement = statement.where(AssessmentRecord.location_json_blob["country"].astext.ilike(func.any_(countries)))
 
     if asset_type != "ALL" and asset_type != "":
         current_app.logger.info(
-            "Performing assessment search on asset type: {asset_type}.", extra=dict(asset_type=asset_type)
+            "Performing assessment search on asset type: %(asset_type)s.", dict(asset_type=asset_type)
         )
         statement = statement.where(AssessmentRecord.asset_type == asset_type)
 
     if country != "" and country != "ALL":
-        current_app.logger.info("Performing assessment search on country: {country}.", extra=dict(country=country))
+        current_app.logger.info("Performing assessment search on country: %(country)s.", dict(country=country))
         statement = statement.where(AssessmentRecord.location_json_blob["country"].astext == country)
 
     if region != "" and region != "ALL":
-        current_app.logger.info("Performing assessment search on region: {region}.", extra=dict(region=region))
+        current_app.logger.info("Performing assessment search on region: %(region)s.", dict(region=region))
         statement = statement.where(AssessmentRecord.location_json_blob["region"].astext == region)
 
     if datasets != "" and datasets != "ALL":
         datasets = True if str(datasets).lower() == "yes" or datasets is True else False
-        current_app.logger.info("Performing assessment search on datasets: {datasets}.", extra=dict(datasets=datasets))
+        current_app.logger.info("Performing assessment search on datasets: %(datasets)s.", dict(datasets=datasets))
         statement = statement.where(cast(AssessmentRecord.datasets, String) == str(datasets).lower())
 
     if publish_datasets != "" and publish_datasets != "ALL":
         current_app.logger.info(
-            "Performing assessment search on publish_datasets: {publish_datasets}.",
-            extra=dict(publish_datasets=publish_datasets),
+            "Performing assessment search on publish_datasets: %(publish_datasets)s.",
+            dict(publish_datasets=publish_datasets),
         )
         if publish_datasets == "None":
             statement = statement.where(AssessmentRecord.publish_datasets.is_(None))
@@ -171,14 +169,14 @@ def get_metadata_for_fund_round_id(  # noqa: C901 - historical sadness
     if team_in_place != "" and team_in_place != "ALL":
         team_in_place = True if str(team_in_place).lower() == "yes" or team_in_place is True else False
         current_app.logger.info(
-            "Performing assessment search on team_in_place: {team_in_place}.", extra=dict(team_in_place=team_in_place)
+            "Performing assessment search on team_in_place: %(team_in_place)s.", dict(team_in_place=team_in_place)
         )
         statement = statement.where(cast(AssessmentRecord.team_in_place, String) == str(team_in_place).lower())
 
     if local_authority != "" and local_authority != "ALL":
         current_app.logger.info(
-            "Performing assessment search on local_authority: {local_authority}.",
-            extra=dict(local_authority=local_authority),
+            "Performing assessment search on local_authority: %(local_authority)s.",
+            dict(local_authority=local_authority),
         )
 
         subquery = (
@@ -195,8 +193,8 @@ def get_metadata_for_fund_round_id(  # noqa: C901 - historical sadness
 
     if joint_application != "" and joint_application != "ALL" and joint_application in ["true", "false"]:
         current_app.logger.info(
-            "Performing assessment search on joint_application: {joint_application}.",
-            extra=dict(joint_application=joint_application),
+            "Performing assessment search on joint_application: %(joint_application)s.",
+            dict(joint_application=joint_application),
         )
 
         subquery = (
@@ -212,7 +210,7 @@ def get_metadata_for_fund_round_id(  # noqa: C901 - historical sadness
 
     if funding_type != "ALL" and funding_type != "":
         current_app.logger.info(
-            "Performing assessment search on funding type: {funding_type}.", extra=dict(funding_type=funding_type)
+            "Performing assessment search on funding type: %(funding_type)s.", dict(funding_type=funding_type)
         )
         # TODO SS figure out how to stop double quoting this - it works but is ugly
         # it's because when we retrieve the json element as funding_type, we get it as a json element, not pure text,
@@ -409,8 +407,8 @@ def get_application_jsonb_blob(application_id: str) -> dict:
 
 def update_status_to_completed(application_id):
     current_app.logger.info(
-        "Updating application status to COMPLETED for application: {application_id}.",
-        extra=dict(application_id=application_id),
+        "Updating application status to COMPLETED for application: %(application_id)s.",
+        dict(application_id=application_id),
     )
     db.session.query(AssessmentRecord).filter(AssessmentRecord.application_id == application_id).update(
         {AssessmentRecord.workflow_status: Status.COMPLETED},
@@ -520,7 +518,7 @@ def associate_assessment_tags(application_id, tags: List):
         if incoming_tag_id and not _existing_tags:
             # If no existing tags are found, create a new tag(s) with incoming tags info.
             current_app.logger.info(
-                "Creating new tag(s) for {incoming_tag_id}", extra=dict(incoming_tag_id=incoming_tag_id)
+                "Creating new tag(s) for %(incoming_tag_id)s", dict(incoming_tag_id=incoming_tag_id)
             )
             create_tag(application_id, incoming_tag_id, True, incoming_user_id)
 
@@ -536,11 +534,11 @@ def associate_assessment_tags(application_id, tags: List):
                 # If it's already associated, skip, otherwise, create a new associated tag.
                 if most_recent_tag.associated:
                     current_app.logger.info(
-                        "Tag is alreday associated: {tag_id}", extra=dict(tag_id=most_recent_tag.tag_id)
+                        "Tag is alreday associated: %(tag_id)s", dict(tag_id=most_recent_tag.tag_id)
                     )
                 else:
                     current_app.logger.info(
-                        "Creating new tag: {incoming_tag_id}", extra=dict(incoming_tag_id=incoming_tag_id)
+                        "Creating new tag: %(incoming_tag_id)s", dict(incoming_tag_id=incoming_tag_id)
                     )
                     create_tag(
                         application_id,
@@ -549,9 +547,7 @@ def associate_assessment_tags(application_id, tags: List):
                         incoming_user_id,
                     )
             else:
-                current_app.logger.info(
-                    "Creating new tag: {incoming_tag_id}", extra=dict(incoming_tag_id=incoming_tag_id)
-                )
+                current_app.logger.info("Creating new tag: %(incoming_tag_id)s", dict(incoming_tag_id=incoming_tag_id))
                 create_tag(application_id, incoming_tag_id, True, incoming_user_id)
 
         if not incoming_tag_id:
@@ -560,8 +556,8 @@ def associate_assessment_tags(application_id, tags: List):
                 most_recent_tag = max(filterted_tag, key=lambda x: x[0])[1]
                 if most_recent_tag.associated:
                     current_app.logger.info(
-                        "Dis-associating existing associated tag_id: {tag_id}",
-                        extra=dict(tag_id=most_recent_tag.tag_id),
+                        "Dis-associating existing associated tag_id: %(tag_id)s",
+                        dict(tag_id=most_recent_tag.tag_id),
                     )
                     create_tag(
                         application_id,
@@ -912,3 +908,22 @@ def update_user_application_association(application_id, user_id, active, assigne
     db.session.refresh(allocation_association)
 
     return allocation_association
+
+
+def check_all_change_requests_accepted(application_id):
+    application = db.session.scalar(select(AssessmentRecord).where(AssessmentRecord.application_id == application_id))
+
+    change_requests = application.change_requests
+    scores = application.scores
+
+    # if a section has been accepted, we "close" any change requests regardless of the state
+    # they are in (RAISED or RESOLVED)
+    accepted_sections = set(score.sub_criteria_id for score in scores if score.score > 0)
+
+    # Change requests may either be resolved by the applicant, or in a raised (unresolved) state by the assessor
+    requested_changes_sections = set(
+        section for change_request in change_requests for section in change_request.sections_to_flag
+    )
+    remaining_sections = requested_changes_sections - accepted_sections
+
+    return len(remaining_sections) == 0

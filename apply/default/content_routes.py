@@ -54,8 +54,8 @@ def determine_all_questions_template_name(fund_short_name: str, round_short_name
 @content_bp.route("/all_questions/<fund_short_name>/<round_short_name>", methods=["GET"])
 def all_questions(fund_short_name, round_short_name):
     current_app.logger.info(
-        "All questions page loaded for fund {fund_short_name} round {round_short_name}.",
-        extra=dict(fund_short_name=fund_short_name, round_short_name=round_short_name),
+        "All questions page loaded for fund %(fund_short_name)s round %(round_short_name)s.",
+        dict(fund_short_name=fund_short_name, round_short_name=round_short_name),
     )
     fund, round = get_fund_and_round(fund_short_name=fund_short_name, round_short_name=round_short_name)
 
@@ -73,8 +73,8 @@ def all_questions(fund_short_name, round_short_name):
             )
         except TemplateNotFound:
             current_app.logger.warning(
-                "No all questions page found for {fund_short_name}:{round_short_name}",
-                extra=dict(fund_short_name=fund_short_name, round_short_name=round_short_name),
+                "No all questions page found for %(fund_short_name)s:%(round_short_name)s",
+                dict(fund_short_name=fund_short_name, round_short_name=round_short_name),
             )
     return abort(404)
 
@@ -121,8 +121,8 @@ def privacy():
 
     if privacy_notice_url:
         current_app.logger.info(
-            "Privacy notice loading for fund {fund_short_name} round {round_short_name}.",
-            extra=dict(fund_short_name=fund.short_name, round_short_name=round.short_name),
+            "Privacy notice loading for fund %(fund_short_name)s round %(round_short_name)s.",
+            dict(fund_short_name=fund.short_name, round_short_name=round.short_name),
         )
         return redirect(privacy_notice_url)
 

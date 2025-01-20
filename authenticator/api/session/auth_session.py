@@ -51,7 +51,7 @@ class AuthSessionBase:
                 status = "expired_token"
             except jwt.PyJWTError as e:
                 current_app.logger.warning(
-                    "PyJWTError: {error_name} - {error}", extra=dict(error_name=e.__class__.__name__, error=str(e))
+                    "PyJWTError: %(error_name)s - %(error)s", dict(error_name=e.__class__.__name__, error=str(e))
                 )
                 status = "invalid_token"
 
@@ -69,11 +69,11 @@ class AuthSessionBase:
             if safe_app := Config.SAFE_RETURN_APPS.get(return_app):
                 redirect_route = safe_app.logout_endpoint
                 current_app.logger.info(
-                    "Returning to {return_app} using {redirect_route}",
-                    extra=dict(return_app=return_app, redirect_route=redirect_route),
+                    "Returning to %(return_app)s using %(redirect_route)s",
+                    dict(return_app=return_app, redirect_route=redirect_route),
                 )
             else:
-                current_app.logger.warning("{return_app} not listed as a safe app.", extra=dict(return_app=return_app))
+                current_app.logger.warning("%(return_app)s not listed as a safe app.", dict(return_app=return_app))
                 resp = make_response({"detail": "Unknown return app."}, 400)
                 resp.headers["Content-Type"] = "application/json"
                 return resp
@@ -152,7 +152,7 @@ class AuthSessionBase:
                 samesite=Config.FSD_USER_TOKEN_COOKIE_SAMESITE,
                 httponly=Config.SESSION_COOKIE_HTTPONLY,
             )
-            current_app.logger.info("User logged in to account : {account_id}", extra=dict(account_id=account.id))
+            current_app.logger.info("User logged in to account : %(account_id)s", dict(account_id=account.id))
             return response
         except SessionCreateError as e:
             error_response(404, str(e))

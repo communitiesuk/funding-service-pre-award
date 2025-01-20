@@ -11,16 +11,15 @@ scored_criteria = [
                 "name": "Vacant property details",
                 "themes": [
                     {
-                        "id": "upload-the-initial-notice-you-served-the-landlord",
-                        "name": "Upload the initial notice you served the landlord",
+                        "id": "what-is-the-vacant-property's-address?",
+                        "name": "What is the vacant property's address?",
                         "answers": [
                             {
-                                "field_id": "ndpQJk",
+                                "field_id": "dwLpZU",
                                 "form_name": "vacant-property-details-hsra-rp",
-                                "field_type": "clientSideFileUploadField",
-                                "presentation_type": "s3bucketPath",
-                                "question": "Upload the initial notice you served the landlord",
-                                "path": "upload-the-initial-notice-you-served-the-landlord",
+                                "field_type": "ukAddressField",
+                                "presentation_type": "text",
+                                "question": "What is the vacant property's address?",
                             }
                         ],
                     },
@@ -38,15 +37,16 @@ scored_criteria = [
                         ],
                     },
                     {
-                        "id": "what-is-the-vacant-property's-address?",
-                        "name": "What is the vacant property's address?",
+                        "id": "upload-the-initial-notice-you-served-the-landlord",
+                        "name": "Upload the initial notice you served the landlord",
                         "answers": [
                             {
-                                "field_id": "dwLpZU",
+                                "field_id": "ndpQJk",
                                 "form_name": "vacant-property-details-hsra-rp",
-                                "field_type": "ukAddressField",
-                                "presentation_type": "text",
-                                "question": "What is the vacant property's address?",
+                                "field_type": "clientSideFileUploadField",
+                                "presentation_type": "s3bucketPath",
+                                "question": "Upload the initial notice you served the landlord",
+                                "path": "upload-the-initial-notice-you-served-the-landlord",
                             }
                         ],
                     },
@@ -64,19 +64,6 @@ scored_criteria = [
                 "name": "Designated area details",
                 "themes": [
                     {
-                        "id": "share-the-link-with-details-of-the-designated-area",
-                        "name": "Share the link with details of the designated area",
-                        "answers": [
-                            {
-                                "field_id": "TzGISC",
-                                "form_name": "designated-area-details-hsra-rp",
-                                "field_type": "websiteField",
-                                "presentation_type": "text",
-                                "question": "Share the link with details of the designated area.",
-                            }
-                        ],
-                    },
-                    {
                         "id": "which-designated-high-street-or-town-centre-is-the-vacant-property-in?",
                         "name": "Which designated high street or town centre is the vacant property in?",
                         "answers": [
@@ -86,6 +73,19 @@ scored_criteria = [
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "Which designated high street or town centre is the vacant property in?",
+                            }
+                        ],
+                    },
+                    {
+                        "id": "share-the-link-with-details-of-the-designated-area",
+                        "name": "Share the link with details of the designated area",
+                        "answers": [
+                            {
+                                "field_id": "TzGISC",
+                                "form_name": "designated-area-details-hsra-rp",
+                                "field_type": "websiteField",
+                                "presentation_type": "text",
+                                "question": "Share the link with details of the designated area.",
                             }
                         ],
                     },
@@ -116,32 +116,6 @@ scored_criteria = [
                         ],
                     },
                     {
-                        "id": "when-do-you-expect-the-tenant-to-move-in?",
-                        "name": "When do you expect the tenant to move in?",
-                        "answers": [
-                            {
-                                "field_id": "HeqfVH",
-                                "form_name": "milestones-hsra-rp",
-                                "field_type": "datePartsField",
-                                "presentation_type": "text",
-                                "question": "When do you expect the tenant to move in?",
-                            }
-                        ],
-                    },
-                    {
-                        "id": "when-do-you-expect-to-finish-the-refurbishment-works?",
-                        "name": "When do you expect to finish the refurbishment works?",
-                        "answers": [
-                            {
-                                "field_id": "gLzqSP",
-                                "form_name": "milestones-hsra-rp",
-                                "field_type": "datePartsField",
-                                "presentation_type": "text",
-                                "question": "When do you expect to finish the refurbishment works?",
-                            }
-                        ],
-                    },
-                    {
                         "id": "when-do-you-expect-to-submit-your-claim?",
                         "name": "When do you expect to submit your claim?",
                         "answers": [
@@ -167,6 +141,32 @@ scored_criteria = [
                             }
                         ],
                     },
+                    {
+                        "id": "when-do-you-expect-to-finish-the-refurbishment-works?",
+                        "name": "When do you expect to finish the refurbishment works?",
+                        "answers": [
+                            {
+                                "field_id": "gLzqSP",
+                                "form_name": "milestones-hsra-rp",
+                                "field_type": "datePartsField",
+                                "presentation_type": "text",
+                                "question": "When do you expect to finish the refurbishment works?",
+                            }
+                        ],
+                    },
+                    {
+                        "id": "when-do-you-expect-the-tenant-to-move-in?",
+                        "name": "When do you expect the tenant to move in?",
+                        "answers": [
+                            {
+                                "field_id": "HeqfVH",
+                                "form_name": "milestones-hsra-rp",
+                                "field_type": "datePartsField",
+                                "presentation_type": "text",
+                                "question": "When do you expect the tenant to move in?",
+                            }
+                        ],
+                    },
                 ],
             },
         ],
@@ -180,20 +180,6 @@ scored_criteria = [
                 "id": "project-costs-hsra-rp",
                 "name": "Project costs",
                 "themes": [
-                    {
-                        "id": "upload-the-independent-survey-of-works",
-                        "name": "Upload the independent survey of works",
-                        "answers": [
-                            {
-                                "field_id": "zORoJy",
-                                "form_name": "project-costs-hsra-rp",
-                                "field_type": "clientSideFileUploadField",
-                                "presentation_type": "s3bucketPath",
-                                "question": "Upload the quote for the vacancy register",
-                                "path": "upload-the-independent-survey-of-works",
-                            }
-                        ],
-                    },
                     {
                         "id": "how-much-funding-are-you-applying-for?-",
                         "name": "How much funding are you applying for? ",
@@ -231,6 +217,20 @@ scored_criteria = [
                                 "presentation_type": "s3bucketPath",
                                 "question": "Upload quotes for refurbishment",
                                 "path": "upload-quotes-for-refurbishment",
+                            }
+                        ],
+                    },
+                    {
+                        "id": "upload-the-independent-survey-of-works",
+                        "name": "Upload the independent survey of works",
+                        "answers": [
+                            {
+                                "field_id": "zORoJy",
+                                "form_name": "project-costs-hsra-rp",
+                                "field_type": "clientSideFileUploadField",
+                                "presentation_type": "s3bucketPath",
+                                "question": "Upload the independent survey of works",
+                                "path": "upload-the-independent-survey-of-works",
                             }
                         ],
                     },

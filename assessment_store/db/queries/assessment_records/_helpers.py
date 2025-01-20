@@ -22,8 +22,8 @@ def get_answer_value(application_json, answer_key):
         )
     except Exception as e:
         current_app.logger.warning(
-            "Could not extract answer from question {answer_key} in application: {application_id}.",
-            extra=dict(application_id=application_json["id"], answer_key=answer_key),
+            "Could not extract answer from question %(answer_key)s in application: %(application_id)s.",
+            dict(application_id=application_json["id"], answer_key=answer_key),
             exc_info=e,
         )
         return None
@@ -43,8 +43,8 @@ def get_answer_value_for_multi_input(application_json, answer_key, value_key):
         return funding_one
     except Exception as e:
         current_app.logger.warning(
-            "Could not extract answer from question {answer_key} in application: {application_id}.",
-            extra=dict(application_id=application_json["id"], answer_key=answer_key),
+            "Could not extract answer from question %(answer_key)s in application: %(application_id)s.",
+            dict(application_id=application_json["id"], answer_key=answer_key),
             exc_info=e,
         )
         return None
@@ -61,8 +61,8 @@ def get_location_json_from_postcode(raw_postcode):
         )
         if response.status_code != 200:
             current_app.logger.error(
-                "Failed requesting location data for postcode {postcode}. Received error response {response}",
-                extra=dict(postcode=raw_postcode, response=response),
+                "Failed requesting location data for postcode %(postcode)s. Received error response %(response)s",
+                dict(postcode=raw_postcode, response=response),
             )
             return None
 
@@ -88,7 +88,7 @@ def get_location_json_from_postcode(raw_postcode):
 
     except Exception as e:
         current_app.logger.error(
-            "Failed requesting location data for postcode {postcode}", exc_info=e, extra=dict(postcode=raw_postcode)
+            "Failed requesting location data for postcode %(postcode)s", dict(postcode=raw_postcode), exc_info=e
         )
         return None
 
@@ -135,7 +135,7 @@ def derive_application_values(application_json):  # noqa: C901 - historical sadn
         return derived_values
 
     current_app.logger.info(
-        "Deriving values for application id: {application_id}.", extra=dict(application_id=application_id)
+        "Deriving values for application id: %(application_id)s.", dict(application_id=application_id)
     )
 
     try:
@@ -190,9 +190,9 @@ def derive_application_values(application_json):  # noqa: C901 - historical sadn
         current_app.logger.error(
             # Shouldn't ever get here, but quick catch all for the interim removal of the queue
             # and not breaking the submit process
-            "Unexpected error when deriving values for application {application_id}",
+            "Unexpected error when deriving values for application %(application_id)s",
+            dict(application_id=application_id),
             exc_info=e,
-            extra=dict(application_id=application_id),
         )
 
     return derived_values
@@ -267,7 +267,7 @@ def filter_tags(incoming_tags, existing_tags):
         )
         if _incoming_tag:
             current_app.logger.info(
-                "Tag id is already associated: {existing_tag_id}", extra=dict(existing_tag_id=existing_tag_id)
+                "Tag id is already associated: %(existing_tag_id)s", dict(existing_tag_id=existing_tag_id)
             )
         else:
             filtered_tags.append(existing_tag_list)

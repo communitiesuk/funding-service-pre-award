@@ -106,8 +106,8 @@ def send_submit_notification(
 
             case _:
                 current_app.logger.error(
-                    "Unknown eoi_decision [{eoi_decision}], unable to send submit notification",
-                    extra=dict(eoi_decision=eoi_decision),
+                    "Unknown eoi_decision [%(eoi_decision)s], unable to send submit notification",
+                    dict(eoi_decision=eoi_decision),
                 )
                 return
     else:
@@ -128,6 +128,6 @@ def send_submit_notification(
 
     if notification:
         current_app.logger.info(
-            "Sent notification {notification_id} for application {application_reference}",
-            extra=dict(notification_id=notification.id, application_reference=application_reference),
+            "Sent notification %(notification_id)s for application %(application_reference)s",
+            dict(notification_id=notification.id, application_reference=application_reference),
         )

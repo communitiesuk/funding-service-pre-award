@@ -24,5 +24,5 @@ class Account(db.Model):
     def highest_role_map(self) -> Mapping[str, str]:
         roles_as_strings = [r.role for r in self.roles]
         role_map = get_highest_role_map(roles_as_strings)
-        current_app.logger.debug("Role map for {id}: {role_map}", extra=dict(id=self.id, role_map=role_map))
+        current_app.logger.debug("Role map for %(id)s: %(role_map)s", dict(id=self.id, role_map=role_map))
         return role_map

@@ -15,7 +15,7 @@ from assess.tagging.routes import tagging_bp
 @shared_bp.errorhandler(404)
 @tagging_bp.errorhandler(404)
 def not_found(error):
-    current_app.logger.info("Encountered 404 against url {request_path}", extra=dict(request_path=request.path))
+    current_app.logger.info("Encountered 404 against url %(request_path)s", dict(request_path=request.path))
     return render_template("assess/404.html"), 404
 
 
@@ -32,7 +32,7 @@ def forbidden(error):
         else error.description
     )
 
-    current_app.logger.info("Encountered 403: {error}", extra=dict(error=str(error)))
+    current_app.logger.info("Encountered 403: %(error)s", dict(error=str(error)))
     return (
         render_template("assess/403.html", error_description=error.description),
         403,
@@ -61,7 +61,7 @@ def error_503(error):
 @scoring_bp.errorhandler(500)
 @scoring_bp.errorhandler(Exception)
 def internal_server_error(error):
-    current_app.logger.exception("Encountered 500: {error}", extra=dict(error=str(error)))
+    current_app.logger.exception("Encountered 500: %(error)s", dict(error=str(error)))
     return render_template("assess/500.html"), 500
 
 

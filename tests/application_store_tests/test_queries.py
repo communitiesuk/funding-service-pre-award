@@ -24,9 +24,12 @@ from application_store.config.key_report_mappings.model import (
     extract_postcode,
 )
 from application_store.db.models import Applications, Forms
+from application_store.db.models.application.enums import Status as ApplicationStatus
+from application_store.db.models.forms.enums import Status as FormStatus
 from application_store.db.queries.application import (
     create_application,
     create_qa_base64file,
+    mark_application_with_requested_changes,
     process_files,
 )
 from application_store.db.queries.reporting.queries import (
@@ -229,12 +232,14 @@ def test_process_files(application, all_application_files, expected):
                                 "IN_PROGRESS": 2,
                                 "COMPLETED": 3,
                                 "SUBMITTED": 4,
+                                "CHANGE_REQUESTED": 0,
+                                "CHANGE_RECEIVED": 0,
                             },
                         }
                     ],
                 }
             ],
-            ["111,r1r1r1,1,2,3,4"],
+            ["111,r1r1r1,1,2,3,4,0,0"],
         ),
         (
             [
@@ -248,6 +253,8 @@ def test_process_files(application, all_application_files, expected):
                                 "IN_PROGRESS": 2,
                                 "COMPLETED": 3,
                                 "SUBMITTED": 4,
+                                "CHANGE_REQUESTED": 0,
+                                "CHANGE_RECEIVED": 0,
                             },
                         },
                         {
@@ -257,12 +264,14 @@ def test_process_files(application, all_application_files, expected):
                                 "IN_PROGRESS": 3,
                                 "COMPLETED": 4,
                                 "SUBMITTED": 5,
+                                "CHANGE_REQUESTED": 0,
+                                "CHANGE_RECEIVED": 0,
                             },
                         },
                     ],
                 }
             ],
-            ["111,r1r1r1,1,2,3,4", "111,r2,2,3,4,5"],
+            ["111,r1r1r1,1,2,3,4,0,0", "111,r2,2,3,4,5,0,0"],
         ),
         (
             [
@@ -276,6 +285,8 @@ def test_process_files(application, all_application_files, expected):
                                 "IN_PROGRESS": 2,
                                 "COMPLETED": 3,
                                 "SUBMITTED": 4,
+                                "CHANGE_REQUESTED": 0,
+                                "CHANGE_RECEIVED": 0,
                             },
                         },
                         {
@@ -285,6 +296,8 @@ def test_process_files(application, all_application_files, expected):
                                 "IN_PROGRESS": 0,
                                 "COMPLETED": 0,
                                 "SUBMITTED": 4,
+                                "CHANGE_REQUESTED": 0,
+                                "CHANGE_RECEIVED": 0,
                             },
                         },
                     ],
@@ -299,12 +312,14 @@ def test_process_files(application, all_application_files, expected):
                                 "IN_PROGRESS": 2,
                                 "COMPLETED": 1,
                                 "SUBMITTED": 6,
+                                "CHANGE_REQUESTED": 0,
+                                "CHANGE_RECEIVED": 0,
                             },
                         },
                     ],
                 },
             ],
-            ["f1,r1,1,2,3,4", "f1,r2,0,0,0,4", "f2,r1,2,2,1,6"],
+            ["f1,r1,1,2,3,4,0,0", "f1,r2,0,0,0,4,0,0", "f2,r1,2,2,1,6,0,0"],
         ),
     ],
 )
@@ -312,7 +327,10 @@ def test_application_status_csv(data, lines_exp):
     result = export_application_statuses_to_csv(data)
     assert result
     lines = result.readlines()
-    assert lines[0].decode().strip() == "fund_id,round_id,NOT_STARTED,IN_PROGRESS,COMPLETED,SUBMITTED"
+    assert (
+        lines[0].decode().strip()
+        == "fund_id,round_id,NOT_STARTED,IN_PROGRESS,COMPLETED,SUBMITTED,CHANGE_REQUESTED,CHANGE_RECEIVED"
+    )
     idx = 1
     for line in lines_exp:
         assert lines[idx].decode().strip() == line
@@ -545,3 +563,146 @@ def test_map_application_key_fields(key_report_mapping: KeyReportMapping, applic
 def test_map_round_id_to_report_fields(round_id, exp_mapping):
     result = ROUND_ID_TO_KEY_REPORT_MAPPING[round_id]
     assert result == exp_mapping
+
+
+@pytest.fixture
+def application_with_forms(_db):
+    application_id = uuid4()
+
+    forms = [
+        Forms(
+            application_id=application_id,
+            status=FormStatus.COMPLETED,
+            name="the-first-form",
+            has_completed=True,
+            json=[
+                {
+                    "category": "FabDefault",
+                    "question": "Project name",
+                    "fields": [{"key": "qwerty", "title": "Project name", "type": "text", "answer": "Hi hello"}],
+                    "status": "COMPLETED",
+                },
+                {
+                    "category": "FabDefault",
+                    "question": "Project purpose",
+                    "fields": [
+                        {"key": "yuiopt", "title": "Project purpose", "type": "text", "answer": "No reason really"}
+                    ],
+                    "status": "COMPLETED",
+                },
+                {
+                    "category": None,
+                    "question": "MarkAsComplete",
+                    "fields": [
+                        {
+                            "key": "markAsComplete",
+                            "title": "Do you want to mark this section as complete?",
+                            "type": "boolean",
+                            "answer": True,
+                        }
+                    ],
+                    "status": "COMPLETED",
+                },
+            ],
+        ),
+        Forms(
+            application_id=application_id,
+            status=FormStatus.COMPLETED,
+            name="the-second-form",
+            has_completed=True,
+            json=[
+                {
+                    "category": "FabDefault",
+                    "question": "Organisation name",
+                    "fields": [
+                        {
+                            "key": "asdfgh",
+                            "title": "Organisation name",
+                            "type": "text",
+                            "answer": "Fake Org",
+                        }
+                    ],
+                    "status": "COMPLETED",
+                },
+                {
+                    "category": None,
+                    "question": "MarkAsComplete",
+                    "fields": [
+                        {
+                            "key": "markAsComplete",
+                            "title": "Do you want to mark this section as complete?",
+                            "type": "boolean",
+                            "answer": True,
+                        }
+                    ],
+                    "status": "COMPLETED",
+                },
+            ],
+        ),
+    ]
+
+    application = Applications(
+        id=application_id,
+        account_id=uuid4(),
+        fund_id=uuid4(),
+        round_id=uuid4(),
+        key="ABCDEF",
+        reference=f"TEST-R1-{uuid4()}",
+        project_name="Some project",
+        status=ApplicationStatus.COMPLETED,
+        forms=forms,
+    )
+
+    _db.session.add(application)
+    _db.session.commit()
+
+    return application
+
+
+@pytest.mark.parametrize(
+    "fields_to_change",
+    [
+        ["qwerty", "asdfgh"],  # Multiple fields in multiple forms
+        ["qwerty", "yuiopt"],  # Multiple fields in the same form
+        ["asdfgh"],  # Single field in the second form only
+        [],  # No fields to change
+        ["abcdef"],  # Field that doesn't match anything
+    ],
+)
+def test_mark_application_with_requested_changes_updates_forms_and_application(
+    _db, application_with_forms, fields_to_change
+):
+    application = application_with_forms
+    application_id = application.id
+
+    mark_application_with_requested_changes(application_id=application_id, field_ids=fields_to_change)
+
+    updated_application = _db.session.query(type(application)).get(application_id)
+    updated_forms = updated_application.forms
+
+    application_changed = False
+    for form in updated_forms:
+        has_matching_field = any(
+            field["key"] in fields_to_change for category in form.json for field in category["fields"]
+        )
+        application_changed |= has_matching_field
+
+        if has_matching_field:
+            assert form.status == FormStatus.CHANGE_REQUESTED
+            assert form.has_completed is False
+            for category in form.json:
+                for field in category["fields"]:
+                    if field["key"] == "markAsComplete":
+                        assert field["answer"] is False
+        else:
+            assert form.status == FormStatus.COMPLETED
+            assert form.has_completed is True
+            for category in form.json:
+                for field in category["fields"]:
+                    if field["key"] == "markAsComplete":
+                        assert field["answer"] is True
+
+    if application_changed:
+        assert updated_application.status == ApplicationStatus.CHANGE_REQUESTED
+    else:
+        assert updated_application.status == ApplicationStatus.COMPLETED

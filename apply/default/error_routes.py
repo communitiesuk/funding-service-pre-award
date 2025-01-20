@@ -28,7 +28,7 @@ def not_found(error):
 @application_bp.errorhandler(Exception)
 @content_bp.errorhandler(Exception)
 def internal_server_error(error):
-    current_app.logger.exception("Encountered 500: {error}", extra=dict(error=str(error)))
+    current_app.logger.exception("Encountered 500: %(error)s", dict(error=str(error)))
     return render_template("apply/500.html", is_error=True), 500
 
 
@@ -48,5 +48,5 @@ def unauthorised_error(error):
 def csrf_token_expiry(error):
     if not g.account_id:
         return redirect(g.logout_url)
-    current_app.logger.exception("Encountered 500: {error}", extra=dict(error=str(error)))
+    current_app.logger.exception("Encountered 500: %(error)s", dict(error=str(error)))
     return render_template("apply/500.html", is_error=True), 500

@@ -208,7 +208,7 @@ def create_tag(fund_id, round_id):
         return redirect(url_for("tagging_bp.create_tag", fund_id=fund_id, round_id=round_id))
 
     elif request.method == "POST":
-        current_app.logger.info("Tag creation form failed validation: {errors}", extra=dict(errors=new_tag_form.errors))
+        current_app.logger.info("Tag creation form failed validation: %(errors)s", dict(errors=new_tag_form.errors))
         errors = new_tag_form.errors
 
     return render_template(
@@ -246,7 +246,7 @@ def deactivate_tag(fund_id, round_id, tag_id):
     }
     if deactivate_tag_form.validate_on_submit():
         current_app.logger.info(
-            "Tag deactivation form validated, deactivating tag_id: {tag_id}.", extra=dict(tag_id=tag_id)
+            "Tag deactivation form validated, deactivating tag_id: %(tag_id)s.", dict(tag_id=tag_id)
         )
         tag_update_to_deactivate = [{"id": tag_id, "active": False}]
         tag_deactivated = update_tags(fund_id, round_id, tag_update_to_deactivate)
@@ -262,7 +262,7 @@ def deactivate_tag(fund_id, round_id, tag_id):
 
     elif request.method == "POST":
         current_app.logger.info(
-            "Tag deactivation form failed validation: {errors}", extra=dict(errors=deactivate_tag_form.errors)
+            "Tag deactivation form failed validation: %(errors)s", dict(errors=deactivate_tag_form.errors)
         )
         flash(TAG_DEACTIVATE_ERROR_MESSAGE)
     return render_template(
@@ -299,7 +299,7 @@ def reactivate_tag(fund_id, round_id, tag_id):
     }
     if reactivate_tag_form.validate_on_submit():
         current_app.logger.info(
-            "Tag reactivation form validated, reactivating tag_id: {tag_id}.", extra=dict(tag_id=tag_id)
+            "Tag reactivation form validated, reactivating tag_id: %(tag_id)s.", dict(tag_id=tag_id)
         )
         tag_to_reactivate = [{"id": tag_id, "active": True}]
         tag_reactivated = update_tags(fund_id, round_id, tag_to_reactivate)
@@ -314,7 +314,7 @@ def reactivate_tag(fund_id, round_id, tag_id):
         flash(TAG_REACTIVATE_ERROR_MESSAGE)
     elif request.method == "POST":
         current_app.logger.info(
-            "Tag reactivation form failed validation: {errors}", extra=dict(errors=reactivate_tag_form.errors)
+            "Tag reactivation form failed validation: %(errors)s", dict(errors=reactivate_tag_form.errors)
         )
         flash(TAG_REACTIVATE_ERROR_MESSAGE)
     return render_template(
@@ -334,7 +334,7 @@ def edit_tag(fund_id, round_id, tag_id):
     fund_round = get_fund_round(fund_id, round_id)
     tag = get_tag(fund_id, round_id, tag_id)
     if request.method == "GET":
-        current_app.logger.info("Loading edit tag page for id {tag_id}", extra=dict(tag_id=tag_id))
+        current_app.logger.info("Loading edit tag page for id %(tag_id)s", dict(tag_id=tag_id))
 
     elif request.method == "POST":
         current_app.logger.info("In edit tag post")
@@ -352,9 +352,7 @@ def edit_tag(fund_id, round_id, tag_id):
             else:
                 flash("An error occurred and your changes were not saved. Please try again later.")
         else:
-            current_app.logger.info(
-                "Edit tag form failed validation: {errors}", extra=dict(errors=edit_tag_form.errors)
-            )
+            current_app.logger.info("Edit tag form failed validation: %(errors)s", dict(errors=edit_tag_form.errors))
             flash(FLAG_ERROR_MESSAGE)
 
     return render_template(

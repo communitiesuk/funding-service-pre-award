@@ -81,10 +81,10 @@ def send_incomplete_applications_after_deadline(
                 )
 
         current_app.logger.info(
-            "Found {matching_app_count} applications with matching"
-            " statuses. Retrieved all data for {apps_to_send_count} of"
+            "Found %(matching_app_count)s applications with matching"
+            " statuses. Retrieved all data for %(apps_to_send_count)s of"
             " them.",
-            extra=dict(
+            dict(
                 matching_app_count=len(matching_applications),
                 apps_to_send_count=len(applications_to_send),
             ),
@@ -92,8 +92,8 @@ def send_incomplete_applications_after_deadline(
         if send_email:
             total_applications = len(applications_to_send)
             current_app.logger.info(
-                "Send email set to true, will now send {total_applications} {emails}.",
-                extra=dict(
+                "Send email set to true, will now send %(total_applications)s %(emails)s.",
+                dict(
                     total_applications=total_applications,
                     emails="emails" if total_applications > 1 else "email",
                 ),
@@ -105,8 +105,8 @@ def send_incomplete_applications_after_deadline(
                         for application in application.values()
                     }
                     current_app.logger.info(
-                        "Sending application {count} of {total_applications} to {email}",
-                        extra=dict(
+                        "Sending application %(count)s of %(total_applications)s to %(email)s",
+                        dict(
                             count=count,
                             total_applications=total_applications,
                             email=email.get("email"),
@@ -123,14 +123,12 @@ def send_incomplete_applications_after_deadline(
                         contact_help_email=application["contact_help_email"],
                     )
                     current_app.logger.info(
-                        "Sent notification {notification_id} for application {application_reference}",
-                        extra=dict(
-                            notification_id=notification.id, application_reference=application_data["reference"]
-                        ),
+                        "Sent notification %(notification_id)s for application %(application_reference)s",
+                        dict(notification_id=notification.id, application_reference=application_data["reference"]),
                     )
                 current_app.logger.info(
-                    "Sent {count} {emails}",
-                    extra=dict(count=count, emails="emails" if count > 1 else "email"),
+                    "Sent %(count)s %(emails)s",
+                    dict(count=count, emails="emails" if count > 1 else "email"),
                 )
                 return count
             else:
@@ -139,8 +137,8 @@ def send_incomplete_applications_after_deadline(
         else:
             count = len(applications_to_send)
             current_app.logger.warning(
-                "Send email set to false, will not send {count} {emails}.",
-                extra=dict(count=count, emails="emails" if count > 1 else "email"),
+                "Send email set to false, will not send %(count)s %(emails)s.",
+                dict(count=count, emails="emails" if count > 1 else "email"),
             )
             return len(applications_to_send)
     else:

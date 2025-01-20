@@ -58,7 +58,7 @@ def put_data(endpoint: str, params: dict = None):
             return response.json()
         else:
             current_app.logger.error(
-                "API error response of : {response_string}", extra=dict(response_string=str(response.json()))
+                "API error response of: %(response_string)s", dict(response_string=str(response.json()))
             )
     else:
         return local_api_call(endpoint, params, "put")

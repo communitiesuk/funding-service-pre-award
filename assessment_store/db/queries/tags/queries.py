@@ -144,8 +144,8 @@ def select_tags_for_fund_round(
     )
     if search_term != "":
         current_app.logger.info(
-            "Performing tag search on search term: {search_term} in fields {search_in}",
-            extra=dict(search_term=search_term, search_in=search_in),
+            "Performing tag search on search term: %(search_term)s in fields %(search_in)s",
+            dict(search_term=search_term, search_in=search_in),
         )
         # using % for sql LIKE search
         search_term = search_term.replace(" ", "%")

@@ -32,8 +32,8 @@ class Notification:
             "content": content,
         }
         current_app.logger.info(
-            " json payload '{template_type}' to '{to_email}'.",
-            extra=dict(template_type=template_type, to_email=to_email),
+            " json payload '%(template_type)s' to '%(to_email)s'.",
+            dict(template_type=template_type, to_email=to_email),
         )
         try:
             sqs_extended_client = Notification._get_sqs_client()
@@ -50,7 +50,7 @@ class Notification:
                 },
             )
             current_app.logger.info(
-                "Message sent to SQS queue and message id is [{message_id}]", extra=dict(message_id=message_id)
+                "Message sent to SQS queue and message id is [%(message_id)s]", dict(message_id=message_id)
             )
             return message_id
         except Exception:

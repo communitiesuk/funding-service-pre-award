@@ -97,7 +97,7 @@ class SsoLoginView(SsoBase, MethodView):
             session["return_app"] = return_app
             session["return_path"] = request.args.get("return_path")
             current_app.logger.debug(
-                "Setting return app to {return_app} for this session", extra=dict(return_app=return_app)
+                "Setting return app to %(return_app)s for this session", dict(return_app=return_app)
             )
 
         return redirect(session["flow"]["auth_uri"]), 302
@@ -148,7 +148,7 @@ class SsoGetTokenView(SsoBase, MethodView):
             session["user"] = result.get("id_token_claims")
             self._save_cache(cache)
         except ValueError as e:  # Usually caused by CSRF
-            current_app.logger.warning("Value Error on get_token route: {error}", extra=dict(error=str(e)))
+            current_app.logger.warning("Value Error on get_token route: %(error)s", dict(error=str(e)))
 
         if "user" not in session or not session["user"].get("sub"):
             return {"message": "No valid token"}, 404
@@ -171,11 +171,11 @@ class SsoGetTokenView(SsoBase, MethodView):
                     redirect_url = safe_app.login_url
 
                 current_app.logger.info(
-                    "Returning to {return_app} @ {redirect_url}",
-                    extra=dict(return_app=return_app, redirect_url=redirect_url),
+                    "Returning to %(return_app)s @ %(redirect_url)s",
+                    dict(return_app=return_app, redirect_url=redirect_url),
                 )
             else:
-                current_app.logger.warning("{return_app} not listed as a safe app.", extra=dict(return_app=return_app))
+                current_app.logger.warning("%(return_app)s not listed as a safe app.", dict(return_app=return_app))
                 resp = make_response({"detail": "Unknown return app."}, 400)
                 resp.headers["Content-Type"] = "application/json"
                 return resp

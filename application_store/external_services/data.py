@@ -27,20 +27,20 @@ def get_data(endpoint: str, params: Optional[dict] = None):
 
     if Config.USE_LOCAL_DATA:
         current_app.logger.info(
-            "Fetching local data from '{endpoint}' with params {params}.",
-            extra=dict(endpoint=endpoint, params=params),
+            "Fetching local data from '%(endpoint)s' with params %(params)s.",
+            dict(endpoint=endpoint, params=params),
         )
         data = get_local_data(endpoint, params)
     else:
         current_app.logger.info(
-            "Fetching data from '{endpoint}' with params {params}.",
-            extra=dict(endpoint=endpoint, params=params),
+            "Fetching data from '%(endpoint)s' with params %(params)s.",
+            dict(endpoint=endpoint, params=params),
         )
         data = get_remote_data(endpoint, params)
     if data is None:
         current_app.logger.error(
-            "Data request failed, unable to recover: {endpoint}",
-            extra=dict(endpoint=endpoint),
+            "Data request failed, unable to recover: %(endpoint)s",
+            dict(endpoint=endpoint),
         )
         return abort(500)
     return data
@@ -60,8 +60,8 @@ def get_remote_data(endpoint, params: Optional[dict] = None):
         return data
     else:
         current_app.logger.warning(
-            "GET remote data call was unsuccessful with status code: {status_code}.",
-            extra=dict(status_code=response.status_code),
+            "GET remote data call was unsuccessful with status code: %(status_code)s.",
+            dict(status_code=response.status_code),
         )
         return None
 
@@ -106,7 +106,7 @@ def get_funds() -> list[Fund] | None:
 
 def get_fund(fund_id: str) -> Fund | None:
     endpoint = Config.FUND_STORE_API_HOST + Config.FUND_ENDPOINT.format(fund_id=fund_id)
-    current_app.logger.info("Request made to {endpoint}", extra=dict(endpoint=endpoint))
+    current_app.logger.info("Request made to %(endpoint)s", dict(endpoint=endpoint))
     response = get_data(endpoint)
     if response is None:
         current_app.logger.info("Request to fund store returned None")

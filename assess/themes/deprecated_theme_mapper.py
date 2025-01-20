@@ -28,7 +28,7 @@ def map_application_with_sub_criteria_themes_fields(
             else:
                 map_single_field_answer(theme, questions)
         except TypeError:
-            current_app.logger.error("Incorrect theme id -> {theme_id}", extra=dict(theme_id=theme_id))
+            current_app.logger.error("Incorrect theme id -> %(theme_id)s", dict(theme_id=theme_id))
             return f"Incorrect theme id -> {theme_id}"
 
     convert_boolean_values(themes_fields)
@@ -98,7 +98,7 @@ def get_themes_fields(sub_criterias, theme_id) -> str | Any:
                 if theme_id == theme.get("id")
             ][0]
         except IndexError:
-            current_app.logger.error("Incorrect theme id -> {theme_id}", extra=dict(theme_id=theme_id))
+            current_app.logger.error("Incorrect theme id -> %(theme_id)s", dict(theme_id=theme_id))
             return f"Incorrect theme id -> {theme_id}"
 
 
@@ -158,9 +158,7 @@ def deprecated_sort_add_another_component_contents(
                     amount_answer = [amount.rsplit(": ", 1)[1] for amount in theme["answer"]]
                     theme["answer"] = amount_answer
         except (KeyError, IndexError):
-            current_app.logger.debug(
-                "Answer not provided for field_id: {field_id}", extra=dict(field_id=field["field_id"])
-            )
+            current_app.logger.debug("Answer not provided for field_id: %(field_id)s", dict(field_id=field["field_id"]))
 
 
 def format_add_another_component_contents(  # noqa: C901

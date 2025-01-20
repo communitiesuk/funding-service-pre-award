@@ -27,7 +27,7 @@ def internal_server_error(error):
     error_message = f"Encountered 500: {error}"
     stack_trace = traceback.format_exc()
     current_app.logger.error(
-        "{error_message}\n{stack_trace}", extra=dict(error_message=error_message, stack_trace=stack_trace)
+        "%(error_message)s\n%(stack_trace)s", dict(error_message=error_message, stack_trace=stack_trace)
     )
 
     return render_template("authenticator/500.html", is_error=True), 500

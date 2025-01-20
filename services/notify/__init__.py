@@ -74,6 +74,22 @@ class NotificationService:
                 },
             },
         },
+        "97e145f0-5b9a-4ed1-9e15-3e0d9fd998f0": {
+            NotifyConstants.TEMPLATE_TYPE_EOI_PASS: {
+                "fund_name": "CF1",
+                "template_id": {
+                    "en": "04db42f4-a74e-4ab3-b9e2-565592fd6f46",
+                    "cy": "46915152-ee11-4bce-a0e1-ce1033078640",
+                },
+            },
+            NotifyConstants.TEMPLATE_TYPE_EOI_PASS_W_CAVEATS: {
+                "fund_name": "CF1",
+                "template_id": {
+                    "en": "705684c7-6985-4d4c-9170-08a85f47b8e1",
+                    "cy": "ead6bfc2-f3a1-468c-8d5a-87a32bf31311",
+                },
+            },
+        },
     }
 
     APPLICATION_SUBMISSION_TEMPLATE_ID_EN = os.environ.get(
@@ -133,8 +149,8 @@ class NotificationService:
     ) -> Notification:
         if current_app.config["DISABLE_NOTIFICATION_SERVICE"]:
             current_app.logger.info(
-                "Notification service is disabled. Would have sent email to {email_address}",
-                extra=dict(email_address=email_address),
+                "Notification service is disabled. Would have sent email to %(email_address)s",
+                dict(email_address=email_address),
             )
             return Notification(id=uuid.UUID("00000000-0000-0000-0000-000000000000"))
 
@@ -207,7 +223,7 @@ class NotificationService:
                     "confirm_email_before_download": None,
                     "retention_period": None,
                 },
-                "full name": contact_name,
+                "full name": contact_name or "",
             },
             govuk_notify_reference=govuk_notify_reference,
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
@@ -249,7 +265,7 @@ class NotificationService:
                     "retention_period": None,
                 },
                 "caveats": caveats,
-                "full name": contact_name,
+                "full name": contact_name or "",
             },
             govuk_notify_reference=govuk_notify_reference,
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),

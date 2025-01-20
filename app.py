@@ -348,11 +348,11 @@ def create_app() -> Flask:  # noqa: C901
                     fund = find_fund_in_request()
                 except Exception as e:  # noqa
                     current_app.logger.warning(
-                        "Exception: %s, occured when trying to reach url: %s, with view_args: %s, and args: %s",
-                        e,
-                        request.url,
-                        request.view_args,
-                        request.args,
+                        (
+                            "Exception: %(e)s, occured when trying to reach url: %(url)s, "
+                            "with view_args: %(view_args)s, and args: %(args)s"
+                        ),
+                        dict(e=e, url=request.url, view_args=request.view_args, args=request.args),
                     )
             if fund:
                 return gettext("Apply for") + " " + fund.title
@@ -396,11 +396,11 @@ def create_app() -> Flask:  # noqa: C901
                 )
         except Exception as e:  # noqa
             current_app.logger.warning(
-                "Exception: %s, occured when trying to reach url: %s, with view_args: %s, and args: %s",
-                e,
-                request.url,
-                request.view_args,
-                request.args,
+                (
+                    "Exception: %(e)s, occured when trying to reach url: %(url)s, "
+                    "with view_args: %(view_args)s, and args: %(args)s"
+                ),
+                dict(e=e, url=request.url, view_args=request.view_args, args=request.args),
             )
         return dict(
             accessibility_statement_url=url_for("content_routes.accessibility_statement"),
@@ -440,7 +440,7 @@ def create_app() -> Flask:  # noqa: C901
             request.path.endswith("js") or request.path.endswith("css") or request.path.endswith("/healthcheck")
         ):
             current_app.logger.warning(
-                "Application is in the Maintenance mode reach url: {url}", extra=dict(url=request.url)
+                "Application is in the Maintenance mode reach url: %(url)s", dict(url=request.url)
             )
 
             if request.host == current_app.config["ASSESS_HOST"]:

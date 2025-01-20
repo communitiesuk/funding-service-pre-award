@@ -57,8 +57,8 @@ class MagicLinksView(MagicLinkMethods, MethodView):
             account = AccountMethods.get_account(account_id=link.get("accountId"))
             if not account:
                 current_app.logger.error(
-                    "Tried to use magic link for non-existent account_id {account_id}",
-                    extra=dict(account_id=link.get("accountId")),
+                    "Tried to use magic link for non-existent account_id %(account_id)s",
+                    dict(account_id=link.get("accountId")),
                 )
                 redirect(
                     url_for(
@@ -117,11 +117,11 @@ class MagicLinksView(MagicLinkMethods, MethodView):
             query_string = urlencode(query_params)
             frontend_account_url = urljoin(Config.APPLICANT_FRONTEND_HOST, f"account?{query_string}")
             current_app.logger.warning(
-                "The magic link with hash: '{link_hash}' has already been"
-                " used but the user with account_id: '{account_id}' is"
+                "The magic link with hash: '%(link_hash)s' has already been"
+                " used but the user with account_id: '%(account_id)s' is"
                 " logged in, redirecting to"
-                " '{frontend_account_url}'.",
-                extra=dict(link_hash=link_hash, account_id=g.account_id, frontend_account_url=frontend_account_url),
+                " '%(frontend_account_url)s'.",
+                dict(link_hash=link_hash, account_id=g.account_id, frontend_account_url=frontend_account_url),
             )
             return redirect(frontend_account_url)
         return redirect(

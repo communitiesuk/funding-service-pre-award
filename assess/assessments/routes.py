@@ -26,6 +26,7 @@ from fsd_utils.sqs_scheduler.context_aware_executor import ContextAwareExecutor
 from markupsafe import escape
 from werkzeug.datastructures import ImmutableMultiDict, MultiDict
 
+from application_store.db.queries.application.queries import mark_application_with_requested_changes
 from assess.assessments.activity_trail import (
     AssociatedTags,
     CheckboxForm,
@@ -275,8 +276,8 @@ def _get_fund_dashboard_data(fund: Fund, round: Round, request):
     if users_not_mapped:
         current_app.logger.warning(
             "The following users were assigned applications but could not be"
-            "found in the account store: {users_not_mapped}",
-            extra=dict(users_not_mapped=users_not_mapped),
+            "found in the account store: %(users_not_mapped)s",
+            dict(users_not_mapped=users_not_mapped),
         )
 
     tags_in_application_map, tag_option_groups = get_tag_map_and_tag_options(
@@ -1017,8 +1018,8 @@ def assignment_overview(fund_short_name: str, round_short_name: str):  # noqa: C
             if future.result() is None:
                 user_id, application_id = future_assignments[future].split(",")
                 current_app.logger.error(
-                    "Could not create assignment for user {user_id} and application {application_id}",
-                    extra=dict(user_id=user_id, application_id=application_id),
+                    "Could not create assignment for user %(user_id)s and application %(application_id)s",
+                    dict(user_id=user_id, application_id=application_id),
                 )
 
         return redirect(
@@ -1144,14 +1145,14 @@ def display_sub_criteria(
     """
     Page showing sub criteria and themes for an application
     """
-    current_app.logger.info("Processing GET to {request_path}.", extra=dict(request_path=request.path))
+    current_app.logger.info("Processing GET to %(request_path)s.", dict(request_path=request.path))
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
     theme_id = request.args.get("theme_id", sub_criteria.themes[0].id)
     comment_form = CommentsForm()
     try:
         current_theme: Theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
     except StopIteration:
-        current_app.logger.warning("Unknown theme ID requested: {theme_id}", extra=dict(theme_id=theme_id))
+        current_app.logger.warning("Unknown theme ID requested: %(theme_id)s", dict(theme_id=theme_id))
         abort(404)
     add_comment_argument = request.args.get("add_comment") == "1"
     if add_comment_argument and comment_form.validate_on_submit():
@@ -1312,7 +1313,7 @@ def request_changes(application_id, sub_criteria_id, theme_id):
             status=WorkflowStatus.CHANGE_REQUESTED,
         )
 
-        # update apply.status apply.forms[].status and each form.question[].status
+        mark_application_with_requested_changes(application_id=application_id, field_ids=form.field_ids.data)
 
         return redirect(
             url_for(
@@ -1343,7 +1344,7 @@ def request_changes(application_id, sub_criteria_id, theme_id):
 @check_access_application_id(roles_required=[Config.LEAD_ASSESSOR])
 def generate_doc_list_for_download(application_id):
     current_app.logger.info(
-        "Generating docs for application id {application_id}", extra=dict(application_id=application_id)
+        "Generating docs for application id %(application_id)s", dict(application_id=application_id)
     )
     state = get_state_for_tasklist_banner(application_id)
     short_id = state.short_id[-6:]
@@ -1387,8 +1388,8 @@ def generate_doc_list_for_download(application_id):
 @check_access_application_id(roles_required=[Config.LEAD_ASSESSOR])
 def download_application_answers(application_id: str, short_id: str, file_type: str):
     current_app.logger.info(
-        "Generating application Q+A download for application {application_id} in {file_type} format",
-        extra=dict(application_id=application_id, file_type=file_type),
+        "Generating application Q+A download for application %(application_id)s in %(file_type)s format",
+        dict(application_id=application_id, file_type=file_type),
     )
     application_json = get_application_json(application_id)
     application_json_blob = application_json["jsonb_blob"]

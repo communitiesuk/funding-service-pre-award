@@ -47,9 +47,9 @@ class Application:
         current_app.logger.info(
             (
                 "Sorting forms into order using section config associated with "
-                "fund: {fund_id}, round: {round_id}, for application id:{application_id}."
+                "fund: %(fund_id)s, round: %(round_id)s, for application id:%(application_id)s."
             ),
-            extra=dict(fund_id=self.fund_id, round_id=self.round_id, application_id=self.id),
+            dict(fund_id=self.fund_id, round_id=self.round_id, application_id=self.id),
         )
         sections_config = [
             {

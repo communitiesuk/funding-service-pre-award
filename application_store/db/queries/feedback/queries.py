@@ -130,8 +130,8 @@ def retrieve_all_feedbacks_and_surveys(fund_id, round_id, status):
             applicant_organisation = result["organisation_name"]
         except Exception as e:
             current_app.logger.error(
-                "Coudn't extract applicant email & organisation.  Exception :{error}",
-                extra=dict(error=e),
+                "Coudn't extract applicant email & organisation. Exception: %(error)s",
+                dict(error=e),
             )
             applicant_email = ""
             applicant_organisation = ""

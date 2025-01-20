@@ -25,7 +25,7 @@ def get_all_subcriteria(fund_id, round_id, language):
 
 def return_subcriteria_from_mapping(sub_criteria_id, fund_id, round_id, language):
     current_app.logger.info(
-        "Finding sub criteria data in config for: {sub_criteria_id}", extra=dict(sub_criteria_id=sub_criteria_id)
+        "Finding sub criteria data in config for: %(sub_criteria_id)s", dict(sub_criteria_id=sub_criteria_id)
     )
     display_config = copy.deepcopy(Config.ASSESSMENT_MAPPING_CONFIG[f"{fund_id}:{round_id}"])
     sub_criterias = get_all_subcriteria(fund_id, round_id, language)
@@ -48,11 +48,11 @@ def return_subcriteria_from_mapping(sub_criteria_id, fund_id, round_id, language
         return sub_crit
     elif len(matching_sub_criteria) > 1:
         current_app.logger.error(
-            "sub_criteria: '{sub_criteria_id}' duplicated.", extra=dict(sub_criteria_id=sub_criteria_id)
+            "sub_criteria: '%(sub_criteria_id)s' duplicated.", dict(sub_criteria_id=sub_criteria_id)
         )
         raise ValueError(f"sub_criteria: '{sub_criteria_id}' duplicated.")
     else:
         current_app.logger.warning(
-            "sub_criteria: '{sub_criteria_id}' not found.", extra=dict(sub_criteria_id=sub_criteria_id)
+            "sub_criteria: '%(sub_criteria_id)s' not found.", dict(sub_criteria_id=sub_criteria_id)
         )
         abort(404, description=f"sub_criteria: '{sub_criteria_id}' not found.")

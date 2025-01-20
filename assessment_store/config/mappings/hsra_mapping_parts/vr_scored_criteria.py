@@ -11,19 +11,6 @@ scored_criteria = [
                 "name": "Designated area details",
                 "themes": [
                     {
-                        "id": "tell-us-more-about-the-designated-area.",
-                        "name": "Tell us more about the designated area.",
-                        "answers": [
-                            {
-                                "field_id": "YMqcPf",
-                                "form_name": "designated-area-details-hsra-vr",
-                                "field_type": "multilineTextField",
-                                "presentation_type": "text",
-                                "question": "Tell us more about the designated area.",
-                            }
-                        ],
-                    },
-                    {
                         "id": "which-town-or-city-will-the-designated-area-be-located-in?",
                         "name": "Which town or city will the designated area be located in?",
                         "answers": [
@@ -33,6 +20,19 @@ scored_criteria = [
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "Which town or city will the designated area be located in?",
+                            }
+                        ],
+                    },
+                    {
+                        "id": "tell-us-more-about-the-designated-area.",
+                        "name": "Tell us more about the designated area.",
+                        "answers": [
+                            {
+                                "field_id": "YMqcPf",
+                                "form_name": "designated-area-details-hsra-vr",
+                                "field_type": "multilineTextField",
+                                "presentation_type": "text",
+                                "question": "Tell us more about the designated area.",
                             }
                         ],
                     },
@@ -63,15 +63,15 @@ scored_criteria = [
                         ],
                     },
                     {
-                        "id": "when-do-you-expect-the-post-payment-verification-(ppv)-form-to-be-submitted?",
-                        "name": "When do you expect the post payment verification (PPV) form to be submitted?",
+                        "id": "when-do-you-expect-the-post-payment-assurance-form-to-be-submitted?",
+                        "name": "When do you expect the post payment assurance form to be submitted?",
                         "answers": [
                             {
                                 "field_id": "KFjxBs",
                                 "form_name": "milestones-hsra-vr",
                                 "field_type": "datePartsField",
                                 "presentation_type": "text",
-                                "question": "When do you expect to submit your post-payment verification (PPV)?",
+                                "question": "When do you expect to submit your post-payment assurance form to be submitted?",
                             }
                         ],
                     },

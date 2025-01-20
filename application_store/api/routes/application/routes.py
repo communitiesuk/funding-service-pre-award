@@ -110,7 +110,9 @@ class ApplicationByIdView(MethodView):
             return_dict = create_qa_base64file(return_dict, with_questions_file)
             return return_dict, 200
         except ValueError as e:
-            current_app.logger.error("Value error getting application ID: {application_id}")
+            current_app.logger.error(
+                "Value error getting application ID: %(application_id)s", dict(application_id=application_id)
+            )
             raise e
         except NoResultFound as e:
             return {"code": 404, "message": str(e)}, 404
@@ -246,8 +248,8 @@ class SubmitApplicationView(MethodView):
 
         except NotificationError:
             current_app.logger.exception(
-                "Notification error on sending SUBMIT notification for application {application_id}",
-                extra=dict(application_id=application_id),
+                "Notification error on sending SUBMIT notification for application %(application_id)s",
+                dict(application_id=application_id),
             )
 
         return {

@@ -81,8 +81,8 @@ def bulk_insert_application_record(
 
         if derived_values["location_json_blob"]["error"]:
             current_app.logger.error(
-                "Location key not found or invalid postcode provided for the application: {short_id}.",
-                extra=dict(short_id=derived_values["short_id"]),
+                "Location key not found or invalid postcode provided for the application: %(short_id)s.",
+                dict(short_id=derived_values["short_id"]),
             )
 
         row = {
@@ -112,7 +112,7 @@ def bulk_insert_application_record(
             print(f"Error occurred while inserting application {row['application_id']}, error: {e}")
             raise e
 
-    print("Inserted application_ids (i.e. application rows) : {[row['application_id'] for row in rows]}")
+    print(f"Inserted application_ids (i.e. application rows) : {[row['application_id'] for row in rows]}")
     return rows
 
 
@@ -299,11 +299,11 @@ def get_tag_types(request, app, clear_test_data, enable_preserve_test_data, _db)
 
 
 @pytest.fixture(scope="session")
-def app(mock_redis):
+def app(request):
     attach_listeners()
 
     app = create_app()
-
+    request.getfixturevalue("mock_redis")
     yield app
 
 

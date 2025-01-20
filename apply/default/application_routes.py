@@ -11,6 +11,7 @@ from fsd_utils.simple_utils.date_utils import (
     current_datetime_after_given_iso_string,
 )
 
+from application_store.db.models.application.enums import Status
 from apply.constants import ApplicationStatus
 from apply.default.data import (
     determine_round_status,
@@ -128,8 +129,8 @@ def verify_round_open(f):
             return f(*args, **kwargs)
         else:
             current_app.logger.info(
-                "User {account_id} tried to update application {application_id} outside of the round being open",
-                extra=dict(account_id=g.account_id, application_id=application_id),
+                "User %(account_id)s tried to update application %(application_id)s outside of the round being open",
+                dict(account_id=g.account_id, application_id=application_id),
             )
             if redirect_to_fund is not False:
                 fund = get_fund(fund_id=application.fund_id)
@@ -278,6 +279,7 @@ def tasklist(application_id):
         "in_progress_status": ApplicationStatus.IN_PROGRESS.name,
         "completed_status": ApplicationStatus.COMPLETED.name,
         "submitted_status": ApplicationStatus.SUBMITTED.name,
+        "change_requested_status": Status.CHANGE_REQUESTED.name,
         "has_section_feedback": round_data.feedback_survey_config.has_section_feedback,
         "number_of_forms": len(application.forms)
         + sum(
@@ -376,7 +378,7 @@ def continue_application(application_id):
         request.host_url
         + url_for("application_routes.fund_round_close_notification", application_id=application_id)[1:]
     )
-    current_app.logger.info("Url the form runner should return to '{return_url}'.", extra=dict(return_url=return_url))
+    current_app.logger.info("Url the form runner should return to '%(return_url)s'.", dict(return_url=return_url))
 
     application = get_application_data(application_id)
     fund, round = get_fund_and_round(fund_id=application.fund_id, round_id=application.round_id)

@@ -9,8 +9,8 @@ from fund_store.db.models.round import Round
 def update_rounds_with_application_guidance(rounds):
     for round in rounds:
         current_app.logger.info(
-            "\tRound: {round_short_name} ({round_id})",
-            extra=dict(round_short_name=round["short_name"], round_id=str(round["id"])),
+            "\tRound: %(round_short_name)s (%(round_id)s)",
+            dict(round_short_name=round["short_name"], round_id=str(round["id"])),
         )
         if round.get("application_guidance"):
             current_app.logger.info("\t\tUpdating application_guidance")

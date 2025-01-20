@@ -169,7 +169,7 @@ def new():
 
             if Config.AUTO_REDIRECT_LOGIN:
                 current_app.logger.info(
-                    "Auto redirecting to magic link:  {created_link}", extra=dict(created_link=created_link)
+                    "Auto redirecting to magic link: %(created_link)s", dict(created_link=created_link)
                 )
                 return redirect(created_link)
 

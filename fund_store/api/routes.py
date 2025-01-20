@@ -395,7 +395,8 @@ def update_application_reminder_sent_status(round_id):
             db.session.commit()
             (
                 current_app.logger.info(
-                    {f"application_reminder_sent status has been updated to True for round {round_id}"}
+                    "application_reminder_sent status has been updated to True for round %(round_id)s",
+                    dict(round_id=round_id),
                 ),
                 200,
             )
@@ -412,8 +413,8 @@ def update_application_reminder_sent_status(round_id):
     except Exception as e:
         (
             current_app.logger.error(
-                "The application_reminder_sent status could not be updated {error}",
-                extra=dict(error=str(e)),
+                "The application_reminder_sent status could not be updated %(error)s",
+                dict(error=str(e)),
             ),
             400,
         )

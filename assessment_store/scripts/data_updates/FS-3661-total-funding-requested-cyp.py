@@ -20,9 +20,7 @@ def update_funding_amount_requested_for_cyp():
     cyp_records = db.session.execute(select_assessment_records_for_round_stmt)
 
     for application_id, jsonb_blob in cyp_records:
-        current_app.logger.info(
-            "Processing application id {application_id}.", extra=dict(application_id=application_id)
-        )
+        current_app.logger.info("Processing application id %(application_id)s.", dict(application_id=application_id))
         total_funding = 0
         for key in fund_round_data_key_mappings["CYPR1"]["funding_two"]:
             total_funding = total_funding + int(
@@ -37,8 +35,8 @@ def update_funding_amount_requested_for_cyp():
 
         new_funding_amount_requested = total_funding
         current_app.logger.info(
-            "New funding amount requested: {new_funding_amount_requested}",
-            extra=dict(new_funding_amount_requested=new_funding_amount_requested),
+            "New funding amount requested: %(new_funding_amount_requested)s",
+            dict(new_funding_amount_requested=new_funding_amount_requested),
         )
         update_statement = (
             update(AssessmentRecord)

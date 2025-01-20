@@ -56,6 +56,6 @@ def update_ar_status_to_qa_completed(application_id, user_id):
         return response
     else:
         current_app.logger.error(
-            "Could not create qa_complete record for application {application_id}",
-            extra=dict(application_id=application_id),
+            "Could not create qa_complete record for application %(application_id)s",
+            dict(application_id=application_id),
         )

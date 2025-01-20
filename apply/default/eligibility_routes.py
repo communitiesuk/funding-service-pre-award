@@ -19,8 +19,8 @@ def eligiblity_result(fund_short_name, round_name):
         round_name = redirect_to_eligible_round
 
     current_app.logger.info(
-        "Eligibility launch result: {fund_short_name} {round_name}",
-        extra=dict(fund_short_name=fund_short_name, round_name=round_name),
+        "Eligibility launch result: %(fund_short_name)s %(round_name)s",
+        dict(fund_short_name=fund_short_name, round_name=round_name),
     )
     fund, round = get_fund_and_round(fund_short_name=fund_short_name, round_short_name=round_name)
     return redirect(url_for("account_routes.new", fund_id=round.fund_id, round_id=round.id))
@@ -36,13 +36,13 @@ def launch_eligibility(fund_id, round_id):
     form_name = f"{fund_name}-{round_name}-eligibility"
 
     current_app.logger.info(
-        "Eligibility launch request for fund {fund_name} round {round_name}",
-        extra=dict(fund_name=fund_name, round_name=round_name),
+        "Eligibility launch request for fund %(fund_name)s round %(round_name)s",
+        dict(fund_name=fund_name, round_name=round_name),
     )
 
     return_url = request.host_url + url_for("account_routes.dashboard", fund=fund_name, round=round_name)
 
-    current_app.logger.info("Url the form runner should return to '{return_url}'.", extra=dict(return_url=return_url))
+    current_app.logger.info("Url the form runner should return to '%(return_url)s'.", dict(return_url=return_url))
 
     rehydrate_payload = format_rehydrate_payload(
         form_data={"questions": []},

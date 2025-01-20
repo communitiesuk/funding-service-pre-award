@@ -19,9 +19,7 @@ def get_scoring_class(round_id):
         }
         scoring_form_class = class_mapping[scoring_system]
     except KeyError:
-        current_app.logger.error(
-            "Scoring system '{scoring_system}' not found.", extra=dict(scoring_system=scoring_system)
-        )
+        current_app.logger.error("Scoring system '%(scoring_system)s' not found.", dict(scoring_system=scoring_system))
         abort(
             500,
             description=f"Scoring system '{scoring_system}' for round {round_id} has not been configured.",

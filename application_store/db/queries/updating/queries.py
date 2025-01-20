@@ -16,8 +16,11 @@ def update_application_and_related_form(application_id, question_json, form_name
     application = get_application(application_id)
     if application.status == ApplicationStatus.SUBMITTED:
         current_app.logger.error(
-            "Not allowed. Attempted to PUT data into a SUBMITTED application with an application_id: {application_id}.",
-            extra=dict(application_id=application_id),
+            (
+                "Not allowed. "
+                "Attempted to PUT data into a SUBMITTED application with an application_id: %(application_id)s."
+            ),
+            dict(application_id=application_id),
         )
         abort(400, "Not allowed to edit a submitted application.")
 
@@ -29,8 +32,8 @@ def update_application_and_related_form(application_id, question_json, form_name
     update_statuses(application_id, form_name, is_summary_page_submit)
     db.session.commit()
     current_app.logger.info(
-        "Application updated for application_id: '{application_id}.",
-        extra=dict(application_id=application_id),
+        "Application updated for application_id: %(application_id)s.",
+        dict(application_id=application_id),
     )
 
 
@@ -48,8 +51,8 @@ def update_form(application_id, form_name, question_json, is_summary_page_submit
         # Removing all data in the form (should not be allowed)
         elif form_sql_row.json and not question_json:
             current_app.logger.error(
-                "Application update aborted for application_id: '{application_id}. Invalid data supplied",
-                extra=dict(application_id=application_id),
+                "Application update aborted for application_id: '%(application_id)s'. Invalid data supplied",
+                dict(application_id=application_id),
             )
             raise Exception("ABORTING UPDATE, INVALID DATA GIVEN")
         # Updating form subsequent times

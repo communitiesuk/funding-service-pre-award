@@ -52,15 +52,15 @@ def get_data(endpoint: str, params: dict = None):
         endpoint = endpoint + "?" + query_string
 
     if Config.USE_LOCAL_DATA:
-        current_app.logger.info("Fetching local data from '{endpoint}'.", extra=dict(endpoint=endpoint))
+        current_app.logger.info("Fetching local data from '%(endpoint)s'.", dict(endpoint=endpoint))
         data = get_local_data(endpoint)
     else:
-        current_app.logger.info("Fetching data from '{endpoint}'.", extra=dict(endpoint=endpoint))
+        current_app.logger.info("Fetching data from '%(endpoint)s'.", dict(endpoint=endpoint))
         data, response_code = get_remote_data(endpoint)
         if response_code != 200:
             return abort(response_code)
     if data is None:
-        current_app.logger.error("Data request failed, unable to recover: {endpoint}", extra=dict(endpoint=endpoint))
+        current_app.logger.error("Data request failed, unable to recover: %(endpoint)s", dict(endpoint=endpoint))
         return abort(500)
     return data
 
@@ -85,16 +85,16 @@ def get_data_or_fail_gracefully(endpoint: str, params: dict = None):
         endpoint = endpoint + "?" + query_string
 
     if Config.USE_LOCAL_DATA:
-        current_app.logger.info("Fetching local data from '{endpoint}'.", extra=dict(endpoint=endpoint))
+        current_app.logger.info("Fetching local data from '%(endpoint)s'.", dict(endpoint=endpoint))
         data = get_local_data(endpoint)
         response_status = 200 if data else 404
     else:
-        current_app.logger.info("Fetching data from '{endpoint}'.", extra=dict(endpoint=endpoint))
+        current_app.logger.info("Fetching data from '%(endpoint)s'.", dict(endpoint=endpoint))
         response_status, data = get_remote_data_force_return(endpoint)
     if (data is None) or (response_status in [404, 500]):
-        current_app.logger.warning("Data request failed, unable to recover: {endpoint}", extra=dict(endpoint=endpoint))
-        current_app.logger.warning("Data retrieved: {data}", extra=dict(data=data))
-        current_app.logger.warning("Service response status code: {response_status}", extra=dict(endpoint=endpoint))
+        current_app.logger.warning("Data request failed, unable to recover: %(endpoint)s", dict(endpoint=endpoint))
+        current_app.logger.warning("Data retrieved: %(data)s", dict(data=data))
+        current_app.logger.warning("Service response status code: %(response_status)s", dict(endpoint=endpoint))
         return abort(404)
     return data
 
@@ -106,8 +106,8 @@ def get_remote_data(endpoint):
         return data, 200
     else:
         current_app.logger.warning(
-            "GET remote data call was unsuccessful with status code: {status_code}.",
-            extra=dict(status_code=response.status_code),
+            "GET remote data call was unsuccessful with status code: %(status_code)s.",
+            dict(status_code=response.status_code),
         )
         return None, response.status_code
 
@@ -181,9 +181,7 @@ def get_fund_data_by_short_name(fund_short_name, language=None, as_dict=False, t
     del ttl_hash  # Only needed for lru_cache
     all_funds = {fund["short_name"].lower() for fund in get_all_funds(ttl_hash=get_ttl_hash(Config.LRU_CACHE_TIME))}
     if fund_short_name.lower() not in all_funds:
-        current_app.logger.warning(
-            "Invalid fund {fund_short_name}!", extra=dict(fund_short_name=fund_short_name.lower())
-        )
+        current_app.logger.warning("Invalid fund %(fund_short_name)s!", dict(fund_short_name=fund_short_name.lower()))
         abort(404)
     fund_request_url = Config.GET_FUND_DATA_BY_SHORT_NAME_ENDPOINT.format(fund_short_name=fund_short_name.lower())
     params = {"language": language or get_lang(), "use_short_name": True}
@@ -239,7 +237,7 @@ def get_round_data_by_short_names(
     ]
     if round_short_name.lower() not in all_rounds:
         current_app.logger.warning(
-            "Invalid round {round_short_name}!", extra=dict(round_short_name=round_short_name.lower())
+            "Invalid round %(round_short_name)s!", dict(round_short_name=round_short_name.lower())
         )
         return None
     params = {"language": language or get_lang(), "use_short_name": "true"}
@@ -277,8 +275,11 @@ def get_round_data_fail_gracefully(fund_id, round_id, use_short_name=False):
             return Round.from_dict(round_response)
     except:  # noqa
         current_app.logger.warning(
-            "Failed to retrieve round using fund_id {fund_id}, round_id {round_id}, use_short_name={use_short_name}",
-            extra=dict(fund_id=fund_id, round_id=round_id, use_short_name=use_short_name),
+            (
+                "Failed to retrieve round using fund_id %(fund_id)s, "
+                "round_id %(round_id)s, use_short_name=%(use_short_name)s"
+            ),
+            dict(fund_id=fund_id, round_id=round_id, use_short_name=use_short_name),
         )
     # return valid Round object with no values so we know we've
     # failed and can handle in templates appropriately
@@ -430,8 +431,8 @@ def get_feedback(application_id, section_id, fund_id, round_id):
         return FeedbackSubmission.from_dict(feedback_response.json())
 
     current_app.logger.info(
-        "No feedback found for {application_id} section {section_id}",
-        extra=dict(application_id=application_id, section_id=section_id),
+        "No feedback found for %(application_id)s section %(section_id)s",
+        dict(application_id=application_id, section_id=section_id),
     )
 
 

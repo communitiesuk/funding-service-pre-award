@@ -206,7 +206,7 @@ class AccountMethods(Account):
                 fund_short_name=fund_short_name if fund_short_name else "",
                 round_short_name=round_short_name if round_short_name else "",
             )
-            current_app.logger.debug("Magic Link URL: {link}", extra=dict(link=new_link_json.get("link")))
+            current_app.logger.debug("Magic Link URL: %(link)s", dict(link=new_link_json.get("link")))
 
             get_notification_service().send_magic_link(
                 email_address=account.email,
@@ -226,6 +226,6 @@ class AccountMethods(Account):
 
             return new_link_json.get("link")
         current_app.logger.error(
-            "Could not create an account ({account}) for email '{email}'", extra=dict(account=account, email=email)
+            "Could not create an account (%(account)s) for email '%(email)s'", dict(account=account, email=email)
         )
         raise AccountError(message="Sorry, we couldn't create an account for this email, please contact support")

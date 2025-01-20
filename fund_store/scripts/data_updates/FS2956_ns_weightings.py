@@ -9,8 +9,8 @@ from fund_store.db.models.section import Section
 
 def update_section_weightings(section):
     current_app.logger.warning(
-        "\tSection: {section_tree_path} ({section_name})",
-        extra=dict(
+        "\tSection: %(section_tree_path)s (%(section_name)s)",
+        dict(
             section_tree_path=str(section["tree_path"]),
             section_name=str(section["section_name"]["en"]),
         ),

@@ -11,22 +11,22 @@ from config import Config
 
 def post_data(endpoint: str, json_payload: Optional[dict] = None) -> dict:
     if Config.USE_LOCAL_DATA:
-        current_app.logger.info("Posting to local dummy endpoint: {endpoint}", extra=dict(endpoint=endpoint))
+        current_app.logger.info("Posting to local dummy endpoint: %(endpoint)s", dict(endpoint=endpoint))
         response = post_local_data(endpoint)
 
     else:
         if json_payload:
             json_payload = {k: v for k, v in json_payload.items() if v is not None}
         current_app.logger.info(
-            "Attempting POST to the following endpoint: '{endpoint}'.",
-            extra=dict(endpoint=endpoint),
+            "Attempting POST to the following endpoint: '%(endpoint)s'.",
+            dict(endpoint=endpoint),
         )
         response = requests.post(endpoint, json=json_payload)
 
     if response.status_code in [200, 201]:
         current_app.logger.info(
-            "Post successfully sent to {endpoint} with response code: '{status_code}'.",
-            extra=dict(endpoint=endpoint, status_code=response.status_code),
+            "Post successfully sent to {endpoint} with response code: '%(status_code)s'.",
+            dict(endpoint=endpoint, status_code=response.status_code),
         )
 
         return response.json()

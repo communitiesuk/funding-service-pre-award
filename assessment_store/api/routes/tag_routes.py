@@ -85,7 +85,7 @@ def add_tag_for_fund_round(fund_id, round_id):
         serialiser = TagSchema()
         serialised_tags = [serialiser.dump(r) for r in inserted_tags]
         return serialised_tags
-    current_app.logger.error("Add tags attempt failed for tags: {tags}.", extra=dict(tags=tags))
+    current_app.logger.error("Add tags attempt failed for tags: %(tags)s.", dict(tags=tags))
     abort(404)
 
 
@@ -110,7 +110,7 @@ def update_tags_for_fund_round(fund_id, round_id):
         serialiser = TagSchema()
         serialised_tags = [serialiser.dump(r) for r in updated_tags]
         return serialised_tags
-    current_app.logger.error("Update tags attempt failed for tags: {tags}.", extra=dict(tags=tags))
+    current_app.logger.error("Update tags attempt failed for tags: %(tags)s.", dict(tags=tags))
     abort(404)
 
 
@@ -140,8 +140,8 @@ def associate_tags_with_assessment(application_id):
 @assessment_tag_bp.get("/application/<application_id>/tag")
 def get_active_tags_associated_with_assessment(application_id):
     current_app.logger.info(
-        "Getting tags associated with assessment with application_id: {application_id}.",
-        extra=dict(application_id=application_id),
+        "Getting tags associated with assessment with application_id: %(application_id)s.",
+        dict(application_id=application_id),
     )
     associated_tags = select_active_tags_associated_with_assessment(application_id)
     if associated_tags:
@@ -154,7 +154,7 @@ def get_active_tags_associated_with_assessment(application_id):
 @assessment_tag_bp.get("/application/<application_id>/tags")
 def get_all_tags_associated_with_application(application_id):
     current_app.logger.info(
-        "Getting tags associated with with application_id: {application_id}.", extra=dict(application_id=application_id)
+        "Getting tags associated with with application_id: %(application_id)s.", dict(application_id=application_id)
     )
     associated_tags = select_all_tags_associated_with_application(application_id)
     if associated_tags:

@@ -6,7 +6,9 @@ import pytest
 
 from assessment_store.api.routes.progress_routes import get_progress_for_applications
 from assessment_store.api.routes.score_routes import get_scoring_system_name_for_round_id
-from assessment_store.db.models import Score
+from assessment_store.db.models import AssessmentFlag, AssessmentRecord, Score
+from assessment_store.db.models.flags import FlagStatus
+from assessment_store.db.queries.assessment_records.queries import check_all_change_requests_accepted
 from assessment_store.db.queries.scores.queries import (
     create_score_for_app_sub_crit,
     get_scores_for_app_sub_crit,
@@ -242,3 +244,189 @@ def test_get_scoring_system(seed_scoring_system):
         returned_scoring_system = get_scoring_system_name_for_round_id(round_id)
         assert returned_scoring_system["scoring_system"] == scoring_system
         assert returned_scoring_system["round_id"] == round_id
+
+
+def test_all_change_requests_accepted(_db):
+    application_id = uuid.uuid4()
+    sub_criteria_1_id = str(uuid.uuid4())
+    user_id = str(uuid.uuid4())
+
+    now = datetime.datetime.now()
+
+    application = AssessmentRecord(
+        application_id=application_id,
+        short_id="some_id",
+        type_of_application="some_type",
+        project_name="some_project_name",
+        funding_amount_requested=0.0,
+        round_id=uuid.uuid4(),
+        fund_id=uuid.uuid4(),
+        workflow_status="IN_PROGRESS",
+        asset_type="an_asset_type",
+        jsonb_blob={},
+    )
+
+    a_score = Score(
+        application_id=application_id,
+        sub_criteria_id=sub_criteria_1_id,
+        score=1,
+        justification="test",
+        date_created=now,
+        user_id=user_id,
+    )
+
+    a_change_request = AssessmentFlag(
+        application_id=application_id,
+        sections_to_flag=[sub_criteria_1_id],
+        latest_allocation=[],
+        latest_status=FlagStatus.RAISED,
+        updates=[],
+        field_ids=["some_id"],
+        is_change_request=True,
+    )
+
+    _db.session.add(application)
+    _db.session.add(a_score)
+    _db.session.add(a_change_request)
+    _db.session.commit()
+
+    check_all_change_requests_accepted(application_id)
+
+
+@pytest.fixture
+def setup_application_with_requests_and_scores(_db):
+    def _create_app_and_data(
+        score_data=None,
+        flag_data=None,
+    ):
+        application_id = uuid.uuid4()
+        user_id = str(uuid.uuid4())
+        now = datetime.datetime.now()
+
+        application = AssessmentRecord(
+            application_id=application_id,
+            short_id="some_id",
+            type_of_application="some_type",
+            project_name="some_project_name",
+            funding_amount_requested=0.0,
+            round_id=uuid.uuid4(),
+            fund_id=uuid.uuid4(),
+            workflow_status="IN_PROGRESS",
+            asset_type="an_asset_type",
+            jsonb_blob={},
+        )
+        _db.session.add(application)
+        _db.session.flush()
+
+        if score_data:
+            for sub_criteria_id, score_value in score_data:
+                _db.session.add(
+                    Score(
+                        application_id=application_id,
+                        sub_criteria_id=sub_criteria_id,
+                        score=score_value,
+                        justification="test",
+                        date_created=now,
+                        user_id=user_id,
+                    )
+                )
+
+        if flag_data:
+            for sections in flag_data:
+                _db.session.add(
+                    AssessmentFlag(
+                        application_id=application_id,
+                        sections_to_flag=sections,
+                        latest_allocation=[],
+                        latest_status=FlagStatus.RAISED,
+                        updates=[],
+                        field_ids=["some_id"],
+                        is_change_request=True,
+                    )
+                )
+
+        _db.session.commit()
+        return application_id
+
+    return _create_app_and_data
+
+
+@pytest.mark.parametrize(
+    "score_value,expected_result",
+    [
+        (1, True),
+        (0, False),
+    ],
+)
+def test_single_request_with_parametrized_score(
+    _db, setup_application_with_requests_and_scores, score_value, expected_result
+):
+    sub_criteria_id = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(
+        score_data=[(sub_criteria_id, score_value)],
+        flag_data=[[sub_criteria_id]],
+    )
+    result = check_all_change_requests_accepted(application_id)
+    assert result == expected_result
+
+
+def test_multiple_requests_all_accepted(_db, setup_application_with_requests_and_scores):
+    sub_criteria_1_id = str(uuid.uuid4())
+    sub_criteria_2_id = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(
+        score_data=[
+            (sub_criteria_1_id, 1),
+            (sub_criteria_2_id, 1),
+        ],
+        flag_data=[
+            [sub_criteria_1_id],
+            [sub_criteria_2_id],
+        ],
+    )
+    result = check_all_change_requests_accepted(application_id)
+    assert result is True
+
+
+def test_multiple_change_requests_one_section_accepted(_db, setup_application_with_requests_and_scores):
+    sub_criteria_1_id = str(uuid.uuid4())
+    sub_criteria_2_id = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(
+        score_data=[
+            (sub_criteria_1_id, 1),
+        ],
+        flag_data=[
+            [sub_criteria_1_id],
+            [sub_criteria_2_id],
+        ],
+    )
+    result = check_all_change_requests_accepted(application_id)
+    assert result is False
+
+
+def test_change_request_multiple_sections_none_accepted(_db, setup_application_with_requests_and_scores):
+    sub_criteria_1_id = str(uuid.uuid4())
+    sub_criteria_2_id = str(uuid.uuid4())
+    sub_criteria_3_id = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(
+        flag_data=[
+            [sub_criteria_1_id, sub_criteria_2_id, sub_criteria_3_id],
+        ]
+    )
+    result = check_all_change_requests_accepted(application_id)
+    assert result is False
+
+
+def test_change_request_multiple_sections_all_accepted(_db, setup_application_with_requests_and_scores):
+    sub_criteria_1_id = str(uuid.uuid4())
+    sub_criteria_2_id = str(uuid.uuid4())
+    sub_criteria_3_id = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(
+        score_data=[
+            (sub_criteria_1_id, 1),
+            (sub_criteria_2_id, 1),
+            (sub_criteria_3_id, 1),
+        ],
+        flag_data=[[sub_criteria_1_id, sub_criteria_2_id], [sub_criteria_3_id]],
+    )
+    result = check_all_change_requests_accepted(application_id)
+    assert result is True

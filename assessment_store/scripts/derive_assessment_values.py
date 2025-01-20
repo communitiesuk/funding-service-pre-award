@@ -20,8 +20,8 @@ def derive_assessment_values(application_id):
     from db import db
 
     current_app.logger.info(
-        "Deriving values for {application_id}",
-        extra=dict(application_id=application_id),
+        "Deriving values for %(application_id)s",
+        dict(application_id=application_id),
     )
 
     application_json = get_application(application_id, include_forms=True, as_json=True)

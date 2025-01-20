@@ -8,8 +8,8 @@ from fund_store.db.models.round import Round
 
 def update_round_guidance(round_config):
     current_app.logger.info(
-        "Round: {round_short_name}, id: {round_id}",
-        extra=dict(
+        "Round: %(round_short_name)s, id: %(round_id)s",
+        dict(
             round_short_name=round_config["short_name"],
             round_id=str(round_config["id"]),
         ),
