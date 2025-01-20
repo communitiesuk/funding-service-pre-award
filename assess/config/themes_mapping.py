@@ -72,6 +72,9 @@ def ordered_themes(fund_round_short_name):
             "milestones",
         ],
         "CTDFCR1": ["project_name", "organisation_name"],
+        "CF1R1": ["project_name", "organisation_name"],
+        "CF1EOI": ["project_name", "organisation_name"],
+        "UFR1": ["project_name", "organisation_name"],
         "HSRAVR": common_questions_hsra
         + [
             "tell-us-more-about-the-designated-area.",

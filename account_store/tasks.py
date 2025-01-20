@@ -45,6 +45,12 @@ def seed_local_account_store_impl():
                 "FFW_LEAD_ASSESSOR",
                 "FFW_ASSESSOR",
                 "FFW_COMMENTER",
+                "CF1_LEAD_ASSESSOR",
+                "CF1_ASSESSOR",
+                "CF1_COMMENTER",
+                "UF1_LEAD_ASSESSOR",
+                "UF1_ASSESSOR",
+                "UF1_COMMENTER",
             ],
         },
         {
