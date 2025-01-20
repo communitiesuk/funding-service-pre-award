@@ -35,7 +35,7 @@
         }) }}
         {% else %}
         {% set grantNotOpen %}
-            {% trans %}This grant is not open for applications for funding, you can {% endtrans %}<a class="govuk-link govuk-link--no-visited-state" href="#">view your applications</a>.
+            {% trans %}This grant is not open for applications for funding, you can {% endtrans %}<a class="govuk-link govuk-link--no-visited-state" href='{{ url_for("proto_apply_blueprint.application_blueprint.application_list_handler", short_code=grant.short_name) }}'>view your applications</a>.
         {% endset %}
         {{ govukInsetText({
             "text": grantNotOpen

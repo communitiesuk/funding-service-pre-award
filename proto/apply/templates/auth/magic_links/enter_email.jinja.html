@@ -4,6 +4,8 @@
 
 {% extends "template.jinja" %}
 
+{% block pageTitle %}{% trans %}Email address{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
 {# add a back link if theres something in the session that says they've come from the grant page #}
 {% block beforeContent %}
 {{ super() }}
@@ -19,6 +21,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             {# values to be replaced with wtfform setup on base branch #}
             {{ govukInput ({
                 "id": "email",

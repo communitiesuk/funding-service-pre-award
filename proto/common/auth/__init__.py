@@ -23,8 +23,9 @@ def is_authenticated(func):
             session["magic_links_forward_path"] = request.path
 
             # this would be cleared by magic links going through but I'm not sure about it - consider reconsider
-            if urlparse(request.referrer).path.startswith("/grant"):
-                session["magic_links_back_path"] = urlparse(request.referrer).path
+            path = urlparse(request.referrer).path
+            if path and path.startswith("/grant"):
+                session["magic_links_back_path"] = path
             # the one edge case then is what if you load up the magic links page _without_ the URL you want to forward the user to, should it show a uniform error, boot your fund page back up
             return redirect(url_for("proto_apply_blueprint.web_blueprint.magic_links_enter_email_handler"))
         else:

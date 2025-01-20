@@ -90,6 +90,26 @@ def upgrade():
         batch_op.create_foreign_key(batch_op.f("fk_applications_account_id_account"), "account", ["account_id"], ["id"])
         batch_op.create_foreign_key(batch_op.f("fk_applications_round_id_round"), "round", ["round_id"], ["id"])
 
+        op.create_table(
+            "magic_link",
+            sa.Column("id", sa.UUID(), nullable=False),
+            sa.Column("email", sa.String(), nullable=True),
+            sa.Column("token", sa.String(), nullable=True),
+            sa.Column("path", sa.String(), nullable=True),
+            sa.Column("used", sa.Boolean(), nullable=True),
+            sa.Column("proto_created_date", sa.DateTime(), server_default=sa.text("now()"), nullable=True),
+            sa.Column("proto_updated_date", sa.DateTime(), server_default=sa.text("now()"), nullable=True),
+            sa.Column(
+                "expires_date",
+                sa.DateTime(),
+                server_default=sa.text("now() + make_interval(secs=>3600.0)"),
+                nullable=True,
+            ),
+            sa.PrimaryKeyConstraint("id", name=op.f("pk_magic_link")),
+        )
+        with op.batch_alter_table("magic_link", schema=None) as batch_op:
+            batch_op.create_index(batch_op.f("ix_magic_link_token"), ["token"], unique=True)
+
     # ### end Alembic commands ###
 
 
@@ -119,4 +139,9 @@ def downgrade():
         batch_op.drop_column("proto_status")
 
     sa.Enum(ProtoApplicationStatus).drop(op.get_bind(), checkfirst=True)
+
+    with op.batch_alter_table("magic_link", schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f("ix_magic_link_token"))
+
+    op.drop_table("magic_link")
     # ### end Alembic commands ###

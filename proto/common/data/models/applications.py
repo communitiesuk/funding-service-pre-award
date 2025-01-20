@@ -79,7 +79,7 @@ class Applications(BaseModel):
     # either rename or add something else form "forms", more specific name
     account_id = Column("account_id", UUID(), ForeignKey("account.id"), nullable=False)
     fund_id = Column("fund_id", db.String(), nullable=False)
-    round_id = Column("round_id", db.String(), ForeignKey("round.id"), nullable=False)
+    round_id = Column("round_id", UUID(), ForeignKey("round.id"), nullable=False)
     key = Column("key", db.String(), nullable=False)
     language = Column("language", ENUM(Language), nullable=True)
     reference = Column("reference", db.String(), nullable=False, unique=True)
