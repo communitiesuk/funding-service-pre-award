@@ -156,7 +156,7 @@ default_fund = None
             default_fund,
         ),
         ("fund_short_name", None, None, None, default_fund),
-        ("fund_short_name", None, "TEST", None, default_fund),
+        ("fund_short_name", None, "TEST", None, short_name_fund),
         ("fund_id", "TEST", None, None, id_fund),
         ("fund_id", None, None, None, default_fund),
         ("fund_id", None, "TEST", None, id_fund),
