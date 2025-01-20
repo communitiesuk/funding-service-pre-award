@@ -1,8 +1,17 @@
 import glob
 import os
 import re
+from contextlib import contextmanager
 
+from alembic import command
+from alembic.config import Config
 from invoke import task
+
+from account_store.tasks import seed_local_account_store_impl
+from app import create_app
+from assessment_store.tasks.db_tasks import seed_assessment_store_db_impl
+from fund_store.scripts.fund_round_loaders.load_fund_round_from_fab import load_fund_from_fab_impl
+from fund_store.scripts.load_all_fund_rounds import load_all_fund_rounds
 
 _VALID_JINJA_EXTENSIONS = (".html", ".jinja", ".jinja2", ".j2")
 
@@ -107,3 +116,24 @@ def pybabel_update(c):
 @task
 def pybabel_compile(c):
     c.run("pybabel compile -d translations")
+
+
+@task
+def full_bootstrap(c):
+    @contextmanager
+    def _env_var(key, value):
+        old_val = os.environ.get(key, "")
+        os.environ[key] = value
+        yield
+        os.environ[key] = old_val
+
+    with _env_var("FLASK_ENV", "development"):
+        with create_app().app_context():
+            alembic_cfg = Config("db/migrations/alembic.ini")
+            alembic_cfg.set_main_option("script_location", "db/migrations")
+            command.upgrade(alembic_cfg, "head")
+
+            load_all_fund_rounds()
+            load_fund_from_fab_impl(seed_all_funds=True)
+            seed_assessment_store_db_impl("local")
+            seed_local_account_store_impl()

@@ -13,17 +13,7 @@ from fund_store.db.queries import (
 )
 
 
-@click.command()
-@click.option("--fund_short_code", default="", help="Fund short code")
-@click.option("--seed_all_funds", default=False, help="See all funds")
-def load_fund_from_fab(fund_short_code, seed_all_funds) -> None:
-    """
-    Insert the FAB fund and round data into the database.
-    See required schema for import here: file_location
-
-    Accept comma separated funds too.
-    """
-
+def load_fund_from_fab_impl(fund_short_code="", seed_all_funds=False):
     if fund_short_code == "" and seed_all_funds == False:
         print(f"Nothing to seed.")
 
@@ -81,6 +71,19 @@ def load_fund_from_fab(fund_short_code, seed_all_funds) -> None:
         print(f"All config has been successfully prepared, now committing to the database.")
         db.session.commit()
         print(f"Config has now been committed to the database.")
+
+
+@click.command()
+@click.option("--fund_short_code", default="", help="Fund short code")
+@click.option("--seed_all_funds", default=False, help="See all funds")
+def load_fund_from_fab(fund_short_code, seed_all_funds) -> None:
+    """
+    Insert the FAB fund and round data into the database.
+    See required schema for import here: file_location
+
+    Accept comma separated funds too.
+    """
+    load_fund_from_fab_impl(fund_short_code, seed_all_funds)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import inspect
 import sys
+from typing import Literal
 
 sys.path.insert(1, ".")
 
@@ -121,6 +122,101 @@ def create_seeded_db(c):
     seed_dev_db(c)
 
 
+def seed_assessment_store_db_impl(environment: Literal["local", "cloud"]):
+    import uuid
+
+    from assessment_store.db.models.score import AssessmentRound, ScoringSystem
+    from assessment_store.db.models.tag import TagType
+    from db import db
+    from fund_store.db.models.round import Round
+
+    # Define scoring systems
+    scoring_system_data = [
+        {
+            "id": str(uuid.uuid4()),
+            "scoring_system_name": "OneToFive",
+            "minimum_score": 1,
+            "maximum_score": 5,
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "scoring_system_name": "ZeroToThree",
+            "minimum_score": 0,
+            "maximum_score": 3,
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "scoring_system_name": "ZeroToOne",
+            "minimum_score": 0,
+            "maximum_score": 1,
+        },
+    ]
+
+    # Fetch existing scoring systems
+    existing_systems = {system.scoring_system_name.name: system.id for system in db.session.query(ScoringSystem).all()}
+
+    # Add missing scoring systems
+    new_systems_added = False
+    for scoring_system in scoring_system_data:
+        name = scoring_system["scoring_system_name"]
+        if name not in existing_systems:
+            db.session.add(ScoringSystem(**scoring_system))
+            _echo_print(f"Added new scoring system: {name}")
+            new_systems_added = True
+        else:
+            scoring_system["id"] = existing_systems[name]  # Reuse existing ID
+
+    if new_systems_added:
+        db.session.commit()
+    else:
+        _echo_print("No new scoring systems were added.")
+
+    # Associate scoring systems with all rounds
+    round_ids = db.session.query(Round).with_entities(Round.id).all()
+    for (round_id,) in round_ids:
+        db.session.merge(AssessmentRound(round_id=round_id, scoring_system_id=scoring_system_data[0]["id"]))
+        _echo_print(f"Associated scoring system ID {scoring_system_data[0]['id']} with round ID {round_id}")
+
+    print(f"Seeded DB with scoring system and assessment round data in {environment} environment.")
+
+    # Define tag types
+    tag_types_data = [
+        TagType(
+            id=str(uuid.uuid4()),
+            purpose="GENERAL",
+            description="Use to categorise projects, such as by organisation or location",
+        ),
+        TagType(
+            id=str(uuid.uuid4()),
+            purpose="PEOPLE",
+            description="Use these tags to assign assessments to team members. "
+            "Note you cannot send notifications using tags",
+        ),
+        TagType(
+            id=str(uuid.uuid4()),
+            purpose="POSITIVE",
+            description="Use to indicate that a project has passed an assessment stage or is recommended",
+        ),
+        TagType(
+            id=str(uuid.uuid4()),
+            purpose="NEGATIVE",
+            description="Use to indicate that a project has failed an assessment stage or is not recommended",
+        ),
+        TagType(
+            id=str(uuid.uuid4()),
+            purpose="ACTION",
+            description="Use to recommend an action, such as further discussion",
+        ),
+    ]
+
+    for tag_type in tag_types_data:
+        existing_tag_type = db.session.query(TagType).where(TagType.purpose == tag_type.purpose).one_or_none()
+        if not existing_tag_type:
+            db.session.add(tag_type)
+    db.session.commit()
+    _echo_print("Seeded DB with tag type data")
+
+
 @task
 def seed_assessment_store_db(c, environment="local"):
     """
@@ -133,97 +229,4 @@ def seed_assessment_store_db(c, environment="local"):
     with _env_var("FLASK_ENV", flask_env):
         app = create_app()
         with app.app_context():
-            import uuid
-
-            from assessment_store.db.models.score import AssessmentRound, ScoringSystem
-            from assessment_store.db.models.tag import TagType
-            from db import db
-            from fund_store.db.models.round import Round
-
-            # Define scoring systems
-            scoring_system_data = [
-                {
-                    "id": str(uuid.uuid4()),
-                    "scoring_system_name": "OneToFive",
-                    "minimum_score": 1,
-                    "maximum_score": 5,
-                },
-                {
-                    "id": str(uuid.uuid4()),
-                    "scoring_system_name": "ZeroToThree",
-                    "minimum_score": 0,
-                    "maximum_score": 3,
-                },
-                {
-                    "id": str(uuid.uuid4()),
-                    "scoring_system_name": "ZeroToOne",
-                    "minimum_score": 0,
-                    "maximum_score": 1,
-                },
-            ]
-
-            # Fetch existing scoring systems
-            existing_systems = {
-                system.scoring_system_name.name: system.id for system in db.session.query(ScoringSystem).all()
-            }
-
-            # Add missing scoring systems
-            new_systems_added = False
-            for scoring_system in scoring_system_data:
-                name = scoring_system["scoring_system_name"]
-                if name not in existing_systems:
-                    db.session.add(ScoringSystem(**scoring_system))
-                    _echo_print(f"Added new scoring system: {name}")
-                    new_systems_added = True
-                else:
-                    scoring_system["id"] = existing_systems[name]  # Reuse existing ID
-
-            if new_systems_added:
-                db.session.commit()
-            else:
-                _echo_print("No new scoring systems were added.")
-
-            # Associate scoring systems with all rounds
-            round_ids = db.session.query(Round).with_entities(Round.id).all()
-            for (round_id,) in round_ids:
-                db.session.merge(AssessmentRound(round_id=round_id, scoring_system_id=scoring_system_data[0]["id"]))
-                _echo_print(f"Associated scoring system ID {scoring_system_data[0]['id']} with round ID {round_id}")
-
-            print(f"Seeded DB with scoring system and assessment round data in {environment} environment.")
-
-            # Define tag types
-            tag_types_data = [
-                TagType(
-                    id=str(uuid.uuid4()),
-                    purpose="GENERAL",
-                    description="Use to categorise projects, such as by organisation or location",
-                ),
-                TagType(
-                    id=str(uuid.uuid4()),
-                    purpose="PEOPLE",
-                    description="Use these tags to assign assessments to team members. "
-                    "Note you cannot send notifications using tags",
-                ),
-                TagType(
-                    id=str(uuid.uuid4()),
-                    purpose="POSITIVE",
-                    description="Use to indicate that a project has passed an assessment stage or is recommended",
-                ),
-                TagType(
-                    id=str(uuid.uuid4()),
-                    purpose="NEGATIVE",
-                    description="Use to indicate that a project has failed an assessment stage or is not recommended",
-                ),
-                TagType(
-                    id=str(uuid.uuid4()),
-                    purpose="ACTION",
-                    description="Use to recommend an action, such as further discussion",
-                ),
-            ]
-
-            for tag_type in tag_types_data:
-                existing_tag_type = db.session.query(TagType).where(TagType.purpose == tag_type.purpose).one_or_none()
-                if not existing_tag_type:
-                    db.session.add(tag_type)
-            db.session.commit()
-            _echo_print("Seeded DB with tag type data")
+            seed_assessment_store_db_impl(environment=environment)
