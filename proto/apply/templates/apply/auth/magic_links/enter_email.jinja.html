@@ -1,0 +1,45 @@
+{% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
+
+{% extends "apply/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}Email address{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{# only want to refer the user back if they've come from a friendly page, do this better #}
+{% if magic_links_back_path and magic_links_back_path.startswith("/grant") %}
+    {{ govukBackLink({
+        "text": _("Back"),
+        "href": magic_links_back_path
+    }) }}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {# values to be replaced with wtfform setup on base branch #}
+            {{ govukInput ({
+                "id": "email",
+                "name": "email",
+                "label": {
+                    "text": _("Email address"),
+                    "isPageHeading": true,
+                    "classes": "govuk-label--l"
+                },
+                "hint": {
+                    "text": _("We'll email you a link to start a new application, or continue any applications you have in progress.")
+                }
+            }) }}
+
+            {{ govukButton({
+                "text": _("Continue")
+            }) }}
+        </form>
+    </div>
+</div>
+{% endblock %}

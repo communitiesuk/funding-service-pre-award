@@ -1,0 +1,96 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+
+{% extends "apply/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}Your applications{% endtrans %} - {{ grant.proto_name }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+
+<div class="govuk-phase-banner">
+    {# temporary workaround for CSP which can just be removed from proto and non-standard styles which should be resolved from merging with proto/base #}
+    <style nonce="{{ csp_nonce() }}">
+    .proto-phase {
+        display: flex;
+        justify-content: space-between;
+    }
+    </style>
+    <div class="proto-phase govuk-!-padding-top-1 govuk-!-padding-bottom-1">
+        <p class="govuk-phase-banner__content">
+            {% set email %}<strong class="govuk-!-font-weight-bold">{{ account.email }}</strong>{% endset %}
+            <span class="govuk-phase-banner__text">{% trans email=email %}You are applying as {{ email }}{% endtrans %}</span>
+        </p>
+        <p class="govuk-phase-banner__content">
+            <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-2" href="#">{% trans %}View all of your grants{% endtrans %}</a>
+            <a class="govuk-link govuk-link--no-visited-state" href={{ url_for("proto_apply.web.magic_links_sign_out_handler") }}>{% trans %}Sign out{% endtrans %}</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-caption-l">{{ grant.proto_name }}</h1>
+        <h2 class="govuk-heading-l">{% trans %}Your applications{% endtrans %}</h2>
+
+        <p class="govuk-body">{% trans number_of_applications=(applications | length) %}You have started {{ number_of_applications }} applications for funding to {% endtrans %}{{ grant.proto_apply_action_description }}.</p>
+
+        {% if active_round %}
+        {% set submissionHtml %}
+            <ul class="govuk-list">
+                {# these default flask-babel date formatters have a comma between day and year which the gov uk style guide doesn't suggest https://www.gov.uk/guidance/style-guide/a-to-z#dates #}
+                <li><strong>{% trans %}Prospectus:{% endtrans %}</strong> <a class="govuk-link govuk-link--no-visited-state" href={{ grant.proto_prospectus_link }}>{{ grant.proto_prospectus_link }}</a></li>
+                <li><strong>{% trans %}Opening date:{% endtrans %}</strong> {{ active_round.proto_start_date | dateformat }}</li>
+                <li><strong>{% trans %}Submission deadline:{% endtrans %}</strong> {{ active_round.proto_end_date | dateformat }}</li>
+            </ul>
+        {% endset %}
+        {{ govukDetails({
+            "summaryText": _("Grant submission details"),
+            "html": submissionHtml
+        }) }}
+        {% else %}
+        {{ govukInsetText({
+            "text": _("This grant is not open for applications for funding.")
+        }) }}
+        {% endif %}
+
+        {% if applications %}
+            {% set rows = [] %}
+            {% for application in applications %}
+                {% set referenceLink %}
+                    <a class="govuk-link govuk-link--no-visited-state" href="#">{{ application.reference }}</a>
+                {% endset %}
+                {% set statusTag %}
+                    <strong class="govuk-tag govuk-tag--grey">Started</strong>
+                {% endset %}
+                {% set rows = rows.append([
+                    { "html": referenceLink },
+                    { "html": statusTag },
+                    { "text": application.proto_created_date | dateformat },
+                    { "text": application.proto_updated_date | dateformat }
+                ]) %}
+            {% endfor %}
+            {{ govukTable({
+                "head": [
+                    { "text": _("Reference") },
+                    { "text": _("Status") },
+                    { "text": _("Started") },
+                    { "text": _("Last updated") }
+                ],
+                "rows": rows
+            }) }}
+        {% endif %}
+
+        {% if active_round %}
+        {{ govukButton({
+            "text": _("Start a new application"),
+            "classes": "govuk-button--secondary" if applications
+        }) }}
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

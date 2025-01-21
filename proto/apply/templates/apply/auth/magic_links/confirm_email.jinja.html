@@ -1,0 +1,33 @@
+
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+
+{% extends "apply/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}Email sent{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{% trans %}Email sent{% endtrans %}</h1>
+
+        {% set email %}<strong class="govuk-!-font-weight-bold">{{ magic_link.email }}</strong>{% endset %}
+        <p class="govuk-body">{% trans email=email %}We have have sent an email to {{ email }}{% endtrans %}</p>
+
+        <h2 class="govuk-heading-m">{% trans %}What happens next{% endtrans %}</h2>
+
+        <p class="govuk-body">{% trans %}Use the link to confirm your email address and start a new application, or continue any applications you have in progress.{% endtrans %}</p>
+
+        <p class="govuk-body">{% trans %}The link will work once and stop working after 24 hours.{% endtrans %}</p>
+
+        {% set detailsHtml %}
+            {% set link %}<a class="govuk-link govuk-link--no-visited-state" href="{{ original_url }}">{% trans %}request a new link{% endtrans %}</a>{% endset %}
+            <p class="govuk-body">{% trans %}The email may take a few minutes to arrive.{% endtrans %}</p>
+            <p class="govuk-body">{% trans link=link %}Check your spam or junk folders. If it still has not arrived, you can {{ link }}.{% endtrans %}</p>
+        {% endset %}
+        {{ govukDetails({
+            "summaryText": _("If you do not receive an email"),
+            "html": detailsHtml
+        }) }}
+    </div>
+</div>
+{% endblock %}

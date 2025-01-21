@@ -186,9 +186,6 @@ def create_app() -> Flask:  # noqa: C901
 
     NotificationService().init_app(flask_app)
 
-    # leaving this for now - for some reason flask is rendering half the template as a string if not a `.htm*` extension
-    flask_app.jinja_options["autoescape"] = True
-
     flask_app.jinja_env.trim_blocks = True
     flask_app.jinja_env.lstrip_blocks = True
     flask_app.jinja_env.add_extension("jinja2.ext.i18n")

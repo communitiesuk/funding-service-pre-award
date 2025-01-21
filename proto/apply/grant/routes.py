@@ -16,9 +16,6 @@ def all_open_grants_handler():
 
 @grant_blueprint.get("/grant/<short_code>")
 def grant_detail_handler(short_code):
-    # should NoResultFound be handled elsewhere as a 404?
-    # grant = get_grant(short_code=short_code)
-
     active_round, grant = get_active_round(short_code)
 
     if not active_round:

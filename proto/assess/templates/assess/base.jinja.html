@@ -14,22 +14,9 @@
 {{ govukHeader({
     "homepageUrl": "#",
     "useTudorCrown": true,
-    "serviceName": _("Assess grant applications")
+    "serviceName": _("Funding service")
 }) }}
 {% endblock header %}
-
-{% block beforeContent %}
-{% set feedbackMessage %}
-{% trans %}This is a new service. Help us improve it and{% endtrans %} <a href="#" class="govuk-link govuk-link--no-visited-state">{% trans %}give your feedback (opens in new tab).{% endtrans %}</a>
-{% endset %}
-
-{{ govukPhaseBanner({
-    "tag": {
-        "text": "Beta"
-    },
-    "html": feedbackMessage
-}) }}
-{% endblock beforeContent %}
 
 {% block footer %}
 {{ govukFooter({

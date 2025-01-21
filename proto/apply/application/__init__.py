@@ -1,0 +1,1 @@
+from proto.apply.application.routes import application_blueprint as application_blueprint

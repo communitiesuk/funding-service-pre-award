@@ -12,7 +12,7 @@
 
         {% if grant.proto_apply_action_description %}
         <p class="govuk-body">
-            1{% trans %}Start or continue an application for funding to{% endtrans %} {{ grant.proto_apply_action_description }}.
+            {% trans %}Start or continue an application for funding to{% endtrans %} {{ grant.proto_apply_action_description }}.
         </p>
         {% endif %}
 
@@ -30,11 +30,15 @@
         </ul>
         {{ govukButton({
             "isStartButton": true,
-            "text": _("Enter your email address")
+            "text": _("Enter your email address"),
+            "href": url_for("proto_apply.application.application_list_handler", short_code=grant.short_name)
         }) }}
         {% else %}
+        {% set grantNotOpen %}
+            {% trans %}This grant is not open for applications for funding, you can {% endtrans %}<a class="govuk-link govuk-link--no-visited-state" href='{{ url_for("proto_apply.application.application_list_handler", short_code=grant.short_name) }}'>view your applications</a>.
+        {% endset %}
         {{ govukInsetText({
-            "text": _("This grant is not open for applications for funding.")
+            "text": grantNotOpen
         }) }}
         {% endif %}
 

@@ -3,12 +3,16 @@ import os
 import uuid
 from datetime import datetime
 from typing import Literal
+from urllib.parse import urljoin
 
 import pytz
-from flask import current_app
+from flask import current_app, url_for
 from fsd_utils import NotifyConstants
 from notifications_python_client import NotificationsAPIClient
 from notifications_python_client.errors import APIError, TokenError
+
+from config import Config
+from proto.common.data.models.magic_link import MagicLink
 
 
 class NotificationError(Exception):
@@ -40,6 +44,12 @@ def _format_submitted_datetime(submission_date):
 
 class NotificationService:
     MAGIC_LINK_TEMPLATE_ID = os.environ.get("MAGIC_LINK_TEMPLATE_ID", "02a6d48a-f227-4b9a-9dd7-9e0cf203c8a2")
+
+    # I don't like that template IDs are defined here. In my opinion they could live in some structured part of
+    # config where they're derived from the environment. There should be no default values
+    PROTO_MAGIC_LINK_TEMPLATE_ID = os.environ.get(
+        "PROTO_MAGIC_LINK_TEMPLATE_ID", "3c96a266-02aa-41fd-9240-1393045c012c"
+    )
 
     EXPRESSION_OF_INTEREST_TEMPLATE_ID = {
         "54c11ec2-0b16-46bb-80d2-f210e47a8791": {
@@ -171,6 +181,21 @@ class NotificationService:
             },
             govuk_notify_reference=govuk_notify_reference,
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
+        )
+
+    def proto_send_magic_link(self, magic_link: MagicLink):
+        magic_link_url = urljoin(
+            Config.APPLICANT_FRONTEND_HOST,
+            url_for("proto_apply.web.magic_links_return_handler", token=magic_link.token),
+        )
+        original_link_url = urljoin(Config.APPLICANT_FRONTEND_HOST, magic_link.path)
+        return self._send_email(
+            magic_link.email,
+            self.PROTO_MAGIC_LINK_TEMPLATE_ID,
+            personalisation={
+                "magic link": magic_link_url,
+                "original link": original_link_url,
+            },
         )
 
     def send_eoi_pass_email(

@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from proto.common.data.models import ApplicationSection, Round
 
 
+# SF notes: CREATED, SUBMITTED, AWARDED, REJECTED, CLOSED
 class ApplicationStatus(str, enum.Enum):
     NOT_STARTED = "not started"
     IN_PROGRESS = "in progress"
@@ -42,6 +43,8 @@ class ProtoApplication(db.Model):
     section_data: Mapped[list["ProtoApplicationSectionData"]] = relationship(
         "ProtoApplicationSectionData", passive_deletes=True
     )
+
+    updated_by_applicant_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     @property
     def status(self):

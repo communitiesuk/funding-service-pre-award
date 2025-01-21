@@ -8,8 +8,10 @@ from db import db
 from proto.common.data.models import (
     ApplicationQuestion,
     ApplicationSection,
+    Fund,
     ProtoApplication,
     ProtoApplicationSectionData,
+    Round,
 )
 
 
@@ -37,6 +39,18 @@ def create_application(preview: bool, round_id: int, account_id: str):
 
 def get_application(application_id: int):
     return db.session.scalars(select(ProtoApplication).filter(ProtoApplication.id == application_id)).one()
+
+
+def get_applications(account_id):
+    applications = db.session.scalars(select(ProtoApplication).filter(ProtoApplication.account_id == account_id)).all()
+    return applications
+
+
+def search_applications(short_code):
+    applications = db.session.scalars(
+        select(ProtoApplication).join(Round).join(Fund).filter(Fund.short_name == short_code)
+    ).all()  # can use this to prove competitive vs. un-competed, only from submitted or all
+    return applications
 
 
 def _build_answer_dict(question: "ApplicationQuestion", answer: str) -> dict:
