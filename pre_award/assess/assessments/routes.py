@@ -1203,8 +1203,11 @@ def display_sub_criteria(
     change_request_user_ids = set(
         flag_item["user_id"] for change_request in sub_criteria_change_requests for flag_item in change_request.updates
     )
+    approval_users_ids = set(score_item["user_id"] for score_item in score)
 
-    change_request_users = get_bulk_accounts_dict(change_request_user_ids, state.fund_short_name)
+    approval_change_request_users = get_bulk_accounts_dict(
+        change_request_user_ids.union(approval_users_ids), state.fund_short_name
+    )
 
     comment_response = get_comments(
         application_id=application_id,
@@ -1269,7 +1272,7 @@ def display_sub_criteria(
         "application_id": application_id,
         "comments": theme_matched_comments,
         "change_requests": sub_criteria_change_requests,
-        "accounts_list": change_request_users,
+        "accounts_list": approval_change_request_users,
         "is_flaggable": False,  # Flag button is disabled in sub-criteria page,
         "display_comment_box": add_comment_argument,
         "display_comment_edit_box": edit_comment_argument,
