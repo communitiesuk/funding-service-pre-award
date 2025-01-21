@@ -76,7 +76,7 @@ def mock_get_applications_for_auth_api():
 @pytest.fixture
 def mock_get_applications_for_auth_frontend():
     with patch_get_applications_for_account(
-        "authenticator.frontend.magic_links.routes.get_applications_for_account"
+        "pre_award.authenticator.frontend.magic_links.routes.get_applications_for_account"
     ) as mock_get_applications:
         yield mock_get_applications
 
@@ -103,7 +103,9 @@ def configure_mock_fund_and_round(mock_get_fund, mock_get_round_data):
 def mock_get_applications_for_account():
     from unittest import mock
 
-    with mock.patch("authenticator.api.magic_links.routes.get_applications_for_account") as mock_get_applications:
+    with mock.patch(
+        "pre_award.authenticator.api.magic_links.routes.get_applications_for_account"
+    ) as mock_get_applications:
         mock_get_applications.return_value = [
             ApplicationSummary(
                 id="00000000-0000-0000-0000-000000000000",

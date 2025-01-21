@@ -32,7 +32,7 @@ def bootstrap_dev_db(c, database_host="localhost"):
 
 
 def seed_local_account_store_impl():
-    from db import db
+    from pre_award.db import db
 
     accounts_to_seed = [
         {

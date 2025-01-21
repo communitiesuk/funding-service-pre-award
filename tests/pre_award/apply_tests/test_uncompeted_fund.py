@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from tests.apply_tests.api_data.test_data import TEST_APPLICATION_SUMMARIES
+from tests.pre_award.apply_tests.api_data.test_data import TEST_APPLICATION_SUMMARIES
 
 
 @pytest.fixture
@@ -42,7 +42,7 @@ def display_data():
 @pytest.mark.usefixtures("mock_login", "mock_get_fund_round")
 def test_changes_requested_notification(apply_test_client, mocker, templates_rendered, display_data):
     mocker.patch(
-        "apply.default.account_routes.search_applications",
+        "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
     )
     apply_test_client.application.jinja_env.globals["get_service_title"] = lambda: "Test Service Title"
@@ -63,7 +63,7 @@ def test_changes_requested_notification(apply_test_client, mocker, templates_ren
 @pytest.mark.usefixtures("mock_login", "mock_get_fund_round")
 def test_no_changes_requested_notification(apply_test_client, mocker, templates_rendered, display_data):
     mocker.patch(
-        "apply.default.account_routes.search_applications",
+        "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
     )
     apply_test_client.application.jinja_env.globals["get_service_title"] = lambda: "Test Service Title"

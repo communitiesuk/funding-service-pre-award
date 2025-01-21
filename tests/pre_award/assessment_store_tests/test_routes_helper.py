@@ -1,8 +1,8 @@
 from unittest.mock import Mock
 
-from assess.services.models.flag import FlagType
-from assessment_store.api.routes._helpers import _derive_status
-from assessment_store.db.models.assessment_record.enums import Status
+from pre_award.assess.services.models.flag import FlagType
+from pre_award.assessment_store.api.routes._helpers import _derive_status
+from pre_award.assessment_store.db.models.assessment_record.enums import Status
 
 
 def test_derive_status():

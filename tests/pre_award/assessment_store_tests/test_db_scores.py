@@ -8,6 +8,7 @@ from pre_award.assessment_store.api.routes.progress_routes import get_progress_f
 from pre_award.assessment_store.api.routes.score_routes import get_scoring_system_name_for_round_id
 from pre_award.assessment_store.db.models import AssessmentFlag, AssessmentRecord, Score
 from pre_award.assessment_store.db.models.flags import FlagStatus
+from pre_award.assessment_store.db.queries.assessment_records.queries import check_all_change_requests_accepted
 from pre_award.assessment_store.db.queries.scores.queries import (
     create_score_for_app_sub_crit,
     get_scores_for_app_sub_crit,

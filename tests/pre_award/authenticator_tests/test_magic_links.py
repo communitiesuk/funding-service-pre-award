@@ -15,7 +15,7 @@ from pre_award.authenticator.frontend.magic_links.forms import EmailForm
 from pre_award.authenticator.models.account import AccountMethods
 from pre_award.authenticator.security.utils import validate_token
 from pre_award.config import Config
-from pre_award.tests.authenticator_tests.conftest import configure_mock_fund_and_round
+from tests.pre_award.authenticator_tests.conftest import configure_mock_fund_and_round
 
 
 @pytest.mark.usefixtures("authenticator_test_client", "mock_redis_magic_links")
@@ -362,8 +362,8 @@ class TestMagicLinks(AuthSessionBase):
         THEN we are redirected to the launch eligibility page if there are no previous applications
         """
         with (
-            mock.patch("authenticator.api.magic_links.routes.FundMethods.get_fund") as mock_get_fund,
-            mock.patch("authenticator.api.magic_links.routes.get_round_data") as mock_get_round_data,
+            mock.patch("pre_award.authenticator.api.magic_links.routes.FundMethods.get_fund") as mock_get_fund,
+            mock.patch("pre_award.authenticator.api.magic_links.routes.get_round_data") as mock_get_round_data,
         ):
             configure_mock_fund_and_round(mock_get_fund, mock_get_round_data)
 
@@ -391,13 +391,13 @@ class TestMagicLinks(AuthSessionBase):
         landing_endpoint = f"/service/magic-links/landing/{link_key}?fund=cof&round=r2w3"
 
         with (
-            mock.patch("authenticator.models.fund.FundMethods.get_fund") as mock_get_fund,
-            mock.patch("authenticator.frontend.magic_links.routes.get_round_data") as mock_get_round_data,
+            mock.patch("pre_award.authenticator.models.fund.FundMethods.get_fund") as mock_get_fund,
+            mock.patch("pre_award.authenticator.frontend.magic_links.routes.get_round_data") as mock_get_round_data,
             mock.patch(
-                "authenticator.frontend.magic_links.routes.get_applications_for_account"
+                "pre_award.authenticator.frontend.magic_links.routes.get_applications_for_account"
             ) as mock_get_applications_for_account,
             mock.patch(
-                "authenticator.frontend.magic_links.routes.MagicLinkMethods.redis_mlinks", create=True
+                "pre_award.authenticator.frontend.magic_links.routes.MagicLinkMethods.redis_mlinks", create=True
             ) as mock_redis_mlinks,
         ):
             configure_mock_fund_and_round(mock_get_fund, mock_get_round_data)

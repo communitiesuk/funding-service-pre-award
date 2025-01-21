@@ -2,11 +2,11 @@ import copy
 
 from sqlalchemy import select
 
-from application_store.db.models.application.applications import Applications
-from assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
-from db import db
 from fund_store.db.models.fund import Fund
 from fund_store.db.models.round import Round
+from pre_award.application_store.db.models.application.applications import Applications
+from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
+from pre_award.db import db
 
 CODE_TO_NAME_MAP = {
     "S12000033": "Aberdeen City Council",

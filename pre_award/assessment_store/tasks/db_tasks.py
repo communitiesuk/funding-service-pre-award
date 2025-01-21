@@ -7,7 +7,7 @@ sys.path.insert(1, ".")
 from invoke import task  # noqa:E402
 
 from app import create_app  # noqa:E402
-from pre_award.assessment_store.tasks.helper_tasks import (
+from pre_award.assessment_store.tasks.helper_tasks import (  # noqa:E402
     _echo_input,  # noqa:E402
     _echo_print,  # noqa:E402
     _env_var,  # noqa:E402
@@ -127,10 +127,10 @@ def create_seeded_db(c):
 def seed_assessment_store_db_impl(environment: Literal["local", "cloud"]):
     import uuid
 
-    from assessment_store.db.models.score import AssessmentRound, ScoringSystem
-    from assessment_store.db.models.tag import TagType
-    from db import db
-    from fund_store.db.models.round import Round
+    from pre_award.assessment_store.db.models.score import AssessmentRound, ScoringSystem
+    from pre_award.assessment_store.db.models.tag import TagType
+    from pre_award.db import db
+    from pre_award.fund_store.db.models.round import Round
 
     # Define scoring systems
     scoring_system_data = [

@@ -21,8 +21,8 @@ from pre_award.application_store.config.key_report_mappings.cyp_r1_key_report_ma
 from pre_award.application_store.config.key_report_mappings.dpif_r2_key_report_mapping import (
     DPIF_R2_KEY_REPORT_MAPPING,
 )
-from application_store.config.key_report_mappings.gbrf_r1_key_report_mapping import GBRF_R1_KEY_REPORT_MAPPING
-from application_store.config.key_report_mappings.lpdf_r1_key_report_mapping import LPDF_R1_KEY_REPORT_MAPPING
+from pre_award.application_store.config.key_report_mappings.gbrf_r1_key_report_mapping import GBRF_R1_KEY_REPORT_MAPPING
+from pre_award.application_store.config.key_report_mappings.lpdf_r1_key_report_mapping import LPDF_R1_KEY_REPORT_MAPPING
 
 ROUND_ID_TO_KEY_REPORT_MAPPING = defaultdict(
     lambda: COF_R2_KEY_REPORT_MAPPING.mapping,

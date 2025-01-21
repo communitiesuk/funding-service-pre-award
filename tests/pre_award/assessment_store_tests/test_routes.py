@@ -583,7 +583,8 @@ def test_add_user_application_association(flask_test_client, send_email_value, m
     ):
         mock_notification_service = mock.MagicMock()
         mocker.patch(
-            "assessment_store.api.routes.user_routes.get_notification_service", return_value=mock_notification_service
+            "pre_award.assessment_store.api.routes.user_routes.get_notification_service",
+            return_value=mock_notification_service,
         )
         if notify_side_effect:
             mock_notification_service.send_assessment_assigned_email.side_effect = notify_side_effect
@@ -636,7 +637,8 @@ def test_update_user_application_association(flask_test_client, send_email_value
     ):
         mock_notification_service = mock.MagicMock()
         mocker.patch(
-            "assessment_store.api.routes.user_routes.get_notification_service", return_value=mock_notification_service
+            "pre_award.assessment_store.api.routes.user_routes.get_notification_service",
+            return_value=mock_notification_service,
         )
         if notify_side_effect:
             mock_notification_service.send_assessment_unassigned_email.side_effect = notify_side_effect
