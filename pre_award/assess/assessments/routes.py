@@ -1203,7 +1203,7 @@ def display_sub_criteria(
     change_request_user_ids = set(
         flag_item["user_id"] for change_request in sub_criteria_change_requests for flag_item in change_request.updates
     )
-    approval_users_ids = set(score_item["user_id"] for score_item in score)
+    approval_users_ids = set(score_item["user_id"] for score_item in score) if score else set()
 
     approval_change_request_users = get_bulk_accounts_dict(
         change_request_user_ids.union(approval_users_ids), state.fund_short_name
