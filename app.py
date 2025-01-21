@@ -29,10 +29,10 @@ from jinja2 import ChoiceLoader, PackageLoader, PrefixLoader
 from sqlalchemy_utils import Ltree
 
 import static_assets
-from account_store.core.account import account_core_bp
-from application_store.api.routes.application.routes import application_store_bp
-from application_store.db.exceptions.application import ApplicationError
-from apply.filters import (
+from pre_award.account_store.core.account import account_core_bp
+from pre_award.application_store.api.routes.application.routes import application_store_bp
+from pre_award.application_store.db.exceptions.application import ApplicationError
+from pre_award.apply.filters import (
     custom_format_datetime,
     date_format_short_month,
     datetime_format,
@@ -43,8 +43,8 @@ from apply.filters import (
     status_translation,
     string_to_datetime,
 )
-from apply.helpers import find_fund_and_round_in_request, find_fund_in_request
-from assess.shared.filters import (
+from pre_award.apply.helpers import find_fund_and_round_in_request, find_fund_in_request
+from pre_award.assess.shared.filters import (
     add_to_dict,
     all_caps_to_human,
     assess_datetime_format,
@@ -57,11 +57,11 @@ from assess.shared.filters import (
     slash_separated_day_month_year,
     utc_to_bst,
 )
-from assessment_store.api.routes import assessment_store_bp
-from common.locale_selector.get_lang import get_lang
-from common.locale_selector.set_lang import LanguageSelector
-from config import Config
-from fund_store.api.routes import fund_store_bp
+from pre_award.assessment_store.api.routes import assessment_store_bp
+from pre_award.common.locale_selector.get_lang import get_lang
+from pre_award.common.locale_selector.set_lang import LanguageSelector
+from pre_award.config import Config
+from pre_award.fund_store.api.routes import fund_store_bp
 from services.notify import NotificationService
 
 
@@ -112,7 +112,7 @@ def create_app() -> Flask:  # noqa: C901
         static_host="<host_from_current_request>",
     )
 
-    flask_app.config.from_object("config.Config")
+    flask_app.config.from_object("pre_award.config.Config")
 
     toggle_client = None
     if getenv("FLASK_ENV") != "unit_test":
@@ -130,15 +130,15 @@ def create_app() -> Flask:  # noqa: C901
 
     flask_app.jinja_loader = ChoiceLoader(
         [
-            PackageLoader("apply"),
-            PackageLoader("assess"),
+            PackageLoader("pre_award.apply"),
+            PackageLoader("pre_award.assess"),
             # move everything into one templates folder for assess rather than nesting in blueprints
-            PackageLoader("assess.shared"),
-            PackageLoader("assess.assessments"),
-            PackageLoader("assess.flagging"),
-            PackageLoader("assess.tagging"),
-            PackageLoader("assess.scoring"),
-            PackageLoader("authenticator.frontend"),
+            PackageLoader("pre_award.assess.shared"),
+            PackageLoader("pre_award.assess.assessments"),
+            PackageLoader("pre_award.assess.flagging"),
+            PackageLoader("pre_award.assess.tagging"),
+            PackageLoader("pre_award.assess.scoring"),
+            PackageLoader("pre_award.authenticator.frontend"),
             PrefixLoader({"govuk_frontend_jinja": PackageLoader("govuk_frontend_jinja")}),
         ]
     )
@@ -195,26 +195,26 @@ def create_app() -> Flask:  # noqa: C901
         toolbar.init_app(flask_app)
 
     # These are required to associated errorhandlers and before/after request decorators with their blueprints
-    import apply.default.error_routes  # noqa
-    import assess.blueprint_middleware  # noqa
-    from apply.default.account_routes import account_bp
-    from apply.default.application_routes import application_bp
-    from apply.default.content_routes import content_bp
-    from apply.default.eligibility_routes import eligibility_bp
-    from apply.default.routes import default_bp
-    from assess.assessments.routes import assessment_bp
-    from assess.flagging.routes import flagging_bp
-    from assess.scoring.routes import scoring_bp
-    from assess.shared.routes import shared_bp
-    from assess.tagging.routes import tagging_bp
-    from authenticator.api.magic_links.routes import api_magic_link_bp
-    from authenticator.api.session.auth_session import api_sessions_bp
-    from authenticator.api.sso.routes import api_sso_bp
-    from authenticator.frontend.default.routes import default_bp as authenticator_default_bp
-    from authenticator.frontend.magic_links.routes import magic_links_bp
-    from authenticator.frontend.sso.routes import sso_bp
-    from authenticator.frontend.user.routes import user_bp
-    from common.error_routes import internal_server_error, not_found
+    import pre_award.apply.default.error_routes  # noqa
+    import pre_award.assess.blueprint_middleware  # noqa
+    from pre_award.apply.default.account_routes import account_bp
+    from pre_award.apply.default.application_routes import application_bp
+    from pre_award.apply.default.content_routes import content_bp
+    from pre_award.apply.default.eligibility_routes import eligibility_bp
+    from pre_award.apply.default.routes import default_bp
+    from pre_award.assess.assessments.routes import assessment_bp
+    from pre_award.assess.flagging.routes import flagging_bp
+    from pre_award.assess.scoring.routes import scoring_bp
+    from pre_award.assess.shared.routes import shared_bp
+    from pre_award.assess.tagging.routes import tagging_bp
+    from pre_award.authenticator.api.magic_links.routes import api_magic_link_bp
+    from pre_award.authenticator.api.session.auth_session import api_sessions_bp
+    from pre_award.authenticator.api.sso.routes import api_sso_bp
+    from pre_award.authenticator.frontend.default.routes import default_bp as authenticator_default_bp
+    from pre_award.authenticator.frontend.magic_links.routes import magic_links_bp
+    from pre_award.authenticator.frontend.sso.routes import sso_bp
+    from pre_award.authenticator.frontend.user.routes import user_bp
+    from pre_award.common.error_routes import internal_server_error, not_found
 
     flask_app.register_error_handler(404, not_found)
     flask_app.register_error_handler(500, internal_server_error)
@@ -271,13 +271,13 @@ def create_app() -> Flask:  # noqa: C901
     # Initialize sqs extended client
     create_sqs_extended_client(flask_app)
 
-    from db import db, migrate
+    from pre_award.db import db, migrate
 
     # Bind SQLAlchemy ORM to Flask app
     db.init_app(flask_app)
 
     # Bind Flask-Migrate db utilities to Flask app
-    migrate.init_app(flask_app, db, directory="db/migrations", render_as_batch=True)
+    migrate.init_app(flask_app, db, directory="pre_award/db/migrations", render_as_batch=True)
 
     # Enable mapping of ltree datatype for sections
     psycopg2.extensions.register_adapter(Ltree, lambda ltree: psycopg2.extensions.QuotedString(str(ltree)))

@@ -9,8 +9,8 @@ import pytest
 from flask import Flask
 
 from app import create_app  # noqa: E402
-from tests.authenticator_tests.testing.mocks.mocks.redis_magic_links import RedisMLinks
-from tests.authenticator_tests.testing.mocks.mocks.redis_sessions import RedisSessions
+from tests.pre_award.authenticator_tests.testing.mocks.mocks.redis_magic_links import RedisMLinks
+from tests.pre_award.authenticator_tests.testing.mocks.mocks.redis_sessions import RedisSessions
 
 if platform.system() == "Darwin":
     multiprocessing.set_start_method("fork")  # Required on macOSX
