@@ -63,14 +63,6 @@ def ordered_themes(fund_round_short_name):
             "risk-and-deliverability",
             "value-for-money",
         ],
-        "HSRAR1": [
-            "total_expected_cost",
-            "refurbishment_costs",
-            "other_costs",
-            "vacant_property_details",
-            "designated_area_details",
-            "milestones",
-        ],
         "CTDFCR1": ["project_name", "organisation_name"],
         "CF1R1": ["project_name", "organisation_name"],
         "CF1EOI": ["project_name", "organisation_name"],
@@ -88,7 +80,7 @@ def ordered_themes(fund_round_short_name):
         + [
             "which-local-authority-are-you-applying-from?",
             "upload-the-initial-notice-you-served-the-landlord",
-            "what-is-the-total-commercial-floorspace-of-the-property,-in-meters-squared?",
+            "what-is-the-total-commercial-floorspace-of-the-property,-in-metres-squared?",
             "what-is-the-vacant-property's-address?",
             "share-the-link-with-details-of-the-designated-area",
             "which-designated-high-street-or-town-centre-is-the-vacant-property-in?",

@@ -64,7 +64,7 @@ scored_criteria = [
                     },
                     {
                         "id": "when-do-you-expect-the-post-payment-assurance-form-to-be-submitted?",
-                        "name": "When do you expect the post payment assurance form to be submitted?",
+                        "name": "When do you expect the post-payment assurance form to be submitted?",
                         "answers": [
                             {
                                 "field_id": "KFjxBs",
