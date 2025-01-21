@@ -50,6 +50,14 @@
 {% endif %}
 {% endblock beforeContent %}
 
+{% block bodyEnd %}
+    <script type="module" src="{{ url_for('static', filename='govuk-frontend-5.7.1.min.js') }}"> </script>
+    <script type="module" nonce="{{ csp_nonce() }}">
+        import { initAll } from "{{ url_for('static', filename='govuk-frontend-5.7.1.min.js') }}"
+        initAll()
+    </script>
+{% endblock %}
+
 {% block footer %}
 {{ govukFooter({
     "meta": {
