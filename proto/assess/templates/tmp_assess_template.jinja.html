@@ -1,0 +1,32 @@
+{% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
+{% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
+{% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
+
+
+{% extends "govuk_frontend_jinja/template.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='apply/govuk-frontend-4.8.0.min.css') }}" />
+{% endblock head %}
+
+{% block header %}
+{{ govukHeader({
+    "homepageUrl": "#",
+    "useTudorCrown": true,
+    "serviceName": _("Funding service")
+}) }}
+{% endblock header %}
+
+{# Just use the things from apply for now to give it a sense of being complete - these would be assess specific, maybe helpful links for assessors or grant teams #}
+{# as external users from other teams would be using these tools we should still be clear to them about how we're using cookies and what our private policy looks like #}
+{# future things like memorandum of understandings and policy documents #}
+{% block footer %}
+{{ govukFooter({
+    "meta": {
+        "items": [
+            { "href": url_for("proto_apply_blueprint.web_blueprint.cookies_handler"), "text": _("Cookies") },
+            { "href": url_for("proto_apply_blueprint.web_blueprint.accessibility_statement_handler"), "text": _("Accessibility statement") }
+        ]
+    }
+}) }}
+{% endblock footer %}

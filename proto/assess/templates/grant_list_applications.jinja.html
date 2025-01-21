@@ -1,0 +1,73 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+
+{% extends "tmp_assess_template.jinja.html" %}
+
+{% block pageTitle %}{{ grant.proto_name }} - {% trans %}Funding service{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{{ govukBreadcrumbs({
+    "items": [
+        { "text": _("Grants"), "href": "#" },
+        { "text": grant.proto_name, "href": "#" },
+        { "text": _("Applications"), "href": "#" }
+    ]
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l">{% trans %}Applications for funding{% endtrans %}</h1>
+
+        {# TODO: move to right aligned (currently blocked by CSP) #}
+        <div class="govuk-button-group" style="justify-content: flex-end" nonce="{{ csp_nonce() }}">
+            <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16" href="#">{% trans %}Select my columns (6){% endtrans %}</a>
+            {{ govukButton({
+                "text": _("Download applications as CSV"),
+                "classes": "govuk-button--secondary govuk-!-font-size-16"
+            }) }}
+
+            {# {{ govukButton({
+                "text": _("Download scores as CSV"),
+                "classes": "govuk-button--secondary govuk-!-font-size-16"
+            }) }} #}
+
+            {# could maybe be a details component - or takes the user to an interstial page #}
+            {# <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16" href="#">{% trans %}Download applications as CSV{% endtrans %}</a> #}
+            {# <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16" href="#">{% trans %}Download scores as CSV{% endtrans %}</a> #}
+        </div>
+
+        {% set rows = [] %}
+        {% for application in applications %}
+            {% set statusTag %}
+            <strong class="govuk-tag govuk-tag--grey">Submitted</strong>
+            {% endset %}
+            {% set rows = rows.append([
+                { "text": application.reference },
+                { "text": "Steven Fountain" },
+                { "html": statusTag },
+                { "text": "0/12" },
+                { "text": application.proto_created_date | dateformat },
+                { "text": application.proto_updated_date | dateformat }
+            ]) %}
+        {% endfor %}
+        {% set dateSubmittedHeader %}<a class="gouvk-link govuk-link--no-visited-state" href="#">{% trans %}Date submitted{% endtrans %}</a>{% endset %}
+        {% set lastUpdatedHeader %}<a class="gouvk-link govuk-link--no-visited-state" href="#">{% trans %}Last updated{% endtrans %}</a>{% endset %}
+        {{ govukTable({
+            "head": [
+                { "text": _("Reference") },
+                { "text": _("Assigned") },
+                { "text": _("Status") },
+                { "text": _("Sections scored") },
+                { "html": dateSubmittedHeader },
+                { "text": lastUpdatedHeader },
+            ],
+            "rows": rows,
+        }) }}
+    </div>
+</div>
+{% endblock %}
