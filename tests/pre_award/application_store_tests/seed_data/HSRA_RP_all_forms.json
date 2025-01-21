@@ -21,13 +21,13 @@
                     {
                         "key": "rFpLZQ",
                         "type": "text",
-                        "title": "What is the total commercial floorspace of the property, in meters squared?",
+                        "title": "What is the total commercial floorspace of the property, in metres squared?",
                         "answer": "12"
                     }
                 ],
                 "status": "COMPLETED",
                 "category": "ISBazm",
-                "question": "What is the total commercial floorspace of the property, in meters squared?"
+                "question": "What is the total commercial floorspace of the property, in metres squared?"
             },
             {
                 "fields": [

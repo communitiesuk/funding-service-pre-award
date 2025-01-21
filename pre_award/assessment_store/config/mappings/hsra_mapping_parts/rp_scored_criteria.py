@@ -24,15 +24,15 @@ scored_criteria = [
                         ],
                     },
                     {
-                        "id": "what-is-the-total-commercial-floorspace-of-the-property,-in-meters-squared?",
-                        "name": "What is the total commercial floorspace of the property, in meters squared?",
+                        "id": "what-is-the-total-commercial-floorspace-of-the-property,-in-metres-squared?",
+                        "name": "What is the total commercial floorspace of the property, in metres squared?",
                         "answers": [
                             {
                                 "field_id": "rFpLZQ",
                                 "form_name": "vacant-property-details-hsra-rp",
                                 "field_type": "numberField",
                                 "presentation_type": "text",
-                                "question": "What is the total commercial floorspace of the property, in meters squared?",
+                                "question": "What is the total commercial floorspace of the property, in metres squared?",
                             }
                         ],
                     },

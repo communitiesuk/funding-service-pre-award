@@ -13045,13 +13045,13 @@ hsra_rp_application_store_json_template = Template(
                         {
                             "key": "rFpLZQ",
                             "type": "text",
-                            "title": "What is the total commercial floorspace of the property, in meters squared?",
+                            "title": "What is the total commercial floorspace of the property, in metres squared?",
                             "answer": "12"
                         }
                     ],
                     "status": "COMPLETED",
                     "category": "ISBazm",
-                    "question": "What is the total commercial floorspace of the property, in meters squared?"
+                    "question": "What is the total commercial floorspace of the property, in metres squared?"
                 },
                 {
                     "fields": [
@@ -13665,7 +13665,7 @@ hsra_vr_application_store_json_template = Template(
                     ],
                     "status": "COMPLETED",
                     "category": "wtecPW",
-                    "question": "When do you expect the post payment assurance form to be submitted?"
+                    "question": "When do you expect the post-payment assurance form to be submitted?"
                 },
                 {
                     "fields": [
