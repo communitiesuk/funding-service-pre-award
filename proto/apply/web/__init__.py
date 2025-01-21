@@ -1,6 +1,11 @@
 from urllib.parse import urljoin
 
-from flask import redirect, render_template, request, session, url_for
+from flask import redirect, render_template, session, url_for
+from flask_babel import lazy_gettext as _l
+from flask_wtf import FlaskForm
+from govuk_frontend_wtf.wtforms_widgets import GovSubmitInput, GovTextInput
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired, Email
 
 from common.blueprints import Blueprint
 from config import Config
@@ -15,6 +20,22 @@ from services.notify import get_notification_service
 web_blueprint = Blueprint("web", __name__)
 
 
+class MagicLinkForm(FlaskForm):
+    email = StringField(
+        _l("Email address"),
+        widget=GovTextInput(),
+        validators=[
+            DataRequired(_l("Enter an email address")),
+            Email(_l("Enter an email address in the correct format, like name@example.com")),
+        ],
+        description=_l(
+            "We'll email you a link to start a new application, or continue any applications you have in progress."
+        ),
+    )
+
+    submit = SubmitField(_l("Continue"), widget=GovSubmitInput())
+
+
 @web_blueprint.get("/cookies")
 def cookies_handler():
     return render_template("apply/web/cookies.jinja.html")
@@ -25,10 +46,19 @@ def accessibility_statement_handler():
     return render_template("apply/web/accessibility.jinja.html")
 
 
-@web_blueprint.get("/auth/magic_links")
+@web_blueprint.route("/auth/magic_links", methods=["GET", "POST"])
 def magic_links_enter_email_handler():
+    form = MagicLinkForm()
+    if form.validate_on_submit():
+        path = session.get("magic_links_forward_path")
+        magic_link = create_magic_link(email=form.data.get("email"), path=path)
+        get_notification_service().proto_send_magic_link(magic_link=magic_link)
+        return redirect(url_for("proto_apply.web.magic_links_confirm_email_handler", external_id=magic_link.id))
+
     return render_template(
-        "apply/auth/magic_links/enter_email.jinja.html", magic_links_back_path=session.get("magic_links_back_path")
+        "apply/auth/magic_links/enter_email.jinja.html",
+        magic_links_back_path=session.get("magic_links_back_path"),
+        form=form,
     )
 
 
@@ -40,17 +70,6 @@ def magic_links_confirm_email_handler(external_id):
         magic_link=magic_link,
         original_url=urljoin(Config.APPLICANT_FRONTEND_HOST, magic_link.path),
     )
-
-
-@web_blueprint.post("/auth/magic_links")
-def magic_links_submit_email_handler():
-    # replace with parsing from wtfforms
-    email = request.form["email"]
-    path = session.get("magic_links_forward_path")
-
-    magic_link = create_magic_link(email=email, path=path)
-    get_notification_service().proto_send_magic_link(magic_link=magic_link)
-    return redirect(url_for("proto_apply.web.magic_links_confirm_email_handler", external_id=magic_link.id))
 
 
 @web_blueprint.get("/auth/return/magic_links/<token>")

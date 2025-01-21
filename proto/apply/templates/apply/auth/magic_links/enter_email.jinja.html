@@ -1,6 +1,7 @@
 {% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 {% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
 
 {% extends "apply/base.jinja.html" %}
 
@@ -20,25 +21,21 @@
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form method="post">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            {# values to be replaced with wtfform setup on base branch #}
-            {{ govukInput ({
-                "id": "email",
-                "name": "email",
+        {% if form.errors %}
+            {{ govukErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+
+        <form method="post" novalidate>
+            {{ form.csrf_token }}
+            {{ form.email(params={
                 "label": {
-                    "text": _("Email address"),
                     "isPageHeading": true,
                     "classes": "govuk-label--l"
                 },
-                "hint": {
-                    "text": _("We'll email you a link to start a new application, or continue any applications you have in progress.")
-                }
+                "autocomplete": "email",
+                "spellcheck": false
             }) }}
-
-            {{ govukButton({
-                "text": _("Continue")
-            }) }}
+            {{ form.submit }}
         </form>
     </div>
 </div>
