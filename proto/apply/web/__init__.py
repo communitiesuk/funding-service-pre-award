@@ -82,7 +82,6 @@ def magic_links_return_handler(token):
 
     session["is_authenticated"] = True
     session["magic_links_account_id"] = account.id
-    session["magic_links_account_email"] = account.email
     session["magic_links_origin_path"] = origin_path
 
     return redirect(urljoin(Config.APPLICANT_FRONTEND_HOST, magic_link.path))

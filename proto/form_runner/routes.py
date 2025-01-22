@@ -1,6 +1,7 @@
-from flask import redirect, render_template, request, session, url_for
+from flask import g, redirect, render_template, request, url_for
 
 from common.blueprints import Blueprint
+from proto.common.auth import is_authenticated
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.services.accounts import get_account
 from proto.common.data.services.applications import (
@@ -17,8 +18,9 @@ runner_blueprint = Blueprint("proto_form_runner", __name__)
 
 
 @runner_blueprint.get("/application/<application_id>")
+@is_authenticated
 def application_tasklist(application_id):
-    account = get_account(session.get("magic_links_account_id"))
+    account = get_account(g.account.id)
     application = get_application(application_id)
     return render_template("form_runner/application_tasklist.html", application=application, account=account)
 
@@ -61,8 +63,9 @@ def _back_link_for_question(question, application_id, from_check_your_answers):
 
 
 @runner_blueprint.route("/application/<application_id>/<section_slug>/<question_slug>", methods=["GET", "POST"])
+@is_authenticated
 def ask_application_question(application_id, section_slug, question_slug):
-    account = {"email": session.get("magic_links_account_email")}
+    account = {"email": g.account.email}
     application = get_application(application_id)
     question = get_application_question(application.round_id, section_slug, question_slug)
     form = build_question_form(application, question)
@@ -86,9 +89,10 @@ def ask_application_question(application_id, section_slug, question_slug):
 
 
 @runner_blueprint.route("/application/<application_id>/<section_slug>/check-your-answers", methods=["GET", "POST"])
+@is_authenticated
 def check_your_answers(application_id, section_slug):
     # these are workaronds for having the navigation show or not and aren't really used - this should be more generic
-    account = {"email": session.get("magic_links_account_email")}
+    account = {"email": g.account.email}
     application = get_application(application_id=application_id)
     section_data = get_application_section_data(application_id, section_slug)
     form = MarkAsCompleteForm(data={"complete": "yes" if section_data and section_data.completed else None})

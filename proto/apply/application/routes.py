@@ -1,4 +1,4 @@
-from flask import redirect, render_template, session, url_for
+from flask import g, redirect, render_template, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
@@ -12,11 +12,9 @@ application_blueprint = Blueprint("application", __name__)
 @application_blueprint.get("/grant/<short_code>/apply")
 @is_authenticated
 def application_list_handler(short_code):
-    account = {
-        "email": session.get("magic_links_account_email")
-    }  # this should be uniformly serialised from the db or the session somewhere
+    account = {"email": g.account.email}  # this should be uniformly serialised from the db or the session somewhere
 
-    applications = get_applications(account_id=session.get("magic_links_account_id"))
+    applications = get_applications(account_id=g.account.id)
 
     active_round, grant = get_active_round(short_code)
 
@@ -35,7 +33,7 @@ def application_list_handler(short_code):
 @application_blueprint.post("/grant/<short_code>/apply")
 @is_authenticated
 def application_new_handler(short_code):
-    account = get_account(session.get("magic_links_account_id"))
+    account = get_account(g.account.id)
 
     active_round, grant = get_active_round(short_code)
 
@@ -49,8 +47,8 @@ def application_new_handler(short_code):
 @application_blueprint.get("/applications")
 @is_authenticated
 def all_user_application_list_handler():
-    account = get_account(session.get("magic_links_account_id"))
-    grants = get_application_grants(session.get("magic_links_account_id"))
+    account = get_account(g.account.id)
+    grants = get_application_grants(g.account.id)
     return render_template(
         "apply/application/all_applications_grant_list.jinja.html",
         grants=grants,
