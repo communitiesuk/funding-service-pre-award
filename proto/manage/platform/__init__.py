@@ -215,7 +215,15 @@ def choose_from_question_bank(grant_code, round_code):
             )
         )
 
-    return render_template("manage/platform/choose_from_question_bank.html", grant=grant, round=round, form=form)
+    return render_template(
+        "manage/platform/choose_from_question_bank.html",
+        grant=grant,
+        round=round,
+        form=form,
+        back_link=url_for(
+            "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
+        ),
+    )
 
 
 @rounds_blueprint.route("/grants/<grant_code>/rounds/<round_code>/create-section", methods=["GET", "POST"])
