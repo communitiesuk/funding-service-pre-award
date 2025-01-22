@@ -12,10 +12,8 @@ from sqlalchemy import select
 from sqlalchemy.orm.exc import NoResultFound
 
 from pre_award.assessment_store.db.models import AssessmentRecord
-from pre_award.assessment_store.db.models.score import AssessmentRound, Score, ScoringSystem
-from pre_award.assessment_store.db.schemas import AssessmentRoundMetadata, ScoreMetadata, ScoringSystemMetadata
-
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as ApplicationStatus
+from pre_award.assessment_store.db.models.score import AssessmentRound, Score, ScoringSystem
 from pre_award.assessment_store.db.queries.assessment_records.queries import (
     check_all_change_requests_accepted,
     update_application_status,
@@ -23,7 +21,7 @@ from pre_award.assessment_store.db.queries.assessment_records.queries import (
 from pre_award.assessment_store.db.queries.flags.queries import (
     resolve_open_change_requests_for_sub_criteria,
 )
-
+from pre_award.assessment_store.db.schemas import AssessmentRoundMetadata, ScoreMetadata, ScoringSystemMetadata
 from pre_award.db import db
 
 

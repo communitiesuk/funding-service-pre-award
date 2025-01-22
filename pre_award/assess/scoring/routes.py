@@ -15,7 +15,6 @@ from pre_award.assess.services.data_services import (
 from pre_award.assess.services.models.sub_criteria import SubCriteria
 from pre_award.assess.services.shared_data_helpers import get_state_for_tasklist_banner
 from pre_award.assess.shared.helpers import determine_assessment_status, determine_flag_status
-from pre_award.assessment_store.db.queries.scores.queries import approve_sub_criteria as _approve_sub_criteria
 from pre_award.common.blueprints import Blueprint
 from pre_award.config import Config
 

@@ -7,9 +7,9 @@ import pytest
 from pre_award.assessment_store.api.routes.progress_routes import get_progress_for_applications
 from pre_award.assessment_store.api.routes.score_routes import get_scoring_system_name_for_round_id
 from pre_award.assessment_store.db.models import AssessmentFlag, AssessmentRecord, Score
+from pre_award.assessment_store.db.models.assessment_record.enums import Status as ApplicationStatus
 from pre_award.assessment_store.db.models.flags import FlagStatus
 from pre_award.assessment_store.db.queries.assessment_records.queries import check_all_change_requests_accepted
-from pre_award.assessment_store.db.models.assessment_record.enums import Status as ApplicationStatus
 from pre_award.assessment_store.db.queries.flags.queries import get_change_requests_for_application
 from pre_award.assessment_store.db.queries.scores.queries import (
     approve_sub_criteria,
