@@ -1,4 +1,5 @@
 import json
+import re
 import uuid
 
 from flask import abort, current_app, g, redirect, render_template, request, url_for
@@ -196,6 +197,31 @@ def new():
         migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
         is_expression_of_interest=round.is_expression_of_interest,
     )
+
+
+@magic_links_bp.route("/new2", methods=["GET", "POST"])
+def new2():
+    """
+    Returns a page containing a single question requesting the
+    users email address.
+    """
+
+    # Grabbing fund and round info from query params and validating
+    fund_short_name = request.args.get("fund")
+    round_short_name = request.args.get("round")
+    govuk_notify_reference = request.args.get("govuk_notify_reference", None)
+
+    # TODO: remove me
+    print(fund_short_name, round_short_name, govuk_notify_reference)
+
+    print("hi")
+    print("hi")
+    print("hi")
+    print("hi")
+
+    print(re.compile(r"[0-9]+"))
+
+    return "hello"
 
 
 @magic_links_bp.route("/check-email", methods=["GET"])
