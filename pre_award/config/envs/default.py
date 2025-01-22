@@ -331,7 +331,12 @@ class DefaultConfig(object):
     TOGGLES_URL = REDIS_INSTANCE_URI + "/0"
     REDIS_SESSIONS_URL = REDIS_INSTANCE_URI + "/1"
     SESSION_REDIS = redis.from_url(REDIS_SESSIONS_URL)
-    FEATURE_CONFIG = {"TAGGING": True, "ASSESSMENT_ASSIGNMENT": False, **CommonConfig.dev_feature_configuration}
+    FEATURE_CONFIG = {
+        "TAGGING": True,
+        "ASSESSMENT_ASSIGNMENT": False,
+        "UNCOMPETED_WORKFLOW": False,
+        **CommonConfig.dev_feature_configuration,
+    }
 
     # LRU cache settings
     LRU_CACHE_TIME = int(environ.get("LRU_CACHE_TIME", 3600))  # in seconds

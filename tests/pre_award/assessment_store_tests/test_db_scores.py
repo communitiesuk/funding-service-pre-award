@@ -7,9 +7,12 @@ import pytest
 from pre_award.assessment_store.api.routes.progress_routes import get_progress_for_applications
 from pre_award.assessment_store.api.routes.score_routes import get_scoring_system_name_for_round_id
 from pre_award.assessment_store.db.models import AssessmentFlag, AssessmentRecord, Score
+from pre_award.assessment_store.db.models.assessment_record.enums import Status as ApplicationStatus
 from pre_award.assessment_store.db.models.flags import FlagStatus
 from pre_award.assessment_store.db.queries.assessment_records.queries import check_all_change_requests_accepted
+from pre_award.assessment_store.db.queries.flags.queries import get_change_requests_for_application
 from pre_award.assessment_store.db.queries.scores.queries import (
+    approve_sub_criteria,
     create_score_for_app_sub_crit,
     get_scores_for_app_sub_crit,
     get_sub_criteria_to_latest_score_map,
@@ -311,7 +314,7 @@ def setup_application_with_requests_and_scores(_db):
             funding_amount_requested=0.0,
             round_id=uuid.uuid4(),
             fund_id=uuid.uuid4(),
-            workflow_status="IN_PROGRESS",
+            workflow_status=ApplicationStatus.CHANGE_REQUESTED,
             asset_type="an_asset_type",
             jsonb_blob={},
         )
@@ -430,3 +433,84 @@ def test_change_request_multiple_sections_all_accepted(_db, setup_application_wi
     )
     result = check_all_change_requests_accepted(application_id)
     assert result is True
+
+
+def test_approve_sub_criteria_resolves_change_request(_db, setup_application_with_requests_and_scores):
+    section_1 = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(flag_data=[[section_1], [section_1]])
+
+    approve_sub_criteria(application_id=application_id, sub_criteria_id=section_1, user_id=str(uuid.uuid4()))
+
+    change_requests = get_change_requests_for_application(application_id)
+    assert all(cr.latest_status == FlagStatus.RESOLVED for cr in change_requests)
+
+
+def test_approve_sub_criteria_creates_score(_db, setup_application_with_requests_and_scores):
+    sub_criteria_id = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id]])
+
+    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()))
+
+    scores = _db.session.query(Score).filter_by(application_id=application_id, sub_criteria_id=sub_criteria_id).all()
+    assert len(scores) == 1
+    assert scores[0].score == 1
+
+
+def test_approve_sub_criteria_updates_application_status(_db, setup_application_with_requests_and_scores):
+    sub_criteria_id = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id]])
+
+    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()))
+
+    application = _db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
+    assert application.workflow_status == ApplicationStatus.IN_PROGRESS
+
+
+def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(
+    _db, setup_application_with_requests_and_scores
+):
+    sub_criteria_id_1 = str(uuid.uuid4())
+    sub_criteria_id_2 = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id_1], [sub_criteria_id_2]])
+
+    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id_1, user_id=str(uuid.uuid4()))
+
+    change_requests = get_change_requests_for_application(application_id)
+    resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
+    unresolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RAISED]
+
+    assert len(resolved_requests) == 1
+    assert len(unresolved_requests) == 1
+    assert unresolved_requests[0].sections_to_flag == [sub_criteria_id_2]
+
+    application = _db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
+    assert application.workflow_status == ApplicationStatus.CHANGE_REQUESTED
+
+    # Approving last remaining sub-criteria should change application status
+    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id_2, user_id=str(uuid.uuid4()))
+
+    change_requests = get_change_requests_for_application(application_id)
+    resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
+    unresolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RAISED]
+
+    assert len(resolved_requests) == 2
+    assert len(unresolved_requests) == 0
+
+    application = _db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
+    assert application.workflow_status == ApplicationStatus.IN_PROGRESS
+
+
+def test_approve_sub_criteria_multiple_change_requests_same_subcriteria(
+    _db, setup_application_with_requests_and_scores
+):
+    sub_criteria_id = str(uuid.uuid4())
+    application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id], [sub_criteria_id]])
+
+    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()))
+
+    change_requests = get_change_requests_for_application(application_id)
+    resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
+    unresolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RAISED]
+
+    assert len(resolved_requests) == 2
+    assert len(unresolved_requests) == 0

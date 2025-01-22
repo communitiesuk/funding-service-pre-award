@@ -13,6 +13,14 @@ def get_flags_for_application(application_id):
     return results
 
 
+def get_change_requests_for_application(application_id):
+    stmt = select(AssessmentFlag).where(
+        AssessmentFlag.application_id == application_id, AssessmentFlag.is_change_request.is_(True)
+    )
+    results = db.session.scalars(stmt).all()
+    return results
+
+
 def get_flag_by_id(flag_id):
     stmt = select(AssessmentFlag).where(AssessmentFlag.id == flag_id)
     results = db.session.scalars(stmt).all()
@@ -74,3 +82,30 @@ def add_update_to_assessment_flag(
     db.session.add(assessment_flag)
     db.session.commit()
     return assessment_flag
+
+
+def resolve_open_change_requests_for_sub_criteria(
+    application_id, sub_criteria_id, user_id, justification="Sub-criteria was approved"
+):
+    stmt = select(AssessmentFlag).where(
+        AssessmentFlag.application_id == application_id,
+        AssessmentFlag.is_change_request.is_(True),
+        AssessmentFlag.latest_status == FlagStatus.RAISED,
+        AssessmentFlag.sections_to_flag.contains([sub_criteria_id]),
+    )
+    open_change_requests = db.session.scalars(stmt).all()
+    for open_change_request in open_change_requests:
+        flag_update = FlagUpdate(
+            justification=justification,
+            user_id=user_id,
+            status=FlagStatus.RESOLVED,
+            allocation=None,
+            assessment_flag_id=open_change_request.id,
+        )
+        open_change_request.updates.append(flag_update)
+        open_change_request.latest_status = FlagStatus.RESOLVED
+        db.session.add(open_change_request)
+
+    db.session.commit()
+
+    return open_change_requests

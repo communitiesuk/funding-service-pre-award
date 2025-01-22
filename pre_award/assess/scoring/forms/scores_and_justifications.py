@@ -3,6 +3,10 @@ from wtforms import RadioField, TextAreaField
 from wtforms.validators import InputRequired
 
 
+class ApprovalForm(FlaskForm):
+    pass
+
+
 class ScoreForm(FlaskForm):
     """
     Given class is a form class model for scoring a sub-criteria fund

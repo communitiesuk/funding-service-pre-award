@@ -334,7 +334,7 @@ def get_available_teams(fund_id: str, round_id: str, ttl_hash=None) -> list:
     return teams_available or []
 
 
-def get_bulk_accounts_dict(account_ids: List, fund_short_name: str):
+def get_bulk_accounts_dict(account_ids: Collection, fund_short_name: str):
     if account_ids:
         account_ids_to_retrieve = list(set(account_ids))
         account_url = Config.BULK_ACCOUNTS_ENDPOINT

@@ -92,6 +92,7 @@ from pre_award.assess.config.display_value_mappings import (
     search_params_default,
 )
 from pre_award.assess.flagging.forms.request_changes_form import RequestChangesForm
+from pre_award.assess.scoring.forms.scores_and_justifications import ApprovalForm
 from pre_award.assess.scoring.helpers import get_scoring_class
 from pre_award.assess.services.aws import get_file_for_download_from_aws
 from pre_award.assess.services.data_services import (
@@ -147,6 +148,7 @@ from pre_award.assess.themes.deprecated_theme_mapper import (
     order_entire_application_by_themes,
 )
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
+from pre_award.assessment_store.db.queries.scores.queries import approve_sub_criteria
 from pre_award.common.blueprints import Blueprint
 from pre_award.config import Config
 
@@ -1147,8 +1149,12 @@ def display_sub_criteria(
     """
     current_app.logger.info("Processing GET to %(request_path)s.", dict(request_path=request.path))
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
+    score = get_score_and_justification(
+        application_id=application_id, sub_criteria_id=sub_criteria_id, score_history=False
+    )
     theme_id = request.args.get("theme_id", sub_criteria.themes[0].id)
     comment_form = CommentsForm()
+    approval_form = ApprovalForm()
     try:
         current_theme: Theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
     except StopIteration:
@@ -1176,22 +1182,32 @@ def display_sub_criteria(
             )
         )
 
+    if approval_form.validate_on_submit():
+        approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=g.account_id)
+
+        return redirect(
+            url_for(
+                "assessment_bp.display_sub_criteria",
+                application_id=application_id,
+                sub_criteria_id=sub_criteria_id,
+                theme_id=theme_id,
+            )
+        )
+
     state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
-    change_requests_list = get_change_requests(application_id)
+    all_change_requests = get_change_requests(application_id)
+    sub_criteria_change_requests = [
+        change_request for change_request in all_change_requests if sub_criteria_id in change_request.sections_to_flag
+    ]
+    change_request_user_ids = set(
+        flag_item["user_id"] for change_request in sub_criteria_change_requests for flag_item in change_request.updates
+    )
+    approval_users_ids = set(score_item["user_id"] for score_item in score) if score else set()
 
-    user_id_list = []
-    change_requests = []
-    for change_request in change_requests_list:
-        if sub_criteria_id not in change_request.sections_to_flag:
-            continue
-
-        change_requests.append(change_request)
-        for flag_item in change_request.updates:
-            if flag_item["user_id"] not in user_id_list:
-                user_id_list.append(flag_item["user_id"])
-
-    accounts_list = get_bulk_accounts_dict(user_id_list, state.fund_short_name)
+    approval_change_request_users = get_bulk_accounts_dict(
+        change_request_user_ids.union(approval_users_ids), state.fund_short_name
+    )
 
     comment_response = get_comments(
         application_id=application_id,
@@ -1251,16 +1267,18 @@ def display_sub_criteria(
 
     common_template_config = {
         "sub_criteria": sub_criteria,
+        "score": score[0] if score else None,
         "fund": get_fund(sub_criteria.fund_id),
         "application_id": application_id,
         "comments": theme_matched_comments,
-        "change_requests": change_requests,
-        "accounts_list": accounts_list,
+        "change_requests": sub_criteria_change_requests,
+        "accounts_list": approval_change_request_users,
         "is_flaggable": False,  # Flag button is disabled in sub-criteria page,
         "display_comment_box": add_comment_argument,
         "display_comment_edit_box": edit_comment_argument,
         "comment_id": comment_id,
         "comment_form": comment_form,
+        "approval_form": approval_form,
         "current_theme": current_theme,
         "flag_status": flag_status,
         "assessment_status": assessment_status,

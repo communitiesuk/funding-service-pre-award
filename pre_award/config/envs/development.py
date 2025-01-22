@@ -5,7 +5,7 @@ import logging
 from distutils.util import strtobool
 from os import getenv
 
-from fsd_utils import configclass
+from fsd_utils import CommonConfig, configclass
 
 from pre_award.config.envs.default import DefaultConfig
 from pre_award.config.envs.default import DefaultConfig as Config
@@ -143,3 +143,10 @@ class DevelopmentConfig(Config):
         RSA256_PUBLIC_KEY = base64.b64decode(RSA256_PUBLIC_KEY_BASE64).decode()
 
     ASSETS_AUTO_BUILD = True
+
+    FEATURE_CONFIG = {
+        "TAGGING": True,
+        "ASSESSMENT_ASSIGNMENT": True,
+        "UNCOMPETED_WORKFLOW": False,
+        **CommonConfig.dev_feature_configuration,
+    }

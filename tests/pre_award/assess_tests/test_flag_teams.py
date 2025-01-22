@@ -19,6 +19,8 @@ class TestTeamsFlagData:
             latest_allocation=latest_allocation,
             application_id=application_id,
             updates=updates,
+            field_ids=[],
+            is_change_request=False,
         )
 
     def test_from_flags_with_empty_list(self):

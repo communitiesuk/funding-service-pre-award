@@ -15,4 +15,9 @@ class TestConfig(AwsConfig):
     # LRU cache settings
     LRU_CACHE_TIME = 300  # in seconds
 
-    FEATURE_CONFIG = {"TAGGING": True, "ASSESSMENT_ASSIGNMENT": True, **CommonConfig.dev_feature_configuration}
+    FEATURE_CONFIG = {
+        "TAGGING": True,
+        "ASSESSMENT_ASSIGNMENT": True,
+        "UNCOMPETED_WORKFLOW": True,
+        **CommonConfig.dev_feature_configuration,
+    }

@@ -79,7 +79,12 @@ class UnitTestConfig(Config):
     TOGGLES_URL = "redis://localhost:6379/0"
 
     FSD_USER_TOKEN_COOKIE_NAME = "fsd_user_token"
-    FEATURE_CONFIG = {"TAGGING": True, "ASSESSMENT_ASSIGNMENT": True, **CommonConfig.dev_feature_configuration}
+    FEATURE_CONFIG = {
+        "TAGGING": True,
+        "ASSESSMENT_ASSIGNMENT": True,
+        "UNCOMPETED_WORKFLOW": True,
+        **CommonConfig.dev_feature_configuration,
+    }
 
     SHOW_ALL_ROUNDS = True
 

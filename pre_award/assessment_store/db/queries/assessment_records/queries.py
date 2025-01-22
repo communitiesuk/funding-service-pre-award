@@ -410,11 +410,14 @@ def update_status_to_completed(application_id):
         "Updating application status to COMPLETED for application: %(application_id)s.",
         dict(application_id=application_id),
     )
+    update_application_status(application_id=application_id, status=Status.COMPLETED)
+
+
+def update_application_status(application_id: str, status: Status):
     db.session.query(AssessmentRecord).filter(AssessmentRecord.application_id == application_id).update(
-        {AssessmentRecord.workflow_status: Status.COMPLETED},
+        {AssessmentRecord.workflow_status: status},
         synchronize_session=False,
     )
-
     db.session.commit()
 
 
