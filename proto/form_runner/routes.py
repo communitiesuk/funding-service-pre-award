@@ -2,6 +2,7 @@ from flask import redirect, render_template, request, session, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
+from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.services.accounts import get_account
 from proto.common.data.services.applications import (
     get_application,
@@ -11,6 +12,7 @@ from proto.common.data.services.applications import (
 )
 from proto.common.data.services.question_bank import get_application_question
 from proto.form_runner.forms import MarkAsCompleteForm, build_question_form
+from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
 
 runner_blueprint = Blueprint("proto_form_runner", __name__)
 
@@ -77,6 +79,7 @@ def ask_application_question(application_id, section_slug, question_slug):
         "form_runner/question_page.html",
         application=application,
         question=question,
+        QuestionType=QuestionType,
         section=question.section,
         form=form,
         back_link=_back_link_for_question(question, application_id, from_check_your_answers),
@@ -99,5 +102,7 @@ def check_your_answers(application_id, section_slug):
         application=application,
         section=section_data.section,
         section_data=section_data,
+        QuestionType=QuestionType,
+        get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
         form=form,
     )

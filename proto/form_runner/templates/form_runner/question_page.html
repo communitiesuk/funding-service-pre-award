@@ -24,8 +24,18 @@
 
     <form method="post" novalidate>
       {{ form.csrf_token }}
+
       <span class="govuk-caption-l">{{ section.title }}</span>
-      {{ form.question(params={"label": {"isPageHeading": true, "classes": "govuk-label--l"} }) }}
+
+      {% if question.type == QuestionType.TEXT_INPUT %}
+        {{ form.question(params={"label": {"isPageHeading": true, "classes": "govuk-label--l"} }) }}
+      {% elif question.type == QuestionType.TEXTAREA %}
+        {{ form.question(params={"label": {"isPageHeading": true, "classes": "govuk-label--l"} }) }}
+      {% elif question.type == QuestionType.RADIOS %}
+        {# govuk-frontend-wtf doesn't seem to be merging this properly - without explicitly re-setting fieldset.legend.text, there's no visible question =[ #}
+        {{ form.question(params={"fieldset": {"legend": {"isPageHeading": true, "classes": "govuk-fieldset__legend--l", "text": form.question.label.text} } }) }}
+      {% endif %}
+
       {{ form.submit }}
     </form>
   </div>

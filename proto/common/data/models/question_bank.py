@@ -8,6 +8,7 @@ from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.testing.schema import mapped_column
 
 from db import db
+from proto.common.data.models import t_data_source
 
 if TYPE_CHECKING:
     from proto.common.data.models.round import Round
@@ -61,7 +62,7 @@ class TemplateQuestion(db.Model):
     title: Mapped[str]
     hint: Mapped[str | None]
     order: Mapped[int]
-    data_source: Mapped[dict | None]
+    data_source: Mapped[t_data_source]
 
     template_section_id: Mapped[int] = mapped_column(db.ForeignKey(TemplateSection.id))
     template_section: Mapped[TemplateSection] = relationship(TemplateSection)
@@ -112,7 +113,7 @@ class ApplicationQuestion(db.Model):
     title: Mapped[str]
     hint: Mapped[str | None]
     order: Mapped[int]
-    data_source: Mapped[dict | None]
+    data_source: Mapped[t_data_source]
 
     section_id: Mapped[int] = mapped_column(db.ForeignKey(ApplicationSection.id))
     section: Mapped[ApplicationSection] = relationship(ApplicationSection)

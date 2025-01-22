@@ -13,6 +13,7 @@ from proto.common.data.models import (
     ProtoApplicationSectionData,
     Round,
 )
+from proto.common.data.models.question_bank import QuestionType
 
 
 def _generate_application_code():
@@ -54,13 +55,16 @@ def search_applications(short_code):
 
 
 def _build_answer_dict(question: "ApplicationQuestion", answer: str) -> dict:
+    if question.type == QuestionType.RADIOS:
+        answer = next(filter(lambda choice: choice["value"] == answer, question.data_source))
+
     return {
         "answer": answer,
         "question_type": question.type,
     }
 
 
-def get_current_answer_to_question(application: ProtoApplication, question: "ApplicationQuestion"):
+def get_current_answer_to_question(application: ProtoApplication, question: "ApplicationQuestion") -> str | dict:
     # str(question.id) because JSON keys must be strings, but our question PK col is an int
     return db.session.scalar(
         select(ProtoApplicationSectionData.data[str(question.id)]["answer"]).filter(

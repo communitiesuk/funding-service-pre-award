@@ -8,6 +8,7 @@ from wtforms.validators import DataRequired, InputRequired
 from proto.common.data.models import ApplicationQuestion, ProtoApplication
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.services.applications import get_current_answer_to_question
+from proto.form_runner.helpers import get_answer_value_for_question
 
 
 # Build the form class and attach a field for it that renders the question correctly.
@@ -28,16 +29,23 @@ def build_question_form(application: "ProtoApplication", question: ApplicationQu
             )
         case QuestionType.RADIOS:
             field = RadioField(
-                label=question.title, description=question.hint, widget=GovRadioInput(), validators=[DataRequired()]
+                label=question.title,
+                description=question.hint or "",
+                choices=[(choice["value"], choice["label"]) for choice in question.data_source],
+                widget=GovRadioInput(),
+                validators=[DataRequired()],
             )
-            # TODO: add choices 👀
         case _:
             raise Exception("Unable to generate dynamic form for question type {_}")
 
     DynamicQuestionForm.question = field
 
     # Populate form with existing answer (if any) from the DB
-    form = DynamicQuestionForm(data={"question": get_current_answer_to_question(application, question)})
+    form = DynamicQuestionForm(
+        data={
+            "question": get_answer_value_for_question(question, get_current_answer_to_question(application, question))
+        }
+    )
 
     return form
 

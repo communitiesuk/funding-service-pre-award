@@ -73,6 +73,16 @@ def insert_question_bank_data(app, db):
                 data_standard_id=data_standards_to_create["$github.com/communitiesuk/json.schema#person.name"].id,
                 template_section_id=template_sections_to_create["project-information"].id,
             ),
+            "project-about-cheese": TemplateQuestion(
+                slug="project-about-cheese",
+                type=QuestionType.RADIOS,
+                title="Is the project about cheese?",
+                hint=None,
+                order=3,
+                data_source=[{"value": "yes", "label": "Yes"}, {"value": "no", "label": "No"}],
+                data_standard_id=None,
+                template_section_id=template_sections_to_create["project-information"].id,
+            ),
             "organisation-name": TemplateQuestion(
                 slug="organisation-name",
                 type=QuestionType.TEXT_INPUT,

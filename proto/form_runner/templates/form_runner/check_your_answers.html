@@ -25,9 +25,7 @@
 
     {% set rowData = [] %}
     {% for question in section.questions %}
-      {% set id = question.id | string %}
-      {% set data = section_data.data.get(id, {}) %}
-      {% set answer = data.get('answer', '') %}
+      {% set answer = get_answer_text_for_question_from_section_data(question, section_data) %}
 
       {% set valueHtml %}
         {% if answer %}
