@@ -1,0 +1,39 @@
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+
+{% extends "apply/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}All applications{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{% trans %}Your applications for all grants{% endtrans %}</h1>
+
+        {% set email %}
+        <strong class="govuk-!-font-weight-bold">{{ account.email }}</strong>
+        {% endset %}
+        <p class="govuk-body govuk-!-margin-bottom-6">{% trans number_of_grants=(grants | length), email=email %}You have applied to {{ number_of_grants }} grants with {{ email }}{% endtrans %}</p>
+
+        <ul class="govuk-list">
+        {% for grant in grants %}
+        <li class="govuk-!-margin-bottom-8">
+            <h2 class="govuk-heading-m">
+                <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_apply.application.application_list_handler', short_code=grant.short_name)}}">{{ grant.proto_name }}</a>
+            </h2>
+            {# not happy at all about using JSON here - I'll move this into a column at some point #}
+            <p class="govuk-body">{{ grant.description_json.en }}</p>
+
+            {# assuming the rounds are somehow sensibly ordered - would need to finess the query, this wants the latest #}
+            {{ govukSummaryList({
+                "rows": [
+                    { "key": { "text": _("Opening date") }, "value": { "text": grant.rounds[0].proto_start_date | dateformat } },
+                    { "key": { "text": _("Submission date") }, "value": { "text": grant.rounds[0].proto_end_date | dateformat } }
+                ]
+            })}}
+        </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

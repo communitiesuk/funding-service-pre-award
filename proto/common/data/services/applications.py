@@ -3,6 +3,7 @@ import string
 
 from sqlalchemy import cast, delete, func, select
 from sqlalchemy.dialects.postgresql import JSONB, insert
+from sqlalchemy.orm import joinedload
 
 from db import db
 from proto.common.data.models import (
@@ -52,6 +53,21 @@ def search_applications(short_code):
         select(ProtoApplication).join(Round).join(Fund).filter(Fund.short_name == short_code)
     ).all()  # can use this to prove competitive vs. un-competed, only from submitted or all
     return applications
+
+
+def get_application_grants(account_id):
+    grants = (
+        db.session.scalars(
+            select(Fund)
+            .options(joinedload(Fund.rounds))
+            .join(Round)
+            .join(ProtoApplication)
+            .filter(ProtoApplication.account_id == account_id)
+        )
+        .unique()
+        .all()
+    )
+    return grants
 
 
 def _build_answer_dict(question: "ApplicationQuestion", answer: str) -> dict:

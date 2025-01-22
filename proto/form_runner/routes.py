@@ -62,6 +62,7 @@ def _back_link_for_question(question, application_id, from_check_your_answers):
 
 @runner_blueprint.route("/application/<application_id>/<section_slug>/<question_slug>", methods=["GET", "POST"])
 def ask_application_question(application_id, section_slug, question_slug):
+    account = {"email": session.get("magic_links_account_email")}
     application = get_application(application_id)
     question = get_application_question(application.round_id, section_slug, question_slug)
     form = build_question_form(application, question)
@@ -80,11 +81,14 @@ def ask_application_question(application_id, section_slug, question_slug):
         section=question.section,
         form=form,
         back_link=_back_link_for_question(question, application_id, from_check_your_answers),
+        account=account,
     )
 
 
 @runner_blueprint.route("/application/<application_id>/<section_slug>/check-your-answers", methods=["GET", "POST"])
 def check_your_answers(application_id, section_slug):
+    # these are workaronds for having the navigation show or not and aren't really used - this should be more generic
+    account = {"email": session.get("magic_links_account_email")}
     application = get_application(application_id=application_id)
     section_data = get_application_section_data(application_id, section_slug)
     form = MarkAsCompleteForm(data={"complete": "yes" if section_data and section_data.completed else None})
@@ -101,4 +105,5 @@ def check_your_answers(application_id, section_slug):
         QuestionType=QuestionType,
         get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
         form=form,
+        account=account,
     )

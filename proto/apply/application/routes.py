@@ -3,7 +3,7 @@ from flask import redirect, render_template, session, url_for
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
 from proto.common.data.services.accounts import get_account
-from proto.common.data.services.applications import create_application, get_applications
+from proto.common.data.services.applications import create_application, get_application_grants, get_applications
 from proto.common.data.services.grants import get_active_round, get_grant
 
 application_blueprint = Blueprint("application", __name__)
@@ -44,3 +44,16 @@ def application_new_handler(short_code):
 
     application = create_application(preview=False, round_id=active_round.id, account_id=account.id)
     return redirect(url_for("proto_form_runner.application_tasklist", application_id=application.id))
+
+
+@application_blueprint.get("/applications")
+@is_authenticated
+def all_user_application_list_handler():
+    account = get_account(session.get("magic_links_account_id"))
+    grants = get_application_grants(session.get("magic_links_account_id"))
+    return render_template(
+        "apply/application/all_applications_grant_list.jinja.html",
+        grants=grants,
+        account=account,
+        active_navigation_tab="your_grants",
+    )

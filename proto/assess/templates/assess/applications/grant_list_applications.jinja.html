@@ -38,12 +38,12 @@
             <strong class="govuk-tag govuk-tag--grey">Submitted</strong>
             {% endset %}
             {% set rows = rows.append([
-                { "text": application.reference },
+                { "text": application.code },
                 { "text": "Steven Fountain" },
                 { "html": statusTag },
                 { "text": "0/12" },
-                { "text": application.proto_created_date | dateformat },
-                { "text": application.proto_updated_date | dateformat }
+                { "text": application.created_at | dateformat },
+                { "text": application.updated_at | dateformat }
             ]) %}
         {% endfor %}
         {% set dateSubmittedHeader %}<a class="gouvk-link govuk-link--no-visited-state" href="#">{% trans %}Date submitted{% endtrans %}</a>{% endset %}

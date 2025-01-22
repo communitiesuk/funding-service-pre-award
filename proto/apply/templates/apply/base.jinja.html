@@ -20,8 +20,8 @@
 {{ govukServiceNavigation({
   "serviceName": "Apply for funding",
   "navigation": [
-    { "href": url_for('admin.index'), "text": _("Your grants"), "active": active_navigation_tab == 'admin'},
-    { "href": url_for('admin.index'), "text": _("Sign out"), "active": active_navigation_tab == 'admin'}
+    { "href": url_for('proto_apply.application.all_user_application_list_handler'), "text": _("Your grants"), "active": active_navigation_tab == "your_grants" },
+    { "href": url_for('proto_apply.web.magic_links_sign_out_handler'), "text": _("Sign out") }
   ] if account
 }) }}
 {% endblock header %}
