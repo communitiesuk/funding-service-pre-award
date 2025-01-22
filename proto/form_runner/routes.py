@@ -23,7 +23,10 @@ def application_tasklist(application_id):
     return render_template("form_runner/application_tasklist.html", application=application, account=account)
 
 
-def _next_url_for_question(application_id, section, current_question_slug):
+def _next_url_for_question(application_id, section, current_question_slug, from_check_your_answers):
+    if from_check_your_answers:
+        return url_for("proto_form_runner.check_your_answers", application_id=application_id, section_slug=section.slug)
+
     question_slugs = [question.slug for question in section.questions]
     curr_index = question_slugs.index(current_question_slug)
     if curr_index == len(question_slugs) - 1:
@@ -66,13 +69,9 @@ def ask_application_question(application_id, section_slug, question_slug):
     from_check_your_answers = "from_cya" in request.args
     if form.validate_on_submit():
         upsert_question_data(application, question, form.question.data)
-        if from_check_your_answers:
-            return redirect(
-                url_for(
-                    "proto_form_runner.check_your_answers", application_id=application_id, section_slug=section_slug
-                )
-            )
-        return redirect(_next_url_for_question(application_id, question.section, question_slug))
+        return redirect(
+            _next_url_for_question(application_id, question.section, question_slug, from_check_your_answers)
+        )
 
     return render_template(
         "form_runner/question_page.html",
