@@ -48,7 +48,7 @@ class NotificationService:
     # I don't like that template IDs are defined here. In my opinion they could live in some structured part of
     # config where they're derived from the environment. There should be no default values
     PROTO_MAGIC_LINK_TEMPLATE_ID = os.environ.get(
-        "PROTO_MAGIC_LINK_TEMPLATE_ID", "3c96a266-02aa-41fd-9240-1393045c012c"
+        "PROTO_MAGIC_LINK_TEMPLATE_ID", "8feb97f3-d6df-401a-849c-75f3b2cdbee8"
     )
 
     EXPRESSION_OF_INTEREST_TEMPLATE_ID = {
