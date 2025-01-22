@@ -1,8 +1,9 @@
-from flask import render_template, session
+from flask import redirect, render_template, session, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
-from proto.common.data.services.applications import get_applications
+from proto.common.data.services.accounts import get_account
+from proto.common.data.services.applications import create_application, get_applications
 from proto.common.data.services.grants import get_active_round, get_grant
 
 application_blueprint = Blueprint("application", __name__)
@@ -29,3 +30,17 @@ def application_list_handler(short_code):
         applications=applications,
         account=account,
     )
+
+
+@application_blueprint.post("/grant/<short_code>/apply")
+@is_authenticated
+def application_new_handler(short_code):
+    account = get_account(session.get("magic_links_account_id"))
+
+    active_round, grant = get_active_round(short_code)
+
+    if not active_round:
+        raise Exception("Cannot start an application with no active application round")
+
+    application = create_application(preview=False, round_id=active_round.id, account_id=account.id)
+    return redirect(url_for("proto_form_runner.application_tasklist", application_id=application.id))

@@ -9,23 +9,11 @@
 
 {% block beforeContent %}
 {{ super() }}
-
 <div class="govuk-phase-banner">
-    {# temporary workaround for CSP which can just be removed from proto and non-standard styles which should be resolved from merging with proto/base #}
-    <style nonce="{{ csp_nonce() }}">
-    .proto-phase {
-        display: flex;
-        justify-content: space-between;
-    }
-    </style>
     <div class="proto-phase govuk-!-padding-top-1 govuk-!-padding-bottom-1">
         <p class="govuk-phase-banner__content">
             {% set email %}<strong class="govuk-!-font-weight-bold">{{ account.email }}</strong>{% endset %}
             <span class="govuk-phase-banner__text">{% trans email=email %}You are applying as {{ email }}{% endtrans %}</span>
-        </p>
-        <p class="govuk-phase-banner__content">
-            <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-2" href="#">{% trans %}View all of your grants{% endtrans %}</a>
-            <a class="govuk-link govuk-link--no-visited-state" href={{ url_for("proto_apply.web.magic_links_sign_out_handler") }}>{% trans %}Sign out{% endtrans %}</a>
         </p>
     </div>
 </div>
@@ -62,7 +50,7 @@
             {% set rows = [] %}
             {% for application in applications %}
                 {% set referenceLink %}
-                    <a class="govuk-link govuk-link--no-visited-state" href="#">{{ application.reference }}</a>
+                    <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_form_runner.application_tasklist', application_id=application.id) }}">{{ application.code }}</a>
                 {% endset %}
                 {% set statusTag %}
                     <strong class="govuk-tag govuk-tag--grey">Started</strong>
@@ -70,8 +58,8 @@
                 {% set rows = rows.append([
                     { "html": referenceLink },
                     { "html": statusTag },
-                    { "text": application.proto_created_date | dateformat },
-                    { "text": application.proto_updated_date | dateformat }
+                    { "text": application.created_at | dateformat },
+                    { "text": application.updated_at | dateformat }
                 ]) %}
             {% endfor %}
             {{ govukTable({
@@ -86,10 +74,13 @@
         {% endif %}
 
         {% if active_round %}
-        {{ govukButton({
-            "text": _("Start a new application"),
-            "classes": "govuk-button--secondary" if applications
-        }) }}
+        <form method="POST">
+            <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+            {{ govukButton({
+                "text": _("Start a new application"),
+                "classes": "govuk-button--secondary" if applications
+            }) }}
+        </form>
         {% endif %}
     </div>
 </div>

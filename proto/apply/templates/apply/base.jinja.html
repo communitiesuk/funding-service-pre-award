@@ -1,6 +1,7 @@
 {% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
 {% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
 {% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
+{% from "govuk_frontend_jinja/components/service-navigation/macro.html" import govukServiceNavigation %}
 
 {% set assetPath = url_for('static', filename='').rstrip('/') %}
 {% extends "govuk_frontend_jinja/template.html" %}
@@ -12,12 +13,23 @@
 {% block header %}
 {{ govukHeader({
     "homepageUrl": "#",
-    "useTudorCrown": true,
-    "serviceName": _("Apply for funding")
+    "classes": "govuk-header--full-width-border",
+    "useTudorCrown": true
+}) }}
+
+{{ govukServiceNavigation({
+  "serviceName": "Apply for funding",
+  "navigation": [
+    { "href": url_for('admin.index'), "text": _("Your grants"), "active": active_navigation_tab == 'admin'},
+    { "href": url_for('admin.index'), "text": _("Sign out"), "active": active_navigation_tab == 'admin'}
+  ] if account
 }) }}
 {% endblock header %}
 
-{% block beforeContent %}
+{# only based on that I don't like it with the "You are applying as " phase banner - can try a few options but #}
+{# another is to put feedback as an action in the service nav or in the footer/ during journeys #}
+
+{# {% block beforeContent %}
 {% set feedbackMessage %}
 {% trans %}This is a new service. Help us improve it and{% endtrans %} <a href="#" class="govuk-link govuk-link--no-visited-state">{% trans %}give your feedback (opens in new tab).{% endtrans %}</a>
 {% endset %}
@@ -28,7 +40,15 @@
     },
     "html": feedbackMessage
 }) }}
-{% endblock beforeContent %}
+{% endblock beforeContent %} #}
+
+{% block bodyEnd %}
+    <script type="module" src="{{ url_for('static', filename='govuk-frontend-5.7.1.min.js') }}"> </script>
+    <script type="module" nonce="{{ csp_nonce() }}">
+        import { initAll } from "{{ url_for('static', filename='govuk-frontend-5.7.1.min.js') }}"
+        initAll()
+    </script>
+{% endblock %}
 
 {% block footer %}
 {{ govukFooter({

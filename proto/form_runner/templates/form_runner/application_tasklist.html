@@ -2,80 +2,133 @@
 {% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
+{% from "govuk_frontend_jinja/components/task-list/macro.html" import govukTaskList %}
 
-{% extends "form_runner/base.jinja.html" %}
+{% extends "apply/base.jinja.html" %}
 
-{% block pageTitle %}{% trans %}Your application{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+{# decision to make this apply specific for now, the tech is still in a form runner folder though so the tasklist could be generalised #}
+{% block pageTitle %}{% trans %}Application{% endtrans %} {{ application.code }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+<div class="govuk-phase-banner">
+    <div class="proto-phase govuk-!-padding-top-1 govuk-!-padding-bottom-1">
+        <p class="govuk-phase-banner__content">
+            {% set email %}<strong class="govuk-!-font-weight-bold">{{ account.email if account }}</strong>{% endset %}
+            <span class="govuk-phase-banner__text">{% trans email=email %}You are applying as {{ email }}{% endtrans %}</span>
+        </p>
+    </div>
+</div>
+
+{# I've ommited the back link because you can click "Your grants" at the top - could try this out with users #}
+{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l">{{ application.round.proto_grant.title_json.en }}</span>
-      Application for {{ application.round.title_json.en }}
+      <span class="govuk-caption-l">{{ application.round.proto_grant.proto_name }}</span>
+
+      {# if the fund config has nominated a question answer to use for the project name and the user has #}
+      {# filled in that information that could be used for the heading here? #}
+      {% trans %}Application for funding{% endtrans %}
     </h1>
 
-    {{ govukDetails({"summaryText": "Help with filling out your application", "text": ""}) }}
+    {# should come from grant config if it has be defined, otherwise would not be shown? #}
+    {{ govukDetails({
+      "summaryText": _("Help with filling out your application"),
+      "text": ""
+    }) }}
 
-    <dl>
-      <dt class="govuk-heading-s app-application-details">{% trans %}Submission deadline:{% endtrans %}</dt>
-      <dd class="govuk-body govuk-!-margin-bottom-2"> {{ application.round.deadline | datetime_format_full_month }}</dd>
-
-      <dt class="govuk-heading-s app-application-details">{% trans %}Reference:{% endtrans %}</dt>
-      <dd class="govuk-body govuk-!-margin-bottom-2"> {{ application.code }}</dd>
-
-      <dt class="govuk-heading-s app-application-details">
-          {% trans %}Status:{% endtrans %}
-      </dt>
+    {# make this a macro - update it to use the latest thinking on statuses #}
+    {# ideally this would be a dictionary mapping statuses to styles and human readable text and thats it #}
+    {% set statusTag %}
       {% if application.not_started %}
-        <dd class="govuk-!-margin-bottom-2">
-          {{ govukTag({"text": "Not started", "classes": "govuk-tag--grey"}) }}
-        </dd>
+        {{ govukTag({"text": _("Not started"), "classes": "govuk-tag--grey"}) }}
       {% elif application.in_progress %}
-        <dd class="govuk-!-margin-bottom-2">
-          {{ govukTag({"text": "In progress", "classes": "govuk-tag--blue"}) }}
-        </dd>
+        {{ govukTag({"text": _("In progress"), "classes": "govuk-tag--blue"}) }}
+      {% elif application.completed %}
+        {{ govukTag({"text": _("Completed"), "classes": "govuk-tag--green"}) }}
       {% endif %}
-    </dl>
+    {% endset %}
 
-    <ol class="govuk-list">
-      {% for section in application.round.application_sections %}
-      <li>
-        <h2 class="govuk-heading-m">Section {{ loop.index }}</h2>
+    {# rename code to proto reference #}
+    {{ govukSummaryList({
+      "rows": [
+        { "key": { "text": _("Reference") }, "value": { "text": application.code } },
+        { "key": { "text": _("Status") }, "value": { "html": statusTag } },
+        { "key": { "text": _("Submission deadline") }, "value": { "text": application.round.deadline | dateformat } },
+      ]
+    }) }}
 
-        <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-2"/>
-        {% if application.section_in_progress(section.id) or application.section_completed(section.id) %}
-        <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_form_runner.check_your_answers', application_id=application.id, section_slug=section.slug) }}">{{ section.title }}</a>
-        {% else %}
-        <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_form_runner.ask_application_question', application_id=application.id, section_slug=section.slug, question_slug=section.questions[0].slug) }}">{{ section.title }}</a>
-        {% endif %}
+    {# <p class="govuk-body">
+      <span>{% trans %}Submission deadline:{% endtrans %}</span>
+      <span>{{ application.round.deadline | dateformat }}</span>
+    </p> #}
 
-        {% if application.section_not_started(section.id) %}
-          {{ govukTag({"text": "Not started", "classes": "govuk-tag--grey app-!-float-right"}) }}
-        {% elif application.section_in_progress(section.id) %}
-          {{ govukTag({"text": "In progress", "classes": "govuk-tag--blue app-!-float-right"}) }}
-        {% elif application.section_completed(section.id) %}
-          {{ govukTag({"text": "Completed", "classes": "govuk-tag--green app-!-float-right"}) }}
-        {% endif %}
-        <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-3"/>
-      </li>
+    {% for section in application.round.application_sections %}
+      {# <h2 class="govuk-heading-m">{{ section.title }}</h2> #}
+      <h2 class="govuk-heading-m">{% trans %}Section{% endtrans %} {{ loop.index }}</h2>
+      {# here we'd be looping through potential sub-sections but we'll add that next #}
 
-      {% if not loop.last %}
-        <hr class="govuk-section-break govuk-section-break--m"/>
+      {% set items = [] %}
+      {# I think I'd prefer this routing done when accessing the first page but this works well for now #}
+      {% if application.section_not_started(section.id) %}
+        {% set status = {
+          "tag": {
+            "text": _("Not started"),
+            "classes": "govuk-tag--grey"
+          }
+        } %}
+        {% set href=url_for('proto_form_runner.ask_application_question', application_id=application.id, section_slug=section.slug, question_slug=section.questions[0].slug) %}
+      {% elif application.section_in_progress(section.id) %}
+        {% set status = {
+          "tag": {
+            "text": _("In progress"),
+            "classes": "govuk-tag--blue"
+          }
+        } %}
+        {% set href=url_for('proto_form_runner.check_your_answers', application_id=application.id, section_slug=section.slug) %}
+      {% elif application.section_completed(section.id) %}
+        {% set status = {
+          "tag": {
+            "text": _("Completed"),
+            "classes": "govuk-tag--green"
+          }
+        } %}
+        {% set href=url_for('proto_form_runner.check_your_answers', application_id=application.id, section_slug=section.slug) %}
       {% endif %}
-      {% endfor %}
-    </ol>
+      {% set items = [{
+        "title": { "text": section.title },
+        "href": href,
+        "status": status
+      }] %}
+      {{ govukTaskList({
+        "idPrefix": "section-" + (loop.index | string),
+        "items": items
+      }) }}
+    {% endfor %}
 
     {% if application.can_be_submitted %}
       {% if application.fake %}
-        {% set submitApplicationHref = url_for('proto_manage.platform.rounds.view_round_data_collection', grant_code=application.round.proto_grant.short_name, round_code=application.round.short_name) %}
+        {% set submitApplicationHref = url_for('proto_apply.application.application_list_handler', short_code=application.round.proto_grant.short_name) %}
       {% else %}
         {% set submitApplicationHref = "#" %}
       {% endif %}
-    {{ govukButton({"text":gettext("Submit application"), "href": submitApplicationHref, "classes": "govuk-!-margin-top-5"}) }}
+      {{ govukButton({
+        "text": _("Submit application"),
+        "href": submitApplicationHref,
+        "classes": "govuk-!-margin-top-5"
+      }) }}
     {% else %}
-    {{ govukButton({"text":gettext("Submit application"), "classes": "govuk-!-margin-top-5 govuk-!-margin-bottom-3", "disabled": true}) }}
-      <p class="govuk-body">You cannot submit your application until you have completed all of the sections.</p>
+      {{ govukButton({
+        "text": _("Submit application"),
+        "classes": "govuk-!-margin-top-5 govuk-!-margin-bottom-3",
+        "disabled": true
+      }) }}
+      <p class="govuk-body">{% trans %}You cannot submit your application until you have completed all of the sections.{% endtrans %}</p>
     {% endif %}
   </div>
 </div>

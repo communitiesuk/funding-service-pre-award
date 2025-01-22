@@ -2,13 +2,16 @@
 {% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
 {% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
 
-{% extends "form_runner/base.jinja.html" %}
+{% extends "apply/base.jinja.html" %}
 
-{% block pageTitle %}{% trans %}Your application{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+{% block pageTitle %}{% trans %}Application{% endtrans %} {{ application.code }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
 
 {% block beforeContent %}
 {{ super() }}
-{{ govukBackLink({"text": "Go back to application overview", "href": url_for("proto_form_runner.application_tasklist", application_id=application_id) }) }}
+{{ govukBackLink({
+  "text": "Go back to application overview",
+  "href": url_for("proto_form_runner.application_tasklist", application_id=application.id)
+}) }}
 {% endblock %}
 
 {% block content %}
@@ -18,15 +21,34 @@
         {{ govukErrorSummary(wtforms_errors(form)) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">Check your answers</h1>
+    <h1 class="govuk-heading-l">{% trans %}Check your answers{% endtrans %}</h1>
 
     {% set rowData = [] %}
     {% for question in section.questions %}
+      {% set id = question.id | string %}
+      {% set data = section_data.data.get(id, {}) %}
+      {% set answer = data.get('answer', '') %}
+
+      {% set valueHtml %}
+        {% if answer %}
+          <span>{{ answer }}</span>
+        {% else %}
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_form_runner.ask_application_question', application_id=application.id, section_slug=section.slug, question_slug=question.slug, from_cya='') }}">
+            {# this should use the question "name" which I should add to record alongside it #}
+            {# i.e project name - What is your project name? #}
+            {% trans %}Enter answer{% endtrans %}
+          </a>
+        {% endif %}
+      {% endset %}
       {% set _ = rowData.append(
           {
-            "key": {"text": question.title},
-            "value": {"text": section_data.data.get(question.id|string, {}).get('answer', '')},
-            "actions": {"items": [{"href": url_for('proto_form_runner.ask_application_question', application_id=application_id, section_slug=section.slug, question_slug=question.slug, from_cya=''), "text": "Change", "visuallyHiddenText": question.title, "classes": "govuk-link--no-visited-state"}]}
+            "key": { "text": question.title },
+            "value": { "html": valueHtml },
+            "actions": {
+              "items": [
+                { "href": url_for('proto_form_runner.ask_application_question', application_id=application.id, section_slug=section.slug, question_slug=question.slug, from_cya=''), "text": "Change", "visuallyHiddenText": question.title, "classes": "govuk-link--no-visited-state" }
+              ] if answer
+            }
           }
         ) %}
     {% endfor %}

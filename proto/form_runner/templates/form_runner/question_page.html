@@ -1,9 +1,19 @@
 {% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
 {% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
 
-{% extends "form_runner/base.jinja.html" %}
+{% extends "apply/base.jinja.html" %}
 
-{% block pageTitle %}{% trans %}Your application{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+{% block pageTitle %}{% trans %}Application{% endtrans %} {{ application.code }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{% if back_link %}
+  {{ govukBackLink({
+    "text": _("Back"),
+    "href": back_link
+  }) }}
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -14,6 +24,7 @@
 
     <form method="post" novalidate>
       {{ form.csrf_token }}
+      <span class="govuk-caption-l">{{ section.title }}</span>
       {{ form.question(params={"label": {"isPageHeading": true, "classes": "govuk-label--l"} }) }}
       {{ form.submit }}
     </form>
