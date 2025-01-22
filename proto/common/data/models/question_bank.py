@@ -23,6 +23,9 @@ class DataStandard(db.Model):
 
     description: Mapped[str]
 
+    def __repr__(self) -> str:
+        return f"<DS: {self.description}>"
+
 
 class TemplateSection(db.Model):
     __table_args__ = (CheckConstraint(r"regexp_like(slug, '[a-z\-]+')", name="slug"),)
