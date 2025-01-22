@@ -1,7 +1,6 @@
 from flask import redirect, render_template, request, session, url_for
 
 from common.blueprints import Blueprint
-from proto.common.auth import is_authenticated
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.services.accounts import get_account
 from proto.common.data.services.applications import (
@@ -18,7 +17,6 @@ runner_blueprint = Blueprint("proto_form_runner", __name__)
 
 
 @runner_blueprint.get("/application/<application_id>")
-@is_authenticated
 def application_tasklist(application_id):
     account = get_account(session.get("magic_links_account_id"))
     application = get_application(application_id)
@@ -63,7 +61,6 @@ def _back_link_for_question(question, application_id, from_check_your_answers):
 
 
 @runner_blueprint.route("/application/<application_id>/<section_slug>/<question_slug>", methods=["GET", "POST"])
-@is_authenticated
 def ask_application_question(application_id, section_slug, question_slug):
     application = get_application(application_id)
     question = get_application_question(application.round_id, section_slug, question_slug)
@@ -87,7 +84,6 @@ def ask_application_question(application_id, section_slug, question_slug):
 
 
 @runner_blueprint.route("/application/<application_id>/<section_slug>/check-your-answers", methods=["GET", "POST"])
-@is_authenticated
 def check_your_answers(application_id, section_slug):
     application = get_application(application_id=application_id)
     section_data = get_application_section_data(application_id, section_slug)
