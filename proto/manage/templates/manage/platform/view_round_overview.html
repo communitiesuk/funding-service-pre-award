@@ -34,8 +34,13 @@
     <nav class="navigation" aria-label="Application round">
       <ul class="govuk-list govuk-list--spaced">
         <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-sidebar__item--active" href="{{ url_for('proto_manage.platform.rounds.view_round_overview', grant_code=grant.short_name, round_code=round.short_name) }}">Round overview</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.rounds.view_round_data_collection', grant_code=grant.short_name, round_code=round.short_name) }}">Data collection</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.rounds.view_round_configuration', grant_code=grant.short_name, round_code=round.short_name) }}">Configuration</a></li>
+        <li>
+          <p class="govuk-body govuk-!-margin-bottom-1">Configure</p>
+          <ul class="govuk-list app-list--dashed">
+            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.rounds.view_round_data_collection', grant_code=grant.short_name, round_code=round.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Data collection</a></li>
+            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.rounds.view_round_configuration', grant_code=grant.short_name, round_code=round.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Round</a></li>
+          </ul>
+        </li>
       </ul>
     </nav>
   </div>

@@ -38,3 +38,11 @@
 .app-\!-float-right {
     float: right;
 }
+
+.app-list--dashed {
+    margin-left: 20px;
+    list-style-type: "– ";
+}
+.app-list--dashed li {
+    margin-bottom: 10px;
+}
