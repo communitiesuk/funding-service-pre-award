@@ -14,6 +14,7 @@
                     application_id=application_id,
                     sub_criteria_id=sub_criteria.id) }}">
             {{ approval_form.csrf_token }}
+            <input type="hidden" name="approve" value="1" />
             <button type="submit" class="govuk-button primary-button">Approve</button>
             <a
                 href="{{ url_for(
@@ -25,6 +26,7 @@
                 class="govuk-button secondary-button">
                 Request changes
             </a>
+        </form>
         </div>
     </div>
 {% endmacro %}
