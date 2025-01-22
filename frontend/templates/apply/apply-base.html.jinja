@@ -11,8 +11,8 @@
 {% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
 {% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
 
-{# TODO sort out service name #}
-{% set serviceName = "Apply for a grant" %}
+{# TODO sort out service name, use existing mechanism for now #}
+{% set serviceName = gettext("Access Funding") if is_error else service_title or get_service_title() %}
 
 {% block pageTitle %}{{serviceName}}{% endblock pageTitle %}
 {% block headIcons %}
