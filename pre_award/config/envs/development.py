@@ -147,6 +147,6 @@ class DevelopmentConfig(Config):
     FEATURE_CONFIG = {
         "TAGGING": True,
         "ASSESSMENT_ASSIGNMENT": True,
-        "UNCOMPETED_WORKFLOW": False,
+        "UNCOMPETED_WORKFLOW": True,
         **CommonConfig.dev_feature_configuration,
     }

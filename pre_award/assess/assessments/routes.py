@@ -1182,7 +1182,7 @@ def display_sub_criteria(
             )
         )
 
-    if approval_form.validate_on_submit():
+    if "approve" in request.form and approval_form.validate_on_submit():
         approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=g.account_id)
 
         return redirect(
