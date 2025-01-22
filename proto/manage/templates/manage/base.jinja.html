@@ -38,13 +38,6 @@
 {% trans %}This is a new service. Help us improve it and{% endtrans %} <a href="#" class="govuk-link govuk-link--no-visited-state">{% trans %}give your feedback (opens in new tab).{% endtrans %}</a>
 {% endset %}
 
-{{ govukPhaseBanner({
-    "tag": {
-        "text": "Beta"
-    },
-    "html": feedbackMessage
-}) }}
-
 {% if back_link %}
 {{ govukBackLink({"href": back_link}) }}
 {% endif %}
