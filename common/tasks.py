@@ -12,6 +12,7 @@ from app import create_app
 from assessment_store.tasks.db_tasks import seed_assessment_store_db_impl
 from fund_store.scripts.fund_round_loaders.load_fund_round_from_fab import load_fund_from_fab_impl
 from fund_store.scripts.load_all_fund_rounds import load_all_fund_rounds
+from proto.tasks import insert_question_bank_data
 
 _VALID_JINJA_EXTENSIONS = (".html", ".jinja", ".jinja2", ".j2")
 
@@ -137,3 +138,4 @@ def full_bootstrap(c):
             load_fund_from_fab_impl(seed_all_funds=True)
             seed_assessment_store_db_impl("local")
             seed_local_account_store_impl()
+            insert_question_bank_data()
