@@ -57,6 +57,7 @@ def post_comments() -> Dict:
     return created_comment
 
 
+@assessment_comment_bp.put("/comment")
 def put_comments() -> Dict:
     """put_comments Function used by the put endpoint `/comment`.
 
