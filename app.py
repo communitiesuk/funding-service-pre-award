@@ -217,8 +217,6 @@ def create_app() -> Flask:  # noqa: C901
     from pre_award.authenticator.frontend.user.routes import user_bp
     from pre_award.common.error_routes import internal_server_error, not_found
 
-    from frontend.apply.routes import apply_bp
-
     flask_app.register_error_handler(404, not_found)
     flask_app.register_error_handler(500, internal_server_error)
     flask_app.register_error_handler(ApplicationError, internal_server_error)
@@ -242,8 +240,6 @@ def create_app() -> Flask:  # noqa: C901
     flask_app.register_blueprint(api_magic_link_bp, host=flask_app.config["AUTH_HOST"])
     flask_app.register_blueprint(api_sso_bp, host=flask_app.config["AUTH_HOST"])
     flask_app.register_blueprint(api_sessions_bp, host=flask_app.config["AUTH_HOST"])
-
-    flask_app.register_blueprint(apply_bp, host=flask_app.config["APPLY_HOST"])
 
     # FIXME: we should be enforcing CSRF on requests to sign out via authenticator, but because this is a cross-domain
     #        request, flask_wtf rejects the request because it's not the same origin. See `project` method in

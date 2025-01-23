@@ -2,7 +2,7 @@
 
 
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='apply/govuk-frontend-4.0.0.min.css' ) }}"> </link>
+  <link rel="stylesheet" href="{{ url_for('static', filename='fs/govuk-frontend-4.7.0.min.css' ) }}"> </link>
   <meta name="description" content="Access Funding" />
   <meta name="keywords" content="Access Funding" />
   <meta name="author" content="Ministry of Housing, Communities and Local Government" />
@@ -27,7 +27,7 @@
 
 <body>, to avoid blocking the initial render. #}
   <script nonce="{{ csp_nonce() }}" type="module">
-    import { initAll } from "{{ url_for('static', filename='apply/govuk-frontend-4.0.0.min.js') }}"
+    import { initAll } from "{{ url_for('static', filename='fs/govuk-frontend-4.7.0.min.js') }}"
     initAll()
   </script>
     <!-- Google Tag Manager -->
