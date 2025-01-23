@@ -50,7 +50,7 @@
             {% set rows = [] %}
             {% for application in applications %}
                 {% set referenceLink %}
-                    <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_form_runner.application_tasklist', application_id=application.id) }}">{{ application.code }}</a>
+                    <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_apply.application.application_tasklist', application_id=application.id) }}">{{ application.code }}</a>
                 {% endset %}
                 {% set statusTag %}
                     <strong class="govuk-tag govuk-tag--grey">Started</strong>

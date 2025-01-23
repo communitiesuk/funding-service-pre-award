@@ -3,7 +3,6 @@ from flask import g, redirect, render_template, request, url_for
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
 from proto.common.data.models.question_bank import QuestionType
-from proto.common.data.services.accounts import get_account
 from proto.common.data.services.applications import (
     get_application,
     get_application_section_data,
@@ -15,14 +14,6 @@ from proto.form_runner.forms import MarkAsCompleteForm, build_question_form
 from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
 
 runner_blueprint = Blueprint("proto_form_runner", __name__)
-
-
-@runner_blueprint.get("/application/<application_id>")
-@is_authenticated
-def application_tasklist(application_id):
-    account = get_account(g.account.id)
-    application = get_application(application_id)
-    return render_template("form_runner/application_tasklist.html", application=application, account=account)
 
 
 def _next_url_for_question(application_id, section, current_question_slug, from_check_your_answers):
@@ -50,7 +41,7 @@ def _back_link_for_question(question, application_id, from_check_your_answers):
         )
 
     if question.slug == question.section.questions[0].slug:
-        return url_for("proto_form_runner.application_tasklist", application_id=application_id)
+        return url_for("proto_apply.application.application_tasklist", application_id=application_id)
 
     previous_question_index = question.section.questions.index(question) - 1
 
@@ -100,7 +91,7 @@ def check_your_answers(application_id, section_slug):
         if form.complete.data is True:
             set_application_section_complete(section_data)
 
-        return redirect(url_for("proto_form_runner.application_tasklist", application_id=application_id))
+        return redirect(url_for("proto_apply.application.application_tasklist", application_id=application_id))
     return render_template(
         "form_runner/check_your_answers.html",
         application=application,

@@ -10,7 +10,7 @@
 {{ super() }}
 {{ govukBackLink({
   "text": "Go back to application overview",
-  "href": url_for("proto_form_runner.application_tasklist", application_id=application.id)
+  "href": url_for("proto_apply.application.application_tasklist", application_id=application.id)
 }) }}
 {% endblock %}
 
