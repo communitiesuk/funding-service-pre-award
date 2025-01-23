@@ -81,7 +81,7 @@ from pre_award.assess.config.display_value_mappings import (
     landing_filters,
     search_params_default,
 )
-from pre_award.assess.flagging.forms.request_changes_form import RequestChangesForm
+from pre_award.assess.flagging.forms.request_changes_form import build_request_changes_form
 from pre_award.assess.scoring.forms.scores_and_justifications import ApprovalForm
 from pre_award.assess.scoring.helpers import get_scoring_class
 from pre_award.assess.services.aws import get_file_for_download_from_aws
@@ -1301,9 +1301,12 @@ def request_changes(application_id, sub_criteria_id, theme_id):
     assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
 
-    form = RequestChangesForm(
-        question_choices=[(question["field_id"], question["question"],question.get("answer","")) for question in theme_answers_response]
-    )
+    form = build_request_changes_form(
+        question_choices=[
+            (question["field_id"], question["question"], question.get("answer", ""))
+            for question in theme_answers_response
+        ]
+    )()
 
     if request.method == "POST" and form.validate_on_submit():
         submit_change_request(
@@ -1336,8 +1339,8 @@ def request_changes(application_id, sub_criteria_id, theme_id):
         "assessments/request_changes.html",
         form=form,
         question_choices=[
-            {"text": label, "value": value, "response":answer, "checked": value in (form.field_ids.data or [])}
-            for value, label,answer in form.field_ids.choices
+            {"text": label, "value": value, "response": answer, "checked": value in (form.field_ids.data or [])}
+            for value, label, answer in form.field_ids.choices
         ],
         state=state,
         sub_criteria=sub_criteria,

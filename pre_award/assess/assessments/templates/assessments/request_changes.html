@@ -56,45 +56,41 @@ Request changes –
     <form method="post">
         {{ form.csrf_token }}
         <div class="govuk-hint">Select all that apply</div>
-        <div class="govuk-!-margin-bottom-6">
-            {% for choice in question_choices %}
-                {% set textHtml %}
+        {% set items = [] %}
+        {% for choice in question_choices %}
+            {% set reason_id = "reason_"~choice.value %}
+            {% set textHtml %}
                 <p class="govuk-body">Answer: {{ choice.response }}</p>
                 <div class="govuk-hint">What changes are needed?</div>
                 {{ govukTextarea({
-                    "id": "textarea_"~choice.value,
-                    "name": "textarea_"~choice.value,
-                    "spellcheck": false,
-                    "classes": "govuk-textarea govuk-!-width-one-half",
+                    "id": form[reason_id].id,
+                    "name": form[reason_id].id,
                     "label": {
-                        "text": ""
+                        "text": "Message",
                     },
-                    "errorMessage": {
-                        "text": form.errors.get("justification") | join("\n")
-                    } if form.errors.get("justification") else None,
                     "rows": 8,
-                    "value": form.justification.data or ""
+                    "errorMessage": {
+                        "text": form.errors.get(reason_id) | join("\n")
+                    } if form.errors.get(reason_id) else None,
+                    "value": form[reason_id].data or ""
                 }) }}
-                {% endset %}
-                {{ govukCheckboxes({
-                    "id": "checkbox_" ~choice.value,
-                    "name": "field_ids_"~choice.value,
-                    "required": True,
-                    "items": [
-                        {
-                            "value": choice.value,
-                            "html": "<strong>" ~ choice.text ~ "</strong>",
-                            "conditional": {
-                                "html": textHtml
-                            },
-                            "errorMessage": {
-                        "text": form.errors.get("field_ids") | join("\n")
-                    } if form.errors.get("field_ids") else None,
-                        }
-
-                    ]
-                }) }}
-            {% endfor %}
+            {% endset %}
+            {% set item = {
+                "value": choice.value,
+                "text": choice.text,
+                "conditional": {
+                    "html": textHtml
+                },
+                "checked": choice.checked
+            } %}
+            {% set items = items.append(item) %}
+        {% endfor %}
+        <div class="govuk-!-margin-bottom-6">
+            {{ govukCheckboxes({
+                "name": "field_ids",
+                "required": True,
+                "items": items,
+            }) }}
         </div>
 
         <div class="govuk-button-group">

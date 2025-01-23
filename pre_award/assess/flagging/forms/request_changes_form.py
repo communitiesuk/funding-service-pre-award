@@ -5,33 +5,26 @@ from wtforms.validators import InputRequired, length
 from pre_award.config import Config
 
 
-class RequestChangesForm(FlaskForm):
-    justification = TextAreaField(
-        "Reason for request changes",
-        validators=[
-            length(max=Config.TEXT_AREA_INPUT_MAX_CHARACTERS),
-            InputRequired(message="Provide a reason for requesting changes to this application"),
-        ],
-    )
-    field_ids = SelectMultipleField(
-        "Questions to change",
-        choices=None,
-        validators=[
-            InputRequired(message="Select which question(s) you are requesting changes to"),
-        ],
-    )
+def build_request_changes_form(question_choices):
+    class RequestChangesForm(FlaskForm):
+        field_ids = SelectMultipleField(
+            "Questions to change",
+            choices=question_choices,
+            validators=[
+                InputRequired(message="Select which question(s) you are requesting changes to"),
+            ],
+        )
 
-    reasons = {}
+    for field_id, question, _ in question_choices:
+        field_name = f"reason_{field_id}"
+        text_area_field = TextAreaField(
+            f"Reason for {question}",
+            validators=[
+                length(max=Config.TEXT_AREA_INPUT_MAX_CHARACTERS),
+                InputRequired(message="Provide a reason for requesting changes to this application"),
+            ],
+        )
 
-    def __init__(self, question_choices=None):
-        super().__init__()
+        setattr(RequestChangesForm, field_name, text_area_field)
 
-        self.field_ids.choices = question_choices
-        self.reasons = { choice[0]:TextAreaField(
-        "Reason for request changes",
-        validators=[
-            length(max=Config.TEXT_AREA_INPUT_MAX_CHARACTERS),
-            InputRequired(message="Provide a reason for requesting changes to this application"),
-        ],
-        ) for choice in self.field_ids.choices }
-
+    return RequestChangesForm
