@@ -45,7 +45,9 @@ class TemplateSection(db.Model):
     order: Mapped[int]
     type: Mapped[TemplateType]
 
-    template_questions: Mapped[list["TemplateQuestion"]] = relationship("TemplateQuestion")
+    template_questions: Mapped[list["TemplateQuestion"]] = relationship(
+        "TemplateQuestion", back_populates="template_section"
+    )
 
     def __repr__(self):
         return self.slug
@@ -76,7 +78,7 @@ class TemplateQuestion(db.Model):
     data_source: Mapped[t_data_source]
 
     template_section_id: Mapped[int] = mapped_column(db.ForeignKey(TemplateSection.id))
-    template_section: Mapped[TemplateSection] = relationship(TemplateSection)
+    template_section: Mapped[TemplateSection] = relationship(TemplateSection, back_populates="template_questions")
     data_standard_id: Mapped[int | None] = mapped_column(db.ForeignKey(DataStandard.id))
     data_standard: Mapped[DataStandard | None] = relationship(DataStandard)
 
@@ -98,7 +100,7 @@ class ProtoDataCollectionSection(db.Model):
     order: Mapped[int]
 
     round_id: Mapped[UUID] = mapped_column(db.ForeignKey("round.id"))
-    round: Mapped["Round"] = relationship("Round")
+    round: Mapped["Round"] = relationship("Round", back_populates="application_sections")
 
     questions: Mapped[list["ProtoDataCollectionQuestion"]] = relationship(
         "ProtoDataCollectionQuestion", order_by="ProtoDataCollectionQuestion.order"
@@ -127,7 +129,7 @@ class ProtoDataCollectionQuestion(db.Model):
     data_source: Mapped[t_data_source]
 
     section_id: Mapped[int] = mapped_column(db.ForeignKey(ProtoDataCollectionSection.id))
-    section: Mapped[ProtoDataCollectionSection] = relationship(ProtoDataCollectionSection)
+    section: Mapped[ProtoDataCollectionSection] = relationship(ProtoDataCollectionSection, back_populates="questions")
     template_question_id: Mapped[int | None] = mapped_column(db.ForeignKey(TemplateQuestion.id))
     template_question: Mapped[TemplateQuestion] = relationship(TemplateQuestion)
     data_standard_id: Mapped[int | None] = mapped_column(db.ForeignKey(DataStandard.id))
