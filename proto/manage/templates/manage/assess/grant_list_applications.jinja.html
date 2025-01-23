@@ -3,24 +3,22 @@
 {% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 
-{% extends "assess/base.jinja.html" %}
+{% extends "manage/base.jinja.html" %}
 
 {% block pageTitle %}{{ grant.proto_name }} - {% trans %}Funding service{% endtrans %}{% endblock %}
 
 {% block beforeContent %}
 {{ super() }}
-{{ govukBreadcrumbs({
-    "items": [
-        { "text": _("Grants"), "href": "#" },
-        { "text": grant.proto_name, "href": "#" },
-        { "text": _("Applications"), "href": "#" }
-    ]
-}) }}
+{{ govukBackLink({
+    "text": "Back",
+    "href": url_for('proto_manage.platform.grants.view_grant_overview', grant_code=grant.short_name)
+})}}
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+        <span class="govuk-caption-l">{{ grant.proto_name }}</span>
         <h1 class="govuk-heading-l">{% trans %}Applications for funding{% endtrans %}</h1>
 
         {# TODO: move to right aligned (currently blocked by CSP) #}

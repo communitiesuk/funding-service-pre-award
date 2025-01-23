@@ -57,7 +57,7 @@
         <li>
           <p class="govuk-body govuk-!-margin-bottom-1">Manage</p>
           <ul class="govuk-list app-list--dashed">
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Assessment</a></li>
+            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.assess.list_grant_applications_handler', short_code=grant.short_name) }}"><span class="govuk-visually-hidden">Manage </span>Assessment</a></li>
             <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Payments</a></li>
             <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Recipients</a></li>
             <li class="govuk-!-margin-bottom-5"><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Monitoring</a></li>

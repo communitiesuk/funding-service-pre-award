@@ -19,7 +19,7 @@ application_blueprint = Blueprint("application", __name__)
 def application_list_handler(short_code):
     account = {"email": g.account.email}  # this should be uniformly serialised from the db or the session somewhere
 
-    applications = get_applications(account_id=g.account.id)
+    applications = get_applications(account_id=g.account.id, short_code=short_code)
 
     active_round, grant = get_active_round(short_code)
 

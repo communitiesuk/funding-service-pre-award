@@ -48,8 +48,13 @@ def get_application(application_id: int):
     return db.session.scalars(select(ProtoApplication).filter(ProtoApplication.id == application_id)).one()
 
 
-def get_applications(account_id):
-    applications = db.session.scalars(select(ProtoApplication).filter(ProtoApplication.account_id == account_id)).all()
+def get_applications(account_id, short_code):
+    applications = db.session.scalars(
+        select(ProtoApplication)
+        .join(Round)
+        .join(Fund)
+        .filter(ProtoApplication.account_id == account_id, Fund.short_name == short_code)
+    ).all()
     return applications
 
 
