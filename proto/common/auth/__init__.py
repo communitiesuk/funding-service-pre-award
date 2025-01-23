@@ -13,6 +13,7 @@ def is_authenticated(func):
             try:
                 g.account = get_account(session["magic_links_account_id"])
             except:  # noqa
+                g.account = None
                 session.clear()
 
         if not session.get("is_authenticated"):
@@ -21,5 +22,19 @@ def is_authenticated(func):
             return redirect(url_for("proto_apply.web.magic_links_enter_email_handler"))
         else:
             return func(*args, **kwargs)
+
+    return wrapper
+
+
+def maybe_authenticated(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if session.get("is_authenticated"):
+            try:
+                g.account = get_account(session["magic_links_account_id"])
+            except:  # noqa
+                g.account = None
+
+        return func(*args, **kwargs)
 
     return wrapper
