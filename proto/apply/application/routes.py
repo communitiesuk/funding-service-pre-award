@@ -62,6 +62,7 @@ def all_user_application_list_handler():
     )
 
 
+# fixme: probably wants to be /grant/<short_code>/application/<application_ref>
 @application_blueprint.get("/application/<application_id>")
 @is_authenticated
 def application_tasklist(application_id):
