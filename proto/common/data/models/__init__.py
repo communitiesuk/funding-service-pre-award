@@ -23,3 +23,4 @@ from proto.common.data.models.applications import (  # noqa
     ProtoApplication as ProtoApplication,
 )
 from proto.common.data.models.data_collection import ProtoDataCollectionSectionData as ProtoDataCollectionSectionData  # noqa
+from proto.common.data.models.reports import ProtoReport as ProtoReport  # noqa
