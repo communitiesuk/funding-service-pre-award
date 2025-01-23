@@ -1,0 +1,81 @@
+{% extends "fs-base.html" %}
+
+<meta name="description" content="Apply for a Grant">
+<meta name="keywords" content="Apply for a Grant">
+<meta name="author" content="Ministry of Housing, Communities and Local Government">
+
+{% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
+{% from "govuk_frontend_jinja/components/cookie-banner/macro.html" import govukCookieBanner %}
+{% from "govuk_frontend_jinja/components/skip-link/macro.html" import govukSkipLink %}
+{% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
+{% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
+{% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
+
+{% set serviceName = get_service_title() %}
+
+{% block pageTitle %}{{serviceName}}{% endblock pageTitle %}
+
+
+{% block skipLink %}
+{{ govukSkipLink({
+    "href": "#main-content",
+    "text": "Skip to main content"
+  })
+}}
+{% endblock skipLink %}
+
+{% block header %}
+  {{ govukHeader({
+      "homepageUrl": "#",
+      "serviceName": serviceName,
+      "serviceUrl": "/monolith",
+    })
+  }}
+{% endblock header %}
+
+{% set mainClasses = "app-main-class" %}
+
+{% block main %}
+  {{ super() }}
+{% endblock main %}
+
+{% block beforeContent %}
+  {{ govukPhaseBanner({
+      "tag": {
+        "text": "Beta"
+      },
+      "html": 'This is a new service.'
+    })
+  }}
+{% endblock beforeContent %}
+
+
+{% block content %}
+<h1 class="govuk-heading-xl">Funding Service Apply Template</h1>
+{% endblock content %}
+
+{% block footer %}
+  {{ govukFooter({
+    "meta": {
+      "items": [
+        {
+          "href": url_for("content_routes.privacy"),
+          "text": gettext("Privacy")
+        },
+        {
+          "href": url_for("content_routes.cookie_policy"),
+          "text": gettext("Cookies")
+        },
+        {
+          "href": url_for("content_routes.accessibility_statement"),
+          "text": gettext("Accessibility Statement")
+        },
+        {
+          "href": url_for("content_routes.contact_us"),
+          "text": gettext("Contact us")
+        }
+      ]
+    }
+  })
+  }}
+{% endblock footer %}
