@@ -1,4 +1,4 @@
-{% block bodyStart %}
+
 {% set acceptHtml %}
 <p class="govuk-body">{% trans %}You've accepted analytics cookies. You can{% endtrans %} <a class="govuk-link"
         href="{{ url_for('content_routes.cookie_policy') }}">{% trans %}change your cookie settings{% endtrans %}</a> {%
@@ -87,77 +87,3 @@
         }
     ]
 }) }}
-{% endblock bodyStart %}
-
-{% block bodyEnd %}
-
-
-{# Run JavaScript at end of the body to avoid blocking the initial render. #}
-  <!-- Google Tag Manager -->
-  <script nonce="{{ csp_nonce() }}">(function (w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true;
-      j.src =
-        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-M5J9Q8HV');
-  </script>
-  <!-- End Google Tag Manager -->
-
-  <script nonce="{{ csp_nonce() }}" type="text/javascript"
-    src="{{ url_for('static', filename='apply/js/fsd_cookies.js') }}"></script>
-
-  <script nonce="{{ csp_nonce() }}">
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments) }
-    <!--Re-implemented these from fsd_cookies.js to avoid conflicts and use a better structure for the elements that utilises the gov uk frontend macros-->
-
-    function acceptCookiesMono() {
-        updateCookieConsent('granted');
-        hideCookiesMessageMono();
-        document.getElementById("cookies-accepted-banner").removeAttribute("hidden");
-    }
-
-    function denyCookiesMono() {
-        updateCookieConsent('denied');
-        hideCookiesMessageMono();
-        document.getElementById("cookies-denied-banner").removeAttribute("hidden");
-    }
-
-    function unhideCookiesMessageMono() {
-        document.getElementById("cookies-choice-banner").removeAttribute("hidden");
-    }
-
-    function hideCookiesMessageMono() {
-        document.getElementById("cookies-choice-banner").setAttribute("hidden", "true");
-        document.getElementById("cookies-accepted-banner").setAttribute("hidden", "true");
-        document.getElementById("cookies-denied-banner").setAttribute("hidden", "true");
-    }
-
-    function initCookieStateMono() {
-      const localConsentMode = readConsentCookie();
-
-      if (!localConsentMode) {
-        gtag('consent', 'default', DEFAULT_CONSENT);
-        unhideCookiesMessageMono();
-      } else {
-        gtag('consent', 'default', readConsentCookie());
-      }
-
-      document.getElementById("accept-cookies-btn").addEventListener("click", acceptCookiesMono);
-      document.getElementById("deny-cookies-btn").addEventListener("click", denyCookiesMono);
-      document.getElementsByName("cookies-hide-btn").forEach(element => {
-        element.addEventListener("click", hideCookiesMessageMono);
-      });
-    }
-
-    initCookieStateMono();
-
-  </script>
-{% endblock bodyEnd %}

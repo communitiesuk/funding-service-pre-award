@@ -3,7 +3,20 @@
 
 {% block head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='apply/govuk-frontend-4.0.0.min.css' ) }}"> </link>
+  <meta name="description" content="Access Funding" />
+  <meta name="keywords" content="Access Funding" />
+  <meta name="author" content="Ministry of Housing, Communities and Local Government" />
 {% endblock %}
+
+
+
+{% block bodyStart %}
+{% include "cookie-start.html"%}
+{% endblock bodyStart %}
+
+{% block pageTitle %}
+
+{% endblock pageTitle %}
 
 {% block content %}
 <h1 class="govuk-heading-xl">Default page template</h1>
@@ -17,4 +30,25 @@
     import { initAll } from "{{ url_for('static', filename='apply/govuk-frontend-4.0.0.min.js') }}"
     initAll()
   </script>
+    <!-- Google Tag Manager -->
+  <script nonce="{{ csp_nonce() }}">(function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true;
+      j.src =
+        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-M5J9Q8HV');
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments) }
+  </script>
+  <!-- End Google Tag Manager -->
+
+ {% include "cookies-end.html"%}
+
   {% endblock bodyEnd %}

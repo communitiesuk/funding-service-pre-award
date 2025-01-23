@@ -1,4 +1,4 @@
-{% extends "fs-base.html.jinja" %}
+{% extends "fs-base.html" %}
 
 <meta name="description" content="Apply for a Grant">
 <meta name="keywords" content="Apply for a Grant">
@@ -11,13 +11,10 @@
 {% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
 {% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
 
-{# TODO sort out service name, use existing mechanism for now #}
-{% set serviceName = gettext("Access Funding") if is_error else service_title or get_service_title() %}
+{% set serviceName = get_service_title() %}
 
 {% block pageTitle %}{{serviceName}}{% endblock pageTitle %}
-{% block headIcons %}
-  {{ super() }}
-{% endblock headIcons %}
+
 
 {% block skipLink %}
 {{ govukSkipLink({
@@ -30,7 +27,6 @@
 {% block header %}
   {{ govukHeader({
       "homepageUrl": "#",
-      "containerClasses": "app-width-container",
       "serviceName": serviceName,
       "serviceUrl": "/monolith",
     })
@@ -53,7 +49,6 @@
   }}
 {% endblock beforeContent %}
 
-{% include 'fs-cookies.html.jinja' %}
 
 {% block content %}
 <h1 class="govuk-heading-xl">Funding Service Apply Template</h1>
