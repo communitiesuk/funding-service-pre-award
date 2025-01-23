@@ -21,8 +21,10 @@ from application_store.db.models.forms.enums import Status as FormStatus
 from application_store.db.schemas import ApplicationSchema
 from application_store.external_services import get_fund, get_round
 from application_store.external_services.aws import FileData, list_files_by_prefix
+from apply.default.data import get_application_data
 from assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
+from assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
 from assessment_store.db.queries.assessment_records._helpers import derive_application_values
 from config import Config
@@ -273,84 +275,189 @@ def submit_application(application_id) -> Applications:  # noqa: C901
     )
     try:
         application = get_application(application_id, include_forms=True)
-        fund = get_fund(application.fund_id)
-        all_application_files = list_files_by_prefix(application_id)
-        application = process_files(application, all_application_files)
+        appln = get_application_data(application_id)
 
-        # Mark the application as submitted
-        application.date_submitted = datetime.now(timezone.utc)
-        application.status = ApplicationStatus.SUBMITTED
+        forms_with_change_requested_status = appln.count_forms_with_status(ApplicationStatus.CHANGE_REQUESTED.name)
+        if forms_with_change_requested_status == 0:
+            fund = get_fund(application.fund_id)
+            all_application_files = list_files_by_prefix(application_id)
+            application = process_files(application, all_application_files)
 
-        application_type = "".join(application.reference.split("-")[:1])
+            # Mark the application as submitted
+            application.date_submitted = datetime.now(timezone.utc)
+            application.status = ApplicationStatus.SUBMITTED
 
-        application_as_dict = get_application(application_id, include_forms=True, as_json=True)
+            application_type = "".join(application.reference.split("-")[:1])
 
-        derived_values = derive_application_values(application_as_dict)
+            application_as_dict = get_application(application_id, include_forms=True, as_json=True)
 
-        row = {
-            **derived_values,
-            "jsonb_blob": ApplicationSchema().dump(application),
-            "type_of_application": application_type,
-        }
+            derived_values = derive_application_values(application_as_dict)
 
-        existing_application = db.session.scalar(
-            select(AssessmentRecord)
-            .where(
-                AssessmentRecord.application_id == row["application_id"],
-                AssessmentRecord.is_withdrawn.is_(False),
-            )
-            .options(load_only(AssessmentRecord.jsonb_blob))
-        )
+            row = {
+                **derived_values,
+                "jsonb_blob": ApplicationSchema().dump(application),
+                "type_of_application": application_type,
+            }
 
-        if existing_application and fund.funding_type == "UNCOMPETED":
-            # For uncompeted funds, the application may already exist and this may be a resubmission.
-
-            # updating row json blob
-            update_application_fields(existing_application.jsonb_blob, row["jsonb_blob"])
-            row["workflow_status"] = WorkflowStatus.CHANGE_RECEIVED
-
-            stmt = postgres_insert(AssessmentRecord).values(row)
-
-            # setting with an update makes sure the derived values are recalculated
-            update_row_statement = stmt.on_conflict_do_update(
-                index_elements=[AssessmentRecord.application_id], set_=row
-            ).returning(AssessmentRecord.application_id)
-
-            db.session.execute(update_row_statement)
-
-            change_requests = existing_application.change_requests
-            for change_request in change_requests:
-                flag_update = FlagUpdate(
-                    justification="Applicant updated their submission",
-                    status=FlagStatus.RESOLVED,
-                    assessment_flag_id=change_request.id,
-                    user_id=application.account_id,
+            existing_application = db.session.scalar(
+                select(AssessmentRecord)
+                .where(
+                    AssessmentRecord.application_id == row["application_id"],
+                    AssessmentRecord.is_withdrawn.is_(False),
                 )
-                change_request.updates.append(flag_update)
-                change_request.latest_status = flag_update.status
-                db.session.add(change_request)
-
-            db.session.commit()
-        else:
-            stmt = postgres_insert(AssessmentRecord).values([row])
-
-            upsert_rows_stmt = stmt.on_conflict_do_nothing(index_elements=[AssessmentRecord.application_id]).returning(
-                AssessmentRecord.application_id
+                .options(load_only(AssessmentRecord.jsonb_blob))
             )
 
-            result = db.session.execute(upsert_rows_stmt)
+            if existing_application and fund.funding_type == "UNCOMPETED":
+                # For uncompeted funds, the application may already exist and this may be a resubmission.
 
-            # Check if the inserted application is in result
-            inserted_application_ids = [item.application_id for item in result]
-            if not len(inserted_application_ids):
-                current_app.logger.warning(
-                    "Application already exists in the database: %(app_id)s", dict(app_id=row["application_id"])
-                )
+                # updating row json blob
+                update_application_fields(existing_application.jsonb_blob, row["jsonb_blob"])
+                row["workflow_status"] = WorkflowStatus.CHANGE_RECEIVED
+
+                stmt = postgres_insert(AssessmentRecord).values(row)
+
+                # setting with an update makes sure the derived values are recalculated
+                update_row_statement = stmt.on_conflict_do_update(
+                    index_elements=[AssessmentRecord.application_id], set_=row
+                ).returning(AssessmentRecord.application_id)
+
+                db.session.execute(update_row_statement)
+                appln = get_application(application_id, include_forms=True)
+
+                change_requests = existing_application.change_requests
+                for change_request in change_requests:
+                    flag_update = FlagUpdate(
+                        justification="Applicant updated their submission",
+                        status=FlagStatus.RESOLVED,
+                        assessment_flag_id=change_request.id,
+                        user_id=application.account_id,
+                    )
+                    change_request.updates.append(flag_update)
+                    change_request.latest_status = flag_update.status
+                    db.session.add(change_request)
+                db.session.commit()
             else:
-                current_app.logger.info(
-                    "Successfully inserted application: %(app_id)s", dict(app_id=row["application_id"])
+                stmt = postgres_insert(AssessmentRecord).values([row])
+
+                upsert_rows_stmt = stmt.on_conflict_do_nothing(
+                    index_elements=[AssessmentRecord.application_id]
+                ).returning(AssessmentRecord.application_id)
+
+                result = db.session.execute(upsert_rows_stmt)
+
+                # Check if the inserted application is in result
+                inserted_application_ids = [item.application_id for item in result]
+                if not len(inserted_application_ids):
+                    current_app.logger.warning(
+                        "Application already exists in the database: %(app_id)s", dict(app_id=row["application_id"])
+                    )
+                else:
+                    current_app.logger.info(
+                        "Successfully inserted application: %(app_id)s", dict(app_id=row["application_id"])
+                    )
+                db.session.commit()
+
+        else:
+            fund = get_fund(application.fund_id)
+            all_application_files = list_files_by_prefix(application_id)
+            application = process_files(application, all_application_files)
+
+            # Mark the application as submitted
+            # application.date_submitted = datetime.now(timezone.utc)
+            application.status = ApplicationStatus.IN_PROGRESS
+
+            application_type = "".join(application.reference.split("-")[:1])
+
+            application_as_dict = get_application(application_id, include_forms=True, as_json=True)
+
+            derived_values = derive_application_values(application_as_dict)
+
+            row = {
+                **derived_values,
+                "jsonb_blob": ApplicationSchema().dump(application),
+                "type_of_application": application_type,
+            }
+
+            existing_application = db.session.scalar(
+                select(AssessmentRecord)
+                .where(
+                    AssessmentRecord.application_id == row["application_id"],
+                    AssessmentRecord.is_withdrawn.is_(False),
                 )
-            db.session.commit()
+                .options(load_only(AssessmentRecord.jsonb_blob))
+            )
+
+            if existing_application and fund.funding_type == "UNCOMPETED":
+                # For uncompeted funds, the application may already exist and this may be a resubmission.
+
+                # updating row json blob
+                update_application_fields(existing_application.jsonb_blob, row["jsonb_blob"])
+                row["workflow_status"] = WorkflowStatus.CHANGE_RECEIVED
+
+                stmt = postgres_insert(AssessmentRecord).values(row)
+
+                # setting with an update makes sure the derived values are recalculated
+                update_row_statement = stmt.on_conflict_do_update(
+                    index_elements=[AssessmentRecord.application_id], set_=row
+                ).returning(AssessmentRecord.application_id)
+
+                db.session.execute(update_row_statement)
+
+                forms_not_to_review = []
+                for form in appln.forms:
+                    if form["status"] == ApplicationStatus.CHANGE_REQUESTED.name:
+                        forms_not_to_review.append("_".join(form["name"].split("-")[:-1]))
+                print("forms_not_to_review: ", forms_not_to_review)
+
+                change_requests = existing_application.change_requests
+                for change_request in change_requests:
+                    assessment_flag = AssessmentFlag.query.filter_by(id=change_request.id).first()
+
+                    if all(
+                        [
+                            assessment_flag.sections_to_flag[0] not in forms_not_to_review,
+                            assessment_flag.latest_status != FlagStatus.RESOLVED,
+                        ]
+                    ):
+                        print("\n\n\nTo update: ", assessment_flag.sections_to_flag)
+                        flag_update = FlagUpdate(
+                            justification="Applicant updated their submission",
+                            status=FlagStatus.RESOLVED,
+                            assessment_flag_id=change_request.id,
+                            user_id=application.account_id,
+                        )
+                        change_request.updates.append(flag_update)
+                        change_request.latest_status = flag_update.status
+                        db.session.add(change_request)
+
+                # Retrieve Applications instance
+                app = Applications.query.filter_by(id=application_id).first()
+
+                app.no_of_change_request_state_forms = forms_with_change_requested_status
+                appln.no_of_change_request_state_forms = forms_with_change_requested_status
+                db.session.commit()
+            else:
+                stmt = postgres_insert(AssessmentRecord).values([row])
+
+                upsert_rows_stmt = stmt.on_conflict_do_nothing(
+                    index_elements=[AssessmentRecord.application_id]
+                ).returning(AssessmentRecord.application_id)
+
+                result = db.session.execute(upsert_rows_stmt)
+
+                # Check if the inserted application is in result
+                inserted_application_ids = [item.application_id for item in result]
+                if not len(inserted_application_ids):
+                    current_app.logger.warning(
+                        "Application already exists in the database: %(app_id)s", dict(app_id=row["application_id"])
+                    )
+                else:
+                    current_app.logger.info(
+                        "Successfully inserted application: %(app_id)s", dict(app_id=row["application_id"])
+                    )
+                db.session.commit()
+
     except exc.SQLAlchemyError as e:
         db.session.rollback()
         current_app.logger.exception(
@@ -419,6 +526,8 @@ def attempt_to_find_and_update_project_name(question_json, application) -> None:
 def mark_application_with_requested_changes(application_id: str, field_ids: list):
     application = db.session.query(Applications).filter_by(id=application_id).first()
     application_should_update = False
+    change_requested_count = 0
+
     for form in application.forms:
         form_should_update = False
         for category in form.json:
@@ -432,7 +541,11 @@ def mark_application_with_requested_changes(application_id: str, field_ids: list
                 if field["key"] == "markAsComplete" and form_should_update:
                     field["answer"] = False
 
+        if form.status == FormStatus.CHANGE_REQUESTED:
+            change_requested_count += 1
+
     if application_should_update:
         application.status = ApplicationStatus.CHANGE_REQUESTED
+        application.no_of_change_request_state_forms = change_requested_count
 
     db.session.commit()

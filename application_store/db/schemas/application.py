@@ -40,3 +40,4 @@ class ApplicationSchema(SQLAlchemyAutoSchema):
     date_submitted = DateTime(format="%Y-%m-%dT%H:%M:%S.%f")
     round_name = Method("get_round_name")
     forms = Nested(FormsRunnerSchema, many=True, allow_none=True)
+    no_of_change_request_state_forms = auto_field()

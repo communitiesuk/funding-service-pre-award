@@ -167,7 +167,12 @@
             {% endif %}
             </dl>
 
-        {% if application["status"] == application_meta_data["completed_status"] %}
+        <!-- {% if application["status"] == application_meta_data["completed_status"] %}
+            {{ tasklist_submit(application.id, application_meta_data, form, url_for('application_routes.submit_application')) }}
+        {% endif %} -->
+
+        sumbission_allowed? {{ application_meta_data.sumbission_allowed }}<br>
+        {% if application_meta_data.sumbission_allowed %}
             {{ tasklist_submit(application.id, application_meta_data, form, url_for('application_routes.submit_application')) }}
         {% endif %}
 

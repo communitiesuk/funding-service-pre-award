@@ -1,7 +1,7 @@
 import uuid
 
 from flask_sqlalchemy.model import DefaultMeta
-from sqlalchemy import Column, DateTime
+from sqlalchemy import Column, DateTime, Integer
 from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -38,6 +38,8 @@ class Applications(BaseModel):
     forms = relationship("Forms")
     feedbacks = relationship("Feedback")
     end_of_application_survey = relationship("EndOfApplicationSurveyFeedback")
+
+    no_of_change_request_state_forms = Column(Integer, default=0, nullable=False)
 
     __table_args__ = (db.UniqueConstraint("fund_id", "round_id", "key", name="_reference"),)
 

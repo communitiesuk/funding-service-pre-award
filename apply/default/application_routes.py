@@ -267,6 +267,20 @@ def tasklist(application_id):
         else None
     )
 
+    forms_with_change_requested_status = application.count_forms_with_status(ApplicationStatus.CHANGE_REQUESTED.name)
+
+    # CHECKING IF SUBMISSION ALLOWED OR NOT
+    submission_allowed = False
+    if application.status == ApplicationStatus.COMPLETED.name:
+        submission_allowed = True
+    elif forms_with_change_requested_status < application.no_of_change_request_state_forms:
+        submission_allowed = True
+
+    forms_to_review = []
+    for form in application.forms:
+        if form["status"] == ApplicationStatus.CHANGE_REQUESTED.name:
+            forms_to_review.append("_".join(form["name"].split("-")[:-1]))
+
     form = FlaskForm()
     application_meta_data = {
         "application_id": application_id,
@@ -280,6 +294,7 @@ def tasklist(application_id):
         "completed_status": ApplicationStatus.COMPLETED.name,
         "submitted_status": ApplicationStatus.SUBMITTED.name,
         "change_requested_status": Status.CHANGE_REQUESTED.name,
+        "sumbission_allowed": submission_allowed,
         "has_section_feedback": round_data.feedback_survey_config.has_section_feedback,
         "number_of_forms": len(application.forms)
         + sum(

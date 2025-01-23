@@ -23,6 +23,7 @@ class Application:
     last_edited: datetime
     language: str
     forms: List[Form]
+    no_of_change_request_state_forms: int
 
     @classmethod
     def get_form_data(cls, application_data, form_name):
@@ -38,6 +39,9 @@ class Application:
     def are_forms_complete(self, form_names: list[str]):
         filtered_forms = [f for f in self.forms if f["name"] in form_names]
         return all(f["status"] == ApplicationStatus.COMPLETED.name for f in filtered_forms)
+
+    def count_forms_with_status(self, status: str) -> int:
+        return sum(1 for f in self.forms if f["status"] == status)
 
     @property
     def all_forms_complete(self):
