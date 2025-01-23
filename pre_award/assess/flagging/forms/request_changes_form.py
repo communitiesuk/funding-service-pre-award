@@ -21,7 +21,17 @@ class RequestChangesForm(FlaskForm):
         ],
     )
 
+    reasons = {}
+
     def __init__(self, question_choices=None):
         super().__init__()
 
         self.field_ids.choices = question_choices
+        self.reasons = { choice[0]:TextAreaField(
+        "Reason for request changes",
+        validators=[
+            length(max=Config.TEXT_AREA_INPUT_MAX_CHARACTERS),
+            InputRequired(message="Provide a reason for requesting changes to this application"),
+        ],
+        ) for choice in self.field_ids.choices }
+

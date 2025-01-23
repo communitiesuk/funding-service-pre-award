@@ -4,6 +4,8 @@
 {% from "govuk_frontend_jinja/components/textarea/macro.html" import govukTextarea %}
 {% from "assess/macros/sub_criteria_navbar.html" import navbar %}
 {% from "assess/macros/sub_criteria_heading.html" import sub_criteria_heading %}
+{% from "govuk_frontend_jinja/components/checkboxes/macro.html" import govukCheckboxes %}
+{% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
 
 {% set pageHeading -%}
 Request changes –
@@ -21,15 +23,12 @@ Request changes –
 
 
 {% block content %}
-{{ sub_criteria_heading(sub_criteria)}}
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-        {{ navbar(application_id, sub_criteria, current_theme.id) }}
-    </div>
     <div class="theme govuk-grid-column-two-thirds">
         <div class="govuk-!-margin-bottom-8">
             <h2 class="govuk-heading-l scoring-heading">Reasons for requesting change</h2>
         </div>
+
         {% if form.errors.get("justification") or form.errors.get("field_ids") %}
         <div class="govuk-error-summary" data-module="govuk-error-summary">
             <div role="alert">
@@ -40,12 +39,12 @@ Request changes –
                     <ul class="govuk-list govuk-error-summary__list">
                         {% if form.errors.get("justification") %}
                         <li>
-                            <a href=#{{ form.justification.id }}>{{ form.errors.get("justification") | join("\n") }}</a>
+                            <a href=#textarea>{{ form.errors.get("justification") | join("\n") }}</a>
                         </li>
                         {% endif %}
                         {% if form.errors.get("field_ids") %}
                         <li>
-                            <a href=#{{ form.field_ids.id }}>{{ form.errors.get("field_ids") | join("\n") }}</a>
+                            <a href=#field_ids>{{ form.errors.get("field_ids") | join("\n") }}</a>
                         </li>
                         {% endif %}
                     </ul>
@@ -54,28 +53,21 @@ Request changes –
         </div>
         {% endif %}
 
-        <form method="post">
-            {{ form.csrf_token }}
-            <div class="govuk-!-margin-bottom-6">
-                {{ govukCheckboxes({
-                    "name": "field_ids",
-                    "fieldset": {
-                        "legend": {
-                        "text": "Select the questions"
-                        }
-                    },
-                    "errorMessage": {
-                        "text": form.errors.get("field_ids") | join("\n")
-                    } if form.errors.get("field_ids") else None,
-                    "items": question_choices,
-                }) }}
-            </div>
-            <div class="govuk-!-margin-bottom-6">
+    <form method="post">
+        {{ form.csrf_token }}
+        <div class="govuk-hint">Select all that apply</div>
+        <div class="govuk-!-margin-bottom-6">
+            {% for choice in question_choices %}
+                {% set textHtml %}
+                <p class="govuk-body">Answer: {{ choice.response }}</p>
+                <div class="govuk-hint">What changes are needed?</div>
                 {{ govukTextarea({
-                    "id": form.justification.id,
-                    "name": form.justification.id,
+                    "id": "textarea_"~choice.value,
+                    "name": "textarea_"~choice.value,
+                    "spellcheck": false,
+                    "classes": "govuk-textarea govuk-!-width-one-half",
                     "label": {
-                        "text": "Message",
+                        "text": ""
                     },
                     "errorMessage": {
                         "text": form.errors.get("justification") | join("\n")
@@ -83,24 +75,45 @@ Request changes –
                     "rows": 8,
                     "value": form.justification.data or ""
                 }) }}
-            </div>
-            <div class="govuk-button-group">
-                {{ govukButton({
-                    "text": "Submit"
-                }) }}
+                {% endset %}
+                {{ govukCheckboxes({
+                    "id": "checkbox_" ~choice.value,
+                    "name": "field_ids_"~choice.value,
+                    "required": True,
+                    "items": [
+                        {
+                            "value": choice.value,
+                            "html": "<strong>" ~ choice.text ~ "</strong>",
+                            "conditional": {
+                                "html": textHtml
+                            },
+                            "errorMessage": {
+                        "text": form.errors.get("field_ids") | join("\n")
+                    } if form.errors.get("field_ids") else None,
+                        }
 
-                <a
-                    class="govuk-link"
-                    href="{{ url_for(
-                        'assessment_bp.display_sub_criteria',
-                        application_id=application_id,
-                        sub_criteria_id=sub_criteria.id
-                    )}}"
-                >
-                    Cancel
-                </a>
-            </div>
-        </form>
+                    ]
+                }) }}
+            {% endfor %}
+        </div>
+
+        <div class="govuk-button-group">
+            {{ govukButton({
+                "text": "Save and continue"
+            }) }}
+
+            <a
+                class="govuk-link"
+                href="{{ url_for(
+                    'assessment_bp.display_sub_criteria',
+                    application_id=application_id,
+                    sub_criteria_id=sub_criteria.id
+                )}}"
+            >
+                Cancel
+            </a>
+        </div>
+    </form>
     </div>
 </div>
 {% endblock content %}

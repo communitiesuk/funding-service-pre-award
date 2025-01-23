@@ -1302,7 +1302,7 @@ def request_changes(application_id, sub_criteria_id, theme_id):
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
 
     form = RequestChangesForm(
-        question_choices=[(question["field_id"], question["question"]) for question in theme_answers_response]
+        question_choices=[(question["field_id"], question["question"],question.get("answer","")) for question in theme_answers_response]
     )
 
     if request.method == "POST" and form.validate_on_submit():
@@ -1336,8 +1336,8 @@ def request_changes(application_id, sub_criteria_id, theme_id):
         "assessments/request_changes.html",
         form=form,
         question_choices=[
-            {"text": label, "value": value, "checked": value in (form.field_ids.data or [])}
-            for value, label in form.field_ids.choices
+            {"text": label, "value": value, "response":answer, "checked": value in (form.field_ids.data or [])}
+            for value, label,answer in form.field_ids.choices
         ],
         state=state,
         sub_criteria=sub_criteria,
