@@ -46,3 +46,12 @@
 .app-list--dashed li {
     margin-bottom: 10px;
 }
+
+:root {
+    --govuk-light-grey: #f3f2f1;
+}
+
+.assess-filter {
+    background-color: var(--govuk-light-grey);
+    padding: 0.8em;
+}

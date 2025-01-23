@@ -2,6 +2,9 @@
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 {% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
+{% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
+{% from "govuk_frontend_jinja/components/pagination/macro.html" import govukPagination %}
 
 {% extends "manage/base.jinja.html" %}
 
@@ -9,54 +12,149 @@
 
 {% block beforeContent %}
 {{ super() }}
-{{ govukBackLink({
-    "text": "Back",
-    "href": url_for('proto_manage.platform.grants.view_grant_overview', grant_code=grant.short_name)
+{{ govukBreadcrumbs({
+    "items": [
+    { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
+    { "text": "Applications", "href": "#" }
+    ]
 })}}
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <span class="govuk-caption-l">{{ grant.proto_name }}</span>
         <h1 class="govuk-heading-l">{% trans %}Applications for funding{% endtrans %}</h1>
-
-        {# TODO: move to right aligned (currently blocked by CSP) #}
-        <div class="govuk-button-group" style="justify-content: flex-end" nonce="{{ csp_nonce() }}">
-            <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16" href="#">{% trans %}Select my columns (6){% endtrans %}</a>
-            {{ govukButton({
-                "text": _("Download applications as CSV"),
-                "classes": "govuk-button--secondary govuk-!-font-size-16"
-            }) }}
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <div class="assess-filter">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-quarter">
+                    <div>
+                        {% set referenceHint %}<span class="govuk-body-s">Enter full or partial reference</span>{% endset %}
+                        {{ govukInput({
+                            "label": {
+                                "text": _("Reference"),
+                                "classes": "govuk-!-font-weight-bold govuk-!-font-size-16"
+                            },
+                            "hint": {
+                                "html": referenceHint,
+                            }
+                        }) }}
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div>
+                        {% set statusHint %}<span class="govuk-body-s">Select an option</span>{% endset %}
+                        {{ govukSelect({
+                            "label": {
+                                "text": _("Status"),
+                                "classes": "govuk-!-font-weight-bold govuk-!-font-size-16"
+                            },
+                            "hint": {
+                                "html": statusHint
+                            },
+                            "items": [
+                                { "value": "all", "text": "All"}
+                            ]
+                        }) }}
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div>
+                        {% set assignedToHint %}<span class="govuk-body-s">Select an option</span>{% endset %}
+                        {{ govukSelect({
+                            "label": {
+                                "text": _("Assinged to"),
+                                "classes": "govuk-!-font-weight-bold govuk-!-font-size-16"
+                            },
+                            "hint": {
+                                "html": assignedToHint
+                            },
+                            "items": [
+                                { "value": "all", "text": "All"}
+                            ]
+                        }) }}
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div>
+                        {% set emailHint %}<span class="govuk-body-s">Enter full email address</span>{% endset %}
+                        {{ govukInput({
+                            "label": {
+                                "text": _("Applicant email"),
+                                "classes": "govuk-!-font-weight-bold govuk-!-font-size-16"
+                            },
+                            "hint": {
+                                "html": emailHint
+                            }
+                        }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    {{ govukButton({
+                        "text": "Filter",
+                        "classes": "govuk-!-margin-bottom-1"
+                    }) }}
+                </div>
+            </div>
         </div>
+    </div>
+</div>
 
-        {% set rows = [] %}
-        {% for application in applications %}
-            {% set statusTag %}
-            <strong class="govuk-tag govuk-tag--grey">Submitted</strong>
-            {% endset %}
-            {% set rows = rows.append([
-                { "text": application.code },
-                { "text": "Steven Fountain" },
-                { "html": statusTag },
-                { "text": "0/12" },
-                { "text": application.created_at | dateformat },
-                { "text": application.updated_at | dateformat }
-            ]) %}
-        {% endfor %}
-        {% set dateSubmittedHeader %}<a class="gouvk-link govuk-link--no-visited-state" href="#">{% trans %}Date submitted{% endtrans %}</a>{% endset %}
-        {% set lastUpdatedHeader %}<a class="gouvk-link govuk-link--no-visited-state" href="#">{% trans %}Last updated{% endtrans %}</a>{% endset %}
-        {{ govukTable({
-            "head": [
-                { "text": _("Reference") },
-                { "text": _("Assigned") },
-                { "text": _("Status") },
-                { "text": _("Sections scored") },
-                { "html": dateSubmittedHeader },
-                { "text": lastUpdatedHeader },
-            ],
-            "rows": rows,
-        }) }}
+<div class="govuk-grid-row govuk-!-margin-top-6">
+    <div class="govuk-grid-column-full">
+        <p class="govuk-body">{{ applications | length }} {% trans %}applications{% endtrans %}</p>
+
+        {% if applications %}
+            <a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">{% trans %}Download applications as CSV{% endtrans %}</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-top-4">
+    <div class="govuk-grid-column-full">
+        {% if applications %}
+            {% set rows = [] %}
+            {% for application in applications %}
+                {% set statusTag %}
+                <strong class="govuk-tag govuk-tag--grey">Submitted</strong>
+                {% endset %}
+                {% set referenceLink %}
+                <a class="govuk-link govuk-link--no-visited-state" href="#">{{ application.code }}</a>
+                {% endset %}
+                {% set rows = rows.append([
+                    { "html": referenceLink },
+                    { "text": "(not assingned)" },
+                    { "html": statusTag },
+                    { "text": "(not scored)" },
+                    { "text": application.created_at | dateformat },
+                    { "text": application.updated_at | dateformat }
+                ]) %}
+            {% endfor %}
+            {% set dateSubmittedHeader %}<a class="gouvk-link govuk-link--no-visited-state" href="#">{% trans %}Date submitted{% endtrans %}</a>{% endset %}
+            {% set lastUpdatedHeader %}<a class="gouvk-link govuk-link--no-visited-state" href="#">{% trans %}Last updated{% endtrans %}</a>{% endset %}
+            {{ govukTable({
+                "head": [
+                    { "text": _("Reference") },
+                    { "text": _("Assigned") },
+                    { "text": _("Status") },
+                    { "text": _("Sections scored") },
+                    { "html": dateSubmittedHeader },
+                    { "text": lastUpdatedHeader },
+                ],
+                "rows": rows,
+            }) }}
+
+            {{ govukPagination({
+                "items": [
+                    { "number": 1, "href": "#", "current": true }
+                ]
+            })}}
+        {% endif %}
     </div>
 </div>
 {% endblock %}
