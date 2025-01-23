@@ -139,7 +139,6 @@ def create_app() -> Flask:  # noqa: C901
             PackageLoader("pre_award.assess.tagging"),
             PackageLoader("pre_award.assess.scoring"),
             PackageLoader("pre_award.authenticator.frontend"),
-            PackageLoader("frontend"),
             PrefixLoader({"govuk_frontend_jinja": PackageLoader("govuk_frontend_jinja")}),
         ]
     )
