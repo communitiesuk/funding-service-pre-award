@@ -17,5 +17,4 @@ __all__ = [
     "SectionField",
     "FormName",
     "Event",
-    "ltree_extension",
 ]

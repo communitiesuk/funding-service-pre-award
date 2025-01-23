@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
 
+from data.models import FundingType
 from pre_award.fund_store.config.fund_loader_config.common_fund_config.fund_base_tree_paths import (
     DPI_R2_BASE_PATH,
 )
 from pre_award.fund_store.config.fund_loader_config.logo import DLUHC_LOGO_PNG
-from services.data.models.fund import FundingType
 
 DPI_FUND_ID = "f493d512-5eb4-11ee-8c99-0242ac120002"
 DPI_ROUND_2_ID = "0059aad4-5eb5-11ee-8c99-0242ac120002"

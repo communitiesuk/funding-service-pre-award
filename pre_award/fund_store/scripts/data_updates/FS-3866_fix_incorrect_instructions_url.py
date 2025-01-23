@@ -2,8 +2,8 @@ from flask import current_app
 from sqlalchemy import update
 
 import pre_award.fund_store.config.fund_loader_config.cof.cof_r3 as cof_r3
+from data.models import Round
 from pre_award.db import db
-from services.data.models.round import Round
 
 
 def update_rounds_with_links(rounds):

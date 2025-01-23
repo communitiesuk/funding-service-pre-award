@@ -9,7 +9,7 @@ from flask_assets import Environment
 from flask_babel import Babel, gettext, pgettext
 from flask_compress import Compress
 
-from frontend.filters import datetime_format_respect_lang
+from common.utils.filters import datetime_format_respect_lang
 
 try:
     from flask_debugtoolbar import DebugToolbarExtension
@@ -141,6 +141,8 @@ def create_app() -> Flask:  # noqa: C901
             PackageLoader("pre_award.assess.tagging"),
             PackageLoader("pre_award.assess.scoring"),
             PackageLoader("pre_award.authenticator.frontend"),
+            PackageLoader("common"),
+            PackageLoader("apply"),
             PrefixLoader({"govuk_frontend_jinja": PackageLoader("govuk_frontend_jinja")}),
         ]
     )
@@ -220,6 +222,7 @@ def create_app() -> Flask:  # noqa: C901
     from pre_award.authenticator.frontend.sso.routes import sso_bp
     from pre_award.authenticator.frontend.user.routes import user_bp
     from pre_award.common.error_routes import internal_server_error, not_found
+    from apply.routes import apply_bp
 
     flask_app.register_error_handler(404, not_found)
     flask_app.register_error_handler(500, internal_server_error)
@@ -244,6 +247,8 @@ def create_app() -> Flask:  # noqa: C901
     flask_app.register_blueprint(api_magic_link_bp, host=flask_app.config["AUTH_HOST"])
     flask_app.register_blueprint(api_sso_bp, host=flask_app.config["AUTH_HOST"])
     flask_app.register_blueprint(api_sessions_bp, host=flask_app.config["AUTH_HOST"])
+
+    flask_app.register_blueprint(apply_bp, host=flask_app.config["APPLY_HOST"])
 
     # FIXME: we should be enforcing CSRF on requests to sign out via authenticator, but because this is a cross-domain
     #        request, flask_wtf rejects the request because it's not the same origin. See `project` method in

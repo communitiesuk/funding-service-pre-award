@@ -7,11 +7,10 @@ from flask import template_rendered
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
+from data.models import Fund, Round
 from pre_award.config.envs.unit_test import UnitTestConfig
 from pre_award.fund_store.config.fund_loader_config.FAB.ctdf import LOADER_CONFIG as ctdf_config
 from pre_award.fund_store.config.fund_loader_config.FAB.ctdf_closed import LOADER_CONFIG as ctdf_config_closed
-from services.data.models.fund import Fund
-from services.data.models.round import Round
 
 
 def _convert_fab_config_into_format_from_db(config_values: dict) -> dict:
@@ -86,5 +85,5 @@ def templates_rendered(app):
 
 @pytest.fixture()
 def mock_get_fund_and_round_success(mocker):
-    mocker.patch("frontend.apply.routes.get_fund_and_round", return_value=(mock_fund, mock_round_open))
+    mocker.patch("apply.routes.get_fund_and_round", return_value=(mock_fund, mock_round_open))
     mocker.patch("app.find_fund_and_round_in_request", return_value=(mock_fund, mock_round_open))

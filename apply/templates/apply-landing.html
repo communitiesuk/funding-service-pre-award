@@ -1,4 +1,4 @@
-{% extends "page-template.jinja.html" %}
+{% extends "apply-base.html" %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 {% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
@@ -6,27 +6,18 @@
 
 
 {% block pageTitle %}Apply for a grant{% endblock %}
-{% set fund_name %}
-{{fund.name_json[get_lang()] or fund.name_json["en"]}}
-{% endset %}
-{% set fund_title %}
-{{fund.title_json[get_lang()] or fund.title_json["en"]}}
-{%endset%}
-{% set round_title %}
-{{round.title_json[get_lang()] or round.title_json["en"]}}
-{% endset%}
 
 {% block content %}
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <span class="govuk-caption-l"> {{ fund_name}} {{ round_title }}</span>
-            <h1 class="govuk-heading-xl">{%trans fund_title=fund_title%}Start or continue an application for {{ fund_title }}{%endtrans%}</h1>
+            <span class="govuk-caption-l">{{ fund.fund_name}} {{ round.round_title }}</span>
+            <h1 class="govuk-heading-xl">{%trans fund_title=fund.fund_title%}Start or continue an application for {{ fund_title }}{%endtrans%}</h1>
 
             {% if round.is_past_submission_deadline %}
 
                 {% set closed_html %}
-                    <p class="govuk-notification-banner__heading">{%trans fund_round_names = fund_name + " " + round_title%}Window closed - {{fund_round_names}}{% endtrans %}</p>
+                    <p class="govuk-notification-banner__heading">{%trans fund_round_names = fund.fund_name + " " + round.round_title%}Window closed - {{fund_round_names}}{% endtrans %}</p>
                     <p class="govuk-body">
                         ({% trans closed_date = round.deadline|datetime_format_respect_lang %}Closed: {{ closed_date }}{% endtrans %})
                     </p>

@@ -4,12 +4,12 @@ import pytest
 from bs4 import BeautifulSoup
 from flask import render_template
 
-from tests.frontend_apply_tests.conftest import mock_fund, mock_round_closed, mock_round_open
+from tests.unit.conftest import mock_fund, mock_round_closed, mock_round_open
 
 
 @pytest.mark.parametrize("mock_round, window_closed_visible", [(mock_round_open, False), (mock_round_closed, True)])
 def test_render_landing(apply_test_client, mock_round, window_closed_visible):
-    result = render_template("apply/apply-landing.html.jinja", fund=mock_fund, round=mock_round)
+    result = render_template("apply-landing.html", fund=mock_fund, round=mock_round)
     assert result
     soup = BeautifulSoup(result, "html.parser")
     assert soup.find("span", {"class": "govuk-caption-l"}, string="Crash Test Dummy Fund " + mock_round.round_title)

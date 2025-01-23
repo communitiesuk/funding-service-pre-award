@@ -1,6 +1,6 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 
-from services.data.models.round import Round
+from data.models import Round
 
 
 class RoundSchema(SQLAlchemyAutoSchema):

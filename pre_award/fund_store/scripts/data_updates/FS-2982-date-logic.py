@@ -4,8 +4,8 @@ from sqlalchemy import update
 import pre_award.fund_store.config.fund_loader_config.cof.cof_r2 as cof_r2
 import pre_award.fund_store.config.fund_loader_config.cof.cof_r3 as cof_r3
 import pre_award.fund_store.config.fund_loader_config.night_shelter.ns_r2 as ns_r2
+from data.models import Round
 from pre_award.db import db
-from services.data.models.round import Round
 
 
 def update_date_format(round_config):

@@ -8,12 +8,11 @@ from sqlalchemy.sql import expression
 from sqlalchemy_utils import Ltree
 from sqlalchemy_utils.types.ltree import LQUERY
 
+from data.models import Fund, Round
 from pre_award.db import db
 from pre_award.fund_store.db.models.event import Event
 from pre_award.fund_store.db.models.form_name import FormName
 from pre_award.fund_store.db.models.section import AssessmentField, Section, SectionField
-from services.data.models.fund import Fund
-from services.data.models.round import Round
 
 
 def get_all_funds() -> List[Fund]:

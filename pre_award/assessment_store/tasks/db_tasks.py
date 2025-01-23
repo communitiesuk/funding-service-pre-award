@@ -127,10 +127,10 @@ def create_seeded_db(c):
 def seed_assessment_store_db_impl(environment: Literal["local", "cloud"]):
     import uuid
 
+    from data.models import Round
     from pre_award.assessment_store.db.models.score import AssessmentRound, ScoringSystem
     from pre_award.assessment_store.db.models.tag import TagType
     from pre_award.db import db
-    from services.data.models.round import Round
 
     # Define scoring systems
     scoring_system_data = [

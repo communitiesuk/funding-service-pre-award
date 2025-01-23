@@ -1,8 +1,7 @@
 from sqlalchemy import select
 
+from data.models import Fund, Round
 from pre_award.db import db
-from services.data.models.fund import Fund
-from services.data.models.round import Round
 
 
 def get_fund_and_round(fund_short_name: str, round_short_name: str) -> tuple[Fund, Round]:
