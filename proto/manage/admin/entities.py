@@ -116,6 +116,8 @@ class TemplateSectionAdmin(BaseAdmin):
     can_create = True
     can_edit = True
 
+    column_list = ["type", "slug", "title", "order"]
+
 
 class TemplateQuestionAdmin(BaseAdmin):
     _model = TemplateQuestion

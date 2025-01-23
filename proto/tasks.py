@@ -5,7 +5,7 @@ from invoke import task
 from sqlalchemy import text
 
 from proto.common.data.models import TemplateSection
-from proto.common.data.models.question_bank import DataStandard, QuestionType, TemplateQuestion
+from proto.common.data.models.question_bank import DataStandard, QuestionType, TemplateQuestion, TemplateType
 
 
 @contextmanager
@@ -36,9 +36,14 @@ def insert_question_bank_data(app, db):
             db.session.flush()
 
         template_sections_to_create = {
-            "project-information": TemplateSection(slug="project-information", title="Project Information", order=1),
+            "project-information": TemplateSection(
+                slug="project-information", title="Project Information", order=1, type=TemplateType.APPLICATION
+            ),
             "organisation-information": TemplateSection(
-                slug="organisation-information", title="Organisation Information", order=2
+                slug="organisation-information",
+                title="Organisation Information",
+                order=2,
+                type=TemplateType.APPLICATION,
             ),
         }
         for ts_slug, ts_instance in template_sections_to_create.items():

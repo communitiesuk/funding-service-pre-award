@@ -27,6 +27,13 @@ class DataStandard(db.Model):
         return f"<DS: {self.description}>"
 
 
+# Whether the sections/questions are associated with applications for funding or reporting (monitoring+evaluation) of
+# funding.
+class TemplateType(enum.Enum):
+    APPLICATION = "application"
+    REPORTING = "reporting"
+
+
 class TemplateSection(db.Model):
     __table_args__ = (CheckConstraint(r"regexp_like(slug, '[a-z\-]+')", name="slug"),)
 
@@ -36,6 +43,7 @@ class TemplateSection(db.Model):
     slug: Mapped[str] = mapped_column(unique=True)
     title: Mapped[str]
     order: Mapped[int]
+    type: Mapped[TemplateType]
 
     template_questions: Mapped[list["TemplateQuestion"]] = relationship("TemplateQuestion")
 

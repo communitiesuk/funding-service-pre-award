@@ -16,11 +16,11 @@ from proto.common.data.services.grants import (
     update_grant,
 )
 from proto.common.data.services.question_bank import (
-    add_template_sections_to_round,
+    add_template_sections_to_application_round,
     create_question,
     create_section,
+    get_application_template_sections_and_questions,
     get_section_for_round,
-    get_template_sections_and_questions,
 )
 from proto.common.data.services.round import create_round, update_round
 from proto.manage.platform.forms import (
@@ -204,11 +204,11 @@ def view_round_configuration(grant_code, round_code):
 @is_authenticated
 def choose_from_question_bank(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
-    template_sections = get_template_sections_and_questions()
+    template_sections = get_application_template_sections_and_questions()
     form = ChooseTemplateSectionsForm(template_sections)
 
     if form.validate_on_submit():
-        add_template_sections_to_round(round.id, form.sections.data)
+        add_template_sections_to_application_round(round.id, form.sections.data)
         return redirect(
             url_for(
                 "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code

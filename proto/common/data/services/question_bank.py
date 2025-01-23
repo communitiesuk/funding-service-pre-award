@@ -8,11 +8,17 @@ from proto.common.data.models import (
     TemplateQuestion,
     TemplateSection,
 )
+from proto.common.data.models.question_bank import TemplateType
 
 
-def get_template_sections_and_questions():
+def get_application_template_sections_and_questions():
     template_sections = (
-        db.session.scalars(select(TemplateSection).join(TemplateQuestion).order_by(TemplateSection.order))
+        db.session.scalars(
+            select(TemplateSection)
+            .join(TemplateQuestion)
+            .filter(TemplateSection.type == TemplateType.APPLICATION)
+            .order_by(TemplateSection.order)
+        )
         .unique()
         .all()
     )
@@ -37,10 +43,12 @@ def create_section(**kwargs):
     db.session.commit()
 
 
-def add_template_sections_to_round(round_id, template_section_ids):
+def add_template_sections_to_application_round(round_id, template_section_ids):
     template_sections = (
         db.session.scalars(
-            select(TemplateSection).join(TemplateQuestion).filter(TemplateSection.id.in_(template_section_ids))
+            select(TemplateSection)
+            .join(TemplateQuestion)
+            .filter(TemplateSection.id.in_(template_section_ids), TemplateSection.type == TemplateType.APPLICATION)
         )
         .unique()
         .all()
