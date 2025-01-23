@@ -84,10 +84,10 @@ class TemplateQuestion(db.Model):
         return f"<TemplateQuestion {self.slug} template_section={self.template_section}>"
 
 
-class ApplicationSection(db.Model):
+class ProtoDataCollectionSection(db.Model):
     __table_args__ = (
         CheckConstraint(r"regexp_like(slug, '[a-z\-]+')", name="slug"),
-        UniqueConstraint("round_id", "slug", name="uq_as_slug_for_round"),
+        UniqueConstraint("round_id", "slug", name="uq_as_slug_for_round2"),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -100,19 +100,19 @@ class ApplicationSection(db.Model):
     round_id: Mapped[UUID] = mapped_column(db.ForeignKey("round.id"))
     round: Mapped["Round"] = relationship("Round")
 
-    questions: Mapped[list["ApplicationQuestion"]] = relationship(
-        "ApplicationQuestion", order_by="ApplicationQuestion.order"
+    questions: Mapped[list["ProtoDataCollectionQuestion"]] = relationship(
+        "ProtoDataCollectionQuestion", order_by="ProtoDataCollectionQuestion.order"
     )
 
     def __repr__(self):
-        return f"<ApplicationSection {self.slug} fund={self.round.proto_grant.short_name}>"
+        return f"<ProtoDataCollectionSection {self.slug} fund={self.round.proto_grant.short_name}>"
 
 
-class ApplicationQuestion(db.Model):
+class ProtoDataCollectionQuestion(db.Model):
     __table_args__ = (
         CheckConstraint(r"regexp_like(slug, '[a-z\-]+')", name="slug"),
-        UniqueConstraint("section_id", "slug", name="uq_aq_slug_for_section"),
-        UniqueConstraint("section_id", "order", name="uq_aq_order_for_section"),
+        UniqueConstraint("section_id", "slug", name="uq_aq_slug_for_section2"),
+        UniqueConstraint("section_id", "order", name="uq_aq_order_for_section2"),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -126,12 +126,12 @@ class ApplicationQuestion(db.Model):
     order: Mapped[int]
     data_source: Mapped[t_data_source]
 
-    section_id: Mapped[int] = mapped_column(db.ForeignKey(ApplicationSection.id))
-    section: Mapped[ApplicationSection] = relationship(ApplicationSection)
+    section_id: Mapped[int] = mapped_column(db.ForeignKey(ProtoDataCollectionSection.id))
+    section: Mapped[ProtoDataCollectionSection] = relationship(ProtoDataCollectionSection)
     template_question_id: Mapped[int | None] = mapped_column(db.ForeignKey(TemplateQuestion.id))
     template_question: Mapped[TemplateQuestion] = relationship(TemplateQuestion)
     data_standard_id: Mapped[int | None] = mapped_column(db.ForeignKey(DataStandard.id))
     data_standard: Mapped[DataStandard | None] = relationship(DataStandard)
 
     def __repr__(self):
-        return f"<ApplicationQuestion {self.slug} section={self.section}>"
+        return f"<ProtoDataCollectionQuestion {self.slug} section={self.section}>"

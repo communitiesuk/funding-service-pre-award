@@ -94,7 +94,7 @@ def check_your_answers(application_id, section_slug):
     # these are workaronds for having the navigation show or not and aren't really used - this should be more generic
     account = {"email": g.account.email}
     application = get_application(application_id=application_id)
-    section_data = get_application_section_data(application_id, section_slug)
+    section_data = get_application_section_data(application, section_slug)
     form = MarkAsCompleteForm(data={"complete": "yes" if section_data and section_data.completed else None})
     if form.validate_on_submit():
         if form.complete.data is True:

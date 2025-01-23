@@ -2,8 +2,8 @@ from sqlalchemy import select
 
 from db import db
 from proto.common.data.models import (
-    ApplicationQuestion,
-    ApplicationSection,
+    ProtoDataCollectionQuestion,
+    ProtoDataCollectionSection,
     Round,
     TemplateQuestion,
     TemplateSection,
@@ -27,18 +27,20 @@ def get_application_template_sections_and_questions():
 
 def get_section_for_round(round, section_id):
     return db.session.scalars(
-        select(ApplicationSection).join(Round).filter(Round.id == round.id, ApplicationSection.id == section_id)
+        select(ProtoDataCollectionSection)
+        .join(Round)
+        .filter(Round.id == round.id, ProtoDataCollectionSection.id == section_id)
     ).one()
 
 
 def create_question(**kwargs):
-    question = ApplicationQuestion(**kwargs)
+    question = ProtoDataCollectionQuestion(**kwargs)
     db.session.add(question)
     db.session.commit()
 
 
 def create_section(**kwargs):
-    section = ApplicationSection(**kwargs)
+    section = ProtoDataCollectionSection(**kwargs)
     db.session.add(section)
     db.session.commit()
 
@@ -56,14 +58,14 @@ def add_template_sections_to_application_round(round_id, template_section_ids):
 
     sections = []
     for template_section in template_sections:
-        section = ApplicationSection(
+        section = ProtoDataCollectionSection(
             slug=template_section.slug, title=template_section.title, order=template_section.order, round_id=round_id
         )
         db.session.add(section)
         sections.append(section)
 
         for template_question in template_section.template_questions:
-            question = ApplicationQuestion(
+            question = ProtoDataCollectionQuestion(
                 slug=template_question.slug,
                 type=template_question.type,
                 title=template_question.title,
@@ -81,20 +83,23 @@ def add_template_sections_to_application_round(round_id, template_section_ids):
 
 def get_application_question(round_id, section_slug, question_slug):
     return db.session.scalar(
-        select(ApplicationQuestion)
-        .join(ApplicationSection)
+        select(ProtoDataCollectionQuestion)
+        .join(ProtoDataCollectionSection)
         .join(Round)
         .filter(
-            ApplicationQuestion.slug == question_slug, ApplicationSection.slug == section_slug, Round.id == round_id
+            ProtoDataCollectionQuestion.slug == question_slug,
+            ProtoDataCollectionSection.slug == section_slug,
+            Round.id == round_id,
         )
     )
 
 
 # def get_application_question(grant_code, round_code, question_id):
 #     question = db.session.scalar(
-#         select(ApplicationQuestion)
+#         select(DataCollectionQuestion)
 #         .join(Round)
 #         .join(Fund)
-#         .filter(ApplicationQuestion.id == question_id, Round.short_name == round_code, Fund.short_name == grant_code)
+#         .filter(DataCollectionQuestion.id == question_id
+#         , Round.short_name == round_code, Fund.short_name == grant_code)
 #     ).one()
 #     return question

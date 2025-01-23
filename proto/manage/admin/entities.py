@@ -6,9 +6,9 @@ from flask_wtf import FlaskForm
 from proto.common.data.models import TemplateSection
 from proto.common.data.models.fund import Fund
 from proto.common.data.models.question_bank import (
-    ApplicationQuestion,
-    ApplicationSection,
     DataStandard,
+    ProtoDataCollectionQuestion,
+    ProtoDataCollectionSection,
     TemplateQuestion,
 )
 from proto.common.data.models.round import Round
@@ -125,8 +125,8 @@ class TemplateQuestionAdmin(BaseAdmin):
     can_edit = True
 
 
-class ApplicationSectionAdmin(BaseAdmin):
-    _model = ApplicationSection
+class DataCollectionSectionAdmin(BaseAdmin):
+    _model = ProtoDataCollectionSection
     can_create = True
     can_edit = True
 
@@ -137,8 +137,8 @@ class ApplicationSectionAdmin(BaseAdmin):
     }
 
 
-class ApplicationQuestionAdmin(BaseAdmin):
-    _model = ApplicationQuestion
+class DataCollectionQuestionAdmin(BaseAdmin):
+    _model = ProtoDataCollectionQuestion
     can_create = True
     can_edit = True
 

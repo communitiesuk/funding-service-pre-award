@@ -50,7 +50,7 @@
             [
               {"text": ' '},
               {"text": question.title},
-              {"html": ("<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('applicationquestion.edit_view', id=question.id, url=url_for('proto_manage.platform.rounds.view_round_data_collection', grant_code=grant.short_name, round_code=round.short_name)) + "'>Edit</a>") if round.proto_draft else ' '}
+              {"html": ("<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('protodatacollectionquestion.edit_view', id=question.id, url=url_for('proto_manage.platform.rounds.view_round_data_collection', grant_code=grant.short_name, round_code=round.short_name)) + "'>Edit</a>") if round.proto_draft else ' '}
             ]
           ) %}
         {% endfor %}

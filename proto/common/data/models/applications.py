@@ -2,7 +2,7 @@ import enum
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, UniqueConstraint, func
+from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
@@ -10,7 +10,8 @@ from proto.common.data.models.types import pk_int
 
 if TYPE_CHECKING:
     from account_store.db.models import Account
-    from proto.common.data.models import ApplicationSection, Round
+    from proto.common.data.models import Round
+    from proto.common.data.models.data_collection import ProtoDataCollection
 
 
 # SF notes: CREATED, SUBMITTED, AWARDED, REJECTED, CLOSED
@@ -40,15 +41,14 @@ class ProtoApplication(db.Model):
     account_id: Mapped[str] = mapped_column(ForeignKey("account.id"))
     account: Mapped["Account"] = relationship("Account")
 
-    section_data: Mapped[list["ProtoApplicationSectionData"]] = relationship(
-        "ProtoApplicationSectionData", passive_deletes=True
-    )
+    data_collection_id: Mapped[pk_int] = mapped_column(ForeignKey("proto_data_collection.id"))
+    data_collection: Mapped["ProtoDataCollection"] = relationship("ProtoDataCollection", lazy="select")
 
     updated_by_applicant_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     @property
     def status(self):
-        if len(self.section_data) == 0:
+        if len(self.data_collection.section_data) == 0:
             return ApplicationStatus.NOT_STARTED
 
         # TODO: WIP
@@ -57,8 +57,8 @@ class ProtoApplication(db.Model):
 
     @property
     def can_be_submitted(self):
-        return len(self.section_data) == len(self.round.application_sections) and all(
-            sd.completed for sd in self.section_data
+        return len(self.data_collection.section_data) == len(self.round.application_sections) and all(
+            sd.completed for sd in self.data_collection.section_data
         )
 
     @property
@@ -74,7 +74,7 @@ class ProtoApplication(db.Model):
         return self.status == ApplicationStatus.COMPLETED
 
     def status_for_section(self, section_id) -> ApplicationSectionStatus:
-        section_data = next(filter(lambda sec: sec.section_id == section_id, self.section_data), None)
+        section_data = next(filter(lambda sec: sec.section_id == section_id, self.data_collection.section_data), None)
         if section_data is None:
             return ApplicationSectionStatus.NOT_STARTED
         elif section_data.completed is False:
@@ -89,20 +89,3 @@ class ProtoApplication(db.Model):
 
     def section_completed(self, section_id) -> bool:
         return self.status_for_section(section_id) == ApplicationSectionStatus.COMPLETED
-
-
-class ProtoApplicationSectionData(db.Model):
-    __table_args__ = (UniqueConstraint("proto_application_id", "section_id"),)
-
-    id: Mapped[pk_int] = mapped_column(primary_key=True)
-    created_at: Mapped[datetime] = mapped_column(default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
-
-    data: Mapped[dict] = mapped_column(nullable=False, default=dict)
-    completed: Mapped[bool] = mapped_column(default=False)
-
-    proto_application_id: Mapped[int] = mapped_column(ForeignKey("proto_application.id", ondelete="CASCADE"))
-    proto_application: Mapped["Round"] = relationship("ProtoApplication")
-
-    section_id: Mapped[int] = mapped_column(ForeignKey("application_section.id"))
-    section: Mapped["ApplicationSection"] = relationship("ApplicationSection")

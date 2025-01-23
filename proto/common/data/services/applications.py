@@ -7,13 +7,14 @@ from sqlalchemy.orm import joinedload
 
 from db import db
 from proto.common.data.models import (
-    ApplicationQuestion,
-    ApplicationSection,
     Fund,
     ProtoApplication,
-    ProtoApplicationSectionData,
+    ProtoDataCollectionQuestion,
+    ProtoDataCollectionSection,
+    ProtoDataCollectionSectionData,
     Round,
 )
+from proto.common.data.models.data_collection import ProtoDataCollection
 from proto.common.data.models.question_bank import QuestionType
 
 
@@ -32,7 +33,11 @@ def create_application(preview: bool, round_id: int, account_id: str):
         )
 
     application = ProtoApplication(
-        code=_generate_application_code(), fake=preview, round_id=round_id, account_id=account_id
+        code=_generate_application_code(),
+        fake=preview,
+        round_id=round_id,
+        account_id=account_id,
+        data_collection=ProtoDataCollection(),
     )
     db.session.add(application)
     db.session.commit()
@@ -70,7 +75,7 @@ def get_application_grants(account_id):
     return grants
 
 
-def _build_answer_dict(question: "ApplicationQuestion", answer: str) -> dict:
+def _build_answer_dict(question: "ProtoDataCollectionQuestion", answer: str) -> dict:
     if question.type == QuestionType.RADIOS:
         answer = next(filter(lambda choice: choice["value"] == answer, question.data_source))
 
@@ -80,27 +85,36 @@ def _build_answer_dict(question: "ApplicationQuestion", answer: str) -> dict:
     }
 
 
-def get_current_answer_to_question(application: ProtoApplication, question: "ApplicationQuestion") -> str | dict:
+def get_current_answer_to_question(
+    application: ProtoApplication, question: "ProtoDataCollectionQuestion"
+) -> str | dict:
     # str(question.id) because JSON keys must be strings, but our question PK col is an int
     return db.session.scalar(
-        select(ProtoApplicationSectionData.data[str(question.id)]["answer"]).filter(
-            ProtoApplicationSectionData.proto_application == application,
-            ProtoApplicationSectionData.section_id == question.section_id,
+        select(ProtoDataCollectionSectionData.data[str(question.id)]["answer"]).filter(
+            ProtoDataCollectionSectionData.data_collection_id == application.data_collection_id,
+            ProtoDataCollectionSectionData.section_id == question.section_id,
         )
     )
 
 
-def upsert_question_data(application: ProtoApplication, question: "ApplicationQuestion", answer: str):
+def upsert_question_data(application: ProtoApplication, question: "ProtoDataCollectionQuestion", answer: str):
     db_answer = _build_answer_dict(question, answer)
 
     db.session.execute(
-        insert(ProtoApplicationSectionData)
-        .values(data={question.id: db_answer}, proto_application_id=application.id, section_id=question.section_id)
+        insert(ProtoDataCollectionSectionData)
+        .values(
+            data={question.id: db_answer},
+            data_collection_id=application.data_collection_id,
+            section_id=question.section_id,
+        )
         .on_conflict_do_update(
-            index_elements=[ProtoApplicationSectionData.proto_application_id, ProtoApplicationSectionData.section_id],
+            index_elements=[
+                ProtoDataCollectionSectionData.data_collection_id,
+                ProtoDataCollectionSectionData.section_id,
+            ],
             set_={
-                ProtoApplicationSectionData.data: func.jsonb_set(
-                    ProtoApplicationSectionData.data, f"{{{question.id}}}", cast(db_answer, JSONB), True
+                ProtoDataCollectionSectionData.data: func.jsonb_set(
+                    ProtoDataCollectionSectionData.data, f"{{{question.id}}}", cast(db_answer, JSONB), True
                 )
             },
         )
@@ -108,18 +122,18 @@ def upsert_question_data(application: ProtoApplication, question: "ApplicationQu
     db.session.commit()
 
 
-def get_application_section_data(application_id, section_slug):
+def get_application_section_data(application, section_slug):
     return db.session.scalar(
-        select(ProtoApplicationSectionData)
-        .join(ApplicationSection)
+        select(ProtoDataCollectionSectionData)
+        .join(ProtoDataCollectionSection)
         .filter(
-            ProtoApplicationSectionData.proto_application_id == application_id,
-            ApplicationSection.slug == section_slug,
+            ProtoDataCollectionSectionData.data_collection_id == application.data_collection_id,
+            ProtoDataCollectionSection.slug == section_slug,
         )
     )
 
 
-def set_application_section_complete(section_data: ProtoApplicationSectionData):
+def set_application_section_complete(section_data: ProtoDataCollectionSectionData):
     section_data.completed = True
     db.session.add(section_data)
     db.session.commit()

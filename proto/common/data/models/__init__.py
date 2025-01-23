@@ -15,11 +15,11 @@ from proto.common.data.models.question_bank import (  # noqa
     DataStandard as DataStandard,
     TemplateSection as TemplateSection,
     TemplateQuestion as TemplateQuestion,
-    ApplicationSection as ApplicationSection,
-    ApplicationQuestion as ApplicationQuestion,
+    ProtoDataCollectionSection as ProtoDataCollectionSection,
+    ProtoDataCollectionQuestion as ProtoDataCollectionQuestion,
 )
 from proto.common.data.models.round import Round as Round  # noqa
 from proto.common.data.models.applications import (  # noqa
     ProtoApplication as ProtoApplication,
-    ProtoApplicationSectionData as ProtoApplicationSectionData,
 )
+from proto.common.data.models.data_collection import ProtoDataCollectionSectionData as ProtoDataCollectionSectionData  # noqa
