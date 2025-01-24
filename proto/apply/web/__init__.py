@@ -1,6 +1,6 @@
 from urllib.parse import urljoin
 
-from flask import redirect, render_template, session, url_for
+from flask import current_app, redirect, render_template, session, url_for
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from govuk_frontend_wtf.wtforms_widgets import GovSubmitInput, GovTextInput
@@ -52,6 +52,10 @@ def magic_links_enter_email_handler():
     if form.validate_on_submit():
         path = session.get("magic_links_forward_path")
         magic_link = create_magic_link(email=form.data.get("email"), path=path)
+
+        if current_app.config["BYPASS_NOTIFY_SORRY_STEVEN"]:
+            return redirect(url_for("proto_apply.web.magic_links_return_handler", token=magic_link.token))
+
         get_notification_service().proto_send_magic_link(magic_link=magic_link)
         return redirect(url_for("proto_apply.web.magic_links_confirm_email_handler", external_id=magic_link.id))
 
