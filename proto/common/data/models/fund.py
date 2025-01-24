@@ -11,6 +11,7 @@ from sqlalchemy.types import Boolean
 from sqlalchemy.types import Enum as SQLAEnum
 
 from db import db
+from proto.common.data.models.reporting_round import ProtoReportingRound
 from proto.common.data.models.round import Round
 
 
@@ -58,6 +59,7 @@ class Fund(db.Model):
 
     description_json = Column("description_json", JSON(none_as_null=True), nullable=False, unique=False)
     rounds: Mapped[List["Round"]] = relationship("Round")
+    reporting_rounds: Mapped[List["ProtoReportingRound"]] = relationship("ProtoReportingRound")
     welsh_available = Column("welsh_available", Boolean, default=False, nullable=False)
     owner_organisation_name = Column("owner_organisation_name", db.String(), nullable=False, unique=False)
     owner_organisation_shortname = Column("owner_organisation_shortname", db.String(), nullable=False, unique=False)

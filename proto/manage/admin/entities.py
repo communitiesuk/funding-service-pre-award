@@ -6,6 +6,7 @@ from flask_wtf import FlaskForm
 from proto.common.data.models import (
     ProtoDataCollectionDefinitionQuestion,
     ProtoDataCollectionDefinitionSection,
+    ProtoReportingRound,
     TemplateSection,
 )
 from proto.common.data.models.fund import Fund
@@ -104,6 +105,25 @@ class RoundAdmin(BaseAdmin):
     column_formatters = {
         "fund_id": lambda v, c, m, p: m.proto_grant.short_name,
         "title_json": lambda v, c, m, p: m.title_json["en"],
+    }
+
+
+class ProtoReportingRoundAdmin(BaseAdmin):
+    _model = ProtoReportingRound
+
+    can_create = True
+    can_edit = True
+
+    column_list = [
+        "grant",
+        "reporting_period_starts",
+        "reporting_period_ends",
+        "submission_period_starts",
+        "submission_period_ends",
+    ]
+
+    column_formatters = {
+        "grant": lambda v, c, m, p: m.grant.short_name,
     }
 
 

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
 from proto.common.data.models import DataStandard, Round, TemplateQuestion, t_data_source
+from proto.common.data.models import ProtoReportingRound
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.models.types import pk_int
 
@@ -16,6 +17,9 @@ class ProtoDataCollectionDefinition(db.Model):
     updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
 
     round: Mapped[Optional["Round"]] = relationship("Round", back_populates="data_collection_definition")
+    reporting_round: Mapped[Optional["ProtoReportingRound"]] = relationship(
+        "ProtoReportingRound", back_populates="data_collection_definition"
+    )
     sections: Mapped[Optional[list["ProtoDataCollectionDefinitionSection"]]] = relationship(
         "ProtoDataCollectionDefinitionSection", back_populates="definition"
     )

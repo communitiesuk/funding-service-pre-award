@@ -1,0 +1,68 @@
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+
+{% extends "manage/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}Manage grants{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row app-sidebar">
+  <div class="govuk-grid-column-three-quarters">
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">{{ grant.name_json.en }} - {{ round.title }}</span>
+      Configuration
+    </h1>
+
+    {% if round.data_collection_definition.sections|length == 0 %}
+      {% set insetText %}
+        <p>
+          You cannot make this round live until you have configured some data collection questions.
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.reporting_rounds.view_reporting_round_data_collection', grant_code=grant.short_name, round_ext_id=round.external_id) }}">Manage data collection</a>.
+        </p>
+      {% endset %}
+      {{ govukInsetText({"html": insetText}) }}
+    {% else %}
+      <form method="post">
+        {{ form.csrf_token }}
+        {{ form.submit }}
+      </form>
+    {% endif %}
+
+    {% set adminEditHref = url_for('protoreportinground.edit_view', id=round.id, url=url_for('proto_manage.platform.reporting_rounds.view_reporting_round_configuration', grant_code=grant.short_name, round_ext_id=round.external_id)) %}
+    {{
+      govukTable(
+        {
+          "caption": "Round configuration",
+          "captionClasses": "govuk-table__caption--m",
+          "firstCellIsHeader": true,
+          "rows": [
+            [{"text": "Code"}, {"text": round.external_id}, {}],
+            [{"text": "Reporting period"}, {"text": round.title}, {"html": "<a class='govuk-link govuk-link--no-visited-state' href='" + adminEditHref + "'>Edit</a>"}],
+            [{"text": "Submissions open"}, {"text": round.submissions_open | datetime_format_full_month}, {"html": "<a class='govuk-link govuk-link--no-visited-state' href='" + adminEditHref + "'>Edit</a>"}],
+            [{"text": "Submissions close"}, {"text": round.submissions_close | datetime_format_full_month}, {"html": "<a class='govuk-link govuk-link--no-visited-state' href='" + adminEditHref + "'>Edit</a>"}],
+            [{"text": "etc"}, {"text": '...'}, {}],
+          ]
+        }
+      )
+    }}
+  </div>
+
+  <div class="govuk-grid-column-one-quarter app-sidebar__container">
+    <nav class="navigation" aria-label="Application round">
+      <ul class="govuk-list govuk-list--spaced">
+        <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.reporting_rounds.view_reporting_round_overview', grant_code=grant.short_name, round_ext_id=round.external_id) }}">Round overview</a></li>
+
+        <li>
+          <p class="govuk-body govuk-!-margin-bottom-1">Configure</p>
+          <ul class="govuk-list app-list--dashed">
+            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.reporting_rounds.view_reporting_round_data_collection', grant_code=grant.short_name, round_ext_id=round.external_id) }}"><span class="govuk-visually-hidden">Configure </span>Data collection</a></li>
+            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-sidebar__item--active" href="{{ url_for('proto_manage.platform.reporting_rounds.view_reporting_round_configuration', grant_code=grant.short_name, round_ext_id=round.external_id) }}"><span class="govuk-visually-hidden">Configure </span>Round</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+{% endblock %}

@@ -9,37 +9,24 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-m">Application rounds</span>
+      <span class="govuk-caption-m">Reporting rounds</span>
       {{ grant.name_json.en }}
     </h1>
   </div>
 </div>
 <div class="govuk-grid-row app-sidebar">
-
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-m">Expression of interest</h2>
-    <p class="govuk-body">Expressions of interest are not available. Prospective applicants must wait for a new round to open.</p>
-    <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">Configure an expression of interest</a></p>
-
-    <h2 class="govuk-heading-m">Eligibility check</h2>
-    <p class="govuk-body">There is no eligiblity check for this grant. Anyone is able to apply.</p>
-    <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">Configure an eligibility check</a></p>
-
-    <h2 class="govuk-heading-m">Rounds</h2>
-
-    <a href="{{ url_for('proto_manage.platform.rounds.create_round_view', grant_code=grant.short_name) }}" class="govuk-button">Create a new application round</a>
+    <a href="{{ url_for('proto_manage.platform.reporting_rounds.create_reporting_round_view', grant_code=grant.short_name) }}" class="govuk-button">Create a new reporting round</a>
     <br>
 
-    {% for round in (grant.rounds | sort(attribute='short_name', case_sensitive=false, reverse=true) | sort(attribute='proto_start_date', reverse=true)) %}
+    {% for round in (grant.reporting_rounds | sort(attribute='created_at', reverse=true) | sort(attribute='start_date', reverse=true)) %}
       <h4 class="govuk-!-display-inline">
-        <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.rounds.view_round_overview', grant_code=round.proto_grant.short_name, round_code=round.short_name) }}">{{ round.short_name }}: {{ round.title_json.en }}</a>
+        <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.reporting_rounds.view_reporting_round_overview', grant_code=round.grant.short_name, round_ext_id=round.external_id) }}">{{ round.title }}</a>
       </h4>
       {{ govukTag({"text": round.status|title, "classes": "govuk-tag--" ~ round.status_colour}) }}
 
-      <p class="govuk-body govuk-!-margin-bottom-1 govuk-!-margin-top-3"><span class="">Open at:</span> {{ round.opens | datetime_format_full_month }}</p>
-      <p class="govuk-body"><span class="">Close at:</span> {{ round.deadline | datetime_format_full_month }}</p>
-      <p class="govuk-body govuk-!-margin-bottom-1"><span class="govuk-!-font-weight-bold">Applications:</span> 0</p>
-      <p class="govuk-body"><span class="govuk-!-font-weight-bold">Recipients in monitoring:</span> 0</p>
+      <p class="govuk-body govuk-!-margin-bottom-1"><span class="govuk-!-font-weight-bold">Reports in progress:</span> 0</p>
+      <p class="govuk-body govuk-!-margin-bottom-1"><span class="govuk-!-font-weight-bold">Reports completed:</span> 0</p>
 
       {% if not loop.last %}
         <hr class="govuk-section-break--m" />
@@ -66,8 +53,8 @@
           <p class="govuk-body govuk-!-margin-bottom-1">Configure</p>
           <ul class="govuk-list app-list--dashed">
             <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Grant</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-sidebar__item--active" href="{{ url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Application rounds</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Reporting rounds</a></li>
+            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Application rounds</a></li>
+            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-sidebar__item--active" href="{{ url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Reporting rounds</a></li>
           </ul>
         </li>
       </ul>

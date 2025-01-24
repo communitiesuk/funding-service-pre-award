@@ -69,7 +69,7 @@
           <ul class="govuk-list app-list--dashed">
             <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Grant</a></li>
             <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Application rounds</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Configure </span>Reporting rounds</a></li>
+            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Reporting rounds</a></li>
           </ul>
         </li>
       </ul>

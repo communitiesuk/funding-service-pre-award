@@ -5,7 +5,7 @@ from proto.common.auth import is_authenticated
 from proto.common.data.exceptions import DataValidationError, attach_validation_error_to_form
 from proto.common.data.models.fund import FundStatus
 from proto.common.data.services.grants import create_grant, get_all_grants_with_rounds, get_grant, update_grant
-from proto.manage.platform import CreateGrantForm, MakeGrantLiveForm
+from proto.manage.platform.forms.grants import CreateGrantForm, MakeGrantLiveForm
 
 grants_blueprint = Blueprint("grants", __name__)
 
@@ -33,12 +33,23 @@ def view_grant_overview(grant_code):
     )
 
 
-@grants_blueprint.get("/grants/<grant_code>/rounds")
+@grants_blueprint.get("/grants/<grant_code>/application-rounds")
 @is_authenticated
-def view_grant_rounds(grant_code):
+def view_grant_rounds(grant_code):  # todo: rename everything application-roundy
     grant = get_grant(grant_code)
     return render_template(
         "manage/platform/view_grant_rounds.html",
+        grant=grant,
+        back_link=url_for("proto_manage.platform.grants.index"),
+    )
+
+
+@grants_blueprint.get("/grants/<grant_code>/reporting-rounds")
+@is_authenticated
+def view_grant_reporting_rounds(grant_code):
+    grant = get_grant(grant_code)
+    return render_template(
+        "manage/platform/view_grant_reporting_rounds.html",
         grant=grant,
         back_link=url_for("proto_manage.platform.grants.index"),
     )

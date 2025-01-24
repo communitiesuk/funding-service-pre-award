@@ -11,12 +11,12 @@ from proto.common.data.models.data_collection import ProtoDataCollectionDefiniti
 from proto.common.data.models.question_bank import TemplateType
 
 
-def get_application_template_sections_and_questions():
+def get_template_sections_and_questions(template_type: TemplateType):
     template_sections = (
         db.session.scalars(
             select(TemplateSection)
             .join(TemplateQuestion)
-            .filter(TemplateSection.type == TemplateType.APPLICATION)
+            .filter(TemplateSection.type == template_type)
             .order_by(TemplateSection.order)
         )
         .unique()

@@ -8,6 +8,7 @@ from sqlalchemy.orm import joinedload
 
 from db import db
 from proto.common.data.exceptions import DataValidationError
+from proto.common.data.models import ProtoReportingRound
 from proto.common.data.models.fund import Fund, FundStatus
 from proto.common.data.models.round import Round
 
@@ -26,6 +27,19 @@ def get_grant_and_round(grant_code: str, round_code: str) -> tuple[Fund, Round]:
         .one()
     )
     return round.proto_grant, round
+
+
+def get_grant_and_reporting_round(grant_code: str, round_ext_id: str) -> tuple[Fund, Round]:
+    round = (
+        db.session.scalars(
+            select(ProtoReportingRound)
+            .join(Fund)
+            .filter(Fund.short_name == grant_code, ProtoReportingRound.external_id == round_ext_id)
+        )
+        .unique()
+        .one()
+    )
+    return round.grant, round
 
 
 def get_active_round(grant_short_code: str):

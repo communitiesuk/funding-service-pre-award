@@ -5,24 +5,23 @@ from flask import g, redirect, render_template, url_for
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
 from proto.common.data.exceptions import DataValidationError, attach_validation_error_to_form
+from proto.common.data.models.question_bank import TemplateType
 from proto.common.data.services.applications import create_application
 from proto.common.data.services.grants import get_grant, get_grant_and_round
 from proto.common.data.services.question_bank import (
     add_template_sections_to_data_collection_definition,
     create_question,
     create_section,
-    get_application_template_sections_and_questions,
     get_section_for_data_collection_definition,
+    get_template_sections_and_questions,
 )
 from proto.common.data.services.round import create_round, update_round
-from proto.manage.platform import (
-    ChooseTemplateSectionsForm,
+from proto.manage.platform.forms.application_round import (
     CreateRoundForm,
     MakeRoundLiveForm,
-    NewQuestionForm,
-    NewSectionForm,
     PreviewApplicationForm,
 )
+from proto.manage.platform.forms.data_collection import ChooseTemplateSectionsForm, NewQuestionForm, NewSectionForm
 
 rounds_blueprint = Blueprint("rounds", __name__)
 
@@ -57,7 +56,7 @@ def create_round_view(grant_code):
             )
 
     return render_template(
-        "manage/platform/create_round.html",
+        "manage/platform/application_round/create_round.html",
         form=form,
         back_link=url_for("proto_manage.platform.grants.view_grant_rounds", grant_code=grant_code),
     )
@@ -68,7 +67,7 @@ def create_round_view(grant_code):
 def view_round_overview(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
     return render_template(
-        "manage/platform/view_round_overview.html",
+        "manage/platform/application_round/view_round_overview.html",
         grant=grant,
         round=round,
         back_link=url_for("proto_manage.platform.grants.view_grant_rounds", grant_code=grant_code),
@@ -83,7 +82,7 @@ def view_round_data_collection(grant_code, round_code):
         submit_label="Preview application", data={"round_id": round.id, "account_id": g.account.id}
     )
     return render_template(
-        "manage/platform/view_round_data_collection.html",
+        "manage/platform/application_round/view_round_data_collection.html",
         grant=grant,
         round=round,
         form=form,
@@ -102,7 +101,7 @@ def view_round_configuration(grant_code, round_code):
             url_for("proto_manage.platform.rounds.view_round_overview", grant_code=grant_code, round_code=round_code)
         )
     return render_template(
-        "manage/platform/view_round_configuration.html",
+        "manage/platform/application_round/view_round_configuration.html",
         grant=grant,
         round=round,
         form=form,
@@ -114,7 +113,7 @@ def view_round_configuration(grant_code, round_code):
 @is_authenticated
 def choose_from_question_bank(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
-    template_sections = get_application_template_sections_and_questions()
+    template_sections = get_template_sections_and_questions(template_type=TemplateType.APPLICATION)
     form = ChooseTemplateSectionsForm(template_sections)
 
     if form.validate_on_submit():
