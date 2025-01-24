@@ -1,9 +1,11 @@
+from typing import Literal
+
 from babel import negotiate_locale
 from flask import request
 from fsd_utils import CommonConfig
 
 
-def get_lang() -> str:
+def get_lang() -> Literal["en", "cy"]:
     # get lang if lang query arg is set
     language_from_query_args = request.args.get("lang")
     if language_from_query_args:

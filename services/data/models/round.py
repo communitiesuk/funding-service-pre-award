@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Literal, Optional
 
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -25,7 +25,7 @@ class Round(Model):
     fund_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("fund.id"),
     )
-    title_json: Mapped[dict[str, str]]
+    title_json: Mapped[dict[Literal["en", "cy"], str]]
     short_name: Mapped[str]
     opens: Mapped[Optional[datetime]]
     deadline: Mapped[Optional[datetime]]
@@ -35,7 +35,7 @@ class Round(Model):
     assessment_deadline: Mapped[Optional[datetime]]
     prospectus: Mapped[str]
     privacy_notice: Mapped[str]
-    contact_us_banner_json: Mapped[Optional[dict[str, str]]]
+    contact_us_banner_json: Mapped[Optional[dict[str, Any]]]
     reference_contact_page_over_email: Mapped[bool] = mapped_column(
         default=False,
     )
@@ -44,19 +44,19 @@ class Round(Model):
     contact_textphone: Mapped[Optional[str]]
     support_times: Mapped[str]
     support_days: Mapped[str]
-    instructions_json: Mapped[Optional[dict[str, str]]]
+    instructions_json: Mapped[Optional[dict[str, Any]]]
     feedback_link: Mapped[Optional[str]]
     project_name_field_id: Mapped[str]
-    application_guidance_json: Mapped[Optional[dict[str, str]]]
+    application_guidance_json: Mapped[Optional[dict[str, Any]]]
     guidance_url: Mapped[Optional[str]]
     all_uploaded_documents_section_available: Mapped[bool] = mapped_column(default=False)
     application_fields_download_available: Mapped[bool] = mapped_column(default=False)
     display_logo_on_pdf_exports: Mapped[bool] = mapped_column(default=False)
     mark_as_complete_enabled: Mapped[bool] = mapped_column(default=False)
     is_expression_of_interest: Mapped[bool] = mapped_column(default=False)
-    feedback_survey_config: Mapped[Optional[dict[str, str]]]
-    eligibility_config: Mapped[Optional[dict[str, str]]]
-    eoi_decision_schema: Mapped[Optional[dict[str, str]]]
+    feedback_survey_config: Mapped[Optional[dict[str, Any]]]
+    eligibility_config: Mapped[Optional[dict[str, Any]]]
+    eoi_decision_schema: Mapped[Optional[dict[str, Any]]]
 
     @hybrid_property
     def is_past_submission_deadline(self) -> bool:

@@ -1,4 +1,5 @@
 import enum
+from typing import Any, Literal
 
 import sqlalchemy
 from flask_migrate import Migrate
@@ -25,7 +26,12 @@ metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 
 db.Model.registry.update_type_annotation_map(
-    {dict[str, str]: JSON(none_as_null=True), FundingType: sqlalchemy.Enum(FundingType, native_enum=False)}
+    {
+        dict[str, Any]: JSON(none_as_null=True),
+        dict[str, str]: JSON(none_as_null=True),
+        dict[Literal["en", "cy"], str]: JSON(none_as_null=True),
+        FundingType: sqlalchemy.Enum(FundingType, native_enum=False),
+    }
 )
 
 migrate = Migrate()

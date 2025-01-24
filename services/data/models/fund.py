@@ -1,5 +1,5 @@
 import uuid
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Literal, Optional
 
 from sqlalchemy import Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -19,10 +19,10 @@ class Fund(Model):
         default=uuid.uuid4,
         primary_key=True,
     )
-    name_json: Mapped[dict[str, str]]
-    title_json: Mapped[dict[str, str]]
+    name_json: Mapped[dict[Literal["en", "cy"], str]]
+    title_json: Mapped[dict[Literal["en", "cy"], str]]
     short_name: Mapped[str] = mapped_column(unique=True)
-    description_json: Mapped[dict[str, str]]
+    description_json: Mapped[dict[Literal["en", "cy"], str]]
     rounds: Mapped[List["Round"]] = relationship("Round")
     welsh_available: Mapped[bool] = mapped_column(default=False, nullable=False)
     owner_organisation_name: Mapped[str]
