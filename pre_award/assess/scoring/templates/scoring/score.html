@@ -16,6 +16,7 @@ Score – {{ sub_criteria.name }} – {{ sub_criteria.project_name }}
 {% endset %}
 
 {% block header %}
+{{ super() }}
 {% include "assess/components/header.html" %}
 {% endblock header %}
 

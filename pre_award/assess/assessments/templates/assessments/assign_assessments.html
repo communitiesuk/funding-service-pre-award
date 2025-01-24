@@ -12,6 +12,7 @@
 {% set pageHeading %}Team dashboard{% endset %}
 
 {% block header %}
+    {{ super() }}
     {{ team_dashboard_header.render(round_details, stats, team_flag_stats, is_active_status) }}
 {% endblock header %}
 
