@@ -68,7 +68,7 @@
       <span>{{ application.round.deadline | dateformat }}</span>
     </p> #}
 
-    {% for section in application.round.application_sections %}
+    {% for section in application.round.data_collection_definition.sections %}
       {# <h2 class="govuk-heading-m">{{ section.title }}</h2> #}
       <h2 class="govuk-heading-m">{% trans %}Section{% endtrans %} {{ loop.index }}</h2>
       {# here we'd be looping through potential sub-sections but we'll add that next #}

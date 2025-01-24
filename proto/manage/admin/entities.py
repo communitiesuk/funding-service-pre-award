@@ -3,12 +3,14 @@ from abc import abstractmethod
 from flask_admin.contrib import sqla
 from flask_wtf import FlaskForm
 
-from proto.common.data.models import TemplateSection
+from proto.common.data.models import (
+    ProtoDataCollectionDefinitionQuestion,
+    ProtoDataCollectionDefinitionSection,
+    TemplateSection,
+)
 from proto.common.data.models.fund import Fund
 from proto.common.data.models.question_bank import (
     DataStandard,
-    ProtoDataCollectionQuestion,
-    ProtoDataCollectionSection,
     TemplateQuestion,
 )
 from proto.common.data.models.round import Round
@@ -126,7 +128,7 @@ class TemplateQuestionAdmin(BaseAdmin):
 
 
 class DataCollectionSectionAdmin(BaseAdmin):
-    _model = ProtoDataCollectionSection
+    _model = ProtoDataCollectionDefinitionSection
     can_create = True
     can_edit = True
 
@@ -138,7 +140,7 @@ class DataCollectionSectionAdmin(BaseAdmin):
 
 
 class DataCollectionQuestionAdmin(BaseAdmin):
-    _model = ProtoDataCollectionQuestion
+    _model = ProtoDataCollectionDefinitionQuestion
     can_create = True
     can_edit = True
 

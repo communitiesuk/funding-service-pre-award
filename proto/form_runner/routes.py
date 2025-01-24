@@ -58,7 +58,7 @@ def _back_link_for_question(question, application_id, from_check_your_answers):
 def ask_application_question(application_id, section_slug, question_slug):
     account = {"email": g.account.email}
     application = get_application(application_id)
-    question = get_application_question(application.round_id, section_slug, question_slug)
+    question = get_application_question(application.round.data_collection_definition_id, section_slug, question_slug)
     form = build_question_form(application, question)
     from_check_your_answers = "from_cya" in request.args
     if form.validate_on_submit():

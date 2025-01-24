@@ -16,11 +16,11 @@ from proto.common.data.services.grants import (
     update_grant,
 )
 from proto.common.data.services.question_bank import (
-    add_template_sections_to_application_round,
+    add_template_sections_to_data_collection_definition,
     create_question,
     create_section,
     get_application_template_sections_and_questions,
-    get_section_for_round,
+    get_section_for_data_collection_definition,
 )
 from proto.common.data.services.round import create_round, update_round
 from proto.manage.platform.forms import (
@@ -208,7 +208,7 @@ def choose_from_question_bank(grant_code, round_code):
     form = ChooseTemplateSectionsForm(template_sections)
 
     if form.validate_on_submit():
-        add_template_sections_to_application_round(round.id, form.sections.data)
+        add_template_sections_to_data_collection_definition(round, form.sections.data)
         return redirect(
             url_for(
                 "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
@@ -230,7 +230,7 @@ def choose_from_question_bank(grant_code, round_code):
 @is_authenticated
 def create_section_view(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
-    form = NewSectionForm(data={"order": max(asec.order for asec in round.application_sections) + 1})
+    form = NewSectionForm(data={"order": max(asec.order for asec in round.data_collection_definition.sections) + 1})
 
     if form.validate_on_submit():
         create_section(round_id=round.id, **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}})
@@ -249,7 +249,7 @@ def create_section_view(grant_code, round_code):
 @is_authenticated
 def create_question_view(grant_code, round_code, section_id):
     grant, round = get_grant_and_round(grant_code, round_code)
-    section = get_section_for_round(round, section_id)
+    section = get_section_for_data_collection_definition(round.data_collection_definition, section_id)
     form = NewQuestionForm(data={"order": (max(q.order for q in section.questions) if section.questions else 0) + 1})
 
     if form.validate_on_submit():

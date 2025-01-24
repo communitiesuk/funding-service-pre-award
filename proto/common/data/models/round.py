@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import JSON, Column, Date, DateTime, ForeignKey, UniqueConstraint, func
 from sqlalchemy.dialects.postgresql import UUID
@@ -8,10 +8,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import Boolean
 
 from db import db
+from proto.common.data.models.types import pk_int
 
 if TYPE_CHECKING:
+    from proto.common.data.models import ProtoDataCollectionDefinition
     from proto.common.data.models.fund import Fund
-    from proto.common.data.models.question_bank import ProtoDataCollectionSection
 
 
 class Round(db.Model):
@@ -112,8 +113,12 @@ class Round(db.Model):
     # whenever we get the round we're going to want the fund information - we _might_ want to be able to override this
     # but this feels like a very sensible way around for most of applies use case
     proto_grant: Mapped["Fund"] = relationship("Fund", lazy=False)
-    application_sections: Mapped[list["ProtoDataCollectionSection"]] = relationship(
-        "ProtoDataCollectionSection", lazy="joined", order_by="ProtoDataCollectionSection.order"
+
+    data_collection_definition_id: Mapped[pk_int | None] = mapped_column(
+        ForeignKey("proto_data_collection_definition.id")
+    )
+    data_collection_definition: Mapped[Optional["ProtoDataCollectionDefinition"]] = relationship(
+        "ProtoDataCollectionDefinition", back_populates="round"
     )
 
     def __repr__(self):

@@ -15,12 +15,16 @@ from proto.common.data.models.question_bank import (  # noqa
     DataStandard as DataStandard,
     TemplateSection as TemplateSection,
     TemplateQuestion as TemplateQuestion,
-    ProtoDataCollectionSection as ProtoDataCollectionSection,
-    ProtoDataCollectionQuestion as ProtoDataCollectionQuestion,
 )
 from proto.common.data.models.round import Round as Round  # noqa
 from proto.common.data.models.applications import (  # noqa
     ProtoApplication as ProtoApplication,
 )
-from proto.common.data.models.data_collection import ProtoDataCollectionSectionData as ProtoDataCollectionSectionData  # noqa
+from proto.common.data.models.data_collection import (  # noqa
+    ProtoDataCollectionDefinition as ProtoDataCollectionDefinition,
+    ProtoDataCollectionInstance as ProtoDataCollectionInstance,
+    ProtoDataCollectionInstanceSectionData as ProtoDataCollectionInstanceSectionData,
+    ProtoDataCollectionDefinitionQuestion as ProtoDataCollectionDefinitionQuestion,
+    ProtoDataCollectionDefinitionSection as ProtoDataCollectionDefinitionSection,
+)
 from proto.common.data.models.reports import ProtoReport as ProtoReport  # noqa

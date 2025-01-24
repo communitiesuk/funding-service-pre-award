@@ -11,7 +11,7 @@ from proto.common.data.models.types import pk_int
 if TYPE_CHECKING:
     from account_store.db.models import Account
     from proto.common.data.models import Round
-    from proto.common.data.models.data_collection import ProtoDataCollection
+    from proto.common.data.models.data_collection import ProtoDataCollectionInstance
 
 
 # SF notes: CREATED, SUBMITTED, AWARDED, REJECTED, CLOSED
@@ -41,14 +41,16 @@ class ProtoApplication(db.Model):
     account_id: Mapped[str] = mapped_column(ForeignKey("account.id"))
     account: Mapped["Account"] = relationship("Account")
 
-    data_collection_id: Mapped[pk_int] = mapped_column(ForeignKey("proto_data_collection.id"))
-    data_collection: Mapped["ProtoDataCollection"] = relationship("ProtoDataCollection", lazy="select")
+    data_collection_instance_id: Mapped[pk_int] = mapped_column(ForeignKey("proto_data_collection_instance.id"))
+    data_collection_instance: Mapped["ProtoDataCollectionInstance"] = relationship(
+        "ProtoDataCollectionInstance", lazy="select"
+    )
 
     updated_by_applicant_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     @property
     def status(self):
-        if len(self.data_collection.section_data) == 0:
+        if len(self.data_collection_instance.section_data) == 0:
             return ApplicationStatus.NOT_STARTED
 
         # TODO: WIP
@@ -57,9 +59,9 @@ class ProtoApplication(db.Model):
 
     @property
     def can_be_submitted(self):
-        return len(self.data_collection.section_data) == len(self.round.application_sections) and all(
-            sd.completed for sd in self.data_collection.section_data
-        )
+        return len(self.data_collection_instance.section_data) == len(
+            self.round.data_collection_definition.sections
+        ) and all(sd.completed for sd in self.data_collection_instance.section_data)
 
     @property
     def not_started(self):
@@ -74,7 +76,9 @@ class ProtoApplication(db.Model):
         return self.status == ApplicationStatus.COMPLETED
 
     def status_for_section(self, section_id) -> ApplicationSectionStatus:
-        section_data = next(filter(lambda sec: sec.section_id == section_id, self.data_collection.section_data), None)
+        section_data = next(
+            filter(lambda sec: sec.section_id == section_id, self.data_collection_instance.section_data), None
+        )
         if section_data is None:
             return ApplicationSectionStatus.NOT_STARTED
         elif section_data.completed is False:

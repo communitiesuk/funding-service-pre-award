@@ -26,7 +26,7 @@
       Data collection
     </h1>
 
-    {% if round.application_sections | length == 0 %}
+    {% if round.data_collection_definition.sections | length == 0 %}
       <p class="govuk-body">No questions have been set up for this round yet.</p>
 
       <a href="{{ url_for('proto_manage.platform.rounds.choose_from_question_bank', grant_code=grant.short_name, round_code=round.short_name) }}" class="govuk-button">Add questions from the bank</a>
@@ -42,7 +42,7 @@
         </div>
       {% endif %}
 
-      {% for section in round.application_sections %}
+      {% for section in round.data_collection_definition.sections %}
         {% set sectionloop = loop %}
         {% set questionRows = [] %}
         {% for question in section.questions %}
@@ -50,7 +50,7 @@
             [
               {"text": ' '},
               {"text": question.title},
-              {"html": ("<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('protodatacollectionquestion.edit_view', id=question.id, url=url_for('proto_manage.platform.rounds.view_round_data_collection', grant_code=grant.short_name, round_code=round.short_name)) + "'>Edit</a>") if round.proto_draft else ' '}
+              {"html": ("<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('protodatacollectiondefinitionquestion.edit_view', id=question.id, url=url_for('proto_manage.platform.rounds.view_round_data_collection', grant_code=grant.short_name, round_code=round.short_name)) + "'>Edit</a>") if round.proto_draft else ' '}
             ]
           ) %}
         {% endfor %}

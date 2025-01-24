@@ -5,7 +5,7 @@ from wtforms.fields.choices import RadioField
 from wtforms.fields.simple import StringField, SubmitField
 from wtforms.validators import DataRequired, InputRequired
 
-from proto.common.data.models import ProtoApplication, ProtoDataCollectionQuestion
+from proto.common.data.models import ProtoApplication, ProtoDataCollectionDefinitionQuestion
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.services.applications import get_current_answer_to_question
 from proto.form_runner.helpers import get_answer_value_for_question
@@ -17,7 +17,9 @@ class DynamicQuestionForm(FlaskForm):
     question: StringField | RadioField
 
 
-def build_question_form(application: "ProtoApplication", question: ProtoDataCollectionQuestion) -> DynamicQuestionForm:
+def build_question_form(
+    application: "ProtoApplication", question: ProtoDataCollectionDefinitionQuestion
+) -> DynamicQuestionForm:
     match question.type:
         case QuestionType.TEXT_INPUT:
             field = StringField(

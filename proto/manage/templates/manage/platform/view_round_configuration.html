@@ -15,7 +15,7 @@
       Configuration
     </h1>
 
-    {% if round.application_sections|length == 0 %}
+    {% if round.data_collection_definition.sections|length == 0 %}
       {% set insetText %}
         <p>
           You cannot make this round live until you have configured some data collection questions.

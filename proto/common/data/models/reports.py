@@ -11,7 +11,7 @@ from proto.common.data.models.types import pk_int
 if TYPE_CHECKING:
     from account_store.db.models import Account
     from proto.common.data.models import Round
-    from proto.common.data.models.data_collection import ProtoDataCollection
+    from proto.common.data.models.data_collection import ProtoDataCollectionInstance
 
 
 class ReportStatus(str, enum.Enum):
@@ -40,8 +40,8 @@ class ProtoReport(db.Model):
     account_id: Mapped[str] = mapped_column(ForeignKey("account.id"))
     account: Mapped["Account"] = relationship("Account")
 
-    data_collection_id: Mapped[pk_int] = mapped_column(ForeignKey("proto_data_collection.id"))
-    data_collection: Mapped["ProtoDataCollection"] = relationship("ProtoDataCollection", lazy="select")
+    data_collection_id: Mapped[pk_int] = mapped_column(ForeignKey("proto_data_collection_instance.id"))
+    data_collection: Mapped["ProtoDataCollectionInstance"] = relationship("ProtoDataCollectionInstance", lazy="select")
 
     updated_by_reporter_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
@@ -56,7 +56,7 @@ class ProtoReport(db.Model):
 
     @property
     def can_be_submitted(self):
-        return len(self.data_collection.section_data) == len(self.round.application_sections) and all(
+        return len(self.data_collection.section_data) == len(self.round.data_collection_definition.sections) and all(
             sd.completed for sd in self.data_collection.section_data
         )
 
