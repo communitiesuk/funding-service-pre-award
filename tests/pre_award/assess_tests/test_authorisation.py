@@ -68,10 +68,10 @@ class TestAuthorisation:
         assess_test_client.set_cookie("fsd_user_token", "")
         response = assess_test_client.get("/")
         assert response.status_code == 200
-        assert b"Welcome to the assessment tool" in response.data
+        assert b"Assessment tool" in response.data
         assert (
             b'<a href="https://authenticator.levellingup.gov.localhost:4004/sso/login" role="button"'
-            b' draggable="false" class="govuk-button"'
+            b' draggable="false" class="govuk-button govuk-button--start"'
             b' data-module="govuk-button">' in response.data
         )
 
