@@ -80,7 +80,7 @@ def get_rounds_with_reminder_date_in_future():
     return rounds
 
 
-def get_rounds_where_reminder_date_today():
+def get_rounds_where_reminder_date_today() -> list[Round]:
     today = datetime.now().date()
     rounds = db.session.scalars(select(Round).filter(func.date(Round.reminder_date) == today)).all()
     return rounds

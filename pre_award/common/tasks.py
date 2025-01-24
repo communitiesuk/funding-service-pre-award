@@ -8,6 +8,7 @@ from alembic.config import Config
 from invoke import task
 
 from app import create_app
+from pre_award.account_store.db.models.queries import get_email_address
 from pre_award.account_store.tasks import seed_local_account_store_impl
 from pre_award.application_store.db.queries.application.queries import search_applications
 from pre_award.apply.models.round import Round
@@ -137,7 +138,9 @@ def reminder_emails(c):
             non_submitted_applications = search_applications(
                 round_id=str(r.id), status_only=["IN_PROGRESS", "NOT_STARTED", "COMPLETED"], forms=False
             )
-            print(non_submitted_applications)
+            for a in non_submitted_applications:
+                email_address = get_email_address(a["account_id"])
+                print(email_address)
 
 
 @task
