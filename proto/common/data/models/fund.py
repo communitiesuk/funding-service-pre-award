@@ -95,6 +95,10 @@ class Fund(db.Model):
         return f"<Fund {self.short_name} - {self.name_json['en']}>"
 
     @property
+    def can_create_a_reporting_round(self):
+        return len(list(filter(lambda r: r.preview, self.reporting_rounds))) == 0
+
+    @property
     def status_colour(self):
         # Design system tag colours: https://design-system.service.gov.uk/components/tag/#additional-colours
         match self.proto_status:

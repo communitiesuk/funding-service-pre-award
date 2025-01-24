@@ -1,5 +1,6 @@
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 
 {% extends "manage/base.jinja.html" %}
 
@@ -16,7 +17,15 @@
 </div>
 <div class="govuk-grid-row app-sidebar">
   <div class="govuk-grid-column-two-thirds">
-    <a href="{{ url_for('proto_manage.platform.reporting_rounds.create_reporting_round_view', grant_code=grant.short_name) }}" class="govuk-button">Create a new reporting round</a>
+    {% if grant.can_create_a_reporting_round %}
+      <a href="{{ url_for('proto_manage.platform.reporting_rounds.create_reporting_round_view', grant_code=grant.short_name) }}" class="govuk-button">Create a new reporting round</a>
+    {% else %}
+      <button href="{{ url_for('proto_manage.platform.reporting_rounds.create_reporting_round_view', grant_code=grant.short_name) }}" class="govuk-button govuk-!-margin-bottom-2" disabled>Create a new reporting round</button>
+      {{ govukInsetText({
+          "text": "You cannot create another reporting round while there is still one in preview.",
+          "classes": "govuk-!-margin-top-0",
+      }) }}
+    {% endif %}
     <br>
 
     {% for round in (grant.reporting_rounds | sort(attribute='created_at', reverse=true) | sort(attribute='start_date', reverse=true)) %}
