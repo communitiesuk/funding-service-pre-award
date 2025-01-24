@@ -68,7 +68,7 @@ def run_migration_in_task(task_command: str, extra_args: list[str]) -> None:
 def get_current_alembic_head_file_content() -> str:
     """Get the content of .current-alembic-head"""
 
-    with open("db/migrations/.current-alembic-head", "r") as file:
+    with open("pre_award/db/migrations/.current-alembic-head", "r") as file:
         file_content = file.read().strip()
 
     return file_content

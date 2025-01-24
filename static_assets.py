@@ -12,8 +12,8 @@ def init_assets(app=None, auto_build=False, static_folder="static"):
     with app.app_context():
         env = Environment(app)
         env.load_path = [
-            path.join(path.dirname(__file__), "assess/static/src"),
-            path.join(path.dirname(__file__), "authenticator/frontend/static/src"),
+            path.join(path.dirname(__file__), "pre_award/assess/static/src"),
+            path.join(path.dirname(__file__), "pre_award/authenticator/frontend/static/src"),
         ]
         # env.set_directory(env_directory)
         # App Engine doesn't support automatic rebuilding.
@@ -28,12 +28,12 @@ def init_assets(app=None, auto_build=False, static_folder="static"):
             "./assess/js/components/*/*.js",
             "./assess/js/init.js",
             filters="jsmin",
-            output="assess/js/main.min.js",
+            output="pre_award/assess/js/main.min.js",
         )
         css = Bundle(
             "./assess/css/*.css",
             filters="cssmin",
-            output="assess/css/main.min.css",
+            output="pre_award/assess/css/main.min.css",
             extra={"rel": "stylesheet/css"},
         )
 
@@ -44,7 +44,7 @@ def init_assets(app=None, auto_build=False, static_folder="static"):
             "./authenticator/js/fsd_cookies.js",
             "./authenticator/js/components/**/*.js",
             filters="jsmin",
-            output="authenticator/js/main.min.js",
+            output="pre_award/authenticator/js/main.min.js",
         )
 
         env.register("authenticator_main_js", authenticator_js)

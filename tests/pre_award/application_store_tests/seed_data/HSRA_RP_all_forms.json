@@ -1,0 +1,433 @@
+[
+    {
+        "name": "vacant-property-details-hsra-rp",
+        "status": "COMPLETED",
+        "questions": [
+            {
+                "fields": [
+                    {
+                        "key": "dwLpZU",
+                        "type": "text",
+                        "title": "What is the vacant property's address?",
+                        "answer": "796 South New Boulevard, Nam voluptates do tempora sit ducimus sit voluptas maiores dicta quia sit eu commodo, Ex voluptas sapiente sed voluptate autem et, Est perferendis exercitation est autem, NN5 7aZ"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "ISBazm",
+                "question": "What is the vacant property's address?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "rFpLZQ",
+                        "type": "text",
+                        "title": "What is the total commercial floorspace of the property, in metres squared?",
+                        "answer": "12"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "ISBazm",
+                "question": "What is the total commercial floorspace of the property, in metres squared?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "ndpQJk",
+                        "type": "text",
+                        "title": "Upload the initial notice you served the landlord",
+                        "answer": "Screenshot 2024-12-19 at 15.27.08.png"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "ISBazm",
+                "question": "Upload the initial notice you served the landlord"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "markAsComplete",
+                        "type": "boolean",
+                        "title": "Do you want to mark this section as complete?",
+                        "answer": true
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": null,
+                "question": "MarkAsComplete"
+            }
+        ]
+    },
+    {
+        "name": "application-name-hsra-rp",
+        "status": "COMPLETED",
+        "questions": [
+            {
+                "fields": [
+                    {
+                        "key": "qbBtUh",
+                        "type": "text",
+                        "title": "What would you like to name your application?",
+                        "answer": "test"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "CiYZae",
+                "question": "What would you like to name your application?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "markAsComplete",
+                        "type": "boolean",
+                        "title": "Do you want to mark this section as complete?",
+                        "answer": true
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": null,
+                "question": "MarkAsComplete"
+            }
+        ]
+    },
+    {
+        "name": "applicant-information-hsra-rp",
+        "status": "COMPLETED",
+        "questions": [
+            {
+                "fields": [
+                    {
+                        "key": "OkKkMd",
+                        "type": "text",
+                        "title": "Full name",
+                        "answer": "Vaughan Decker"
+                    },
+                    {
+                        "key": "Lwkcam",
+                        "type": "text",
+                        "title": "Job title",
+                        "answer": "Vel et voluptatibus "
+                    },
+                    {
+                        "key": "XfiUqN",
+                        "type": "text",
+                        "title": "Email address",
+                        "answer": "nivedys@mailinator.com"
+                    },
+                    {
+                        "key": "DlZjvr",
+                        "type": "text",
+                        "title": "Telephone number",
+                        "answer": "+1 (307) 655-2083"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "bnfUAs",
+                "question": "Who should we contact about this application?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "markAsComplete",
+                        "type": "boolean",
+                        "title": "Do you want to mark this section as complete?",
+                        "answer": true
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": null,
+                "question": "MarkAsComplete"
+            }
+        ]
+    },
+    {
+        "name": "declaration-hsra-rp",
+        "status": "COMPLETED",
+        "questions": [
+            {
+                "fields": [
+                    {
+                        "key": "QUaOGq",
+                        "type": "list",
+                        "title": "By submitting this application, you confirm that the information you have provided is correct.",
+                        "answer": [
+                            "confirm"
+                        ]
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "wycNzR",
+                "question": "By submitting this application, you confirm that the information you have provided is correct."
+            },
+            {
+                "fields": [
+                    {
+                        "key": "markAsComplete",
+                        "type": "boolean",
+                        "title": "Do you want to mark this section as complete?",
+                        "answer": true
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": null,
+                "question": "MarkAsComplete"
+            }
+        ]
+    },
+    {
+        "name": "organisation-information-hsra-rp",
+        "status": "COMPLETED",
+        "questions": [
+            {
+                "fields": [
+                    {
+                        "key": "WLddBt",
+                        "type": "text",
+                        "title": "Which local authority are you applying from?",
+                        "answer": "test"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "eaktoV",
+                "question": "Which local authority are you applying from?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "okHmBB",
+                        "type": "text",
+                        "title": "Full name",
+                        "answer": "Abel Pearson"
+                    },
+                    {
+                        "key": "bQOXTi",
+                        "type": "text",
+                        "title": "Email address",
+                        "answer": "rycytarule@mailinator.com"
+                    },
+                    {
+                        "key": "phaosT",
+                        "type": "text",
+                        "title": "Telephone number",
+                        "answer": "+1 (175) 631-9337"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "eaktoV",
+                "question": "Who is your section 151 officer?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "markAsComplete",
+                        "type": "boolean",
+                        "title": "Do you want to mark this section as complete?",
+                        "answer": true
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": null,
+                "question": "MarkAsComplete"
+            }
+        ]
+    },
+    {
+        "name": "designated-area-details-hsra-rp",
+        "status": "COMPLETED",
+        "questions": [
+            {
+                "fields": [
+                    {
+                        "key": "frDgtU",
+                        "type": "text",
+                        "title": "Which designated high street or town centre is the vacant property in?",
+                        "answer": "asfd"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "YFgsrH",
+                "question": "Which designated high street or town centre is the vacant property in?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "TzGISC",
+                        "type": "text",
+                        "title": "Share the link with details of the designated area.",
+                        "answer": "https://www.zekigopozojyp.cm"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "YFgsrH",
+                "question": "Share the link with details of the designated area"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "markAsComplete",
+                        "type": "boolean",
+                        "title": "Do you want to mark this section as complete?",
+                        "answer": true
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": null,
+                "question": "MarkAsComplete"
+            }
+        ]
+    },
+    {
+        "name": "milestones-hsra-rp",
+        "status": "COMPLETED",
+        "questions": [
+            {
+                "fields": [
+                    {
+                        "key": "kkBYPW",
+                        "type": "date",
+                        "title": "When do you expect the auction to take place?",
+                        "answer": "2002-01-23"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "wtecPW",
+                "question": "When do you expect the auction to take place?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "pTZLiJ",
+                        "type": "date",
+                        "title": "When do you expect to submit your claim?",
+                        "answer": "1989-06-06"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "wtecPW",
+                "question": "When do you expect to submit your claim?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "ihfalZ",
+                        "type": "date",
+                        "title": "When do you expect the tenant to sign  the tenancy agreement?",
+                        "answer": "1988-04-22"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "wtecPW",
+                "question": "When do you expect the tenant to sign  the tenancy agreement?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "gLzqSP",
+                        "type": "date",
+                        "title": "When do you expect to finish the refurbishment works?",
+                        "answer": "1995-08-27"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "wtecPW",
+                "question": "When do you expect to finish the refurbishment works?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "HeqfVH",
+                        "type": "date",
+                        "title": "When do you expect the tenant to move in?",
+                        "answer": "2012-03-17"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "wtecPW",
+                "question": "When do you expect the tenant to move in?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "markAsComplete",
+                        "type": "boolean",
+                        "title": "Do you want to mark this section as complete?",
+                        "answer": true
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": null,
+                "question": "MarkAsComplete"
+            }
+        ]
+    },
+    {
+        "name": "project-costs-hsra-rp",
+        "status": "COMPLETED",
+        "questions": [
+            {
+                "fields": [
+                    {
+                        "key": "uJIluf",
+                        "type": "text",
+                        "title": "How much funding are you applying for? ",
+                        "answer": "500000"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "qavZyX",
+                "question": "How much funding are you applying for? "
+            },
+            {
+                "fields": [
+                    {
+                        "key": "LFwJND",
+                        "type": "freeText",
+                        "title": "Why are your costs higher than the guided price?",
+                        "answer": "<p>sdlkjf</p>"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "qavZyX",
+                "question": "Why are your costs higher than the guided price?"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "zORoJy",
+                        "type": "text",
+                        "title": "Upload the quote for the vacancy register",
+                        "answer": "Screenshot 2024-12-16 at 11.30.02.png"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "qavZyX",
+                "question": "Upload the independent survey of works"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "xPzwQq",
+                        "type": "text",
+                        "title": "Upload quotes for refurbishment",
+                        "answer": "Screenshot 2024-12-19 at 15.27.08.png"
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": "qavZyX",
+                "question": "Upload quotes for refurbishment"
+            },
+            {
+                "fields": [
+                    {
+                        "key": "markAsComplete",
+                        "type": "boolean",
+                        "title": "Do you want to mark this section as complete?",
+                        "answer": true
+                    }
+                ],
+                "status": "COMPLETED",
+                "category": null,
+                "question": "MarkAsComplete"
+            }
+        ]
+    }
+]
