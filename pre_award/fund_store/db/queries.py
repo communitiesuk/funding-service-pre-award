@@ -4,6 +4,7 @@ from typing import List
 
 from sqlalchemy import bindparam, exc, func, insert, select, text, update
 from sqlalchemy.dialects.postgresql import insert as postgres_insert
+from sqlalchemy.orm import joinedload
 from sqlalchemy.sql import expression
 from sqlalchemy_utils import Ltree
 from sqlalchemy_utils.types.ltree import LQUERY
@@ -82,8 +83,10 @@ def get_rounds_with_reminder_date_in_future():
 
 def get_rounds_where_reminder_date_today() -> list[Round]:
     today = datetime.now().date()
-    rounds = db.session.scalars(select(Round).filter(func.date(Round.reminder_date) == today)).all()
-    return rounds
+    rounds_with_parent_fund = db.session.scalars(
+        select(Round).options(joinedload(Round.fund)).filter(func.date(Round.reminder_date) == today)
+    ).all()
+    return rounds_with_parent_fund
 
 
 def get_sections_for_round(round_id) -> List[Section]:

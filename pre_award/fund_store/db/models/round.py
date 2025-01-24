@@ -3,9 +3,11 @@ import uuid
 from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy import JSON, Column, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.types import Boolean
 
 from pre_award.db import db
+from pre_award.fund_store.db.models.fund import Fund
 
 BaseModel: DefaultMeta = db.Model
 
@@ -26,6 +28,7 @@ class Round(BaseModel):
         ForeignKey("fund.id"),
         nullable=False,
     )
+    fund: Mapped["Fund"] = relationship(lazy=True)
     title_json = Column("title_json", JSON(none_as_null=True), nullable=False, unique=False)
     short_name = Column("short_name", db.String(), nullable=False, unique=False)
     opens = Column("opens", DateTime())

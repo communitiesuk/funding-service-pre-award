@@ -19,6 +19,7 @@ from pre_award.fund_store.db.queries import (
 )
 from pre_award.fund_store.scripts.fund_round_loaders.load_fund_round_from_fab import load_fund_from_fab_impl
 from pre_award.fund_store.scripts.load_all_fund_rounds import load_all_fund_rounds
+from services.notify import get_notification_service
 
 _VALID_JINJA_EXTENSIONS = (".html", ".jinja", ".jinja2", ".j2")
 
@@ -141,6 +142,22 @@ def reminder_emails(c):
             for a in non_submitted_applications:
                 email_address = get_email_address(a["account_id"])
                 print(email_address)
+                print(r.fund)
+                breakpoint()
+                get_notification_service().send_application_deadline_reminder_email(
+                    email_address=email_address,
+                    fund_name=r.fund,
+                    application_reference=a["reference"],
+                    round_name=r.title_json["en"],
+                    deadline=r.deadline,
+                    contact_help_email=r.contact_email,
+                )
+                # current_app.logger.info(
+                #     "Sent notification %(notification_id)s for application %(application_reference)s",
+                #     dict(
+                #         notification_id=notification.id,
+                #         application_reference=application["application"]["reference"],
+                #     ),
 
 
 @task
