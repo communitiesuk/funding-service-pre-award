@@ -390,7 +390,7 @@ list-style-type: upper-roman;
 body .govuk-button,
 body .govuk-button--primary {
   margin-right: 1.5em;
-  background-color: #1d70b8;
+  background-color #1d70b8;
 }
 body .govuk-button:hover,
 body .govuk-button--primary:hover {
