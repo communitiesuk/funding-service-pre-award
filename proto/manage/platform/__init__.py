@@ -72,7 +72,8 @@ def index():
 def view_grant_overview(grant_code):
     grant = get_grant(grant_code)
     return render_template(
-        "manage/platform/view_grant_overview.html",
+        # "manage/platform/view_grant_overview.html",
+        "manage/platform/view_grant_overview_sf_fork.html",
         grant=grant,
         back_link=url_for("proto_manage.platform.grants.index"),
     )

@@ -116,10 +116,10 @@ class DefaultConfig(object):
     SUPPORT_DESK_ASSESS = "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/5/group/70"
 
     API_HOST = getenv("API_HOST", "api.levellingup.gov.localhost:3012")
-    APPLY_HOST = getenv("APPLY_HOST", "frontend.levellingup.gov.localhost:3008")
+    APPLY_HOST = getenv("APPLY_HOST", "apply.levellingup.gov.localhost:3008")
     ASSESS_HOST = getenv("ASSESS_HOST", "assessment.levellingup.gov.localhost:3010")
     AUTH_HOST = getenv("AUTH_HOST", "authenticator.levellingup.gov.localhost:4004")
-    MANAGE_HOST = "manage.levellingup.gov.localhost:3008"
+    MANAGE_HOST = "funding.levellingup.gov.localhost:3008"
     FORM_RUNNER_HOST = "forms.levellingup.gov.localhost:3008"
 
     STATIC_FOLDER = "static"

@@ -1,0 +1,30 @@
+
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+
+{% extends "manage/platform/grants_base.html" %}
+
+{% block pageTitle %}{{ grant.proto_name }} - {% trans %}Funding service{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="fs-align-status-tag govuk-!-margin-bottom-6">
+<h1 class="govuk-heading-l govuk-!-margin-bottom-0">
+    {{ grant.proto_name }}
+</h1>
+{{ govukTag ({
+    "text": _("Draft"),
+    "classes": "govuk-tag--grey"
+}) }}
+</div>
+
+{% set yourGrantsLinksHtml %}
+<p class="govuk-body">You've got some links</p>
+
+{% set applyLink = url_for('proto_apply.grant_blueprint.grant_detail_handler', short_code=grant.short_name) %}
+<a class="govuk-link govuk-link--no-visited-state" href="{{ applyLink }}">https://apply.communities.gov.uk/grant/{{ grant.short_name }}</a>
+{% endset %}
+{{ govukDetails({
+    "summaryText": _("Your grants published links"),
+    "html": yourGrantsLinksHtml
+})}}
+{% endblock %}
