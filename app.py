@@ -154,6 +154,7 @@ def create_app() -> Flask:  # noqa: C901
         [
             PackageLoader("proto.apply"),
             PackageLoader("proto.assess"),
+            PackageLoader("proto.common"),
             PackageLoader("proto.manage"),
             PackageLoader("proto.report"),
             PackageLoader("proto.form_runner"),

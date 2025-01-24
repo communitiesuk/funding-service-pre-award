@@ -1,4 +1,4 @@
-{% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
+{% from "common/partials/mhclg-header.html" import mhclgHeader %}
 {% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
 {% from "govuk_frontend_jinja/components/service-navigation/macro.html" import govukServiceNavigation %}
 {% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
@@ -14,12 +14,10 @@
 {% endblock head %}
 
 {% block header %}
-{{ govukHeader({
+{{ mhclgHeader({
+    "productName": "MHCLG Funding",
     "homepageUrl": "#",
-    "useTudorCrown": true,
     "classes": "govuk-header--full-width-border",
-    "navigation": [{"html": "<span class='govuk-visually-hidden'>Logged in as </span>" ~ g.account.email, "href": "#"}, {"text": "Sign out", "href": url_for('proto_apply.web.magic_links_sign_out_handler')}],
-    "navigationClasses": "govuk-header__navigation--end"
 }) }}
 
 {{ govukServiceNavigation({
