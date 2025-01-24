@@ -16,14 +16,14 @@ def _grants_service_nav():
 
 
 @grants_blueprint.get("/")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def index():
     grants = get_all_grants_with_rounds()
     return render_template("manage/platform/home.html", grants=grants)
 
 
 @grants_blueprint.get("/grants/<grant_code>")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_grant_overview(grant_code):
     grant = get_grant(grant_code)
     return render_template(
@@ -34,7 +34,7 @@ def view_grant_overview(grant_code):
 
 
 @grants_blueprint.get("/grants/<grant_code>/application-rounds")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_grant_rounds(grant_code):  # todo: rename everything application-roundy
     grant = get_grant(grant_code)
     return render_template(
@@ -45,7 +45,7 @@ def view_grant_rounds(grant_code):  # todo: rename everything application-roundy
 
 
 @grants_blueprint.get("/grants/<grant_code>/reporting-rounds")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_grant_reporting_rounds(grant_code):
     grant = get_grant(grant_code)
     return render_template(
@@ -56,7 +56,7 @@ def view_grant_reporting_rounds(grant_code):
 
 
 @grants_blueprint.route("/grants/<grant_code>/configuration", methods=("GET", "POST"))
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_grant_configuration(grant_code):
     grant = get_grant(grant_code)
     form = MakeGrantLiveForm()
@@ -72,7 +72,7 @@ def view_grant_configuration(grant_code):
 
 
 @grants_blueprint.route("/create-grant", methods=["GET", "POST"])
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def create_grant_view():
     form = CreateGrantForm()
     if form.validate_on_submit():

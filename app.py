@@ -1,17 +1,17 @@
 import datetime
 from os import getenv
-from urllib.parse import urlencode, urljoin
 
 import psycopg2
-from flask import Flask, current_app, g, make_response, render_template, request, url_for
+from flask import Flask, current_app, g, request, url_for
 from flask.json.provider import DefaultJSONProvider
 from flask_admin import Admin
 from flask_admin.theme import Bootstrap4Theme  # noqa
 from flask_assets import Environment
-from flask_babel import Babel, gettext, pgettext
+from flask_babel import Babel, pgettext
 from flask_compress import Compress
 from govuk_frontend_wtf.main import WTFormsHelpers
 
+from proto.common.errors import errorhandler_403
 from proto.manage.admin import register_admin_views
 from proto.utils.templating import format_list
 
@@ -29,16 +29,12 @@ from fsd_utils import init_sentry
 from fsd_utils.healthchecks.checkers import DbChecker, FlaskRunningChecker, RedisChecker
 from fsd_utils.healthchecks.healthcheck import Healthcheck
 from fsd_utils.logging import logging
-from fsd_utils.services.aws_extended_client import SQSExtendedClient
 from fsd_utils.toggles.toggles import create_toggles_client, initialise_toggles_redis_store, load_toggles
 from govuk_flask_admin import GovukFlaskAdmin, GovukFrontendV5_6Theme  # noqa
 from jinja2 import ChoiceLoader, PackageLoader, PrefixLoader
 from sqlalchemy_utils import Ltree
 
 import static_assets
-from account_store.core.account import account_core_bp
-from application_store.api.routes.application.routes import application_store_bp
-from application_store.db.exceptions.application import ApplicationError
 from apply.filters import (
     custom_format_datetime,
     date_format_short_month,
@@ -50,7 +46,7 @@ from apply.filters import (
     status_translation,
     string_to_datetime,
 )
-from apply.helpers import find_fund_and_round_in_request, find_fund_in_request
+from apply.helpers import find_fund_and_round_in_request
 from assess.shared.filters import (
     add_to_dict,
     all_caps_to_human,
@@ -64,11 +60,9 @@ from assess.shared.filters import (
     slash_separated_day_month_year,
     utc_to_bst,
 )
-from assessment_store.api.routes import assessment_store_bp
 from common.locale_selector.get_lang import get_lang
 from common.locale_selector.set_lang import LanguageSelector
 from config import Config
-from fund_store.api.routes import fund_store_bp
 from services.notify import NotificationService
 
 
@@ -158,15 +152,15 @@ def create_app() -> Flask:  # noqa: C901
             PackageLoader("proto.manage"),
             PackageLoader("proto.report"),
             PackageLoader("proto.form_runner"),
-            PackageLoader("apply"),
-            PackageLoader("assess"),
-            # move everything into one templates folder for assess rather than nesting in blueprints
-            PackageLoader("assess.shared"),
-            PackageLoader("assess.assessments"),
-            PackageLoader("assess.flagging"),
-            PackageLoader("assess.tagging"),
-            PackageLoader("assess.scoring"),
-            PackageLoader("authenticator.frontend"),
+            # PackageLoader("apply"),
+            # PackageLoader("assess"),
+            # # move everything into one templates folder for assess rather than nesting in blueprints
+            # PackageLoader("assess.shared"),
+            # PackageLoader("assess.assessments"),
+            # PackageLoader("assess.flagging"),
+            # PackageLoader("assess.tagging"),
+            # PackageLoader("assess.scoring"),
+            # PackageLoader("authenticator.frontend"),
             PrefixLoader({"govuk_frontend_jinja": PackageLoader("govuk_frontend_jinja")}),
             PrefixLoader({"govuk_frontend_wtf": PackageLoader("govuk_frontend_wtf")}),
             # PackageLoader("govuk_flask_admin"),  # FIXME: you can try me (uncomment all 3) but I don't work well yet
@@ -175,7 +169,7 @@ def create_app() -> Flask:  # noqa: C901
 
     admin = Admin(
         flask_app,
-        host=Config.MANAGE_HOST,
+        host=Config.FUNDING_HOST,
         url="/admin",
         csp_nonce_generator=flask_app.jinja_env.globals["csp_nonce"],
         theme=Bootstrap4Theme(swatch="cerulean", fluid=False),
@@ -239,50 +233,51 @@ def create_app() -> Flask:  # noqa: C901
         toolbar.init_app(flask_app)
 
     # These are required to associated errorhandlers and before/after request decorators with their blueprints
-    import apply.default.error_routes  # noqa
-    import assess.blueprint_middleware  # noqa
-    from apply.default.account_routes import account_bp
-    from apply.default.application_routes import application_bp
+    # import apply.default.error_routes  # noqa
+    # import assess.blueprint_middleware  # noqa
+    # from apply.default.account_routes import account_bp
+    # from apply.default.application_routes import application_bp
     from apply.default.content_routes import content_bp
-    from apply.default.eligibility_routes import eligibility_bp
-    from apply.default.routes import default_bp
-    from assess.assessments.routes import assessment_bp
-    from assess.flagging.routes import flagging_bp
-    from assess.scoring.routes import scoring_bp
-    from assess.shared.routes import shared_bp
-    from assess.tagging.routes import tagging_bp
-    from authenticator.api.magic_links.routes import api_magic_link_bp
-    from authenticator.api.session.auth_session import api_sessions_bp
-    from authenticator.api.sso.routes import api_sso_bp
-    from authenticator.frontend.default.routes import default_bp as authenticator_default_bp
-    from authenticator.frontend.magic_links.routes import magic_links_bp
-    from authenticator.frontend.sso.routes import sso_bp
-    from authenticator.frontend.user.routes import user_bp
-    from common.error_routes import internal_server_error, not_found
 
-    flask_app.register_error_handler(404, not_found)
-    flask_app.register_error_handler(500, internal_server_error)
-    flask_app.register_error_handler(ApplicationError, internal_server_error)
-
-    flask_app.register_blueprint(default_bp, host=flask_app.config["APPLY_HOST"])
-    flask_app.register_blueprint(application_bp, host=flask_app.config["APPLY_HOST"])
+    # from apply.default.eligibility_routes import eligibility_bp
+    # from apply.default.routes import default_bp
+    # from assess.assessments.routes import assessment_bp
+    # from assess.flagging.routes import flagging_bp
+    # from assess.scoring.routes import scoring_bp
+    # from assess.shared.routes import shared_bp
+    # from assess.tagging.routes import tagging_bp
+    # from authenticator.api.magic_links.routes import api_magic_link_bp
+    # from authenticator.api.session.auth_session import api_sessions_bp
+    # from authenticator.api.sso.routes import api_sso_bp
+    # from authenticator.frontend.default.routes import default_bp as authenticator_default_bp
+    # from authenticator.frontend.magic_links.routes import magic_links_bp
+    # from authenticator.frontend.sso.routes import sso_bp
+    # from authenticator.frontend.user.routes import user_bp
+    # from common.error_routes import internal_server_error, not_found
+    #
+    # flask_app.register_error_handler(404, not_found)
+    # flask_app.register_error_handler(500, internal_server_error)
+    # flask_app.register_error_handler(ApplicationError, internal_server_error)
+    #
+    # flask_app.register_blueprint(default_bp, host=flask_app.config["APPLY_HOST"])
+    # flask_app.register_blueprint(application_bp, host=flask_app.config["APPLY_HOST"])
     flask_app.register_blueprint(content_bp, host=flask_app.config["APPLY_HOST"])
-    flask_app.register_blueprint(eligibility_bp, host=flask_app.config["APPLY_HOST"])
-    flask_app.register_blueprint(account_bp, host=flask_app.config["APPLY_HOST"])
-
-    flask_app.register_blueprint(shared_bp, host=flask_app.config["ASSESS_HOST"])
-    flask_app.register_blueprint(tagging_bp, host=flask_app.config["ASSESS_HOST"])
-    flask_app.register_blueprint(flagging_bp, host=flask_app.config["ASSESS_HOST"])
-    flask_app.register_blueprint(scoring_bp, host=flask_app.config["ASSESS_HOST"])
-    flask_app.register_blueprint(assessment_bp, host=flask_app.config["ASSESS_HOST"])
-
-    flask_app.register_blueprint(authenticator_default_bp, host=flask_app.config["AUTH_HOST"])
-    flask_app.register_blueprint(magic_links_bp, host=flask_app.config["AUTH_HOST"])
-    flask_app.register_blueprint(sso_bp, host=flask_app.config["AUTH_HOST"])
-    flask_app.register_blueprint(user_bp, host=flask_app.config["AUTH_HOST"])
-    flask_app.register_blueprint(api_magic_link_bp, host=flask_app.config["AUTH_HOST"])
-    flask_app.register_blueprint(api_sso_bp, host=flask_app.config["AUTH_HOST"])
-    flask_app.register_blueprint(api_sessions_bp, host=flask_app.config["AUTH_HOST"])
+    # flask_app.register_blueprint(eligibility_bp, host=flask_app.config["APPLY_HOST"])
+    # flask_app.register_blueprint(account_bp, host=flask_app.config["APPLY_HOST"])
+    #
+    # flask_app.register_blueprint(shared_bp, host=flask_app.config["ASSESS_HOST"])
+    # flask_app.register_blueprint(tagging_bp, host=flask_app.config["ASSESS_HOST"])
+    # flask_app.register_blueprint(flagging_bp, host=flask_app.config["ASSESS_HOST"])
+    # flask_app.register_blueprint(scoring_bp, host=flask_app.config["ASSESS_HOST"])
+    # flask_app.register_blueprint(assessment_bp, host=flask_app.config["ASSESS_HOST"])
+    #
+    # flask_app.register_blueprint(authenticator_default_bp, host=flask_app.config["AUTH_HOST"])
+    # flask_app.register_blueprint(magic_links_bp, host=flask_app.config["AUTH_HOST"])
+    # flask_app.register_blueprint(sso_bp, host=flask_app.config["AUTH_HOST"])
+    # flask_app.register_blueprint(user_bp, host=flask_app.config["AUTH_HOST"])
+    # flask_app.register_blueprint(api_magic_link_bp, host=flask_app.config["AUTH_HOST"])
+    # flask_app.register_blueprint(api_sso_bp, host=flask_app.config["AUTH_HOST"])
+    # flask_app.register_blueprint(api_sessions_bp, host=flask_app.config["AUTH_HOST"])
 
     from proto.apply import apply_blueprint as proto_apply_blueprint
     from proto.assess import assess_blueprint as proto_assess_blueprint
@@ -290,29 +285,32 @@ def create_app() -> Flask:  # noqa: C901
     from proto.manage import manage_blueprint as proto_manage_blueprint
     from proto.report import report_blueprint as proto_report_blueprint
 
-    flask_app.register_blueprint(proto_apply_blueprint, host=flask_app.config["APPLY_HOST"])
-    flask_app.register_blueprint(proto_report_blueprint, host=flask_app.config["APPLY_HOST"])
-    flask_app.register_blueprint(proto_form_runner_blueprint, host=flask_app.config["FORM_RUNNER_HOST"])
-    flask_app.register_blueprint(proto_assess_blueprint, host=flask_app.config["ASSESS_HOST"])
-    flask_app.register_blueprint(proto_manage_blueprint, host=flask_app.config["MANAGE_HOST"])
+    flask_app.register_error_handler(403, errorhandler_403)
+    flask_app.register_blueprint(proto_apply_blueprint, host=flask_app.config["FUNDING_HOST"])
+    flask_app.register_blueprint(proto_report_blueprint, host=flask_app.config["FUNDING_HOST"])
+    flask_app.register_blueprint(proto_form_runner_blueprint, host=flask_app.config["FUNDING_HOST"])
+    flask_app.register_blueprint(proto_assess_blueprint, host=flask_app.config["FUNDING_HOST"])
+    flask_app.register_blueprint(
+        proto_manage_blueprint, host=flask_app.config["FUNDING_HOST"], url_prefix="/grant-management"
+    )
 
     # FIXME: we should be enforcing CSRF on requests to sign out via authenticator, but because this is a cross-domain
     #        request, flask_wtf rejects the request because it's not the same origin. See `project` method in
     #        `flask_wtf.csrf`. Note: this preserves existing behaviour, because Authenticator was not enforcing CSRF
     #        at all (it never initialised CSRFProtect).
-    csrf.exempt(api_sessions_bp)
-    csrf.exempt(api_sso_bp)
-
-    flask_app.register_blueprint(account_core_bp, url_prefix="/account", host=Config.API_HOST)
-    flask_app.register_blueprint(fund_store_bp, url_prefix="/fund", host=Config.API_HOST)
-    flask_app.register_blueprint(application_store_bp, url_prefix="/application", host=Config.API_HOST)
-    flask_app.register_blueprint(assessment_store_bp, url_prefix="/assessment", host=Config.API_HOST)
-    csrf.exempt(account_core_bp)
-    csrf.exempt(fund_store_bp)
-    csrf.exempt(application_store_bp)
-    csrf.exempt(assessment_store_bp)
-    for bp, _ in assessment_store_bp._blueprints:
-        csrf.exempt(bp)
+    # csrf.exempt(api_sessions_bp)
+    # csrf.exempt(api_sso_bp)
+    #
+    # flask_app.register_blueprint(account_core_bp, url_prefix="/account", host=Config.API_HOST)
+    # flask_app.register_blueprint(fund_store_bp, url_prefix="/fund", host=Config.API_HOST)
+    # flask_app.register_blueprint(application_store_bp, url_prefix="/application", host=Config.API_HOST)
+    # flask_app.register_blueprint(assessment_store_bp, url_prefix="/assessment", host=Config.API_HOST)
+    # csrf.exempt(account_core_bp)
+    # csrf.exempt(fund_store_bp)
+    # csrf.exempt(application_store_bp)
+    # csrf.exempt(assessment_store_bp)
+    # for bp, _ in assessment_store_bp._blueprints:
+    #     csrf.exempt(bp)
 
     # Initialise Sessions
     session = Session()
@@ -322,7 +320,7 @@ def create_app() -> Flask:  # noqa: C901
     redis_mlinks.init_app(flask_app)
 
     # Initialize sqs extended client
-    create_sqs_extended_client(flask_app)
+    # create_sqs_extended_client(flask_app)
 
     # Initialise logging
     logging.init_app(flask_app)
@@ -342,73 +340,73 @@ def create_app() -> Flask:  # noqa: C901
         if values is not None:
             values.pop("host_from_current_request", None)
 
-    @flask_app.context_processor
-    def inject_global_constants():
-        if request.host == current_app.config["APPLY_HOST"]:
-            return dict(
-                stage="beta",
-                service_meta_author="Department for Levelling up Housing and Communities",
-                toggle_dict={feature.name: feature.is_enabled() for feature in toggle_client.list()}
-                if toggle_client
-                else {},
-                support_desk_apply=Config.SUPPORT_DESK_APPLY,
-            )
-        elif request.host == current_app.config["ASSESS_HOST"]:
-            return dict(
-                stage="beta",
-                service_title="Assessment Hub – GOV.UK",
-                service_meta_description="Assessment Hub",
-                service_meta_keywords="Assessment Hub",
-                service_meta_author="DLUHC",
-                sso_logout_url=flask_app.config.get("SSO_LOGOUT_URL"),
-                g=g,
-                toggle_dict=(
-                    {feature.name: feature.is_enabled() for feature in toggle_client.list()} if toggle_client else {}
-                ),
-                support_desk_assess=Config.SUPPORT_DESK_ASSESS,
-            )
-        elif request.host == current_app.config["AUTH_HOST"]:
-            query_params = urlencode({"fund": request.args.get("fund", ""), "round": request.args.get("round", "")})
-            return dict(
-                stage="beta",
-                service_meta_author="Ministry of Housing, Communities and Local Government",
-                accessibility_statement_url=urljoin(Config.APPLICANT_FRONTEND_HOST, "/accessibility_statement"),  # noqa
-                cookie_policy_url=urljoin(Config.APPLICANT_FRONTEND_HOST, "/cookie_policy"),
-                contact_us_url=urljoin(Config.APPLICANT_FRONTEND_HOST, f"/contact_us?{query_params}"),
-                privacy_url=urljoin(Config.APPLICANT_FRONTEND_HOST, f"/privacy?{query_params}"),
-                feedback_url=urljoin(Config.APPLICANT_FRONTEND_HOST, f"/feedback?{query_params}"),
-            )
-
-        return {}
-
-    @flask_app.context_processor
-    def utility_processor():
-        def _get_service_title():
-            fund = None
-            if request.view_args or request.args or request.form:
-                try:
-                    fund = find_fund_in_request()
-                except Exception as e:  # noqa
-                    current_app.logger.warning(
-                        (
-                            "Exception: %(e)s, occured when trying to reach url: %(url)s, "
-                            "with view_args: %(view_args)s, and args: %(args)s"
-                        ),
-                        dict(e=e, url=request.url, view_args=request.view_args, args=request.args),
-                    )
-            if fund:
-                return gettext("Apply for") + " " + fund.title
-            elif (
-                request.args
-                and (return_app := request.args.get("return_app"))
-                and request.host == current_app.config["AUTH_HOST"]
-            ):
-                return Config.SAFE_RETURN_APPS[return_app].service_title
-
-            return gettext("Access Funding")
-
-        return dict(get_service_title=_get_service_title)
-
+    # @flask_app.context_processor
+    # def inject_global_constants():
+    #     if request.host == current_app.config["APPLY_HOST"]:
+    #         return dict(
+    #             stage="beta",
+    #             service_meta_author="Department for Levelling up Housing and Communities",
+    #             toggle_dict={feature.name: feature.is_enabled() for feature in toggle_client.list()}
+    #             if toggle_client
+    #             else {},
+    #             support_desk_apply=Config.SUPPORT_DESK_APPLY,
+    #         )
+    #     elif request.host == current_app.config["ASSESS_HOST"]:
+    #         return dict(
+    #             stage="beta",
+    #             service_title="Assessment Hub – GOV.UK",
+    #             service_meta_description="Assessment Hub",
+    #             service_meta_keywords="Assessment Hub",
+    #             service_meta_author="DLUHC",
+    #             sso_logout_url=flask_app.config.get("SSO_LOGOUT_URL"),
+    #             g=g,
+    #             toggle_dict=(
+    #                 {feature.name: feature.is_enabled() for feature in toggle_client.list()} if toggle_client else {}
+    #             ),
+    #             support_desk_assess=Config.SUPPORT_DESK_ASSESS,
+    #         )
+    #     elif request.host == current_app.config["AUTH_HOST"]:
+    #         query_params = urlencode({"fund": request.args.get("fund", ""), "round": request.args.get("round", "")})
+    #         return dict(
+    #             stage="beta",
+    #             service_meta_author="Ministry of Housing, Communities and Local Government",
+    #             accessibility_statement_url=urljoin(Config.APPLICANT_FRONTEND_HOST, "/accessibility_statement"),  # noqa
+    #             cookie_policy_url=urljoin(Config.APPLICANT_FRONTEND_HOST, "/cookie_policy"),
+    #             contact_us_url=urljoin(Config.APPLICANT_FRONTEND_HOST, f"/contact_us?{query_params}"),
+    #             privacy_url=urljoin(Config.APPLICANT_FRONTEND_HOST, f"/privacy?{query_params}"),
+    #             feedback_url=urljoin(Config.APPLICANT_FRONTEND_HOST, f"/feedback?{query_params}"),
+    #         )
+    #
+    #     return {}
+    #
+    # @flask_app.context_processor
+    # def utility_processor():
+    #     def _get_service_title():
+    #         fund = None
+    #         if request.view_args or request.args or request.form:
+    #             try:
+    #                 fund = find_fund_in_request()
+    #             except Exception as e:  # noqa
+    #                 current_app.logger.warning(
+    #                     (
+    #                         "Exception: %(e)s, occured when trying to reach url: %(url)s, "
+    #                         "with view_args: %(view_args)s, and args: %(args)s"
+    #                     ),
+    #                     dict(e=e, url=request.url, view_args=request.view_args, args=request.args),
+    #                 )
+    #         if fund:
+    #             return gettext("Apply for") + " " + fund.title
+    #         elif (
+    #             request.args
+    #             and (return_app := request.args.get("return_app"))
+    #             and request.host == current_app.config["AUTH_HOST"]
+    #         ):
+    #             return Config.SAFE_RETURN_APPS[return_app].service_title
+    #
+    #         return gettext("Access Funding")
+    #
+    #     return dict(get_service_title=_get_service_title)
+    #
     @flask_app.context_processor
     def inject_content_urls():
         try:
@@ -467,64 +465,80 @@ def create_app() -> Flask:  # noqa: C901
         return response
 
     @flask_app.before_request
-    def filter_all_requests():
-        source_app_host_match = {
-            current_app.config["APPLY_HOST"]: "apply_frontend",
-            current_app.config["ASSESS_HOST"]: "assess_frontend",
-            current_app.config["AUTH_HOST"]: "authenticator_frontend",
-            current_app.config["API_HOST"]: request.blueprint,
-        }
-        request.get_extra_log_context = lambda: {"source": source_app_host_match.get(request.host)}
-        if request.host == current_app.config["API_HOST"]:
-            return
+    def attach_guest_account():
+        from account_store.db.models import Account
 
-        if flask_app.config.get("MAINTENANCE_MODE") and not (
-            request.path.endswith("js") or request.path.endswith("css") or request.path.endswith("/healthcheck")
-        ):
-            current_app.logger.warning(
-                "Application is in the Maintenance mode reach url: %(url)s", dict(url=request.url)
-            )
+        # FIXME: do this better, but provides an account interface for use with 'guest' users so you can still easily
+        # check attributes like `is_platform_admin` without having to do a lot of hoop-jumping.
 
-            if request.host == current_app.config["ASSESS_HOST"]:
-                maintenance_template = "assess/maintenance.html"
-            else:
-                maintenance_template = "apply/maintenance.html"
+        anonymous_user = Account(
+            email=None,
+            full_name=None,
+            azure_ad_subject_id=None,
+            roles=[],
+            is_magic_link=None,
+        )
+        g.account = anonymous_user
 
-            return (
-                render_template(
-                    maintenance_template,
-                    maintenance_end_time=flask_app.config.get("MAINTENANCE_END_TIME"),
-                ),
-                503,
-            )
-
-        if request.path == "/favicon.ico":
-            return make_response("404"), 404
+    # @flask_app.before_request
+    # def filter_all_requests():
+    #     source_app_host_match = {
+    #         current_app.config["APPLY_HOST"]: "apply_frontend",
+    #         current_app.config["ASSESS_HOST"]: "assess_frontend",
+    #         current_app.config["AUTH_HOST"]: "authenticator_frontend",
+    #         current_app.config["API_HOST"]: request.blueprint,
+    #     }
+    #     request.get_extra_log_context = lambda: {"source": source_app_host_match.get(request.host)}
+    #     if request.host == current_app.config["API_HOST"]:
+    #         return
+    #
+    #     if flask_app.config.get("MAINTENANCE_MODE") and not (
+    #         request.path.endswith("js") or request.path.endswith("css") or request.path.endswith("/healthcheck")
+    #     ):
+    #         current_app.logger.warning(
+    #             "Application is in the Maintenance mode reach url: %(url)s", dict(url=request.url)
+    #         )
+    #
+    #         if request.host == current_app.config["ASSESS_HOST"]:
+    #             maintenance_template = "assess/maintenance.html"
+    #         else:
+    #             maintenance_template = "apply/maintenance.html"
+    #
+    #         return (
+    #             render_template(
+    #                 maintenance_template,
+    #                 maintenance_end_time=flask_app.config.get("MAINTENANCE_END_TIME"),
+    #             ),
+    #             503,
+    #         )
+    #
+    #     if request.path == "/favicon.ico":
+    #         return make_response("404"), 404
 
     return flask_app
 
 
-def create_sqs_extended_client(flask_app):
-    if (
-        getenv("AWS_ACCESS_KEY_ID", "Access Key Not Available") == "Access Key Not Available"
-        and getenv("AWS_SECRET_ACCESS_KEY", "Secret Key Not Available") == "Secret Key Not Available"
-    ):
-        flask_app.extensions["sqs_extended_client"] = SQSExtendedClient(
-            region_name=Config.AWS_REGION,
-            endpoint_url=getenv("AWS_ENDPOINT_OVERRIDE", None),
-            large_payload_support=Config.AWS_MSG_BUCKET_NAME,
-            always_through_s3=True,
-            delete_payload_from_s3=True,
-            logger=flask_app.logger,
-        )
-    else:
-        flask_app.extensions["sqs_extended_client"] = SQSExtendedClient(
-            aws_access_key_id=Config.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=Config.AWS_SECRET_ACCESS_KEY,
-            region_name=Config.AWS_REGION,
-            endpoint_url=getenv("AWS_ENDPOINT_OVERRIDE", None),
-            large_payload_support=Config.AWS_MSG_BUCKET_NAME,
-            always_through_s3=True,
-            delete_payload_from_s3=True,
-            logger=flask_app.logger,
-        )
+# def create_sqs_extended_client(flask_app):
+#     if (
+#         getenv("AWS_ACCESS_KEY_ID", "Access Key Not Available") == "Access Key Not Available"
+#         and getenv("AWS_SECRET_ACCESS_KEY", "Secret Key Not Available") == "Secret Key Not Available"
+#     ):
+#         flask_app.extensions["sqs_extended_client"] = SQSExtendedClient(
+#             region_name=Config.AWS_REGION,
+#             endpoint_url=getenv("AWS_ENDPOINT_OVERRIDE", None),
+#             large_payload_support=Config.AWS_MSG_BUCKET_NAME,
+#             always_through_s3=True,
+#             delete_payload_from_s3=True,
+#             logger=flask_app.logger,
+#         )
+#     else:
+#         flask_app.extensions["sqs_extended_client"] = SQSExtendedClient(
+#             aws_access_key_id=Config.AWS_ACCESS_KEY_ID,
+#             aws_secret_access_key=Config.AWS_SECRET_ACCESS_KEY,
+#             region_name=Config.AWS_REGION,
+#             endpoint_url=getenv("AWS_ENDPOINT_OVERRIDE", None),
+#             large_payload_support=Config.AWS_MSG_BUCKET_NAME,
+#             always_through_s3=True,
+#             delete_payload_from_s3=True,
+#             logger=flask_app.logger,
+#         )

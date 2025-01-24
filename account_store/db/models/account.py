@@ -35,4 +35,4 @@ class Account(db.Model):
 
     @property
     def is_platform_admin(self):
-        return self.email.endswith("@communities.gov.uk")
+        return self.email.endswith("@communities.gov.uk") if self.email else False

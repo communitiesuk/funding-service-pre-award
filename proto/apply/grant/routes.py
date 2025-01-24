@@ -8,8 +8,7 @@ from proto.common.data.services.round import get_open_rounds
 grant_blueprint = Blueprint("grant_blueprint", __name__)
 
 
-@grant_blueprint.get("/grant")
-@grant_blueprint.get("/grant/")
+@grant_blueprint.get("/")
 @maybe_authenticated
 def all_open_grants_handler():
     rounds = get_open_rounds()

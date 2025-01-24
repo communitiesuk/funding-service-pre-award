@@ -31,7 +31,7 @@ def _reporting_rounds_service_nav():
 
 
 @reporting_rounds_blueprint.route("/grants/<grant_code>/create-reporting-round", methods=["GET", "POST"])
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def create_reporting_round_view(grant_code):
     grant = get_grant(grant_code)
     form = CreateReportingRoundForm()
@@ -63,7 +63,7 @@ def create_reporting_round_view(grant_code):
 
 
 @reporting_rounds_blueprint.get("/grants/<grant_code>/reporting-rounds/<round_ext_id>")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_reporting_round_overview(grant_code, round_ext_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     return render_template(
@@ -75,7 +75,7 @@ def view_reporting_round_overview(grant_code, round_ext_id):
 
 
 @reporting_rounds_blueprint.get("/grants/<grant_code>/reporting-rounds/<round_ext_id>/data-collection")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_reporting_round_data_collection(grant_code, round_ext_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     form = PreviewReportForm(
@@ -93,7 +93,7 @@ def view_reporting_round_data_collection(grant_code, round_ext_id):
 @reporting_rounds_blueprint.route(
     "/grants/<grant_code>/reporting-rounds/<round_ext_id>/configuration", methods=["GET", "POST"]
 )
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_reporting_round_configuration(grant_code, round_ext_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     form = PublishReportingRoundForm()
@@ -118,7 +118,7 @@ def view_reporting_round_configuration(grant_code, round_ext_id):
 @reporting_rounds_blueprint.route(
     "/grants/<grant_code>/reporting-rounds/<round_ext_id>/choose-from-question-bank", methods=["GET", "POST"]
 )
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def choose_from_question_bank(grant_code, round_ext_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     template_sections = get_template_sections_and_questions(template_type=TemplateType.REPORTING)
@@ -150,7 +150,7 @@ def choose_from_question_bank(grant_code, round_ext_id):
 @reporting_rounds_blueprint.route(
     "/grants/<grant_code>/reporting-rounds/<round_ext_id>/create-section", methods=["GET", "POST"]
 )
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def create_section_view(grant_code, round_ext_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     form = NewSectionForm(
@@ -179,7 +179,7 @@ def create_section_view(grant_code, round_ext_id):
     "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/create-question",
     methods=["GET", "POST"],
 )
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def create_question_view(grant_code, round_ext_id, section_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
@@ -206,7 +206,7 @@ def create_question_view(grant_code, round_ext_id, section_id):
 
 
 @reporting_rounds_blueprint.post("/grants/<grant_code>/reporting-rounds/<round_ext_id>/preview-report")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def preview_report(grant_code, round_ext_id):
     # form = PreviewApplicationForm(submit_label=None)
     # if form.validate_on_submit():

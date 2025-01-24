@@ -32,7 +32,7 @@ def _rounds_service_nav():
 
 
 @rounds_blueprint.route("/grants/<grant_code>/create-round", methods=["GET", "POST"])
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def create_round_view(grant_code):
     grant = get_grant(grant_code)
     form = CreateRoundForm()
@@ -63,7 +63,7 @@ def create_round_view(grant_code):
 
 
 @rounds_blueprint.get("/grants/<grant_code>/rounds/<round_code>")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_round_overview(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
     return render_template(
@@ -75,7 +75,7 @@ def view_round_overview(grant_code, round_code):
 
 
 @rounds_blueprint.get("/grants/<grant_code>/rounds/<round_code>/data-collection")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_round_data_collection(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
     form = PreviewApplicationForm(
@@ -91,7 +91,7 @@ def view_round_data_collection(grant_code, round_code):
 
 
 @rounds_blueprint.route("/grants/<grant_code>/rounds/<round_code>/configuration", methods=["GET", "POST"])
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def view_round_configuration(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
     form = MakeRoundLiveForm()
@@ -110,7 +110,7 @@ def view_round_configuration(grant_code, round_code):
 
 
 @rounds_blueprint.route("/grants/<grant_code>/rounds/<round_code>/choose-from-question-bank", methods=["GET", "POST"])
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def choose_from_question_bank(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
     template_sections = get_template_sections_and_questions(template_type=TemplateType.APPLICATION)
@@ -136,7 +136,7 @@ def choose_from_question_bank(grant_code, round_code):
 
 
 @rounds_blueprint.route("/grants/<grant_code>/rounds/<round_code>/create-section", methods=["GET", "POST"])
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def create_section_view(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
     form = NewSectionForm(data={"order": max(asec.order for asec in round.data_collection_definition.sections) + 1})
@@ -155,7 +155,7 @@ def create_section_view(grant_code, round_code):
 @rounds_blueprint.route(
     "/grants/<grant_code>/rounds/<round_code>/sections/<section_id>/create-question", methods=["GET", "POST"]
 )
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def create_question_view(grant_code, round_code, section_id):
     grant, round = get_grant_and_round(grant_code, round_code)
     section = get_section_for_data_collection_definition(round.data_collection_definition, section_id)
@@ -174,7 +174,7 @@ def create_question_view(grant_code, round_code, section_id):
 
 
 @rounds_blueprint.post("/grants/<grant_code>/rounds/<round_code>/preview-application")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def preview_application(grant_code, round_code):
     form = PreviewApplicationForm(submit_label=None)
     if form.validate_on_submit():

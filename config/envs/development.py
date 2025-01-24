@@ -62,11 +62,7 @@ class DevelopmentConfig(Config):
     AUTO_REDIRECT_LOGIN = True
     DISABLE_NOTIFICATION_SERVICE = False  # Toggle on if you have no notify api key.
 
-    # TODO: domain thinking - if we're having just a single domain funding.communities.gov.uk then we can pin
-    #       the session cookie directly on that. If we're still having separate domains for some reason, then
-    #       the session (auth) cookie still needs to be on a parent domain. Which is what I'm doing here - making
-    #       auth carry across from frontend.* to forms.* to manage.* etc.
-    SESSION_COOKIE_DOMAIN = getenv("SESSION_COOKIE_DOMAIN", "levellingup.gov.localhost")
+    SESSION_COOKIE_DOMAIN = getenv("SESSION_COOKIE_DOMAIN", "funding.communities.gov.localhost")
 
     # RSA 256 KEYS
     if not hasattr(DefaultConfig, "RSA256_PUBLIC_KEY"):

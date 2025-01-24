@@ -12,13 +12,10 @@
 
 {% block beforeContent %}
 {{ super() }}
-{# only want to refer the user back if they've come from a friendly page, do this better #}
-{% if magic_links_back_path and magic_links_back_path.startswith("/grant") %}
-    {{ govukBackLink({
-        "text": _("Back"),
-        "href": magic_links_back_path
-    }) }}
-{% endif %}
+{{ govukBackLink({
+    "text": _("Back"),
+    "href": magic_links_back_path
+}) }}
 {% endblock %}
 
 {% block content %}

@@ -14,7 +14,7 @@ def _grants_service_nav():
 
 
 @assess_blueprint.get("/grants/<short_code>/applications")
-@is_authenticated
+@is_authenticated(as_platform_admin=True)
 def list_grant_applications_handler(short_code):
     active_round, grant = get_active_round(short_code)
 
