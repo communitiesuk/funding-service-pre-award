@@ -16,7 +16,7 @@
 {% block header %}
 {{ mhclgHeader({
     "productName": "MHCLG Funding",
-    "homepageUrl": "#",
+    "homepageUrl": url_for('proto_apply.grant_blueprint.all_open_grants_handler'),
     "classes": "govuk-header--full-width-border",
     "navigation": [{"html": "<span class='govuk-visually-hidden'>Logged in as </span>" ~ g.account.email, "href": "#"}, {"text": "Sign out", "href": url_for('proto_apply.web.magic_links_sign_out_handler')}],
     "navigationClasses": "govuk-header__navigation--end"
@@ -29,7 +29,7 @@
     {"href": "#", "text": "Reports", "active": active_navigation_tab == 'reports'},
 ] %}
 {% if g.account.is_platform_admin %}
-  {% set _ = navigationItems.append({"href": url_for('admin.index'), "text": "Admin", "active": active_navigation_tab == 'admin'}) %}
+  {% set __ = navigationItems.append({"href": url_for('admin.index'), "text": "Admin", "active": active_navigation_tab == 'admin'}) %}
 {% endif %}
 {{ govukServiceNavigation({
   "serviceName": "Grant management",

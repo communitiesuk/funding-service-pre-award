@@ -7,6 +7,9 @@
 
 {% block pageTitle %}{% trans %}Email address{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
 
+{# Hide service nav on the login page because it looks weird? #}
+{% block serviceNavigation %}{% endblock serviceNavigation %}
+
 {% block beforeContent %}
 {{ super() }}
 {# only want to refer the user back if they've come from a friendly page, do this better #}

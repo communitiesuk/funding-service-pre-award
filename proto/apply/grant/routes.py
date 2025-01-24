@@ -13,7 +13,7 @@ grant_blueprint = Blueprint("grant_blueprint", __name__)
 @maybe_authenticated
 def all_open_grants_handler():
     rounds = get_open_rounds()
-    return render_template("apply/grant/all_grants.jinja.html", rounds=rounds)
+    return render_template("apply/grant/all_grants.jinja.html", rounds=rounds, active_navigation_tab="grants")
 
 
 @grant_blueprint.get("/grant/<short_code>")

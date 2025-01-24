@@ -46,7 +46,7 @@
         {% set sectionloop = loop %}
         {% set questionRows = [] %}
         {% for question in section.questions %}
-          {% set _ = questionRows.append(
+          {% set __ = questionRows.append(
             [
               {"text": ' '},
               {"text": question.title},
@@ -56,7 +56,7 @@
         {% endfor %}
 
         {% if round.proto_draft %}
-          {% set _ = questionRows.append(
+          {% set __ = questionRows.append(
             [
               {"text": ' '},
               {"html": '<a class="govuk-link govuk-link--no-visited-state" href="' ~ url_for('proto_manage.platform.rounds.create_question_view', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id) ~ '">Add another question</a>'},

@@ -12,7 +12,7 @@
       {{ form.csrf_token }}
 
       {% set sectionHints = [] %}
-      {% for questions in form.section_questions %}{% set _ = sectionHints.append({"hint": {"html": "<ul class='govuk-list govuk-list--bullet govuk-hint'>" ~ (questions | format_list("<li>%s</li>") | join('') ~ "</ul>") }}) %}{% endfor %}
+      {% for questions in form.section_questions %}{% set __ = sectionHints.append({"hint": {"html": "<ul class='govuk-list govuk-list--bullet govuk-hint'>" ~ (questions | format_list("<li>%s</li>") | join('') ~ "</ul>") }}) %}{% endfor %}
       {{ form.sections(params={"fieldset": {"legend": {"text": form.sections.label, "isPageHeading": true, "classes": "govuk-fieldset__legend--l"} }, "hint": {"text": "TODO: this would be filterable/searchable because the number of templates may grow large"}, "items": sectionHints}) }}
 
       {{ form.submit }}

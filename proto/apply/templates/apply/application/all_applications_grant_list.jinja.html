@@ -13,7 +13,7 @@
         {% set email %}
         <strong class="govuk-!-font-weight-bold">{{ account.email }}</strong>
         {% endset %}
-        <p class="govuk-body govuk-!-margin-bottom-6">{% trans number_of_grants=(grants | length), email=email %}You have applied to {{ number_of_grants }} grants with {{ email }}{% endtrans %}</p>
+        <p class="govuk-body govuk-!-margin-bottom-6">{% trans number_of_grants=(grants | length), email=email %}You have applied to {{ number_of_grants }} grants.{% endtrans %}</p>
 
         <ul class="govuk-list">
         {% for grant in grants %}
