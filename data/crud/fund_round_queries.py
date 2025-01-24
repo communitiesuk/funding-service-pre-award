@@ -11,7 +11,7 @@ def get_fund_and_round(fund_short_name: str, round_short_name: str) -> tuple[Fun
             select(Round)
             .where(Round.short_name == round_short_name.upper())
             .where(Round.fund_id == fund.id)
-            .where(Round.is_not_yet_open == False)  # noqa: E712
+            .where(Round.is_not_yet_open.is_(False))
         ).one_or_none()
         return fund, round
     return None, None
