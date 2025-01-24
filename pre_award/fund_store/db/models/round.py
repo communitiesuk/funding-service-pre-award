@@ -7,7 +7,6 @@ from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.types import Boolean
 
 from pre_award.db import db
-from pre_award.fund_store.db.models.fund import Fund
 
 BaseModel: DefaultMeta = db.Model
 
@@ -28,7 +27,7 @@ class Round(BaseModel):
         ForeignKey("fund.id"),
         nullable=False,
     )
-    fund: Mapped["Fund"] = relationship(lazy=True)
+    fund: Mapped["Fund"] = relationship(lazy=True)  # noqa: F821
     title_json = Column("title_json", JSON(none_as_null=True), nullable=False, unique=False)
     short_name = Column("short_name", db.String(), nullable=False, unique=False)
     opens = Column("opens", DateTime())
