@@ -9,6 +9,7 @@ from invoke import task
 
 from app import create_app
 from pre_award.account_store.tasks import seed_local_account_store_impl
+from pre_award.application_store.db.queries.application.queries import search_applications
 from pre_award.apply.models.round import Round
 from pre_award.assessment_store.tasks.db_tasks import seed_assessment_store_db_impl
 from pre_award.fund_store.db.queries import (
@@ -132,7 +133,11 @@ def reminder_emails(c):
         rounds: list[Round] = get_rounds_with_reminder_date_in_future()
         print([round.reminder_date for round in rounds])
         rounds_with_reminder_today = get_rounds_where_reminder_date_today()
-        print(rounds_with_reminder_today)
+        for r in rounds_with_reminder_today:
+            non_submitted_applications = search_applications(
+                round_id=str(r.id), status_only=["IN_PROGRESS", "NOT_STARTED", "COMPLETED"], forms=False
+            )
+            print(non_submitted_applications)
 
 
 @task
