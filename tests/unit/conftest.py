@@ -25,8 +25,8 @@ def _convert_fab_config_into_format_from_db(config_values: dict) -> dict:
 
 
 mock_fund = Fund(**ctdf_config["fund_config"])
-mock_round_open = Round(**_convert_fab_config_into_format_from_db(ctdf_config["round_config"]))
-mock_round_closed = Round(**_convert_fab_config_into_format_from_db(ctdf_config_closed["round_config"]))
+mock_round_open = Round(fund=mock_fund, **_convert_fab_config_into_format_from_db(ctdf_config["round_config"]))
+mock_round_closed = Round(fund=mock_fund, **_convert_fab_config_into_format_from_db(ctdf_config_closed["round_config"]))
 
 
 # this is temp copied from apply_tests while the new routes are piggy backing on the apply
@@ -84,6 +84,8 @@ def templates_rendered(app):
 
 
 @pytest.fixture()
-def mock_get_fund_and_round_success(mocker):
-    mocker.patch("apply.routes.get_fund_and_round", return_value=(mock_fund, mock_round_open))
+def mock_get_round_success(mocker):
+    mocker.patch("apply.routes.get_round", return_value=mock_round_open)
     mocker.patch("app.find_fund_and_round_in_request", return_value=(mock_fund, mock_round_open))
+    mocker.patch("app.find_fund_in_request", return_value=mock_fund)
+    # mocker.patch("pre_award.apply.helpers.get_all_fund_short_names", return_value=[mock_fund.short_name])

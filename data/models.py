@@ -1,17 +1,17 @@
 import uuid
-from datetime import datetime
 from enum import Enum
 from typing import List
 
 from alembic_utils.pg_extension import PGExtension
 from flask_sqlalchemy.model import DefaultMeta
-from sqlalchemy import JSON, Column, DateTime, ForeignKey, UniqueConstraint
+from sqlalchemy import JSON, Column, DateTime, ForeignKey, UniqueConstraint, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.types import Boolean
 from sqlalchemy.types import Enum as SQLAEnum
 
+from common.utils.date_time_utils import get_now_from_utc_time_without_tzinfo
 from pre_award.common.locale_selector.get_lang import get_lang
 from pre_award.db import db
 
@@ -59,7 +59,7 @@ class Fund(BaseModel):
         return self.name_json[get_lang()] or self.name_json["en"]
 
     @property
-    def fund_title(self):
+    def title(self):
         return self.title_json[get_lang()] or self.title_json["en"]
 
 
@@ -79,6 +79,7 @@ class Round(BaseModel):
         ForeignKey("fund.id"),
         nullable=False,
     )
+    fund: Mapped[Fund] = relationship(lazy=True)
     title_json = Column("title_json", JSON(none_as_null=True), nullable=False, unique=False)
     short_name = Column("short_name", db.String(), nullable=False, unique=False)
     opens = Column("opens", DateTime())
@@ -149,15 +150,27 @@ class Round(BaseModel):
 
     @hybrid_property
     def is_past_submission_deadline(self):
-        return datetime.now() > self.deadline
+        return get_now_from_utc_time_without_tzinfo() > self.deadline
+
+    @is_past_submission_deadline.expression
+    def is_past_submission_deadline(cls):
+        return func.now() > cls.deadline
 
     @hybrid_property
     def is_not_yet_open(self):
-        return datetime.now() < self.opens
+        return get_now_from_utc_time_without_tzinfo() < self.opens
+
+    @is_not_yet_open.expression
+    def is_not_yet_open(self):
+        return func.now() < self.opens
 
     @hybrid_property
     def is_open(self):
-        return self.opens < datetime.now() < self.deadline
+        return self.opens < get_now_from_utc_time_without_tzinfo() < self.deadline
+
+    @is_open.expression
+    def is_open(self):
+        return self.opens < func.now() < self.deadline
 
     @property
     def round_title(self):

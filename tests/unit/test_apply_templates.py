@@ -9,10 +9,10 @@ from tests.unit.conftest import mock_fund, mock_round_closed, mock_round_open
 
 @pytest.mark.parametrize("mock_round, window_closed_visible", [(mock_round_open, False), (mock_round_closed, True)])
 def test_render_landing(apply_test_client, mock_round, window_closed_visible):
-    result = render_template("apply-landing.html", fund=mock_fund, round=mock_round)
+    result = render_template("apply/landing.html", fund=mock_fund, round=mock_round)
     assert result
     soup = BeautifulSoup(result, "html.parser")
-    assert soup.find("span", {"class": "govuk-caption-l"}, string="Crash Test Dummy Fund " + mock_round.round_title)
+    assert soup.find("span", {"class": "govuk-caption-xl"}, string="Crash Test Dummy Fund " + mock_round.round_title)
     assert soup.find("h1", string="Start or continue an application for funding for crash test dummies")
     assert soup.find(
         "p",
