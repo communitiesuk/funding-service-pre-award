@@ -24,6 +24,7 @@
 {% set funding_amount = sub_criteria.funding_amount_requested if sub_criteria else state.funding_amount_requested %}
 
 {% block header %}
+{{ super() }}
 <header role="banner" data-module="govuk-header">
     <nav class="govuk-width-container govuk-header__navigation">
         <div class="govuk-phase-banner flex-parent-element">
