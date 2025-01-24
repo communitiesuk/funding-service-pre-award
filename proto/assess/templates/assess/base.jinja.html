@@ -15,6 +15,8 @@
     "productName": "MHCLG Funding",
     "homepageUrl": "#",
     "classes": "govuk-header--full-width-border",
+    "navigation": [{"html": "<span class='govuk-visually-hidden'>Logged in as </span>" ~ g.account.email, "href": "#"}, {"text": "Sign out", "href": url_for('proto_apply.web.magic_links_sign_out_handler')}],
+    "navigationClasses": "govuk-header__navigation--end"
 }) }}
 {% endblock header %}
 

@@ -18,16 +18,23 @@
     "productName": "MHCLG Funding",
     "homepageUrl": "#",
     "classes": "govuk-header--full-width-border",
+    "navigation": [{"html": "<span class='govuk-visually-hidden'>Logged in as </span>" ~ g.account.email, "href": "#"}, {"text": "Sign out", "href": url_for('proto_apply.web.magic_links_sign_out_handler')}],
+    "navigationClasses": "govuk-header__navigation--end"
 }) }}
 
+{% set navigationItems = [
+    {"href": url_for('proto_manage.platform.grants.index'), "text": "Grants", "active": active_navigation_tab == 'grants'},
+    {"href": "#", "text": "Applications", "active": active_navigation_tab == 'applications'},
+    {"href": "#", "text": "Payments", "active": active_navigation_tab == 'payments'},
+    {"href": "#", "text": "Reports", "active": active_navigation_tab == 'reports'},
+] %}
+{% if g.account.is_platform_admin %}
+  {% set _ = navigationItems.append({"href": url_for('admin.index'), "text": "Admin", "active": active_navigation_tab == 'admin'}) %}
+{% endif %}
 {{ govukServiceNavigation({
   "serviceName": "Grant management",
-  "navigation": [
-    {"href": url_for('proto_manage.platform.grants.index'), "text": "Grants", "active": active_navigation_tab == 'grants'},
-    {"href": url_for('round.index_view'), "text": "Application rounds", "active": active_navigation_tab == 'rounds'},
-    {"href": url_for('templatesection.index_view'), "text": "Question bank", "active": active_navigation_tab == 'templates'},
-    {"href": url_for('admin.index'), "text": "DB Admin", "active": active_navigation_tab == 'admin'},
-  ]
+  "navigationClasses": "app-service-navigation--fill" if g.account.is_platform_admin else "",
+  "navigation": navigationItems,
 }) }}
 {% endblock header %}
 

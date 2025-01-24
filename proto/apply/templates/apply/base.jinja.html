@@ -15,13 +15,14 @@
     "productName": "MHCLG Funding",
     "homepageUrl": "#",
     "classes": "govuk-header--full-width-border",
+    "navigation": [{"html": "<span class='govuk-visually-hidden'>Logged in as </span>" ~ g.account.email, "href": "#"}, {"text": "Sign out", "href": url_for('proto_apply.web.magic_links_sign_out_handler')}],
+    "navigationClasses": "govuk-header__navigation--end"
 }) }}
 
 {{ govukServiceNavigation({
   "serviceName": "Apply for funding",
   "navigation": [
     { "href": url_for('proto_apply.application.all_user_application_list_handler'), "text": _("Your grants"), "active": active_navigation_tab == "your_grants" },
-    { "href": url_for('proto_apply.web.magic_links_sign_out_handler'), "text": _("Sign out") }
   ] if account
 }) }}
 {% endblock header %}

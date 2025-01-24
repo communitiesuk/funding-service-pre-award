@@ -32,3 +32,7 @@ class Account(db.Model):
         role_map = get_highest_role_map(roles_as_strings)
         current_app.logger.debug("Role map for %(id)s: %(role_map)s", dict(id=self.id, role_map=role_map))
         return role_map
+
+    @property
+    def is_platform_admin(self):
+        return self.email.endswith("@communities.gov.uk")
