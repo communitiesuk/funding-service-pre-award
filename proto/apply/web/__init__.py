@@ -9,6 +9,7 @@ from wtforms.validators import DataRequired, Email
 
 from common.blueprints import Blueprint
 from config import Config
+from proto.common.auth import maybe_authenticated
 from proto.common.data.services.magic_links import (
     claim_magic_link,
     create_magic_link,
@@ -47,10 +48,11 @@ def accessibility_statement_handler():
 
 
 @web_blueprint.route("/auth/magic_links", methods=["GET", "POST"])
+@maybe_authenticated
 def magic_links_enter_email_handler():
     form = MagicLinkForm()
     if form.validate_on_submit():
-        path = session.get("magic_links_forward_path")
+        path = session.get("magic_links_forward_path", url_for("proto_apply.grant_blueprint.all_open_grants_handler"))
         magic_link = create_magic_link(email=form.data.get("email"), path=path)
 
         if current_app.config["BYPASS_NOTIFY_SORRY_STEVEN"]:
