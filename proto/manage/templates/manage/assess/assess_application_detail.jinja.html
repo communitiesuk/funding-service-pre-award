@@ -34,7 +34,7 @@
         })}}
 
         <p class="govuk-body">
-            <a class="govuk-link govuk-link--no-visisted-state" href="#">View all application answers</a>
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_all_answers_handler', short_code=grant.short_name, application_id=application.id)}}">View all application answers</a>
         </p>
 
         {# these will be "sub-section"/ "category" names #}
@@ -43,7 +43,7 @@
         {% for section_data in application.data_collection_instance.section_data %}
         {% set section = section_data.section %}
         {% set linkHtml %}
-            <a class="govuk-link govuk-link--no-visited-state" href="#">{{ section.title }}</a>
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=section_data.id) }}">{{ section.title }}</a>
         {% endset %}
         {% set summaryListRows = summaryListRows.append([
             { "html": linkHtml }

@@ -51,3 +51,27 @@ def assess_application_detail_hander(short_code, application_id):
     grant = get_grant(short_code)
     application = get_application(application_id)
     return render_template("manage/assess/assess_application_detail.jinja.html", grant=grant, application=application)
+
+
+@assess_blueprint.get("/grants/<short_code>/applications/<application_id>/all_answers")
+@is_authenticated(as_platform_admin=True)
+def assess_application_all_answers_handler(short_code, application_id):
+    grant = get_grant(short_code)
+    application = get_application(application_id)
+    return render_template(
+        "manage/assess/assess_application_view_all_answers.html", grant=grant, application=application
+    )
+
+
+@assess_blueprint.get("/grants/<short_code>/applications/<application_id>/section/<section_id>")
+@is_authenticated(as_platform_admin=True)
+def assess_application_section_hander(short_code, application_id, section_id):
+    grant = get_grant(short_code)
+    application = get_application(application_id)
+    section_data = next((x for x in application.data_collection_instance.section_data if str(x.id) == section_id), None)
+    return render_template(
+        "manage/assess/assess_application_section_detail.html",
+        grant=grant,
+        application=application,
+        section_data=section_data,
+    )

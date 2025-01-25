@@ -1,0 +1,51 @@
+{% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+
+{% from "form_runner/application_status.html" import applicationStatus %}
+
+{% extends "manage/base.jinja.html" %}
+
+{% block pageTitle %}{{ section.title }} - {% trans %}Application{% endtrans %} {{ application.code }} - {% trans %}Funding service{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{{ govukBreadcrumbs({
+    "items": [
+    { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
+    { "text": _("Applications"), "href": url_for("proto_manage.assess.list_grant_applications_handler", short_code=grant.short_name) },
+    { "text": application.code, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.id) },
+    { "text": section.title, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.id) }
+    ]
+})}}
+{% endblock %}
+
+{% set section = section_data.section %}
+{% set data = section_data.data %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{% trans %}Application for funding{% endtrans %}</span>
+        <h1 class="govuk-heading-l">{{ section.title }}</h1>
+
+        {% set rows =[] %}
+        {% for question in section.questions %}
+        {% if question.type.name == "RADIOS" %}
+            {% set answer = data.get(question.id | string).get("answer").get("label") %}
+        {% else %}
+            {% set answer = data.get(question.id | string).get("answer") %}
+        {% endif %}
+
+        {% set rows = rows.append({
+            "key": { "text": question.title },
+            "value": { "text": answer }
+        }) %}
+        {% endfor %}
+        {{ govukSummaryList({
+            "firstCellIsHeader": false,
+            "rows": rows
+        }) }}
+    </div>
+</div>
+{% endblock %}
