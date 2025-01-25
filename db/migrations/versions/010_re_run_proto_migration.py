@@ -276,8 +276,11 @@ def upgrade():
             ["id"],
         )
 
-    op.execute("update round set proto_start_date = '2025-01-01', proto_end_date = '2025-02-28'")
-    op.execute(text("update round set proto_draft = false where proto_draft is null"))
+    op.execute(text("update fund set proto_name = name_json->>'en', proto_name_cy = name_json->>'cy'"))
+    op.execute(text("update fund set proto_apply_action_description = title_json->>'en'"))
+
+    op.execute(text("update round set proto_start_date = '2025-01-01', proto_end_date = '2025-02-28'"))
+    op.execute(text("update round set proto_draft = true where proto_draft is null"))
 
     with op.batch_alter_table("round", schema=None) as batch_op:
         batch_op.alter_column("proto_start_date", existing_type=sa.Date(), nullable=False)

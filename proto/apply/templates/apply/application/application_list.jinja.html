@@ -45,7 +45,7 @@
         <h1 class="govuk-caption-l">{{ grant.proto_name }}</h1>
         <h2 class="govuk-heading-l">{% trans %}Your applications{% endtrans %}</h2>
 
-        <p class="govuk-body">{% trans number_of_applications=(applications | length) %}You have started {{ number_of_applications }} applications for funding to {% endtrans %}{{ grant.proto_apply_action_description }}.</p>
+        <p class="govuk-body">{% trans number_of_applications=(applications | length) %}You have started {{ number_of_applications }} applications for {% endtrans %}{{ grant.proto_apply_action_description }}.</p>
 
         {% if active_round %}
         {% set submissionHtml %}
