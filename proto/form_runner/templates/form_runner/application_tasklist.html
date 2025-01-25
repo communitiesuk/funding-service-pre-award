@@ -125,7 +125,7 @@
           {{ govukButton({
             "text": _("Submit application"),
             "classes": "govuk-!-margin-top-5",
-            "disabled": application.can_be_submitted,
+            "disabled": not application.can_be_submitted,
           }) }}
         </form>
       {% endif %}
