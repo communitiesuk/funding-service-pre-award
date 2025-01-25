@@ -21,7 +21,14 @@
         {{ govukErrorSummary(wtforms_errors(form)) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">{% trans %}Check your answers{% endtrans %}</h1>
+    <span class="govuk-caption-l">{{ section.title }}</span>
+    <h1 class="govuk-heading-l">
+      {% if not application.is_submitted %}
+        {% trans %}Check your answers{% endtrans %}
+      {% else %}
+        {% trans %}Your answers{% endtrans %}
+      {% endif %}
+    </h1>
 
     {% set rowData = [] %}
     {% for question in section.questions %}
@@ -46,7 +53,7 @@
               "items": [
                 { "href": url_for('proto_form_runner.ask_application_question', application_id=application.id, section_slug=section.slug, question_slug=question.slug, from_cya=''), "text": "Change", "visuallyHiddenText": question.title, "classes": "govuk-link--no-visited-state" }
               ] if answer
-            }
+            } if not application.is_submitted
           }
         ) %}
     {% endfor %}
@@ -56,11 +63,13 @@
       })
     }}
 
+    {% if not application.is_submitted %}
     <form method="post" novalidate>
       {{ form.csrf_token }}
       {{ form.complete(params={"classes": "govuk-radios--inline"}) }}
       {{ form.submit }}
     </form>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

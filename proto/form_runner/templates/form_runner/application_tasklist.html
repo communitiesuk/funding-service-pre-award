@@ -110,6 +110,7 @@
       }) }}
     {% endfor %}
 
+    {% if not application.is_submitted %}
     <form method="POST">
       <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
       {# if its fake application this will be a link back to wherever we want, otherwise it will act as a submit button for the form #}
@@ -121,6 +122,7 @@
       }) }}
       <p class="govuk-body">{% trans %}You cannot submit your application until you have completed all of the sections.{% endtrans %}</p>
     </form>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
