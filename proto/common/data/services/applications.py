@@ -1,7 +1,7 @@
 import random
 import string
 
-from sqlalchemy import cast, delete, func, select
+from sqlalchemy import case, cast, delete, func, select
 from sqlalchemy.dialects.postgresql import JSONB, insert
 from sqlalchemy.orm import joinedload
 
@@ -16,6 +16,7 @@ from proto.common.data.models import (
 )
 from proto.common.data.models.applications import TestLiveStatus
 from proto.common.data.models.data_collection import ProtoDataCollectionInstance
+from proto.common.data.models.fund import FundingType
 from proto.common.data.models.question_bank import QuestionType
 
 
@@ -68,8 +69,14 @@ def get_applications(account_id, short_code):
 
 def search_applications(short_code):
     applications = db.session.scalars(
-        select(ProtoApplication).join(Round).join(Fund).filter(Fund.short_name == short_code)
-    ).all()  # can use this to prove competitive vs. un-competed, only from submitted or all
+        select(ProtoApplication)
+        .join(Round)
+        .join(Fund)
+        .filter(
+            Fund.short_name == short_code,
+            case((Fund.funding_type == FundingType.COMPETITIVE, ProtoApplication.submitted), else_=True),
+        )
+    ).all()
     return applications
 
 

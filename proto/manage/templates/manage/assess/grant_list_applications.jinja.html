@@ -6,6 +6,8 @@
 {% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
 {% from "govuk_frontend_jinja/components/pagination/macro.html" import govukPagination %}
 
+{% from "form_runner/application_status.html" import applicationStatus %}
+
 {% extends "manage/base.jinja.html" %}
 
 {% block pageTitle %}{{ grant.proto_name }} - {% trans %}Funding service{% endtrans %}{% endblock %}
@@ -24,6 +26,13 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-l">{% trans %}Applications for funding{% endtrans %}</h1>
+
+        {# just a little thing but presume we should do our best to check against actual enum values - this feels dumb #}
+        {% if grant.funding_type.name == "COMPETITIVE" %}
+        <p class="govuk-body">
+            {% trans name=grant.proto_name %}{{ name }} is a competed grant, you will only see applications your users have submitted.{% endtrans %}
+        </p>
+        {% endif %}
     </div>
 </div>
 <div class="govuk-grid-row">
@@ -107,7 +116,9 @@
 
 <div class="govuk-grid-row govuk-!-margin-top-6">
     <div class="govuk-grid-column-full">
-        <p class="govuk-body">{{ applications | length }} {% trans %}applications{% endtrans %}</p>
+        <p class="govuk-body">
+            {{ applications | length }} {% trans %}applications{% endtrans %}.
+        </p>
 
         {% if applications %}
             <a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">{% trans %}Download applications as CSV{% endtrans %}</a>
@@ -120,16 +131,13 @@
         {% if applications %}
             {% set rows = [] %}
             {% for application in applications %}
-                {% set statusTag %}
-                <strong class="govuk-tag govuk-tag--grey">Submitted</strong>
-                {% endset %}
                 {% set referenceLink %}
                 <a class="govuk-link govuk-link--no-visited-state" href="#">{{ application.code }}</a>
                 {% endset %}
                 {% set rows = rows.append([
                     { "html": referenceLink },
                     { "text": "(not assingned)" },
-                    { "html": statusTag },
+                    { "html": applicationStatus(application) },
                     { "text": "(not scored)" },
                     { "text": application.created_at | dateformat },
                     { "text": application.updated_at | dateformat }

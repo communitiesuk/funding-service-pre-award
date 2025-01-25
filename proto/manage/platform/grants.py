@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for
+from flask import redirect, render_template, session, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
@@ -25,6 +25,9 @@ def index():
 @grants_blueprint.get("/grants/<grant_code>")
 @is_authenticated(as_platform_admin=True)
 def view_grant_overview(grant_code):
+    # it's only ever the top level nav that will use this - all links on the actual page will be relative to
+    # the grant you're working on. You'll never randomly jump around because this changes
+    session["last_selected_grant_short_code"] = grant_code
     grant = get_grant(grant_code)
     return render_template(
         "manage/platform/view_grant_overview.html",
