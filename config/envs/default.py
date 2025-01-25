@@ -122,7 +122,7 @@ class DefaultConfig(object):
     MANAGE_HOST = "manage.levellingup.gov.localhost:3008"
     FORM_RUNNER_HOST = "forms.levellingup.gov.localhost:3008"
 
-    FUNDING_HOST = "funding.communities.gov.localhost:3010"
+    FUNDING_HOST = getenv("FUNDING_HOST", "funding.communities.gov.localhost:3010")
 
     STATIC_FOLDER = "static"
     TEMPLATES_FOLDER = "templates"
