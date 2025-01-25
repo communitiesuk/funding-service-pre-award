@@ -176,6 +176,7 @@ def create_app() -> Flask:  # noqa: C901
         # theme=GovukFrontendV5_6Theme(),  # FIXME: you can try me (uncomment all 3) but I don't work well yet  # noqa
     )
     # GovukFlaskAdmin(flask_app)  # FIXME: you can try me (uncomment all 3) but I don't work well yet  # noqa
+
     register_admin_views(admin, db)
 
     WTFormsHelpers(flask_app)
