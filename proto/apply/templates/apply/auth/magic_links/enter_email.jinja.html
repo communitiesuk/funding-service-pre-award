@@ -13,10 +13,12 @@
 
 {% block beforeContent %}
 {{ super() }}
+{% if magic_links_back_path %}
 {{ govukBackLink({
     "text": _("Back"),
     "href": magic_links_back_path
 }) }}
+{% endif %}
 {% endblock %}
 
 {% block content %}

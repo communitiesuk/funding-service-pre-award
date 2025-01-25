@@ -136,11 +136,11 @@
     {% endif %}
     {% if params.navigation | length %}
       <nav aria-label="{{ params.navigationLabel | default(menuButtonText, true) }}" class="govuk-header__navigation {%- if params.navigationClasses %} {{ params.navigationClasses }}{% endif %}">
-        <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" {%- if params.menuButtonLabel and params.menuButtonLabel != menuButtonText %} aria-label="{{ params.menuButtonLabel }}"{% endif %} hidden>
+        {# <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" {%- if params.menuButtonLabel and params.menuButtonLabel != menuButtonText %} aria-label="{{ params.menuButtonLabel }}"{% endif %} hidden>
           {{ menuButtonText }}
-        </button>
+        </button> #}
 
-        <ul id="navigation" class="govuk-header__navigation-list">
+        <ul class="govuk-header__navigation-list">
         {% for item in params.navigation %}
           {% if item.text or item.html %}
           <li class="govuk-header__navigation-item {%- if item.active %} govuk-header__navigation-item--active{% endif %}">

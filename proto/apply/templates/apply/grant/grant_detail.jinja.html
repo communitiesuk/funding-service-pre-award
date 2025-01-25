@@ -30,7 +30,7 @@
         </ul>
         {{ govukButton({
             "isStartButton": true,
-            "text": _("Enter your email address") if not account else _("GET IN HERE CHAMP"),
+            "text": _("Enter your email address") if not g.account.email else _("Your applications"),
             "href": url_for("proto_apply.application.application_list_handler", short_code=grant.short_name)
         }) }}
         {% else %}

@@ -10,11 +10,10 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">Open grants</h1>
 
+        {# <h2 class="govuk-heading-m">{% trans num_rounds=rounds|length %}{{ num_rounds }} rounds are currently open{% endtrans %}</h2> #}
         <p class="govuk-body">
-            {% trans %}Find grants from MHCLG that you can apply for funding through.{% endtrans %}
+          {% trans num_rounds=rounds | length %}There are {{ num_rounds }} grants open for applications for funding.{% endtrans %}
         </p>
-
-        <h2 class="govuk-heading-m">{% trans num_rounds=rounds|length %}{{ num_rounds }} rounds are currently open{% endtrans %}</h2>
 
         {% for round in (rounds | sort(attribute='proto_grant.short_name', case_sensitive=false)) %}
           <h2 class="govuk-heading-s govuk-!-display-inline">

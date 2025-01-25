@@ -65,6 +65,8 @@ def magic_links_enter_email_handler():
         "apply/auth/magic_links/enter_email.jinja.html",
         magic_links_back_path=session.get("magic_links_back_path"),
         form=form,
+        # TODO: temporary - really specific for one flow should be changed
+        active_navigation_tab="grants",
     )
 
 
@@ -75,6 +77,8 @@ def magic_links_confirm_email_handler(external_id):
         "apply/auth/magic_links/confirm_email.jinja.html",
         magic_link=magic_link,
         original_url=urljoin(Config.APPLICANT_FRONTEND_HOST, magic_link.path),
+        # TODO: temporary - really specific for one flow should be changed
+        active_navigation_tab="grants",
     )
 
 
