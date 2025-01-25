@@ -4,7 +4,7 @@ import psycopg2
 import sqlalchemy.exc
 from flask_babel import lazy_gettext as _l
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import contains_eager, joinedload
 
 from db import db
 from proto.common.data.exceptions import DataValidationError
@@ -43,19 +43,16 @@ def get_grant_and_reporting_round(grant_code: str, round_ext_id: str) -> tuple[F
 
 
 def get_active_round(grant_short_code: str):
-    round = (
-        db.session.scalars(
-            select(Round)
-            .join(Fund)
-            .filter(
-                Fund.short_name == grant_short_code,
-                # probably want some way of having rounds that are always open especially for uncompeted grants
-                Round.proto_start_date <= date.today(),
-                Round.proto_end_date >= date.today(),
-            )
+    round = db.session.scalar(
+        select(Round)
+        .join(Round.proto_grant)
+        .options(contains_eager(Round.proto_grant))
+        .filter(
+            Fund.short_name == grant_short_code,
+            # probably want some way of having rounds that are always open especially for uncompeted grants
+            Round.proto_start_date <= date.today(),
+            Round.proto_end_date >= date.today(),
         )
-        .unique()
-        .one_or_none()
     )
     return round, round.proto_grant if round else None
 
