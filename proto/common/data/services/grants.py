@@ -49,6 +49,7 @@ def get_active_round(grant_short_code: str):
         .options(contains_eager(Round.proto_grant))
         .filter(
             Fund.short_name == grant_short_code,
+            Round.proto_draft.is_(False),
             # probably want some way of having rounds that are always open especially for uncompeted grants
             Round.proto_start_date <= date.today(),
             Round.proto_end_date >= date.today(),
