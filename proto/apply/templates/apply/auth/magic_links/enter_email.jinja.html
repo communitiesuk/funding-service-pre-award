@@ -8,7 +8,8 @@
 {% block pageTitle %}{% trans %}Email address{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
 
 {# Hide service nav on the login page because it looks weird? #}
-{% block serviceNavigation %}{% endblock serviceNavigation %}
+{# Jan 25: I'm not _convinced_ it doesn't look weird but something about it not being there is inconsistent too #}
+{# {% block serviceNavigation %}{% endblock serviceNavigation %} #}
 
 {% block beforeContent %}
 {{ super() }}
