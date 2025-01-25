@@ -2,6 +2,9 @@
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 {% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+{% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
+
+{% from "form_runner/application_status.html" import applicationStatus %}
 
 {% extends "apply/base.jinja.html" %}
 
@@ -22,6 +25,23 @@
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+
+        {# i've just done a flash message for the time being, there will probably be quite a lot of text about next steps so this should probably be a govuk style confirmation scren #}
+        {# I'll hook that in if I get time #}
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                {% if message == "APPLICATION_SUBMITTED" %}
+                    {% set html %}
+                        <h3 class="govuk-notification-banner__heading">{% trans %}Application submitted{% endtrans %}</h3>
+                        <p class="govuk-body">{% trans %}You will receive an email with confirmation. You can view your submission at any time.{% endtrans %}</p>
+                    {% endset %}
+                    {{ govukNotificationBanner({
+                        "html": html,
+                        "type": "success"
+                    }) }}
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
         <h1 class="govuk-caption-l">{{ grant.proto_name }}</h1>
         <h2 class="govuk-heading-l">{% trans %}Your applications{% endtrans %}</h2>
 
@@ -52,12 +72,9 @@
                 {% set referenceLink %}
                     <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_apply.application.application_tasklist', application_id=application.id) }}">{{ application.code }}</a>
                 {% endset %}
-                {% set statusTag %}
-                    <strong class="govuk-tag govuk-tag--grey">Started</strong>
-                {% endset %}
                 {% set rows = rows.append([
                     { "html": referenceLink },
-                    { "html": statusTag },
+                    { "html": applicationStatus(application) },
                     { "text": application.created_at | dateformat },
                     { "text": application.updated_at | dateformat }
                 ]) %}

@@ -1,0 +1,14 @@
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+
+{% macro applicationStatus(application) %}
+{% if application.not_started %}
+    {{ govukTag({"text": _("Not started"), "classes": "govuk-tag--grey"}) }}
+{% elif application.in_progress %}
+    {{ govukTag({"text": _("In progress") if not application.can_be_submitted else _("Ready to submit"), "classes": "govuk-tag--blue"}) }}
+{% elif application.is_submitted %}
+    {{ govukTag({"text": _("Submitted"), "classes": "govuk-tag--green" }) }}
+{# I presume this is some kind of awarded state but not going to deep that yet - pre-award currently ends with submitted #}
+{% elif application.completed %}
+    {{ govukTag({"text": _("Completed"), "classes": "govuk-tag--green"}) }}
+{% endif %}
+{% endmacro %}

@@ -14,6 +14,7 @@ from proto.common.data.models import (
     ProtoDataCollectionInstanceSectionData,
     Round,
 )
+from proto.common.data.models.applications import TestLiveStatus
 from proto.common.data.models.data_collection import ProtoDataCollectionInstance
 from proto.common.data.models.question_bank import QuestionType
 
@@ -38,6 +39,11 @@ def create_application(preview: bool, round_id: int, account_id: str):
         round_id=round_id,
         account_id=account_id,
         data_collection_instance=ProtoDataCollectionInstance(),
+        # this should be based on if the _round_ is "preview" - the round can only
+        # not be "preview" if the grant is "live"
+        # will need to reconcile with how this works with fake later but assumption
+        # would be all fake applications are test
+        test_live_status=TestLiveStatus.TEST,
     )
     db.session.add(application)
     db.session.commit()
@@ -53,7 +59,9 @@ def get_applications(account_id, short_code):
         select(ProtoApplication)
         .join(Round)
         .join(Fund)
-        .filter(ProtoApplication.account_id == account_id, Fund.short_name == short_code)
+        .filter(
+            ProtoApplication.account_id == account_id, Fund.short_name == short_code, ProtoApplication.fake.is_(False)
+        )
     ).all()
     return applications
 
@@ -141,4 +149,10 @@ def get_application_section_data(application, section_slug):
 def set_application_section_complete(section_data: ProtoDataCollectionInstanceSectionData):
     section_data.completed = True
     db.session.add(section_data)
+    db.session.commit()
+
+
+def submit_application(application: ProtoApplication):
+    application.submitted = True
+    db.session.add(application)
     db.session.commit()

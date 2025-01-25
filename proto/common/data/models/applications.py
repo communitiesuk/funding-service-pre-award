@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 class ApplicationStatus(str, enum.Enum):
     NOT_STARTED = "not started"
     IN_PROGRESS = "in progress"
+    SUBMITTED = "submitted"
     CHANGE_REQUESTED = "change requested"
     COMPLETED = "completed"
 
@@ -26,6 +27,12 @@ class ApplicationSectionStatus(str, enum.Enum):
     NOT_STARTED = "not started"
     IN_PROGRESS = "in progress"
     COMPLETED = "completed"
+
+
+# please come up with a better name
+class TestLiveStatus(str, enum.Enum):
+    TEST = "TEST"
+    LIVE = "LIVE"
 
 
 class ProtoApplication(db.Model):
@@ -46,6 +53,11 @@ class ProtoApplication(db.Model):
         "ProtoDataCollectionInstance", lazy="select"
     )
 
+    submitted: Mapped[bool] = mapped_column(default=False)
+
+    # struggling to call this anything other than status
+    test_live_status: Mapped[TestLiveStatus]
+
     updated_by_applicant_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     @property
@@ -53,9 +65,7 @@ class ProtoApplication(db.Model):
         if len(self.data_collection_instance.section_data) == 0:
             return ApplicationStatus.NOT_STARTED
 
-        # TODO: WIP
-
-        return ApplicationStatus.IN_PROGRESS
+        return ApplicationStatus.SUBMITTED if self.submitted else ApplicationStatus.IN_PROGRESS
 
     @property
     def can_be_submitted(self):
@@ -70,6 +80,10 @@ class ProtoApplication(db.Model):
     @property
     def in_progress(self):
         return self.status == ApplicationStatus.IN_PROGRESS
+
+    @property
+    def is_submitted(self):
+        return self.status == ApplicationStatus.SUBMITTED
 
     @property
     def completed(self):

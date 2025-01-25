@@ -6,6 +6,8 @@
 {% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
 {% from "govuk_frontend_jinja/components/task-list/macro.html" import govukTaskList %}
 
+{% from "form_runner/application_status.html" import applicationStatus %}
+
 {% extends "apply/base.jinja.html" %}
 
 {# decision to make this apply specific for now, the tech is still in a form runner folder though so the tasklist could be generalised #}
@@ -49,15 +51,7 @@
 
     {# make this a macro - update it to use the latest thinking on statuses #}
     {# ideally this would be a dictionary mapping statuses to styles and human readable text and thats it #}
-    {% set statusTag %}
-      {% if application.not_started %}
-        {{ govukTag({"text": _("Not started"), "classes": "govuk-tag--grey"}) }}
-      {% elif application.in_progress %}
-        {{ govukTag({"text": _("In progress"), "classes": "govuk-tag--blue"}) }}
-      {% elif application.completed %}
-        {{ govukTag({"text": _("Completed"), "classes": "govuk-tag--green"}) }}
-      {% endif %}
-    {% endset %}
+    {% set statusTag = applicationStatus(application) %}
 
     {# rename code to proto reference #}
     {{ govukSummaryList({
@@ -116,25 +110,17 @@
       }) }}
     {% endfor %}
 
-    {% if application.can_be_submitted %}
-      {% if application.fake %}
-        {% set submitApplicationHref = url_for('proto_apply.application.application_list_handler', short_code=application.round.proto_grant.short_name) %}
-      {% else %}
-        {% set submitApplicationHref = "#" %}
-      {% endif %}
+    <form method="POST">
+      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+      {# if its fake application this will be a link back to wherever we want, otherwise it will act as a submit button for the form #}
       {{ govukButton({
         "text": _("Submit application"),
-        "href": submitApplicationHref,
-        "classes": "govuk-!-margin-top-5"
-      }) }}
-    {% else %}
-      {{ govukButton({
-        "text": _("Submit application"),
-        "classes": "govuk-!-margin-top-5 govuk-!-margin-bottom-3",
-        "disabled": true
+        "href": url_for('proto_apply.application.application_list_handler', short_code=application.round.proto_grant.short_name) if application.fake,
+        "classes": "govuk-!-margin-top-5",
+        "disabled": not application.can_be_submitted
       }) }}
       <p class="govuk-body">{% trans %}You cannot submit your application until you have completed all of the sections.{% endtrans %}</p>
-    {% endif %}
+    </form>
   </div>
 </div>
 {% endblock %}

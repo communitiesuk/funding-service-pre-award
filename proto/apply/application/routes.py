@@ -1,4 +1,4 @@
-from flask import g, redirect, render_template, url_for
+from flask import flash, g, redirect, render_template, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
@@ -7,6 +7,7 @@ from proto.common.data.services.applications import (
     get_application,
     get_application_grants,
     get_applications,
+    submit_application,
 )
 from proto.common.data.services.grants import get_active_round, get_grant
 
@@ -67,3 +68,16 @@ def all_user_application_list_handler():
 def application_tasklist(application_id):
     application = get_application(application_id)
     return render_template("form_runner/application_tasklist.html", application=application, account=g.account)
+
+
+@application_blueprint.post("/application/<application_id>")
+@is_authenticated
+def application_submit_handler(application_id):
+    application = get_application(application_id=application_id)
+
+    if application.can_be_submitted:
+        submit_application(application)
+        flash("APPLICATION_SUBMITTED")
+    return redirect(
+        url_for("proto_apply.application.application_list_handler", short_code=application.round.proto_grant.short_name)
+    )
