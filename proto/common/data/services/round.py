@@ -4,7 +4,7 @@ import psycopg2
 import sqlalchemy
 from flask_babel import lazy_gettext as _l
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import contains_eager
 
 from db import db
 from proto.common.data.exceptions import DataValidationError
@@ -56,7 +56,8 @@ def get_open_rounds():
     return (
         db.session.scalars(
             select(Round)
-            .options(joinedload(Round.proto_grant))
+            .join(Fund, Fund.id == Round.fund_id)
+            .options(contains_eager(Round.proto_grant))
             .filter(
                 Fund.proto_status == FundStatus.LIVE,
                 Round.proto_draft.is_(False),

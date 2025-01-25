@@ -112,7 +112,7 @@ class Round(db.Model):
 
     # whenever we get the round we're going to want the fund information - we _might_ want to be able to override this
     # but this feels like a very sensible way around for most of applies use case
-    proto_grant: Mapped["Fund"] = relationship("Fund", lazy=False)
+    proto_grant: Mapped["Fund"] = relationship("Fund", lazy=True)
 
     data_collection_definition_id: Mapped[pk_int | None] = mapped_column(
         ForeignKey("proto_data_collection_definition.id")
