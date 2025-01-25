@@ -110,18 +110,25 @@
       }) }}
     {% endfor %}
 
+
     {% if not application.is_submitted %}
-    <form method="POST">
-      <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
-      {# if its fake application this will be a link back to wherever we want, otherwise it will act as a submit button for the form #}
-      {{ govukButton({
-        "text": _("Submit application"),
-        "href": url_for('proto_apply.application.application_list_handler', short_code=application.round.proto_grant.short_name) if application.fake,
-        "classes": "govuk-!-margin-top-5",
-        "disabled": not application.can_be_submitted
-      }) }}
-      <p class="govuk-body">{% trans %}You cannot submit your application until you have completed all of the sections.{% endtrans %}</p>
-    </form>
+      {% if application.fake %}
+        {% set canBeSubmitted = application.can_be_submitted %}
+        <a class="govuk-button govuk-!-margin-top-5" href="{{ url_for('proto_apply.application.application_list_handler', short_code=application.round.proto_grant.short_name) }}" {% if not canBeSubmitted %}disabled{% endif %}>Submit application</a>
+        {% if not canBeSubmitted %}
+          <p class="govuk-body">{% trans %}You cannot submit your application until you have completed all of the sections.{% endtrans %}</p>
+        {% endif %}
+      {% else %}
+        <form method="POST">
+          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+          {# if its fake application this will be a link back to wherever we want, otherwise it will act as a submit button for the form #}
+          {{ govukButton({
+            "text": _("Submit application"),
+            "classes": "govuk-!-margin-top-5",
+            "disabled": application.can_be_submitted,
+          }) }}
+        </form>
+      {% endif %}
     {% endif %}
   </div>
 </div>
