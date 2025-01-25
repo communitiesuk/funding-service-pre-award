@@ -1,0 +1,57 @@
+{% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+
+{% from "form_runner/application_status.html" import applicationStatus %}
+
+{% extends "manage/base.jinja.html" %}
+
+{% block pageTitle %}Application {{ application.code }} - {% trans %}Funding service{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{{ govukBreadcrumbs({
+    "items": [
+    { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
+    { "text": _("Applications"), "href": url_for("proto_manage.assess.list_grant_applications_handler", short_code=grant.short_name) },
+    { "text": application.code, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.id) }
+    ]
+})}}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{% trans %}Application for funding{% endtrans %}</h1>
+
+        {{ govukSummaryList({
+            "rows": [
+                { "key": { "text": _("Reference") }, "value": { "text": application.code } },
+                { "key": { "text": _("Status") }, "value": { "html": applicationStatus(application) } },
+                { "key": { "text": _("Started") }, "value": { "text": application.created_at | dateformat } },
+                { "key": { "text": _("Submitted") }, "value": { "text": application.updated_by_applicant_at | dateformat } },
+            ]
+        })}}
+
+        <p class="govuk-body">
+            <a class="govuk-link govuk-link--no-visisted-state" href="#">View all application answers</a>
+        </p>
+
+        {# these will be "sub-section"/ "category" names #}
+        <h2 class="govuk-heading-m">{% trans %}Application{% endtrans %}</h2>
+        {% set summaryListRows = [] %}
+        {% for section_data in application.data_collection_instance.section_data %}
+        {% set section = section_data.section %}
+        {% set linkHtml %}
+            <a class="govuk-link govuk-link--no-visited-state" href="#">{{ section.title }}</a>
+        {% endset %}
+        {% set summaryListRows = summaryListRows.append([
+            { "html": linkHtml }
+        ]) %}
+        {% endfor %}
+        {{ govukTable({
+            "rows": summaryListRows
+        }) }}
+    </div>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@ from flask import redirect, render_template, session, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
-from proto.common.data.services.applications import search_applications
+from proto.common.data.services.applications import get_application, search_applications
 from proto.common.data.services.grants import get_active_round, get_all_grants_with_rounds, get_grant
 
 assess_blueprint = Blueprint("assess", __name__)
@@ -43,3 +43,11 @@ def list_grant_applications_handler(short_code):
         grant = get_grant(short_code=short_code)
     applications = search_applications(short_code)
     return render_template("manage/assess/grant_list_applications.jinja.html", applications=applications, grant=grant)
+
+
+@assess_blueprint.get("/grants/<short_code>/applications/<application_id>")
+@is_authenticated(as_platform_admin=True)
+def assess_application_detail_hander(short_code, application_id):
+    grant = get_grant(short_code)
+    application = get_application(application_id)
+    return render_template("manage/assess/assess_application_detail.jinja.html", grant=grant, application=application)
