@@ -179,6 +179,8 @@ def preview_application(grant_code, round_code):
     form = PreviewApplicationForm(submit_label=None)
     if form.validate_on_submit():
         application = create_application(preview=True, round_id=form.round_id.data, account_id=form.account_id.data)
-        return redirect(url_for("proto_apply.application.application_tasklist", application_id=application.id))
+        return redirect(
+            url_for("proto_apply.application.application_tasklist", application_external_id=application.external_id)
+        )
 
     raise Exception(f"Failed to start application: {form.data}")

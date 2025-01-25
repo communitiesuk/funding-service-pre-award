@@ -1,5 +1,6 @@
 import random
 import string
+import uuid
 
 from sqlalchemy import case, cast, delete, func, select
 from sqlalchemy.dialects.postgresql import JSONB, insert
@@ -51,8 +52,8 @@ def create_application(preview: bool, round_id: int, account_id: str):
     return application
 
 
-def get_application(application_id: int):
-    return db.session.scalars(select(ProtoApplication).filter(ProtoApplication.id == application_id)).one()
+def get_application(external_id: uuid.UUID):
+    return db.session.scalars(select(ProtoApplication).filter(ProtoApplication.external_id == external_id)).one()
 
 
 def get_applications(account_id, short_code):

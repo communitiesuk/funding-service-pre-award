@@ -47,7 +47,9 @@ def application_new_handler(short_code):
         raise Exception("Cannot start an application with no active application round")
 
     application = create_application(preview=False, round_id=active_round.id, account_id=g.account.id)
-    return redirect(url_for("proto_apply.application.application_tasklist", application_id=application.id))
+    return redirect(
+        url_for("proto_apply.application.application_tasklist", application_external_id=application.external_id)
+    )
 
 
 @application_blueprint.get("/applications")
@@ -63,17 +65,17 @@ def all_user_application_list_handler():
 
 
 # fixme: probably wants to be /grant/<short_code>/application/<application_ref>
-@application_blueprint.get("/application/<application_id>")
+@application_blueprint.get("/application/<application_external_id>")
 @is_authenticated
-def application_tasklist(application_id):
-    application = get_application(application_id)
+def application_tasklist(application_external_id):
+    application = get_application(application_external_id)
     return render_template("form_runner/application_tasklist.html", application=application, account=g.account)
 
 
-@application_blueprint.post("/application/<application_id>")
+@application_blueprint.post("/application/<application_external_id>")
 @is_authenticated
-def application_submit_handler(application_id):
-    application = get_application(application_id=application_id)
+def application_submit_handler(application_external_id):
+    application = get_application(external_id=application_external_id)
 
     if application.can_be_submitted:
         submit_application(application)

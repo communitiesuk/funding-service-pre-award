@@ -1,4 +1,5 @@
 import enum
+import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -37,6 +38,7 @@ class TestLiveStatus(str, enum.Enum):
 
 class ProtoApplication(db.Model):
     id: Mapped[pk_int] = mapped_column(primary_key=True)
+    external_id: Mapped[uuid.UUID] = mapped_column(index=True, default=uuid.uuid4)
     created_at: Mapped[datetime] = mapped_column(default=func.now())
     updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
 

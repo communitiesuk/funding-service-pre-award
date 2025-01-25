@@ -81,7 +81,7 @@
             "classes": "govuk-tag--grey"
           }
         } %}
-        {% set href=url_for('proto_form_runner.ask_application_question', application_id=application.id, section_slug=section.slug, question_slug=section.questions[0].slug) %}
+        {% set href=url_for('proto_form_runner.ask_application_question', application_external_id=application.external_id, section_slug=section.slug, question_slug=section.questions[0].slug) %}
       {% elif application.section_in_progress(section.id) %}
         {% set status = {
           "tag": {
@@ -89,7 +89,7 @@
             "classes": "govuk-tag--blue"
           }
         } %}
-        {% set href=url_for('proto_form_runner.check_your_answers', application_id=application.id, section_slug=section.slug) %}
+        {% set href=url_for('proto_form_runner.check_your_answers', application_external_id=application.external_id, section_slug=section.slug) %}
       {% elif application.section_completed(section.id) %}
         {% set status = {
           "tag": {
@@ -97,7 +97,7 @@
             "classes": "govuk-tag--green"
           }
         } %}
-        {% set href=url_for('proto_form_runner.check_your_answers', application_id=application.id, section_slug=section.slug) %}
+        {% set href=url_for('proto_form_runner.check_your_answers', application_external_id=application.external_id, section_slug=section.slug) %}
       {% endif %}
       {% set items = [{
         "title": { "text": section.title },

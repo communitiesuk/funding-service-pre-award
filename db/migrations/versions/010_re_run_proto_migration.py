@@ -130,6 +130,7 @@ def upgrade():
     op.create_table(
         "proto_application",
         sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("external_id", sa.UUID(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.Column("code", sa.String(), nullable=False),
