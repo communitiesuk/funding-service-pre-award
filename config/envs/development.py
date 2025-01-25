@@ -18,6 +18,7 @@ class DevelopmentConfig(Config):
     FLASK_ENV = "development"
 
     BYPASS_NOTIFY_SORRY_STEVEN = bool(strtobool(getenv("BYPASS_NOTIFY_SORRY_STEVEN", "false")))
+    SQLALCHEMY_ECHO = True
 
     DEBUG_TB_ENABLED = True
     DEBUG_TB_ROUTES_HOST = "*"

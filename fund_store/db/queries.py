@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from typing import List
 
 from sqlalchemy import bindparam, exc, func, insert, select, text, update
@@ -336,6 +336,8 @@ def upsert_round_data(round_configs, commit: bool = True):
             round_record.is_expression_of_interest = round_config["is_expression_of_interest"]
             round_record.eligibility_config = round_config["eligibility_config"]
             round_record.eoi_decision_schema = round_config["eoi_decision_schema"]
+            round_record.proto_start_date = date(2025, 1, 1)
+            round_record.proto_end_date = date(2025, 2, 28)
 
             updated_rounds[round_config["id"]] = round_record
 
@@ -374,6 +376,8 @@ def upsert_round_data(round_configs, commit: bool = True):
                 is_expression_of_interest=round_config["is_expression_of_interest"],
                 eligibility_config=round_config["eligibility_config"],
                 eoi_decision_schema=round_config["eoi_decision_schema"],
+                proto_start_date=date(2025, 1, 1),
+                proto_end_date=date(2025, 2, 28),
             )
             db.session.add(new_round)
 
