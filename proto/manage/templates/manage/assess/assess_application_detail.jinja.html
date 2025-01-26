@@ -1,6 +1,8 @@
 {% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
 {% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 
 {% from "form_runner/application_status.html" import applicationStatus %}
 
@@ -22,6 +24,25 @@
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+        {% if form.errors %}
+            {{ govukErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                {% if message == "COMMENT_ADDED" %}
+                    {% set html %}
+                        <h3 class="govuk-notification-banner__heading">{% trans %}Comment added{% endtrans %}</h3>
+                        <p class="govuk-body">{% trans %}Your comment for this application has been recorded.{% endtrans %}</p>
+                    {% endset %}
+                    {{ govukNotificationBanner({
+                        "html": html,
+                        "type": "success"
+                    }) }}
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
+
         <h1 class="govuk-heading-l">{% trans %}Application for funding{% endtrans %}</h1>
 
         {{ govukSummaryList({
@@ -53,6 +74,55 @@
         {{ govukTable({
             "rows": summaryListRows
         }) }}
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">{% trans %}Timeline{% endtrans %}</h2>
+        <ol class="timeline govuk-!-margin-top-6">
+            <li class="timeline__event">
+                <p class="timeline__event-title govuk-body">{% trans section_link=link %}Application submitted{% endtrans %}</span>
+                <p class="govuk-body govuk-!-margin-bottom-0">{% trans name=application.account.email %}{{ name }} on{% endtrans %} <time>{{ application.updated_by_applicant_at | dateformat }}</time></span>
+            </li>
+
+            {% for comment in comments %}
+
+            {# please don't judge me #}
+            {% set nameFromEmail = comment.account.email.split("@")[0].split(".") | join(" ") | title %}
+
+            <li class="timeline__event">
+                {% if comment.section %}
+                    {# the comment was made for a specific section #}
+                    {% set link %}
+                        <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=comment.section.id) }}">{{ comment.section.section.title }}</a>
+                    {% endset %}
+                    <p class="timeline__event-title govuk-body">{% trans section_link=link %}Comment added to {{ link }}{% endtrans %}</p>
+                    <p class="govuk-body govuk-!-margin-bottom-0">{% trans name=nameFromEmail %}{{ name }} on{% endtrans %} <time>{{ comment.created_at | dateformat }}</time></p>
+                {% else %}
+                    {# the comment was made against the whole application #}
+                    <h2 class="timeline__event-title govuk-heading-s">{% trans %}Comment added to this application{% endtrans %}</h2>
+                    <span class="govuk-body govuk-!-margin-bottom-0">{% trans name=nameFromEmail %}{{ name }} on{% endtrans %} <time>{{ comment.created_at | dateformat }}</time></span>
+                    <div class="timeline__content govuk-!-margin-top-4">
+                        <p class="govuk-body">{{ comment.comment }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </ol>
+
+        <form method="POST" novalidate>
+            {{ form.csrf_token }}
+            {{ form.action }}
+            {{ form.comment(params={
+                "label": {
+                    "text": _("Comment on this application"),
+                    "classes": "govuk-!-font-weight-bold govuk-!-margin-top-4"
+                }
+            }) }}
+            {{ form.submit(params ={
+                "classes": "govuk-button--secondary"
+            }) }}
+        </form>
     </div>
 </div>
 {% endblock %}

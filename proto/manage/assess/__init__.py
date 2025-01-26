@@ -13,6 +13,21 @@ from proto.common.data.services.grants import get_active_round, get_all_grants_w
 assess_blueprint = Blueprint("assess", __name__)
 
 
+class CommentForm(FlaskForm):
+    comment = StringField(
+        _l("Comment"),
+        widget=GovTextArea(),
+        validators=[DataRequired(_l("Enter a comment"))],
+        description=_l(
+            "Use comments to record assessment progress for yourself and other assessors. "
+            "Comments on competed grants will not be shared with applicants."
+        ),
+    )
+    action = HiddenField("action")
+
+    submit = SubmitField(_l("Add comment"), widget=GovSubmitInput())
+
+
 @assess_blueprint.context_processor
 def _grants_service_nav():
     return dict(active_navigation_tab="applications")
@@ -50,12 +65,36 @@ def list_grant_applications_handler(short_code):
     return render_template("manage/assess/grant_list_applications.jinja.html", applications=applications, grant=grant)
 
 
-@assess_blueprint.get("/grants/<short_code>/applications/<application_id>")
+@assess_blueprint.route("/grants/<short_code>/applications/<application_id>", methods=["GET", "POST"])
 @is_authenticated(as_platform_admin=True)
 def assess_application_detail_hander(short_code, application_id):
+    form = CommentForm(request.values, action="COMMENT")
     grant = get_grant(short_code)
     application = get_application(application_id)
-    return render_template("manage/assess/assess_application_detail.jinja.html", grant=grant, application=application)
+
+    if form.validate_on_submit():
+        action = form.data.get("action")
+        comment = form.data.get("comment")
+
+        if action == "COMMENT":
+            add_comment(account=g.account, application=application, comment=comment)
+            flash("COMMENT_ADDED")
+            return redirect(
+                url_for(
+                    "proto_manage.assess.assess_application_detail_hander",
+                    short_code=short_code,
+                    application_id=application_id,
+                )
+            )
+
+    comments = get_comments(application.id)
+    return render_template(
+        "manage/assess/assess_application_detail.jinja.html",
+        grant=grant,
+        application=application,
+        comments=comments,
+        form=form,
+    )
 
 
 @assess_blueprint.get("/grants/<short_code>/applications/<application_id>/all_answers")
@@ -66,21 +105,6 @@ def assess_application_all_answers_handler(short_code, application_id):
     return render_template(
         "manage/assess/assess_application_view_all_answers.html", grant=grant, application=application
     )
-
-
-class CommentForm(FlaskForm):
-    comment = StringField(
-        _l("Comment on this section"),
-        widget=GovTextArea(),
-        validators=[DataRequired(_l("Enter a comment"))],
-        description=_l(
-            "Use comments to record assessment progress for yourself and other assessors. "
-            "Comments on competed grants will not be shared with applicants."
-        ),
-    )
-    action = HiddenField("action")
-
-    submit = SubmitField(_l("Add comment"), widget=GovSubmitInput())
 
 
 @assess_blueprint.route(

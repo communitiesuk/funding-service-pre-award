@@ -20,6 +20,9 @@
 })}}
 {% endblock %}
 
+{# these pages are lazy loading each of the sections meaning that more data and sections = more queries and #}
+{# longer sync loads -- we should definitely look at eagerly fetching the sections using joins where possible #}
+{# to bring it back to O(1) #}
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
