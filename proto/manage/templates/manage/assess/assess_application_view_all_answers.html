@@ -14,8 +14,8 @@
     "items": [
     { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
     { "text": _("Applications"), "href": url_for("proto_manage.assess.list_grant_applications_handler", short_code=grant.short_name) },
-    { "text": application.code, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.id) },
-    { "text": _("View all answers"), "href": url_for("proto_manage.assess.assess_application_all_answers_handler", short_code=grant.short_name, application_id=application.id) }
+    { "text": application.code, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.external_id) },
+    { "text": _("View all answers"), "href": url_for("proto_manage.assess.assess_application_all_answers_handler", short_code=grant.short_name, application_id=application.external_id) }
     ]
 })}}
 {% endblock %}

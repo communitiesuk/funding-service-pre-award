@@ -132,7 +132,7 @@
             {% set rows = [] %}
             {% for application in applications %}
                 {% set referenceLink %}
-                <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_detail_hander', short_code=grant.short_name, application_id=application.id) }}">{{ application.code }}</a>
+                <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_detail_hander', short_code=grant.short_name, application_id=application.external_id) }}">{{ application.code }}</a>
                 {% endset %}
                 {% set rows = rows.append([
                     { "html": referenceLink },

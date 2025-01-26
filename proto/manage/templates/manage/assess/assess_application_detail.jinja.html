@@ -17,7 +17,7 @@
     "items": [
     { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
     { "text": _("Applications"), "href": url_for("proto_manage.assess.list_grant_applications_handler", short_code=grant.short_name) },
-    { "text": application.code, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.id) }
+    { "text": application.code, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.external_id) }
     ]
 })}}
 {% endblock %}
@@ -57,7 +57,7 @@
         })}}
 
         <p class="govuk-body">
-            <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_all_answers_handler', short_code=grant.short_name, application_id=application.id)}}">View all application answers</a>
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_all_answers_handler', short_code=grant.short_name, application_id=application.external_id)}}">View all application answers</a>
         </p>
 
         {# these will be "sub-section"/ "category" names #}
@@ -67,11 +67,11 @@
         {% set section = section_data.section %}
         {% set scored = section_data.scores | length %}
         {% set linkHtml %}
-            <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=section_data.id) }}">{{ section.title }}</a>
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.external_id, section_id=section_data.id) }}">{{ section.title }}</a>
         {% endset %}
         {% set items = items.append({
             "title": { "text": section.title },
-            "href": url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=section_data.id),
+            "href": url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.external_id, section_id=section_data.id),
             "status": {
                 "tag": {
                     "text": _("Unscored"),
@@ -106,7 +106,7 @@
                 {% if comment.section %}
                     {# the comment was made for a specific section #}
                     {% set link %}
-                        <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=comment.section.id) }}">{{ comment.section.section.title }}</a>
+                        <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.external_id, section_id=comment.section.id) }}">{{ comment.section.section.title }}</a>
                     {% endset %}
                     <p class="timeline__event-title govuk-body">{% trans section_link=link %}Comment added to {{ link }}{% endtrans %}</p>
                     <p class="govuk-body govuk-!-margin-bottom-0">{% trans name=nameFromEmail %}{{ name }} on{% endtrans %} <time>{{ comment.created_at | dateformat }}</time></p>
