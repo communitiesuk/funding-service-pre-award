@@ -5,6 +5,7 @@ from sqlalchemy import case, cast, delete, func, select
 from sqlalchemy.dialects.postgresql import JSONB, insert
 from sqlalchemy.orm import joinedload
 
+from apply.models.account import Account
 from db import db
 from proto.common.data.models import (
     Fund,
@@ -17,6 +18,8 @@ from proto.common.data.models import (
 from proto.common.data.models.applications import TestLiveStatus
 from proto.common.data.models.data_collection import ProtoDataCollectionInstance
 from proto.common.data.models.fund import FundingType
+from proto.common.data.models.proto_comment import ProtoComment
+from proto.common.data.models.proto_score import ProtoScore
 from proto.common.data.models.question_bank import QuestionType
 
 
@@ -163,3 +166,32 @@ def submit_application(application: ProtoApplication):
     application.submitted = True
     db.session.add(application)
     db.session.commit()
+
+
+def add_comment(
+    application: ProtoApplication, account: Account, comment: str, section: ProtoDataCollectionDefinitionSection = None
+):
+    comment = ProtoComment(
+        account_id=account.id,
+        application_id=application.id,
+        section_id=section.id if section else None,
+        comment=comment,
+    )
+    db.session.add(comment)
+    db.session.commit()
+    return comment
+
+
+def score_application(
+    application: ProtoApplication,
+    account: Account,
+    score: int,
+    reason: str,
+    section: ProtoDataCollectionDefinitionSection,
+):
+    score = ProtoScore(
+        account_id=account.id, application_id=application.id, section_id=section.id, score=score, reason=reason
+    )
+    db.session.add(score)
+    db.session.commit()
+    return score

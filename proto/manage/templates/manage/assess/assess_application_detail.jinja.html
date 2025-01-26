@@ -28,6 +28,7 @@
             "rows": [
                 { "key": { "text": _("Reference") }, "value": { "text": application.code } },
                 { "key": { "text": _("Status") }, "value": { "html": applicationStatus(application) } },
+                { "key": { "text": _("Assigned to") }, "value": { "text": _("(Not assigned)") } },
                 { "key": { "text": _("Started") }, "value": { "text": application.created_at | dateformat } },
                 { "key": { "text": _("Submitted") }, "value": { "text": application.updated_by_applicant_at | dateformat } },
             ]

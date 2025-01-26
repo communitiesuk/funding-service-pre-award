@@ -1,6 +1,11 @@
 {% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
 {% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/textarea/macro.html" import govukTextarea %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 
 {% from "form_runner/application_status.html" import applicationStatus %}
 
@@ -15,7 +20,7 @@
     { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
     { "text": _("Applications"), "href": url_for("proto_manage.assess.list_grant_applications_handler", short_code=grant.short_name) },
     { "text": application.code, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.id) },
-    { "text": section.title, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.id) }
+    { "text": section.title, "href": url_for("proto_manage.assess.assess_application_section_hander", short_code=grant.short_name, application_id=application.id, section_id=section_data.id) }
     ]
 })}}
 {% endblock %}
@@ -26,6 +31,25 @@
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+        {% if form.errors %}
+            {{ govukErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                {% if message == "COMMENT_ADDED" %}
+                    {% set html %}
+                        <h3 class="govuk-notification-banner__heading">{% trans %}Comment added{% endtrans %}</h3>
+                        <p class="govuk-body">{% trans %}Your comment for this section has been recorded.{% endtrans %}</p>
+                    {% endset %}
+                    {{ govukNotificationBanner({
+                        "html": html,
+                        "type": "success"
+                    }) }}
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
+
         <span class="govuk-caption-l">{% trans %}Application for funding{% endtrans %}</span>
         <h1 class="govuk-heading-l">{{ section.title }}</h1>
 
@@ -46,6 +70,35 @@
             "firstCellIsHeader": false,
             "rows": rows
         }) }}
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        {% set detailHtml %}
+        {% endset %}
+        {{ govukDetails({
+            "summaryText": "Score this section",
+            "html": detailHtml
+        }) }}
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        {# <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"> #}
+        <form method="POST" novalidate>
+            {{ form.csrf_token }}
+            {{ form.action }}
+            {{ form.comment(params={
+                "label": {
+                    "classes": "govuk-!-font-weight-bold govuk-!-margin-top-4"
+                }
+            }) }}
+            {{ form.submit(params ={
+                "classes": "govuk-button--secondary"
+            }) }}
+        </form>
     </div>
 </div>
 {% endblock %}
