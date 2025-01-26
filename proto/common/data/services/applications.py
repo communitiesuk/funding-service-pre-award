@@ -168,6 +168,19 @@ def submit_application(application: ProtoApplication):
     db.session.commit()
 
 
+# this could probably be fetched with a clever join alongside the application but
+# I'm just going to do it here for now, there may be a method we want to get both comments
+# and scores by application or section
+# we almost definitely want to access this from the application model to make
+# route handler code clean
+def get_comments(application_id, section_id=None):
+    filters = [ProtoComment.application_id == application_id]
+    if section_id:
+        filters.append(ProtoComment.section_id == section_id)
+    comments = db.session.scalars(select(ProtoComment).filter(*filters)).all()
+    return comments
+
+
 def add_comment(
     application: ProtoApplication, account: Account, comment: str, section: ProtoDataCollectionDefinitionSection = None
 ):

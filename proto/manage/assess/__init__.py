@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
-from proto.common.data.services.applications import add_comment, get_application, search_applications
+from proto.common.data.services.applications import add_comment, get_application, get_comments, search_applications
 from proto.common.data.services.grants import get_active_round, get_all_grants_with_rounds, get_grant
 
 assess_blueprint = Blueprint("assess", __name__)
@@ -110,10 +110,13 @@ def assess_application_section_hander(short_code, application_id, section_id):
                 )
             )
 
+    comments = get_comments(application.id, section_id=section_id)
+
     return render_template(
         "manage/assess/assess_application_section_detail.html",
         grant=grant,
         application=application,
         section_data=section_data,
         form=form,
+        comments=comments,
     )

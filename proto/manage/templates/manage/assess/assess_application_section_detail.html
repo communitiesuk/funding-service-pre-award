@@ -87,6 +87,24 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         {# <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"> #}
+        {% if comments %}
+        <ol class="timeline govuk-!-margin-top-2">
+            {% for comment in comments %}
+
+            {# please don't judge me #}
+            {% set nameFromEmail = comment.account.email.split("@")[0].split(".") | join(" ") | title %}
+
+            <li class="timeline__event">
+                <h2 class="timeline__event-title govuk-heading-s">{% trans %}Comment added to this section{% endtrans %}</h2>
+                <span class="govuk-body">{% trans name=nameFromEmail %}{{ name }} on{% endtrans %} <time>{{ comment.created_at | dateformat }}</time></span>
+                <div class="timeline__content govuk-!-margin-top-2">
+                    <p class="govuk-body">{{ comment.comment }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+
         <form method="POST" novalidate>
             {{ form.csrf_token }}
             {{ form.action }}

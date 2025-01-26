@@ -836,3 +836,42 @@
         box-shadow: 0 -5px #ffdd00, 0 5px #0b0c0c;
     }
 }
+
+
+/* Lifted from https://github.com/hmrc/hmrc-frontend/blob/main/src/components/timeline/_timeline.scss */
+
+.timeline {
+    border-left: 5px solid #1d70b8;
+    margin: 0 0 30px;
+    padding: 0;
+}
+
+.timeline__event {
+    list-style: none;
+    padding-left: 15px;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+@media (min-width: 40.0625em) {
+    .timeline__event {
+        padding-bottom: 30px;
+    }
+    .timeline__event-title {
+        /* margin-bottom: 20px */
+    }
+}
+
+.timeline__event-title {
+    margin-bottom: 5px;
+}
+
+.timeline__event-title:before {
+    background-color: #1d70b8;
+    content: "";
+    height: 5px;
+    left: 0;
+    position: absolute;
+    top: .5em;
+    width: 7px;
+}
