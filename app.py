@@ -147,7 +147,6 @@ def create_app() -> Flask:  # noqa: C901
     flask_app.jinja_loader = ChoiceLoader(
         [
             PackageLoader("proto.apply"),
-            PackageLoader("proto.assess"),
             PackageLoader("proto.common"),
             PackageLoader("proto.manage"),
             PackageLoader("proto.report"),
@@ -281,7 +280,6 @@ def create_app() -> Flask:  # noqa: C901
     # flask_app.register_blueprint(api_sessions_bp, host=flask_app.config["AUTH_HOST"])
 
     from proto.apply import apply_blueprint as proto_apply_blueprint
-    from proto.assess import assess_blueprint as proto_assess_blueprint
     from proto.form_runner import runner_blueprint as proto_form_runner_blueprint
     from proto.manage import manage_blueprint as proto_manage_blueprint
     from proto.report import report_blueprint as proto_report_blueprint
@@ -290,7 +288,6 @@ def create_app() -> Flask:  # noqa: C901
     flask_app.register_blueprint(proto_apply_blueprint, host=flask_app.config["FUNDING_HOST"])
     flask_app.register_blueprint(proto_report_blueprint, host=flask_app.config["FUNDING_HOST"])
     flask_app.register_blueprint(proto_form_runner_blueprint, host=flask_app.config["FUNDING_HOST"])
-    flask_app.register_blueprint(proto_assess_blueprint, host=flask_app.config["FUNDING_HOST"])
     flask_app.register_blueprint(
         proto_manage_blueprint, host=flask_app.config["FUNDING_HOST"], url_prefix="/grant-management"
     )

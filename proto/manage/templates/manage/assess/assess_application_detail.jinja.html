@@ -1,0 +1,139 @@
+{% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
+{% from "govuk_frontend_jinja/components/task-list/macro.html" import govukTaskList %}
+
+{% from "form_runner/application_status.html" import applicationStatus %}
+
+{% extends "manage/base.jinja.html" %}
+
+{% block pageTitle %}Application {{ application.code }} - {% trans %}Funding service{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{{ govukBreadcrumbs({
+    "items": [
+    { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
+    { "text": _("Applications"), "href": url_for("proto_manage.assess.list_grant_applications_handler", short_code=grant.short_name) },
+    { "text": application.code, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.id) }
+    ]
+})}}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        {% if form.errors %}
+            {{ govukErrorSummary(wtforms_errors(form)) }}
+        {% endif %}
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                {% if message == "COMMENT_ADDED" %}
+                    {% set html %}
+                        <h3 class="govuk-notification-banner__heading">{% trans %}Comment added{% endtrans %}</h3>
+                        <p class="govuk-body">{% trans %}Your comment for this application has been recorded.{% endtrans %}</p>
+                    {% endset %}
+                    {{ govukNotificationBanner({
+                        "html": html,
+                        "type": "success"
+                    }) }}
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
+
+        <h1 class="govuk-heading-l">{% trans %}Application for funding{% endtrans %}</h1>
+
+        {{ govukSummaryList({
+            "rows": [
+                { "key": { "text": _("Reference") }, "value": { "text": application.code } },
+                { "key": { "text": _("Status") }, "value": { "html": applicationStatus(application) } },
+                { "key": { "text": _("Assigned to") }, "value": { "text": _("(Not assigned)") } },
+                { "key": { "text": _("Started") }, "value": { "text": application.created_at | dateformat } },
+                { "key": { "text": _("Submitted") }, "value": { "text": application.updated_by_applicant_at | dateformat } },
+            ]
+        })}}
+
+        <p class="govuk-body">
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_all_answers_handler', short_code=grant.short_name, application_id=application.id)}}">View all application answers</a>
+        </p>
+
+        {# these will be "sub-section"/ "category" names #}
+        <h2 class="govuk-heading-m">{% trans %}Application{% endtrans %}</h2>
+        {% set items = [] %}
+        {% for section_data in application.data_collection_instance.section_data %}
+        {% set section = section_data.section %}
+        {% set scored = section_data.scores | length %}
+        {% set linkHtml %}
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=section_data.id) }}">{{ section.title }}</a>
+        {% endset %}
+        {% set items = items.append({
+            "title": { "text": section.title },
+            "href": url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=section_data.id),
+            "status": {
+                "tag": {
+                    "text": _("Unscored"),
+                    "classes": "govuk-tag--blue"
+                }
+            } if not scored else {
+                "text": _("Scored")
+            }
+        }) %}
+        {% endfor %}
+        {{ govukTaskList({
+            "items": items
+        }) }}
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">{% trans %}Timeline{% endtrans %}</h2>
+        <ol class="timeline govuk-!-margin-top-6">
+            <li class="timeline__event">
+                <p class="timeline__event-title govuk-body">{% trans section_link=link %}Application submitted{% endtrans %}</span>
+                <p class="govuk-body govuk-!-margin-bottom-0">{% trans name=application.account.email %}{{ name }} on{% endtrans %} <time>{{ application.updated_by_applicant_at | dateformat }}</time></span>
+            </li>
+
+            {% for comment in comments %}
+
+            {# please don't judge me #}
+            {% set nameFromEmail = comment.account.email.split("@")[0].split(".") | join(" ") | title %}
+
+            <li class="timeline__event">
+                {% if comment.section %}
+                    {# the comment was made for a specific section #}
+                    {% set link %}
+                        <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=comment.section.id) }}">{{ comment.section.section.title }}</a>
+                    {% endset %}
+                    <p class="timeline__event-title govuk-body">{% trans section_link=link %}Comment added to {{ link }}{% endtrans %}</p>
+                    <p class="govuk-body govuk-!-margin-bottom-0">{% trans name=nameFromEmail %}{{ name }} on{% endtrans %} <time>{{ comment.created_at | dateformat }}</time></p>
+                {% else %}
+                    {# the comment was made against the whole application #}
+                    <h2 class="timeline__event-title govuk-heading-s">{% trans %}Comment added to this application{% endtrans %}</h2>
+                    <span class="govuk-body govuk-!-margin-bottom-0">{% trans name=nameFromEmail %}{{ name }} on{% endtrans %} <time>{{ comment.created_at | dateformat }}</time></span>
+                    <div class="timeline__content govuk-!-margin-top-4">
+                        <p class="govuk-body">{{ comment.comment }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </ol>
+
+        <form method="POST" novalidate>
+            {{ form.csrf_token }}
+            {{ form.action }}
+            {{ form.comment(params={
+                "label": {
+                    "text": _("Comment on this application"),
+                    "classes": "govuk-!-font-weight-bold govuk-!-margin-top-4"
+                }
+            }) }}
+            {{ form.submit(params ={
+                "classes": "govuk-button--secondary"
+            }) }}
+        </form>
+    </div>
+</div>
+{% endblock %}

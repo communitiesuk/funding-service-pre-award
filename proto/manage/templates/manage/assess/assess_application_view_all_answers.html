@@ -1,0 +1,66 @@
+{% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+
+{% from "form_runner/application_status.html" import applicationStatus %}
+
+{% extends "manage/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}View all answers{% endtrans %} - {%trans %}Application{% endtrans %} {{ application.code }} - {% trans %}Funding service{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{{ govukBreadcrumbs({
+    "items": [
+    { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
+    { "text": _("Applications"), "href": url_for("proto_manage.assess.list_grant_applications_handler", short_code=grant.short_name) },
+    { "text": application.code, "href": url_for("proto_manage.assess.assess_application_detail_hander", short_code=grant.short_name, application_id=application.id) },
+    { "text": _("View all answers"), "href": url_for("proto_manage.assess.assess_application_all_answers_handler", short_code=grant.short_name, application_id=application.id) }
+    ]
+})}}
+{% endblock %}
+
+{# these pages are lazy loading each of the sections meaning that more data and sections = more queries and #}
+{# longer sync loads -- we should definitely look at eagerly fetching the sections using joins where possible #}
+{# to bring it back to O(1) #}
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{% trans %}Application for funding{% endtrans %}</span>
+        {# This isn't a useful heading - the purpose of this page is likely to cmd + f or to print and share - maybe its #}
+        {# the application reference + user meaningful name #}
+        <h1 class="govuk-heading-l">{% trans %}All answers{% endtrans %}</h1>
+
+        {# the look of this could use a lot of work #}
+        {# summary lists would probably make the  #}
+        {# if might be that this is the one place we don't want to use components to let us have #}
+        {# short answers in-line and longer answers break onto a new line #}
+        {% for section_data in application.data_collection_instance.section_data %}
+        {% set section = section_data.section %}
+        {% set data = section_data.data %}
+        <h2 class="govuk-heading-m">{{ section.title }}<h2>
+        <hr class="govuk-section-break govuk-section-break--visible">
+
+        {% set rows =[] %}
+        {% for question in section.questions %}
+        {# still the feeling of use enums not names #}
+        {% if question.type.name == "RADIOS" %}
+            {% set answer = data.get(question.id | string).get("answer").get("label") %}
+        {% else %}
+            {# "text like" answers catch-all #}
+            {% set answer = data.get(question.id | string).get("answer") %}
+        {% endif %}
+
+        {% set rows = rows.append({
+            "key": { "text": question.title },
+            "value": { "text": answer }
+        }) %}
+        {% endfor %}
+        {{ govukSummaryList({
+            "firstCellIsHeader": false,
+            "rows": rows
+        }) }}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
