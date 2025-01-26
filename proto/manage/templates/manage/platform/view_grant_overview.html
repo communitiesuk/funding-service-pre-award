@@ -1,79 +1,161 @@
-{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
-{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% extends "manage/platform/grants_base.html" %}
 
-{% extends "manage/base.jinja.html" %}
-
-{% block pageTitle %}{% trans %}Manage grants{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+{% block pageTitle %}{{ grant.name }} - {% trans %}Funding service{% endtrans %}{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-m">Grant overview</span>
-      {{ grant.name_json.en }}
-    </h1>
-  </div>
+    <div class="govuk-grid-column-full">
+        {# don't judge me pls #}
+        {% set shouldInlineTag = (grant.name | length) <= 25 %}
+        {% if shouldInlineTag %}<div class="fs-align-status-tag govuk-!-margin-bottom-6">{% endif %}
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
+            {{ grant.name }}
+        </h1>
+        {{ govukTag ({
+            "text": _("Draft"),
+            "classes": "govuk-tag--grey" + (" govuk-!-margin-top-1" if not shouldInlineTag else "")
+        }) }}
+        {% if shouldInlineTag %}</div>{% endif %}
+    </div>
 </div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h3 class="govuk-heading-s">{% trans %}In the last month{% endtrans %}</h3>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+        <div class="govuk-heading-l govuk-!-margin-bottom-0">6</div>
+        <div class="govuk-body">funding applications</div>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <div class="govuk-heading-l govuk-!-margin-bottom-0">0</div>
+        <div class="govuk-body">monitoring reports</div>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <div class="govuk-heading-l govuk-!-margin-bottom-0">£0</div>
+        <div class="govuk-body">total paid out</div>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        {% set yourGrantsLinksHtml %}
+            <p class="govuk-body">You've got some links</p>
+            {% set applyLink = url_for('proto_apply.grant_blueprint.grant_detail_handler', short_code=grant.short_name) %}
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ applyLink }}">https://apply.communities.gov.uk/grant/{{ grant.short_name }}</a>
+        {% endset %}
+        {{ govukDetails({
+            "summaryText": _("Your grants published links"),
+            "html": yourGrantsLinksHtml
+        })}}
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-!-margin-top-6">
+        <h2 class="govuk-heading-m">{% trans %}Funding{% endtrans %}</h2>
+        {% set uncompetedLink %}<a class="govuk-link govuk-link--no-visited-state" href="#">{% trans %}un-competed grants{% endtrans %}</a>{% endset %}
+        <p class="govuk-body">{% trans link=uncompetedLink %}See guidance on {{ link }} to let your users set up grant recipient profiles.{% endtrans %}</p>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <hr class="govuk-section-break govuk-section-break--visible">
 
-<div class="govuk-grid-row app-sidebar">
-  <div class="govuk-grid-column-two-thirds">
-    {% if grant.is_draft %}
-      {% set insetText %}
-        <p>
-          This grant is a draft and must be published before any application rounds will become available.
-          <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}">Make the grant live.</a>
-        </p>
-      {% endset %}
-      {{ govukInsetText({"html": insetText}) }}
-    {% endif %}
+        {# note we only need padding on desktop, on mobile it gets very spaced out #}
+        {{ govukSummaryList({
+            "rows": [
+                {
+                    "key": {
+                        "text": _("Recipients"),
+                        "classes": "govuk-!-padding-top-4 govuk-!-padding-bottom-4"
+                    },
+                    "value": { "text": "0 awarded grant recipients" },
+                    "actions": {
+                        "items": [
+                            { "text": _("Manage"), "href": "#", "classes": "govuk-link--no-visited-state" },
+                        ]
+                    },
+                },
+                {
+                    "key": {
+                        "text": _("Application rounds"),
+                        "classes": "govuk-!-padding-top-4 govuk-!-padding-bottom-4"
+                    },
+                    "value": { "text": "Preview round open" },
+                    "actions": {
+                        "items": [
+                            { "text": _("Manage"), "href": "#", "classes": "govuk-link--no-visited-state" },
+                        ]
+                    }
+                },
+                {
+                    "key": {
+                        "text": _("Application information"),
+                        "classes": "govuk-!-padding-top-4 govuk-!-padding-bottom-4"
+                    },
+                    "value": { "text": "16 questions across 3 sections" },
+                    "actions": {
+                        "items": [
+                            { "text": _("Manage"), "href": "#", "classes": "govuk-link--no-visited-state" },
+                        ]
+                    },
+                    "classes": "govuk-!-padding-top-2 govuk-!-padding-bottom-2"
+                }
 
-    <p class="govuk-body govuk-!-display-inline-block govuk-!-margin-3 govuk-!-padding-5 app-card">
-      Applications
-      <br>
-      29
-    </p>
-    <p class="govuk-body govuk-!-display-inline-block govuk-!-margin-3 govuk-!-padding-5 app-card">
-      Recipients
-      <br>
-      12
-    </p>
-    <p class="govuk-body govuk-!-display-inline-block govuk-!-margin-3 govuk-!-padding-5 app-card">
-      Funding delivered
-      <br>
-      £1,242,481
-    </p>
+            ]
+        }) }}
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">{% trans %}Monitoring and evaluation{% endtrans %}</h2>
+        {% set uncompetedLink %}<a class="govuk-link govuk-link--no-visited-state" href="#">{% trans %}un-competed grants{% endtrans %}</a>{% endset %}
+        <p class="govuk-body">{% trans link=uncompetedLink %}Competed grants must be awarded to applicants that have been scored. See guidance on {{ link }} to let your users set up grant recipient profiles without applying.{% endtrans %}</p>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <hr class="govuk-section-break govuk-section-break--visible">
 
-    <p class="govuk-body">
-      {{ grant.description_json.en }}
-    </p>
-  </div>
+        {# note we only need padding on desktop, on mobile it gets very spaced out #}
+        {{ govukSummaryList({
+            "rows": [
+                {
+                    "key": { "text": _("Recipients") },
+                    "value": { "text": "0 awarded grant recipients" },
+                    "actions": {
+                        "items": [
+                            { "text": _("Manage"), "href": "#" },
+                        ]
+                    },
+                    "classes": "govuk-!-padding-top-2 govuk-!-padding-bottom-2"
+                },
+                {
+                    "key": { "text": _("Application rounds") },
+                    "value": { "text": "Preview round open" },
+                    "actions": {
+                        "items": [
+                            { "text": _("Manage"), "href": "#" },
+                        ]
+                    },
+                    "classes": "govuk-!-padding-top-2 govuk-!-padding-bottom-2"
+                },
+                {
+                    "key": { "text": _("Application information") },
+                    "value": { "text": "16 questions across 3 sections" },
+                    "actions": {
+                        "items": [
+                            { "text": _("Manage"), "href": "#" },
+                        ]
+                    },
+                    "classes": "govuk-!-padding-top-2 govuk-!-padding-bottom-2"
+                }
 
-  <div class="govuk-grid-column-one-quarter app-sidebar__container">
-    <nav class="navigation" aria-label="Grant">
-      <ul class="govuk-list govuk-list--spaced">
-        <li class="govuk-!-margin-bottom-5"><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-sidebar__item--active" href="{{ url_for('proto_manage.platform.grants.view_grant_overview', grant_code=grant.short_name) }}">Grant overview</a></li>
-
-        <li>
-          <p class="govuk-body govuk-!-margin-bottom-1">Manage</p>
-          <ul class="govuk-list app-list--dashed">
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.assess.list_grant_applications_handler', short_code=grant.short_name) }}"><span class="govuk-visually-hidden">Manage </span>Assessment</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Payments</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Recipients</a></li>
-            <li class="govuk-!-margin-bottom-5"><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Monitoring</a></li>
-          </ul>
-        </li>
-
-        <li>
-          <p class="govuk-body govuk-!-margin-bottom-1">Configure</p>
-          <ul class="govuk-list app-list--dashed">
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Grant</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Application rounds</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Reporting rounds</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-  </div>
+            ]
+        }) }}
+    </div>
 </div>
 {% endblock %}

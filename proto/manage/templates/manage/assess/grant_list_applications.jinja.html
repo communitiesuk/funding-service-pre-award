@@ -10,13 +10,13 @@
 
 {% extends "manage/base.jinja.html" %}
 
-{% block pageTitle %}{{ grant.proto_name }} - {% trans %}Funding service{% endtrans %}{% endblock %}
+{% block pageTitle %}{{ grant.name }} - {% trans %}Funding service{% endtrans %}{% endblock %}
 
 {% block beforeContent %}
 {{ super() }}
 {{ govukBreadcrumbs({
     "items": [
-    { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
+    { "text": grant.name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
     { "text": "Applications", "href": "#" }
     ]
 })}}
@@ -30,7 +30,7 @@
         {# just a little thing but presume we should do our best to check against actual enum values - this feels dumb #}
         {% if grant.funding_type.name == "COMPETITIVE" %}
         <p class="govuk-body">
-            {% trans name=grant.proto_name %}{{ name }} is a competed grant, you will only see applications your users have submitted.{% endtrans %}
+            {% trans name=grant.name%}{{ name }} is a competed grant, you will only see applications your users have submitted.{% endtrans %}
         </p>
         {% endif %}
     </div>

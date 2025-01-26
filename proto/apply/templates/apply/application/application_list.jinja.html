@@ -8,7 +8,7 @@
 
 {% extends "apply/base.jinja.html" %}
 
-{% block pageTitle %}{% trans %}Your applications{% endtrans %} - {{ grant.proto_name }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+{% block pageTitle %}{% trans %}Your applications{% endtrans %} - {{ grant.name }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
 
 {% block beforeContent %}
 {{ super() }}
@@ -42,7 +42,7 @@
                 {% endif %}
             {% endfor %}
         {% endwith %}
-        <h1 class="govuk-caption-l">{{ grant.proto_name }}</h1>
+        <h1 class="govuk-caption-l">{{ grant.name }}</h1>
         <h2 class="govuk-heading-l">{% trans %}Your applications{% endtrans %}</h2>
 
         <p class="govuk-body">{% trans number_of_applications=(applications | length) %}You have started {{ number_of_applications }} applications for {% endtrans %}{{ grant.proto_apply_action_description }}.</p>
