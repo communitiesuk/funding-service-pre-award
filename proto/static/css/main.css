@@ -883,7 +883,6 @@
     }
 }
 
-
 /* Lifted from https://github.com/hmrc/hmrc-frontend/blob/main/src/components/timeline/_timeline.scss */
 
 .timeline {
@@ -920,4 +919,12 @@
     position: absolute;
     top: .5em;
     width: 7px;
+}
+
+/* prototype watermark, because */
+.watermark--prototype {
+  background-image: url("/assets/prototype.png");
+  background-size: 25%;
+  background-repeat: repeat;
+  background-position: 50% 0;
 }

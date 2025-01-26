@@ -11,6 +11,10 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}" />
 {% endblock head %}
 
+{% if not config.SUPPRESS_PROTOTYPE_WATERMARK_SORRY_SAM %}
+{% set bodyClasses = "watermark--prototype" %}
+{% endif %}
+
 {% block header %}
 {{ mhclgHeader({
     "productName": "MHCLG Funding",
