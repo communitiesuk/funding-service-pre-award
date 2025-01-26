@@ -25,8 +25,8 @@
 {% block header %}
 {{ super() }}
 <header role="banner" data-module="govuk-header">
-    <nav class="govuk-width-container govuk-header__navigation">
-        <div class="govuk-phase-banner flex-parent-element">
+    <nav class="govuk-width-container govuk-header__navigation govuk-!-padding-top-3">
+        <div class="flex-parent-element">
             <p class="govuk-!-text-align-left flex-parent-element flexed-element-margins-collapse">
                 {{ govukBackLink({'href': url_for("assessment_bp.fund_dashboard", fund_short_name=state['fund_short_name'], round_short_name=state['round_short_name']), 'html': 'Back to <b>assessment dashboard</b>', 'attributes': {'data-qa': 'back-to-assessment-dashboard'} }) }}
             </p>

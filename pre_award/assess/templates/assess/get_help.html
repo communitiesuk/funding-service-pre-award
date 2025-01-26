@@ -7,8 +7,8 @@
 
 {% block header %}
     {{ super()}}
-<nav class="govuk-header__navigation govuk-width-container">
-    <div class="govuk-phase-banner flex-parent-element">
+<nav class="govuk-header__navigation govuk-width-container govuk-!-padding-top-3">
+    <div class="flex-parent-element">
         {% if request.referrer %}
         <p class="govuk-!-text-align-left flex-parent-element flexed-element-margins-collapse">
             {{ govukBackLink({'href': request.referrer, 'html': 'Back'}) }}

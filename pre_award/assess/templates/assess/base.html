@@ -2,10 +2,10 @@
 
 {% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
 
-{% set serviceName = get_service_title() %}
 {% set assetPath = url_for('static', filename='assess').rstrip('/') %}
 
-{% block pageTitle %}{{ [pageHeading.rstrip('\n'), serviceName]|join(' – ') if pageHeading else serviceName }}{% endblock pageTitle %}
+{% set title = [pageHeading.rstrip('\n'), service_title]|join(' – ') if pageHeading else service_title %}
+{% block pageTitle %}{{ title }}{% endblock pageTitle %}
 
 {% block head %}
   {% include "assess/head.html" %}
@@ -14,7 +14,7 @@
 {% block header %}
   {{ govukHeader({
     "homepageUrl": "/",
-    "serviceName": serviceName,
+    "serviceName": title,
     "useTudorCrown": true,
   }) }}
 {% endblock header %}
@@ -40,7 +40,7 @@
   <!-- Google Tag Manager (noscript) -->
   {# djlint:off #}
   <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M5J9Q8HV" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      <iframe title="Google Tag Manager" src="https://www.googletagmanager.com/ns.html?id=GTM-M5J9Q8HV" height="0" width="0" style="display:none;visibility:hidden"></iframe>
   </noscript>
   {# djlint:on #}
   <!-- End Google Tag Manager (noscript) -->
