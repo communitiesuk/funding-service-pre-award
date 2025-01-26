@@ -3,6 +3,7 @@
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
 {% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
+{% from "govuk_frontend_jinja/components/task-list/macro.html" import govukTaskList %}
 
 {% from "form_runner/application_status.html" import applicationStatus %}
 
@@ -61,18 +62,28 @@
 
         {# these will be "sub-section"/ "category" names #}
         <h2 class="govuk-heading-m">{% trans %}Application{% endtrans %}</h2>
-        {% set summaryListRows = [] %}
+        {% set items = [] %}
         {% for section_data in application.data_collection_instance.section_data %}
         {% set section = section_data.section %}
+        {% set scored = section_data.scores | length %}
         {% set linkHtml %}
             <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=section_data.id) }}">{{ section.title }}</a>
         {% endset %}
-        {% set summaryListRows = summaryListRows.append([
-            { "html": linkHtml }
-        ]) %}
+        {% set items = items.append({
+            "title": { "text": section.title },
+            "href": url_for('proto_manage.assess.assess_application_section_hander', short_code=grant.short_name, application_id=application.id, section_id=section_data.id),
+            "status": {
+                "tag": {
+                    "text": _("Unscored"),
+                    "classes": "govuk-tag--blue"
+                }
+            } if not scored else {
+                "text": _("Scored")
+            }
+        }) %}
         {% endfor %}
-        {{ govukTable({
-            "rows": summaryListRows
+        {{ govukTaskList({
+            "items": items
         }) }}
     </div>
 </div>

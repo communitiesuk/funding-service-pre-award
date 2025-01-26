@@ -1,12 +1,12 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from sqlalchemy import CheckConstraint, ForeignKey, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
-from proto.common.data.models import DataStandard, Round, TemplateQuestion, t_data_source
-from proto.common.data.models import ProtoReportingRound
+from proto.common.data.models import DataStandard, ProtoReportingRound, Round, TemplateQuestion, t_data_source
+from proto.common.data.models.proto_score import ProtoScore
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.models.types import pk_int
 
@@ -109,3 +109,7 @@ class ProtoDataCollectionInstanceSectionData(db.Model):
 
     section_id: Mapped[int] = mapped_column(ForeignKey("proto_data_collection_definition_section.id"))
     section: Mapped["ProtoDataCollectionDefinitionSection"] = relationship("ProtoDataCollectionDefinitionSection")
+
+    # I'm fairly confident backref is deprecated and should be more formally defined with `back_populates` but
+    # this loads and I said i'd push in 15 minutes
+    scores: Mapped[List["ProtoScore"]] = relationship("ProtoScore", backref="proto_score")

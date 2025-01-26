@@ -6,6 +6,7 @@
 {% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
 {% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
 {% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
+{% from "govuk_frontend_jinja/components/radios/macro.html" import govukRadios %}
 
 {% from "form_runner/application_status.html" import applicationStatus %}
 
@@ -31,8 +32,8 @@
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        {% if form.errors %}
-            {{ govukErrorSummary(wtforms_errors(form)) }}
+        {% if form.errors or score_form.errors %}
+            {{ govukErrorSummary(wtforms_errors(form if form.errors else score_form)) }}
         {% endif %}
 
         {% with messages = get_flashed_messages() %}
@@ -41,6 +42,15 @@
                     {% set html %}
                         <h3 class="govuk-notification-banner__heading">{% trans %}Comment added{% endtrans %}</h3>
                         <p class="govuk-body">{% trans %}Your comment for this section has been recorded.{% endtrans %}</p>
+                    {% endset %}
+                    {{ govukNotificationBanner({
+                        "html": html,
+                        "type": "success"
+                    }) }}
+                {% elif message == "SCORE_ADDED" %}
+                    {% set html %}
+                        <h3 class="govuk-notification-banner__heading">{% trans %}Section scored{% endtrans %}</h3>
+                        <p class="govuk-body">{% trans %}Your score and reason have been recorded.{% endtrans %}</p>
                     {% endset %}
                     {{ govukNotificationBanner({
                         "html": html,
@@ -76,10 +86,29 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         {% set detailHtml %}
+            <form method="POST" novalidate>
+                {{ score_form.csrf_token }}
+                {{ score_form.action }}
+                {{ score_form.score(params={
+                    "fieldset": {
+                        "legend": {
+                            "text": _("Your score"),
+                            "classes": "govuk-!-font-weight-bold"
+                        }
+                    }
+                }) }}
+                {{ score_form.reason(params={
+                    "label": {
+                        "classes": "govuk-!-font-weight-bold"
+                    }
+                }) }}
+                {{ score_form.submit }}
+            </form>
         {% endset %}
         {{ govukDetails({
             "summaryText": "Score this section",
-            "html": detailHtml
+            "html": detailHtml,
+            "open": score_form.errors
         }) }}
     </div>
 </div>
@@ -87,18 +116,25 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         {# <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"> #}
-        {% if comments %}
+        {% if actions %}
         <ol class="timeline govuk-!-margin-top-2">
-            {% for comment in comments %}
+            {% for action in actions | sort(attribute="created_at") %}
+
+            {# hacky and a hundred things to improve #}
+            {% set event = "SCORE" if action.score else "COMMENT" %}
 
             {# please don't judge me #}
-            {% set nameFromEmail = comment.account.email.split("@")[0].split(".") | join(" ") | title %}
+            {% set nameFromEmail = action.account.email.split("@")[0].split(".") | join(" ") | title %}
 
             <li class="timeline__event">
+                {% if action.comment %}
                 <h2 class="timeline__event-title govuk-heading-s">{% trans %}Comment added to this section{% endtrans %}</h2>
-                <span class="govuk-body">{% trans name=nameFromEmail %}{{ name }} on{% endtrans %} <time>{{ comment.created_at | dateformat }}</time></span>
+                {% else %}
+                <h2 class="timeline__event-title govuk-heading-s">{% trans %}This section was scored{% endtrans %} ({{ action.score }})</h2>
+                {% endif %}
+                <span class="govuk-body">{% trans name=nameFromEmail %}{{ name }} on{% endtrans %} <time>{{ action.created_at | dateformat }}</time></span>
                 <div class="timeline__content govuk-!-margin-top-2">
-                    <p class="govuk-body">{{ comment.comment }}</p>
+                    <p class="govuk-body">{{ action.comment or action.reason }}</p>
                 </div>
             </li>
             {% endfor %}
