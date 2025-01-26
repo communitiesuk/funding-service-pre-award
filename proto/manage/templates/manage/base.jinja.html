@@ -26,6 +26,7 @@
 {% set navigationItems = [
     {"href": url_for('proto_manage.platform.grants.index'), "text": "Grants", "active": active_navigation_tab == 'grants'},
     {"href": url_for('proto_manage.assess.route_grant_applications'), "text": "Applications", "active": active_navigation_tab == 'applications'},
+    {"href": "#", "text": "Recipients", "active": active_navigation_tab == 'recipients'},
     {"href": "#", "text": "Payments", "active": active_navigation_tab == 'payments'},
     {"href": "#", "text": "Reports", "active": active_navigation_tab == 'reports'},
 ] %}
