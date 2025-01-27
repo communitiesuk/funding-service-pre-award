@@ -12,7 +12,8 @@ grants_blueprint = Blueprint("grants", __name__)
 
 @grants_blueprint.context_processor
 def _grants_service_nav():
-    return dict(active_navigation_tab="grants")
+    # this shouldn't happen at blueprint level - sort it out
+    return dict(active_navigation_tab="grants", active_sub_navigation_tab="dashboard")
 
 
 @grants_blueprint.get("/")
@@ -71,6 +72,7 @@ def view_grant_configuration(grant_code):
         grant=grant,
         form=form,
         back_link=url_for("proto_manage.platform.grants.index"),
+        active_sub_navigation_tab="settings",
     )
 
 

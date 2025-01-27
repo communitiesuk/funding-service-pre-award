@@ -5,6 +5,7 @@
 
 {% block pageTitle %}{{ grant.name }} - {% trans %}Funding service{% endtrans %}{% endblock %}
 
+{% block beforeContent %}{% endblock %}
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -16,7 +17,7 @@
         </h1>
         {{ govukTag ({
             "text": _("Draft"),
-            "classes": "govuk-tag--grey" + (" govuk-!-margin-top-1" if not shouldInlineTag else "")
+            "classes": "govuk-tag--grey" + (" govuk-!-margin-top-1 govuk-!-margin-bottom-5" if not shouldInlineTag else "")
         }) }}
         {% if shouldInlineTag %}</div>{% endif %}
     </div>
@@ -28,7 +29,7 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-        <div class="govuk-heading-l govuk-!-margin-bottom-0">6</div>
+        <div class="govuk-heading-l govuk-!-margin-bottom-0">0</div>
         <div class="govuk-body">funding applications</div>
     </div>
     <div class="govuk-grid-column-one-third">
@@ -43,13 +44,20 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         {% set yourGrantsLinksHtml %}
-            <p class="govuk-body">You've got some links</p>
+            <p class="govuk-body">{% trans %}We've set up pages to let your fund team collect information from your users.{% endtrans %}</p>
+            <p class="govuk-body">{% trans %}You can preview these pages while you set up your fund. You can use share these links with your users and team for feedback.{% endtrans %}</p>
+
+            <p class="govuk-body govuk-!-margin-bottom-0">{% trans %}Appying for funding, or setting up an un-competed fund recipient profile.{% endtrans %}</p>
             {% set applyLink = url_for('proto_apply.grant_blueprint.grant_detail_handler', short_code=grant.short_name) %}
-            <a class="govuk-link govuk-link--no-visited-state" href="{{ applyLink }}">https://apply.communities.gov.uk/grant/{{ grant.short_name }}</a>
+            <a class="govuk-heading-s govuk-link govuk-link--no-visited-state" href="{{ applyLink }}">https://funding.communities.gov.uk/access/grant/{{ grant.short_name }}</a>
+
+            <p class="govuk-body govuk-!-margin-top-4 govuk-!-margin-bottom-0">{% trans %}Reporting on funding progress by submitting monitoring information.{% endtrans %}</p>
+            <a class="govuk-heading-s govuk-link govuk-link--no-visited-state" href="{{ applyLink }}">https://funding.communities.gov.uk/report/grant/{{ grant.short_name }}</a>
         {% endset %}
         {{ govukDetails({
             "summaryText": _("Your grants published links"),
-            "html": yourGrantsLinksHtml
+            "html": yourGrantsLinksHtml,
+            "classes": "govuk-!-margin-top-1"
         })}}
     </div>
 </div>
@@ -60,102 +68,61 @@
         <p class="govuk-body">{% trans link=uncompetedLink %}See guidance on {{ link }} to let your users set up grant recipient profiles.{% endtrans %}</p>
     </div>
 </div>
+
+{# [ (key, value, action, valueIsHtml) ] #}
+{% macro grantSummaryList(rows) %}
+    {% set summaryListRows = [] %}
+
+    {# cooked this up because there was quite a lot of custom styling being added to each row #}
+    {# note we only need padding on desktop, on mobile it gets very spaced out #}
+    {% for key, value, action, link in rows %}
+        {% set summaryListRows = summaryListRows.append({
+            "key": {
+                    "text": key,
+                    "classes": "govuk-!-padding-top-4 govuk-!-padding-bottom-4"
+                },
+                "value": { "text": value },
+                "actions": {
+                    "items": [
+                        { "text": action, "href": link, "classes": "govuk-link--no-visited-state" },
+                    ]
+                },
+        }) %}
+    {% endfor %}
+
+    {{ govukSummaryList({
+        "rows": summaryListRows
+    }) }}
+{% endmacro %}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <hr class="govuk-section-break govuk-section-break--visible">
 
-        {# note we only need padding on desktop, on mobile it gets very spaced out #}
-        {{ govukSummaryList({
-            "rows": [
-                {
-                    "key": {
-                        "text": _("Recipients"),
-                        "classes": "govuk-!-padding-top-4 govuk-!-padding-bottom-4"
-                    },
-                    "value": { "text": "0 awarded grant recipients" },
-                    "actions": {
-                        "items": [
-                            { "text": _("Manage"), "href": "#", "classes": "govuk-link--no-visited-state" },
-                        ]
-                    },
-                },
-                {
-                    "key": {
-                        "text": _("Application rounds"),
-                        "classes": "govuk-!-padding-top-4 govuk-!-padding-bottom-4"
-                    },
-                    "value": { "text": "Preview round open" },
-                    "actions": {
-                        "items": [
-                            { "text": _("Manage"), "href": "#", "classes": "govuk-link--no-visited-state" },
-                        ]
-                    }
-                },
-                {
-                    "key": {
-                        "text": _("Application information"),
-                        "classes": "govuk-!-padding-top-4 govuk-!-padding-bottom-4"
-                    },
-                    "value": { "text": "16 questions across 3 sections" },
-                    "actions": {
-                        "items": [
-                            { "text": _("Manage"), "href": "#", "classes": "govuk-link--no-visited-state" },
-                        ]
-                    },
-                    "classes": "govuk-!-padding-top-2 govuk-!-padding-bottom-2"
-                }
+        {% set rows = [
+            (_("Recipients"), "0 awarded grant recipients", _("Manage"), "#"),
+            (_("Application rounds"), "Preview round open", _("Manage"), url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name)),
+            (_("Application information"), "16 questions across 3 sections", _("Manage"), "#"),
+        ] %}
 
-            ]
-        }) }}
+        {{ grantSummaryList(rows) }}
     </div>
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-m">{% trans %}Monitoring and evaluation{% endtrans %}</h2>
-        {% set uncompetedLink %}<a class="govuk-link govuk-link--no-visited-state" href="#">{% trans %}un-competed grants{% endtrans %}</a>{% endset %}
-        <p class="govuk-body">{% trans link=uncompetedLink %}Competed grants must be awarded to applicants that have been scored. See guidance on {{ link }} to let your users set up grant recipient profiles without applying.{% endtrans %}</p>
+        <h2 class="govuk-heading-m govuk-!-margin-top-4">{% trans %}Monitoring and evaluation{% endtrans %}</h2>
     </div>
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <hr class="govuk-section-break govuk-section-break--visible">
 
-        {# note we only need padding on desktop, on mobile it gets very spaced out #}
-        {{ govukSummaryList({
-            "rows": [
-                {
-                    "key": { "text": _("Recipients") },
-                    "value": { "text": "0 awarded grant recipients" },
-                    "actions": {
-                        "items": [
-                            { "text": _("Manage"), "href": "#" },
-                        ]
-                    },
-                    "classes": "govuk-!-padding-top-2 govuk-!-padding-bottom-2"
-                },
-                {
-                    "key": { "text": _("Application rounds") },
-                    "value": { "text": "Preview round open" },
-                    "actions": {
-                        "items": [
-                            { "text": _("Manage"), "href": "#" },
-                        ]
-                    },
-                    "classes": "govuk-!-padding-top-2 govuk-!-padding-bottom-2"
-                },
-                {
-                    "key": { "text": _("Application information") },
-                    "value": { "text": "16 questions across 3 sections" },
-                    "actions": {
-                        "items": [
-                            { "text": _("Manage"), "href": "#" },
-                        ]
-                    },
-                    "classes": "govuk-!-padding-top-2 govuk-!-padding-bottom-2"
-                }
+        {% set rows = [
+            (_("Monitoring rounds"), "No open rounds", _("Manage"), "#"),
+            (_("Monitoring information"), "No monitoring questions", _("Manage"), "#"),
+        ] %}
 
-            ]
-        }) }}
+        {{ grantSummaryList(rows) }}
     </div>
 </div>
 {% endblock %}

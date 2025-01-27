@@ -5,6 +5,7 @@
 {% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
 {% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
 {% from "govuk_frontend_jinja/components/pagination/macro.html" import govukPagination %}
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
 
 {% from "form_runner/application_status.html" import applicationStatus %}
 
@@ -25,12 +26,22 @@
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-l">{% trans %}Applications for funding{% endtrans %}</h1>
+
+        <div class="fs-align-status-tag">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
+                {% trans %}Applications for funding{% endtrans %}
+            </h1>
+            {{ govukTag ({
+                "text": _("Test"),
+                "classes": "govuk-tag--grey govuk-!-margin-top-1"
+            }) }}
+        </div>
+
 
         {# just a little thing but presume we should do our best to check against actual enum values - this feels dumb #}
         {% if grant.funding_type.name == "COMPETITIVE" %}
-        <p class="govuk-body">
-            {% trans name=grant.name%}{{ name }} is a competed grant, you will only see applications your users have submitted.{% endtrans %}
+        <p class="govuk-body govuk-!-margin-top-6">
+            {% trans name=grant.name%}As a competed grant, you will only see applications your users have submitted.{% endtrans %}
         </p>
         {% endif %}
     </div>
