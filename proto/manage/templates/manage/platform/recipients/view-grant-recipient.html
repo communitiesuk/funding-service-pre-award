@@ -1,0 +1,36 @@
+{% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+
+{% extends "manage/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}Grant recipients{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{{ govukBreadcrumbs({
+    "items": [
+    { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
+    { "text": "Recipients", "href": url_for('proto_manage.platform.recipients.index') },
+    { "text": "Bolton Council", "href": "#" }
+    ]
+})}}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Bolton Council</h1>
+  </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      {{ govukSummaryList({
+          "rows": [
+              { "key": { "text": _("Funding allocated") }, "value": { "text": "£0" }, "actions": {"items": [{"href": "#", "text": "Change"}] } },
+              { "key": { "text": _("Funding paid") }, "value": { "text": "£0" }, "actions": {"items": [{"href": "#", "text": "Make a payment"}] } },
+              { "key": { "text": _("Projects") }, "value": { "html": "Rebuilding the local chapel<br>Carrying hedgehogs across the road" }, "actions": {"items": [{"href": "#", "text": "Manage"}] } },
+          ]
+      })}}
+  </div>
+</div>
+{% endblock %}

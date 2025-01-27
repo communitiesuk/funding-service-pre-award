@@ -1,0 +1,131 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
+{% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
+{% from "govuk_frontend_jinja/components/pagination/macro.html" import govukPagination %}
+
+{% extends "manage/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}Grant recipients{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{{ govukBreadcrumbs({
+    "items": [
+    { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
+    { "text": "Recipients", "href": "#" }
+    ]
+})}}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Grant recipients</h1>
+  </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <div class="assess-filter">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    <div>
+                        {% set referenceHint %}<span class="govuk-body-s">Enter full or partial local authority name</span>{% endset %}
+                        {{ govukInput({
+                            "label": {
+                                "text": _("Local authority"),
+                                "classes": "govuk-!-font-weight-bold govuk-!-font-size-16"
+                            },
+                            "hint": {
+                                "html": referenceHint,
+                            }
+                        }) }}
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div>
+                        {% set statusHint %}<span class="govuk-body-s">Select an option</span>{% endset %}
+                        {{ govukSelect({
+                            "label": {
+                                "text": _("Funding status"),
+                                "classes": "govuk-!-font-weight-bold govuk-!-font-size-16"
+                            },
+                            "hint": {
+                                "html": statusHint
+                            },
+                            "items": [
+                                { "value": "all", "text": "All" },
+                                { "value": "active", "text": "Active" },
+                                { "value": "completed", "text": "Completed" },
+                            ]
+                        }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    {{ govukButton({
+                        "text": "Filter",
+                        "classes": "govuk-!-margin-bottom-1"
+                    }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-top-6">
+    <div class="govuk-grid-column-full">
+        <p class="govuk-body">
+            {{ recipients | length }} {% trans %}recipients{% endtrans %}.
+        </p>
+
+        <div class="govuk-button-group">
+
+          <a href="{{ url_for('proto_manage.platform.recipients.choose_new_recipient_flow', short_code=grant.short_name) }}" class="govuk-button govuk-button--secondary">Setup a new grant recipient</a>
+
+          {% if recipients %}
+              <a class="govuk-body govuk-link govuk-link--no-visited-state" href="#">{% trans %}Download recipients as CSV{% endtrans %}</a>
+          {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-top-4">
+    <div class="govuk-grid-column-full">
+        {% if recipients %}
+            {% set rows = [] %}
+            {% for recipient in recipients %}
+                {% set referenceLink %}
+                <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.recipients.view_grant_recipient', short_code=grant.short_name, recipient_id=recipient.id) }}">Bolton Council</a>
+                {% endset %}
+                {% set rows = rows.append([
+                    { "html": referenceLink },
+                    { "text": recipient.status.value },
+                    { "html": "£0" },
+                    { "html": "£0" },
+                    { "text": 'N/A' }
+                ]) %}
+            {% endfor %}
+            {{ govukTable({
+                "head": [
+                    { "text": _("Local authority") },
+                    { "text": _("Status") },
+                    { "text": _("Funding allocated") },
+                    { "text": _("Funding paid") },
+                    { "text": _("Last monitoring report") },
+                ],
+                "rows": rows,
+            }) }}
+
+            {{ govukPagination({
+                "items": [
+                    { "number": 1, "href": "#", "current": true }
+                ]
+            })}}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

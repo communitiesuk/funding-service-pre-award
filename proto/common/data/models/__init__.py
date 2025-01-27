@@ -29,3 +29,4 @@ from proto.common.data.models.data_collection import (  # noqa
     ProtoDataCollectionDefinitionSection as ProtoDataCollectionDefinitionSection,
 )
 from proto.common.data.models.reports import ProtoReport as ProtoReport  # noqa
+from proto.common.data.models.recipients import ProtoGrantRecipient as ProtoGrantRecipient  # noqa

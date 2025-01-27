@@ -1,0 +1,38 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
+{% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
+{% from "govuk_frontend_jinja/components/pagination/macro.html" import govukPagination %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+
+{% extends "manage/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}Grant recipients{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+{{ govukBackLink({'href': url_for("proto_manage.platform.recipients.index"), 'text': 'Back'}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if form.errors %}
+        {{ govukErrorSummary(wtforms_errors(form)) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l">Setup new grant recipient</h1>
+  </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        {{ form.flow }}
+        {{ form.submit }}
+      </form>
+  </div>
+</div>
+{% endblock %}
