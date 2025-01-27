@@ -16,6 +16,7 @@ from sqlalchemy.sql.expression import Select
 
 from pre_award.application_store.db.exceptions import ApplicationError, SubmitError
 from pre_award.application_store.db.models import Applications
+from pre_award.application_store.db.models.application.enums import Status
 from pre_award.application_store.db.models.application.enums import Status as ApplicationStatus
 from pre_award.application_store.db.models.forms.enums import Status as FormStatus
 from pre_award.application_store.db.schemas import ApplicationSchema
@@ -46,6 +47,14 @@ def get_application(app_id, include_forms=False, as_json=False) -> dict | Applic
         return json_row
     else:
         return row
+
+
+def get_incomplete_applications_for_round(round_id: str):
+    stmt = select(Applications).where(
+        Applications.status.in_([Status.IN_PROGRESS, Status.NOT_STARTED, Status.COMPLETED]),
+        Applications.round_id == str(round_id),
+    )
+    return db.session.scalars(stmt).all()
 
 
 def get_applications(filters=None, include_forms=False, as_json=False) -> list[dict] | list[Applications]:

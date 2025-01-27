@@ -11,7 +11,10 @@ from invoke import task
 from app import create_app
 from pre_award.account_store.db.models.queries import get_email_address, set_application_reminder_sent
 from pre_award.account_store.tasks import seed_local_account_store_impl
-from pre_award.application_store.db.queries.application.queries import search_applications
+from pre_award.application_store.db.queries.application.queries import (
+    get_incomplete_applications_for_round,
+    search_applications,
+)
 from pre_award.assessment_store.tasks.db_tasks import seed_assessment_store_db_impl
 from pre_award.fund_store.db.models import Round
 from pre_award.fund_store.db.queries import (
@@ -140,6 +143,7 @@ def reminder_emails(c):
             r for r in rounds_with_reminder_today if not r.application_reminder_sent
         ]
         for r in rounds_with_unsent_application_reminders:
+            get_incomplete_applications_for_round(r.id)  # TODO: Use this instead of search_applications
             non_submitted_applications = search_applications(
                 round_id=str(r.id), status_only=["IN_PROGRESS", "NOT_STARTED", "COMPLETED"], forms=False
             )
