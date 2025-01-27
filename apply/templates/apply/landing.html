@@ -4,9 +4,6 @@
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 
 
-
-{% block pageTitle %}Apply for a grant{% endblock %}
-
 {% block content %}
 
       <div class="govuk-grid-row">
@@ -56,7 +53,7 @@
                 </p>
             {% endif %}
             {{ govukButton({
-                "isStartButton": True,
+                "isStartButton": true,
                 "href" : url_for("magic_links_bp.new", fund=fund.short_name, round=round.short_name),
                 "text": gettext("Enter your email address")
             }) }}
