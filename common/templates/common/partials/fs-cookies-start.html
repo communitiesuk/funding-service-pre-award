@@ -26,6 +26,7 @@
             "html": acceptHtml,
             "actions": [
                 {
+                    "attributes": {"id": "hide-cookies-btn"},
                     "text": gettext("Hide cookie message"),
                     "type": "submit",
                     "name": "cookies-hide-btn",
@@ -42,15 +43,16 @@
     "attributes": {"id": "cookies-denied-banner"},
     "messages": [
         {
-        "html": denyHtml,
-        "actions": [
-            {
-                "text": gettext("Hide cookie message"),
-                "type": "submit",
-                "name": "cookies-hide-btn",
-                "value": "yes"
-            }
-            ]
+            "html": denyHtml,
+            "actions": [
+                {
+                    "attributes": {"id": "hide-cookies-btn"},
+                    "text": gettext("Hide cookie message"),
+                    "type": "submit",
+                    "name": "cookies-hide-btn",
+                    "value": "yes"
+                }
+                ]
         }
     ]
     })
