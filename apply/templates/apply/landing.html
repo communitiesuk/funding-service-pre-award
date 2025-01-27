@@ -2,6 +2,10 @@
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 {% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% block head %}
+    {{super()}}
+  <link rel="stylesheet" href="{{ url_for('static', filename='fs/styles/apply.css' ) }}"> </link>
+{% endblock head %}
 
 {% block pageTitle %}
   {% if round.is_expression_of_interest %}
@@ -52,7 +56,7 @@
             </p>
             {% endif %}
             <p class="govuk-body">
-                {% trans %}<a class="govuk-link" href="{{ prospectus_link }}">Read the fund's prospectus</a> before you start.{% endtrans %}
+                {% trans prospectus_link=round.prospectus %}<a class="govuk-link" href="{{ prospectus_link }}">Read the fund's prospectus</a> before you start.{% endtrans %}
             </p>
             {% if not round.is_expression_of_interest %}
                 <p class="govuk-body">

@@ -26,10 +26,8 @@
 {# Run JavaScript at end of the
 
 <body>, to avoid blocking the initial render. #}
-  <script nonce="{{ csp_nonce() }}" type="module">
-    import { initAll } from "{{ url_for('static', filename='fs/govuk-frontend-4.7.0.min.js') }}"
-    initAll()
-  </script>
+  <script src="{{ url_for('static', filename='apply/govuk-frontend-4.0.0.min.js') }}"> </script>
+  <script>window.GOVUKFrontend.initAll()</script>
     <!-- Google Tag Manager -->
   <script nonce="{{ csp_nonce() }}">(function (w, d, s, l, i) {
       w[l] = w[l] || [];

@@ -13,7 +13,13 @@
 
 {% set serviceName = get_service_title() %}
 
-
+{% block pageTitle %}
+  {% if round.is_expression_of_interest %}
+      {% trans %}Start or continue an{% endtrans %} {{ fund.title }}
+  {% else %}
+      {% trans %}Start or continue an application for{% endtrans %} {{ fund.title }}
+  {% endif %}
+{% endblock pageTitle %}
 
 
 {% block skipLink %}

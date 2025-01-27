@@ -254,6 +254,16 @@ def build_monolith_assets(static_dist_root="static/fs", remove_existing=False) -
     os.remove(ZIP_FILE)
     static_assets.build_bundles(static_folder="static")
 
+    # Copy custom css
+
+    # Copy css
+    print("Copying custom CSS")
+    os.makedirs("./static/fs/styles")
+    shutil.copyfile(
+        "apply/static/src/styles/apply.css",
+        "./static/fs/styles/apply.css",
+    )
+
 
 if __name__ == "__main__":
     build_apply_assets()
