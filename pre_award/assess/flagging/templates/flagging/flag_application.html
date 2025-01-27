@@ -1,5 +1,6 @@
 {% extends "assess/base.html" %}
 {% from "assess/macros/theme.html" import theme %}
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
 {% from "govuk_frontend_jinja/components/label/macro.html" import govukLabel %}
 {%- from "govuk_frontend_jinja/components/table/macro.html" import govukTable -%}
 {%- from "govuk_frontend_jinja/components/fieldset/macro.html" import govukFieldset -%}
@@ -274,10 +275,14 @@
                                 data-qa="submit-flag-button">
                             Submit
                         </button>
-                        <a href="{{ url_for('assessment_bp.application', application_id=application_id)}}"
-                            class="govuk-button secondary-button">
-                            Cancel
-                        </a>
+                        {% set cancel_flag_url = url_for(
+                            'assessment_bp.application', application_id=application_id
+                        ) %}
+                        {{ govukButton({
+                            "text": "Cancel",
+                            "classes": "govuk-button--secondary",
+                            "href": cancel_flag_url
+                        }) }}
                     </div>
                 </form>
             </div>
