@@ -1,0 +1,22 @@
+services:
+  pre-award:
+    build:
+      context: .
+    volumes:
+      - .:/workspace:cached
+    command: sleep infinity
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/pre-award
+      - DATABASE_URL_UNIT_TEST=postgresql://postgres:password@db:5432/pre-award_unit_test
+      - SECRET_KEY=local
+      - FLASK_ENV=development
+      - REDIS_INSTANCE_URI=redis://redis-data:6379
+
+  db:
+    image: postgres
+    environment:
+     - POSTGRES_PASSWORD=password
+  redis-data:
+    image: redis
+    ports:
+      - 6379:6379
