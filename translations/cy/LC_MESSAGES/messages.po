@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-15 14:26+0000\n"
+"POT-Creation-Date: 2025-01-27 11:56+0000\n"
 "PO-Revision-Date: 2022-10-25 16:55+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: cy\n"
@@ -19,68 +19,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: app.py:368
+#: app.py:368 pre_award/apply/default/application_routes.py:348
 msgid "Apply for"
 msgstr "Gwneud cais am"
 
-#: app.py:376
+#: app.py:376 pre_award/apply/templates/apply/base.html:4
+#: pre_award/authenticator/frontend/templates/authenticator/base.html:5
 msgid "Access Funding"
 msgstr "Cael Mynediad at Gyllid"
 
-#: frontend/templates/page-template.jinja.html:30
-msgid "You've accepted analytics cookies. You can"
-msgstr "Rydych wedi derbyn cwcis dadansoddeg. Gallwch"
+#: apply/templates/apply/apply-base.html:60
+#: pre_award/apply/templates/apply/header.html:34
+msgid "View all applications"
+msgstr ""
 
-#: frontend/templates/page-template.jinja.html:31
-#: frontend/templates/page-template.jinja.html:37
-msgid "change your cookie settings"
-msgstr "newid eich gosodiadau cwcis"
+#: apply/templates/apply/apply-base.html:67
+#: pre_award/apply/templates/apply/header.html:41
+msgid "Sign out"
+msgstr ""
 
-#: frontend/templates/page-template.jinja.html:32
-#: frontend/templates/page-template.jinja.html:38
-msgid "at any time."
-msgstr "unrhyw bryd."
-
-#: frontend/templates/page-template.jinja.html:36
-msgid "You've rejected analytics cookies. You can"
-msgstr "Rydych wedi gwrthod cwcis dadansoddeg. Gallwch"
-
-#: frontend/templates/page-template.jinja.html:141
+#: apply/templates/apply/apply-base.html:90
+#: pre_award/apply/templates/apply/header.html:57
+#: pre_award/authenticator/frontend/templates/authenticator/header.html:36
 msgid "This is a new service."
 msgstr "Gwasanaeth newydd yw hwn."
 
-#: frontend/templates/page-template.jinja.html:162
+#: apply/templates/apply/apply-base.html:106
+#: pre_award/apply/templates/apply/footer.html:10
+#: pre_award/authenticator/frontend/templates/authenticator/footer.html:9
 msgid "Privacy"
 msgstr "Preifatrwydd"
 
-#: frontend/templates/page-template.jinja.html:166
+#: apply/templates/apply/apply-base.html:110
+#: pre_award/apply/templates/apply/footer.html:15
+#: pre_award/authenticator/frontend/templates/authenticator/footer.html:14
 msgid "Cookies"
 msgstr "Cwcis"
 
-#: frontend/templates/page-template.jinja.html:170
+#: apply/templates/apply/apply-base.html:114
+#: pre_award/apply/templates/apply/footer.html:19
+#: pre_award/authenticator/frontend/templates/authenticator/footer.html:18
 msgid "Accessibility Statement"
 msgstr "Datganiad Hygyrchedd"
 
-#: frontend/templates/page-template.jinja.html:174
+#: apply/templates/apply/apply-base.html:118
+#: pre_award/apply/templates/apply/500.html:12
+#: pre_award/apply/templates/apply/footer.html:23
+#: pre_award/authenticator/frontend/templates/authenticator/500.html:11
+#: pre_award/authenticator/frontend/templates/authenticator/footer.html:22
 msgid "Contact us"
 msgstr "Cysylltwch â ni"
 
-#: frontend/templates/apply/landing-mono.html:24
+#: apply/templates/apply/landing.html:12
 #, python-format
 msgid "Start or continue an application for %(fund_title)s"
 msgstr "Gwneud cais am %(fund_title)s"
 
-#: frontend/templates/apply/landing-mono.html:29
+#: apply/templates/apply/landing.html:17
 #, python-format
 msgid "Window closed - %(fund_round_names)s"
 msgstr "Ffenestr ar gau - %(fund_round_names)s"
 
-#: frontend/templates/apply/landing-mono.html:31
+#: apply/templates/apply/landing.html:19
 #, python-format
 msgid "Closed: %(closed_date)s"
 msgstr ""
 
-#: frontend/templates/apply/landing-mono.html:33
+#: apply/templates/apply/landing.html:21
+#: pre_award/apply/templates/apply/partials/round_closed_warning.html:23
 msgid ""
 "You can no longer submit applications in this window. Any you had in "
 "progress will be\n"
@@ -89,11 +95,14 @@ msgstr ""
 "Ni allwch gyflwyno ceisiadau yn y ffenestr hon mwyach. Bydd unrhyw un "
 "oedd gennych ar y gweill yn cael ei e-bostio atoch."
 
-#: frontend/templates/apply/landing-mono.html:38
+#: apply/templates/apply/landing.html:26
+#: pre_award/apply/templates/apply/partials/round_closed_warning.html:6
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:29
 msgid "Important"
 msgstr "Pwysig"
 
-#: frontend/templates/apply/landing-mono.html:44
+#: apply/templates/apply/landing.html:32
+#: pre_award/apply/templates/apply/partials/available_in_language.html:3
 #, python-format
 msgid ""
 " This service is also available <a href=\"%(url)s\" class=\"govuk-"
@@ -102,40 +111,4154 @@ msgstr ""
 "Mae'r gwasanaeth yma hefyd ar gael <a href=\"%(url)s\" class=\"govuk-"
 "link\">yn Saesneg (English)"
 
-#: frontend/templates/apply/landing-mono.html:60
+#: apply/templates/apply/landing.html:48
 #, python-format
 msgid ""
 "<a class=\"govuk-link\" href=\"%(prospectus_link)s\">Read the fund's "
 "prospectus</a> before you start."
-msgstr "<a class=\"govuk-link\" href=\"%(prospectus_link)s\">Darllenwch brosbectws "
-"y gronfa</a> cyn dechrau."
+msgstr ""
+"<a class=\"govuk-link\" href=\"%(prospectus_link)s\">Darllenwch "
+"brosbectws y gronfa</a> cyn dechrau."
 
-#: frontend/templates/apply/landing-mono.html:64
+#: apply/templates/apply/landing.html:52
+#: pre_award/apply/templates/apply/fund_start_page.html:58
+#: pre_award/apply/templates/apply/tasklist.html:127
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:20
 msgid "Submission deadline:"
 msgstr "Dyddiad cau cyflwyno:"
 
-#: frontend/templates/apply/landing-mono.html:70
+#: apply/templates/apply/landing.html:58
+#: pre_award/apply/templates/apply/fund_start_page.html:66
 msgid "Enter your email address"
 msgstr "Nodwch eich cyfeirad e-bost"
 
-#: frontend/templates/apply/landing-mono.html:72
+#: apply/templates/apply/landing.html:60
+#: pre_award/apply/templates/apply/fund_start_page.html:70
+#: pre_award/apply/templates/apply/tasklist.html:93
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:72
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:73
 msgid "Get help"
 msgstr "Cael help"
 
-#: frontend/templates/apply/landing-mono.html:74
+#: apply/templates/apply/landing.html:62
 #, python-format
 msgid ""
 "If you need help, contact us through our <a class=\"govuk-link\" "
 "href=\"%(support_desk_apply)s\" target=\"_blank\">support desk</a>"
 msgstr ""
 
-#: frontend/templates/apply/landing-mono.html:77
+#: apply/templates/apply/landing.html:65
 msgid ""
 "Do not send any applications or attachments from the service desk portal."
 " We'll only accept applications through this service."
 msgstr ""
 "Peidwch ag anfon unrhyw geisadau neu atodiadau dros e-bost. Byddwn yn "
 "derbyn ceisiadau drwy'r gwasanaeth hon yn unig."
+
+#: common/templates/common/partials/fs-cookies-start.html:3
+#: pre_award/apply/templates/apply/head.html:37
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:37
+msgid "You've accepted analytics cookies. You can"
+msgstr "Rydych wedi derbyn cwcis dadansoddeg. Gallwch"
+
+#: common/templates/common/partials/fs-cookies-start.html:4
+#: common/templates/common/partials/fs-cookies-start.html:10
+#: pre_award/apply/templates/apply/head.html:38
+#: pre_award/apply/templates/apply/head.html:53
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:38
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:53
+msgid "change your cookie settings"
+msgstr "newid eich gosodiadau cwcis"
+
+#: common/templates/common/partials/fs-cookies-start.html:5
+#: common/templates/common/partials/fs-cookies-start.html:11
+#: pre_award/apply/templates/apply/head.html:38
+#: pre_award/apply/templates/apply/head.html:53
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:38
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:53
+msgid "at any time."
+msgstr "unrhyw bryd."
+
+#: common/templates/common/partials/fs-cookies-start.html:9
+#: pre_award/apply/templates/apply/head.html:52
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:52
+msgid "You've rejected analytics cookies. You can"
+msgstr "Rydych wedi gwrthod cwcis dadansoddeg. Gallwch"
+
+#: common/templates/common/partials/fs-cookies-start.html:16
+#: pre_award/apply/templates/apply/head.html:18
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:18
+msgid "We use some essential cookies to make this service work."
+msgstr "Rydym yn defnyddio rhai cwcis hanfodol i wneud i'r gwasanaeth hwn weithio."
+
+#: common/templates/common/partials/fs-cookies-start.html:17
+#: pre_award/apply/templates/apply/head.html:19
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:19
+msgid ""
+"We'd also like to use analytics cookies so we can understand how you use "
+"the service and make improvements."
+msgstr ""
+"Hoffem ddefnyddio cwcis dadansoddeg hefyd fel y gallwn ddeall sut rydych "
+"yn defnyddio'r gwasanaeth a gwneud gwelliannau."
+
+#: common/templates/common/partials/fs-cookies-start.html:21
+#: common/templates/common/partials/fs-cookies-start.html:40
+#: common/templates/common/partials/fs-cookies-start.html:59
+#: common/templates/common/partials/fs-cookies-start.html:64
+#: pre_award/apply/templates/apply/head.html:16
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:16
+msgid "Cookies on Access Funding"
+msgstr "Cael Mynediad at Gyllid"
+
+#: common/templates/common/partials/fs-cookies-start.html:29
+#: common/templates/common/partials/fs-cookies-start.html:48
+#: pre_award/apply/templates/apply/head.html:44
+#: pre_award/apply/templates/apply/head.html:59
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:44
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:59
+msgid "Hide cookie message"
+msgstr "Cuddio'r neges ynghylch cwcis"
+
+#: common/templates/common/partials/fs-cookies-start.html:69
+#: pre_award/apply/templates/apply/head.html:25
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:25
+msgid "Accept analytics cookies"
+msgstr "Derbyn cwcis dadansoddeg"
+
+#: common/templates/common/partials/fs-cookies-start.html:76
+#: pre_award/apply/templates/apply/head.html:28
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:28
+msgid "Reject analytics cookies"
+msgstr "Gwrthod cwcis dadansoddeg"
+
+#: common/templates/common/partials/fs-cookies-start.html:82
+#: pre_award/apply/templates/apply/head.html:30
+#: pre_award/authenticator/frontend/templates/authenticator/head.html:30
+msgid "View cookies"
+msgstr "Gweld cwcis"
+
+#: pre_award/apply/filters.py:15 pre_award/apply/filters.py:62
+#: pre_award/apply/filters.py:92
+#: pre_award/authenticator/frontend/magic_links/filters.py:9
+msgid "at"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:14
+#: pre_award/apply/templates/apply/feedback_generic_survey.html:34
+msgid "How easy did you find it to complete this section?"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:16 pre_award/apply/forms/feedback.py:86
+msgid "Very easy"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:17 pre_award/apply/forms/feedback.py:87
+msgid "Easy"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:20 pre_award/apply/forms/feedback.py:90
+msgid "Neither easy nor difficult"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:22 pre_award/apply/forms/feedback.py:92
+msgid "Difficult"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:23 pre_award/apply/forms/feedback.py:93
+msgid "Very difficult"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:25 pre_award/apply/forms/feedback.py:51
+msgid "Explain why you chose this score (optional)"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:26 pre_award/apply/forms/feedback.py:52
+#: pre_award/apply/forms/feedback.py:74 pre_award/apply/forms/feedback.py:95
+msgid "Select a score"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:43
+msgid "How was your overall application experience?"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:45
+msgid "Very good"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:46
+msgid "Good"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:47
+msgid "Average"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:48
+msgid "Poor"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:49
+msgid "Very poor"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:60
+msgid ""
+"To what extent do you agree that this application form allowed you to "
+"demonstrate why your organization should receive funding?"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:65
+msgid "Strongly agree"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:66
+msgid "Agree"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:69
+msgid "Neither agree nor disagree"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:71
+msgid "Disagree"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:72
+msgid "Strongly disagree"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:82
+msgid "How easy was it to understand the eligibility criteria for this fund?"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:103
+msgid "Number of hours spent:"
+msgstr ""
+
+#: pre_award/apply/forms/feedback.py:105
+msgid "Enter a number only. The number must be at least 0.5 or greater."
+msgstr ""
+
+#: pre_award/apply/forms/research.py:16
+msgid "I agree to be contacted for research purposes"
+msgstr ""
+
+#: pre_award/apply/forms/research.py:17
+msgid "I do not want to be contacted for research purposes"
+msgstr ""
+
+#: pre_award/apply/models/language.py:5
+msgid "English"
+msgstr ""
+
+#: pre_award/apply/models/language.py:5
+msgid "Welsh"
+msgstr ""
+
+#: pre_award/apply/models/statuses.py:6
+msgid "Not Started"
+msgstr ""
+
+#: pre_award/apply/models/statuses.py:7
+msgid "In Progress"
+msgstr ""
+
+#: pre_award/apply/models/statuses.py:8
+msgid "Completed"
+msgstr ""
+
+#: pre_award/apply/models/statuses.py:9
+msgid "Submitted"
+msgstr ""
+
+#: pre_award/apply/models/statuses.py:10
+msgid "Not Submitted"
+msgstr ""
+
+#: pre_award/apply/models/statuses.py:11
+msgid "Ready to Submit"
+msgstr ""
+
+#: pre_award/apply/templates/apply/500.html:3
+#: pre_award/authenticator/frontend/templates/authenticator/500.html:3
+#: pre_award/authenticator/frontend/templates/authenticator/500.html:8
+msgid "Sorry, there is a problem with the service"
+msgstr ""
+
+#: pre_award/apply/templates/apply/500.html:9
+#: pre_award/authenticator/frontend/templates/authenticator/500.html:9
+msgid "Try again later."
+msgstr ""
+
+#: pre_award/apply/templates/apply/500.html:12
+#: pre_award/authenticator/frontend/templates/authenticator/500.html:11
+msgid "if you have any questions."
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:2
+#, fuzzy
+msgid "Accessibility statement"
+msgstr "Datganiad Hygyrchedd"
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:13
+msgid ""
+"The Department for Levelling Up, Housing and Communities is committed to "
+"making our online services accessible to all users by meeting"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:15
+msgid ""
+"The Public Sector Bodies (Websites and Mobile Applications) (No. 2) "
+"Accessibility Regulations 2018"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:16
+msgid ""
+"This accessibility statement applies to content on the access-"
+"funding.levellingup.gov.uk domain and the following services:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:19
+msgid "Community Ownership Fund online application"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:20
+msgid "Night Shelter Transformation Fund online application"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:24
+msgid "Compliance status"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:25
+msgid ""
+"The Access Funding online application website is fully compliant with the"
+" Web Content Accessibility Guidelines version 2.1 AA standard."
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:27
+#, fuzzy
+msgid "Preparation of this accessibility statement"
+msgstr "Datganiad Hygyrchedd"
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:28
+msgid ""
+"This statement was prepared in November 2022 and was last updated on 7th "
+"February 2023 following an accessibility audit carried out by"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:29
+msgid "The Digital Accessibility Centre (DAC)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:30
+msgid ""
+"additional manual testing and our responses to the findings of these "
+"activities."
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:31
+msgid "Feedback and contact information"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:32
+msgid ""
+"If you find any problems that are not listed on this page or you think "
+"we’re not meeting the accessibility requirements,"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:33
+#, fuzzy
+msgid "contact us"
+msgstr "Cysylltwch â ni"
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:34
+msgid "Enforcement procedure"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:35
+msgid ""
+"The Equality and Human Rights Commission (EHRC) is responsible for "
+"enforcing the Public Sector Bodies (Websites and Mobile Applications) "
+"(No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’)."
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:36
+msgid "If you’re not happy with how we respond to your complaint,"
+msgstr ""
+
+#: pre_award/apply/templates/apply/accessibility_statement.html:37
+msgid "contact the Equality Advisory and Support Service (EASS)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/application_submitted.html:4
+#: pre_award/apply/templates/apply/eoi_submitted.html:6
+msgid "Application complete"
+msgstr ""
+
+#: pre_award/apply/templates/apply/application_submitted.html:18
+#: pre_award/apply/templates/apply/eoi_submitted.html:19
+msgid "Your reference number"
+msgstr ""
+
+#: pre_award/apply/templates/apply/application_submitted.html:22
+msgid "We have sent you a confirmation email and a copy of your answers to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/application_submitted.html:24
+#: pre_award/apply/templates/apply/eoi_submitted.html:24
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:33
+msgid "What happens next"
+msgstr "Beth sy'n digwydd nesaf"
+
+#: pre_award/apply/templates/apply/application_submitted.html:27
+msgid "Your application to the"
+msgstr ""
+
+#: pre_award/apply/templates/apply/application_submitted.html:27
+msgid "has been submitted."
+msgstr ""
+
+#: pre_award/apply/templates/apply/application_submitted.html:30
+msgid "We'll email you to let you know whether you have been successful."
+msgstr ""
+
+#: pre_award/apply/templates/apply/application_submitted.html:33
+msgid "Return to your applications page."
+msgstr ""
+
+#: pre_award/apply/templates/apply/contact_us.html:7
+msgid "Get help with your application"
+msgstr ""
+
+#: pre_award/apply/templates/apply/contact_us.html:16
+#, fuzzy
+msgid "Contact"
+msgstr "Cysylltwch â ni"
+
+#: pre_award/apply/templates/apply/contact_us.html:18
+#, fuzzy
+msgid "Contact page"
+msgstr "Cysylltwch â ni"
+
+#: pre_award/apply/templates/apply/contact_us.html:26
+msgid "Contact us if you have any questions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/cookie_policy.html:147
+msgid "Do you want to accept analytics cookies?"
+msgstr "Ydych chi am dderbyn cwcis dadansoddol?"
+
+#: pre_award/apply/templates/apply/cookie_policy.html:160
+msgid "Yes"
+msgstr ""
+
+#: pre_award/apply/templates/apply/cookie_policy.html:160
+msgid "No"
+msgstr ""
+
+#: pre_award/apply/templates/apply/cookie_policy.html:164
+#, fuzzy
+msgid "Save cookie settings"
+msgstr "newid eich gosodiadau cwcis"
+
+#: pre_award/apply/templates/apply/dashboard_all.html:12
+msgid "All applications"
+msgstr ""
+
+#: pre_award/apply/templates/apply/dashboard_all.html:25
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:32
+msgid "You have started"
+msgstr ""
+
+#: pre_award/apply/templates/apply/dashboard_all.html:25
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:32
+#, python-format
+msgid " %(application_count)s application"
+msgid_plural "%(application_count)s applications"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+
+#: pre_award/apply/templates/apply/dashboard_all.html:25
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:32
+#, fuzzy
+msgid "using this email address"
+msgstr "Nodwch eich cyfeirad e-bost"
+
+#: pre_award/apply/templates/apply/dashboard_all.html:36
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:18
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:43
+#: pre_award/apply/templates/apply/tasklist.html:26
+msgid "Expression of interest"
+msgstr ""
+
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:16
+msgid "Your applications for"
+msgstr ""
+
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:51
+msgid "Deadline for applications: "
+msgstr ""
+
+#: pre_award/apply/templates/apply/eligibility_result.html:5
+msgid "You can apply for this funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eligibility_result.html:7
+#: pre_award/apply/templates/apply/tasklist.html:8
+msgid "Back to your applications"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eligibility_result.html:14
+msgid "Based on your answers, you can apply for "
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/cy/cof-eoi_r1_all_questions_cy.html:10
+#: pre_award/apply/templates/apply/all_questions/cy/cof25-eoi_r1_all_questions_cy.html:11
+#: pre_award/apply/templates/apply/all_questions/cy/cof25_r1_all_questions_cy.html:11
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r3w3_all_questions_cy.html:10
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r4w1_all_questions_cy.html:11
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r4w2_all_questions_cy.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof-eoi_r1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof25-eoi_r1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof25_r1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof_r3w3_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof_r4w1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof_r4w2_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/ctdf_cr1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cyp_r1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/dpif_r2_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/dpif_r3_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/ffw_aor1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/gbrf_r1_all_questions_en.html:10
+#: pre_award/apply/templates/apply/all_questions/en/lpdf_r1_all_questions_en.html:10
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:10
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:10
+#: pre_award/apply/templates/apply/eligibility_result.html:14
+#, python-format
+msgid "%(fund_title)s"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_1.html:7
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_2.html:7
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_3.html:7
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_4.html:7
+#: pre_award/apply/templates/apply/end_of_application_survey.html:6
+#: pre_award/apply/templates/apply/feedback_generic_survey.html:7
+#: pre_award/apply/templates/apply/research_contact_details.html:6
+#: pre_award/apply/templates/apply/research_opt_in.html:6
+#: pre_award/apply/templates/apply/section_feedback_intro.html:7
+msgid "Go back to application overview"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_1.html:22
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_2.html:22
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_3.html:21
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_4.html:23
+#: pre_award/apply/templates/apply/end_of_application_survey.html:20
+#: pre_award/apply/templates/apply/tasklist.html:198
+#: pre_award/apply/templates/apply/tasklist.html:207
+msgid "Applicant feedback survey"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_1.html:25
+msgid "1 of 4 questions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_1.html:42
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_4.html:46
+#: pre_award/apply/templates/apply/feedback_generic_survey.html:40
+#: pre_award/apply/templates/apply/research_contact_details.html:29
+#: pre_award/apply/templates/apply/research_contact_details.html:41
+#: pre_award/apply/templates/apply/research_opt_in.html:42
+msgid "Error:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_1.html:70
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_2.html:62
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_3.html:62
+#: pre_award/apply/templates/apply/research_opt_in.html:63
+msgid "Save and continue"
+msgstr "Arbed a pharhau"
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_2.html:25
+msgid "2 of 4 questions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_3.html:24
+msgid "3 of 4 questions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_4.html:26
+msgid "4 of 4 questions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_4.html:37
+msgid ""
+"Approximately how many hours did your organisation spend preparing and "
+"working on this application?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_4.html:42
+msgid ""
+"This includes time spent attending meetings, preparing documents and "
+"business cases, doing research and collating answers, from both paid and "
+"volunteer resources."
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_feedback_page_4.html:61
+#: pre_award/apply/templates/apply/feedback_generic_survey.html:61
+msgid "Submit feedback"
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_survey.html:22
+msgid ""
+"This section will ask about your overall experience of completing this "
+"application, so we can improve our application forms. Your responses will"
+" not be scored."
+msgstr ""
+
+#: pre_award/apply/templates/apply/end_of_application_survey.html:27
+#: pre_award/apply/templates/apply/section_feedback_intro.html:33
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:63
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:25
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:22
+msgid "Continue"
+msgstr "Parhau"
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:23
+msgid ""
+"You will receive an email shortly that will tell you the outcome of your "
+"expression of interest and if there are any actions you need to take "
+"before you're ready to apply."
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:25
+msgid ""
+"Please consider the content of the email carefully before beginning a "
+"full application."
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:27
+msgid ""
+"You will also receive a link to apply by email if/when an application "
+"window is open."
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:30
+msgid "You do not meet the requirements for the Community Ownership Fund"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:31
+msgid "Thank you for your interest in the Community Ownership Fund (COF)."
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:32
+msgid ""
+"Unfortunately, you do not meet the minimum requirements to apply for "
+"funding. This is because you have not met one or more of the following "
+"criteria:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:33
+msgid "Your organisation must"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:35
+#: pre_award/apply/templates/apply/eoi_submitted.html:42
+msgid "be based in the UK"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:36
+msgid "not be subject to any insolvency claim"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:37
+msgid "intend to receive the funding and run the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:40
+msgid "Your asset must"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:43
+msgid "be at risk"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:44
+msgid "have had prior community use or significance"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:45
+msgid "have at least 15 years on the lease, if a leasehold building"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:48
+msgid "You must"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:50
+msgid "apply for up to &pound;2 million in capital funding from COF"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:51
+msgid ""
+"be able to secure at least 20&percnt; match funding from other sources "
+"(or 10&percnt; in exceptional cases)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/eoi_submitted.html:54
+msgid ""
+"You can find more information about eligibility requirements in the COF "
+"prospectus."
+msgstr ""
+
+#: pre_award/apply/templates/apply/feedback_generic_survey.html:26
+#: pre_award/apply/templates/apply/section_feedback_intro.html:21
+msgid "feedback"
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund-round-notification.html:5
+msgid "Round closed"
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund-round-notification.html:17
+msgid "This application is now closed"
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund-round-notification.html:20
+msgid "The deadline to apply for this fund has now passed."
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund-round-notification.html:23
+msgid ""
+"You can still view your application, but you can no longer add new "
+"information."
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund-round-notification.html:25
+msgid "View application"
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund-round-notification.html:29
+msgid "Back to all applications"
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund_start_page.html:5
+msgid "Start or continue an"
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund_start_page.html:7
+#, fuzzy
+msgid "Start or continue an application for"
+msgstr "Gwneud cais am %(fund_title)s"
+
+#: pre_award/apply/templates/apply/fund_start_page.html:48
+msgid "Read the fund's prospectus"
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund_start_page.html:50
+msgid "before you start."
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund_start_page.html:52
+msgid "before you apply."
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund_start_page.html:73
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:76
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:77
+msgid "If you have questions about the form or the fund,"
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund_start_page.html:79
+#: pre_award/apply/templates/apply/tasklist.html:105
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:77
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:78
+#, fuzzy
+msgid "contact us."
+msgstr "Cysylltwch â ni"
+
+#: pre_award/apply/templates/apply/fund_start_page.html:82
+msgid "If you need help, contact us through our "
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund_start_page.html:83
+#: pre_award/apply/templates/apply/partials/contact_details.html:5
+#: pre_award/apply/templates/apply/tasklist.html:107
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:80
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:81
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:5
+msgid "support desk"
+msgstr ""
+
+#: pre_award/apply/templates/apply/fund_start_page.html:88
+#: pre_award/apply/templates/apply/partials/contact_details.html:14
+#: pre_award/apply/templates/apply/tasklist.html:110
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:83
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:84
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:14
+#, fuzzy
+msgid ""
+"Do not send any applications or attachments through the support desk. "
+"We'll only accept applications through this service."
+msgstr ""
+"Peidwch ag anfon unrhyw geisadau neu atodiadau dros e-bost. Byddwn yn "
+"derbyn ceisiadau drwy'r gwasanaeth hon yn unig."
+
+#: pre_award/apply/templates/apply/header.html:55
+#: pre_award/authenticator/frontend/templates/authenticator/header.html:34
+msgid "beta"
+msgstr "beta"
+
+#: pre_award/apply/templates/apply/research_contact_details.html:19
+msgid "Who should we contact for research purposes?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_contact_details.html:21
+msgid ""
+"These do not need to be the same contact details you used on your "
+"application. Anyone involved in the application process can take part in "
+"research."
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_contact_details.html:33
+msgid "Full name"
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_contact_details.html:45
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:9
+msgid "Email address"
+msgstr "Cyfeiriad e-bost"
+
+#: pre_award/apply/templates/apply/research_contact_details.html:51
+msgid "Submit"
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_opt_in.html:19
+msgid "Help us improve the application process"
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_opt_in.html:21
+msgid ""
+"We need your help to make applications easier to understand and use for "
+"everyone applying for funding from the Department of Levelling Up, "
+"Housing and Communities."
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_opt_in.html:23
+msgid "If you opt in to take part in research, you might be asked to:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_opt_in.html:25
+msgid ""
+"answer some questions about your experiences of the application process "
+"in an email"
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_opt_in.html:26
+msgid "talk to a researcher about your experiences over a video call"
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_opt_in.html:27
+msgid ""
+"try out new application tool features and tell us whether they are easy "
+"to use"
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_opt_in.html:30
+msgid "Taking part in research will not affect the outcomes of your application."
+msgstr ""
+
+#: pre_award/apply/templates/apply/research_opt_in.html:32
+msgid ""
+"You can always say no to an invite, and can withdraw your consent to be "
+"contacted or to use your data at any time. To do so, please contact us "
+"through our "
+msgstr ""
+
+#: pre_award/apply/templates/apply/section_feedback_intro.html:23
+msgid ""
+"We'll ask about your experience of completing this section, so we can "
+"improve our application forms. Your responses will not be scored."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:10
+msgid "Task List"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:34
+#, fuzzy
+msgid "Application for"
+msgstr "Gwneud cais am"
+
+#: pre_award/apply/templates/apply/tasklist.html:39
+msgid "Help with filling out your application"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:46
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:36
+msgid "Moving through the form"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:49
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:39
+msgid "This form is split into sections based on how it will be assessed."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:52
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:42
+msgid "You do not have to complete it in order, or all at once."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:55
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:45
+msgid ""
+"When you have written something in every field in a section, the section "
+"will be marked as complete. You can still change your responses in "
+"sections that are marked as complete."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:59
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:49
+msgid "Saving progress and making changes"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:62
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:52
+msgid ""
+"Your work will not save automatically. To make sure you do not lose "
+"anything, select \"Save and continue\" regularly, and always before you "
+"go back or close your internet browser window."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:66
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:55
+msgid "If you need to edit or revisit any sections, use the browser back button."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:69
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:58
+msgid "You can edit your responses as many times as you like before you submit."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:73
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:62
+msgid "Submitting your application"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:77
+msgid ""
+"When you have completed all sections, you'll be able to submit your "
+"expression of interest."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:80
+msgid ""
+"Once you have submitted your expression of interest, you'll not be able "
+"to edit, add or change any sections."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:84
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:65
+msgid ""
+"When you have completed all sections, you'll be able to submit your "
+"application."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:88
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:68
+msgid ""
+"Once you have submitted your application, you'll not be able to edit, add"
+" or change any sections."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:98
+msgid "If you have any questions about the form or the fund, "
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:107
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:79
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:80
+msgid ""
+"If you have any questions about the form or the fund, contact us through "
+"our "
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:113
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:86
+msgid "How we'll use your information"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:116
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:89
+msgid "Read how we'll use the information from your application in our"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:117
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:89
+#, fuzzy
+msgid "privacy notice"
+msgstr "Preifatrwydd"
+
+#: pre_award/apply/templates/apply/tasklist.html:131
+msgid "Reference:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:139
+msgid "Status:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:160
+msgid "None of the sections have been completed."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:162
+msgid "You have completed"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:163
+msgid "of"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:164
+msgid "sections."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:182
+msgid "Applicant feedback survey (not scored)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:187
+msgid ""
+"You must complete all other sections before starting the feedback survey."
+" This section is optional and should take approximately 1 minute to "
+"complete."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:191
+msgid ""
+"You must complete all other sections before starting the feedback survey."
+" This section should take approximately 1 minute to complete."
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_section.html:53
+#: pre_award/apply/templates/apply/tasklist.html:201
+#: pre_award/apply/templates/apply/tasklist.html:259
+msgid "Cannot start yet"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:227
+msgid "Applicant feedback submitted"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:240
+msgid "Applicant research survey (not scored)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:245
+msgid ""
+"You must complete all other sections before starting the research survey."
+" This section is optional and should take approximately 1 minute to "
+"complete."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:249
+msgid ""
+"You must complete all other sections before starting the research survey."
+" This section should take approximately 1 minute to complete."
+msgstr ""
+
+#: pre_award/apply/templates/apply/tasklist.html:256
+#: pre_award/apply/templates/apply/tasklist.html:265
+#: pre_award/apply/templates/apply/tasklist.html:286
+msgid "Applicant research survey"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/cy/cof-eoi_r1_all_questions_cy.html:6
+#: pre_award/apply/templates/apply/all_questions/cy/cof25-eoi_r1_all_questions_cy.html:7
+#: pre_award/apply/templates/apply/all_questions/cy/cof25_r1_all_questions_cy.html:7
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r3w3_all_questions_cy.html:6
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r4w1_all_questions_cy.html:7
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r4w2_all_questions_cy.html:7
+#: pre_award/apply/templates/apply/all_questions/en/cof-eoi_r1_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/cof25-eoi_r1_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/cof25_r1_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/cof_r3w3_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/cof_r4w1_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/cof_r4w2_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/ctdf_cr1_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/cyp_r1_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/dpif_r2_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/dpif_r3_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/ffw_aor1_all_questions_en.html:7
+#: pre_award/apply/templates/apply/all_questions/en/gbrf_r1_all_questions_en.html:6
+#: pre_award/apply/templates/apply/all_questions/en/lpdf_r1_all_questions_en.html:6
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:6
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:6
+msgid "Full list of application questions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/cy/cof-eoi_r1_all_questions_cy.html:10
+#: pre_award/apply/templates/apply/all_questions/cy/cof25-eoi_r1_all_questions_cy.html:11
+#: pre_award/apply/templates/apply/all_questions/cy/cof25_r1_all_questions_cy.html:11
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r3w3_all_questions_cy.html:10
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r4w1_all_questions_cy.html:11
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r4w2_all_questions_cy.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof-eoi_r1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof25-eoi_r1_all_questions_en.html:12
+#: pre_award/apply/templates/apply/all_questions/en/cof25_r1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof_r3w3_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof_r4w1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/cof_r4w2_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/ctdf_cr1_all_questions_en.html:12
+#: pre_award/apply/templates/apply/all_questions/en/cyp_r1_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/dpif_r2_all_questions_en.html:11
+#: pre_award/apply/templates/apply/all_questions/en/dpif_r3_all_questions_en.html:12
+#: pre_award/apply/templates/apply/all_questions/en/ffw_aor1_all_questions_en.html:12
+#: pre_award/apply/templates/apply/all_questions/en/gbrf_r1_all_questions_en.html:10
+#: pre_award/apply/templates/apply/all_questions/en/lpdf_r1_all_questions_en.html:10
+#, python-format
+msgid "%(round_title)s"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/cy/cof-eoi_r1_all_questions_cy.html:15
+#: pre_award/apply/templates/apply/all_questions/cy/cof25-eoi_r1_all_questions_cy.html:16
+#: pre_award/apply/templates/apply/all_questions/cy/cof25_r1_all_questions_cy.html:16
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r3w3_all_questions_cy.html:15
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r4w1_all_questions_cy.html:16
+#: pre_award/apply/templates/apply/all_questions/cy/cof_r4w2_all_questions_cy.html:16
+#: pre_award/apply/templates/apply/all_questions/en/cof-eoi_r1_all_questions_en.html:16
+#: pre_award/apply/templates/apply/all_questions/en/cof25_r1_all_questions_en.html:16
+#: pre_award/apply/templates/apply/all_questions/en/cof_r3w3_all_questions_en.html:16
+#: pre_award/apply/templates/apply/all_questions/en/cof_r4w1_all_questions_en.html:16
+#: pre_award/apply/templates/apply/all_questions/en/cof_r4w2_all_questions_en.html:16
+#: pre_award/apply/templates/apply/all_questions/en/cyp_r1_all_questions_en.html:16
+#: pre_award/apply/templates/apply/all_questions/en/dpif_r2_all_questions_en.html:16
+#: pre_award/apply/templates/apply/all_questions/en/gbrf_r1_all_questions_en.html:15
+#: pre_award/apply/templates/apply/all_questions/en/lpdf_r1_all_questions_en.html:15
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:13
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:13
+msgid "Table of contents"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:16
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:42
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:16
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:36
+msgid "about-organisation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:16
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:42
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:16
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:36
+msgid "About your organisation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:19
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:204
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:19
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:210
+msgid "about-project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:19
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:205
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:19
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:211
+msgid "About your project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:22
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:465
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:22
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:494
+msgid "strategic-case"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:22
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:466
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:22
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:495
+msgid "Strategic case"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:25
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:598
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:25
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:660
+msgid "management-case"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:25
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:599
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:25
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:661
+msgid "Management case"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:28
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1207
+msgid "community-benefits"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:28
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1208
+msgid "Potential to deliver community benefits"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:31
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1252
+msgid "community-value"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:31
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1253
+msgid "Added value to community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:34
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1274
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:28
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1167
+msgid "subsidy-control"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:34
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1275
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:28
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1168
+msgid "Subsidy control and state aid"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:37
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1308
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:31
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1201
+msgid "declarations"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:37
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:31
+msgid "Declarations"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:43
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:37
+msgid "Organisation information"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:44
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:38
+msgid "Your unique tracker number"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:45
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:39
+msgid ""
+"This was included in the letter we sent to confirm your successful "
+"expression of interest."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:46
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:40
+msgid "For example, ‘ANON-###-###-###’"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:47
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:41
+#: pre_award/apply/templates/apply/partials/applications_table.html:74
+msgid "Organisation name"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:48
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:42
+msgid "This must match your registered legal organisation name"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:49
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:43
+msgid "Does your organisation use any other names?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:51
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:131
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:158
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:170
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:370
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:415
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:427
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:516
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1287
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1299
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:45
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:134
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:161
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:173
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:409
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1180
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1192
+msgctxt "individual"
+msgid "If 'Yes', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:54
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:134
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:161
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:373
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:418
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:430
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:519
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:48
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:137
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:164
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:412
+msgctxt "individual"
+msgid "If 'No', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:56
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:50
+msgid "Alternative names of your organisation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:57
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:51
+msgid "What is your organisation's main purpose?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:57
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:58
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:67
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:180
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:220
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:251
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:254
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:257
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:358
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:361
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:442
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:498
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:501
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:504
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:510
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:522
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:525
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:551
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:581
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:852
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:932
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:994
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1003
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1026
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1043
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1046
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1055
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1058
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1064
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1070
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1240
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1243
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1246
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1262
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1271
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1290
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1302
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:51
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:53
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:64
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:183
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:266
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:269
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:272
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:397
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:504
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:513
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:519
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:537
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:543
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:546
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:552
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:561
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:619
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:625
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:631
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:643
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:905
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:914
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:978
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:987
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:996
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1019
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1036
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1039
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1048
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1054
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1183
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1195
+msgid "(maximum 500 words)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:58
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:53
+msgid "Tell us about your organisation's main activities"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:59
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:56
+msgid "Have you delivered projects like this before?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:61
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:214
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:337
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:352
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:548
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:712
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:58
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:220
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:229
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:385
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:734
+msgctxt "group"
+msgid "If 'Yes', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:61
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:131
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:171
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:214
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:355
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:370
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:548
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1287
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:134
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:174
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:229
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:409
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1180
+msgid "and"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:64
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:217
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:340
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:355
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:715
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:61
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:223
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:232
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:388
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:737
+msgctxt "group"
+msgid "If 'No', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:67
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:64
+msgid "Describe your previous projects"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:70
+msgid "Provide any evidence to support your previous projects (optional)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:73
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:67
+msgid "Type of organisation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:76
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:117
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:70
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:120
+msgid "Select one option"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:80
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:74
+msgid "Charitable incorporated organisation (CIO)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:83
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:77
+msgid "Co-operative, such as a community benefit society"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:86
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:80
+msgid "Community interest company (CIC)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:89
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:83
+msgid "Company limited by guarantee"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:92
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:86
+msgid "Scottish charitable incorporated organisation (SCIO)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:95
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:124
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:313
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:92
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:127
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:328
+msgid "Other"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:99
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:99
+msgid ""
+"If 'Charitable incorporated organisation (CIO)' or 'Scottish charitable "
+"incorporated organisation (SCIO)', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:102
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:102
+msgid ""
+"If 'Co-operative, such as a community benefit society', 'Community "
+"interest company (CIC)', or 'Company limited by guarantee' go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:105
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:96
+msgid "If 'Other', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:108
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:111
+msgid "Charity number"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:111
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:114
+msgid "Company registration number"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:114
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:117
+msgid "Which regulatory body is your company registered with?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:121
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:124
+msgid "Companies House"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:128
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:131
+msgid "Is your organisation a trading subsidiary of a parent company?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:137
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:140
+msgid "Name of parent organisation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:140
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:143
+msgid "Date parent organisation was established"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:143
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:436
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:146
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:482
+msgid "For example, 27 3 2007"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:146
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:149
+msgid "Organisation address"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:149
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:152
+msgid "Website and social media"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:152
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:155
+msgid ""
+"For example, your company's Facebook, Instagram or Twitter accounts (if "
+"applicable)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:155
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:158
+msgid "Is your correspondence address different to the organisation address?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:164
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:167
+msgid "Correspondence address"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:167
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:170
+msgid "Is your application a joint bid in partnership with other organisations?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:174
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:177
+msgid "Partner organisation name"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:177
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:180
+#, fuzzy
+msgid "Partner organisation address"
+msgstr "Nodwch eich cyfeirad e-bost"
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:180
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:183
+msgid "Tell us about your partnership and how you plan to work together"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:183
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:186
+msgid ""
+"If you are working in partnership with more than one organisation, "
+"include their details here"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:186
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:189
+msgid "Applicant information"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:189
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:192
+msgid "Name of lead contact"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:192
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:195
+msgid ""
+"This does not have to be the same person as the lead contact for your "
+"expression of interest."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:195
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:198
+msgid "They will receive all the information about this application."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:198
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:204
+#, fuzzy
+msgid "Lead contact email address"
+msgstr "Nodwch eich cyfeirad e-bost"
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:201
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:207
+msgid "Lead contact telephone number"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:208
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:214
+msgid "Project information"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:211
+msgid "Have you been given funding through the Community Ownership Fund before?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:220
+msgid "Describe your previous project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:223
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:238
+msgid "Include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:227
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:242
+msgid "project name"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:230
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:245
+msgid "general project review"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:233
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:248
+msgid "date you received funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:237
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:252
+msgid "Amount of funding received"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:242
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:257
+#: pre_award/apply/templates/apply/partials/applications_table.html:74
+msgid "Project name"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:245
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:260
+msgid ""
+"This is what your project will be called within your organisation and by "
+"the public."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:248
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:263
+msgid ""
+"Choose a name that describes your project. For example, the name of your "
+"asset, or a link to your asset's location"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:251
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:266
+msgid ""
+"Tell us how the asset is currently being used, or how it has been used "
+"before, and why it's important to the community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:254
+msgid ""
+"Explain why the asset is at risk of being lost to the community, or why "
+"it has already been lost"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:257
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:269
+msgid "Give a brief summary of your project, including what you hope to achieve"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:260
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:275
+msgid "Address of the community asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:263
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:278
+msgid "In which constituency is your asset?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:266
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:281
+msgid "In which local council area is your asset?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:270
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:285
+msgid "Asset information"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:273
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:288
+msgid "Asset type"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:276
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:291
+msgid ""
+"Select how the asset is mainly used. For example, if it is a theatre that"
+" also has a cafe, select 'Theatre'"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:280
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:295
+msgid "Community centre"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:283
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:298
+msgid "Cinema"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:286
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:301
+msgid "Gallery"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:289
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:304
+msgid "Museum"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:292
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:307
+msgid "Music venue"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:295
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:310
+msgid "Park"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:298
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:313
+msgid "Post office building"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:301
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:316
+msgid "Pub"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:304
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:319
+msgid "Shop"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:307
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:322
+msgid "Sporting or leisure facility"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:310
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:325
+msgid "Theatre"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:317
+msgid "What do you intend to do with the asset?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:321
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:342
+msgid "Buy the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:324
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:345
+msgid "Lease the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:327
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:348
+msgid "Already owned by organisation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:330
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:351
+msgid "Already leased by organisation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:334
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:382
+msgid "Do you know who currently owns your asset?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:343
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:391
+msgid "Name of current asset owner"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:346
+msgid "Describe the current ownership status"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:349
+msgid "Have you already completed the purchase or lease?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:358
+msgid ""
+"Describe the sale process, e.g. an auction, or the terms of your lease if"
+" you have rented the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:361
+msgid ""
+"Describe the expected sale process, or the proposed terms of your lease "
+"if you are renting the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:364
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:400
+msgid "Expected date of sale or lease"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:367
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:406
+msgid "Is your asset currently publicly owned?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:376
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:415
+msgid ""
+"Tell us about the person you have spoken to at the relevant public about "
+"the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:379
+msgid ""
+"When you buy or lease a publicly owned asset, the public authority must "
+"continue to be responsible for delivering any statutory services the "
+"asset provides"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:382
+msgid ""
+"This includes things like social care, waste collection and planning "
+"services"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:385
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:427
+msgid ""
+"Grants from this fund cannot be used to buy the freehold or premium on "
+"the lease of a publicly owned asset. Money must only be used for "
+"renovation and refurbishment costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:388
+msgid "Upload supporting evidence"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:391
+msgid "Upload supporting evidence to summarise:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:395
+msgid "the risk the asset is facing"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:398
+msgid ""
+"that any statutory services will not be transferred from the public "
+"authority"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:401
+msgid "that the asset will be sustainable after it has been transferred"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:405
+msgid ""
+"For example, this evidence can include confirmation from the public owner"
+" or a letter from the local authority"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:408
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:574
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:884
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1085
+msgid ""
+"It should be a single file no bigger than 5MB in any of the following "
+"formats:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:412
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:491
+msgid "Is this a registered Asset of Community Value (ACV)?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:421
+msgid "Will you purchase the asset within the appropriate time frame?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:424
+msgid "Is the asset listed for disposal, or part of a Community Asset Transfer?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:427
+msgid ", and"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:433
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:479
+msgid "When was the asset listed?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:439
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:485
+msgid "Provide a link to the listing"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:442
+msgid "Describe the current status of the Community Asset Transfer"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:445
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:447
+msgid "Why is the asset at risk of closure?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:448
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:478
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1220
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:450
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:599
+msgid "Select all that apply"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:452
+msgid "For sale or listed for disposal"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:455
+msgid "Future use not secured"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:458
+msgid "Unprofitable under current business model"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:461
+msgid "Current ownership not tenable"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:469
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:602
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1211
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1256
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:498
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:664
+#: pre_award/apply/templates/apply/partials/tasklist_section.html:33
+msgid "This section is worth"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:469
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:602
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1211
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1256
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:498
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:664
+msgid "of the assessment criteria."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:472
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:501
+#, fuzzy
+msgid "Community use"
+msgstr "Cysylltwch â ni"
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:475
+msgid "What policy aims will your project deliver against?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:482
+msgid "Support local community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:485
+msgid "Improve local skills"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:488
+msgid "Net zero"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:491
+msgid "Regeneration"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:494
+msgid "Fight climate change"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:498
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:504
+msgid ""
+"Who in the community uses the asset, or has used it in the past, and who "
+"benefits from it?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:501
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:513
+msgid ""
+"Tell us how losing the asset would affect, or has already affected, "
+"people in the community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:504
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:519
+msgid "Why will the asset be lost without community intervention?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:507
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:534
+msgid "Community engagement"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:510
+msgid ""
+"Tell us how you have engaged with the community about your intention to "
+"take ownership of the asset, and explain how this has shaped your project"
+" plans"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:513
+msgid "Have you done any fundraising in the community?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:522
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:543
+msgid "Describe your fundraising activities"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:525
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:552
+msgid "Tell us how your project supports any wider local plans"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:528
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:558
+msgid "Local support"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:531
+msgid "Are you confident there is local support for your project?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:534
+msgid "This support can be from:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:538
+msgid "community groups"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:541
+msgid "local businesses"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:544
+msgid "public sector partners"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:551
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:561
+msgid "Tell us more about the local support for your project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:554
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:564
+msgid "This can include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:558
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:568
+msgid "surveys of the community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:561
+msgid "town hall meetings you have runs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:564
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:574
+msgid "the estimated number of volunteers you have for your project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:567
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:577
+msgid "a letter from your local MP"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:571
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:584
+msgid "Upload supporting evidence (optional)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:578
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:640
+msgid "Environmental sustainability"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:581
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:643
+msgid ""
+"Tell us how you have considered the environmental sustainability of your "
+"project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:584
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:646
+msgid "This could include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:588
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:650
+msgid "any low or zero carbon approaches you will adopt during construction"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:591
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:653
+msgid "how the asset will align with Net Zero initiatives in future"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:594
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:656
+msgid "how you will measure and reduce the asset's environmental impact"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:605
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:667
+msgid "Funding required"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:608
+msgid "We're looking to understand:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:612
+msgid "how much funding you're applying for from this fund"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:615
+msgid "your full project costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:618
+msgid "any funding you've already received for your project so far"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:621
+msgid "any funding you plan to secure for your project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:624
+msgid "any funding you've already received towards capital costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:628
+msgid ""
+"We'll ask you to upload a business plan to support the answers you give "
+"us in this section."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:631
+msgid ""
+"This fund can offer up to 50&percnt; of your capital costs to renovate "
+"and repair the asset."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:634
+msgid "Total funding request"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:637
+msgid "This is the amount you are applying for from the Community Ownership Fund."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:640
+msgid ""
+"You can apply for up to 50&percnt; of your capital costs, up to a maximum"
+" of £250,000 (up to £1 million for sporting assets). You can apply for up"
+" to £50,000 of your revenue costs (no more than 20&percnt; of your "
+"capital funding)."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:643
+msgid "Capital costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:646
+msgid ""
+"This is used to purchase or lease the asset and pay for refurbishment "
+"costs. You can apply for up to £250,000 (up to £1 million for sporting "
+"assets)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:649
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:929
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:944
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:964
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:982
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:722
+msgid ""
+"You can use your business plan to provide information that supports your "
+"answers."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:652
+msgid "Do you need to add revenue costs? (optional)?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:655
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:681
+msgid ""
+"This is used for the running costs of the project. This might include "
+"legal fees or general costs, including for:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:659
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:685
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:817
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:849
+msgid "utilities"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:662
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:688
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:820
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:852
+msgid "staffing"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:665
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:691
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:823
+msgid "appointing external consultants"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:669
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:695
+msgid ""
+"It should be no more than £50,000, and no more than 20&percnt; of your "
+"capital funding."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:672
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:759
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:988
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1000
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:781
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:833
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:911
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:993
+msgctxt "indefinite"
+msgid "If 'Yes', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:675
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:762
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:991
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:784
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:836
+msgctxt "indefinite"
+msgid "If 'No', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:678
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:839
+msgid "Revenue costs (optional)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:698
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:800
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:793
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:859
+msgid "You can use your business plan to:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:702
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:863
+msgid "tell us why you need revenue funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:705
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:800
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:866
+msgid "provide any information that supports your answers"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:709
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:731
+msgid "Have you secured any match funding yet?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:718
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:740
+msgid "Secured match funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:721
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:768
+msgid ""
+"You need to raise other sources of funding alongside investment from this"
+" fund."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:724
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:771
+msgid ""
+"Having a range of funders contributing to your project can show the "
+"quality of your project and the support it has in the community."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:727
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:774
+msgid "Match funding sources can include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:731
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:778
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:750
+msgid "public bodies"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:734
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:781
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:753
+msgid "devolved administrations"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:737
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:784
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:756
+msgid "charitable trusts"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:740
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:787
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:759
+msgid "national lottery funders"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:743
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:790
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:762
+msgid "community shares"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:746
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:793
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:765
+msgid "social investors"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:749
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:796
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:768
+msgid "other lenders"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:753
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:811
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:849
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1020
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1040
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:902
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1013
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1033
+msgid ""
+"You can use your business plan to provide evidence to support your "
+"answers."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:756
+msgid "Do you have any match funding identified but not yet secured?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:765
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:787
+msgid "Unsecured match funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:804
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:797
+msgid ""
+"tell us how long it will likely take to secure any outstanding match "
+"funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:807
+msgid "- provide any information that supports your answers"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:814
+msgid "Asset value"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:817
+msgid ""
+"You need to have the asset valued by someone independent before you take "
+"control of it."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:820
+msgid ""
+"This includes the building and its contents, including fixtures and "
+"fittings, and any stock."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:823
+msgid "You can use your business plan to provide evidence to support your answer."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:826
+msgid "If you have already bought or leased the asset, use its current valuation."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:829
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:882
+msgid "Feasibility"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:832
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:917
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:885
+msgid ""
+"This is analysis which tests the ability of your project to deliver its "
+"objectives."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:835
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:888
+msgid "You should use your feasibility studies to:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:839
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:892
+msgid ""
+"test the context and resources within which the project is operating, "
+"including market analysis and whether the financial, technical and "
+"management capabilities are strong enough to deliver the range of uses "
+"planned for the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:842
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:895
+msgid "test the viability and sustainability of the project in the long term"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:845
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:898
+msgid "develop a strong business plan"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:852
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:905
+msgid ""
+"Tell us about the feasibility studies you have carried out for your "
+"project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:855
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:908
+msgid "Do you need to do any further feasibility work?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:858
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:920
+msgid "Risk"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:861
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:923
+msgid ""
+"We want to understand any risks your project may face and how you intend "
+"to mitigate them. They can be during the planning or delivery stages, or "
+"after you have taken ownership of the asset."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:864
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:926
+msgid ""
+"This does not include any risks to the asset or why it may close, which "
+"we asked you about earlier in your application."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:867
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:929
+msgid "Examples of risks include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:871
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:933
+msgid "planning consent for any work needed on the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:874
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:936
+msgid "potential issues with the supply of building materials"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:877
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:939
+msgid "staffing departures during delivery of your project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:881
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:943
+msgid "Risks to your project (document upload)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:888
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:946
+msgid "Upload a document detailing any risks your project may face."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:891
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:949
+msgid "You should include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:895
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:953
+msgid "a description of the risk"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:898
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:956
+msgid "the likelihood of it happening"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:901
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:959
+msgid "when it may occur"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:904
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:962
+msgid "how you intend to mitigate it"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:907
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:965
+msgid "the likelihood of it happening after mitigation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:911
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:969
+msgid ""
+"Do not include any risks to the asset or why it may close, which we asked"
+" you about earlier in your application."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:914
+msgid "Project costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:920
+msgid ""
+"We're looking to understand your full financial forecasts for running the"
+" asset once you take ownership."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:923
+msgid ""
+"This includes your sources of income and regular costs, as well as a "
+"summary of your expected cash flow for the next few years."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:926
+msgid ""
+"We also need to make sure you're confident you'll spend any money awarded"
+" by this fund within 12 months."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:932
+msgid "Summarise your cash flow for the running of the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:935
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:696
+msgid "If successful, will you use your funding in the next 12 months?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:938
+msgid "Income sources"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:941
+msgid ""
+"This is how you expect the asset to make money in future. These should be"
+" measured against your running costs."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:947
+msgid "Running costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:950
+msgid ""
+"Money used to regularly maintain the asset and keep it open to the "
+"community. This can include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:954
+msgid "utility bills"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:957
+msgid "gardening costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:960
+msgid "security measures"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:967
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:984
+msgid "Skills and resources"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:970
+msgid ""
+"We'll be assessing how you have considered the management requirements of"
+" your project."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:973
+msgid ""
+"This includes the steps you're taking to make sure your organisation has "
+"the right capacity and resource to run the asset sustainably."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:976
+msgid ""
+"You need to demonstrate you have considered succession planning for your "
+"organisation's staff and trustees."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:979
+msgid ""
+"If you're planning to recruit staff to manage and run the asset and its "
+"services, please provide an overview of these plans."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:985
+msgid "Do you have experience of managing a community asset?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:994
+msgid "Describe any experience you have with community assets similar to this"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:997
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:990
+msgid "Do you have any plans to recruit people to help you manage the asset?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1003
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:996
+msgid "Tells us about the roles you'll recruit"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1006
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:999
+msgid ""
+"These should be positions which will help you effectively manage the "
+"asset during community ownership."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1009
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1002
+msgid "Include the:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1013
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1033
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1187
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1006
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1026
+msgid "role"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1016
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1036
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1190
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1009
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1029
+msgid "main responsibilities"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1023
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1016
+msgid "Community representation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1026
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1019
+msgid "List the members of your board"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1029
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1022
+msgid "Include their:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1043
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1036
+msgid "Tell us about your governance and membership structures"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1046
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1039
+msgid ""
+"Explain how you'll consider the views of the community in the running of "
+"the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1049
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1042
+msgid ""
+"Include how they'll be involved in decision making, and how you'll "
+"measure public support for your decisions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1052
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1045
+msgid "Inclusiveness and integration"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1055
+msgid ""
+"Describe the planned activities or services that will take place at the "
+"asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1058
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1054
+msgid ""
+"Describe anything that might prevent people from using the asset or "
+"participating in its running"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1061
+msgid "For example, membership costs or eligibility criteria"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1064
+msgid ""
+"Tell us how you'll make your project accessible and inclusive to everyone"
+" in the community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1067
+msgid ""
+"This includes considering people with protected characteristics, "
+"disability access needs, and making the space attractive to everyone"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1070
+msgid ""
+"Describe how the project will bring people together from all over the "
+"community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1073
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1060
+msgid "Business plan"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1076
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1063
+msgid "Business plan (document upload)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1079
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1066
+msgid "Upload your business plan."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1082
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1069
+msgid ""
+"Include any information that supports the answers in your application. "
+"All figures must match those you've given in the management case section."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1089
+msgid "Your business plan could include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1092
+msgid "Funding details"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1096
+msgid "project costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1099
+msgid "capital costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1102
+msgid "revenue costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1105
+msgid "total request for funding (capital costs plus revenue costs)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1108
+msgid "match funding details"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1111
+msgid "funding you have already secured, with supporting evidence"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1114
+msgid "funding you still need to secure"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1117
+msgid "how long it will likely take to secure outstanding match funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1120
+msgid "financial forecasts, including:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1125
+msgid "income sources"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1128
+msgid "costs with an evidenced set of assumptions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1131
+msgid "why you’ll need revenue funding and how you’ll use it"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1134
+msgid "cashflow"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1139
+msgid "your most recent audited accounts covering the last 3 years"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1142
+msgid "a bank account in your organisation’s name"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1146
+msgid "Asset details"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1150
+msgid ""
+"independent valuation of the asset (if you intend to buy it), with "
+"supporting evidence"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1153
+msgid "completed or planned feasibility studies, with supporting evidence"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1156
+msgid "planned activities or services that will take place in the community asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1159
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1140
+msgid ""
+"any supporting evidence that you will deliver the benefits to the "
+"community you have outlined"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1162
+msgid "planned skills or resources needed to manage the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1165
+msgid "your experience of delivering similar projects"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1168
+msgid "any relevant project management expertise"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1171
+msgid "roles you plan to recruit to help you manage the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1175
+msgid "Organisation details"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1179
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1153
+msgid ""
+"your organisation’s governance and membership structures, with supporting"
+" evidence"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1182
+msgid "members of your board, including their:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1195
+msgid "copies of your organisation’s memorandum and articles of association"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1198
+msgid "a copy of your most recent governance board meeting minutes"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1201
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1159
+msgid ""
+"supporting evidence of how you will manage finances and prevent fraud. "
+"For example, copies of your policy documents"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1204
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1162
+msgid ""
+"supporting evidence of how you will manage performance and risks. For "
+"example, copies of your policy documents"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1214
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:593
+msgid "Community benefits"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1217
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:596
+msgid "What community benefits do you expect to deliver with this project?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1224
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:603
+msgid "Community pride and perceptions of the local area as a place to live"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1227
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:606
+msgid "Social trust, cohesion and a sense of belonging"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1230
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:609
+msgid "Participation in community life, arts and culture, or sport"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1233
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:612
+msgid ""
+"Local economic outcomes, such as employment and volunteering "
+"opportunities, and employability and skills"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1236
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:615
+msgid ""
+"Delivering positive impact in physical and mental health, and reducing "
+"loneliness and isolation"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1240
+msgid ""
+"Tell us about these benefits in detail, and explain how you'll measure "
+"the benefits it'll bring for the community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1243
+msgid ""
+"Explain how you plan to sustain, and potentially expand, these benefits "
+"over time"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1246
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:631
+msgid "Tell us how you'll make sure the whole community benefits from the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1249
+msgid "For example, people who have not used the asset in the past"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1259
+msgid "Value to the community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1262
+msgid "Tell us about your local community as a whole"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1265
+msgid ""
+"This includes details of any needs it has and how your project will look "
+"to support these."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1268
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:637
+msgid ""
+"Where possible, reference any data you have on protected characteristics "
+"and equality impacts."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1271
+msgid ""
+"Describe any specific challenges your community faces, and how the asset "
+"will address these"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1278
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1171
+msgid "Project qualification"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1281
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1174
+msgid "Does your project meet the definition of a subsidy?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1284
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1177
+msgid ""
+"For projects in England, Northern Ireland, Scotland and Wales, this "
+"definition is laid out in Paragraph 2 of the Subsidy Control Act (2022)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1290
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1183
+msgid ""
+"Explain how you think a grant from this fund can be provided in "
+"compliance with the Subsidy Control Act (2022)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1293
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1186
+msgid "This is measured by the 7 common principles laid out in Schedule 1"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1296
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1189
+msgid "Is your project based in Northern Ireland?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1302
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1195
+msgid "Explain how your project will comply with state aid rules"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1305
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1198
+msgid ""
+"You can find more information about when state aid rules apply in "
+"Northern Ireland in the government guidance."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1309
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1202
+msgid "Check declarations"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1312
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1205
+msgid "Final confirmations"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1315
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1208
+msgid ""
+"Confirm you have considered subsidy control and state aid implications "
+"for your project, and the information you have given us is correct"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1318
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1211
+msgid ""
+"Confirm you have considered people with protected characteristics "
+"throughout the planning of your project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1321
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1214
+msgid ""
+"Confirm you have considered sustainability and the environment throughout"
+" the planning of your project, including compliance with the government's"
+" Net Zero ambitions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r2_all_questions.html:1324
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1217
+msgid ""
+"Confirm you have a bank account set up and associated with the "
+"organisation you are applying on behalf of"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:52
+msgid "This is what the organisation was set up to achieve"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:54
+msgid ""
+"Include any activities you undertake in order to achieve the "
+"organisation's purpose."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:55
+msgid "You must list at least one, and can include up to three."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:89
+msgid "Parish, town or community council"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:105
+msgid "If 'Parish council', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:108
+msgid "Type of organisation (other)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:201
+msgid "Lead contact job title"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:217
+msgid "Have you applied to the Community Ownership Fund before?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:226
+msgid "Was your application successful?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:235
+msgid "Describe the project for which you were given funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:272
+msgid ""
+"Tell us about the planned activities and/or services that will take place"
+" in the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:332
+msgctxt "individual"
+msgid "If 'other', go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:335
+msgid "Type of asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:335
+msgid "(other)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:338
+msgid "How do you intend to take community ownership of the asset?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:355
+msgctxt "individual"
+msgid "If ‘buy the asset’ go to "
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:358
+msgctxt "individual"
+msgid "If ‘lease the asset’ go to "
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:361
+msgctxt "individual"
+msgid "If ‘already owned by the organisation’ go to"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:364
+msgctxt "individual"
+msgid "If ‘already leased by the organisation’ go to "
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:367
+msgid "Upload asset valuation or lease agreement"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:370
+msgid ""
+"Please upload evidence that shows the asset valuation (if you are buying "
+"the asset) or the lease agreement (if you are leasing the asset)."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:373
+msgid ""
+"If you are buying the asset: this could be an official document showing "
+"the asset's value from an independent surveyor or similar professional."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:376
+msgid ""
+"If you are leasing the asset: this could be a copy of your tenancy "
+"agreement, or agreed heads of terms, showing at least 15 years tenancy "
+"with reasonable break clauses."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:379
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:444
+msgid ""
+"It should be a single file no bigger than 5MB in an accepted format (jpg,"
+" jpeg, png, pdf, txt, doc, docx, odt, csv, xls, xlsx, ods)."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:394
+msgid "Tell us what you know about the sale or the lease of the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:397
+msgid ""
+"Describe the expected sale process, or the proposed terms of your lease "
+"if you are planning to rent the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:403
+msgid "Describe the terms of your lease if you have rented the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:418
+msgid ""
+"When you buy or lease a publicly owned asset, the public authority cannot"
+" transfer statutory services or duties to the community group"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:421
+msgid ""
+"This includes things like social care, waste collection and planning "
+"services."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:424
+msgid ""
+"We do not define individual libraries as statutory services for this "
+"purpose."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:430
+msgid ""
+"Upload evidence to confirm the above information and that the asset is at"
+" risk"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:433
+msgid "This could be from:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:437
+msgid "a letter from an appropriate public authority officer or cabinet member"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:440
+msgid "a published cabinet paper from a local authority"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:454
+msgid "Closure"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:457
+msgid "Sale"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:460
+msgid "Neglect or dereliction"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:463
+msgid "Unsustainable current business model"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:466
+msgid "Listed for disposal"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:469
+msgid "Part of a Community Asset Transfer"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:473
+msgid ""
+"If ‘listed for disposal, go to <strong>2.2.3.1.</strong> and "
+"<strong>2.2.3.2.</strong>"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:476
+msgid "If ‘Part of a Community Asset Transfer’, go to <strong>2.2.3.3.</strong>"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:488
+msgid ""
+"Describe the current status of the Community Asset Transfer (maximum 500 "
+"words)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:507
+msgid ""
+"Include any specific uses and how many people take part in these "
+"activities."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:510
+msgid ""
+"Reference any statistics you have to reinforce this. For example, data on"
+" footfall"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:516
+msgid ""
+"Where possible give examples of these effects, such as important services"
+" ending or having to travel a significant distance to use a similar asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:522
+msgid ""
+"Include any evidence you have that it's use by the community will be "
+"threatened."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:525
+msgid "For example, by the owner's intention or an imminent sale"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:528
+msgid ""
+"Explain how the community will be better served with the asset under "
+"community ownership"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:531
+msgid "Include why this is preferable to any other type of ownership"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:537
+msgid ""
+"Tell us how you have engaged with the community about your intention to "
+"take ownership of the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:540
+msgid ""
+"Give examples of the different ways you've engaged with people, and how "
+"this has shaped your project plans"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:546
+msgid ""
+"Tell us about any partnerships you've formed, and how they'll help the "
+"project be successful"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:549
+msgid ""
+"For example, any agreements you've reached with other local businesses or"
+" community organisations"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:555
+msgid ""
+"These could include plans led by the council, local businesses or the "
+"community"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:571
+msgid "town hall meetings you have run"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:581
+msgid "If you plan to upload any supporting evidence below, reference it here."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:587
+msgid "Upload evidence to show the support you have from the community."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:590
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:972
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1072
+msgid ""
+"It should be a single file no bigger than 10MB in an accepted format "
+"(jpg, jpeg, png, pdf, txt, doc, docx, odt, csv, xls, xlsx, ods)."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:619
+msgid ""
+"Tell us about these benefits in detail, and how the asset's activities "
+"will help deliver them"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:622
+msgid ""
+"Include how the asset will address any specific needs the community "
+"faces, and how you researched these"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:625
+msgid "Explain how you plan to deliver and sustain these benefits over time"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:628
+msgid ""
+"Include the key milestones you intend to meet in order to deliver these "
+"benefits"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:634
+msgid ""
+"For example, people who have not used the asset in the past, and other "
+"people who live in the local area."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:670
+msgid "Capital funding request"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:673
+msgid ""
+"Capital costs are the costs of buying or leasing your asset and paying "
+"for refurbishment."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:676
+msgid ""
+"Community Ownership Fund (COF) will fund up to 80&percnt; of your capital"
+" costs, up to a maximum of £2 million."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:679
+msgid ""
+"At least 20&percnt; of the total capital costs of your project must be "
+"covered by other sources (match funding). For example:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:683
+msgid ""
+"You want to purchase a community asset which costs £2,500,000. You can "
+"apply for £2m from COF, and must raise the remaining £500,000 from other "
+"sources."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:686
+msgid ""
+"You want to purchase a community asset which costs £250,000. You can "
+"apply for £200,000 from COF, and must raise the remaining £50,000 from "
+"other sources."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:690
+msgid ""
+"(In exceptional circumstances, you may only need to secure 10&percnt; in "
+"match funding. Your development support provider will have already "
+"confirmed this with you if you're eligible.)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:693
+msgid "If successful, you must spend all the funding within 12 months."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:699
+msgid "Capital costs for yor project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:702
+msgid "Tell us about your total capital costs."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:705
+msgid ""
+"This should be for the whole project, not just what you're requesting "
+"from the fund."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:708
+msgid "Capital costs can be used to:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:712
+msgid "purchase or lease the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:715
+msgid "pay for refurbishment costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:719
+#, python-format
+msgid ""
+"Remember, you can apply for up to 80% (or 90% if the development support "
+"provider has confirmed you're eligible to do this) of your capital costs,"
+" up to a maximum of £2 million."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:725
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:870
+msgid "Describe the cost."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:728
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:807
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:873
+msgid "Amount."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:743
+msgid ""
+"Tell us which sources of funding you have already secured as match "
+"funding."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:746
+msgid "Match funding sources could include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:772
+msgid "Source of secured funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:775
+msgid "Have you already spent the match funding you have secured?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:778
+msgid "Have you identified, but not yet secured, any additional match funding?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:790
+msgid "Tell us which sources of funding you intend to secure as match funding."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:804
+msgid "Source of unsecured match funding."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:810
+msgid "Are you applying for revenue funding from the Community Ownership Fund?"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:813
+msgid ""
+"Revenue costs go towards running the asset once you've taken ownership of"
+" it. This might include general costs, including for:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:827
+msgid ""
+"Remember, you can apply for up to fifty thousand pounds (£50,000) of your"
+" revenue costs (no more than 20&percnt; of your capital funding)."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:830
+msgid ""
+"You can use your business plan to provide any information that supports "
+"your answers"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:842
+msgid "Tell us about the total revenue costs of your project."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:845
+msgid ""
+"These are the running costs of the project. This might include general "
+"costs, including for:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:856
+msgid ""
+"Remember, you can apply for up to £50,000 of your revenue costs (no more "
+"than 20&percnt; of your capital funding)."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:876
+msgid "Tell us how the revenue funding you've requested will help run the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:879
+msgid ""
+"Include the specific needs it will meet, and how you'll meet these needs "
+"once you've spent the funding."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:914
+msgid "Describe the feasibility work you still need to complete"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:917
+msgid "Include details of your plans and when you expect to complete them"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:975
+msgid "Operational costs"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:978
+msgid "Summarise your income and operational costs for the running of the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:981
+msgid ""
+"Include how you see it working over the next three years. You must use "
+"your business plan to provide a forecast of figures."
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:987
+msgid ""
+"Describe any relevant experience you have delivering similar projects or "
+"running an asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1048
+msgid ""
+"Tell us how the asset will be accountable to local people, and involve "
+"them in its running"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1051
+msgid ""
+"This means how you'll involve everyone in key decisions, such as how the "
+"asset is used"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1057
+msgid ""
+"For example, high membership costs or exclusive eligibility criteria "
+"which prevent people from participating"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1075
+msgid "Your business plan should include (but is not limited to):"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1079
+msgid "Information about the capital element of your project. This could include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1084
+msgid ""
+"information about your completed or planned feasibility studies. This "
+"could include any relevant surveys"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1087
+msgid "a programme with key milestones for completion of your project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1090
+msgid ""
+"your skills and resources to manage the capital project, including "
+"relevant project management expertise"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1095
+msgid "A financial breakdown of your project. This should include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1100
+msgid ""
+"a clear breakdown of the total capital project costs and explanation of "
+"how these have been calculated. This could include any quotes or cost "
+"benchmarking"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1103
+msgid "whether the costs include irrecoverable VAT"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1106
+msgid "the capital funding request from the Community Ownership Fund"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1109
+msgid "the total amount of match funding required"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1112
+msgid "sources of match funding secured to date"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1115
+msgid "sources of match funding still to be secured"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1118
+msgid ""
+"timescales and potential sources for securing all outstanding match "
+"funding"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1123
+msgid ""
+"Information about how the asset will be used and managed in the future. "
+"This should include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1128
+msgid ""
+"a discussion of planned activities and/or services that will take place "
+"in the community asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1131
+msgid ""
+"your full financial forecasts, including income sources and costs with an"
+" evidenced set of assumptions"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1134
+msgid ""
+"a clear breakdown of the revenue project costs and explanation of how "
+"these have been calculated"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1137
+msgid "your cashflow and revenue budgets"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1145
+msgid ""
+"A consideration of risks and mitigations of both the capital works/spend "
+"and the ongoing operation of the asset"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1148
+msgid "Organisational and governance information. This should include:"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1156
+msgid "members of your board, including their role and main responsibilities"
+msgstr ""
+
+#: pre_award/apply/templates/apply/all_questions/uses_translations/cof_r3_all_questions.html:1220
+msgid ""
+"Confirm that the information you've provided in this application is "
+"accurate to the best of your knowledge on the date of submission"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/applications_table.html:32
+#: pre_award/apply/templates/apply/partials/start-application-button.html:11
+msgid "Continue application"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/applications_table.html:37
+msgid "Untitled project"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/applications_table.html:77
+#, fuzzy
+msgid "Status"
+msgstr "Cysylltwch â ni"
+
+#: pre_award/apply/templates/apply/partials/applications_table.html:80
+msgid "Last edited"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/applications_table.html:83
+msgid "Application Reference"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/applications_table.html:90
+msgid "Language"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/applications_table.html:98
+msgid "Action"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/available_in_language.html:10
+msgid "You cannot change the language of an existing application."
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/contact_details.html:4
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:4
+msgid "Please contact us through our "
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/contact_details.html:9
+#: pre_award/apply/templates/apply/partials/contact_details.html:24
+#: pre_award/apply/templates/apply/partials/contact_details.html:34
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:9
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:24
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:34
+msgid "except public holidays"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/contact_details.html:18
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:18
+msgid "Telephone"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/contact_details.html:29
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:29
+msgid "Textphone"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/eligibility-check-button.html:11
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:25
+msgid "Start a new application"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/feedback_error_summary.html:5
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:21
+msgid "There is a problem"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/round_closed_warning.html:12
+#: pre_award/apply/templates/apply/partials/round_closed_warning.html:20
+msgid "Window closed"
+msgstr "Ffenestr ar gau"
+
+#: pre_award/apply/templates/apply/partials/round_closed_warning.html:14
+#: pre_award/apply/templates/apply/partials/round_closed_warning.html:22
+msgid "Closed"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/round_closed_warning.html:15
+msgid ""
+"We have now entered a pre-election period. There will be no further "
+"Community Ownership\n"
+"            Fund announcements at this time."
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/round_closed_warning.html:17
+#, fuzzy
+msgid "You can no longer submit applications in this window."
+msgstr ""
+"Ni allwch gyflwyno ceisiadau yn y ffenestr hon mwyach. Bydd unrhyw un "
+"oedd gennych ar y gweill yn cael ei e-bostio atoch."
+
+#: pre_award/apply/templates/apply/partials/start-application-button.html:11
+msgid "Start new application"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_section.html:33
+msgid "of the assessment criteria"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_section.html:50
+#: pre_award/apply/templates/apply/partials/tasklist_section.html:65
+msgid "Feedback on this section (not scored)"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_section.html:57
+msgid "Feedback on this section submitted"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_section.html:73
+msgid ""
+"You must complete all other questions in this section before giving "
+"feedback"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_submit.html:7
+msgid "All sections complete"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_submit.html:10
+msgid "You can submit your application when you are ready."
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_submit.html:11
+msgid "Once your application has been submitted, you cannot change your answers."
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_submit.html:12
+msgid "Submit your application"
+msgstr ""
+
+#: pre_award/authenticator/frontend/magic_links/forms.py:23
+msgid "Session expired, please refresh page to continue."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:9
+msgid "Email sent"
+msgstr "E-bost wedi'i anfon"
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:11
+msgid "Email not sent"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:26
+msgid "No email has been sent."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:27
+msgid "If you need a link to access your applications you can "
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:27
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:47
+msgid "request a new link"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:32
+msgid "We have sent an email to "
+msgstr "Rydym wedi anfon e-bost i "
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:35
+msgid ""
+"Use the link to confirm your email address and start a new application, "
+"or continue any applications you have in progress."
+msgstr ""
+"Defnyddiwch y ddolen i gadarnhau eich cyfeiriad e-bost a dechrau cais newydd, "
+"neu i barhau ag unrhyw geisiadau sydd gennych ar waith."
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:37
+msgid "The link will work once and stop working after 24 hours."
+msgstr "Bydd y ddolen yn gweithio unwaith ac yn stopio gweithio ar ôl 24 awr."
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:42
+msgid "If you do not receive an email"
+msgstr "Os nad ydych chi'n derbyn e-bost"
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:46
+msgid "The email may take a few minutes to arrive."
+msgstr "Gall gymryd ychydig funudau i'r e-bost gyrraedd."
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:47
+msgid "Check your spam or junk folders – if it still has not arrived, you can "
+msgstr ""
+"Gwiriwch eich folder 'junk' a 'spam' "
+"- os nad ydyw wedi cyrraedd, gallech "
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:28
+msgid ""
+"You must use the same email address when you submit a full application to"
+" Community Ownership Fund"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:44
+msgid ""
+"<p>We'll email you a link to start a new application, or continue any "
+"applications you have in progress.</p>\n"
+"<p>The link will work once and stop working after 24 hours.</p>\n"
+"<p>If you want to return to an application, you must use the email you "
+"started the application with.</p>"
+msgstr ""
+"<p>Byddwn yn e-bostio dolen atoch i "
+"ddechrau cais newydd, neu i barhau "
+"ag unrhyw geisiadau sydd gennych ar "
+"waith.</p><p>Bydd y ddolen yn gweithio "
+"unwaith ac yn stopio gweithio ar "
+"ôl 24 awr.</p><p>Os ydych chi eisiau "
+"mynd yn ôl at gais, rhaid i "
+"chi ddefnyddio'r e-bost y dechreuoch y"
+" cais gydag ef.</p>"
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:47
+msgid "<p>Use the email address you would like your outcome email sent to.</p>"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/invalid.html:4
+msgid "Link expired"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/invalid.html:11
+msgid " Magic link expired "
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/invalid.html:16
+msgid " You can request a new magic link to access your application. "
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/invalid.html:24
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/signed_out.html:35
+msgid "Request a new link"
+msgstr "cais am linc arall"
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:31
+msgid "How to complete your application"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:17
+msgid "Express an interest in applying for the "
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:29
+msgid ""
+"You must complete this Expression of Interest (EOI) form if you are "
+"interested in applying for the Community Ownership Fund."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:30
+#, fuzzy
+msgid "Read the fund's prospectus before you start"
+msgstr ""
+"<a class=\"govuk-link\" href=\"%(prospectus_link)s\">Darllenwch "
+"brosbectws y gronfa</a> cyn dechrau."
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:34
+msgid "What this process involves"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:38
+msgid ""
+"We will ask for some basic information about your organisation and your "
+"project. This should take approximately 15 minutes to complete."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:42
+msgid ""
+"You will receive instant results showing whether your project may be "
+"suitable for COF funding. You will also receive an email with guidance on"
+" any additional requirements you must meet before applying."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:46
+msgid ""
+"Meeting the requirements at EOI stage does not guarantee you are eligible"
+" for funding. Your full application to COF will be subject to further "
+"gateway, eligibility, and due diligence checks, as set out in our"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:47
+msgid "explanatory note on decision making"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:51
+msgid "How we'll use your data"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:55
+msgid ""
+"Some of the answers you submit will be assessed automatically to show "
+"whether you are suitable for COF."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:59
+msgid ""
+"We also store this data so we can refer to it if you complete a COF "
+"application."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:63
+msgid ""
+"By completing this form, you also consent to share your data with our "
+"development support provider, who may direct you to relevant information "
+"and support. They will also use your answers to determine whether you may"
+" be eligible for in-depth support with your COF application."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:68
+msgid "Read our privacy notice for more information."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/signed_out.html:4
+msgid "You are not logged in"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/signed_out.html:6
+msgid "You have been signed out"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/signed_out.html:20
+msgid "Your session has "
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/signed_out.html:22
+msgid "expired"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/signed_out.html:24
+msgid "been closed"
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/signed_out.html:30
+msgid "To re-access your account, please click below to request a new link."
+msgstr ""
+
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/signed_out.html:38
+msgid ""
+"To re-access your account, please use the link originally provided in the"
+" email sent you."
+msgstr ""
 
 #~ msgid "Contact the"
 #~ msgstr "Cysylltu â'r "
@@ -392,9 +4515,6 @@ msgstr ""
 #~ msgid "We have sent you a confirmation email and a copy of your answers to"
 #~ msgstr "Rydym wedi anfon  neges e-bost i gadarnhau a chopi o'ch atebion at"
 
-#~ msgid "What happens next"
-#~ msgstr "Beth sy'n digwydd nesaf"
-
 #~ msgid "Your application to the"
 #~ msgstr "Mae eich cais i'r"
 
@@ -484,9 +4604,6 @@ msgstr ""
 #~ msgid "Error:"
 #~ msgstr "Gwall:"
 
-#~ msgid "Save and continue"
-#~ msgstr "Arbed a pharhau"
-
 #~ msgid "2 of 4 questions"
 #~ msgstr "Cwestiwn 2 o 4"
 
@@ -533,9 +4650,6 @@ msgstr ""
 #~ "gwblhau’r cais hwn, fel y gallwn "
 #~ "wella ein ffurflenni cais. Ni fydd "
 #~ "eich ymatebion yn cael eu sgorio."
-
-#~ msgid "Continue"
-#~ msgstr "Parhau"
 
 #~ msgid ""
 #~ "You will receive an email shortly "
@@ -693,14 +4807,6 @@ msgstr ""
 #~ msgid "support desk"
 #~ msgstr ""
 
-#~ msgid "Cookies on Access Funding"
-#~ msgstr "Cwcis ar Gyllid Mynediad"
-
-#~ msgid "We use some essential cookies to make this service work."
-#~ msgstr ""
-#~ "Rydym yn defnyddio rhai cwcis hanfodol"
-#~ " i wneud i'r gwasanaeth hwn weithio."
-
 #~ msgid ""
 #~ "We'd also like to use analytics "
 #~ "cookies so we can understand how "
@@ -711,18 +4817,6 @@ msgstr ""
 #~ "fel y gallwn ddeall sut rydych yn"
 #~ " defnyddio'r gwasanaeth a gwneud "
 #~ "gwelliannau."
-
-#~ msgid "Accept analytics cookies"
-#~ msgstr "Derbyn cwcis dadansoddeg"
-
-#~ msgid "Reject analytics cookies"
-#~ msgstr "Gwrthod cwcis dadansoddeg"
-
-#~ msgid "View cookies"
-#~ msgstr "Gweld cwcis"
-
-#~ msgid "Hide cookie message"
-#~ msgstr "Cuddio'r neges ynghylch cwcis"
 
 #~ msgid "View all applications"
 #~ msgstr "Eich ceisiadau"
@@ -1126,13 +5220,13 @@ msgstr ""
 #~ msgid "Does your organisation use any other names?"
 #~ msgstr "A yw eich sefydliad yn defnyddio unrhyw enwau eraill?"
 
-#~ msgctxt "individual"
+#~ msgctxt "indefinite"
 #~ msgid "If 'Yes', go to"
-#~ msgstr "Os 'Ydy', ewch i"
+#~ msgstr "Os 'Oes', ewch i"
 
-#~ msgctxt "individual"
+#~ msgctxt "indefinite"
 #~ msgid "If 'No', go to"
-#~ msgstr "Os 'Nac ydy', ewch i"
+#~ msgstr "Os 'Nac oes', ewch i"
 
 #~ msgid "Alternative names of your organisation"
 #~ msgstr "Enwau amgen eich sefydliad"
@@ -1149,16 +5243,8 @@ msgstr ""
 #~ msgid "Have you delivered projects like this before?"
 #~ msgstr "A ydych chi wedi cyflawni prosiectau fel hwn o'r blaen?"
 
-#~ msgctxt "group"
-#~ msgid "If 'Yes', go to"
-#~ msgstr "Os 'Ydyn', ewch i"
-
 #~ msgid "and"
 #~ msgstr "a"
-
-#~ msgctxt "group"
-#~ msgid "If 'No', go to"
-#~ msgstr "Os 'Nac ydyn', ewch i"
 
 #~ msgid "Describe your previous projects"
 #~ msgstr "Disgrifiwch eich prosiect blaenorol"
@@ -1903,14 +5989,6 @@ msgstr ""
 #~ "Ni ddylai fod yn fwy na £50,000,"
 #~ " a dim mwy nag 20percnt; o'ch "
 #~ "cyllid cyfalaf."
-
-#~ msgctxt "indefinite"
-#~ msgid "If 'Yes', go to"
-#~ msgstr "Os 'Oes', ewch i"
-
-#~ msgctxt "indefinite"
-#~ msgid "If 'No', go to"
-#~ msgstr "Os 'Nac oes', ewch i"
 
 #~ msgid "Revenue costs (optional)"
 #~ msgstr "cosau refeniw (dewisol)"
@@ -3550,9 +7628,6 @@ msgstr ""
 #~ msgid "Session expired, please refresh page to continue."
 #~ msgstr ""
 
-#~ msgid "Email sent"
-#~ msgstr "E-bost wedi'i anfon"
-
 #~ msgid "Email not sent"
 #~ msgstr ""
 
@@ -3561,38 +7636,6 @@ msgstr ""
 
 #~ msgid "If you need a link to access your applications you can "
 #~ msgstr ""
-
-#~ msgid "request a new link"
-#~ msgstr "cais am linc arall"
-
-#~ msgid "We have sent an email to "
-#~ msgstr "Rydym wedi anfon e-bost i "
-
-#~ msgid ""
-#~ "Use the link to confirm your email"
-#~ " address and start a new application,"
-#~ " or continue any applications you "
-#~ "have in progress."
-#~ msgstr ""
-#~ "Defnyddiwch y ddolen i gadarnhau eich"
-#~ " cyfeiriad e-bost a dechrau cais "
-#~ "newydd, neu i barhau ag unrhyw "
-#~ "geisiadau sydd gennych ar waith."
-
-#~ msgid "The link will work once and stop working after 24 hours."
-#~ msgstr "Bydd y ddolen yn gweithio unwaith ac yn stopio gweithio ar ôl 24 awr."
-
-#~ msgid "If you do not receive an email"
-#~ msgstr "Os nad ydych chi'n derbyn e-bost"
-
-#~ msgid "The email may take a few minutes to arrive."
-#~ msgstr "Gall gymryd ychydig funudau i'r e-bost gyrraedd."
-
-#~ msgid "Check your spam or junk folders – if it still has not arrived, you can "
-#~ msgstr ""
-#~ "Gwiriwch eich folder 'junk' a 'spam' "
-#~ "- os nad ydyw wedi cyrraedd, "
-#~ "gallech "
 
 #~ msgid ""
 #~ "You must use the same email "
@@ -3603,26 +7646,6 @@ msgstr ""
 #~ "cyfeiriad e-bost pan fyddwch yn cyflwyno"
 #~ " cais llawn i'r Gronfa Perchnogaeth "
 #~ "Gymunedol"
-
-#~ msgid ""
-#~ "<p>We'll email you a link to start"
-#~ " a new application, or continue any"
-#~ " applications you have in progress.</p>"
-#~ "\n"
-#~ "<p>The link will work once and stop working after 24 hours.</p>\n"
-#~ "<p>If you want to return to an "
-#~ "application, you must use the email "
-#~ "you started the application with.</p>"
-#~ msgstr ""
-#~ "<p>Byddwn yn e-bostio dolen atoch i "
-#~ "ddechrau cais newydd, neu i barhau "
-#~ "ag unrhyw geisiadau sydd gennych ar "
-#~ "waith.</p><p>Bydd y ddolen yn gweithio "
-#~ "unwaith ac yn stopio gweithio ar "
-#~ "ôl 24 awr.</p><p>Os ydych chi eisiau "
-#~ "mynd yn ôl at gais, rhaid i "
-#~ "chi ddefnyddio'r e-bost y dechreuoch y"
-#~ " cais gydag ef.</p>"
 
 #~ msgid "<p>Use the email address you would like your outcome email sent to.</p>"
 #~ msgstr ""

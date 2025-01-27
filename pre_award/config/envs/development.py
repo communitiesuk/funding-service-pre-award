@@ -56,7 +56,7 @@ class DevelopmentConfig(Config):
 
     USE_LOCAL_DATA = strtobool(getenv("USE_LOCAL_DATA", "True"))
     SESSION_COOKIE_SECURE = False
-    AUTO_REDIRECT_LOGIN = True
+    AUTO_REDIRECT_LOGIN = False
     DISABLE_NOTIFICATION_SERVICE = False  # Toggle on if you have no notify api key.
 
     SESSION_COOKIE_DOMAIN = getenv("SESSION_COOKIE_DOMAIN")
