@@ -13,7 +13,7 @@
 
 {% block header %}
 {{ mhclgHeader({
-    "productName": "MHCLG Funding",
+    "productName": "MHCLG Funding Service",
     "homepageUrl": url_for('proto_apply.grant_blueprint.all_open_grants_handler'),
     "classes": "govuk-header--full-width-border",
     "navigation": [{ "text": _("Sign in"), "href": url_for('proto_apply.application.all_user_application_list_handler') }] if not g.account.email,
