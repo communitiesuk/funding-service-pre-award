@@ -3,6 +3,13 @@
 {% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 
+{% block pageTitle %}
+  {% if round.is_expression_of_interest %}
+      {% trans %}Start or continue an{% endtrans %} {{ fund.title }}
+  {% else %}
+      {% trans %}Start or continue an application for{% endtrans %} {{ fund.title }}
+  {% endif %}
+{% endblock pageTitle %}
 
 {% block content %}
 
