@@ -143,12 +143,11 @@ def reminder_emails(c):
                 email_address = get_email_address(a["account_id"])
                 print(email_address)
                 print(r.fund)
-                breakpoint()
                 get_notification_service().send_application_deadline_reminder_email(
                     email_address=email_address,
-                    fund_name=r.fund,
+                    fund_name=r.fund.name_json["en"],
                     application_reference=a["reference"],
-                    round_name=r.title_json["en"],
+                    round_name=r.title_json["en"],  # TODO: Handle Welsh?
                     deadline=r.deadline,
                     contact_help_email=r.contact_email,
                 )

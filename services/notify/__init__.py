@@ -359,7 +359,7 @@ class NotificationService:
                 "name of fund": fund_name,
                 "application reference": application_reference,
                 "round name": round_name,
-                "application deadline": deadline,
+                "application deadline": str(deadline),  # TODO: work out correct pretty print for date
             },
             govuk_notify_reference=govuk_notify_reference,
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
