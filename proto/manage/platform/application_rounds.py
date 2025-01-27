@@ -142,7 +142,10 @@ def create_section_view(grant_code, round_code):
     form = NewSectionForm(data={"order": max(asec.order for asec in round.data_collection_definition.sections) + 1})
 
     if form.validate_on_submit():
-        create_section(round_id=round.id, **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}})
+        create_section(
+            definition_id=round.data_collection_definition.id,
+            **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}},
+        )
         return redirect(
             url_for(
                 "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
