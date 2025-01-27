@@ -89,6 +89,10 @@ def get_rounds_where_reminder_date_today() -> list[Round]:
     return rounds_with_parent_fund
 
 
+def has_reminder_been_sent(round: Round) -> bool:
+    return round.application_reminder_sent
+
+
 def get_sections_for_round(round_id) -> List[Section]:
     return db.session.scalars(select(Section).filter(Section.round_id == round_id).order_by(Section.path)).all()
 

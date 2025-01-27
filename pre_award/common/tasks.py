@@ -5,14 +5,15 @@ from contextlib import contextmanager
 
 from alembic import command
 from alembic.config import Config
+from flask import current_app
 from invoke import task
 
 from app import create_app
-from pre_award.account_store.db.models.queries import get_email_address
+from pre_award.account_store.db.models.queries import get_email_address, set_application_reminder_sent
 from pre_award.account_store.tasks import seed_local_account_store_impl
 from pre_award.application_store.db.queries.application.queries import search_applications
-from pre_award.apply.models.round import Round
 from pre_award.assessment_store.tasks.db_tasks import seed_assessment_store_db_impl
+from pre_award.fund_store.db.models import Round
 from pre_award.fund_store.db.queries import (
     get_rounds_where_reminder_date_today,
     get_rounds_with_reminder_date_in_future,
@@ -135,11 +136,16 @@ def reminder_emails(c):
         rounds: list[Round] = get_rounds_with_reminder_date_in_future()
         print([round.reminder_date for round in rounds])
         rounds_with_reminder_today = get_rounds_where_reminder_date_today()
-        for r in rounds_with_reminder_today:
+        rounds_with_unsent_application_reminders: list[Round] = [
+            r for r in rounds_with_reminder_today if not r.application_reminder_sent
+        ]
+        for r in rounds_with_unsent_application_reminders:
             non_submitted_applications = search_applications(
                 round_id=str(r.id), status_only=["IN_PROGRESS", "NOT_STARTED", "COMPLETED"], forms=False
             )
+
             for a in non_submitted_applications:
+                # TODO: Filter to unique email addresses
                 email_address = get_email_address(a["account_id"])
                 print(email_address)
                 print(r.fund)
@@ -151,12 +157,18 @@ def reminder_emails(c):
                     deadline=r.deadline,
                     contact_help_email=r.contact_email,
                 )
-                # current_app.logger.info(
-                #     "Sent notification %(notification_id)s for application %(application_reference)s",
-                #     dict(
-                #         notification_id=notification.id,
-                #         application_reference=application["application"]["reference"],
-                #     ),
+        current_app.logger.info(
+            "The application reminder has been sent successfully for %(fund_name)s %(round_name)s",
+            dict(fund_name=r.fund.name_json["en"], round_name=r.title_json["en"]),
+        )
+        set_application_reminder_sent(r)
+
+        # current_app.logger.info(
+        #     "Sent notification %(notification_id)s for application %(application_reference)s",
+        #     dict(
+        #         notification_id=notification.id,
+        #         application_reference=application["application"]["reference"],
+        #     ),
 
 
 @task

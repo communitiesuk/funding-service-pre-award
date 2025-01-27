@@ -33,7 +33,7 @@ class Fund(BaseModel):
     title_json = Column("title_json", JSON(none_as_null=True), nullable=False, unique=False)
     short_name = Column("short_name", db.String(), nullable=False, unique=True)
     description_json = Column("description_json", JSON(none_as_null=True), nullable=False, unique=False)
-    rounds: Mapped[List["Round"]] = relationship("Round")
+    rounds: Mapped[List["Round"]] = relationship("Round", back_populates="fund")
     welsh_available = Column("welsh_available", Boolean, default=False, nullable=False)
     owner_organisation_name = Column("owner_organisation_name", db.String(), nullable=False, unique=False)
     owner_organisation_shortname = Column("owner_organisation_shortname", db.String(), nullable=False, unique=False)
