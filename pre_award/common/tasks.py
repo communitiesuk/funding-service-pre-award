@@ -157,11 +157,12 @@ def reminder_emails(c):
                     deadline=r.deadline,
                     contact_help_email=r.contact_email,
                 )
-        current_app.logger.info(
-            "The application reminder has been sent successfully for %(fund_name)s %(round_name)s",
-            dict(fund_name=r.fund.name_json["en"], round_name=r.title_json["en"]),
-        )
-        set_application_reminder_sent(r)
+            current_app.logger.info(
+                "The application reminder has been sent successfully for %(fund_name)s %(round_name)s",
+                dict(fund_name=r.fund.name_json["en"], round_name=r.title_json["en"]),
+            )
+
+            set_application_reminder_sent(r)
 
         # current_app.logger.info(
         #     "Sent notification %(notification_id)s for application %(application_reference)s",
