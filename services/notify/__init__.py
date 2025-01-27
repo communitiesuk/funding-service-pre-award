@@ -342,13 +342,24 @@ class NotificationService:
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
         )
 
+    @classmethod
+    def format_deadline_date(cls, date: datetime):
+        # This is ambiguous but appears this is currently persisted as UK local time rather than UTC
+        # so not performing any timezone conversion at this point
+        return (
+            datetime.strptime(date.isoformat(), "%Y-%m-%dT%H:%M:%S")
+            .strftime(f"{'%d %B %Y'} at {'%I:%M%p'}")
+            .replace("AM", "am")
+            .replace("PM", "pm")
+        )
+
     def send_application_deadline_reminder_email(
         self,
         email_address: str,
         fund_name: str,
         application_reference: str,
         round_name: str,
-        deadline: str,
+        deadline: datetime,
         contact_help_email: str,
         govuk_notify_reference: str | None = None,
     ) -> Notification:
@@ -359,7 +370,7 @@ class NotificationService:
                 "name of fund": fund_name,
                 "application reference": application_reference,
                 "round name": round_name,
-                "application deadline": str(deadline),  # TODO: work out correct pretty print for date
+                "application deadline": self.format_deadline_date(deadline),
             },
             govuk_notify_reference=govuk_notify_reference,
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
