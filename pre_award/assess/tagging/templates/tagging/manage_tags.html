@@ -4,6 +4,7 @@
 {% set pageHeading = "Manage tags" %}
 
 {% block header %}
+{{ super() }}
 {{ tag_header("assessment landing", url_for("assessment_bp.landing"), fund_round, sso_logout_url) }}
 {% endblock header %}
 

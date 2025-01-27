@@ -6,6 +6,7 @@
 {% set pageHeading = "Get help" %}
 
 {% block header %}
+    {{ super()}}
 <nav class="govuk-header__navigation govuk-width-container">
     <div class="govuk-phase-banner flex-parent-element">
         {% if request.referrer %}
@@ -19,6 +20,7 @@
     </div>
 </nav>
 {% endblock header %}
+
 {% block content %}
     <h1 class="govuk-heading-l">Get help</h1>
     <p class="govuk-body">Problems with the assessment tool?</p>

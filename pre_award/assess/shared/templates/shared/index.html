@@ -1,14 +1,17 @@
 {% extends "assess/base.html" %}
 {%- from 'govuk_frontend_jinja/components/inset-text/macro.html' import govukInsetText -%}
 {%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
 {% block content %}
-    <div class="fsd-login-banner-background">
-    </div>
     <div class="govuk-width-container">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 <div class="govuk-grid-column-two-thirds">
-                    <h1 class="govuk-heading-xl">Welcome to the assessment tool</h1>
+                    <h1 class="govuk-heading-xl">Assessment tool</h1>
+                    <p class="govuk-body">
+                        The Funding Service assessment tool has been designed to help<br>
+                        evaluate fund applications, to facilitate fund decision-making.
+                    </p>
                     <p class="govuk-body">Here you can:</p>
                     <ul class="govuk-list govuk-list--bullet">
                         <li>assess applications end to end</li>
@@ -16,10 +19,10 @@
                         <li>monitor the assessment progress of a fund</li>
                     </ul>
                     {{ govukButton({
-                    "isStartButton": false,
-                    "href" : login_url,
-                    "text": "Log in"
-                    }) }}
+                        "text": "Sign in",
+                        "href": login_url,
+                        "isStartButton": true
+                      }) }}
                     <h2 class="govuk-heading-l">Get help</h2>
                     <p class="govuk-body">If you are having issues logging in, contact the FSD support team through our <a class="govuk-link" href=" {{ support_desk_apply }} " target="_blank">
                         {% trans %}support desk{% endtrans %}
