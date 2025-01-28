@@ -7,13 +7,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='fs/styles/apply.css' ) }}"> </link>
 {% endblock head %}
 
-{% block pageTitle %}
-  {% if round.is_expression_of_interest %}
-      {% trans %}Start or continue an{% endtrans %} {{ fund.title }}
-  {% else %}
-      {% trans %}Start or continue an application for{% endtrans %} {{ fund.title }}
-  {% endif %}
-{% endblock pageTitle %}
 
 {% block content %}
 
