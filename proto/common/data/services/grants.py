@@ -63,32 +63,22 @@ def get_all_grants_with_rounds():
 
 
 def create_grant(
-    code,
     name,
-    name_cy,
-    title,
-    title_cy,
-    description,
-    description_cy,
-    welsh_available,
     funding_type,
-    ggis_reference,
-    prospectus_link,
 ):
+    code = "".join([word[0] for word in name.upper().split(" ")])
     grant = Fund(
-        name_json={"en": name, "cy": name_cy},  # Workaround: required field
-        title_json={"en": title, "cy": title_cy},  # Workaround: required field
+        name_json={"en": name, "cy": ""},
+        title_json={"en": "", "cy": ""},
         short_name=code,
-        description_json={"en": description, "cy": description_cy},  # Workaround: required field
-        owner_organisation_name="todo",  # Workaround: required field
-        owner_organisation_shortname="todo",  # Workaround: required field
-        owner_organisation_logo_uri="todo",  # Workaround: required field
+        description_json={"en": "", "cy": ""},
+        owner_organisation_name="",
+        owner_organisation_shortname="",
+        owner_organisation_logo_uri="",
         funding_type=funding_type,
-        welsh_available=welsh_available,
-        ggis_scheme_reference_number=ggis_reference,
+        welsh_available=False,
+        ggis_scheme_reference_number="",
         proto_name=name,
-        proto_name_cy=name_cy,
-        proto_prospectus_link=prospectus_link,
     )
     db.session.add(grant)
 

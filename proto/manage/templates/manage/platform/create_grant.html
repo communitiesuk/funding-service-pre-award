@@ -17,17 +17,8 @@
 
     <form method="post" novalidate>
       {{ form.csrf_token }}
-      {{ form.code }}
       {{ form.name }}
-      {{ form.name_cy }}
-      {{ form.title }}
-      {{ form.title_cy }}
-      {{ form.description }}
-      {{ form.description_cy }}
-      {{ form.welsh_available }}
-      {{ form.funding_type }}
-      {{ form.prospectus_link }}
-      {{ form.ggis_reference }}
+      {{ form.funding_type(params={"classes": "govuk-radios--inline"}) }}
       {{ form.submit }}
     </form>
   </div>
