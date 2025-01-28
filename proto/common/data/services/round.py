@@ -12,19 +12,24 @@ from proto.common.data.models import Fund, Round
 from proto.common.data.models.fund import FundStatus
 
 
-def create_round(fund_id, code, title, title_cy, proto_start_date, proto_end_date):
+def create_round(fund_id):
+    existing_rounds = db.session.scalars(select(Round).join(Round.proto_grant).filter(Fund.id == fund_id)).all()
+    round_id = str(len(existing_rounds) + 1)
+    code = "R" + round_id
+    name = f"Round {round_id}"
+
     round = Round(
         short_name=code,
-        title_json={"en": title, "cy": title_cy},
-        opens=proto_start_date,
-        deadline=proto_end_date,
-        proto_start_date=proto_start_date,
-        proto_end_date=proto_end_date,
-        prospectus="https://www.google.com",
-        privacy_notice="https://www.google.com",
-        support_times="fixme",
-        support_days="fixme",
-        project_name_field_id="fixme",
+        title_json={"en": name, "cy": name},
+        opens=None,
+        deadline=None,
+        proto_start_date=None,
+        proto_end_date=None,
+        prospectus="",
+        privacy_notice="",
+        support_times="",
+        support_days="",
+        project_name_field_id="",
         fund_id=fund_id,
     )
     db.session.add(round)

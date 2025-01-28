@@ -1,13 +1,10 @@
-import datetime
-
 from flask import g, redirect, render_template, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
-from proto.common.data.exceptions import DataValidationError, attach_validation_error_to_form
 from proto.common.data.models.question_bank import TemplateType
 from proto.common.data.services.applications import create_application
-from proto.common.data.services.grants import get_grant, get_grant_and_round
+from proto.common.data.services.grants import get_grant_and_round
 from proto.common.data.services.question_bank import (
     add_template_sections_to_data_collection_definition,
     create_question,
@@ -15,9 +12,8 @@ from proto.common.data.services.question_bank import (
     get_section_for_data_collection_definition,
     get_template_sections_and_questions,
 )
-from proto.common.data.services.round import create_round, update_round
+from proto.common.data.services.round import update_round
 from proto.manage.platform.forms.application_round import (
-    CreateRoundForm,
     MakeRoundLiveForm,
     PreviewApplicationForm,
 )
@@ -29,39 +25,6 @@ rounds_blueprint = Blueprint("rounds", __name__)
 @rounds_blueprint.context_processor
 def _rounds_service_nav():
     return dict(active_navigation_tab="rounds")
-
-
-@rounds_blueprint.route("/grants/<grant_code>/create-round", methods=["GET", "POST"])
-@is_authenticated(as_platform_admin=True)
-def create_round_view(grant_code):
-    grant = get_grant(grant_code)
-    form = CreateRoundForm()
-    if form.validate_on_submit():
-        try:
-            round = create_round(
-                fund_id=grant.id,
-                **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}},
-                proto_start_date=datetime.date(2025, 1, 1),
-                proto_end_date=datetime.date(2025, 1, 31),
-            )
-        except DataValidationError as e:
-            attach_validation_error_to_form(form, e)
-        else:
-            return redirect(
-                url_for(
-                    "proto_manage.platform.rounds.view_round_overview",
-                    grant_code=grant_code,
-                    round_code=round.short_name,
-                )
-            )
-
-    return render_template(
-        "manage/platform/application_round/create_round.html",
-        grant=grant,
-        form=form,
-        back_link=url_for("proto_manage.platform.grants.view_grant_rounds", grant_code=grant_code),
-        active_sub_navigation_tab="funding",
-    )
 
 
 @rounds_blueprint.get("/grants/<grant_code>/rounds/<round_code>")

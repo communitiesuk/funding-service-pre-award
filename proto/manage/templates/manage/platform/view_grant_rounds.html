@@ -34,9 +34,10 @@
 
     <h2 class="govuk-heading-m">Rounds</h2>
 
-    <p class="govuk-body govuk-!-margin-bottom-6">
-    <a href="{{ url_for('proto_manage.platform.rounds.create_round_view', grant_code=grant.short_name) }}" class='{{ "govuk-button " + ("govuk-button--secondary" if grant.rounds else "") }}'>Create a new application round</a>
-    </p>
+    <form method="post" novalidate>
+      {{ form.csrf_token }}
+      {{ form.create_new_round }}
+    </form>
 
     {% for round in (grant.rounds | sort(attribute='short_name', case_sensitive=false, reverse=true) | sort(attribute='proto_start_date', reverse=true)) %}
       <h4 class="govuk-!-display-inline">

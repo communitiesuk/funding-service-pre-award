@@ -7,6 +7,8 @@ from proto.common.data.models.fund import FundStatus
 from proto.common.data.services.applications import search_applications
 from proto.common.data.services.grants import create_grant, get_all_grants_with_rounds, get_grant, update_grant
 from proto.common.data.services.recipients import search_recipients
+from proto.common.data.services.round import create_round
+from proto.manage.platform.forms.application_round import CreateRoundForm
 from proto.manage.platform.forms.grants import CreateGrantForm, MakeGrantLiveForm
 
 grants_blueprint = Blueprint("grants", __name__)
@@ -45,15 +47,27 @@ def view_grant_overview(grant_code):
     )
 
 
-@grants_blueprint.get("/grants/<grant_code>/application-rounds")
+@grants_blueprint.route("/grants/<grant_code>/application-rounds", methods=("GET", "POST"))
 @is_authenticated(as_platform_admin=True)
 def view_grant_rounds(grant_code):  # todo: rename everything application-roundy
     grant = get_grant(grant_code)
+    form = CreateRoundForm()
+    if form.validate_on_submit():
+        round = create_round(fund_id=grant.id)
+        return redirect(
+            url_for(
+                "proto_manage.platform.rounds.view_round_overview",
+                grant_code=grant.short_name,
+                round_code=round.short_name,
+            )
+        )
+
     return render_template(
         "manage/platform/view_grant_rounds.html",
         grant=grant,
         back_link=url_for("proto_manage.platform.grants.index"),
         active_sub_navigation_tab="funding",
+        form=form,
     )
 
 
