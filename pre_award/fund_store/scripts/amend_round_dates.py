@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 import click
 
+from data.models import Round
 from pre_award.db import db
 from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import rounds_config as cof_r2_configs
 from pre_award.fund_store.config.fund_loader_config.cof.cof_r3 import round_config as cof_r3w1_config
@@ -14,7 +15,6 @@ from pre_award.fund_store.config.fund_loader_config.cof.eoi import round_config_
 from pre_award.fund_store.config.fund_loader_config.cyp.cyp_r1 import round_config as cyp_config
 from pre_award.fund_store.config.fund_loader_config.digital_planning.dpi_r2 import round_config as dpif_config
 from pre_award.fund_store.config.fund_loader_config.night_shelter.ns_r2 import round_config as nstf_config
-from pre_award.fund_store.db.models import Round
 
 ROUND_IDS = {
     "COF_R2W2": "c603d114-5364-4474-a0c4-c41cbf4d3bbd",

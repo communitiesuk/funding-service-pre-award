@@ -13,9 +13,8 @@ from sqlalchemy_utils import Ltree
 from werkzeug.test import TestResponse
 
 from app import create_app
+from data.models import Fund, FundingType, Round
 from pre_award.config import Config
-from pre_award.fund_store.db.models.fund import Fund, FundingType
-from pre_award.fund_store.db.models.round import Round
 from pre_award.fund_store.db.models.section import Section
 from pre_award.fund_store.db.queries import insert_fund_data, insert_sections, upsert_round_data
 

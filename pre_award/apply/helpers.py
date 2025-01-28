@@ -147,7 +147,11 @@ def format_rehydrate_payload(
 
 def find_round_short_name_in_request():
     view_args = request.view_args or {}
-    if round_short_name := view_args.get("round_short_name") or request.args.get("round"):
+    if (
+        round_short_name := view_args.get("round_short_name")
+        or request.args.get("round_short_name")
+        or request.args.get("round")
+    ):
         return round_short_name
     else:
         return None
@@ -183,9 +187,11 @@ def find_fund_id_in_request():
 
 def find_fund_short_name_in_request():
     view_args = request.view_args or {}
-    if (fund_short_name := view_args.get("fund_short_name") or request.args.get("fund")) and str.upper(
-        fund_short_name
-    ) in get_all_fund_short_names(get_ttl_hash(Config.LRU_CACHE_TIME)):
+    if (
+        fund_short_name := view_args.get("fund_short_name")
+        or request.args.get("fund_short_name")
+        or request.args.get("fund")
+    ) and str.upper(fund_short_name) in get_all_fund_short_names(get_ttl_hash(Config.LRU_CACHE_TIME)):
         return fund_short_name
     else:
         return None
