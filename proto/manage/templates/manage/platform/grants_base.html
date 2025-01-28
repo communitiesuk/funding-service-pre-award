@@ -12,7 +12,14 @@
                         <a href="{{ url_for('proto_manage.platform.grants.view_grant_overview', grant_code=grant.short_name) }}" class="{{ 'govuk-link govuk-link--no-visited-state govuk-link--no-underline govuk-!-padding-top-0 ' + ('selected' if active_sub_navigation_tab == 'dashboard' else '') }}">{% trans %}Dashboard{% endtrans %}</a>
                     </li>
                     <li class="fs-nav-item">
-                        <a href="#" class="govuk-link govuk-link--no-visited-state govuk-link--no-underline">{% trans %}Manage users{% endtrans %}</a>
+                        <a href="{{ url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name) }}" class="{{ 'govuk-link govuk-link--no-visited-state govuk-link--no-underline ' + ('selected' if active_sub_navigation_tab == 'funding' else '') }}">{% trans %}Funding{% endtrans %}</a>
+                    </li>
+                    <li class="fs-nav-item">
+                        <a href="{{ url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name) }}" class="{{ 'govuk-link govuk-link--no-visited-state govuk-link--no-underline ' + ('selected' if active_sub_navigation_tab == 'monitoring' else '') }}">{% trans %}Monitoring{% endtrans %}</a>
+                    </li>
+
+                    <li class="fs-nav-item">
+                        <a href="#" class="govuk-link govuk-link--no-visited-state govuk-link--no-underline">{% trans %}Team members{% endtrans %}</a>
                     </li>
                     <li class="fs-nav-item">
                         <a href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}" class="{{ 'govuk-link govuk-link--no-visited-state govuk-link--no-underline ' + ('selected' if active_sub_navigation_tab == 'settings' else '') }}">{% trans %}Settings{% endtrans %}</a>

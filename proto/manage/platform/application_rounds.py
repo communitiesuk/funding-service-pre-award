@@ -60,7 +60,7 @@ def create_round_view(grant_code):
         grant=grant,
         form=form,
         back_link=url_for("proto_manage.platform.grants.view_grant_rounds", grant_code=grant_code),
-        active_sub_navigation_tab="dashboard",
+        active_sub_navigation_tab="funding",
     )
 
 

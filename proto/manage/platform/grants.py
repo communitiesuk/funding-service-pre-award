@@ -4,6 +4,7 @@ from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
 from proto.common.data.exceptions import DataValidationError, attach_validation_error_to_form
 from proto.common.data.models.fund import FundStatus
+from proto.common.data.services.applications import search_applications
 from proto.common.data.services.grants import create_grant, get_all_grants_with_rounds, get_grant, update_grant
 from proto.manage.platform.forms.grants import CreateGrantForm, MakeGrantLiveForm
 
@@ -30,9 +31,11 @@ def view_grant_overview(grant_code):
     # the grant you're working on. You'll never randomly jump around because this changes
     session["last_selected_grant_short_code"] = grant_code
     grant = get_grant(grant_code)
+    applications = search_applications(grant_code)
     return render_template(
         "manage/platform/view_grant_overview.html",
         grant=grant,
+        applications=applications,
         back_link=url_for("proto_manage.platform.grants.index"),
     )
 
@@ -45,6 +48,7 @@ def view_grant_rounds(grant_code):  # todo: rename everything application-roundy
         "manage/platform/view_grant_rounds.html",
         grant=grant,
         back_link=url_for("proto_manage.platform.grants.index"),
+        active_sub_navigation_tab="funding",
     )
 
 
@@ -56,6 +60,7 @@ def view_grant_reporting_rounds(grant_code):
         "manage/platform/view_grant_reporting_rounds.html",
         grant=grant,
         back_link=url_for("proto_manage.platform.grants.index"),
+        active_sub_navigation_tab="monitoring",
     )
 
 

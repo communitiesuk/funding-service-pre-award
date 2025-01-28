@@ -16,8 +16,8 @@
             {{ grant.name }}
         </h1>
         {{ govukTag ({
-            "text": _("Draft"),
-            "classes": "govuk-tag--grey" + (" govuk-!-margin-top-1 govuk-!-margin-bottom-5" if not shouldInlineTag else "")
+            "text": grant.proto_status.value|title,
+            "classes": "govuk-tag--" + grant.status_colour + (" govuk-!-margin-top-1 govuk-!-margin-bottom-5" if not shouldInlineTag else "")
         }) }}
         {% if shouldInlineTag %}</div>{% endif %}
     </div>
@@ -29,7 +29,7 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-        <div class="govuk-heading-l govuk-!-margin-bottom-0">0</div>
+        <div class="govuk-heading-l govuk-!-margin-bottom-0">{{ applications | length }}</div>
         <div class="govuk-body">funding applications</div>
     </div>
     <div class="govuk-grid-column-one-third">
@@ -99,10 +99,24 @@
     <div class="govuk-grid-column-full">
         <hr class="govuk-section-break govuk-section-break--visible">
 
+        {# all based on the latest round - doesn't play nicely with having multiple - can think it through but not for the demo #}
+        {# links into sf thoughts about the application data collection being associated with a grant and #}
+        {# then each round linking to a fixed version of it, one for a lot more thinking tho #}
+        {% set indicativeRound = grant.rounds[0] if grant.rounds else None %}
+        {% set applicationRoundText = _("Preview round open") if grant.rounds else _("No open rounds") %}
+
+        {% if indicativeRound.data_collection_definition %}
+            {% set questions = [] %}
+            {% set numberOfSections = indicativeRound.data_collection_definition.sections | length %}
+            {% for section in indicativeRound.data_collection_definition.sections %}
+                {% set questions = questions.append(section.questions | length) %}
+            {% endfor %}
+        {% endif %}
+        {% set applicationQuestionsText = _("No application questions") if not indicativeRound.data_collection_definition else (questions | sum | string + " questions in " + numberOfSections | string + " sections") %}
         {% set rows = [
             (_("Recipients"), "0 awarded grant recipients", _("Manage"), "#"),
-            (_("Application rounds"), "Preview round open", _("Manage"), url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name)),
-            (_("Application information"), "16 questions across 3 sections", _("Manage"), "#"),
+            (_("Application rounds"), applicationRoundText, _("Manage"), url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name)),
+            (_("Application information"), applicationQuestionsText, _("Manage") if indicativeRound else "", url_for('proto_manage.platform.rounds.view_round_data_collection', grant_code=grant.short_name, round_code=indicativeRound.short_name)),
         ] %}
 
         {{ grantSummaryList(rows) }}
