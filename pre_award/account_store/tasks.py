@@ -38,6 +38,7 @@ def seed_local_account_store_impl():
         {
             "email": "lead_assessor@example.com",
             "account_id": uuid4(),
+            "full_name": "Example Lead Assessor",
             "roles": [
                 "CTDF_LEAD_ASSESSOR",
                 "CTDF_ASSESSOR",
@@ -55,6 +56,7 @@ def seed_local_account_store_impl():
         },
         {
             "email": "dev@example.com",
+            "full_name": "Local Debug User",
             "account_id": "00000000-0000-0000-0000-000000000000",
             "roles": [],
         },
@@ -63,7 +65,11 @@ def seed_local_account_store_impl():
         account_from_db = db.session.query(Account).where(Account.email == account_to_create["email"]).one_or_none()
         if not account_from_db:
             # Create account
-            account = Account(id=account_to_create["account_id"], email=account_to_create["email"])
+            account = Account(
+                id=account_to_create["account_id"],
+                email=account_to_create["email"],
+                full_name=account_to_create["full_name"],
+            )
             db.session.add(account)
             db.session.commit()
             print(f"Created account for {account_to_create['email']}")
