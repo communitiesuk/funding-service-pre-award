@@ -1,8 +1,8 @@
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
-from govuk_frontend_wtf.wtforms_widgets import GovCheckboxesInput, GovSubmitInput, GovTextInput, GovRadioInput
-from wtforms import SelectMultipleField, SubmitField, StringField, IntegerField, RadioField
-from wtforms.validators import DataRequired, Regexp, Optional
+from govuk_frontend_wtf.wtforms_widgets import GovCheckboxesInput, GovRadioInput, GovSubmitInput, GovTextInput
+from wtforms import IntegerField, RadioField, SelectMultipleField, StringField, SubmitField
+from wtforms.validators import DataRequired, Optional
 from wtforms.widgets import HiddenInput
 
 from proto.common.data.models import TemplateSection
@@ -37,15 +37,6 @@ class NewSectionForm(FlaskForm):
         widget=GovTextInput(),
         validators=[DataRequired(message=_l("Enter the name of the section"))],
     )
-    slug = StringField(
-        _l("What is the URL slug for this section?"),
-        widget=GovTextInput(),
-        validators=[
-            DataRequired(message=_l("Enter a URL slug for the section")),
-            Regexp(r"[a-z\-]+", message=_l("Enter a URL slug using only letters and dashes")),
-        ],
-        filters=[lambda val: val.lower() if val else val],
-    )
     order = IntegerField(
         widget=HiddenInput(),
     )
@@ -69,14 +60,6 @@ class NewQuestionForm(FlaskForm):
         description="Only provide this if additional information is needed to help answer the question correctly.",
         widget=GovTextInput(),
         validators=[Optional()],
-    )
-    slug = StringField(
-        _l("What is the URL slug for this question?"),
-        widget=GovTextInput(),
-        validators=[
-            DataRequired(message=_l("Enter a URL slug for the question")),
-            Regexp(r"[a-z\-]+", message=_l("Enter a URL slug using only letters and dashes")),
-        ],
     )
     order = IntegerField(
         widget=HiddenInput(),

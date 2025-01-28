@@ -9,6 +9,7 @@ from proto.common.data.models import (
 )
 from proto.common.data.models.data_collection import ProtoDataCollectionDefinition
 from proto.common.data.models.question_bank import TemplateType
+from proto.common.helpers import make_url_slug
 
 
 def get_template_sections_and_questions(template_type: TemplateType):
@@ -37,12 +38,14 @@ def get_section_for_data_collection_definition(data_collection_definition, secti
 
 
 def create_question(**kwargs):
+    kwargs["slug"] = make_url_slug(kwargs["title"])
     question = ProtoDataCollectionDefinitionQuestion(**kwargs)
     db.session.add(question)
     db.session.commit()
 
 
 def create_section(**kwargs):
+    kwargs["slug"] = make_url_slug(kwargs["title"])
     section = ProtoDataCollectionDefinitionSection(**kwargs)
     db.session.add(section)
     db.session.commit()
