@@ -288,13 +288,6 @@ def upgrade():
         batch_op.alter_column("proto_end_date", existing_type=sa.Date(), nullable=False)
         batch_op.alter_column("proto_draft", existing_type=sa.Boolean(), nullable=False)
 
-    op.execute(
-        text(
-            "update round set proto_start_date = '2025-01-01', proto_end_date = '2025-02-28' "
-            "where proto_start_date is null and proto_end_date is null"
-        )
-    )
-
 
 def downgrade():
     with op.batch_alter_table("round", schema=None) as batch_op:

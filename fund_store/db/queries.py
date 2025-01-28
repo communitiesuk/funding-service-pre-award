@@ -249,6 +249,9 @@ def insert_fund_data(fund_config, commit: bool = True):
                 owner_organisation_logo_uri=bindparam("owner_organisation_logo_uri"),
                 ggis_scheme_reference_number=bindparam("ggis_scheme_reference_number"),
                 funding_type=bindparam("funding_type"),
+                proto_name=bindparam("proto_name"),
+                proto_name_cy=bindparam("proto_name_cy"),
+                proto_apply_action_description=bindparam("proto_apply_action_description"),
             )
         )
         .on_conflict_do_update(
@@ -264,6 +267,9 @@ def insert_fund_data(fund_config, commit: bool = True):
                 "owner_organisation_logo_uri": bindparam("owner_organisation_logo_uri"),
                 "ggis_scheme_reference_number": bindparam("ggis_scheme_reference_number"),
                 "funding_type": bindparam("funding_type"),
+                "proto_name": bindparam("proto_name"),
+                "proto_name_cy": bindparam("proto_name_cy"),
+                "proto_apply_action_description": bindparam("proto_apply_action_description"),
             },
         )
         .returning(Fund.id)
@@ -281,6 +287,9 @@ def insert_fund_data(fund_config, commit: bool = True):
         "owner_organisation_logo_uri": fund_config["owner_organisation_logo_uri"],
         "ggis_scheme_reference_number": fund_config.get("ggis_scheme_reference_number"),
         "funding_type": fund_config["funding_type"],
+        "proto_name": fund_config["name_json"]["en"],
+        "proto_name_cy": fund_config["name_json"]["cy"],
+        "proto_apply_action_description": fund_config["title_json"]["en"],
     }
 
     result = db.session.execute(stmt, update_params)
