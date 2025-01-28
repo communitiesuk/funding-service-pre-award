@@ -83,7 +83,7 @@ msgstr "Ffenestr ar gau - %(fund_round_names)s"
 #: apply/templates/apply/landing.html:19
 #, python-format
 msgid "Closed: %(closed_date)s"
-msgstr ""
+msgstr "Ar gau: %(closed_date)s"
 
 #: apply/templates/apply/landing.html:21
 #: pre_award/apply/templates/apply/partials/round_closed_warning.html:23
@@ -7574,9 +7574,6 @@ msgstr ""
 
 #~ msgid "There is a problem"
 #~ msgstr "Mae problem"
-
-#~ msgid "Closed"
-#~ msgstr "Ar gau"
 
 #~ msgid ""
 #~ "We have now entered a pre-election"
