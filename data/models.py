@@ -1,183 +1,140 @@
 import uuid
-from enum import Enum
-from typing import List
+from datetime import datetime
+from typing import TYPE_CHECKING, Any, List, Literal, Optional
 
 from alembic_utils.pg_extension import PGExtension
-from flask_sqlalchemy.model import DefaultMeta
-from sqlalchemy import JSON, Column, DateTime, ForeignKey, UniqueConstraint, func
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import ColumnElement, Enum, ForeignKey, UniqueConstraint, func
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import Mapped, relationship
-from sqlalchemy.types import Boolean
-from sqlalchemy.types import Enum as SQLAEnum
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from common.utils.date_time_utils import get_now_from_utc_time_without_tzinfo
 from pre_award.common.locale_selector.get_lang import get_lang
-from pre_award.db import db
+from pre_award.db import FundingType, db
+
+if TYPE_CHECKING:
+    from flask_sqlalchemy.model import Model
+else:
+    Model = db.Model
 
 ltree_extension = PGExtension(
     schema="public",
     signature="ltree",
 )
 
-BaseModel: DefaultMeta = db.Model
 
-
-class FundingType(Enum):
-    COMPETITIVE = "COMPETITIVE"
-    UNCOMPETED = "UNCOMPETED"
-    EOI = "EOI"
-
-
-class Fund(BaseModel):
-    id = Column(
-        "id",
-        UUID(as_uuid=True),
+class Fund(Model):
+    id: Mapped[uuid.UUID] = mapped_column(
         default=uuid.uuid4,
         primary_key=True,
-        nullable=False,
     )
-    name_json = Column("name_json", JSON(none_as_null=True), nullable=False, unique=False)
-    title_json = Column("title_json", JSON(none_as_null=True), nullable=False, unique=False)
-    short_name = Column("short_name", db.String(), nullable=False, unique=True)
-    description_json = Column("description_json", JSON(none_as_null=True), nullable=False, unique=False)
+    name_json: Mapped[dict[Literal["en", "cy"], str]]
+    title_json: Mapped[dict[Literal["en", "cy"], str]]
+    short_name: Mapped[str] = mapped_column(unique=True)
+    description_json: Mapped[dict[Literal["en", "cy"], str]]
     rounds: Mapped[List["Round"]] = relationship("Round")
-    welsh_available = Column("welsh_available", Boolean, default=False, nullable=False)
-    owner_organisation_name = Column("owner_organisation_name", db.String(), nullable=False, unique=False)
-    owner_organisation_shortname = Column("owner_organisation_shortname", db.String(), nullable=False, unique=False)
-    owner_organisation_logo_uri = Column("owner_organisation_logo_uri", db.Text(), nullable=True, unique=False)
-    funding_type = Column(
-        "funding_type",
-        SQLAEnum(FundingType, name="fundingtype"),
-        nullable=False,
-        unique=False,
+    welsh_available: Mapped[bool] = mapped_column(default=False, nullable=False)
+    owner_organisation_name: Mapped[str]
+    owner_organisation_shortname: Mapped[str]
+    owner_organisation_logo_uri: Mapped[Optional[str]]
+    funding_type: Mapped[FundingType] = mapped_column(
+        Enum(
+            FundingType,
+            name="fundingtype",
+            create_constraint=True,
+            validate_strings=True,
+        )
     )
-    ggis_scheme_reference_number = Column("ggis_scheme_reference_number", db.String(255), nullable=True, unique=False)
+    ggis_scheme_reference_number: Mapped[Optional[str]]
 
     @property
-    def fund_name(self):
+    def name(self) -> str:
         return self.name_json[get_lang()] or self.name_json["en"]
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.title_json[get_lang()] or self.title_json["en"]
 
 
-class Round(BaseModel):
+class Round(Model):
     __table_args__ = (UniqueConstraint("fund_id", "short_name"),)
-    id = Column(
-        "id",
-        UUID(as_uuid=True),
+    id: Mapped[uuid.UUID] = mapped_column(
         default=uuid.uuid4,
         primary_key=True,
-        nullable=False,
     )
     # fund_id: Mapped[UUID] = mapped_column(ForeignKey("fund.id"))
-    fund_id = Column(
-        "fund_id",
-        UUID(as_uuid=True),
+    fund_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("fund.id"),
-        nullable=False,
     )
     fund: Mapped[Fund] = relationship(lazy=True)
-    title_json = Column("title_json", JSON(none_as_null=True), nullable=False, unique=False)
-    short_name = Column("short_name", db.String(), nullable=False, unique=False)
-    opens = Column("opens", DateTime())
-    deadline = Column("deadline", DateTime())
-    assessment_start = Column("assessment_start", DateTime())
-    application_reminder_sent = Column(
-        "application_reminder_sent",
-        db.Boolean,
+    title_json: Mapped[dict[Literal["en", "cy"], str]]
+    short_name: Mapped[str]
+    opens: Mapped[Optional[datetime]]
+    deadline: Mapped[Optional[datetime]]
+    assessment_start: Mapped[Optional[datetime]]
+    application_reminder_sent: Mapped[bool] = mapped_column(default=False)
+    reminder_date: Mapped[Optional[datetime]]
+    assessment_deadline: Mapped[Optional[datetime]]
+    prospectus: Mapped[str]
+    privacy_notice: Mapped[str]
+    contact_us_banner_json: Mapped[Optional[dict[str, Any]]]
+    reference_contact_page_over_email: Mapped[bool] = mapped_column(
         default=False,
-        nullable=False,
     )
-    reminder_date = Column("reminder_date", DateTime())
-    assessment_deadline = Column("assessment_deadline", DateTime())
-    prospectus = Column("prospectus", db.String(), nullable=False, unique=False)
-    privacy_notice = Column("privacy_notice", db.String(), nullable=False, unique=False)
-    contact_us_banner_json = Column("contact_us_banner_json", JSON(none_as_null=True), nullable=True, unique=False)
-    reference_contact_page_over_email = Column(
-        "reference_contact_page_over_email",
-        db.Boolean,
-        default=False,
-        nullable=False,
-    )
-    contact_email = Column("contact_email", db.String(), nullable=True, unique=False)
-    contact_phone = Column("contact_phone", db.String(), nullable=True, unique=False)
-    contact_textphone = Column("contact_textphone", db.String(), nullable=True, unique=False)
-    support_times = Column("support_times", db.String(), nullable=False, unique=False)
-    support_days = Column("support_days", db.String(), nullable=False, unique=False)
-    instructions_json = Column("instructions_json", JSON(none_as_null=True), nullable=True, unique=False)
-    feedback_link = Column("feedback_link", db.String(), unique=False)
-    project_name_field_id = Column("project_name_field_id", db.String(), unique=False, nullable=False)
-    application_guidance_json = Column(
-        "application_guidance_json", JSON(none_as_null=True), nullable=True, unique=False
-    )
-    guidance_url = Column("guidance_url", db.String(), nullable=True, unique=False)
-    all_uploaded_documents_section_available = Column(
-        "all_uploaded_documents_section_available",
-        Boolean,
-        default=False,
-        nullable=False,
-    )
-    application_fields_download_available = Column(
-        "application_fields_download_available",
-        db.Boolean,
-        default=False,
-        nullable=False,
-    )
-    display_logo_on_pdf_exports = Column(
-        "display_logo_on_pdf_exports",
-        db.Boolean,
-        default=False,
-        nullable=False,
-    )
-    mark_as_complete_enabled = Column(
-        "mark_as_complete_enabled",
-        db.Boolean,
-        default=False,
-        nullable=False,
-    )
-    is_expression_of_interest = Column(
-        "is_expression_of_interest",
-        db.Boolean,
-        default=False,
-        nullable=False,
-    )
-    feedback_survey_config = Column("feedback_survey_config", JSON(none_as_null=True), nullable=True, unique=False)
-    eligibility_config = Column("eligibility_config", JSON(none_as_null=True), nullable=True, unique=False)
-    eoi_decision_schema = Column("eoi_decision_schema ", JSON(none_as_null=True), nullable=True, unique=False)
+    contact_email: Mapped[Optional[str]]
+    contact_phone: Mapped[Optional[str]]
+    contact_textphone: Mapped[Optional[str]]
+    support_times: Mapped[str]
+    support_days: Mapped[str]
+    instructions_json: Mapped[Optional[dict[str, str]]]
+    feedback_link: Mapped[Optional[str]]
+    project_name_field_id: Mapped[str]
+    application_guidance_json: Mapped[Optional[dict[str, Any]]]
+    guidance_url: Mapped[Optional[str]]
+    all_uploaded_documents_section_available: Mapped[bool] = mapped_column(default=False)
+    application_fields_download_available: Mapped[bool] = mapped_column(default=False)
+    display_logo_on_pdf_exports: Mapped[bool] = mapped_column(default=False)
+    mark_as_complete_enabled: Mapped[bool] = mapped_column(default=False)
+    is_expression_of_interest: Mapped[bool] = mapped_column(default=False)
+    feedback_survey_config: Mapped[Optional[dict[str, Any]]]
+    eligibility_config: Mapped[Optional[dict[str, Any]]]
+    eoi_decision_schema: Mapped[Optional[dict[str, Any]]]
 
     @hybrid_property
-    def is_past_submission_deadline(self):
-        return get_now_from_utc_time_without_tzinfo() > self.deadline
+    def is_past_submission_deadline(self) -> bool:
+        return get_now_from_utc_time_without_tzinfo() > self.deadline if self.deadline else False
 
     @is_past_submission_deadline.expression
-    def is_past_submission_deadline(cls):
+    def _is_past_submission_deadline(cls) -> ColumnElement[bool]:
         return func.now() > cls.deadline
 
     @hybrid_property
-    def is_not_yet_open(self):
-        return get_now_from_utc_time_without_tzinfo() < self.opens
+    def is_not_yet_open(self) -> bool:
+        return get_now_from_utc_time_without_tzinfo() < self.opens if self.opens else True
 
     @is_not_yet_open.expression
-    def is_not_yet_open(self):
-        return func.now() < self.opens
+    def _is_not_yet_open(cls) -> ColumnElement[bool]:
+        return func.now() < cls.opens
 
     @hybrid_property
-    def is_open(self):
-        return self.opens < get_now_from_utc_time_without_tzinfo() < self.deadline
+    def is_open(self) -> bool:
+        return (
+            self.opens < get_now_from_utc_time_without_tzinfo() < self.deadline
+            if (self.deadline and self.opens)
+            else False
+        )
 
     @is_open.expression
-    def is_open(self):
-        return self.opens < func.now() < self.deadline
+    def _is_open(cls) -> ColumnElement[bool]:
+        return cls.opens < func.now() < cls.deadline
 
     @property
-    def round_title(self):
+    def title(self) -> str | None:
+        if not self.title_json:
+            return None
         return self.title_json[get_lang()] or self.title_json["en"]
 
     @property
-    def round_instructions(self):
+    def instructions(self) -> str | None:
         if not self.instructions_json:
             return None
 
