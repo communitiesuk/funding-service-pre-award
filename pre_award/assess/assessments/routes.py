@@ -1301,28 +1301,30 @@ def request_changes(application_id, sub_criteria_id, theme_id):
     assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
 
-    form = build_request_changes_form(
-        question_choices=[
-            (question["field_id"], question["question"], question.get("answer", ""))
-            for question in theme_answers_response
-        ]
-    )()
+    question_choices = [
+        (question["field_id"], question["question"], question.get("answer", "")) for question in theme_answers_response
+    ]
 
+    form = build_request_changes_form(question_choices)()
+    justification_data = {field_id: getattr(form, f"reason_{field_id}").data for field_id, _, _ in question_choices}
     if request.method == "POST" and form.validate_on_submit():
-        submit_change_request(
-            application_id=application_id,
-            flag_type=FlagType.RAISED.name,
-            user_id=g.account_id,
-            justification=form.justification.data,
-            field_ids=form.field_ids.data,
-            section=[sub_criteria_id],
-            is_change_request=True,
-        )
+        for field_id, justification in justification_data.items():
+            justification = justification.strip()
+            if justification:
+                submit_change_request(
+                    application_id=application_id,
+                    flag_type=FlagType.RAISED.name,
+                    user_id=g.account_id,
+                    justification=justification,
+                    field_ids=[field_id],
+                    section=[sub_criteria_id],
+                    is_change_request=True,
+                )
 
-        update_assessment_record_status(
-            application_id=application_id,
-            status=WorkflowStatus.CHANGE_REQUESTED,
-        )
+            update_assessment_record_status(
+                application_id=application_id,
+                status=WorkflowStatus.CHANGE_REQUESTED,
+            )
 
         mark_application_with_requested_changes(application_id=application_id, field_ids=form.field_ids.data)
 
