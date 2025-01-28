@@ -2,21 +2,21 @@
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 
-{% extends "manage/base.jinja.html" %}
+{% extends "manage/platform/grants_base.html" %}
 
-{% block pageTitle %}{% trans %}Manage grants{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
-
+{% block pageTitle %}{% trans %}Settings{% endtrans %} - {{ grant.name }} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+{% block beforeContent %}{% endblock %}
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-m">Grant configuration</span>
-      {{ grant.name_json.en }}
+      <span class="govuk-caption-l">{{ grant.name }}</span>
+      {% trans %}Settings{% endtrans %}
     </h1>
   </div>
 </div>
-<div class="govuk-grid-row app-sidebar">
-  <div class="govuk-grid-column-two-thirds">
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
 
     {% if grant.is_draft %}
       {% if grant.rounds|rejectattr("is_draft")|list|length == 0 %}
@@ -36,53 +36,28 @@
     {% endif %}
 
     {% set editLinkHtml = "<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('fund.edit_view', id=grant.id, url=url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name)) + "'>Edit</a>" %}
+
+    {# [{"text": "Name (Welsh)"}, {"text": grant.name_json.cy}, {"html": editLinkHtml}], #}
+    {# [{"text": "Title (Welsh)"}, {"text": grant.title_json.cy}, {"html": editLinkHtml}], #}
+    {# [{"text": "Description (Welsh)"}, {"text": grant.description_json.cy}, {"html": editLinkHtml}], #}
     {{
       govukTable(
         {
           "firstCellIsHeader": true,
           "rows": [
             [{"text": "Code"}, {"text": grant.short_name}, {"html": editLinkHtml}],
-            [{"text": "Name (English)"}, {"text": grant.name_json.en}, {"html": editLinkHtml}],
-            [{"text": "Name (Welsh)"}, {"text": grant.name_json.cy}, {"html": editLinkHtml}],
-            [{"text": "Title (English)"}, {"text": grant.title_json.en}, {"html": editLinkHtml}],
-            [{"text": "Title (Welsh)"}, {"text": grant.title_json.cy}, {"html": editLinkHtml}],
-            [{"text": "Description (English)"}, {"text": grant.description_json.en}, {"html": editLinkHtml}],
-            [{"text": "Description (Welsh)"}, {"text": grant.description_json.cy}, {"html": editLinkHtml}],
+            [{"text": "Name"}, {"text": grant.name_json.en}, {"html": editLinkHtml}],
+            [{"text": "Title"}, {"text": grant.title_json.en}, {"html": editLinkHtml}],
+            [{"text": "Description"}, {"text": grant.description_json.en}, {"html": editLinkHtml}],
             [{"text": "Funding type"}, {"text": grant.funding_type.value}, {"html": editLinkHtml}],
             [{"text": "Organisation name"}, {"text": grant.owner_organisation_name}, {"html": editLinkHtml}],
             [{"text": "Organisation code"}, {"text": grant.owner_organisation_shortname}, {"html": editLinkHtml}],
             [{"text": "GGIS reference"}, {"text": grant.ggis_scheme_reference_number}, {"html": editLinkHtml}],
-          ]
+          ],
+          "classes": "govuk-!-margin-top-4"
         }
       )
     }}
-  </div>
-
-  <div class="govuk-grid-column-one-quarter app-sidebar__container">
-    <nav class="navigation" aria-label="Grant">
-      <ul class="govuk-list govuk-list--spaced">
-        <li class="govuk-!-margin-bottom-5"><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_overview', grant_code=grant.short_name) }}">Grant overview</a></li>
-
-        <li>
-          <p class="govuk-body govuk-!-margin-bottom-1">Manage</p>
-          <ul class="govuk-list app-list--dashed">
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.assess.list_grant_applications_handler', short_code=grant.short_name) }}"><span class="govuk-visually-hidden">Manage </span>Assessment</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Payments</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.recipients.index') }}"><span class="govuk-visually-hidden">Manage </span>Recipients</a></li>
-            <li class="govuk-!-margin-bottom-5"><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Monitoring</a></li>
-          </ul>
-        </li>
-
-        <li>
-          <p class="govuk-body govuk-!-margin-bottom-1">Configure</p>
-          <ul class="govuk-list app-list--dashed">
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-sidebar__item--active" href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Grant</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Application rounds</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Reporting rounds</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
   </div>
 </div>
 {% endblock %}

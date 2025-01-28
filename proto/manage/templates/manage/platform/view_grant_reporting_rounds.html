@@ -2,16 +2,18 @@
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 
-{% extends "manage/base.jinja.html" %}
+{% extends "manage/platform/grants_base.html" %}
 
 {% block pageTitle %}{% trans %}Manage grants{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
 
+{% block beforeContent %}{% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-m">Reporting rounds</span>
-      {{ grant.name_json.en }}
+      <span class="govuk-caption-l">{{ grant.name }}</span>
+      Reporting rounds
     </h1>
   </div>
 </div>
@@ -41,33 +43,6 @@
         <hr class="govuk-section-break--m" />
       {% endif %}
     {% endfor %}
-  </div>
-
-  <div class="govuk-grid-column-one-quarter app-sidebar__container">
-    <nav class="navigation" aria-label="Grant">
-      <ul class="govuk-list govuk-list--spaced">
-        <li class="govuk-!-margin-bottom-5"><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_overview', grant_code=grant.short_name) }}">Grant overview</a></li>
-
-        <li>
-          <p class="govuk-body govuk-!-margin-bottom-1">Manage</p>
-          <ul class="govuk-list app-list--dashed">
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.assess.list_grant_applications_handler', short_code=grant.short_name) }}"><span class="govuk-visually-hidden">Manage </span>Assessment</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Payments</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.recipients.index') }}"><span class="govuk-visually-hidden">Manage </span>Recipients</a></li>
-            <li class="govuk-!-margin-bottom-5"><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Monitoring</a></li>
-          </ul>
-        </li>
-
-        <li>
-          <p class="govuk-body govuk-!-margin-bottom-1">Configure</p>
-          <ul class="govuk-list app-list--dashed">
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Grant</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Application rounds</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-sidebar__item--active" href="{{ url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Reporting rounds</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
   </div>
 </div>
 {% endblock %}

@@ -19,7 +19,7 @@
         {% for grant in grants %}
         <li class="govuk-!-margin-bottom-8">
             <h2 class="govuk-heading-m">
-                <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_apply.application.application_list_handler', short_code=grant.short_name)}}">{{ grant.proto_name }}</a>
+                <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_apply.application.application_list_handler', short_code=grant.short_name)}}">{{ grant.name }}</a>
             </h2>
             {# not happy at all about using JSON here - I'll move this into a column at some point #}
             <p class="govuk-body">{{ grant.description_json.en }}</p>

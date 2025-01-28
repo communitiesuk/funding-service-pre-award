@@ -1,0 +1,41 @@
+{% extends "manage/base.jinja.html" %}
+
+{# not convinced this is the best way but works for now with all inheriting templates behaving as expected #}
+{% block main %}
+<div class="govuk-width-container {%- if containerClasses %} {{ containerClasses }}{% endif %}">
+    <main class="govuk-main-wrapper {%- if mainClasses %} {{ mainClasses }}{% endif %}" id="main-content" {%- if mainLang %} lang="{{ mainLang }}"{% endif %}>
+        <div class="fs-container">
+            <nav class="fs-left govuk-body">
+                <ul>
+                    <li class="fs-nav-item">
+                        {# adding the override class here manually is a workaround - make the first child css selector play nice #}
+                        <a href="{{ url_for('proto_manage.platform.grants.view_grant_overview', grant_code=grant.short_name) }}" class="{{ 'govuk-link govuk-link--no-visited-state govuk-link--no-underline govuk-!-padding-top-0 ' + ('selected' if active_sub_navigation_tab == 'dashboard' else '') }}">{% trans %}Dashboard{% endtrans %}</a>
+                    </li>
+                    <li class="fs-nav-item">
+                        <a href="{{ url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name) }}" class="{{ 'govuk-link govuk-link--no-visited-state govuk-link--no-underline ' + ('selected' if active_sub_navigation_tab == 'funding' else '') }}">{% trans %}Funding{% endtrans %}</a>
+                    </li>
+                    <li class="fs-nav-item">
+                        <a href="{{ url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name) }}" class="{{ 'govuk-link govuk-link--no-visited-state govuk-link--no-underline ' + ('selected' if active_sub_navigation_tab == 'monitoring' else '') }}">{% trans %}Monitoring{% endtrans %}</a>
+                    </li>
+
+                    <li class="fs-nav-item">
+                        <a href="#" class="govuk-link govuk-link--no-visited-state govuk-link--no-underline">{% trans %}Team members{% endtrans %}</a>
+                    </li>
+                    <li class="fs-nav-item">
+                        <a href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}" class="{{ 'govuk-link govuk-link--no-visited-state govuk-link--no-underline ' + ('selected' if active_sub_navigation_tab == 'settings' else '') }}">{% trans %}Settings{% endtrans %}</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="fs-right">
+                {% block beforeContent %}
+                    {# we'll talk about this pattern, leaving this in to work with the pages for now #}
+                    {% if back_link %}
+                        {{ govukBackLink({"href": back_link}) }}
+                    {% endif %}
+                {% endblock %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

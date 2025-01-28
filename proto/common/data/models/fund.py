@@ -112,3 +112,7 @@ class Fund(db.Model):
     @property
     def is_draft(self):
         return self.proto_status == FundStatus.DRAFT
+
+    @property
+    def name(self):
+        return self.proto_name or self.name_json.get("en")

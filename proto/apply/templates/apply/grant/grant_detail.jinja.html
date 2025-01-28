@@ -3,12 +3,12 @@
 
 {% extends "apply/base.jinja.html" %}
 
-{% block pageTitle %}{{ grant.proto_name }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+{% block pageTitle %}{{ grant.name }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">{{ grant.proto_name }}</h1>
+        <h1 class="govuk-heading-xl">{{ grant.name }}</h1>
 
         {% if grant.proto_apply_action_description %}
         <p class="govuk-body">

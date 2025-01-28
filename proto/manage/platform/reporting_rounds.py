@@ -58,6 +58,8 @@ def create_reporting_round_view(grant_code):
     return render_template(
         "manage/platform/reporting_round/create_round.html",
         form=form,
+        grant=grant,
+        active_sub_navigation_tab="monitoring",
         back_link=url_for("proto_manage.platform.grants.view_grant_reporting_rounds", grant_code=grant_code),
     )
 

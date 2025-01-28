@@ -9,8 +9,8 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">My grants</h1>
 
-
-    <a href="{{ url_for('proto_manage.platform.grants.create_grant_view') }}" class="govuk-button govuk-button--secondary">Create a new grant</a>
+    <p class="govuk-body">{% trans number_of_grants=grants | length %}You have access to {{ number_of_grants }} grants.{% endtrans %}</p>
+    <a href="{{ url_for('proto_manage.platform.grants.create_grant_view') }}" class="govuk-button govuk-button--secondary">{% trans %}Set up a new grant{% endtrans %}</a>
   <br>
 
     {% for grant in (grants | sort(attribute='short_name', case_sensitive=false)) %}

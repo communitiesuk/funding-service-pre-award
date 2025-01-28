@@ -1,79 +1,142 @@
-{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
-{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% extends "manage/platform/grants_base.html" %}
 
-{% extends "manage/base.jinja.html" %}
+{% block pageTitle %}{{ grant.name }} - {% trans %}Funding service{% endtrans %}{% endblock %}
 
-{% block pageTitle %}{% trans %}Manage grants{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
-
+{% block beforeContent %}{% endblock %}
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-m">Grant overview</span>
-      {{ grant.name_json.en }}
-    </h1>
-  </div>
+    <div class="govuk-grid-column-full">
+        {# don't judge me pls #}
+        {% set shouldInlineTag = (grant.name | length) <= 25 %}
+        {% if shouldInlineTag %}<div class="fs-align-status-tag govuk-!-margin-bottom-6">{% endif %}
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
+            {{ grant.name }}
+        </h1>
+        {{ govukTag ({
+            "text": grant.proto_status.value|title,
+            "classes": "govuk-tag--" + grant.status_colour + (" govuk-!-margin-top-1 govuk-!-margin-bottom-5" if not shouldInlineTag else "")
+        }) }}
+        {% if shouldInlineTag %}</div>{% endif %}
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h3 class="govuk-heading-s">{% trans %}In the last month{% endtrans %}</h3>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+        <div class="govuk-heading-l govuk-!-margin-bottom-0">{{ applications | length }}</div>
+        <div class="govuk-body">funding applications</div>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <div class="govuk-heading-l govuk-!-margin-bottom-0">0</div>
+        <div class="govuk-body">monitoring reports</div>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <div class="govuk-heading-l govuk-!-margin-bottom-0">£0</div>
+        <div class="govuk-body">total paid out</div>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        {% set yourGrantsLinksHtml %}
+            <p class="govuk-body">{% trans %}We've set up pages to let your fund team collect information from your users.{% endtrans %}</p>
+            <p class="govuk-body">{% trans %}You can preview these pages while you set up your fund. You can use share these links with your users and team for feedback.{% endtrans %}</p>
+
+            <p class="govuk-body govuk-!-margin-bottom-0">{% trans %}Appying for funding, or setting up an un-competed fund recipient profile.{% endtrans %}</p>
+            {% set applyLink = url_for('proto_apply.grant_blueprint.grant_detail_handler', short_code=grant.short_name) %}
+            <a class="govuk-heading-s govuk-link govuk-link--no-visited-state" href="{{ applyLink }}">https://funding.communities.gov.uk/access/grant/{{ grant.short_name }}</a>
+
+            <p class="govuk-body govuk-!-margin-top-4 govuk-!-margin-bottom-0">{% trans %}Reporting on funding progress by submitting monitoring information.{% endtrans %}</p>
+            <a class="govuk-heading-s govuk-link govuk-link--no-visited-state" href="{{ applyLink }}">https://funding.communities.gov.uk/report/grant/{{ grant.short_name }}</a>
+        {% endset %}
+        {{ govukDetails({
+            "summaryText": _("Your grants published links"),
+            "html": yourGrantsLinksHtml,
+            "classes": "govuk-!-margin-top-1"
+        })}}
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-!-margin-top-6">
+        <h2 class="govuk-heading-m">{% trans %}Funding{% endtrans %}</h2>
+        {% set uncompetedLink %}<a class="govuk-link govuk-link--no-visited-state" href="#">{% trans %}un-competed grants{% endtrans %}</a>{% endset %}
+        <p class="govuk-body">{% trans link=uncompetedLink %}See guidance on {{ link }} to let your users set up grant recipient profiles.{% endtrans %}</p>
+    </div>
 </div>
 
-<div class="govuk-grid-row app-sidebar">
-  <div class="govuk-grid-column-two-thirds">
-    {% if grant.is_draft %}
-      {% set insetText %}
-        <p>
-          This grant is a draft and must be published before any application rounds will become available.
-          <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}">Make the grant live.</a>
-        </p>
-      {% endset %}
-      {{ govukInsetText({"html": insetText}) }}
-    {% endif %}
+{# [ (key, value, action, valueIsHtml) ] #}
+{% macro grantSummaryList(rows) %}
+    {% set summaryListRows = [] %}
 
-    <p class="govuk-body govuk-!-display-inline-block govuk-!-margin-3 govuk-!-padding-5 app-card">
-      Applications
-      <br>
-      29
-    </p>
-    <p class="govuk-body govuk-!-display-inline-block govuk-!-margin-3 govuk-!-padding-5 app-card">
-      Recipients
-      <br>
-      12
-    </p>
-    <p class="govuk-body govuk-!-display-inline-block govuk-!-margin-3 govuk-!-padding-5 app-card">
-      Funding delivered
-      <br>
-      £1,242,481
-    </p>
+    {# cooked this up because there was quite a lot of custom styling being added to each row #}
+    {# note we only need padding on desktop, on mobile it gets very spaced out #}
+    {% for key, value, action, link in rows %}
+        {% set summaryListRows = summaryListRows.append({
+            "key": {
+                    "text": key,
+                    "classes": "govuk-!-padding-top-4 govuk-!-padding-bottom-4"
+                },
+                "value": { "text": value },
+                "actions": {
+                    "items": [
+                        { "text": action, "href": link, "classes": "govuk-link--no-visited-state" },
+                    ]
+                },
+        }) %}
+    {% endfor %}
 
-    <p class="govuk-body">
-      {{ grant.description_json.en }}
-    </p>
-  </div>
+    {{ govukSummaryList({
+        "rows": summaryListRows
+    }) }}
+{% endmacro %}
 
-  <div class="govuk-grid-column-one-quarter app-sidebar__container">
-    <nav class="navigation" aria-label="Grant">
-      <ul class="govuk-list govuk-list--spaced">
-        <li class="govuk-!-margin-bottom-5"><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline app-sidebar__item--active" href="{{ url_for('proto_manage.platform.grants.view_grant_overview', grant_code=grant.short_name) }}">Grant overview</a></li>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <hr class="govuk-section-break govuk-section-break--visible">
 
-        <li>
-          <p class="govuk-body govuk-!-margin-bottom-1">Manage</p>
-          <ul class="govuk-list app-list--dashed">
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.assess.list_grant_applications_handler', short_code=grant.short_name) }}"><span class="govuk-visually-hidden">Manage </span>Assessment</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Payments</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.recipients.index') }}"><span class="govuk-visually-hidden">Manage </span>Recipients</a></li>
-            <li class="govuk-!-margin-bottom-5"><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="#"><span class="govuk-visually-hidden">Manage </span>Monitoring</a></li>
-          </ul>
-        </li>
+        {# all based on the latest round - doesn't play nicely with having multiple - can think it through but not for the demo #}
+        {# links into sf thoughts about the application data collection being associated with a grant and #}
+        {# then each round linking to a fixed version of it, one for a lot more thinking tho #}
+        {% set indicativeRound = grant.rounds[0] if grant.rounds else None %}
+        {% set applicationRoundText = _("Preview round open") if grant.rounds else _("No open rounds") %}
 
-        <li>
-          <p class="govuk-body govuk-!-margin-bottom-1">Configure</p>
-          <ul class="govuk-list app-list--dashed">
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_configuration', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Grant</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Application rounds</a></li>
-            <li><a class="govuk-link govuk-link--no-visited-state govuk-link--no-underline" href="{{ url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name) }}"><span class="govuk-visually-hidden">Configure </span>Reporting rounds</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-  </div>
+        {% if indicativeRound.data_collection_definition %}
+            {% set questions = [] %}
+            {% set numberOfSections = indicativeRound.data_collection_definition.sections | length %}
+            {% for section in indicativeRound.data_collection_definition.sections %}
+                {% set questions = questions.append(section.questions | length) %}
+            {% endfor %}
+        {% endif %}
+        {% set applicationQuestionsText = _("No application questions") if not indicativeRound.data_collection_definition else (questions | sum | string + " questions in " + numberOfSections | string + " sections") %}
+        {% set rows = [
+            (_("Recipients"), (receipients | length | string) + " awarded grant recipients", _("Manage"), url_for('proto_manage.platform.recipients.list_grant_recipients', short_code=grant.short_name) ),
+            (_("Application rounds"), applicationRoundText, _("Manage"), url_for('proto_manage.platform.grants.view_grant_rounds', grant_code=grant.short_name)),
+            (_("Application information"), applicationQuestionsText, _("Manage") if indicativeRound else "", url_for('proto_manage.platform.rounds.view_round_data_collection', grant_code=grant.short_name, round_code=indicativeRound.short_name)),
+        ] %}
+
+        {{ grantSummaryList(rows) }}
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m govuk-!-margin-top-4">{% trans %}Monitoring and evaluation{% endtrans %}</h2>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <hr class="govuk-section-break govuk-section-break--visible">
+
+        {% set rows = [
+            (_("Monitoring rounds"), _("No open rounds") if not grant.reporting_rounds else _("Preview round open"), _("Manage"), url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name)),
+            (_("Monitoring information"), "No monitoring questions", _("Manage"), "#"),
+        ] %}
+
+        {{ grantSummaryList(rows) }}
+    </div>
 </div>
 {% endblock %}
