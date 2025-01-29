@@ -178,4 +178,7 @@ class Round(BaseModel):
 
     @property
     def round_instructions(self):
-        return self.instructions_json[get_lang()] or self.instructions_json["en"] or None
+        if not self.instructions_json:
+            return None
+
+        return self.instructions_json.get(get_lang(), self.instructions_json.get("en"))
