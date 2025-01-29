@@ -30,7 +30,7 @@ wheels = [
 
 [[package]]
 name = "alembic-utils"
-version = "0.8.5"
+version = "0.8.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "alembic" },
@@ -39,7 +39,7 @@ dependencies = [
     { name = "sqlalchemy" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/06/7a/9fa4e2334bf6cf1a3632cafc2bba5ea86fd30d86209b78b5b1d7104a8996/alembic_utils-0.8.5.tar.gz", hash = "sha256:afc192a6e4e9ecc262452e5525a12be0b830de01bc63622d2014f92005fc66cf", size = 22033 }
+sdist = { url = "https://files.pythonhosted.org/packages/25/6b/e9cd5a576fdc7cbf6580f011a6025de4dae84020a17440be06efb984b649/alembic_utils-0.8.6.tar.gz", hash = "sha256:c6991c364c0a9fad13712124f07440a9cc719037b171d5190cf4beaed2ac026c", size = 22034 }
 
 [[package]]
 name = "aniso8601"
@@ -846,7 +846,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "airium", specifier = "==0.2.6" },
-    { name = "alembic-utils", specifier = "==0.8.5" },
+    { name = "alembic-utils", specifier = "==0.8.6" },
     { name = "babel", specifier = "==2.16.0" },
     { name = "beautifulsoup4", specifier = "==4.12.3" },
     { name = "boto3", specifier = "==1.36.3" },

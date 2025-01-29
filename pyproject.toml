@@ -8,7 +8,7 @@ requires-python = ">=3.10, <3.11"
 
 dependencies = [
     "airium==0.2.6",
-    "alembic-utils==0.8.5",
+    "alembic-utils==0.8.6",
     "babel==2.16.0",
     "beautifulsoup4==4.12.3",
     "boto3==1.36.3",
