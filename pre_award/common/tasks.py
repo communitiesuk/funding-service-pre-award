@@ -9,13 +9,11 @@ from flask import current_app
 from invoke import task
 
 from app import create_app
+from data.models import Round
 from pre_award.account_store.db.models.queries import get_email_address, set_application_reminder_sent
 from pre_award.account_store.tasks import seed_local_account_store_impl
-from pre_award.application_store.db.queries.application.queries import (
-    search_applications,
-)
+from pre_award.application_store.db.queries.application.queries import search_applications
 from pre_award.assessment_store.tasks.db_tasks import seed_assessment_store_db_impl
-from pre_award.fund_store.db.models import Round
 from pre_award.fund_store.db.queries import (
     get_rounds_where_reminder_date_today,
     get_rounds_with_reminder_date_in_future,
@@ -130,6 +128,27 @@ def pybabel_compile(c):
 
 
 @task
+def full_bootstrap(c):
+    @contextmanager
+    def _env_var(key, value):
+        old_val = os.environ.get(key, "")
+        os.environ[key] = value
+        yield
+        os.environ[key] = old_val
+
+    with _env_var("FLASK_ENV", "development"):
+        with create_app().app_context():
+            alembic_cfg = Config("pre_award/db/migrations/alembic.ini")
+            alembic_cfg.set_main_option("script_location", "pre_award/db/migrations")
+            command.upgrade(alembic_cfg, "head")
+
+            load_all_fund_rounds()
+            load_fund_from_fab_impl(seed_all_funds=True)
+            seed_assessment_store_db_impl("local")
+            seed_local_account_store_impl()
+
+
+@task
 def reminder_emails(c):
     print("Building!")
     app = create_app()
@@ -173,24 +192,3 @@ def reminder_emails(c):
         #         notification_id=notification.id,
         #         application_reference=application["application"]["reference"],
         #     ),
-
-
-@task
-def full_bootstrap(c):
-    @contextmanager
-    def _env_var(key, value):
-        old_val = os.environ.get(key, "")
-        os.environ[key] = value
-        yield
-        os.environ[key] = old_val
-
-    with _env_var("FLASK_ENV", "development"):
-        with create_app().app_context():
-            alembic_cfg = Config("pre_award/db/migrations/alembic.ini")
-            alembic_cfg.set_main_option("script_location", "pre_award/db/migrations")
-            command.upgrade(alembic_cfg, "head")
-
-            load_all_fund_rounds()
-            load_fund_from_fab_impl(seed_all_funds=True)
-            seed_assessment_store_db_impl("local")
-            seed_local_account_store_impl()

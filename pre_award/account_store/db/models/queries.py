@@ -1,8 +1,8 @@
 from sqlalchemy import select
 
+from data.models import Round
 from pre_award.account_store.db.models.account import Account
 from pre_award.db import db
-from pre_award.fund_store.db.models.round import Round
 
 
 def get_email_address(account_id: str) -> str:
