@@ -36,6 +36,7 @@ from pre_award.assess.assessments.forms.assignment_forms import (
     AssessorTypeForm,
     AssignmentOverviewForm,
 )
+from pre_award.assess.assessments.forms.change_request_form import ChangeRequestForm
 from pre_award.assess.assessments.forms.comments_form import CommentsForm
 from pre_award.assess.assessments.forms.mark_qa_complete_form import MarkQaCompleteForm
 from pre_award.assess.assessments.helpers import (
@@ -1173,15 +1174,8 @@ def display_sub_criteria(
         )
 
     if "approve" in request.form and approval_form.validate_on_submit():
-        approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=g.account_id)
-
         return redirect(
-            url_for(
-                "assessment_bp.display_sub_criteria",
-                application_id=application_id,
-                sub_criteria_id=sub_criteria_id,
-                theme_id=theme_id,
-            )
+            url_for("assessment_bp.accept_changes", application_id=application_id, sub_criteria_id=sub_criteria_id)
         )
 
     state = get_state_for_tasklist_banner(application_id)
@@ -1286,6 +1280,50 @@ def display_sub_criteria(
         state=state,
         migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
         **common_template_config,
+    )
+
+
+@assessment_bp.route(
+    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/accept_changes",
+    methods=["GET", "POST"],
+)
+@check_access_application_id
+def accept_changes(application_id, sub_criteria_id):
+    form = ChangeRequestForm()
+    state = get_state_for_tasklist_banner(application_id)
+    flags_list = get_flags(application_id)
+    flag_status = determine_flag_status(flags_list)
+    sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
+    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+
+    if request.method == "POST" and form.validate_on_submit():
+        approve_sub_criteria(
+            application_id=application_id,
+            sub_criteria_id=sub_criteria_id,
+            user_id=g.account_id,
+            message=form.comment.data,
+        )
+        return render_template(
+            "assessments/change_request_accepted.html",
+            fund=get_fund(sub_criteria.fund_id),
+            application_id=application_id,
+            sub_criteria=sub_criteria,
+            state=state,
+            migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
+            flag_status=flag_status,
+            assessment_status=assessment_status,
+        )
+
+    return render_template(
+        "assessments/change_request_accept_comment.html",
+        fund=get_fund(sub_criteria.fund_id),
+        application_id=application_id,
+        sub_criteria=sub_criteria,
+        state=state,
+        migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
+        flag_status=flag_status,
+        assessment_status=assessment_status,
+        change_request_form=form,
     )
 
 
