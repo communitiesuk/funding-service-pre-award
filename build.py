@@ -195,7 +195,7 @@ def build_assess_authenticator_assets(remove_existing=False):
 def build_monolith_assets(static_dist_root="static/fs", remove_existing=False) -> None:
     MONOLITH_DIST_PATH = "./" + static_dist_root
     MAIN_DIST_PATH = "./static"
-    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v4.7.0/release-v4.7.0.zip"
+    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v4.8.0/release-v4.8.0.zip"
     ZIP_FILE = "./monolith_govuk_frontend.zip"
 
     ASSETS_DIR = "/assets"

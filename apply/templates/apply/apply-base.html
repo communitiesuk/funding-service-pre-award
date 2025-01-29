@@ -21,6 +21,11 @@
   {% endif %}
 {% endblock pageTitle %}
 
+{% block head %}
+
+  {{super()}}
+  <link rel="stylesheet" href="{{ url_for('static', filename='fs/styles/apply.css' ) }}"> </link>
+{% endblock head%}
 
 {% block skipLink %}
 {{ govukSkipLink({
@@ -31,7 +36,6 @@
 {% endblock skipLink %}
 {% block header %}
   {{ govukHeader({
-    "homepageUrl": "",
     "serviceName": serviceName,
     "useTudorCrown": true,
   }) }}
