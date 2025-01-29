@@ -100,31 +100,31 @@ class Round(Model):
     eoi_decision_schema: Mapped[Optional[dict[str, Any]]]
 
     @hybrid_property
-    def is_past_submission_deadline(self) -> bool:
+    def _is_past_submission_deadline(self) -> bool:
         return get_now_from_utc_time_without_tzinfo() > self.deadline if self.deadline else False
 
-    @is_past_submission_deadline.expression
-    def _is_past_submission_deadline(cls) -> ColumnElement[bool]:
+    @_is_past_submission_deadline.expression
+    def is_past_submission_deadline(cls) -> ColumnElement[bool]:
         return func.now() > cls.deadline
 
     @hybrid_property
-    def is_not_yet_open(self) -> bool:
+    def _is_not_yet_open(self) -> bool:
         return get_now_from_utc_time_without_tzinfo() < self.opens if self.opens else True
 
-    @is_not_yet_open.expression
-    def _is_not_yet_open(cls) -> ColumnElement[bool]:
+    @_is_not_yet_open.expression
+    def is_not_yet_open(cls) -> ColumnElement[bool]:
         return func.now() < cls.opens
 
     @hybrid_property
-    def is_open(self) -> bool:
+    def _is_open(self) -> bool:
         return (
             self.opens < get_now_from_utc_time_without_tzinfo() < self.deadline
             if (self.deadline and self.opens)
             else False
         )
 
-    @is_open.expression
-    def _is_open(cls) -> ColumnElement[bool]:
+    @_is_open.expression
+    def is_open(cls) -> ColumnElement[bool]:
         return cls.opens < func.now() < cls.deadline
 
     @property
