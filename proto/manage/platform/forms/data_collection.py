@@ -1,6 +1,12 @@
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
-from govuk_frontend_wtf.wtforms_widgets import GovCheckboxesInput, GovRadioInput, GovSubmitInput, GovTextInput
+from govuk_frontend_wtf.wtforms_widgets import (
+    GovCheckboxesInput,
+    GovRadioInput,
+    GovSubmitInput,
+    GovTextArea,
+    GovTextInput,
+)
 from wtforms import IntegerField, RadioField, SelectMultipleField, StringField, SubmitField
 from wtforms.validators import DataRequired, Optional
 from wtforms.widgets import HiddenInput
@@ -43,11 +49,18 @@ class NewSectionForm(FlaskForm):
     submit = SubmitField(_l("Add section"), widget=GovSubmitInput())
 
 
+human_readable = {
+    QuestionType.TEXT_INPUT: "Single line of text",
+    QuestionType.TEXTAREA: "More than a single line of text",
+    QuestionType.RADIOS: "Selection from a list of options",
+}
+
+
 class NewQuestionForm(FlaskForm):
     type = RadioField(
         _l("What type of question are you adding?"),
         widget=GovRadioInput(),
-        choices=[(ft.value, ft.name) for ft in QuestionType],
+        choices=[(ft.value, human_readable.get(ft)) for ft in QuestionType],
         validators=[DataRequired(message=_l("Select a question type"))],
     )
     title = StringField(
@@ -58,7 +71,7 @@ class NewQuestionForm(FlaskForm):
     hint = StringField(
         _l("What is the hint text for the question?"),
         description="Only provide this if additional information is needed to help answer the question correctly.",
-        widget=GovTextInput(),
+        widget=GovTextArea(),
         validators=[Optional()],
     )
     order = IntegerField(

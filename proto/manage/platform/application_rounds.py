@@ -24,7 +24,7 @@ rounds_blueprint = Blueprint("rounds", __name__)
 
 @rounds_blueprint.context_processor
 def _rounds_service_nav():
-    return dict(active_navigation_tab="rounds")
+    return dict(active_navigation_tab="grants")
 
 
 @rounds_blueprint.get("/grants/<grant_code>/rounds/<round_code>")
@@ -36,6 +36,7 @@ def view_round_overview(grant_code, round_code):
         grant=grant,
         round=round,
         back_link=url_for("proto_manage.platform.grants.view_grant_rounds", grant_code=grant_code),
+        active_sub_navigation_tab="funding",
     )
 
 
@@ -52,6 +53,7 @@ def view_round_data_collection(grant_code, round_code):
         round=round,
         form=form,
         back_link=url_for("proto_manage.platform.grants.view_grant_rounds", grant_code=grant_code),
+        active_sub_navigation_tab="funding",
     )
 
 
@@ -71,6 +73,7 @@ def view_round_configuration(grant_code, round_code):
         round=round,
         form=form,
         back_link=url_for("proto_manage.platform.grants.view_grant_rounds", grant_code=grant_code),
+        active_sub_navigation_tab="funding",
     )
 
 
@@ -97,6 +100,7 @@ def choose_from_question_bank(grant_code, round_code):
         back_link=url_for(
             "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
         ),
+        active_sub_navigation_tab="funding",
     )
 
 
@@ -117,7 +121,16 @@ def create_section_view(grant_code, round_code):
             )
         )
 
-    return render_template("manage/platform/create_section.html", grant=grant, round=round, form=form)
+    return render_template(
+        "manage/platform/create_section.html",
+        grant=grant,
+        round=round,
+        form=form,
+        back_link=url_for(
+            "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
+        ),
+        active_sub_navigation_tab="funding",
+    )
 
 
 @rounds_blueprint.route(
@@ -138,7 +151,17 @@ def create_question_view(grant_code, round_code, section_id):
                 "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
             )
         )
-    return render_template("manage/platform/create_question.html", grant=grant, round=round, section=section, form=form)
+    return render_template(
+        "manage/platform/create_question.html",
+        grant=grant,
+        round=round,
+        section=section,
+        form=form,
+        active_sub_navigation_tab="funding",
+        back_link=url_for(
+            "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
+        ),
+    )
 
 
 @rounds_blueprint.post("/grants/<grant_code>/rounds/<round_code>/preview-application")

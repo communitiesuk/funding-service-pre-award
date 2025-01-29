@@ -13,11 +13,12 @@
         {{ govukErrorSummary(wtforms_errors(form)) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">Create a new grant</h1>
+    <h1 class="govuk-heading-l">Set up a new grant</h1>
 
     <form method="post" novalidate>
       {{ form.csrf_token }}
       {{ form.name }}
+      {{ form.proto_apply_action_description }}
       {{ form.funding_type(params={"classes": "govuk-radios--inline"}) }}
       {{ form.submit }}
     </form>

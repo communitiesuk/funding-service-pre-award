@@ -22,11 +22,8 @@
     {% if grant.can_create_a_reporting_round %}
       <a href="{{ url_for('proto_manage.platform.reporting_rounds.create_reporting_round_view', grant_code=grant.short_name) }}" class="govuk-button">Create a new reporting round</a>
     {% else %}
-      <button href="{{ url_for('proto_manage.platform.reporting_rounds.create_reporting_round_view', grant_code=grant.short_name) }}" class="govuk-button govuk-!-margin-bottom-2" disabled>Create a new reporting round</button>
-      {{ govukInsetText({
-          "text": "You cannot create another reporting round while there is still one in preview.",
-          "classes": "govuk-!-margin-top-0",
-      }) }}
+      <p class="govuk-body">You cannot create another reporting round while there is still one in preview.</p>
+      <button href="{{ url_for('proto_manage.platform.reporting_rounds.create_reporting_round_view', grant_code=grant.short_name) }}" class="govuk-button govuk-!-margin-bottom-2 govuk-!-margin-bottom-8" disabled>Create a new reporting round</button>
     {% endif %}
     <br>
 

@@ -49,7 +49,7 @@ def get_active_round(grant_short_code: str):
         .options(contains_eager(Round.proto_grant))
         .filter(
             Fund.short_name == grant_short_code,
-            Round.proto_draft.is_(False),
+            # Round.proto_draft.is_(False),
             # probably want some way of having rounds that are always open especially for uncompeted grants
             Round.proto_start_date <= date.today(),
             Round.proto_end_date >= date.today(),
@@ -65,11 +65,12 @@ def get_all_grants_with_rounds():
 def create_grant(
     name,
     funding_type,
+    proto_apply_action_description,
 ):
     code = "".join([word[0] for word in name.upper().split(" ")])
     grant = Fund(
         name_json={"en": name, "cy": ""},
-        title_json={"en": "", "cy": ""},
+        title_json={"en": proto_apply_action_description, "cy": ""},
         short_name=code,
         description_json={"en": "", "cy": ""},
         owner_organisation_name="",
@@ -79,6 +80,7 @@ def create_grant(
         welsh_available=False,
         ggis_scheme_reference_number="",
         proto_name=name,
+        proto_apply_action_description=proto_apply_action_description,
     )
     db.session.add(grant)
 

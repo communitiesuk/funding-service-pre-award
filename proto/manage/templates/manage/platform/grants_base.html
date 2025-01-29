@@ -30,7 +30,10 @@
                 {% block beforeContent %}
                     {# we'll talk about this pattern, leaving this in to work with the pages for now #}
                     {% if back_link %}
-                        {{ govukBackLink({"href": back_link}) }}
+                        {{ govukBackLink({
+                            "href": back_link,
+                            "classes": "govuk-!-margin-bottom-8"
+                        }) }}
                     {% endif %}
                 {% endblock %}
                 {% block content %}{% endblock %}

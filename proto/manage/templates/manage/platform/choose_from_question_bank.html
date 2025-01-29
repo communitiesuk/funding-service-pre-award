@@ -1,13 +1,13 @@
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
 
-{% extends "manage/base.jinja.html" %}
+{% extends "manage/platform/grants_base.html" %}
 
 {% block pageTitle %}{% trans %}Choose questions for application round{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
     <form method="post" novalidate>
       {{ form.csrf_token }}
 

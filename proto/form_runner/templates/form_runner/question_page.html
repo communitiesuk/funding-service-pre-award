@@ -7,6 +7,16 @@
 
 {% block beforeContent %}
 {{ super() }}
+<div class="govuk-phase-banner">
+    <div class="proto-phase govuk-!-padding-top-1 govuk-!-padding-bottom-1">
+        <p class="govuk-phase-banner__content">
+            {% set email %}<strong class="govuk-!-font-weight-bold">{{ account.email }}</strong>{% endset %}
+            <span class="govuk-phase-banner__text">{% trans email=email %}You are applying as {{ email }}{% endtrans %}</span>
+        </p>
+    </div>
+</div>
+
+
 {% if back_link %}
   {{ govukBackLink({
     "text": _("Back"),

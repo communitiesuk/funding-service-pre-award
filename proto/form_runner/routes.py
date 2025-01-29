@@ -16,6 +16,11 @@ from proto.form_runner.helpers import get_answer_text_for_question_from_section_
 runner_blueprint = Blueprint("proto_form_runner", __name__)
 
 
+@runner_blueprint.context_processor
+def _grants_service_nav():
+    return dict(active_navigation_tab="your_grants")
+
+
 def _next_url_for_question(application_external_id, section, current_question_slug, from_check_your_answers):
     if from_check_your_answers:
         return url_for(

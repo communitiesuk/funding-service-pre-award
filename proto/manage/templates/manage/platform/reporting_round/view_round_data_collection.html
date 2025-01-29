@@ -3,7 +3,7 @@
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 
-{% extends "manage/base.jinja.html" %}
+{% extends "manage/platform/grants_base.html" %}
 
 {% block pageTitle %}{% trans %}Manage grants{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
 
@@ -22,7 +22,7 @@
   <div class="govuk-grid-column-three-quarters">
 
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l">{{ grant.name_json.en }} - {{ round.title }}</span>
+      <span class="govuk-caption-l">{{ grant.name }}</span>
       Data collection
     </h1>
 

@@ -27,7 +27,7 @@ reporting_rounds_blueprint = Blueprint("reporting_rounds", __name__)
 
 @reporting_rounds_blueprint.context_processor
 def _reporting_rounds_service_nav():
-    return dict(active_navigation_tab="rounds")
+    return dict(active_navigation_tab="grants")
 
 
 @reporting_rounds_blueprint.route("/grants/<grant_code>/create-reporting-round", methods=["GET", "POST"])
@@ -73,6 +73,7 @@ def view_reporting_round_overview(grant_code, round_ext_id):
         grant=grant,
         round=reporting_round,
         back_link=url_for("proto_manage.platform.grants.view_grant_reporting_rounds", grant_code=grant_code),
+        active_sub_navigation_tab="monitoring",
     )
 
 
@@ -89,6 +90,7 @@ def view_reporting_round_data_collection(grant_code, round_ext_id):
         round=reporting_round,
         form=form,
         back_link=url_for("proto_manage.platform.grants.view_grant_reporting_rounds", grant_code=grant_code),
+        active_sub_navigation_tab="monitoring",
     )
 
 
@@ -114,6 +116,7 @@ def view_reporting_round_configuration(grant_code, round_ext_id):
         round=reporting_round,
         form=form,
         back_link=url_for("proto_manage.platform.grants.view_grant_reporting_rounds", grant_code=grant_code),
+        active_sub_navigation_tab="monitoring",
     )
 
 
@@ -146,6 +149,7 @@ def choose_from_question_bank(grant_code, round_ext_id):
             grant_code=grant_code,
             round_ext_id=round_ext_id,
         ),
+        active_sub_navigation_tab="monitoring",
     )
 
 
@@ -173,7 +177,11 @@ def create_section_view(grant_code, round_ext_id):
         )
 
     return render_template(
-        "manage/platform/create_section.html", grant=grant, reporting_round=reporting_round, form=form
+        "manage/platform/create_section.html",
+        grant=grant,
+        reporting_round=reporting_round,
+        form=form,
+        active_sub_navigation_tab="monitoring",
     )
 
 
@@ -204,6 +212,7 @@ def create_question_view(grant_code, round_ext_id, section_id):
         reporting_round=reporting_round,
         section=section,
         form=form,
+        active_sub_navigation_tab="monitoring",
     )
 
 
