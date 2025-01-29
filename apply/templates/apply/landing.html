@@ -5,6 +5,17 @@
 {% block head %}
     {{super()}}
 {% endblock head %}
+{% block pageTitle %}
+  {% if not fund or not round %}
+        {% trans %}Access Funding{% endtrans %}
+  {% else %}
+    {% if round.is_expression_of_interest %}
+        {% trans %}Start or continue an{% endtrans %} {{ fund.title }}
+    {% else %}
+        {% trans %}Start or continue an application for{% endtrans %} {{ fund.title }}
+    {% endif %}
+  {% endif %}
+{% endblock pageTitle %}
 
 
 {% block content %}

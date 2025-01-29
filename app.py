@@ -393,7 +393,7 @@ def create_app() -> Flask:  # noqa: C901
                         round=round.short_name,
                     ),
                     contact_us_url=url_for(
-                        "content_routes.contact_us",
+                        "apply_routes.contact_us",
                         fund=fund.short_name,
                         round=round.short_name,
                     ),
@@ -418,7 +418,7 @@ def create_app() -> Flask:  # noqa: C901
             )
         return dict(
             accessibility_statement_url=url_for("content_routes.accessibility_statement"),
-            contact_us_url=url_for("content_routes.contact_us"),
+            contact_us_url=url_for("apply_routes.contact_us"),
             privacy_url=url_for("content_routes.privacy"),
             feedback_url=url_for("content_routes.feedback"),
         )

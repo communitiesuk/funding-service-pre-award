@@ -13,13 +13,7 @@
 
 {% set serviceName = get_service_title() %}
 
-{% block pageTitle %}
-  {% if round.is_expression_of_interest %}
-      {% trans %}Start or continue an{% endtrans %} {{ fund.title }}
-  {% else %}
-      {% trans %}Start or continue an application for{% endtrans %} {{ fund.title }}
-  {% endif %}
-{% endblock pageTitle %}
+
 
 {% block head %}
 
@@ -63,11 +57,27 @@
 {% endblock content %}
 
 {% block footer %}
+
+  {% if fund and round %}
+    {% set contactUsUrl%}
+      {{ url_for("apply_routes.contact_us", fund_short_name=fund.short_name) }}
+    {% endset %}
+    {% set privacyUrl%}
+      {{ url_for("content_routes.privacy", fund_short_name=fund.short_name, round_short_name=round.short_name) }}
+    {% endset %}
+  {% else %}
+    {% set contactUsUrl%}
+      {{ url_for("apply_routes.contact_us") }}
+    {% endset %}
+    {% set privacyUrl%}
+      {{ url_for("content_routes.privacy") }}
+    {% endset %}
+  {% endif %}
   {{ govukFooter({
     "meta": {
       "items": [
         {
-          "href": url_for("content_routes.privacy", fund_short_name=fund.short_name, round_short_name=round.short_name),
+          "href": privacyUrl,
           "text": gettext("Privacy")
         },
         {
@@ -75,11 +85,11 @@
           "text": gettext("Cookies")
         },
         {
-          "href": url_for("content_routes.accessibility_statement", fund_short_name=fund.short_name, round_short_name=round.short_name),
+          "href": url_for("content_routes.accessibility_statement"),
           "text": gettext("Accessibility Statement")
         },
         {
-          "href": url_for("content_routes.contact_us", fund_short_name=fund.short_name, round_short_name=round.short_name),
+          "href": contactUsUrl,
           "text": gettext("Contact us")
         }
       ]
