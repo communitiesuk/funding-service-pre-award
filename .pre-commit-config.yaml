@@ -1,5 +1,6 @@
 ci:
   autofix_prs: false
+  skip: ["mypy"]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -36,3 +37,12 @@ repos:
 #     hooks:
 #       - id: djlint-jinja
 #         types_or: ['html', 'jinja']
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: Run type checks
+        language: system
+        types: [python]
+        entry: uv run mypy
+        pass_filenames: false

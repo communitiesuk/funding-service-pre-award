@@ -5,7 +5,7 @@ from data.models import Fund, Round
 from pre_award.db import db
 
 
-def get_round(fund_short_name: str, round_short_name: str):
+def get_round(fund_short_name: str, round_short_name: str) -> Round | None:
     round = db.session.scalar(
         select(Round)
         .join(Fund)
