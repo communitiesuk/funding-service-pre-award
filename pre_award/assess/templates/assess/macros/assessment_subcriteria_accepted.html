@@ -14,7 +14,11 @@
     {% set notification_banner_html %}
     <p class="govuk-body">
         <strong>Approved by</strong><br>
-        {{ user_info["full_name"] or "N/A" }} ({{ user_info["highest_role"] | all_caps_to_human }}) {{ user_info["email_address"] }}
+        {% if user_info %}
+            {{ user_info["full_name"] or "N/A" }} ({{ user_info["highest_role"] | all_caps_to_human }}) {{ user_info["email_address"] }}
+        {% else %}
+            N/A
+        {% endif %}
     </p>
     {% endset %}
 

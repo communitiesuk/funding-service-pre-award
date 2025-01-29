@@ -19,6 +19,7 @@
 {% from "assess/macros/migration_banner.html" import migration_banner %}
 {% from "assess/macros/link_to_download_contract_docs.html" import link_to_download_contract_docs %}
 {% from "assess/macros/assessment_actions.html" import assessment_actions %}
+{% from "assess/macros/assessment_change_received.html" import assessment_change_received %}
 
 {% set pageHeading = state.project_name %}
 
@@ -172,6 +173,10 @@
             application_id,
             show_caption=False,
         ) }}
+        {% endif %}
+
+        {% if toggle_dict.get("UNCOMPETED_WORKFLOW") and fund[0].funding_type == 'UNCOMPETED' and assessment_status == "Change received" %}
+        {{ assessment_change_received() }}
         {% endif %}
 
         {% if state.criterias|length > 0 %}<h2 class="govuk-heading-l govuk-!-margin-top-8">Unscored</h2>{% endif %}
