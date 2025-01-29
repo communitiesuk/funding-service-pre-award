@@ -56,7 +56,6 @@ dependencies = [
     "xhtml2pdf==0.2.16",
     "notifications-python-client==10.0.1",
     "funding-service-design-utils[toggles]==6.0.2",
-    "pyclean>=3.1.0",
 ]
 
 [tool.djlint]
@@ -120,12 +119,12 @@ dev = [
     "flask-debugtoolbar==0.16.0",
     "freezegun==1.5.1",
     "responses==0.25.6",
-    "types-flask-migrate>=4.1.0.20250112",
-    "types-pymysql>=1.1.0.20241103",
-    "types-colorama>=0.4.15.20240311",
-    "types-psycopg2>=2.9.21.20241019",
-    "mypy>=1.13.0",
-    "types-babel>=2.11.0.15",
+    "types-flask-migrate==4.1.0.20250112",
+    "types-pymysql==1.1.0.20241103",
+    "types-colorama==0.4.15.20240311",
+    "types-psycopg2==2.9.21.20250121",
+    "mypy==1.13.0",
+    "types-babel==2.11.0.15",
 ]
 [tool.mypy]
 strict = true

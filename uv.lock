@@ -806,7 +806,6 @@ dependencies = [
     { name = "pandas" },
     { name = "prance" },
     { name = "psycopg2-binary" },
-    { name = "pyclean" },
     { name = "pyjwt" },
     { name = "python-dateutil" },
     { name = "python-slugify" },
@@ -891,7 +890,6 @@ requires-dist = [
     { name = "pandas", specifier = "==2.2.2" },
     { name = "prance", specifier = "==23.6.21.0" },
     { name = "psycopg2-binary", specifier = "==2.9.9" },
-    { name = "pyclean", specifier = ">=3.1.0" },
     { name = "pyjwt", specifier = "==2.8.0" },
     { name = "python-dateutil", specifier = "==2.9.0.post0" },
     { name = "python-slugify", specifier = "==8.0.4" },
@@ -918,7 +916,7 @@ dev = [
     { name = "invoke", specifier = "==2.2.0" },
     { name = "json2html", specifier = "==1.3.0" },
     { name = "moto", extras = ["s3", "sqs"], specifier = "==5.0.26" },
-    { name = "mypy", specifier = ">=1.13.0" },
+    { name = "mypy", specifier = "==1.13.0" },
     { name = "pre-commit", specifier = "==4.0.1" },
     { name = "pytest", specifier = "==8.3.4" },
     { name = "pytest-env", specifier = "==1.1.5" },
@@ -928,11 +926,11 @@ dev = [
     { name = "requests-mock", specifier = "==1.11.0" },
     { name = "responses", specifier = "==0.25.6" },
     { name = "ruff", specifier = "==0.9.3" },
-    { name = "types-babel", specifier = ">=2.11.0.15" },
-    { name = "types-colorama", specifier = ">=0.4.15.20240311" },
-    { name = "types-flask-migrate", specifier = ">=4.1.0.20250112" },
-    { name = "types-psycopg2", specifier = ">=2.9.21.20241019" },
-    { name = "types-pymysql", specifier = ">=1.1.0.20241103" },
+    { name = "types-babel", specifier = "==2.11.0.15" },
+    { name = "types-colorama", specifier = "==0.4.15.20240311" },
+    { name = "types-flask-migrate", specifier = "==4.1.0.20250112" },
+    { name = "types-psycopg2", specifier = "==2.9.21.20250121" },
+    { name = "types-pymysql", specifier = "==1.1.0.20241103" },
 ]
 
 [[package]]
@@ -1675,15 +1673,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/58/a1/0a2867e48b232b4f82c4929ef7135f2a5d72c3886b957dccf63c70aa2fcb/py_partiql_parser-0.6.1.tar.gz", hash = "sha256:8583ff2a0e15560ef3bc3df109a7714d17f87d81d33e8c38b7fed4e58a63215d", size = 17120 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/97/84/0e410c20bbe9a504fc56e97908f13261c2b313d16cbb3b738556166f044a/py_partiql_parser-0.6.1-py2.py3-none-any.whl", hash = "sha256:ff6a48067bff23c37e9044021bf1d949c83e195490c17e020715e927fe5b2456", size = 23520 },
-]
-
-[[package]]
-name = "pyclean"
-version = "3.1.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/04/6c/a7c0cfd4013405408aa894ee2dace6fdbad58f379344aba2396dfea85d46/pyclean-3.1.0.tar.gz", hash = "sha256:d23fa900558696e08c79401c79f242fe6f7f38fd58ccd035f875a01c5bc7a6fc", size = 46150 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cf/6d/a0d36ecfe8849d029f0dfbac5733e8b74732ff3f86fa75a501107903c54b/pyclean-3.1.0-py3-none-any.whl", hash = "sha256:46652f7416816924cab565cd045d0c341237aced0368a3727d66b5192c16728c", size = 21588 },
 ]
 
 [[package]]
