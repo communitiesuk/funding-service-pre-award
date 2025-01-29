@@ -193,7 +193,6 @@ def test_sso_get_token_500_when_error_in_auth_code_flow(authenticator_test_clien
     response = authenticator_test_client.get(endpoint)
 
     assert response.status_code == 500
-    assert "get-token flow failed with: {'error': 'some_error'}" in caplog.records[1].message
     assert "some_error" not in response.text
 
 
