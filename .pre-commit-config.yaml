@@ -44,5 +44,5 @@ repos:
         name: Run type checks
         language: system
         types: [python]
-        entry: mypy
+        entry: uv run mypy
         pass_filenames: false
