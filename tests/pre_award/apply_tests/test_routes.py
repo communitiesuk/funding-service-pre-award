@@ -130,7 +130,7 @@ def test_inject_service_name_simpler(
     request_mock.form = form
     request_mock.host = app.config["APPLY_HOST"]
     with app.app_context():
-        render_template("apply/fund_start_page.html")
+        render_template("apply/cookie_policy.html")
     assert len(templates_rendered) == 1
     assert templates_rendered[0][1]["get_service_title"]() == expected_title
 

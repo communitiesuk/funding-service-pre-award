@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-27 11:56+0000\n"
+"POT-Creation-Date: 2025-01-29 16:50+0000\n"
 "PO-Revision-Date: 2022-10-25 16:55+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: cy\n"
@@ -28,41 +28,50 @@ msgstr "Gwneud cais am"
 msgid "Access Funding"
 msgstr "Cael Mynediad at Gyllid"
 
-#: apply/templates/apply/apply-base.html:60
+#: apply/templates/apply/apply-base.html:18
+msgid "Start or continue an"
+msgstr ""
+
+#: apply/templates/apply/apply-base.html:20
+#, fuzzy
+msgid "Start or continue an application for"
+msgstr "Gwneud cais am %(fund_title)s"
+
+#: apply/templates/apply/apply-base.html:66
 #: pre_award/apply/templates/apply/header.html:34
 msgid "View all applications"
 msgstr ""
 
-#: apply/templates/apply/apply-base.html:67
+#: apply/templates/apply/apply-base.html:73
 #: pre_award/apply/templates/apply/header.html:41
 msgid "Sign out"
 msgstr ""
 
-#: apply/templates/apply/apply-base.html:90
+#: apply/templates/apply/apply-base.html:96
 #: pre_award/apply/templates/apply/header.html:57
 #: pre_award/authenticator/frontend/templates/authenticator/header.html:36
 msgid "This is a new service."
 msgstr "Gwasanaeth newydd yw hwn."
 
-#: apply/templates/apply/apply-base.html:106
+#: apply/templates/apply/apply-base.html:112
 #: pre_award/apply/templates/apply/footer.html:10
 #: pre_award/authenticator/frontend/templates/authenticator/footer.html:9
 msgid "Privacy"
 msgstr "Preifatrwydd"
 
-#: apply/templates/apply/apply-base.html:110
+#: apply/templates/apply/apply-base.html:116
 #: pre_award/apply/templates/apply/footer.html:15
 #: pre_award/authenticator/frontend/templates/authenticator/footer.html:14
 msgid "Cookies"
 msgstr "Cwcis"
 
-#: apply/templates/apply/apply-base.html:114
+#: apply/templates/apply/apply-base.html:120
 #: pre_award/apply/templates/apply/footer.html:19
 #: pre_award/authenticator/frontend/templates/authenticator/footer.html:18
 msgid "Accessibility Statement"
 msgstr "Datganiad Hygyrchedd"
 
-#: apply/templates/apply/apply-base.html:118
+#: apply/templates/apply/apply-base.html:124
 #: pre_award/apply/templates/apply/500.html:12
 #: pre_award/apply/templates/apply/footer.html:23
 #: pre_award/authenticator/frontend/templates/authenticator/500.html:11
@@ -70,22 +79,22 @@ msgstr "Datganiad Hygyrchedd"
 msgid "Contact us"
 msgstr "Cysylltwch â ni"
 
-#: apply/templates/apply/landing.html:12
+#: apply/templates/apply/landing.html:16
 #, python-format
 msgid "Start or continue an application for %(fund_title)s"
 msgstr "Gwneud cais am %(fund_title)s"
 
-#: apply/templates/apply/landing.html:17
+#: apply/templates/apply/landing.html:21
 #, python-format
 msgid "Window closed - %(fund_round_names)s"
 msgstr "Ffenestr ar gau - %(fund_round_names)s"
 
-#: apply/templates/apply/landing.html:19
+#: apply/templates/apply/landing.html:23
 #, python-format
 msgid "Closed: %(closed_date)s"
 msgstr "Ar gau: %(closed_date)s"
 
-#: apply/templates/apply/landing.html:21
+#: apply/templates/apply/landing.html:25
 #: pre_award/apply/templates/apply/partials/round_closed_warning.html:23
 msgid ""
 "You can no longer submit applications in this window. Any you had in "
@@ -95,13 +104,13 @@ msgstr ""
 "Ni allwch gyflwyno ceisiadau yn y ffenestr hon mwyach. Bydd unrhyw un "
 "oedd gennych ar y gweill yn cael ei e-bostio atoch."
 
-#: apply/templates/apply/landing.html:26
+#: apply/templates/apply/landing.html:30
 #: pre_award/apply/templates/apply/partials/round_closed_warning.html:6
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:29
 msgid "Important"
 msgstr "Pwysig"
 
-#: apply/templates/apply/landing.html:32
+#: apply/templates/apply/landing.html:36
 #: pre_award/apply/templates/apply/partials/available_in_language.html:3
 #, python-format
 msgid ""
@@ -111,7 +120,7 @@ msgstr ""
 "Mae'r gwasanaeth yma hefyd ar gael <a href=\"%(url)s\" class=\"govuk-"
 "link\">yn Saesneg (English)"
 
-#: apply/templates/apply/landing.html:48
+#: apply/templates/apply/landing.html:50
 #, python-format
 msgid ""
 "<a class=\"govuk-link\" href=\"%(prospectus_link)s\">Read the fund's "
@@ -120,34 +129,31 @@ msgstr ""
 "<a class=\"govuk-link\" href=\"%(prospectus_link)s\">Darllenwch "
 "brosbectws y gronfa</a> cyn dechrau."
 
-#: apply/templates/apply/landing.html:52
-#: pre_award/apply/templates/apply/fund_start_page.html:58
+#: apply/templates/apply/landing.html:55
 #: pre_award/apply/templates/apply/tasklist.html:127
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:20
 msgid "Submission deadline:"
 msgstr "Dyddiad cau cyflwyno:"
 
-#: apply/templates/apply/landing.html:58
-#: pre_award/apply/templates/apply/fund_start_page.html:66
+#: apply/templates/apply/landing.html:61
 msgid "Enter your email address"
 msgstr "Nodwch eich cyfeirad e-bost"
 
-#: apply/templates/apply/landing.html:60
-#: pre_award/apply/templates/apply/fund_start_page.html:70
+#: apply/templates/apply/landing.html:63
 #: pre_award/apply/templates/apply/tasklist.html:93
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:72
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:73
 msgid "Get help"
 msgstr "Cael help"
 
-#: apply/templates/apply/landing.html:62
+#: apply/templates/apply/landing.html:65
 #, python-format
 msgid ""
 "If you need help, contact us through our <a class=\"govuk-link\" "
 "href=\"%(support_desk_apply)s\" target=\"_blank\">support desk</a>"
 msgstr ""
 
-#: apply/templates/apply/landing.html:65
+#: apply/templates/apply/landing.html:68
 msgid ""
 "Do not send any applications or attachments from the service desk portal."
 " We'll only accept applications through this service."
@@ -202,16 +208,16 @@ msgstr ""
 "yn defnyddio'r gwasanaeth a gwneud gwelliannau."
 
 #: common/templates/common/partials/fs-cookies-start.html:21
-#: common/templates/common/partials/fs-cookies-start.html:40
-#: common/templates/common/partials/fs-cookies-start.html:59
-#: common/templates/common/partials/fs-cookies-start.html:64
+#: common/templates/common/partials/fs-cookies-start.html:41
+#: common/templates/common/partials/fs-cookies-start.html:61
+#: common/templates/common/partials/fs-cookies-start.html:66
 #: pre_award/apply/templates/apply/head.html:16
 #: pre_award/authenticator/frontend/templates/authenticator/head.html:16
 msgid "Cookies on Access Funding"
 msgstr "Cael Mynediad at Gyllid"
 
-#: common/templates/common/partials/fs-cookies-start.html:29
-#: common/templates/common/partials/fs-cookies-start.html:48
+#: common/templates/common/partials/fs-cookies-start.html:30
+#: common/templates/common/partials/fs-cookies-start.html:50
 #: pre_award/apply/templates/apply/head.html:44
 #: pre_award/apply/templates/apply/head.html:59
 #: pre_award/authenticator/frontend/templates/authenticator/head.html:44
@@ -219,19 +225,19 @@ msgstr "Cael Mynediad at Gyllid"
 msgid "Hide cookie message"
 msgstr "Cuddio'r neges ynghylch cwcis"
 
-#: common/templates/common/partials/fs-cookies-start.html:69
+#: common/templates/common/partials/fs-cookies-start.html:71
 #: pre_award/apply/templates/apply/head.html:25
 #: pre_award/authenticator/frontend/templates/authenticator/head.html:25
 msgid "Accept analytics cookies"
 msgstr "Derbyn cwcis dadansoddeg"
 
-#: common/templates/common/partials/fs-cookies-start.html:76
+#: common/templates/common/partials/fs-cookies-start.html:78
 #: pre_award/apply/templates/apply/head.html:28
 #: pre_award/authenticator/frontend/templates/authenticator/head.html:28
 msgid "Reject analytics cookies"
 msgstr "Gwrthod cwcis dadansoddeg"
 
-#: common/templates/common/partials/fs-cookies-start.html:82
+#: common/templates/common/partials/fs-cookies-start.html:84
 #: pre_award/apply/templates/apply/head.html:30
 #: pre_award/authenticator/frontend/templates/authenticator/head.html:30
 msgid "View cookies"
@@ -847,68 +853,6 @@ msgstr ""
 msgid "Back to all applications"
 msgstr ""
 
-#: pre_award/apply/templates/apply/fund_start_page.html:5
-msgid "Start or continue an"
-msgstr ""
-
-#: pre_award/apply/templates/apply/fund_start_page.html:7
-#, fuzzy
-msgid "Start or continue an application for"
-msgstr "Gwneud cais am %(fund_title)s"
-
-#: pre_award/apply/templates/apply/fund_start_page.html:48
-msgid "Read the fund's prospectus"
-msgstr ""
-
-#: pre_award/apply/templates/apply/fund_start_page.html:50
-msgid "before you start."
-msgstr ""
-
-#: pre_award/apply/templates/apply/fund_start_page.html:52
-msgid "before you apply."
-msgstr ""
-
-#: pre_award/apply/templates/apply/fund_start_page.html:73
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:76
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:77
-msgid "If you have questions about the form or the fund,"
-msgstr ""
-
-#: pre_award/apply/templates/apply/fund_start_page.html:79
-#: pre_award/apply/templates/apply/tasklist.html:105
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:77
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:78
-#, fuzzy
-msgid "contact us."
-msgstr "Cysylltwch â ni"
-
-#: pre_award/apply/templates/apply/fund_start_page.html:82
-msgid "If you need help, contact us through our "
-msgstr ""
-
-#: pre_award/apply/templates/apply/fund_start_page.html:83
-#: pre_award/apply/templates/apply/partials/contact_details.html:5
-#: pre_award/apply/templates/apply/tasklist.html:107
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:80
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:81
-#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:5
-msgid "support desk"
-msgstr ""
-
-#: pre_award/apply/templates/apply/fund_start_page.html:88
-#: pre_award/apply/templates/apply/partials/contact_details.html:14
-#: pre_award/apply/templates/apply/tasklist.html:110
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:83
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:84
-#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:14
-#, fuzzy
-msgid ""
-"Do not send any applications or attachments through the support desk. "
-"We'll only accept applications through this service."
-msgstr ""
-"Peidwch ag anfon unrhyw geisadau neu atodiadau dros e-bost. Byddwn yn "
-"derbyn ceisiadau drwy'r gwasanaeth hon yn unig."
-
 #: pre_award/apply/templates/apply/header.html:55
 #: pre_award/authenticator/frontend/templates/authenticator/header.html:34
 msgid "beta"
@@ -1080,6 +1024,13 @@ msgstr ""
 msgid "If you have any questions about the form or the fund, "
 msgstr ""
 
+#: pre_award/apply/templates/apply/tasklist.html:105
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:77
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:78
+
+msgid "contact us."
+msgstr "Cysylltwch â ni"
+
 #: pre_award/apply/templates/apply/tasklist.html:107
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:79
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:80
@@ -1087,6 +1038,27 @@ msgid ""
 "If you have any questions about the form or the fund, contact us through "
 "our "
 msgstr ""
+
+#: pre_award/apply/templates/apply/partials/contact_details.html:5
+#: pre_award/apply/templates/apply/tasklist.html:107
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:80
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:81
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:5
+msgid "support desk"
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/contact_details.html:14
+#: pre_award/apply/templates/apply/tasklist.html:110
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:83
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:84
+#: pre_award/authenticator/frontend/templates/authenticator/partials/contact_details.html:14
+#, fuzzy
+msgid ""
+"Do not send any applications or attachments through the support desk. "
+"We'll only accept applications through this service."
+msgstr ""
+"Peidwch ag anfon unrhyw geisadau neu atodiadau dros e-bost. Byddwn yn "
+"derbyn ceisiadau drwy'r gwasanaeth hon yn unig."
 
 #: pre_award/apply/templates/apply/tasklist.html:113
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:86
@@ -4087,8 +4059,8 @@ msgid ""
 "Use the link to confirm your email address and start a new application, "
 "or continue any applications you have in progress."
 msgstr ""
-"Defnyddiwch y ddolen i gadarnhau eich cyfeiriad e-bost a dechrau cais newydd, "
-"neu i barhau ag unrhyw geisiadau sydd gennych ar waith."
+"Defnyddiwch y ddolen i gadarnhau eich cyfeiriad e-bost a dechrau cais "
+"newydd, neu i barhau ag unrhyw geisiadau sydd gennych ar waith."
 
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:37
 msgid "The link will work once and stop working after 24 hours."
@@ -4104,9 +4076,7 @@ msgstr "Gall gymryd ychydig funudau i'r e-bost gyrraedd."
 
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/check_email.html:47
 msgid "Check your spam or junk folders – if it still has not arrived, you can "
-msgstr ""
-"Gwiriwch eich folder 'junk' a 'spam' "
-"- os nad ydyw wedi cyrraedd, gallech "
+msgstr "Gwiriwch eich folder 'junk' a 'spam' - os nad ydyw wedi cyrraedd, gallech "
 
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:28
 msgid ""
@@ -4122,15 +4092,11 @@ msgid ""
 "<p>If you want to return to an application, you must use the email you "
 "started the application with.</p>"
 msgstr ""
-"<p>Byddwn yn e-bostio dolen atoch i "
-"ddechrau cais newydd, neu i barhau "
-"ag unrhyw geisiadau sydd gennych ar "
-"waith.</p><p>Bydd y ddolen yn gweithio "
-"unwaith ac yn stopio gweithio ar "
-"ôl 24 awr.</p><p>Os ydych chi eisiau "
-"mynd yn ôl at gais, rhaid i "
-"chi ddefnyddio'r e-bost y dechreuoch y"
-" cais gydag ef.</p>"
+"<p>Byddwn yn e-bostio dolen atoch i ddechrau cais newydd, neu i barhau ag"
+" unrhyw geisiadau sydd gennych ar waith.</p><p>Bydd y ddolen yn gweithio "
+"unwaith ac yn stopio gweithio ar ôl 24 awr.</p><p>Os ydych chi eisiau "
+"mynd yn ôl at gais, rhaid i chi ddefnyddio'r e-bost y dechreuoch y cais "
+"gydag ef.</p>"
 
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/email.html:47
 msgid "<p>Use the email address you would like your outcome email sent to.</p>"
@@ -4157,6 +4123,11 @@ msgstr "cais am linc arall"
 msgid "How to complete your application"
 msgstr ""
 
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:76
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:77
+msgid "If you have questions about the form or the fund,"
+msgstr ""
+
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:17
 msgid "Express an interest in applying for the "
 msgstr ""
@@ -4168,11 +4139,9 @@ msgid ""
 msgstr ""
 
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:30
-#, fuzzy
 msgid "Read the fund's prospectus before you start"
 msgstr ""
-"<a class=\"govuk-link\" href=\"%(prospectus_link)s\">Darllenwch "
-"brosbectws y gronfa</a> cyn dechrau."
+"Darllenwch brosbectws y gronfa cyn dechrau."
 
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:34
 msgid "What this process involves"
@@ -4786,14 +4755,6 @@ msgstr ""
 #~ msgid "Start or continue an"
 #~ msgstr "Gwneud cais am"
 
-#~ msgid "Read the fund's prospectus"
-#~ msgstr "Darllenwch brosbectws y gronfa"
-
-#~ msgid "before you start."
-#~ msgstr "cyn dechrau."
-
-#~ msgid "before you apply."
-#~ msgstr "cyn i chi ymgeisio."
 
 #~ msgid "If you have questions about the form or the fund,"
 #~ msgstr "Os oes gennych unrhyw gwestiynau ynglŷn â'r ffurflen neu'r gronfa,"
@@ -4801,8 +4762,7 @@ msgstr ""
 #~ msgid "contact us."
 #~ msgstr "cysylltwch â ni."
 
-#~ msgid "If you need help, contact us through our "
-#~ msgstr "Os oes angen help arnoch chi, anfonwch e-bost atom y"
+
 
 #~ msgid "support desk"
 #~ msgstr ""
