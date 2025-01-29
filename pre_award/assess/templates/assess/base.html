@@ -4,8 +4,7 @@
 
 {% set assetPath = url_for('static', filename='assess').rstrip('/') %}
 
-{% set title = [pageHeading.rstrip('\n'), service_title]|join(' – ') if pageHeading else service_title %}
-{% block pageTitle %}{{ title }}{% endblock pageTitle %}
+{% block pageTitle %}{{ [pageHeading.rstrip('\n'), service_title]|join(' – ') if pageHeading else service_title }}{% endblock pageTitle %}
 
 {% block head %}
   {% include "assess/head.html" %}
@@ -14,7 +13,7 @@
 {% block header %}
   {{ govukHeader({
     "homepageUrl": "/",
-    "serviceName": title,
+    "serviceName": "Assess grant applications",
     "useTudorCrown": true,
   }) }}
 {% endblock header %}
