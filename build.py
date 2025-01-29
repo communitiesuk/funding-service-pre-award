@@ -67,7 +67,7 @@ def build_apply_assets():
 def build_some_assess_assets(static_dist_root="static/assess"):
     DIST_ROOT = "./" + static_dist_root
     GOVUK_DIR = "/govuk-frontend"
-    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v4.7.0/release-v4.7.0.zip"
+    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v4.8.0/release-v4.8.0.zip"
     ZIP_FILE = "./govuk_frontend.zip"
     DIST_PATH = DIST_ROOT + GOVUK_DIR
     ASSETS_DIR = "/assets"
