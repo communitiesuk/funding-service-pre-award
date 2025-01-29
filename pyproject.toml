@@ -118,5 +118,5 @@ dev = [
     "ruff==0.9.3",
     "flask-debugtoolbar==0.16.0",
     "freezegun==1.5.1",
-    "responses==0.25.3",
+    "responses==0.25.6",
 ]
