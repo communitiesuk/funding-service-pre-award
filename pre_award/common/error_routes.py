@@ -42,8 +42,6 @@ def not_found(error):
 
 
 def internal_server_error(error):
-    current_app.logger.error(error)
-
     if request.host == current_app.config["API_HOST"]:
         return jsonify({"detail": str(error)}), 500
 

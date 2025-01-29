@@ -5,9 +5,9 @@ from distutils.util import strtobool
 from flask import abort, current_app, jsonify, request
 from fsd_utils.locale_selector.get_lang import get_lang
 
+from data.models import Round
 from pre_award.common.blueprints import Blueprint
 from pre_award.db import db
-from pre_award.fund_store.db.models import Round
 from pre_award.fund_store.db.models.event import EventType
 from pre_award.fund_store.db.queries import create_event as create_event_in_db
 from pre_award.fund_store.db.queries import (

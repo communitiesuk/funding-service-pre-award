@@ -23,7 +23,7 @@ LOADER_CONFIG = {
         "ggis_scheme_reference_number": "123-abc-456-def",
         "funding_type": "UNCOMPETED",
         "name_json": {"en": "Crash Test Dummy Fund", "cy": ""},
-        "title_json": {"en": "Round 1", "cy": ""},
+        "title_json": {"en": "funding for crash test dummies", "cy": ""},
         "description_json": {"en": "crash test dummies", "cy": ""},
     },
     "round_config": {

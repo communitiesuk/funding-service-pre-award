@@ -24,9 +24,10 @@
 {% set funding_amount = sub_criteria.funding_amount_requested if sub_criteria else state.funding_amount_requested %}
 
 {% block header %}
+{{ super() }}
 <header role="banner" data-module="govuk-header">
-    <nav class="govuk-width-container govuk-header__navigation">
-        <div class="govuk-phase-banner flex-parent-element">
+    <nav class="govuk-width-container govuk-header__navigation govuk-!-padding-top-3">
+        <div class="flex-parent-element">
             <p class="govuk-!-text-align-left flex-parent-element flexed-element-margins-collapse">
                 {{ govukBackLink({'href': url_for("assessment_bp.application", application_id=application_id), 'html':
                 'Back to <b>assessment tasklist</b>', 'attributes': {'data-qa': 'back-to-assessment-tasklist'} }) }}
@@ -50,10 +51,8 @@
 {% endblock header %}
 
 {% block content %}
-
-<main class="govuk-main-wrapper" id="main-content" role="main">
     {% if migration_banner_enabled %}
-    {{ migration_banner() }}
+        {{ migration_banner() }}
     {% endif %}
     <div class="govuk-grid-row">
         <div>
@@ -200,11 +199,6 @@
                     </table>
                 </div>
             </div>
-
         </div>
-
     </div>
-
-</main>
-
 {% endblock content %}

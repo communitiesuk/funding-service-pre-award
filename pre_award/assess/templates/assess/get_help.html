@@ -6,8 +6,9 @@
 {% set pageHeading = "Get help" %}
 
 {% block header %}
-<nav class="govuk-header__navigation govuk-width-container">
-    <div class="govuk-phase-banner flex-parent-element">
+    {{ super()}}
+<nav class="govuk-header__navigation govuk-width-container govuk-!-padding-top-3">
+    <div class="flex-parent-element">
         {% if request.referrer %}
         <p class="govuk-!-text-align-left flex-parent-element flexed-element-margins-collapse">
             {{ govukBackLink({'href': request.referrer, 'html': 'Back'}) }}
@@ -19,6 +20,7 @@
     </div>
 </nav>
 {% endblock header %}
+
 {% block content %}
     <h1 class="govuk-heading-l">Get help</h1>
     <p class="govuk-body">Problems with the assessment tool?</p>

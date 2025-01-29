@@ -8,7 +8,7 @@ requires-python = ">=3.10, <3.11"
 
 dependencies = [
     "airium==0.2.6",
-    "alembic-utils==0.8.5",
+    "alembic-utils==0.8.6",
     "babel==2.16.0",
     "beautifulsoup4==4.12.3",
     "boto3==1.36.3",
@@ -29,7 +29,7 @@ dependencies = [
     "flask-talisman==1.1.0",
     "flask-wtf==1.2.2",
     "flask==3.0.3",
-    "govuk-frontend-jinja==2.7.0",
+    "govuk-frontend-jinja==2.8.0",
     "greenlet==3.1.1",
     "gunicorn[gevent]==23.0.0",
     "invoke==2.2.0",
@@ -115,8 +115,8 @@ dev = [
     "pytest-mock==3.14.0",
     "pytest==8.3.4",
     "requests-mock==1.11.0",
-    "ruff==0.9.1",
+    "ruff==0.9.3",
     "flask-debugtoolbar==0.16.0",
     "freezegun==1.5.1",
-    "responses==0.25.3",
+    "responses==0.25.6",
 ]

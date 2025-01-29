@@ -4,8 +4,8 @@
 {% macro render(round_details, stats, team_flag_stats, is_active_status, sso_logout_url) %}
 
 <header role="banner" data-module="govuk-header">
-    <nav class="govuk-width-container govuk-header__navigation">
-        <div class="govuk-phase-banner flex-parent-element">
+    <nav class="govuk-width-container govuk-header__navigation govuk-!-padding-top-3">
+        <div class="flex-parent-element">
             <p class="govuk-!-text-align-left govuk-!-margin-left-3 flex-parent-element flexed-element-margins-collapse">
                 {{ govukBackLink({'href': url_for("assessment_bp.landing"), 'html': 'Back to <b>assessment landing</b>',
                 'attributes': {'data-qa': 'back-to-assessment-overview-link'} }) }}

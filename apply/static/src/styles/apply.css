@@ -1,0 +1,4 @@
+/* TODO Remove once frontend jinja macros updated and we can use macros for headers - see apply-base.html */
+.header-pointer-events-none {
+    pointer-events: none;
+  }

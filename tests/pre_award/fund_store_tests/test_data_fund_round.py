@@ -1,6 +1,6 @@
 import pytest
 
-from pre_award.fund_store.db.models.fund import FundingType
+from data.models import FundingType
 from pre_award.fund_store.db.queries import (
     get_all_funds,
     get_fund_by_id,
