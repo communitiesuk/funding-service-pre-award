@@ -246,6 +246,75 @@ resolved_app = {
     },
 }
 
+uncompeted_app_id = "uncompeted_app"
+uncompeted_app = {
+    "id": uncompeted_app_id,
+    "workflow_status": "CHANGE_RECEIVED",
+    "project_name": "Project In prog and Res",
+    "short_id": "INP",
+    "flags": [
+        {
+            "id": "1c5e8bea-f5ed-4b74-8823-e64fec27a7dc",
+            "latest_status": FlagType.RESOLVED.value,
+            "latest_allocation": "test_team",
+            "application_id": resolved_app_id,
+            "sections_to_flag": ["Test section"],
+            "field_ids": [],
+            "is_change_request": False,
+            "updates": [
+                {
+                    "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
+                    "user_id": test_user_id_lead_assessor,
+                    "date_created": "2023-02-20 12:00:00",
+                    "justification": "Test",
+                    "status": FlagType.RAISED.value,
+                    "allocation": None,
+                },
+                {
+                    "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
+                    "user_id": test_user_id_lead_assessor,
+                    "date_created": "2023-02-20 12:00:00",
+                    "justification": "Test",
+                    "status": FlagType.RESOLVED.value,
+                    "allocation": None,
+                },
+            ],
+        },
+    ],
+    "tag_associations": [
+        {
+            "associated": True,
+            "id": "f908512a-25ef-4ec8-9850-b5a9c867992f",
+            "user_id": test_user_id_lead_assessor,
+            "tag": {
+                "active": True,
+                "creator_user_id": test_user_id_lead_assessor,
+                "id": "62ea161d-8593-4943-8676-baae283cd979",
+                "value": "Tag one red",
+                "tag_type": {
+                    "id": "7e7ecf78-9239-498a-9086-008043230a69",
+                    "purpose": "NEGATIVE",
+                },
+            },
+        }
+    ],
+    "user_associations": [],
+    "qa_complete": [],
+    "is_qa_complete": False,
+    "criteria_sub_criteria_name": "test_sub_criteria",
+    "criteria_sub_criteria_id": "test_sub_criteria_id",
+    "theme_id": "test_theme_id",
+    "theme_name": "test_theme_name",
+    "mock_field": {
+        "answer": "Yes",
+        "field_id": "JCACTy",
+        "field_type": "yesNoField",
+        "form_name": "community-engagement",
+        "presentation_type": "text",
+        "question": "Have you done any fundraising in the community?",
+    },
+}
+
 stopped_app_id = "stopped_app"
 stopped_app = {
     "id": stopped_app_id,
@@ -387,6 +456,7 @@ mock_api_results = {
         # "assessment_start": None,
         # "assessment_deadline": "2124-01-01 12:00:00",
         # "deadline": "2024-01-01 12:00:00"
+        "funding_type": "UNCOMPETED",
     },
     "fund_store/funds/NSTF": {
         "id": "NSTF",
@@ -646,6 +716,37 @@ mock_api_results = {
         "fund_id": test_fund_id,
         "round_id": test_round_id,
         "qa_complete": resolved_app["qa_complete"],
+    },
+    "assessment_store/application_overviews/uncompeted_app": {
+        "criterias": [
+            {
+                "name": "string",
+                "sub_criterias": [
+                    {
+                        "id": uncompeted_app["criteria_sub_criteria_id"],
+                        "name": uncompeted_app["criteria_sub_criteria_name"],
+                        "theme_count": 1,
+                        "score": 4,
+                        "status": "string",
+                    }
+                ],
+                "total_criteria_score": 4,
+                "number_of_scored_sub_criteria": 5,
+                "weighting": 0,
+            }
+        ],
+        "sections": [
+            {
+                "name": "string",
+                "sub_criterias": [{"id": "string", "name": "A fixed sub criteria"}],
+            }
+        ],
+        "project_name": uncompeted_app["project_name"],
+        "short_id": uncompeted_app["short_id"],
+        "workflow_status": uncompeted_app["workflow_status"],
+        "fund_id": test_fund_id,
+        "round_id": test_round_id,
+        "qa_complete": uncompeted_app["qa_complete"],
     },
     "assessment_store/application_overviews/flagged_app": {
         "criterias": [

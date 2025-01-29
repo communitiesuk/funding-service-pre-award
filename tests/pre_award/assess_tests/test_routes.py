@@ -1407,6 +1407,29 @@ class TestRoutes:
         assert sample_1 in response.text
         assert sample_2 in response.text
 
+    @pytest.mark.application_id("uncompeted_app")
+    def test_application(
+        self,
+        assess_test_client,
+        mock_get_funds,
+        mock_get_fund,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_application_json,
+        mocks_for_file_export_download,
+        mock_get_assessor_tasklist_state,
+        mock_get_scoring_system,
+    ):
+        token = create_valid_token(test_lead_assessor_claims)
+        assess_test_client.set_cookie("fsd_user_token", token)
+        response = assess_test_client.get("/assess/application/uncompeted_app")
+        assert response.status_code == 200
+        soup = BeautifulSoup(response.data, "html.parser")
+        assert any(
+            "The applicant has made changes following your change request." in p.text
+            for p in soup.find_all("p", class_="govuk-notification-banner__heading")
+        ), "Text does not match"
+
     def test_get_file_with_short_id(
         self,
         assess_test_client,

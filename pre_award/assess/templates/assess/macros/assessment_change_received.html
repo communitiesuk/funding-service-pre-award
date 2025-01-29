@@ -1,0 +1,15 @@
+{% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
+
+{% macro assessment_change_received() %}
+
+    {% set notification_banner_html %}
+    <p class="govuk-notification-banner__heading">
+        The applicant has made changes following your change request.<br>
+        Review the changes
+    </p>
+    {% endset %}
+
+    {{ govukNotificationBanner({
+        "html": notification_banner_html,
+    }) }}
+{% endmacro %}
