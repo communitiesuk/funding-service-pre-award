@@ -12,7 +12,7 @@ from app import create_app
 from data.models import Round
 from pre_award.account_store.db.models.queries import get_email_address, set_application_reminder_sent
 from pre_award.account_store.tasks import seed_local_account_store_impl
-from pre_award.application_store.db.queries.application.queries import search_applications
+from pre_award.application_store.db.queries.application.queries import get_incomplete_applications_for_round
 from pre_award.assessment_store.tasks.db_tasks import seed_assessment_store_db_impl
 from pre_award.fund_store.db.queries import (
     get_rounds_where_reminder_date_today,
@@ -161,20 +161,15 @@ def reminder_emails(c):
             r for r in rounds_with_reminder_today if not r.application_reminder_sent
         ]
         for r in rounds_with_unsent_application_reminders:
-            # x = get_incomplete_applications_for_round(r.id)  # TODO: Use this instead of search_applications
-            non_submitted_applications = search_applications(
-                round_id=str(r.id), status_only=["IN_PROGRESS", "NOT_STARTED", "COMPLETED"], forms=False
-            )
-
+            non_submitted_applications = get_incomplete_applications_for_round(r.id)
             for a in non_submitted_applications:
-                # TODO: Filter to unique email addresses
-                email_address = get_email_address(a["account_id"])
+                email_address = get_email_address(a.account_id)
                 print(email_address)
                 print(r.fund)
                 get_notification_service().send_application_deadline_reminder_email(
                     email_address=email_address,
                     fund_name=r.fund.name_json["en"],
-                    application_reference=a["reference"],
+                    application_reference=a.reference,
                     round_name=r.title_json["en"],  # TODO: Handle Welsh?
                     deadline=r.deadline,
                     contact_help_email=r.contact_email,

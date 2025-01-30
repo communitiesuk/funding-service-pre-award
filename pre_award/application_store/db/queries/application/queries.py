@@ -14,7 +14,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload, load_only, noload
 from sqlalchemy.sql.expression import Select
 
-from pre_award.account_store.db.models.account import Account
 from pre_award.application_store.db.exceptions import ApplicationError, SubmitError
 from pre_award.application_store.db.models import Applications
 from pre_award.application_store.db.models.application.enums import Status
@@ -51,17 +50,11 @@ def get_application(app_id, include_forms=False, as_json=False) -> dict | Applic
 
 
 def get_incomplete_applications_for_round(round_id: str):
-    breakpoint()
-    stmt = (
-        select(Applications, Account.email)
-        .join(Account, Applications.account_id == Account.id)
-        .where(
-            Applications.status.in_([Status.IN_PROGRESS, Status.NOT_STARTED, Status.COMPLETED]),
-            Applications.round_id == str(round_id),
-        )
+    stmt = select(Applications).where(
+        Applications.status.in_([Status.IN_PROGRESS, Status.NOT_STARTED, Status.COMPLETED]),
+        Applications.round_id == str(round_id),
     )
-    results = db.session.execute(stmt).all()
-    return [{"application": app, "email": email} for app, email in results]
+    return db.session.execute(stmt).scalars().all()
 
 
 def get_applications(filters=None, include_forms=False, as_json=False) -> list[dict] | list[Applications]:
