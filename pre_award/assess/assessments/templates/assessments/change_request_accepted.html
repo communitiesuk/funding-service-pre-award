@@ -17,14 +17,18 @@
     {% include "assess/components/header.html" %}
 {% endblock header %}
 {% block content %}
-    <div class="govuk-panel govuk-panel--confirmation">
-        <h1 class="govuk-panel__title">Your change has been accepted</h1>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <div class="govuk-panel govuk-panel--confirmation">
+                <h1 class="govuk-panel__title">Your change has been accepted</h1>
+            </div>
+            <h2 class="govuk-heading-l">What happens next</h2>
+            <p class="govuk-body">Your acceptance has been sent to the applicant by email.</p>
+            <p class="govuk-body">The applicant will no longer be able to make changes to this section.</p>
+            <p class="govuk-body">
+                The status for this criteria will now be marked as <strong>Reviewed</strong>.
+            </p>
+            <a href="{{ url_for('assessment_bp.application', application_id=application_id) }}" class="govuk-link">Back to application</a>
+        </div>
     </div>
-    <h2 class="govuk-heading-l">What happens next</h2>
-    <p class="govuk-body">Your acceptance has been sent to the applicant by email.</p>
-    <p class="govuk-body">The applicant will no longer be able to make changes to this section.</p>
-    <p class="govuk-body">
-        The status for this criteria will now be marked as <strong>Reviewed</strong>.
-    </p>
-    <a href="{{ url_for('assessment_bp.application', application_id=application_id) }}" class="govuk-link">Back to application</a>
 {% endblock content %}
