@@ -8,6 +8,7 @@ from flask.json.provider import DefaultJSONProvider
 from flask_assets import Environment
 from flask_babel import Babel, gettext, pgettext
 from flask_compress import Compress
+from flipper import FeatureFlagClient, MemoryFeatureFlagStore
 
 from common.utils.filters import datetime_format_respect_lang
 
@@ -117,9 +118,13 @@ def create_app() -> Flask:  # noqa: C901
     flask_app.config.from_object("pre_award.config.Config")
 
     toggle_client = None
-    initialise_toggles_redis_store(flask_app)
-    toggle_client = create_toggles_client()
-    load_toggles(Config.FEATURE_CONFIG, toggle_client)
+    if getenv("FLASK_ENV") != "unit_test":
+        initialise_toggles_redis_store(flask_app)
+        toggle_client = create_toggles_client()
+        load_toggles(Config.FEATURE_CONFIG, toggle_client)
+    else:
+        toggle_client = FeatureFlagClient(MemoryFeatureFlagStore())
+        load_toggles(Config.FEATURE_CONFIG, toggle_client)
 
     Babel(flask_app, locale_selector=get_lang)
     LanguageSelector(flask_app)
