@@ -169,7 +169,7 @@ def reminder_emails(c):
                 email_address = get_email_address(a.account_id)
                 print(email_address)
                 print(r.fund)
-                get_notification_service().send_application_deadline_reminder_email(
+                notification = get_notification_service().send_application_deadline_reminder_email(
                     email_address=email_address,
                     fund_name=r.fund.name_json["en"],
                     application_reference=a.reference,
@@ -177,16 +177,18 @@ def reminder_emails(c):
                     deadline=r.deadline,
                     contact_help_email=r.contact_email,
                 )
+                (
+                    current_app.logger.info(
+                        "Sent notification %(notification_id)s for application %(application_reference)s",
+                        dict(
+                            notification_id=notification.id,
+                            application_reference=a.reference,
+                        ),
+                    ),
+                )
             current_app.logger.info(
                 "The application reminder has been sent successfully for %(fund_name)s %(round_name)s",
                 dict(fund_name=r.fund.name_json["en"], round_name=r.title_json["en"]),
             )
 
             set_application_reminder_sent(r)
-
-        # current_app.logger.info(
-        #     "Sent notification %(notification_id)s for application %(application_reference)s",
-        #     dict(
-        #         notification_id=notification.id,
-        #         application_reference=application["application"]["reference"],
-        #     ),
