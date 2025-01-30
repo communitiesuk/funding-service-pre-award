@@ -40,9 +40,8 @@ Request changes –
       <a
             class="govuk-link"
             href="{{ url_for(
-                'assessment_bp.display_sub_criteria',
-                application_id=application_id,
-                sub_criteria_id=sub_criteria.id
+                "assessment_bp.application",
+                application_id=application_id
             ) }}"
       >
         Back to application
