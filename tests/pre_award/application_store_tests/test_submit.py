@@ -6,7 +6,9 @@ from uuid import uuid4
 
 import pytest
 from click.testing import CliRunner
+from flask_session import Session
 from fsd_utils import Decision, NotifyConstants
+from pytest_mock import MockerFixture
 
 from pre_award.application_store._helpers.application import send_submit_notification
 from pre_award.application_store.db.exceptions.submit import SubmitError
@@ -26,6 +28,7 @@ from pre_award.application_store.external_services.exceptions import Notificatio
 from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import COF_ROUND_4_W2_ID
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from pre_award.assessment_store.db.models.assessment_record.enums import Status
+from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
 from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
 from pre_award.assessment_store.scripts.derive_assessment_values import derive_assessment_values
@@ -756,3 +759,53 @@ def test_existing_history_log_is_appended(existing_json_blob, new_json_blob, moc
 
     old_val = existing_json_blob["forms"][0]["questions"][0]["fields"][1]["answer"]
     assert list(f2["history_log"][-1].values())[0] == old_val
+
+
+@pytest.mark.fund_config(
+    {
+        "name": "Generated test fund",
+        "identifier": "1",
+        "short_name": "TEST",
+        "description": "Testing fund",
+        "welsh_available": False,
+        "name_json": {"en": "English title", "cy": "Welsh title"},
+        "funding_type": "UNCOMPETED",
+        "rounds": [],
+    }
+)
+def test_assessment_records_workflow_status(
+    mocker: MockerFixture, setup_submitted_application: Applications, _db: Session
+) -> None:
+    application_id = str(setup_submitted_application)
+    application = get_application(application_id, include_forms=True)
+    assessment_record = _db.session.get(AssessmentRecord, application_id)
+    mocker.patch(
+        "pre_award.application_store.db.queries.application.queries.db.session.scalar", return_value=assessment_record
+    )
+
+    submit_application(application_id)
+    assert application.status.name == "SUBMITTED"  # type: ignore
+    assert assessment_record.workflow_status.name == "NOT_STARTED"
+
+    # Resubmit an already submitted application (e.g. by refreshing "Application Submitted" success page)
+    submit_application(application_id)
+    assert application.status.name == "SUBMITTED"  # type: ignore
+    assessment_record = _db.session.get(AssessmentRecord, application_id)
+    # workflow_status shouldn't change on resubmission
+    assert assessment_record.workflow_status.name == "NOT_STARTED"
+
+    # Simulate a change request to the application
+    application.status = ApplicationStatus.CHANGE_REQUESTED  # type: ignore
+    assessment_record.workflow_status = WorkflowStatus.CHANGE_REQUESTED
+    _db.session.commit()
+
+    # Simulate reviewing and completing the section
+    application.status = ApplicationStatus.COMPLETED  # type: ignore
+    _db.session.commit()
+
+    # Resubmit application after changes have been made
+    submit_application(application_id)
+    application = _db.session.get(Applications, application_id)
+    assert application.status.name == "SUBMITTED"  # type: ignore
+    assessment_record = _db.session.get(AssessmentRecord, application_id)
+    assert assessment_record.workflow_status.name == "CHANGE_RECEIVED"
