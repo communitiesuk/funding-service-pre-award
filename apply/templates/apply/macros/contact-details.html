@@ -2,8 +2,8 @@
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 
 {% macro fs_contact_details(support_desk_apply) %}
-    <p class="govuk-body"><strong>{% trans %}Please contact us through our {% endtrans %}
-        <a class="govuk-link" href="{{ support_desk_apply }}" target="_blank">{% trans %}support desk{% endtrans %}</a> if you need help.</strong>
+    <p class="govuk-body">{% trans %}Contact us through our {% endtrans %}
+        <a class="govuk-link" href="{{ support_desk_apply }}" target="_blank">{% trans %}support desk{% endtrans %}</a> if you need help.
     </p>
     <p class="govuk-body">{% trans %}Monday to Friday: 9am to 5pm (except public holidays){% endtrans %}</p>
 

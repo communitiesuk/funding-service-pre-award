@@ -1,6 +1,6 @@
 {% extends "authenticator/base.html" %}
 
-{% from "authenticator/partials/contact_details.html" import contact_details %}
+{% from "apply/macros/contact-details.html" import fs_contact_details %}
 
 {% block pageTitle %}Page not found – {{ base_title }}{% endblock pageTitle %}
 
@@ -13,14 +13,7 @@
             <p class="govuk-body">If the web address is correct or you selected a link or a button, contact
                 us to speak to an adviser.</p>
 
-            {{ contact_details(
-                support_desk_apply,
-                "",
-                "",
-                "9am to 5pm",
-                "Monday to Friday"
-                )
-            }}
+            {{ fs_contact_details( upport_desk_apply) }}
         </div>
     </div>
 {% endblock content %}

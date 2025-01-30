@@ -4,6 +4,7 @@
 {% from "apply/partials/tasklist_submit.html" import tasklist_submit %}
 {% from "apply/partials/round_closed_warning.html" import round_closed_warning %}
 {% from "apply/partials/migration_banner.html" import migration_banner %}
+{% from "apply/macros/contact-details.html" import fs_contact_details %}
 {% block beforeContent %}
 <a href="{{ dashboard_url }}" class="govuk-back-link"> {% trans %}Back to your applications{% endtrans %}</a>
 {% endblock beforeContent %}
@@ -90,14 +91,10 @@
                 {% endif %}
 
                 <h2 class="govuk-heading govuk-heading-s">
-                    {% trans %}Get help{% endtrans %}
+                    {% trans %}Get help with your application{% endtrans %}
                 </h2>
 
-                <p class="govuk-body">
-                    {% trans %}If you have any questions about the form or the fund, contact us through our {% endtrans %}<a class="govuk-link" href=" {{ support_desk_apply }} " target="_blank">{% trans %}support desk{% endtrans %}</a>
-                </p>
-                <p>{% trans %}Do not send any applications or attachments through the support desk. We'll only accept applications through this service.{% endtrans %}</p>
-
+                {{ fs_contact_details(support_desk_apply) }}
                 <h2 class="govuk-heading govuk-heading-s">
                     {% trans %}How we'll use your information{% endtrans %}
                 </h2>
