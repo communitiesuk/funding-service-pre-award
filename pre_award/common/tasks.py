@@ -150,10 +150,9 @@ def full_bootstrap(c):
 
 @task
 def reminder_emails(c):
-    print("Building!")
     app = create_app()
     with app.app_context():
-        print("IN APP CONTEXT")
+        current_app.logger.info("Application deadline reminder task is now running!")
         rounds: list[Round] = get_rounds_with_reminder_date_in_future()
         print([round.reminder_date for round in rounds])
         rounds_with_reminder_today = get_rounds_where_reminder_date_today()
