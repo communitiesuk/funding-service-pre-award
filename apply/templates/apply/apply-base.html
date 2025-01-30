@@ -10,6 +10,7 @@
 {% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
 {% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
 {% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 
 {% set serviceName = get_service_title() %}
 
@@ -29,9 +30,28 @@
 }}
 {% endblock skipLink %}
 {% block header %}
+{% set navigationItems = []%}
+{% if g.is_authenticated and g.logout_url %}
+  {% if toggle_dict.get("MULTIFUND_DASHBOARD") %}
+    {% do navigationItems.append({"text": gettext("View all applications"), "href":url_for('account_routes.dashboard')} ) %}
+  {% endif %}
+  {% set signoutHtml %}
+    <form method="post" action="{{ g.logout_url }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ govukButton({
+            "isStartButton": false,
+            "type":"submit",
+            "text": gettext("Sign out"),
+            "classes": "signout_button"
+        }) }}
+    </form>
+  {% endset %}
+  {% do navigationItems.append({"html": signoutHtml})%}
+{% endif %}
   {{ govukHeader({
     "serviceName": serviceName,
     "useTudorCrown": true,
+    "navigation": navigationItems
   }) }}
 {% endblock header %}
 

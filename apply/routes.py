@@ -1,4 +1,5 @@
 from flask import abort, render_template, request
+from fsd_utils.authentication.decorators import login_requested
 
 from data.crud.fund_round_queries import get_fund, get_round
 from pre_award.common.blueprints import Blueprint
@@ -15,6 +16,7 @@ def landing_page(fund_short_name: str, round_short_name: str) -> str:
 
 
 @apply_bp.route("/contact_us", methods=["GET"])
+@login_requested
 def contact_us() -> str:
     fund_short_name = request.args.get("fund_short_name", None)
     fund = get_fund(fund_short_name=fund_short_name) if fund_short_name else None

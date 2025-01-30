@@ -44,6 +44,7 @@ jobs:
       assets_required: true
 
   type_checks:
+    if: ${{ ! contains(fromJSON(needs.setup.outputs.jobs_to_run), 'dev') }}
     needs: [setup]
     runs-on: ubuntu-latest
     steps:

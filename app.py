@@ -156,6 +156,7 @@ def create_app() -> Flask:  # noqa: C901
     flask_app.jinja_env.trim_blocks = True
     flask_app.jinja_env.lstrip_blocks = True
     flask_app.jinja_env.add_extension("jinja2.ext.i18n")
+    flask_app.jinja_env.add_extension("jinja2.ext.do")
     flask_app.jinja_env.globals["get_lang"] = get_lang
     flask_app.jinja_env.globals["pgettext"] = pgettext
 

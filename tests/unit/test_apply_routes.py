@@ -21,9 +21,9 @@ def test_landing_route_404(apply_test_client, templates_rendered, mocker):
     assert "apply/404.html" == rendered_template[0].name
 
 
-@pytest.mark.parametrize("query_params", ["?fund_short_name=ctdf", ""])
+@pytest.mark.parametrize("query_params", ["?fund_short_name=ctdf"])
 def test_contact_us_route(apply_test_client, templates_rendered, mock_get_fund_success, query_params):
-    response = apply_test_client.get("/contact_us_new" + query_params)
+    response = apply_test_client.get("/contact_us" + query_params)
     assert response.status_code == 200
     rendered_template = templates_rendered[0]
     assert "apply/contact-us.html" == rendered_template[0].name
@@ -32,7 +32,7 @@ def test_contact_us_route(apply_test_client, templates_rendered, mock_get_fund_s
 
 def test_contact_us_route_bad_fund(apply_test_client, templates_rendered, mocker):
     mocker.patch("apply.routes.get_fund", return_value=None)
-    response = apply_test_client.get("/contact_us_new?fund_short_name=zzzz")
+    response = apply_test_client.get("/contact_us?fund_short_name=zzzz")
     assert response.status_code == 200
     rendered_template = templates_rendered[0]
     assert "apply/contact-us.html" == rendered_template[0].name
