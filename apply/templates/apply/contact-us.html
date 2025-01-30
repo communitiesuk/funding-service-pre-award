@@ -1,5 +1,6 @@
 {% extends "apply/apply-base.html" %}
-{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+
+{% from "apply/macros/contact-details.html" import fs_contact_details %}
 
 
 {% set pageHeading %}{% trans %}Get help with your application{% endtrans %}{% endset %}
@@ -14,15 +15,7 @@
             {% endif %}
 
             <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
-            <p class="govuk-body">{% trans %}Contact us if you have any questions{% endtrans %}.</p>
-            <p class="govuk-body"><strong>{% trans %}Please contact us through our {% endtrans %}
-                <a class="govuk-link" href="{{ support_desk_apply }}" target="_blank">{% trans %}support desk{% endtrans %}</a>.</strong>
-            </p>
-            <p class="govuk-body">{% trans %}Monday to Friday: 9am to 5pm (except public holidays){% endtrans %}</p>
-
-            {{ govukInsetText({
-                "text": gettext("Do not send any applications or attachments through the support desk. We'll only accept applications through this service.")
-            }) }}
+            {{ fs_contact_details(support_desk_apply) }}
         </div>
     </div>
 {% endblock content %}

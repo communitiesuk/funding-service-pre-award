@@ -94,20 +94,9 @@
                 </h2>
 
                 <p class="govuk-body">
-                    {% if link_to_contact_us_page %}
-                    {% trans %}If you have any questions about the form or the fund, {% endtrans %}
-                        <a class="govuk-link" href="{{
-                            url_for(
-                                "apply_routes.contact_us",
-                                fund=fund_short_name,
-                                round=round_short_name
-                            )
-                        }}">{% trans %}contact us.{% endtrans %}</a>
-                    {% else %}
-                        {% trans %}If you have any questions about the form or the fund, contact us through our {% endtrans %}<a class="govuk-link" href=" {{ support_desk_apply }} " target="_blank">{% trans %}support desk{% endtrans %}</a>
-                    {% endif %}
-                        </p>
-                        <p>{% trans %}Do not send any applications or attachments through the support desk. We'll only accept applications through this service.{% endtrans %}</p>
+                    {% trans %}If you have any questions about the form or the fund, contact us through our {% endtrans %}<a class="govuk-link" href=" {{ support_desk_apply }} " target="_blank">{% trans %}support desk{% endtrans %}</a>
+                </p>
+                <p>{% trans %}Do not send any applications or attachments through the support desk. We'll only accept applications through this service.{% endtrans %}</p>
 
                 <h2 class="govuk-heading govuk-heading-s">
                     {% trans %}How we'll use your information{% endtrans %}

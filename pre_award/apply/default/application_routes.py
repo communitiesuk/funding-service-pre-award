@@ -341,7 +341,6 @@ def tasklist(application_id):
             application_guidance=app_guidance,
             existing_feedback_map=existing_feedback_map,
             feedback_survey_data=feedback_survey_data,
-            link_to_contact_us_page=round_data.reference_contact_page_over_email,
             research_survey_data=research_survey_data,
             migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
             # Set service_title here so it uses the application language - overrides the context_processor
