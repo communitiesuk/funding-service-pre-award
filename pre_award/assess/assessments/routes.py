@@ -1365,7 +1365,7 @@ def request_changes(application_id, sub_criteria_id, theme_id):
 
         return redirect(
             url_for(
-                "assessment_bp.display_sub_criteria",
+                "assessment_bp.success_page",
                 application_id=application_id,
                 sub_criteria_id=sub_criteria_id,
                 theme_id=theme_id,
@@ -1862,4 +1862,26 @@ def view_entire_application(application_id):
         state=state,
         application_id=application_id,
         mapped_answers=map_answers,
+    )
+
+
+@assessment_bp.route(
+    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/success_page",
+    methods=["GET"],
+)
+@check_access_application_id
+def success_page(application_id, sub_criteria_id, theme_id):
+    sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
+    current_theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
+    state = get_state_for_tasklist_banner(application_id)
+    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    return render_template(
+        "assessments/change_request_success_page.html",
+        application_id=application_id,
+        theme_id=theme_id,
+        fund=get_fund(sub_criteria.fund_id),
+        current_theme=current_theme,
+        state=state,
+        sub_criteria=sub_criteria,
+        assessment_status=assessment_status,
     )
