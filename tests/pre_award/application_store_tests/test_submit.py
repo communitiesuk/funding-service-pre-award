@@ -521,6 +521,8 @@ def test_derive_values_script(
 def test_fields_resubmitted_uncompeted_application(setup_submitted_application, mocker, _db):
     application_id = str(setup_submitted_application)
     application = get_application(application_id, include_forms=True)
+    resubmitted_assessment = _db.session.get(AssessmentRecord, application_id)
+    resubmitted_assessment.workflow_status = Status.CHANGE_REQUESTED
 
     # Modify answer to a question
     test_field = application.forms[0].json[0]["fields"][0]
@@ -546,7 +548,7 @@ def test_fields_resubmitted_uncompeted_application(setup_submitted_application, 
                     except ValueError:
                         raise AssertionError("History log key is not an isoformat datetime") from None
                     assert list(field["history_log"][0].values())[0] == original_answer
-
+    # breakpoint()
     assert resubmitted_assessment.project_name == application.project_name
     assert resubmitted_assessment.workflow_status == Status.CHANGE_RECEIVED
 
