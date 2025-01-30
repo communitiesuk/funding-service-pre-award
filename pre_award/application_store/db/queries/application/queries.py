@@ -54,7 +54,7 @@ def get_incomplete_applications_for_round(round_id: str):
         Applications.status.in_([Status.IN_PROGRESS, Status.NOT_STARTED, Status.COMPLETED]),
         Applications.round_id == str(round_id),
     )
-    return db.session.execute(stmt).scalars().all()
+    return db.session.execute(stmt).scalars().fetchall()
 
 
 def get_applications(filters=None, include_forms=False, as_json=False) -> list[dict] | list[Applications]:

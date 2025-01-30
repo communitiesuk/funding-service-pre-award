@@ -162,6 +162,7 @@ def reminder_emails(c):
         ]
         for r in rounds_with_unsent_application_reminders:
             non_submitted_applications = get_incomplete_applications_for_round(r.id)
+
             for a in non_submitted_applications:
                 email_address = get_email_address(a.account_id)
                 print(email_address)
