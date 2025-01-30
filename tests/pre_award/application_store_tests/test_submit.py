@@ -548,7 +548,7 @@ def test_fields_resubmitted_uncompeted_application(setup_submitted_application, 
                     except ValueError:
                         raise AssertionError("History log key is not an isoformat datetime") from None
                     assert list(field["history_log"][0].values())[0] == original_answer
-    # breakpoint()
+
     assert resubmitted_assessment.project_name == application.project_name
     assert resubmitted_assessment.workflow_status == Status.CHANGE_RECEIVED
 
