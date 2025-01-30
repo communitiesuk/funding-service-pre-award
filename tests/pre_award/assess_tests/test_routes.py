@@ -1408,20 +1408,16 @@ class TestRoutes:
         assert sample_2 in response.text
 
     @pytest.mark.application_id("uncompeted_app")
-    def test_application(
+    def test_change_received_notification_banner(
         self,
         assess_test_client,
         mock_get_funds,
         mock_get_fund,
         mock_get_round,
         mock_get_application_metadata,
-        mock_get_application_json,
-        mocks_for_file_export_download,
         mock_get_assessor_tasklist_state,
         mock_get_scoring_system,
     ):
-        token = create_valid_token(test_lead_assessor_claims)
-        assess_test_client.set_cookie("fsd_user_token", token)
         response = assess_test_client.get("/assess/application/uncompeted_app")
         assert response.status_code == 200
         soup = BeautifulSoup(response.data, "html.parser")

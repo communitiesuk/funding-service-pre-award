@@ -257,7 +257,7 @@ uncompeted_app = {
             "id": "1c5e8bea-f5ed-4b74-8823-e64fec27a7dc",
             "latest_status": FlagType.RESOLVED.value,
             "latest_allocation": "test_team",
-            "application_id": resolved_app_id,
+            "application_id": uncompeted_app_id,
             "sections_to_flag": ["Test section"],
             "field_ids": [],
             "is_change_request": False,

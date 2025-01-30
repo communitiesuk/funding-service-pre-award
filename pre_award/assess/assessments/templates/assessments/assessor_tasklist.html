@@ -176,7 +176,7 @@
         {% endif %}
 
         {% if toggle_dict.get("UNCOMPETED_WORKFLOW") and fund[0].funding_type == 'UNCOMPETED' and assessment_status == "Change received" %}
-        {{ assessment_change_received() }}
+            {{ assessment_change_received() }}
         {% endif %}
 
         {% if state.criterias|length > 0 %}<h2 class="govuk-heading-l govuk-!-margin-top-8">Unscored</h2>{% endif %}
