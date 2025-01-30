@@ -4,40 +4,45 @@
 {% macro comment_box(comment_form, html_text, placeholder, application_id) %}
 
 <form method="post">
-<div class="govuk-grid-row">
-    {{ comment_form.csrf_token }}
-    <div class="govuk-grid-column-full">
-    {{ govukTextarea({
-    "name": comment_form.comment.id,
-    "id": comment_form.comment.id,
-    "rows": 8,
-    "label": {
-      "text": "" if html_text else "Add a comment",
-      "html": html_text if html_text else "",
-      "classes": "govuk-label--m",
-      isPageHeading: true
-    },
-    "value": placeholder if placeholder else "",
-    "errorMessage": {
-      "text": comment_form.comment.errors.0
-  } if comment_form.comment.errors
-  }) }}
+    <div class="govuk-grid-row">
+        {{ comment_form.csrf_token }}
+        <div class="govuk-grid-column-full">
+            {{ govukTextarea({
+                "name": comment_form.comment.id,
+                "id": comment_form.comment.id,
+                "rows": 8,
+                "label": {
+                    "text": "" if html_text else "Add a comment",
+                    "html": html_text if html_text else "",
+                    "classes": "govuk-label--m",
+                    isPageHeading: true
+            },
+            "value": placeholder if placeholder else "",
+            "errorMessage": {
+                "text": comment_form.comment.errors.0
+            } if comment_form.comment.errors
+            }) }}
 
-  {{ govukButton({
-    "text": "Save comment",
-    "type": "submit",
-    "classes": "primary-button govuk-!-margin-bottom-9",
-    "data-qa": "save-comment-button"
-  }) }}
+            {{ govukButton({
+                "text": "Save comment",
+                "type": "submit",
+                "classes": "primary-button govuk-!-margin-bottom-9 govuk-!-margin-right-3",
+                "data-qa": "save-comment-button"
+            }) }}
 
-  {% if application_id %}
-    <a class="govuk-link govuk-!-padding-top-2 govuk-!-display-inline-block" href="{{ url_for(
-    'assessment_bp.application',
-    application_id=application_id) }}">Cancel</a>
-  {% endif %}
+            {% if application_id %}
+                {% set cancel_flag_url = url_for(
+                  'assessment_bp.application', application_id=application_id
+                ) %}
+                {{ govukButton({
+                    "text": "Cancel",
+                    "classes": "govuk-button--secondary",
+                    "href": cancel_flag_url
+                }) }}
+            {% endif %}
 
+        </div>
     </div>
-</div>
 </form>
 
 {% endmacro %}

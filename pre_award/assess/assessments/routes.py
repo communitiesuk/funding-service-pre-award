@@ -10,17 +10,7 @@ from collections import OrderedDict
 from datetime import datetime
 from urllib.parse import quote_plus, unquote_plus
 
-from flask import (
-    Response,
-    abort,
-    current_app,
-    g,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-)
+from flask import Response, abort, current_app, g, redirect, render_template, request, session, url_for
 from fsd_utils import extract_questions_and_answers
 from fsd_utils.sqs_scheduler.context_aware_executor import ContextAwareExecutor
 from markupsafe import escape
@@ -1500,7 +1490,7 @@ def application(application_id):
     state = get_state_for_tasklist_banner(application_id)
 
     scoring_form = get_scoring_class(state.round_id)()
-
+    fund = get_fund(state.fund_id)
     fund_round = get_round(
         state.fund_id,
         state.round_id,
@@ -1638,6 +1628,7 @@ def application(application_id):
         comment_id=comment_id,
         comment_form=comment_form,
         comments=theme_matched_comments,
+        fund=fund,
     )
 
 

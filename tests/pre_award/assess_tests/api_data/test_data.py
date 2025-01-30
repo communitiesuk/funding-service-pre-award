@@ -246,6 +246,18 @@ resolved_app = {
     },
 }
 
+uncompeted_app_id = "uncompeted_app"
+uncompeted_app = {
+    "id": uncompeted_app_id,
+    "workflow_status": "CHANGE_RECEIVED",
+    "project_name": "Uncompeted project In prog and Res",
+    "short_id": "UNCMP-INP",
+    "qa_complete": [],
+    "is_qa_complete": False,
+    "criteria_sub_criteria_name": "test_uncomp_sub_criteria",
+    "criteria_sub_criteria_id": "test_uncomp_sub_criteria_id",
+}
+
 stopped_app_id = "stopped_app"
 stopped_app = {
     "id": stopped_app_id,
@@ -387,6 +399,7 @@ mock_api_results = {
         # "assessment_start": None,
         # "assessment_deadline": "2124-01-01 12:00:00",
         # "deadline": "2024-01-01 12:00:00"
+        "funding_type": "UNCOMPETED",
     },
     "fund_store/funds/NSTF": {
         "id": "NSTF",
@@ -646,6 +659,37 @@ mock_api_results = {
         "fund_id": test_fund_id,
         "round_id": test_round_id,
         "qa_complete": resolved_app["qa_complete"],
+    },
+    "assessment_store/application_overviews/uncompeted_app": {
+        "criterias": [
+            {
+                "name": "string",
+                "sub_criterias": [
+                    {
+                        "id": uncompeted_app["criteria_sub_criteria_id"],
+                        "name": uncompeted_app["criteria_sub_criteria_name"],
+                        "theme_count": 1,
+                        "score": 4,
+                        "status": "string",
+                    }
+                ],
+                "total_criteria_score": 4,
+                "number_of_scored_sub_criteria": 5,
+                "weighting": 0,
+            }
+        ],
+        "sections": [
+            {
+                "name": "string",
+                "sub_criterias": [{"id": "string", "name": "A fixed sub criteria"}],
+            }
+        ],
+        "project_name": uncompeted_app["project_name"],
+        "short_id": uncompeted_app["short_id"],
+        "workflow_status": uncompeted_app["workflow_status"],
+        "fund_id": test_fund_id,
+        "round_id": test_round_id,
+        "qa_complete": uncompeted_app["qa_complete"],
     },
     "assessment_store/application_overviews/flagged_app": {
         "criterias": [

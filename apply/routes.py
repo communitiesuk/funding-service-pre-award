@@ -7,7 +7,7 @@ apply_bp = Blueprint("apply_routes", __name__, template_folder="templates")
 
 
 @apply_bp.route("/funding-round/<fund_short_name>/<round_short_name>")
-def landing_page(fund_short_name: str, round_short_name: str):
+def landing_page(fund_short_name: str, round_short_name: str) -> str:
     round = get_round(fund_short_name, round_short_name)
     if not round:
         return abort(404)

@@ -14,15 +14,9 @@
 }
 
 .search-button {
-    color: #fff;
-    background-color: #1d70b8;
     margin-bottom: 0;
     margin-left: 8px;
     vertical-align: baseline;
-}
-
-.search-button:hover {
-    background-color: #003078;
 }
 
 .search-input {
