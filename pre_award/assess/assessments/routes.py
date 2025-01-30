@@ -1490,7 +1490,7 @@ def application(application_id):
     state = get_state_for_tasklist_banner(application_id)
 
     scoring_form = get_scoring_class(state.round_id)()
-    fund = (get_fund(state.fund_id),)
+    fund = get_fund(state.fund_id)
     fund_round = get_round(
         state.fund_id,
         state.round_id,
