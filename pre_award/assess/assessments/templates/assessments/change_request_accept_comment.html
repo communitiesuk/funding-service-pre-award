@@ -13,49 +13,38 @@
 {% from "assess/macros/assessment_subcriteria_accepted.html" import assessment_subcriteria_accepted %}
 {%- from 'govuk_frontend_jinja/components/textarea/macro.html' import govukTextarea -%}
 {%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
-
-
 {% block header %}
-{% include "assess/components/header.html" %}
+    {% include "assess/components/header.html" %}
 {% endblock header %}
-
 {% block content %}
-    <h1 class="govuk-heading-l">
-        {{sub_criteria.name}}: Accepted
-    </h1>
-
+    <h1 class="govuk-heading-l">{{ sub_criteria.name }}: Accepted</h1>
     <form method="post">
         <div class="govuk-grid-row">
             {{ change_request_form.csrf_token }}
             <div class="govuk-grid-column-full">
-            {{ govukTextarea({
-            "name": change_request_form.comment.id,
-            "id": change_request_form.comment.id,
-            "rows": 8,
-            "label": {
-              "text": "Why has the change been accepted?",
-              "classes": "govuk-label--m",
-              isPageHeading: true
-            },
-            "value": "This submission meets the required criteria",
-            "errorMessage": {
-              "text": change_request_form.comment.errors.0
-          } if change_request_form.comment.errors
-          }) }}
-
-          {{ govukButton({
-            "text": "Save and continue",
-            "type": "submit",
-            "data-qa": "save-comment-button"
-          }) }}
-          {{ govukButton({
-            "text": "Cancel",
-            "classes": "govuk-button--secondary",
-            "href": url_for(
-            'assessment_bp.display_sub_criteria',
-            application_id=application_id,
-            sub_criteria_id=sub_criteria.id)
-          }) }}
+                {{ govukTextarea({
+                                "name": change_request_form.comment.id,
+                                "id": change_request_form.comment.id,
+                                "rows": 8,
+                                "label": {
+                                "text": "Why has the change been accepted?",
+                                "classes": "govuk-label--m",
+                                isPageHeading: true
+                                },
+                                "value": "This submission meets the required criteria",
+                                "errorMessage": {
+                                "text": change_request_form.comment.errors.0
+                                } if change_request_form.comment.errors
+                                }) }}
+                {{ govukButton({"text": "Save and continue", "type": "submit", "data-qa": "save-comment-button"}) }}
+                {{ govukButton({
+                                "text": "Cancel",
+                                "classes": "govuk-button--secondary",
+                                "href": url_for(
+                                'assessment_bp.display_sub_criteria',
+                                application_id=application_id,
+                                sub_criteria_id=sub_criteria.id)
+                }) }}
             </div>
         </div>
     </form>
