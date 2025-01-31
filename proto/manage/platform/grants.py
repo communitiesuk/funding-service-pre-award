@@ -9,7 +9,7 @@ from proto.common.data.services.grants import create_grant, get_all_grants_with_
 from proto.common.data.services.recipients import search_recipients
 from proto.common.data.services.round import create_round
 from proto.manage.platform.forms.application_round import CreateRoundForm
-from proto.manage.platform.forms.grants import CreateGrantForm, MakeGrantLiveForm
+from proto.manage.platform.forms.grants import CreateGrantForm, EditGrantProspectusLink, MakeGrantLiveForm
 
 grants_blueprint = Blueprint("grants", __name__)
 
@@ -96,6 +96,23 @@ def view_grant_configuration(grant_code):
         grant=grant,
         form=form,
         back_link=url_for("proto_manage.platform.grants.index"),
+        active_sub_navigation_tab="settings",
+    )
+
+
+@grants_blueprint.route("/grants/<grant_code>/configuration/prospectus-link", methods=["GET", "POST"])
+@is_authenticated(as_platform_admin=True)
+def edit_grant_prospectus_link(grant_code):
+    grant = get_grant(grant_code)
+    form = EditGrantProspectusLink()
+    if form.validate_on_submit():
+        update_grant(grant, prospectus_link=form.prospectus_link.data)
+        return redirect(url_for("proto_manage.platform.grants.view_grant_configuration", grant_code=grant_code))
+    return render_template(
+        "manage/platform/edit_grant_prospectus_link.html",
+        grant=grant,
+        form=form,
+        back_link=url_for("proto_manage.platform.grants.view_grant_configuration", grant_code=grant_code),
         active_sub_navigation_tab="settings",
     )
 

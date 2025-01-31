@@ -98,9 +98,12 @@ def create_grant(
     return grant
 
 
-def update_grant(grant: Fund, status: FundStatus | None = None):
+def update_grant(grant: Fund, status: FundStatus | None = None, prospectus_link: str | None = None):
     if status is not None:
         grant.proto_status = status
+
+    if prospectus_link:
+        grant.proto_prospectus_link = prospectus_link
 
     db.session.add(grant)
 

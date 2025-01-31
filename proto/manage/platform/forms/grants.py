@@ -1,8 +1,9 @@
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from govuk_frontend_wtf.wtforms_widgets import GovRadioInput, GovSubmitInput, GovTextArea, GovTextInput
+from markupsafe import Markup
 from wtforms import RadioField, StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import URL, DataRequired
 
 from proto.common.data.models.fund import FundingType
 
@@ -31,3 +32,24 @@ class CreateGrantForm(FlaskForm):
 
 class MakeGrantLiveForm(FlaskForm):
     submit = SubmitField(_l("Make grant live"), widget=GovSubmitInput())
+
+
+class EditGrantProspectusLink(FlaskForm):
+    prospectus_link = StringField(
+        "Prospectus link",
+        description=Markup("""
+        <p class="govuk-hint">
+        The prospectus should explain:
+        <ul class="govuk-list govuk-list--bullet govuk-hint">
+        <li>who can apply</li>
+        <li>what funding is available</li>
+        <li>the goals the grant is trying to achieve</li>
+        <li>how funding will be awarded</li>
+        <li>the monitoring and evaluation requirements for grant recipients</li>
+        </ul>
+        </p>
+        """),
+        widget=GovTextInput(),
+        validators=[URL(message=_l("Enter a valid grant prospectus link"))],
+    )
+    submit = SubmitField(_l("Save"), widget=GovSubmitInput())

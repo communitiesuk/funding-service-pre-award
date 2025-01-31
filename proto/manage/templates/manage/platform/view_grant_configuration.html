@@ -50,7 +50,7 @@
             [{"text": "Title"}, {"text": grant.title_json.en}, {"html": editLinkHtml}],
             [{"text": "Description"}, {"text": grant.description_json.en}, {"html": editLinkHtml}],
             [{"text": "Funding type"}, {"text": grant.funding_type.value}, {"html": editLinkHtml}],
-            [{"text": "Prospectus Link"}, {"text": grant.prospectus_link }, {"html": editLinkHtml}],
+            [{"text": "Prospectus Link"}, {"text": grant.proto_prospectus_link }, {"html": "<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('proto_manage.platform.grants.edit_grant_prospectus_link', grant_code=grant.short_name) + "'>Edit</a>"}],
             [{"text": "Organisation name"}, {"text": grant.owner_organisation_name}, {"html": editLinkHtml}],
             [{"text": "Organisation code"}, {"text": grant.owner_organisation_shortname}, {"html": editLinkHtml}],
             [{"text": "GGIS reference"}, {"text": grant.ggis_scheme_reference_number}, {"html": editLinkHtml}],
