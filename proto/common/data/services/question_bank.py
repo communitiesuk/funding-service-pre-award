@@ -4,6 +4,7 @@ from db import db
 from proto.common.data.models import (
     ProtoDataCollectionDefinitionQuestion,
     ProtoDataCollectionDefinitionSection,
+    Round,
     TemplateQuestion,
     TemplateSection,
 )
@@ -52,11 +53,17 @@ def create_section(**kwargs):
 
 
 def add_template_sections_to_data_collection_definition(round, template_section_ids):
+    # fixme: last minute hack fix
+    if isinstance(round, Round):
+        template_type = TemplateType.APPLICATION
+    else:
+        template_type = TemplateType.REPORTING
+
     template_sections = (
         db.session.scalars(
             select(TemplateSection)
             .join(TemplateQuestion)
-            .filter(TemplateSection.id.in_(template_section_ids), TemplateSection.type == TemplateType.APPLICATION)
+            .filter(TemplateSection.id.in_(template_section_ids), TemplateSection.type == template_type)
         )
         .unique()
         .all()
