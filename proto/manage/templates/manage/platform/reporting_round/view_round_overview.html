@@ -1,6 +1,7 @@
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
 
 {% extends "manage/platform/grants_base.html" %}
 
@@ -27,6 +28,12 @@
       {{ govukInsetText({"text": "This reporting round will open on " ~ round.submission_period_starts | datetime_format_full_month ~ "."}) }}
       {% endif %}
     {% endif %}
+
+    {# {{ govukSummaryList({
+      "items": [
+        { "key": { "text": "Status" } }, "value": { { html: "value" } }
+      ]
+    })}} #}
   </div>
 
   <div class="govuk-grid-column-one-quarter app-sidebar__container">

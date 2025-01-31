@@ -1,6 +1,7 @@
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
 
 {% extends "manage/platform/grants_base.html" %}
 
@@ -15,10 +16,25 @@
       {{ round.title_json.en }}
     </h1>
 
+    {% set statusHtml %}
+    {{ govukTag({
+      "text": "Preview",
+      "classes": "govuk-tag--grey"
+    })}}
+    {% endset %}
+    {{ govukSummaryList({
+      "rows": [
+        { "key": { "text": "Status" }, "value": { "html": statusHtml } },
+        { "key": { "text": "Opens" }, "value": { "text": round.proto_start_date | dateformat } },
+        { "key": { "text": "Closes" }, "value": { "html": round.proto_end_date | dateformat } }
+      ],
+      "classes": "govuk-!-margin-bottom-8"
+    })}}
+
     {% if round.status == 'draft' %}
       {% set insetText %}
         <p>
-          This funding round is a draft and must be published before it will become available.
+          This funding round is a draft and must be published before your users can apply.
           <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.rounds.view_round_configuration', grant_code=grant.short_name, round_code=round.short_name) }}">Make the round live.</a>
         </p>
       {% endset %}
@@ -28,6 +44,7 @@
       {{ govukInsetText({"text": "This funding round will open for applications on " ~ round.proto_start_date | datetime_format_full_month ~ "."}) }}
       {% endif %}
     {% endif %}
+
   </div>
 
   <div class="govuk-grid-column-one-quarter app-sidebar__container">

@@ -13,7 +13,7 @@
     <a href="{{ url_for('proto_manage.platform.grants.create_grant_view') }}" class="govuk-button govuk-button--secondary">{% trans %}Set up a new grant{% endtrans %}</a>
   <br>
 
-    {% for grant in (grants | sort(attribute='short_name', case_sensitive=false)) %}
+    {% for grant in (grants | sort(attribute='proto_created_date', reverse=true)) %}
       <h2 class="govuk-heading-s govuk-!-display-inline">
         <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.grants.view_grant_overview', grant_code=grant.short_name) }}">{{ grant.short_name }}: {{ grant.name_json.en }}</a></h2>
 
