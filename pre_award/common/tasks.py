@@ -146,7 +146,7 @@ def full_bootstrap(c):
 
 
 @task
-def reminder_emails(c):
+def send_incomplete_application_reminder(c):
     app = create_app()
     with app.app_context():
         current_app.logger.info("Application deadline reminder task is now running!")

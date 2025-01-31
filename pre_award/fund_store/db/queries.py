@@ -2,9 +2,9 @@ import uuid
 from datetime import datetime
 from typing import List
 
-from dateutil import tz
 from sqlalchemy import bindparam, exc, func, insert, select, text, update
 from sqlalchemy.dialects.postgresql import insert as postgres_insert
+from sqlalchemy.orm import joinedload
 from sqlalchemy.sql import expression
 from sqlalchemy_utils import Ltree
 from sqlalchemy_utils.types.ltree import LQUERY
@@ -81,12 +81,9 @@ def get_rounds_with_reminder_date_in_future():
 
 
 def get_rounds_where_reminder_pending() -> list[Round]:
-    uk_timezone = tz.gettz("Europe/London")
-    uk_datetime = datetime.now(uk_timezone).replace(tzinfo=None)
+    today = datetime.now().date()
     rounds_with_parent_fund = db.session.scalars(
-        select(Round).filter(
-            not Round.application_reminder_sent, Round.reminder_date < uk_datetime, Round.deadline > uk_datetime
-        )
+        select(Round).options(joinedload(Round.fund)).filter(func.date(Round.reminder_date) == today)
     ).all()
     return rounds_with_parent_fund
 
