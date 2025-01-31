@@ -950,3 +950,8 @@
     background-color:	#f47738;
     color: white;
 }
+
+
+.app-\!-no-wrap {
+    white-space: nowrap;
+}
