@@ -5,6 +5,26 @@
 
 {% block pageTitle %}{{ grant.name }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
 
+{% block beforeContent %}
+{{ super() }}
+{% if grant.is_draft %}
+<style nonce="{{ csp_nonce() }}">
+    {# reset a few nav things that don't play nicely with this #}
+    .govuk-service-navigation__item, .govuk-service-navigation__service-name {
+        border: 0;
+    }
+    .govuk-service-navigation__item--active {
+        font-weight: bold;
+    }
+</style>
+ <div class="test-data-banner govuk-body govuk-!-margin-bottom-2">
+    <div class="test-data-tag">
+        <strong>Draft grant</strong>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

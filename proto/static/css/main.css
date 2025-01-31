@@ -928,3 +928,25 @@
   background-repeat: repeat;
   background-position: 50% 0;
 }
+
+.test-data-banner {
+    text-align: center;
+    border-top: 5px solid	#f47738;
+    z-index: 10;
+}
+
+  /* @include govuk-media-query($from: tablet) { */
+    /* .test-data-banner { */
+      /* margin-top: -#{govuk-spacing(4)}; */
+    /* } */
+  /* } */
+
+.test-data-tag {
+    position: relative;
+    display: inline-block;
+    padding: 2px;
+    padding-right: 8px;
+    padding-left: 8px;
+    background-color:	#f47738;
+    color: white;
+}
