@@ -16,7 +16,8 @@ def landing_page(fund_short_name: str, round_short_name: str) -> str:
 
 
 @apply_bp.route("/contact_us", methods=["GET"])
-@login_requested
+# TODO Ignoring this as the decorator lives in utils - fix typing once utils is gone
+@login_requested  # type:ignore
 def contact_us() -> str:
     fund_short_name = request.args.get("fund_short_name", None)
     fund = get_fund(fund_short_name=fund_short_name) if fund_short_name else None

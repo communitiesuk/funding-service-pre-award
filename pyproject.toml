@@ -133,11 +133,13 @@ packages = ["apply", "common", "data"]
 [[tool.mypy.overrides]]
 module = [
     "flask_babel",
+    "fsd_utils.*"
 ]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = [
-    "pre_award.*"
+    "pre_award.*",
+    "fsd_utils.*"
 ]
 ignore_errors = true
