@@ -31,18 +31,12 @@ class Round:
     prospectus: str
     privacy_notice: str
     instructions: str
-    contact_us_banner: str
     contact_email: str
-    contact_phone: str
-    contact_textphone: str
-    support_days: str
-    support_times: str
     feedback_link: str
     project_name_field_id: str
     application_guidance: str
     mark_as_complete_enabled: bool = False
     is_expression_of_interest: bool = False
-    reference_contact_page_over_email: bool = False
     feedback_survey_config: FeedbackSurveyConfig = None
     has_eligibility: bool = False
 

@@ -8,12 +8,7 @@ from tests.pre_award.apply_tests.api_data.test_data_forms import COF_TEST_FORMS
 common_round_data = {
     "opens": "2022-09-01T00:00:01",
     "assessment_deadline": "2030-03-20T00:00:01",
-    "contact_us_banner": "",
     "contact_email": "test@example.com",
-    "contact_phone": "123456789",
-    "contact_textphone": "123456789",
-    "support_times": "9-5",
-    "support_days": "Mon-Fri",
     "prospectus": "/cof_r2w2_prospectus",
     "instructions": "Round specific instruction text",
     "privacy_notice": "http://privacy.com",
@@ -173,10 +168,6 @@ TEST_DISPLAY_DATA = {
                         "fund_id": "fund-service-design",
                         "short_name": "R2W2",
                         "contact_email": "test@example.com",
-                        "contact_phone": "123456789",
-                        "contact_textphone": "123456789",
-                        "support_times": "9-5",
-                        "support_days": "Mon-Fri",
                     },
                     "applications": [
                         {
@@ -214,10 +205,6 @@ TEST_DISPLAY_DATA = {
                         "short_name": "R2W3",
                         "instructions": "r2w3 instructions",
                         "contact_email": "test@example.com",
-                        "contact_phone": "123456789",
-                        "contact_textphone": "123456789",
-                        "support_times": "9-5",
-                        "support_days": "Mon-Fri",
                     },
                     "applications": [
                         {
