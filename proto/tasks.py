@@ -32,12 +32,21 @@ def insert_question_bank_data():
             slug="https://www.github.com/communitiesuk/funding-service-data-standards/schemas/organisation.schema.json#properties/type",
             description="The organisation type",
         ),
+        "risk.schema.json#properties/risk_title": DataStandard(
+            slug="https://www.github.com/communitiesuk/funding-service-data-standards/schemas/risk.schema.json#properties/risk_title",
+            description="A short description of the risk",
+        ),
+        "risk.schema.json#properties/risk_description": DataStandard(
+            slug="https://www.github.com/communitiesuk/funding-service-data-standards/schemas/risk.schema.json#properties/risk_description",
+            description="The details of the risk",
+        ),
+        "risk.schema.json#properties/risk_category": DataStandard(
+            slug="https://www.github.com/communitiesuk/funding-service-data-standards/schemas/risk.schema.json#properties/principal_risk_category",
+            description="The primary categorisation of the risk",
+        ),
     }
-
-    for ds_slug, ds_instance in data_standards_to_create.items():
-        ds_id = db.session.execute(
-            text("select id from data_standard where slug = :slug"), dict(slug=ds_slug)
-        ).scalar_one_or_none()
+    for _, ds_instance in data_standards_to_create.items():
+        ds_id = db.session.scalar(text("select id from data_standard where slug = :slug"), dict(slug=ds_instance.slug))
         if not ds_id:
             db.session.add(ds_instance)
         else:
@@ -54,6 +63,19 @@ def insert_question_bank_data():
             title="Organisation Information",
             order=2,
             type=TemplateType.APPLICATION,
+        ),
+        "risk-information": TemplateSection(
+            slug="risk-information",
+            title="Risks",
+            order=3,
+            type=TemplateType.APPLICATION,
+        ),
+        # Hack - possibly would de-dupe this if we were doing it for real
+        "monitoring-risk-information": TemplateSection(
+            slug="monitoring-risk-information",  # hack - maybe should be unique on slug+type
+            title="Risks",
+            order=1,
+            type=TemplateType.REPORTING,
         ),
     }
     for ts_slug, ts_instance in template_sections_to_create.items():
@@ -88,7 +110,7 @@ def insert_question_bank_data():
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
         ),
-        "organisation-name": TemplateQuestion(
+        "risk-name": TemplateQuestion(
             slug="organisation-name",
             type=QuestionType.TEXT_INPUT,
             title="What is the name of your organisation?",
@@ -120,8 +142,116 @@ def insert_question_bank_data():
             hint=None,
             order=3,
             data_source=None,
-            data_standard_id=data_standards_to_create["ser.schema.json#properties/full_name"].id,
+            data_standard_id=data_standards_to_create["user.schema.json#properties/full_name"].id,
             template_section_id=template_sections_to_create["organisation-information"].id,
+        ),
+        "risk-title": TemplateQuestion(
+            slug="risk-title",
+            type=QuestionType.TEXT_INPUT,
+            title="What is the risk to your project?",
+            hint="Summarise the risk in a single sentence",
+            order=1,
+            data_source=None,
+            data_standard_id=data_standards_to_create["risk.schema.json#properties/risk_title"].id,
+            template_section_id=template_sections_to_create["risk-information"].id,
+        ),
+        "risk-description": TemplateQuestion(
+            slug="risk-description",
+            type=QuestionType.TEXTAREA,
+            title="Tell us more about the risk to your project.",
+            hint="""<p class="govuk-hint">
+            You should cover:
+            <ul class="govuk-list govuk-list--bullet govuk-hint">
+            <li>What could go wrong?</li>
+            <li>What could cause things to go wrong></li>
+            <li>What would the outcome be if it did go wrong?</li>
+            </ul>
+            </p>""",
+            order=2,
+            data_source=None,
+            data_standard_id=data_standards_to_create["risk.schema.json#properties/risk_description"].id,
+            template_section_id=template_sections_to_create["risk-information"].id,
+        ),
+        "risk-category": TemplateQuestion(
+            slug="risk-category",
+            type=QuestionType.RADIOS,
+            title="What is the main category for this risk?",
+            hint=None,
+            order=3,
+            data_source=[
+                {"value": val, "label": val}
+                for val in [
+                    "Arms length bodies",
+                    "Commercial",
+                    "Financial",
+                    "Governance",
+                    "Information and data",
+                    "Legal",
+                    "Local Government delivery",
+                    "People",
+                    "Project delivery",
+                    "Resilience",
+                    "Security",
+                    "Strategy",
+                    "Systems and infrastructure",
+                ]
+            ],
+            data_standard_id=data_standards_to_create["risk.schema.json#properties/risk_category"].id,
+            template_section_id=template_sections_to_create["risk-information"].id,
+        ),
+        "monitoring-risk-title": TemplateQuestion(
+            slug="risk-title",
+            type=QuestionType.TEXT_INPUT,
+            title="What is the risk to your project?",
+            hint="Summarise the risk in a single sentence",
+            order=1,
+            data_source=None,
+            data_standard_id=data_standards_to_create["risk.schema.json#properties/risk_title"].id,
+            template_section_id=template_sections_to_create["monitoring-risk-information"].id,
+        ),
+        "monitoring-risk-description": TemplateQuestion(
+            slug="risk-description",
+            type=QuestionType.TEXTAREA,
+            title="Tell us more about the risk to your project.",
+            hint="""<p class="govuk-hint">
+            You should cover:
+            <ul class="govuk-list govuk-list--bullet govuk-hint">
+            <li>What could go wrong?</li>
+            <li>What could cause things to go wrong></li>
+            <li>What would the outcome be if it did go wrong?</li>
+            </ul>
+            </p>""",
+            order=2,
+            data_source=None,
+            data_standard_id=data_standards_to_create["risk.schema.json#properties/risk_description"].id,
+            template_section_id=template_sections_to_create["monitoring-risk-information"].id,
+        ),
+        "monitoring-risk-category": TemplateQuestion(
+            slug="risk-category",
+            type=QuestionType.RADIOS,
+            title="What is the main category for this risk?",
+            hint=None,
+            order=3,
+            data_source=[
+                {"value": val, "label": val}
+                for val in [
+                    "Arms length bodies",
+                    "Commercial",
+                    "Financial",
+                    "Governance",
+                    "Information and data",
+                    "Legal",
+                    "Local Government delivery",
+                    "People",
+                    "Project delivery",
+                    "Resilience",
+                    "Security",
+                    "Strategy",
+                    "Systems and infrastructure",
+                ]
+            ],
+            data_standard_id=data_standards_to_create["risk.schema.json#properties/risk_category"].id,
+            template_section_id=template_sections_to_create["monitoring-risk-information"].id,
         ),
     }
     for tq_slug, tq_instance in template_questions_to_create.items():

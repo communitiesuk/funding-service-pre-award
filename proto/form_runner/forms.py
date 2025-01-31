@@ -1,6 +1,7 @@
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from govuk_frontend_wtf.wtforms_widgets import GovRadioInput, GovSubmitInput, GovTextArea, GovTextInput
+from markupsafe import Markup
 from wtforms.fields.choices import RadioField
 from wtforms.fields.simple import StringField, SubmitField
 from wtforms.validators import DataRequired, InputRequired
@@ -23,16 +24,22 @@ def build_question_form(
     match question.type:
         case QuestionType.TEXT_INPUT:
             field = StringField(
-                label=question.title, description=question.hint, widget=GovTextInput(), validators=[DataRequired()]
+                label=question.title,
+                description=Markup(question.hint) if question.hint else "",
+                widget=GovTextInput(),
+                validators=[DataRequired()],
             )
         case QuestionType.TEXTAREA:
             field = StringField(
-                label=question.title, description=question.hint, widget=GovTextArea(), validators=[DataRequired()]
+                label=question.title,
+                description=Markup(question.hint) if question.hint else "",
+                widget=GovTextArea(),
+                validators=[DataRequired()],
             )
         case QuestionType.RADIOS:
             field = RadioField(
                 label=question.title,
-                description=question.hint or "",
+                description=Markup(question.hint) if question.hint else "",
                 choices=[(choice["value"], choice["label"]) for choice in question.data_source],
                 widget=GovRadioInput(),
                 validators=[DataRequired()],
