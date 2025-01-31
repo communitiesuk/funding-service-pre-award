@@ -14,10 +14,7 @@ from pre_award.account_store.db.models.queries import get_email_address, set_app
 from pre_award.account_store.tasks import seed_local_account_store_impl
 from pre_award.application_store.db.queries.application.queries import get_incomplete_applications_for_round
 from pre_award.assessment_store.tasks.db_tasks import seed_assessment_store_db_impl
-from pre_award.fund_store.db.queries import (
-    get_rounds_where_reminder_date_today,
-    get_rounds_with_reminder_date_in_future,
-)
+from pre_award.fund_store.db.queries import get_rounds_where_reminder_pending, get_rounds_with_reminder_date_in_future
 from pre_award.fund_store.scripts.fund_round_loaders.load_fund_round_from_fab import load_fund_from_fab_impl
 from pre_award.fund_store.scripts.load_all_fund_rounds import load_all_fund_rounds
 from services.notify import get_notification_service
@@ -155,9 +152,9 @@ def reminder_emails(c):
         current_app.logger.info("Application deadline reminder task is now running!")
         rounds: list[Round] = get_rounds_with_reminder_date_in_future()
         print([round.reminder_date for round in rounds])
-        rounds_with_reminder_today = get_rounds_where_reminder_date_today()
+        rounds_with_reminder_pending = get_rounds_where_reminder_pending()
         rounds_with_unsent_application_reminders: list[Round] = [
-            r for r in rounds_with_reminder_today if not r.application_reminder_sent
+            r for r in rounds_with_reminder_pending if not r.application_reminder_sent
         ]
         for r in rounds_with_unsent_application_reminders:
             non_submitted_applications = get_incomplete_applications_for_round(r.id)
