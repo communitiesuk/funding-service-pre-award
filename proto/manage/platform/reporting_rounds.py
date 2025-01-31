@@ -189,8 +189,12 @@ def create_section_view(grant_code, round_ext_id):
     "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/create-question",
     methods=["GET", "POST"],
 )
+@reporting_rounds_blueprint.route(
+    "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/questions/<question_id>",
+    methods=["GET", "POST"],
+)
 @is_authenticated(as_platform_admin=True)
-def create_question_view(grant_code, round_ext_id, section_id):
+def create_question_view(grant_code, round_ext_id, section_id, question_id=None):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
     form = NewQuestionForm(data={"order": (max(q.order for q in section.questions) if section.questions else 0) + 1})

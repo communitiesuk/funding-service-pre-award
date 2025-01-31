@@ -1,9 +1,55 @@
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
+{% from "govuk_frontend_jinja/components/select/macro.html" import govukSelect %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 
 {% extends "manage/platform/grants_base.html" %}
 
 {% block pageTitle %}{% trans %}Choose questions for application round{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% set filterHtml %}
+<div class="assess-filter">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <div>
+              {% set referenceHint %}<span class="govuk-body-s">Enter full or partial category</span>{% endset %}
+              {{ govukInput({
+                  "label": {
+                      "text": _("Category"),
+                      "classes": "govuk-!-font-weight-bold govuk-!-font-size-16"
+                  },
+                  "hint": {
+                      "html": referenceHint,
+                  }
+              }) }}
+          </div>
+        </div>
+        <div class="govuk-grid-column-one-half">
+          <div>
+              {% set referenceHint %}<span class="govuk-body-s">Enter full or partial question text</span>{% endset %}
+              {{ govukInput({
+                  "label": {
+                      "text": _("Question"),
+                      "classes": "govuk-!-font-weight-bold govuk-!-font-size-16"
+                  },
+                  "hint": {
+                      "html": referenceHint,
+                  }
+              }) }}
+          </div>
+        </div>
+    </div>
+    <div class="govuk-grid-row govuk-!-margin-top-3">
+        <div class="govuk-grid-column-full">
+            {{ govukButton({
+                "text": "Filter",
+                "classes": "govuk-!-margin-bottom-1 govuk-button"
+            }) }}
+        </div>
+    </div>
+</div>
+{% endset %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -13,7 +59,7 @@
 
       {% set sectionHints = [] %}
       {% for questions in form.section_questions %}{% set __ = sectionHints.append({"hint": {"html": "<ul class='govuk-list govuk-list--bullet govuk-hint'>" ~ (questions | format_list("<li>%s</li>") | join('') ~ "</ul>") }}) %}{% endfor %}
-      {{ form.sections(params={"fieldset": {"legend": {"text": form.sections.label, "isPageHeading": true, "classes": "govuk-fieldset__legend--l"} }, "hint": {"text": "TODO: this would be filterable/searchable because the number of templates may grow large"}, "items": sectionHints}) }}
+      {{ form.sections(params={"fieldset": {"legend": {"text": form.sections.label, "isPageHeading": true, "classes": "govuk-fieldset__legend--l"} }, "hint": {"html": filterHtml}, "items": sectionHints}) }}
 
       {{ form.submit }}
     </form>
