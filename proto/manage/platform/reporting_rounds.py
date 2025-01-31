@@ -197,7 +197,8 @@ def create_question_view(grant_code, round_ext_id, section_id):
 
     if form.validate_on_submit():
         create_question(
-            section_id=section.id, **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}}
+            section_id=section.id,
+            **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token", "mandatory"}},
         )
         return redirect(
             url_for(
