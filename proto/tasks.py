@@ -20,9 +20,18 @@ def insert_question_bank_data():
     from db import db
 
     data_standards_to_create = {
-        "$github.com/communitiesuk/json.schema#person.name": DataStandard(
-            slug="$github.com/communitiesuk/json.schema#person.name", description="A person's name"
-        )
+        "user.schema.json#properties/full_name": DataStandard(
+            slug="https://www.github.com/communitiesuk/funding-service-data-standards/schemas/user.schema.json#properties/full_name",
+            description="A person's name",
+        ),
+        "organisation.schema.json#properties/name": DataStandard(
+            slug="https://www.github.com/communitiesuk/funding-service-data-standards/schemas/organisation.schema.json#properties/name",
+            description="The organisation name",
+        ),
+        "organisation.schema.json#properties/type": DataStandard(
+            slug="https://www.github.com/communitiesuk/funding-service-data-standards/schemas/organisation.schema.json#properties/type",
+            description="The organisation type",
+        ),
     }
 
     for ds_slug, ds_instance in data_standards_to_create.items():
@@ -69,23 +78,13 @@ def insert_question_bank_data():
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
         ),
-        "project-owner": TemplateQuestion(
-            slug="project-owner",
-            type=QuestionType.TEXT_INPUT,
-            title="Who is your project's owner?",
-            hint=None,
+        "project-about": TemplateQuestion(
+            slug="project-about",
+            type=QuestionType.TEXTAREA,
+            title="What is your project about?",
+            hint="Give a brief summary of your project, including what you hope to achieve",
             order=2,
             data_source=None,
-            data_standard_id=data_standards_to_create["$github.com/communitiesuk/json.schema#person.name"].id,
-            template_section_id=template_sections_to_create["project-information"].id,
-        ),
-        "project-about-cheese": TemplateQuestion(
-            slug="project-about-cheese",
-            type=QuestionType.RADIOS,
-            title="Is the project about cheese?",
-            hint=None,
-            order=3,
-            data_source=[{"value": "yes", "label": "Yes"}, {"value": "no", "label": "No"}],
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
         ),
@@ -96,7 +95,22 @@ def insert_question_bank_data():
             hint=None,
             order=1,
             data_source=None,
-            data_standard_id=None,
+            data_standard_id=data_standards_to_create["organisation.schema.json#properties/name"].id,
+            template_section_id=template_sections_to_create["organisation-information"].id,
+        ),
+        "organisation-kind": TemplateQuestion(
+            slug="organisation-kind",
+            type=QuestionType.RADIOS,
+            title="What kind of organisation are you in?",
+            hint=None,
+            order=2,
+            data_source=[
+                {"value": "charity", "label": "Charity"},
+                {"value": "local-authority", "label": "Local Authority"},
+                {"value": "limited-company", "label": "Limited company"},
+                {"value": "other", "label": "Other"},
+            ],
+            data_standard_id=data_standards_to_create["organisation.schema.json#properties/type"].id,
             template_section_id=template_sections_to_create["organisation-information"].id,
         ),
         "organisation-owner": TemplateQuestion(
@@ -104,9 +118,9 @@ def insert_question_bank_data():
             type=QuestionType.TEXT_INPUT,
             title="Who is your organisation's owner?",
             hint=None,
-            order=2,
+            order=3,
             data_source=None,
-            data_standard_id=data_standards_to_create["$github.com/communitiesuk/json.schema#person.name"].id,
+            data_standard_id=data_standards_to_create["ser.schema.json#properties/full_name"].id,
             template_section_id=template_sections_to_create["organisation-information"].id,
         ),
     }
