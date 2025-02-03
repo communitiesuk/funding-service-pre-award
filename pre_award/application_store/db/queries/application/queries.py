@@ -307,7 +307,8 @@ def submit_application(application_id) -> Applications:  # noqa: C901
 
             # updating row json blob
             update_application_fields(existing_application.jsonb_blob, row["jsonb_blob"])
-            row["workflow_status"] = WorkflowStatus.CHANGE_RECEIVED
+            if existing_application.workflow_status == WorkflowStatus.CHANGE_REQUESTED:
+                row["workflow_status"] = WorkflowStatus.CHANGE_RECEIVED
 
             stmt = postgres_insert(AssessmentRecord).values(row)
 
