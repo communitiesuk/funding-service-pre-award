@@ -261,8 +261,9 @@ def update_application_fields(existing_json_blob, new_json_blob) -> set:
                             {datetime.now(tz=timezone.utc).isoformat(): field_map[field["key"]]}
                         )
                     else:
-                        field["history_log"] = [{datetime.now(tz=timezone.utc).isoformat(): field_map[field["key"]]}]
-
+                        field["history_log"] = [
+                            {datetime.now(tz=timezone.utc).isoformat(): field_map.get(field["key"], None)}
+                        ]
     return changed_fields
 
 
