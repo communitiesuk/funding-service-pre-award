@@ -10,16 +10,11 @@
 {% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
 {% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
 {% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 
 {% set serviceName = get_service_title() %}
 
-{% block pageTitle %}
-  {% if round.is_expression_of_interest %}
-      {% trans %}Start or continue an{% endtrans %} {{ fund.title }}
-  {% else %}
-      {% trans %}Start or continue an application for{% endtrans %} {{ fund.title }}
-  {% endif %}
-{% endblock pageTitle %}
+
 
 {% block head %}
 
@@ -35,9 +30,28 @@
 }}
 {% endblock skipLink %}
 {% block header %}
+{% set navigationItems = []%}
+{% if g.is_authenticated and g.logout_url %}
+  {% if toggle_dict.get("MULTIFUND_DASHBOARD") %}
+    {% do navigationItems.append({"text": gettext("View all applications"), "href":url_for('account_routes.dashboard')} ) %}
+  {% endif %}
+  {% set signoutHtml %}
+    <form method="post" action="{{ g.logout_url }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ govukButton({
+            "isStartButton": false,
+            "type":"submit",
+            "text": gettext("Sign out"),
+            "classes": "signout_button"
+        }) }}
+    </form>
+  {% endset %}
+  {% do navigationItems.append({"html": signoutHtml})%}
+{% endif %}
   {{ govukHeader({
     "serviceName": serviceName,
     "useTudorCrown": true,
+    "navigation": navigationItems
   }) }}
 {% endblock header %}
 
@@ -63,11 +77,27 @@
 {% endblock content %}
 
 {% block footer %}
+
+  {% if fund and round %}
+    {% set contactUsUrl%}
+      {{ url_for("apply_routes.contact_us", fund_short_name=fund.short_name) }}
+    {% endset %}
+    {% set privacyUrl%}
+      {{ url_for("content_routes.privacy", fund_short_name=fund.short_name, round_short_name=round.short_name) }}
+    {% endset %}
+  {% else %}
+    {% set contactUsUrl%}
+      {{ url_for("apply_routes.contact_us") }}
+    {% endset %}
+    {% set privacyUrl%}
+      {{ url_for("content_routes.privacy") }}
+    {% endset %}
+  {% endif %}
   {{ govukFooter({
     "meta": {
       "items": [
         {
-          "href": url_for("content_routes.privacy", fund_short_name=fund.short_name, round_short_name=round.short_name),
+          "href": privacyUrl,
           "text": gettext("Privacy")
         },
         {
@@ -75,11 +105,11 @@
           "text": gettext("Cookies")
         },
         {
-          "href": url_for("content_routes.accessibility_statement", fund_short_name=fund.short_name, round_short_name=round.short_name),
+          "href": url_for("content_routes.accessibility_statement"),
           "text": gettext("Accessibility Statement")
         },
         {
-          "href": url_for("content_routes.contact_us", fund_short_name=fund.short_name, round_short_name=round.short_name),
+          "href": contactUsUrl,
           "text": gettext("Contact us")
         }
       ]

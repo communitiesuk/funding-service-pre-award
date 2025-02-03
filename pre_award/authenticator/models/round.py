@@ -16,13 +16,8 @@ class Round:
     prospectus: str = ""
     instructions: str = ""
     contact_email: str = ""
-    contact_phone: str = ""
-    contact_textphone: str = ""
-    support_days: str = ""
-    support_times: str = ""
     application_guidance: str = ""
     is_expression_of_interest: bool = False
-    reference_contact_page_over_email: bool = False
     has_eligibility: bool = False
 
     @classmethod

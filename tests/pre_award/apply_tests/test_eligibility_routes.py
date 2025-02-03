@@ -4,12 +4,7 @@ from pre_award.apply.models.round import Round
 default_hsra_round_fields = {
     "opens": "2022-09-01T00:00:01",
     "assessment_deadline": "2030-03-20T00:00:01",
-    "contact_us_banner": "",
     "contact_email": "test@example.com",
-    "contact_phone": "123456789",
-    "contact_textphone": "123456789",
-    "support_times": "9-5",
-    "support_days": "Mon-Fri",
     "prospectus": "/hsra_rp_prospectus",
     "instructions": "Round specific instruction text",
     "privacy_notice": "http://privacy.com",

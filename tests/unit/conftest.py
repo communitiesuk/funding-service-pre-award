@@ -88,4 +88,8 @@ def mock_get_round_success(mocker):
     mocker.patch("apply.routes.get_round", return_value=mock_round_open)
     mocker.patch("app.find_fund_and_round_in_request", return_value=(mock_fund, mock_round_open))
     mocker.patch("app.find_fund_in_request", return_value=mock_fund)
-    # mocker.patch("pre_award.apply.helpers.get_all_fund_short_names", return_value=[mock_fund.short_name])
+
+
+@pytest.fixture()
+def mock_get_fund_success(mocker):
+    mocker.patch("apply.routes.get_fund", return_value=mock_fund)

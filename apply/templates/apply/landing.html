@@ -2,9 +2,21 @@
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 {% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "apply/macros/contact-details.html" import fs_contact_details %}
 {% block head %}
     {{super()}}
 {% endblock head %}
+{% block pageTitle %}
+  {% if not fund or not round %}
+        {% trans %}Access Funding{% endtrans %}
+  {% else %}
+    {% if round.is_expression_of_interest %}
+        {% trans %}Start or continue an{% endtrans %} {{ fund.title }}
+    {% else %}
+        {% trans %}Start or continue an application for{% endtrans %} {{ fund.title }}
+    {% endif %}
+  {% endif %}
+{% endblock pageTitle %}
 
 
 {% block content %}
@@ -59,13 +71,9 @@
                 "href" : url_for("magic_links_bp.new", fund=fund.short_name, round=round.short_name),
                 "text": gettext("Enter your email address")
             }) }}
-            <h2 class="govuk-heading-m">{% trans %}Get help{% endtrans %} </h2>
-            <p class="govuk-body">
-                {% trans %}If you need help, contact us through our <a class="govuk-link" href="{{ support_desk_apply }}" target="_blank">support desk</a>{% endtrans %}.
-            </p>
-            <p class="govuk-body">
-                {% trans %}Do not send any applications or attachments from the service desk portal. We'll only accept applications through this service.{% endtrans %}
-            </p>
+            <h2 class="govuk-heading-m">{% trans %}Get help with your application{% endtrans %} </h2>
+
+            {{ fs_contact_details(support_desk_apply) }}
         </div>
       </div>
 

@@ -1,6 +1,5 @@
 from flask import abort, current_app, redirect, render_template, request, url_for
 from flask_babel import gettext
-from fsd_utils.authentication.decorators import login_requested
 from jinja2.exceptions import TemplateNotFound
 
 from pre_award.apply.helpers import find_fund_and_round_in_request, find_round_in_request, get_fund_and_round
@@ -90,19 +89,6 @@ def cof_r2w2_all_questions_redirect():
     )
 
 
-@content_bp.route("/contact_us", methods=["GET"])
-@login_requested
-def contact_us():
-    fund, round = find_fund_and_round_in_request()
-    fund_name = fund.name if fund else None
-    return render_template(
-        "apply/contact_us.html",
-        round_data=round,
-        fund_name=fund_name,
-        migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
-    )
-
-
 @content_bp.route("/cookie_policy", methods=["GET"])
 def cookie_policy():
     current_app.logger.info("Cookie policy page loaded.")
@@ -141,7 +127,7 @@ def feedback():
 
     return redirect(
         url_for(
-            "content_routes.contact_us",
+            "apply_routes.contact_us",
             fund=request.args.get("fund"),
             round=request.args.get("round"),
         )
