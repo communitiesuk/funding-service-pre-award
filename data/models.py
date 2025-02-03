@@ -76,15 +76,7 @@ class Round(Model):
     assessment_deadline: Mapped[Optional[datetime]]
     prospectus: Mapped[str]
     privacy_notice: Mapped[str]
-    contact_us_banner_json: Mapped[Optional[dict[str, Any]]]
-    reference_contact_page_over_email: Mapped[bool] = mapped_column(
-        default=False,
-    )
     contact_email: Mapped[Optional[str]]
-    contact_phone: Mapped[Optional[str]]
-    contact_textphone: Mapped[Optional[str]]
-    support_times: Mapped[str]
-    support_days: Mapped[str]
     instructions_json: Mapped[Optional[dict[str, str]]]
     feedback_link: Mapped[Optional[str]]
     project_name_field_id: Mapped[str]
