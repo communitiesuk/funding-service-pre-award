@@ -79,6 +79,7 @@ def format_rehydrate_payload(
     round_name=None,
     has_eligibility=False,
     round_close_notification_url=None,
+    change_requests=None,
 ):
     """
     Returns information in a JSON format that provides the
@@ -139,6 +140,8 @@ def format_rehydrate_payload(
     formatted_data["metadata"]["fund_name"] = fund_name
     formatted_data["metadata"]["round_name"] = round_name
     formatted_data["metadata"]["has_eligibility"] = has_eligibility
+    formatted_data["metadata"]["change_requests"] = change_requests
+
     if round_close_notification_url is not None:
         formatted_data["metadata"]["round_close_notification_url"] = round_close_notification_url
 
