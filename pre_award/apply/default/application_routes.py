@@ -44,7 +44,7 @@ from pre_award.apply.helpers import (
     get_token_to_return_to_application,
 )
 from pre_award.apply.models.statuses import get_formatted
-from pre_award.assessment_store.db.queries.flags.queries import get_change_requests
+from pre_award.assessment_store.db.queries.flags.queries import prepare_change_requests_metadata
 from pre_award.common.blueprints import Blueprint
 from pre_award.common.locale_selector.set_lang import LanguageSelector
 from pre_award.config import Config
@@ -384,7 +384,7 @@ def continue_application(application_id):
     fund, round = get_fund_and_round(fund_id=application.fund_id, round_id=application.round_id)
 
     form_data = application.get_form_data(application, form_name)
-    change_requests = get_change_requests(application_id)
+    change_requests = prepare_change_requests_metadata(application_id)
 
     rehydrate_payload = format_rehydrate_payload(
         form_data=form_data,
