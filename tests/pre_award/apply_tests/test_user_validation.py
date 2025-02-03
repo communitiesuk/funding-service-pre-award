@@ -38,7 +38,7 @@ class TestUserValidation:
             return_value=RoundStatus(False, False, True),
         )
         mocker.patch(
-            "pre_award.apply.default.application_routes.get_change_requests",
+            "pre_award.apply.default.application_routes.prepare_change_requests_metadata",
             return_value=[],
         )
         expected_redirect_url = DefaultConfig.FORM_REHYDRATION_URL.format(rehydration_token=self.REHYDRATION_TOKEN)
