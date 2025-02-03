@@ -126,51 +126,7 @@ round_config_eoi = [
             "https://www.gov.uk/government/publications/community-ownership-fund-"
             "privacy-notice/community-ownership-fund-privacy-notice"
         ),
-        "reference_contact_page_over_email": True,
-        "contact_us_banner_json": {
-            "en": textwrap.dedent(
-                """
-                 <h2 class="govuk-heading-m">Get application support</h2>
-                 <p class="govuk-body">
-                    <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Visit the My Community website</a>
-                    for information and guidance on applying to Community Ownership Fund.
-                    <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund#enquiry-form">Fill out the enquiry form</a>
-                    to request advice from My Community.
-                </p>
-                <p class="govuk-body">
-                    We cannot provide direct support to applicants outside of this service.
-                </p>
-                <h2 class="govuk-heading-m">Get technical support</h2>
-                <p  class="govuk-body">
-                    Contact the Department of Levelling Up, Housing and Communities funding team if you need
-                    help with accessing or submitting an application form.
-                </p>
-            """
-            ),
-            "cy": textwrap.dedent(
-                """
-                 <h2 class="govuk-heading-m">Cael cymorth â'r cais</h2>
-                 <p class="govuk-body">
-                    <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Ewch i wefan My Community</a>
-                    i gael gwybodaeth ac arweiniad ar wneud cais i'r Gronfa Perchnogaeth Gymunedol.
-                    <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund#enquiry-form">Llenwch y ffurflen ymholiad</a>
-                    i ofyn am gyngor gan My Community.
-                </p>
-                <p class="govuk-body">
-                    Ni allwn ddarparu cymorth uniongyrchol i ymgeiswyr tu hwnt i'r gwasanaeth hwn.
-                </p>
-                <h2 class="govuk-heading-m">Cael cymorth technegol</h2>
-                <p  class="govuk-body">
-                    Cysylltwch â thîm cyllid yr Adran Ffyniant Bro, Tai a Chymunedau os oes angen help arnoch i gael at ffurflen gais neu ei chyflwyno.
-                </p>
-            """
-            ),
-        },
         "contact_email": "COF@communities.gov.uk",
-        "contact_phone": None,
-        "contact_textphone": None,
-        "support_times": "9am to 5pm",
-        "support_days": "Monday to Friday",
         "instructions_json": {
             "en": (
                 "You must complete this Expression of Interest (EOI) form if you"
