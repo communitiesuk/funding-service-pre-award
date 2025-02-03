@@ -1,3 +1,4 @@
+from unittest.mock import MagicMock
 from uuid import uuid4
 
 import pytest
@@ -9,6 +10,7 @@ from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
 from pre_award.assessment_store.db.queries.flags.queries import (
     add_flag_for_application,
     add_update_to_assessment_flag,
+    get_change_requests,
     get_flags_for_application,
 )
 from tests.pre_award.assessment_store_tests._helpers import get_assessment_record
@@ -145,3 +147,62 @@ def test_get_most_recent_metadata_statuses_for_fund_round_id(
         status_or_flag,
     )
     assert expected_application_count == len(metadata)
+
+
+# Test cases
+def test_get_change_requests_no_flags(mocker):
+    mock_session = mocker.patch("pre_award.assessment_store.db.queries.flags.queries.db.session.query")
+    mock_session.return_value.filter.return_value.all.return_value = []
+
+    result = get_change_requests("123")
+    assert result is None
+
+
+def test_get_change_requests_with_flags(mocker):
+    mock_flag_update = MagicMock()
+    mock_flag_update.justification = "Justification 1"
+
+    mock_assessment_flag = MagicMock()
+    mock_assessment_flag.field_ids = ["field_1", "field_2"]
+    mock_assessment_flag.updates = [mock_flag_update]
+
+    mock_session = mocker.patch("pre_award.assessment_store.db.queries.flags.queries.db.session.query")
+    mock_session.return_value.filter.return_value.all.return_value = [mock_assessment_flag]
+
+    result = get_change_requests("123")
+
+    expected_result = {
+        "field_1": ["Justification 1"],
+        "field_2": ["Justification 1"],
+    }
+    assert result == expected_result
+
+
+def test_get_change_requests_multiple_flags(mocker):
+    mock_flag_update1 = MagicMock()
+    mock_flag_update1.justification = "Justification 1"
+
+    mock_flag_update2 = MagicMock()
+    mock_flag_update2.justification = "Justification 2"
+
+    mock_assessment_flag1 = MagicMock()
+    mock_assessment_flag1.field_ids = ["field_1"]
+    mock_assessment_flag1.updates = [mock_flag_update1]
+
+    mock_assessment_flag2 = MagicMock()
+    mock_assessment_flag2.field_ids = ["field_2"]
+    mock_assessment_flag2.updates = [mock_flag_update2]
+
+    mock_session = mocker.patch("pre_award.assessment_store.db.queries.flags.queries.db.session.query")
+    mock_session.return_value.filter.return_value.all.return_value = [
+        mock_assessment_flag1,
+        mock_assessment_flag2,
+    ]
+
+    result = get_change_requests("123")
+
+    expected_result = {
+        "field_1": ["Justification 1"],
+        "field_2": ["Justification 2"],
+    }
+    assert result == expected_result

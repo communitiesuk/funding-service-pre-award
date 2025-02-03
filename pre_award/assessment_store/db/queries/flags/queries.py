@@ -109,3 +109,29 @@ def resolve_open_change_requests_for_sub_criteria(
     db.session.commit()
 
     return open_change_requests
+
+
+def get_change_requests(application_id: str) -> dict[str, list] | None:
+    assessment_flags = (
+        db.session.query(AssessmentFlag)
+        .filter(
+            AssessmentFlag.application_id == application_id,
+            AssessmentFlag.latest_status == FlagStatus.RAISED,
+        )
+        .all()
+    )
+
+    if not assessment_flags:
+        return None
+
+    assessor_change_requests: dict[str, list] = {}
+    for change_request in assessment_flags:
+        for field_id in change_request.field_ids:
+            if field_id not in assessor_change_requests:
+                assessor_change_requests[field_id] = []
+
+            assessor_change_requests[field_id].extend(
+                [update.justification for update in change_request.updates if update.status != FlagStatus.RESOLVED]
+            )
+
+    return assessor_change_requests
