@@ -182,10 +182,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                     "en": "English Application Guidance",
                     "fr": "French Application Guidance",
                 },
-                "contact_us_banner_json": {
-                    "en": "English banner",
-                    "fr": "French banner",
-                },
             },
             "en",
             {
@@ -198,11 +194,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                     "en": "English Application Guidance",
                     "fr": "French Application Guidance",
                 },
-                "contact_us_banner": "English banner",
-                "contact_us_banner_json": {
-                    "en": "English banner",
-                    "fr": "French banner",
-                },
             },
         ),
         (
@@ -212,10 +203,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                 "application_guidance_json": {
                     "en": "English Application Guidance",
                     "fr": "French Application Guidance",
-                },
-                "contact_us_banner_json": {
-                    "en": "English banner",
-                    "fr": "French banner",
                 },
             },
             "fr",
@@ -229,11 +216,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                     "en": "English Application Guidance",
                     "fr": "French Application Guidance",
                 },
-                "contact_us_banner": "French banner",
-                "contact_us_banner_json": {
-                    "en": "English banner",
-                    "fr": "French banner",
-                },
             },
         ),
         (
@@ -245,10 +227,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                         "en": "English Application Guidance",
                         "fr": "French Application Guidance",
                     },
-                    "contact_us_banner_json": {
-                        "en": "English banner",
-                        "fr": "French banner",
-                    },
                 },
                 {
                     "title_json": {
@@ -259,10 +237,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                     "application_guidance_json": {
                         "en": "Another English Application Guidance",
                         "fr": "Another French Application Guidance",
-                    },
-                    "contact_us_banner_json": {
-                        "en": "Another English banner",
-                        "fr": "Another French banner",
                     },
                 },
             ],
@@ -278,11 +252,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                         "en": "English Application Guidance",
                         "fr": "French Application Guidance",
                     },
-                    "contact_us_banner": "English banner",
-                    "contact_us_banner_json": {
-                        "en": "English banner",
-                        "fr": "French banner",
-                    },
                 },
                 {
                     "title": "Another English Title",
@@ -297,11 +266,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                         "en": "Another English Application Guidance",
                         "fr": "Another French Application Guidance",
                     },
-                    "contact_us_banner": "Another English banner",
-                    "contact_us_banner_json": {
-                        "en": "Another English banner",
-                        "fr": "Another French banner",
-                    },
                 },
             ],
         ),
@@ -314,10 +278,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                         "en": "English Application Guidance",
                         "fr": "French Application Guidance",
                     },
-                    "contact_us_banner_json": {
-                        "en": "English banner",
-                        "fr": "French banner",
-                    },
                 },
                 {
                     "title_json": {
@@ -328,10 +288,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                     "application_guidance_json": {
                         "en": "Another English Application Guidance",
                         "fr": "Another French Application Guidance",
-                    },
-                    "contact_us_banner_json": {
-                        "en": "Another English banner",
-                        "fr": "Another French banner",
                     },
                 },
             ],
@@ -347,11 +303,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                         "en": "English Application Guidance",
                         "fr": "French Application Guidance",
                     },
-                    "contact_us_banner": "French banner",
-                    "contact_us_banner_json": {
-                        "en": "English banner",
-                        "fr": "French banner",
-                    },
                 },
                 {
                     "title": "Another French Title",
@@ -365,11 +316,6 @@ def test_filter_fund_by_lang(fund_data, lang_key, expected):
                     "application_guidance_json": {
                         "en": "Another English Application Guidance",
                         "fr": "Another French Application Guidance",
-                    },
-                    "contact_us_banner": "Another French banner",
-                    "contact_us_banner_json": {
-                        "en": "Another English banner",
-                        "fr": "Another French banner",
                     },
                 },
             ],

@@ -238,12 +238,7 @@ LOADER_CONFIG = {
         "assessment_deadline": "2025-01-31T17:00:00",
         "prospectus": "https://www.gov.uk/government/publications/community-ownership-fund-prospectus/community-ownership-fund-2025-prospectus",
         "privacy_notice": "https://www.gov.uk/government/organisations/ministry-of-housing-communities-local-government",
-        "reference_contact_page_over_email": True,
         "contact_email": "COF@communities.gov.uk",
-        "contact_phone": "",
-        "contact_textphone": "",
-        "support_times": "9am to 5pm",
-        "support_days": "Monday to Friday",
         "instructions_json": {
             "en": "You must have received an invitation to apply. If we did not invite you, first <a href='https://www.gov.uk/guidance/community-ownership-fund-round-4-how-to-express-your-interest-in-applying'>express your interest in the fund</a>.",
             "cy": "Mae'n rhaid i chi fod wedi derbyn gwahoddiad i ymgeisio. Os na wnaethom eich gwahodd, <a href='https://www.gov.uk/guidance/community-ownership-fund-round-4-how-to-express-your-interest-in-applying'> mynegwch eich diddordeb yn y gronfa yn gyntaf</a>.",
@@ -271,10 +266,6 @@ LOADER_CONFIG = {
         },
         "eligibility_config": {"has_eligibility": False},
         "title_json": {"en": "Round 1", "cy": None},
-        "contact_us_banner_json": {
-            "en": ' <h2 class="govuk-heading-m">Get application support</h2>\r\n                 <p class="govuk-body">\r\n                    <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Visit the My Community website</a>\r\n                    for information and guidance on applying to Community Ownership Fund 2025.\r\n                    <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund#enquiry-form">Fill out the enquiry form</a>\r\n                    to request advice from My Community.\r\n                </p>\r\n                <p class="govuk-body">\r\n                    We cannot provide direct support to applicants outside of this service.\r\n                </p>\r\n                <h2 class="govuk-heading-m">Get technical support</h2>\r\n                <p  class="govuk-body">\r\n                    Contact the Ministry of Housing, Communities and Local Government funding team if you need\r\n                    help with accessing or submitting an application form.\r\n                </p>            \r\n',
-            "cy": '<h2 class="govuk-heading-m">Cael cymorth â\'r cais</h2>\r\n                 <p class="govuk-body">\r\n                    <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund">Ewch i wefan My Community</a>\r\n                    i gael gwybodaeth ac arweiniad ar wneud cais i\'r Gronfa Perchnogaeth Gymunedol 2025.\r\n                    <a class="govuk-link" href="https://mycommunity.org.uk/community-ownership-fund#enquiry-form">Llenwch y ffurflen ymholiad</a>\r\n                    i ofyn am gyngor gan My Community.\r\n                </p>\r\n                <p class="govuk-body">\r\n                    Ni allwn ddarparu cymorth uniongyrchol i ymgeiswyr tu hwnt i\'r gwasanaeth hwn.\r\n                </p>\r\n                <h2 class="govuk-heading-m">Cael cymorth technegol</h2>\r\n                <p  class="govuk-body">\r\n                    Cysylltwch â thîm cyllid yr Adran Ffyniant Bro, Tai a Chymunedau os oes angen help arnoch i gael at ffurflen gais neu ei chyflwyno.\r\n                </p>',
-        },
     },
     "base_path": 1036,
 }

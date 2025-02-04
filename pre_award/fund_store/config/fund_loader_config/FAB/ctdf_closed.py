@@ -38,12 +38,7 @@ LOADER_CONFIG = {
         "assessment_deadline": "2024-12-31T11:57:00",
         "prospectus": "https://en.wikipedia.org/wiki/Crash_test_dummy",
         "privacy_notice": "https://mhclgdigital.atlassian.net/wiki/home",
-        "reference_contact_page_over_email": False,
         "contact_email": "FundingService@communities.gov.uk",
-        "contact_phone": "305-513-8350",
-        "contact_textphone": "",
-        "support_times": "09:00 - 15:00",
-        "support_days": "mon-fri",
         "instructions_json": {
             "en": "This is a fake fund for testing so will not result in you getting any money!",
             "cy": None,
@@ -71,7 +66,6 @@ LOADER_CONFIG = {
         },
         "eligibility_config": {"has_eligibility": False},
         "title_json": {"en": "Crash Round 2", "cy": None},
-        "contact_us_banner_json": {"en": None, "cy": None},
     },
     "base_path": 1040,
 }
