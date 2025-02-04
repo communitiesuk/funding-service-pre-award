@@ -26,7 +26,7 @@ from pre_award.assessment_store.db.queries.scores.queries import (
     update_scoring_system_for_round_id,
 )
 from pre_award.db import db
-from pre_award.fund_store.db.queries import get_fund_name
+from pre_award.fund_store.db.queries import get_fund_short_name
 
 try:
     from data.models import Fund, Round
@@ -43,7 +43,7 @@ def print_fund_round_scoringsystem() -> None:
     else:
         print("\nAvailable Rounds:")
         for idx, rnd in enumerate(rounds, start=1):
-            fund_name = get_fund_name(rnd)
+            fund_name = get_fund_short_name(rnd.fund_id)
             short_name = getattr(rnd, "short_name", "N/A")
             scoring_system = get_scoring_info_by_round(rnd.id)
             if scoring_system:
