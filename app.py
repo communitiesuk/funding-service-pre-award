@@ -395,7 +395,7 @@ def create_app() -> Flask:  # noqa: C901
                     ),
                     contact_us_url=url_for(
                         "apply_routes.contact_us",
-                        fund=fund.short_name,
+                        fund_short_name=fund.short_name,
                         round=round.short_name,
                     ),
                     privacy_url=url_for(

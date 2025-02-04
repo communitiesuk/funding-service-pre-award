@@ -2,12 +2,11 @@
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 
 {% macro fs_contact_details(support_desk_apply) %}
-    <p class="govuk-body">{% trans %}Contact us through our {% endtrans %}
-        <a class="govuk-link" href="{{ support_desk_apply }}" target="_blank">{% trans %}support desk{% endtrans %}</a> if you need help.
+    <p class="govuk-body">{% trans %}Contact us through our <a class="govuk-link" href="{{ support_desk_apply }}" target="_blank">support desk</a> if you need help.{% endtrans %}
     </p>
     <p class="govuk-body">{% trans %}Monday to Friday: 9am to 5pm (except public holidays){% endtrans %}</p>
 
     {{ govukInsetText({
-        "text": gettext("Do not send any applications or attachments through the support desk. We'll only accept applications through this service.")
+        "text": _("Do not send any applications or attachments through the support desk. We'll only accept applications through this service.")
     }) }}
 {% endmacro %}

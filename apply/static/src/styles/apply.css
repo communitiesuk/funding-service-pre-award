@@ -6,7 +6,7 @@ a.govuk-header__link--homepage {
   }
 
 /* Makes the signout button in the header look like a link */
-.signout_button {
+ .app-header__button--signout{
   background: none;
   border: none;
   padding: 0;
@@ -20,7 +20,7 @@ a.govuk-header__link--homepage {
   margin: 0;
 }
 
-.signout_button:hover {
+ .app-header__button--signout:hover {
   background-color: #000000;
   text-decoration: underline;
   text-decoration-thickness: 3px;
