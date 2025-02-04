@@ -185,11 +185,11 @@ def insert_scoring_system_for_round_id(round_id: str, scoring_system_id: str) ->
     return inserted_assessment_round
 
 
-def approve_sub_criteria(application_id, sub_criteria_id, user_id):
+def approve_sub_criteria(application_id, sub_criteria_id, user_id, message):
     # Temporary solution to "accept" a sub-criteria is to provide it a non-zero score
     create_score_for_app_sub_crit(
         score=1,
-        justification="Approved by assessor",
+        justification=message,
         application_id=application_id,
         user_id=user_id,
         sub_criteria_id=sub_criteria_id,

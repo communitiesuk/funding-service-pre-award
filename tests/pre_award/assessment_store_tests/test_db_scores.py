@@ -439,7 +439,9 @@ def test_approve_sub_criteria_resolves_change_request(_db, setup_application_wit
     section_1 = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[section_1], [section_1]])
 
-    approve_sub_criteria(application_id=application_id, sub_criteria_id=section_1, user_id=str(uuid.uuid4()))
+    approve_sub_criteria(
+        application_id=application_id, sub_criteria_id=section_1, user_id=str(uuid.uuid4()), message="test"
+    )
 
     change_requests = get_change_requests_for_application(application_id)
     assert all(cr.latest_status == FlagStatus.RESOLVED for cr in change_requests)
@@ -449,18 +451,23 @@ def test_approve_sub_criteria_creates_score(_db, setup_application_with_requests
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id]])
 
-    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()))
+    approve_sub_criteria(
+        application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()), message="test"
+    )
 
     scores = _db.session.query(Score).filter_by(application_id=application_id, sub_criteria_id=sub_criteria_id).all()
     assert len(scores) == 1
     assert scores[0].score == 1
+    assert scores[0].justification == "test"
 
 
 def test_approve_sub_criteria_updates_application_status(_db, setup_application_with_requests_and_scores):
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id]])
 
-    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()))
+    approve_sub_criteria(
+        application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()), message="test"
+    )
 
     application = _db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
     assert application.workflow_status == ApplicationStatus.IN_PROGRESS
@@ -473,7 +480,9 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(
     sub_criteria_id_2 = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id_1], [sub_criteria_id_2]])
 
-    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id_1, user_id=str(uuid.uuid4()))
+    approve_sub_criteria(
+        application_id=application_id, sub_criteria_id=sub_criteria_id_1, user_id=str(uuid.uuid4()), message="test"
+    )
 
     change_requests = get_change_requests_for_application(application_id)
     resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
@@ -487,7 +496,9 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(
     assert application.workflow_status == ApplicationStatus.CHANGE_REQUESTED
 
     # Approving last remaining sub-criteria should change application status
-    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id_2, user_id=str(uuid.uuid4()))
+    approve_sub_criteria(
+        application_id=application_id, sub_criteria_id=sub_criteria_id_2, user_id=str(uuid.uuid4()), message="test"
+    )
 
     change_requests = get_change_requests_for_application(application_id)
     resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
@@ -506,7 +517,9 @@ def test_approve_sub_criteria_multiple_change_requests_same_subcriteria(
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id], [sub_criteria_id]])
 
-    approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()))
+    approve_sub_criteria(
+        application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()), message="test"
+    )
 
     change_requests = get_change_requests_for_application(application_id)
     resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
