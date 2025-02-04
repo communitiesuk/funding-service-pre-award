@@ -27,8 +27,8 @@ def get_fund_by_id(
     return fund
 
 
-def get_fund_name(round: Round) -> str:
-    fund = get_fund_by_id(getattr(round, "fund_id", None))
+def get_fund_short_name(fund_id: str) -> str:
+    fund = get_fund_by_id(fund_id)
     return fund.short_name if fund else "N/A"
 
 
