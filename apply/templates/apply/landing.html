@@ -11,9 +11,9 @@
         {% trans %}Access Funding{% endtrans %}
   {% else %}
     {% if round.is_expression_of_interest %}
-        {% trans %}Start or continue an{% endtrans %} {{ fund.title }}
+        {% trans fund_title=fund.title%}Start or continue an {{ fund_title }}{%endtrans%}
     {% else %}
-        {% trans %}Start or continue an application for{% endtrans %} {{ fund.title }}
+        {% trans fund_title=fund.title%}Start or continue an application for {{ fund_title }}{%endtrans%}
     {% endif %}
   {% endif %}
 {% endblock pageTitle %}
@@ -38,7 +38,7 @@
                     </p>
                 {%endset%}
                 {{govukNotificationBanner({
-                    "titleText": gettext("Important"),
+                    "titleText": _("Important"),
                     "html": closed_html
                 })}}
             {% endif %}
@@ -69,7 +69,7 @@
             {{ govukButton({
                 "isStartButton": true,
                 "href" : url_for("magic_links_bp.new", fund=fund.short_name, round=round.short_name),
-                "text": gettext("Enter your email address")
+                "text": _("Enter your email address")
             }) }}
             <h2 class="govuk-heading-m">{% trans %}Get help with your application{% endtrans %} </h2>
 
