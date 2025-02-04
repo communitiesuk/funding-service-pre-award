@@ -869,6 +869,89 @@ class TestRoutes:
             response.location == f"https://authenticator.levellingup.gov.localhost:4004/service/user?{encoded_params}"  # noqa
         )
 
+    @pytest.mark.application_id("resolved_app")
+    @pytest.mark.sub_criteria_id("test_sub_criteria_id")
+    def test_route_sub_criteria_acceptance_comment(
+        self,
+        assess_test_client,
+        request,
+        mock_get_sub_criteria,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_comments,
+        mock_get_flags,
+        mock_get_scores,
+        mock_get_bulk_accounts,
+        mock_get_assessor_tasklist_state,
+        mock_get_scoring_system,
+    ):
+        application_id = request.node.get_closest_marker("application_id").args[0]
+        sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
+
+        token = create_valid_token(test_lead_assessor_claims)
+        assess_test_client.set_cookie("fsd_user_token", token)
+
+        response = assess_test_client.get(
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/accept_changes"  # noqa
+        )
+        assert 200 == response.status_code
+        soup = BeautifulSoup(response.data, "html.parser")
+
+        # Page should contain a form with a textarea
+        forms = soup.find_all("form")
+        assert forms, "No forms found in the response"
+
+        form_with_textarea = any(form.find("textarea") for form in forms)
+        assert form_with_textarea, "No form with a comment box found in the response"
+
+    @pytest.mark.application_id("resolved_app")
+    @pytest.mark.sub_criteria_id("test_sub_criteria_id")
+    def test_route_sub_criteria_acceptance(
+        self,
+        assess_test_client,
+        request,
+        mock_get_sub_criteria,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_comments,
+        mock_get_flags,
+        mock_get_scores,
+        mock_get_bulk_accounts,
+        mock_get_assessor_tasklist_state,
+        mock_get_scoring_system,
+    ):
+        application_id = request.node.get_closest_marker("application_id").args[0]
+        sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
+
+        token = create_valid_token(test_lead_assessor_claims)
+        assess_test_client.set_cookie("fsd_user_token", token)
+
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
+        form_data = {
+            "comment": "some justification",
+        }
+        with mock.patch("pre_award.assess.assessments.routes.approve_sub_criteria") as mock_approve_sub_criteria:
+            response = assess_test_client.post(
+                f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/accept_changes",
+                headers=headers,
+                data=form_data,
+                follow_redirects=True,
+            )
+        assert 200 == response.status_code
+        assert "Your change has been accepted" in str(response.data)
+        mock_approve_sub_criteria.assert_called_once_with(
+            application_id="resolved_app",
+            sub_criteria_id="test_sub_criteria_id",
+            user_id="lead",
+            message="some justification",
+        )
+
     def test_homepage_route_accessible(self, assess_test_client, mock_get_funds):
         # Remove fsd-user-token cookie
         assess_test_client.set_cookie("fsd_user_token", "")
