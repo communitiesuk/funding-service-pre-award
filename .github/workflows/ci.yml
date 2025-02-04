@@ -1,0 +1,48 @@
+name: Build and unit test
+
+on:
+  push:
+
+jobs:
+  setup:
+    uses: communitiesuk/funding-service-design-workflows/.github/workflows/determine-jobs.yml@main
+    with:
+      environment: ${{ inputs.environment }}
+
+  pre_deploy_tests:
+    uses: communitiesuk/funding-service-design-workflows/.github/workflows/pre-deploy.yml@main
+    with:
+      postgres_unit_testing: true
+      check_db_migrations: true
+      assets_required: true
+
+  type_checks:
+    if: ${{ ! contains(fromJSON(needs.setup.outputs.jobs_to_run), 'dev') }}
+    needs: [setup]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5
+        with:
+          python-version: 3.10.x
+      - name: Install uv
+        uses: astral-sh/setup-uv@887a942a15af3a7626099df99e897a18d9e5ab3a # v5
+        with:
+          enable-cache: true
+      - name: install dependencies
+        run: uv sync
+      - name: run type checking
+        run: uv run mypy
+
+  paketo_build:
+    needs: [ setup ]
+    permissions:
+      packages: write
+    uses: communitiesuk/funding-service-design-workflows/.github/workflows/package.yml@main
+    with:
+      version_to_build: ${{ github.sha }}
+      owner: ${{ github.repository_owner }}
+      application: funding-service-pre-award
+      assets_required: true

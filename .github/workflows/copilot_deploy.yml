@@ -1,5 +1,5 @@
 name: Deploy to AWS
-run-name: ${{ github.event_name == 'workflow_dispatch' && format('Deploy to {0}', github.event.inputs.environment) || (github.ref == 'refs/heads/main' && 'Deploy to Test-UAT-Prod' || 'Build & Unit Test') }}
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('Deploy to {0}', github.event.inputs.environment) || (github.ref == 'refs/heads/main' && 'Deploy to Test-UAT-Prod') }}
 
 on:
   workflow_dispatch:
@@ -29,6 +29,7 @@ on:
         type: boolean
         description: Run e2e tests (application)
   push:
+    branches: [ main ]
 
 jobs:
   setup:
@@ -40,7 +41,7 @@ jobs:
     uses: communitiesuk/funding-service-design-workflows/.github/workflows/pre-deploy.yml@main
     with:
       postgres_unit_testing: true
-      check_db_migrations: true
+      check_db_migrations: false
       assets_required: true
 
   type_checks:
