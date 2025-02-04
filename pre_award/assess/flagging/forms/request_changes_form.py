@@ -19,16 +19,16 @@ def build_request_changes_form(question_choices):
 
     selected_field_ids = form.field_ids.data or []
 
-    for field_id, question, _ in question_choices:
+    for field_id in question_choices:
         field_name = f"reason_{field_id}"
 
         validators = [Length(max=Config.TEXT_AREA_INPUT_MAX_CHARACTERS)]
         if field_id in selected_field_ids:
             validators.append(InputRequired(message="Provide a reason for requesting changes to this application"))
         text_area_field = TextAreaField(
-            f"Reason for {question}",
+            label=field_name,
             validators=validators,
         )
         setattr(RequestChangesForm, field_name, text_area_field)
 
-    return RequestChangesForm
+    return RequestChangesForm()

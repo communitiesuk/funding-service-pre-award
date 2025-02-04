@@ -2,10 +2,6 @@
 {% from "govuk_frontend_jinja/components/checkboxes/macro.html" import govukCheckboxes %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 {% from "govuk_frontend_jinja/components/textarea/macro.html" import govukTextarea %}
-{% from "assess/macros/sub_criteria_navbar.html" import navbar %}
-{% from "assess/macros/sub_criteria_heading.html" import sub_criteria_heading %}
-{% from "govuk_frontend_jinja/components/checkboxes/macro.html" import govukCheckboxes %}
-{% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
 
 {% set pageHeading -%}
 Request changes –
@@ -29,7 +25,7 @@ Request changes –
             <h2 class="govuk-heading-l scoring-heading">Reasons for requesting change</h2>
         </div>
 
-        {% if form.errors.get("justification") or form.errors.get("field_ids") %}
+        {% if form.errors.get("field_ids") %}
         <div class="govuk-error-summary" data-module="govuk-error-summary">
             <div role="alert">
                 <h2 class="govuk-error-summary__title">
@@ -37,11 +33,6 @@ Request changes –
                 </h2>
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
-                        {% if form.errors.get("justification") %}
-                        <li>
-                            <a href=#textarea>{{ form.errors.get("justification") | join("\n") }}</a>
-                        </li>
-                        {% endif %}
                         {% if form.errors.get("field_ids") %}
                         <li>
                             <a href=#field_ids>{{ form.errors.get("field_ids") | join("\n") }}</a>
