@@ -37,14 +37,15 @@ jobs:
       environment: ${{ inputs.environment }}
 
   pre_deploy_tests:
+    needs: [setup]
     uses: communitiesuk/funding-service-design-workflows/.github/workflows/pre-deploy.yml@main
     with:
       postgres_unit_testing: true
-      check_db_migrations: true
+      check_db_migrations: ${{ needs.setup.outputs.jobs_to_run == '[]'}}
       assets_required: true
 
   type_checks:
-    if: ${{ ! contains(fromJSON(needs.setup.outputs.jobs_to_run), 'dev') }}
+    if: ${{ needs.setup.outputs.jobs_to_run == '[]' }}
     needs: [setup]
     runs-on: ubuntu-latest
     steps:
