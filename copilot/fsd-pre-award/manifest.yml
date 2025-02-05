@@ -23,6 +23,7 @@ http:
     - frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
     - assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
     - authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
+    - assess.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk
 # Your service is reachable at "http://fsd-pre-award.${COPILOT_SERVICE_DISCOVERY_ENDPOINT}:8080" but is not public.
 
 # Configuration for your containers and service.
@@ -51,21 +52,21 @@ variables:
   FLASK_ENV: ${COPILOT_ENVIRONMENT_NAME}
   SENTRY_DSN: "https://80c7f65b54f0eff535777a66b375adf0@o1432034.ingest.us.sentry.io/4508324370317312"
   AWS_BUCKET_NAME:
-    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-FormUploadsBucket
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${CsOPILOT_ENVIRONMENT_NAME}-FormUploadsBucket
   AWS_MSG_BUCKET_NAME:
     from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-MessageBucket
   AWS_SQS_NOTIF_APP_PRIMARY_QUEUE_URL:
     from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-NotificationQueueURL
   AWS_SQS_NOTIF_APP_SECONDARY_QUEUE_URL:
     from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-NotificationDeadLetterQueueURL
-  ASSESSMENT_FRONTEND_HOST: "https://assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  ASSESSMENT_FRONTEND_HOST: "https://assess.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
   SENTRY_TRACES_SAMPLE_RATE: 0.5
   API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local"
 
   ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: false
   APPLICANT_FRONTEND_HOST: "https://frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk" # TODO: remove me when all frontends combined
   APPLY_HOST: "frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
-  ASSESS_HOST: "assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  ASSESS_HOST: "assess.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
   AUTH_HOST: "authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   FORM_DESIGNER_HOST: "https://form-designer.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   FORMS_SERVICE_PUBLIC_HOST: "https://forms.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
@@ -179,6 +180,7 @@ environments:
         - "frontend.access-funding.levellingup.gov.uk"
         - "assessment.access-funding.levellingup.gov.uk"
         - "authenticator.access-funding.levellingup.gov.uk"
+        - "assess.access-funding.communities.gov.uk"
       hosted_zone: Z0686469NF3ZJTU9I02M
     count:
       range: 2-4
@@ -192,11 +194,11 @@ environments:
       requests: 30
     variables:
       FLASK_ENV: production
-      ASSESSMENT_FRONTEND_HOST: "https://assessment.access-funding.levellingup.gov.uk"
+      ASSESSMENT_FRONTEND_HOST: "https://assess.access-funding.communities.gov.uk"
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: false
       COOKIE_DOMAIN: ".access-funding.levellingup.gov.uk"
       APPLY_HOST: "frontend.access-funding.levellingup.gov.uk"
-      ASSESS_HOST: "assessment.access-funding.levellingup.gov.uk"
+      ASSESS_HOST: "assess.access-funding.communities.gov.uk"
       AUTH_HOST: "authenticator.access-funding.levellingup.gov.uk"
       API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local:8080"
       APPLICANT_FRONTEND_HOST: "https://frontend.access-funding.levellingup.gov.uk" # TODO: remove me when all frontends combined
