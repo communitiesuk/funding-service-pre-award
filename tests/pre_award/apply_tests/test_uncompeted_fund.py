@@ -57,7 +57,7 @@ def test_changes_requested_notification(apply_test_client, mocker, templates_ren
     rendered_html = template.render(
         display_data=display_data,
     )
-    assert "Please review updates from the Assessor" in rendered_html
+    assert "The assessor has requested changes to your application." in rendered_html
 
 
 @pytest.mark.usefixtures("mock_login", "mock_get_fund_round")

@@ -27,6 +27,22 @@ Your applications
 {% endif %}
     <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
 
+    {% for fund in display_data["funds"] %}
+        {% for round in fund["rounds"] %}
+            {% if "CHANGE_REQUESTED" in round["applications"]|map(attribute="status") %}
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        {{
+                            govukNotificationBanner({
+                                "text": "The assessor has requested changes to your application. Select 'Continue application' to make changes."
+                            })
+                        }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
     <p class="govuk-body">
         {% set application_count=display_data["total_applications_to_display"] %}
         {% trans %}You have started{% endtrans %}&nbsp;{% trans count=application_count %} {{ application_count }} application{% pluralize %}{{ application_count }} applications{% endtrans %}&nbsp;{% trans %}using this email address{% endtrans %}.
@@ -54,14 +70,7 @@ Your applications
                 {% if round["is_past_submission_deadline"] %}
                     {{ round_closed_warning(fund["fund_data"]["name"], round["round_details"]["title"], round["round_details"]["deadline"]) }}
                 {% endif %}
-                {% if "CHANGE_REQUESTED" in round["applications"]|map(attribute="status") %}
-                {{
-                    govukNotificationBanner({
-                        "text": "Please review updates from the Assessor"
-                    })
-                }}
-                {% endif %}
-                    {{ applications_table(round["applications"], round["is_past_submission_deadline"], show_language_column, fund["fund_data"]["short_name"], round["round_details"]["is_expression_of_interest"]) }}
+                {{ applications_table(round["applications"], round["is_past_submission_deadline"], show_language_column, fund["fund_data"]["short_name"], round["round_details"]["is_expression_of_interest"]) }}
                 {% if not round["is_past_submission_deadline"] %}
                     {% if round["round_details"]["has_eligibility"] %}
                         {{ eligibilityCheckButton(form, url_for('eligibility_routes.launch_eligibility', fund_id=fund["fund_data"]["id"], round_id=round["round_details"]["id"])) }}
