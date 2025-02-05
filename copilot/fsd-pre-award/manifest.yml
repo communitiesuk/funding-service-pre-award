@@ -67,7 +67,6 @@ variables:
   APPLY_HOST: "frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   ASSESS_HOST: "assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   AUTH_HOST: "authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
-  COOKIE_DOMAIN: ".test.levellingup.gov.uk"
   FORM_DESIGNER_HOST: "https://form-designer.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   FORMS_SERVICE_PUBLIC_HOST: "https://forms.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
@@ -102,6 +101,7 @@ environments:
   dev:
     variables:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
+      COOKIE_DOMAIN: ".dev.access-funding.test.levellingup.gov.uk"
     count:
       spot: 2
     sidecars:
@@ -123,6 +123,7 @@ environments:
   test:
     variables:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
+      COOKIE_DOMAIN: ".test.access-funding.test.levellingup.gov.uk"
     count:
       spot: 2
     sidecars:
@@ -144,6 +145,7 @@ environments:
   uat:
     variables:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
+      COOKIE_DOMAIN: ".uat.access-funding.test.levellingup.gov.uk"
     count:
       range: 2-4
       cooldown:
@@ -192,7 +194,7 @@ environments:
       FLASK_ENV: production
       ASSESSMENT_FRONTEND_HOST: "https://assessment.access-funding.levellingup.gov.uk"
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: false
-      COOKIE_DOMAIN: ".levellingup.gov.uk"
+      COOKIE_DOMAIN: ".access-funding.levellingup.gov.uk"
       APPLY_HOST: "frontend.access-funding.levellingup.gov.uk"
       ASSESS_HOST: "assessment.access-funding.levellingup.gov.uk"
       AUTH_HOST: "authenticator.access-funding.levellingup.gov.uk"
