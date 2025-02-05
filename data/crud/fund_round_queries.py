@@ -6,7 +6,7 @@ from pre_award.db import db
 
 
 def get_fund(fund_short_name: str) -> Fund | None:
-    return db.session.scalar(select(Fund).where(Fund.short_name == fund_short_name.upper()))
+    return db.session.scalar(select(Fund).where(Fund.short_name == fund_short_name))
 
 
 def get_round(fund_short_name: str, round_short_name: str) -> Round | None:
@@ -14,8 +14,8 @@ def get_round(fund_short_name: str, round_short_name: str) -> Round | None:
         select(Round)
         .join(Fund)
         .options(contains_eager(Round.fund))
-        .where(Fund.short_name == fund_short_name.upper())
-        .where(Round.short_name == round_short_name.upper())
+        .where(Fund.short_name == fund_short_name)
+        .where(Round.short_name == round_short_name)
         .where(Round.is_not_yet_open.is_(False))
     )
     return round
