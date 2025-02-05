@@ -1576,7 +1576,7 @@ class TestRoutes:
         assess_test_client.set_cookie("fsd_user_token", token)
 
         response = assess_test_client.get(
-            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/theme_id/test_theme_id/success_page"
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/theme_id/test_theme_id/request_change/success"
         )
         assert 200 == response.status_code
         assert b"Your request for changes has been sent" in response.data
