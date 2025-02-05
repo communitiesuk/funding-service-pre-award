@@ -20,6 +20,7 @@ http:
     grace_period: 20s
 
   alias:
+    - frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk
     - frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
     - assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
     - authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
