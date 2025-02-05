@@ -9,7 +9,7 @@
         <div class="govuk-grid-column-two-thirds">
 
             {% if fund %}
-                <p class="govuk-caption-xl">{% trans %}Contact{% endtrans %} {{ fund.name }}</p>
+                <p class="govuk-caption-xl">{% trans fund_name=fund.name%}Contact {{ fund_name }}{% endtrans %}</p>
             {% else %}
                 <p class="govuk-caption-xl">{% trans %}Contact page{% endtrans %}</p>
             {% endif %}
