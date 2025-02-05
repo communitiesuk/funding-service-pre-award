@@ -1,8 +1,5 @@
 {% extends "assess/base.html" %}
-{% from "assess/macros/sub_criteria_navbar.html" import navbar %}
-{% from "assess/macros/sub_criteria_heading.html" import sub_criteria_heading %}
-{% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
-
+{%- from "govuk_frontend_jinja/components/panel/macro.html" import govukPanel -%}
 
 {% set pageHeading -%}
 Request changes –
@@ -14,17 +11,16 @@ Request changes –
 {% endset %}
 
 {% block header %}
+  {{ super() }}
   {% include "assess/components/header.html" %}
 {% endblock header %}
 
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half-from-desktop">
-      <div class="govuk-panel govuk-panel--confirmation">
-        <h1 class="govuk-panel__title">
-          Your request for changes has been sent
-        </h1>
-      </div>
+      {{ govukPanel({
+          "titleText": "Your request for changes has been complete",
+      }) }}
       <h1 class="govuk-heading-m govuk-!-margin-top-7">
         What happens next
       </h1>
@@ -33,20 +29,20 @@ Request changes –
         to let them know.
       </p>
       <p class="govuk-body">
-        We will email you when the applicant makes changes.</p>
+        We will email you when the applicant makes changes.
+      </p>
       <p class="govuk-body">
         The status for this criteria will be sent to <b>Change requested</b>.
       </p>
       <a
-            class="govuk-link"
-            href="{{ url_for(
-                "assessment_bp.application",
-                application_id=application_id
-            ) }}"
+        class="govuk-link"
+        href="{{ url_for(
+          "assessment_bp.application",
+          application_id=application_id
+        ) }}"
       >
         Back to application
       </a>
     </div>
   </div>
-
 {% endblock content %}

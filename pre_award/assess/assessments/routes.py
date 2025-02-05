@@ -1866,7 +1866,7 @@ def view_entire_application(application_id):
 
 
 @assessment_bp.route(
-    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/success_page",
+    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/request_change/success",
     methods=["GET"],
 )
 @check_access_application_id
