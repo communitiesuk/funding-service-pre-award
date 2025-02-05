@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from unittest.mock import MagicMock
 from uuid import uuid4
 
@@ -6,11 +7,14 @@ from sqlalchemy import select
 
 from pre_award.assessment_store.db.models.assessment_record import AssessmentRecord
 from pre_award.assessment_store.db.models.assessment_record.enums import Status
-from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
+from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
 from pre_award.assessment_store.db.queries.flags.queries import (
     add_flag_for_application,
     add_update_to_assessment_flag,
+    get_change_requests_for_application,
     get_flags_for_application,
+    is_first_change_request_for_date,
     prepare_change_requests_metadata,
 )
 from tests.pre_award.assessment_store_tests._helpers import get_assessment_record
@@ -218,3 +222,273 @@ def test_get_change_requests_multiple_flags(mocker):
         "field_2": ["Justification 2"],
     }
     assert result == expected_result
+
+
+def create_change_request(db, application_id, status, updates=None, is_change_request=True):
+    flag = AssessmentFlag(
+        application_id=application_id,
+        latest_status=status,
+        latest_allocation="Team A",
+        sections_to_flag=["section1"],
+        updates=[],
+        field_ids=["field1"],
+        is_change_request=is_change_request,
+    )
+    if db:
+        db.session.add(flag)
+        db.session.commit()
+
+    if updates:
+        for i, update in enumerate(updates):
+            new_update = FlagUpdate(
+                assessment_flag_id=flag.id,
+                user_id=f"user{i}",
+                date_created=update.get("date_created", datetime(2025, 2, 4)),
+                justification=update.get("justification", f"Test justification {i}"),
+                status=update.get("status", status),
+                allocation="Team A",
+            )
+            if db:
+                db.session.add(new_update)
+        if db:
+            db.session.commit()
+        flag.updates.append(new_update)
+
+    return flag
+
+
+@pytest.mark.apps_to_insert([{**test_input_data[0]}])
+def test_get_all_change_requests(_db, seed_application_records):
+    app_id = seed_application_records[0]["application_id"]
+    create_change_request(
+        _db, app_id, FlagStatus.RAISED, updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}]
+    )
+    create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RESOLVED,
+        updates=[{"status": FlagStatus.RESOLVED, "date_created": datetime(2025, 2, 4) - timedelta(days=1)}],
+    )
+
+    results = get_change_requests_for_application(app_id)
+    assert len(results) == 2
+
+
+@pytest.mark.apps_to_insert([{**test_input_data[0]}])
+def test_get_only_raised_change_requests(_db, seed_application_records):
+    app_id = seed_application_records[0]["application_id"]
+    create_change_request(
+        _db, app_id, FlagStatus.RAISED, updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}]
+    )
+    create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RESOLVED,
+        updates=[{"status": FlagStatus.RESOLVED, "date_created": datetime(2025, 2, 4) - timedelta(days=1)}],
+    )
+
+    results = get_change_requests_for_application(app_id, only_raised=True)
+    assert len(results) == 1
+    assert results[0].latest_status == FlagStatus.RAISED
+
+
+@pytest.mark.apps_to_insert([{**test_input_data[0]}])
+def test_sort_descending(_db, seed_application_records):
+    app_id = seed_application_records[0]["application_id"]
+    base_date = datetime(2025, 2, 4)
+
+    flag1 = create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RAISED,
+        updates=[
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=3)},
+            {"status": FlagStatus.RESOLVED, "date_created": base_date - timedelta(days=2)},
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=1)},
+        ],
+    )
+    flag2 = create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RAISED,
+        updates=[
+            {"status": FlagStatus.RESOLVED, "date_created": base_date - timedelta(days=4)},
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=3)},
+        ],
+    )
+    flag3 = create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RESOLVED,
+        updates=[
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=5)},
+            {"status": FlagStatus.RESOLVED, "date_created": base_date - timedelta(days=4)},
+            {"status": FlagStatus.RESOLVED, "date_created": base_date - timedelta(days=3)},
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=2)},
+        ],
+    )
+
+    results = get_change_requests_for_application(app_id, sort_descending=True)
+    assert len(results) == 3
+    assert results[0].id == flag1.id and results[1].id == flag3.id and results[2].id == flag2.id, (
+        "Flags returned in wrong order"
+    )
+
+
+@pytest.mark.apps_to_insert([{**test_input_data[0]}])
+def test_sort_descending_only_raised(_db, seed_application_records):
+    app_id = seed_application_records[0]["application_id"]
+    base_date = datetime(2025, 2, 4)
+
+    flag1 = create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RAISED,
+        updates=[
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=6)},
+            {"status": FlagStatus.RESOLVED, "date_created": base_date - timedelta(days=5)},
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=4)},
+        ],
+    )
+    create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RESOLVED,
+        updates=[
+            {"status": FlagStatus.RESOLVED, "date_created": base_date},
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=3)},
+        ],
+    )
+    flag3 = create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RAISED,
+        updates=[
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=4)},
+            {"status": FlagStatus.RESOLVED, "date_created": base_date - timedelta(days=2)},
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=2)},
+        ],
+    )
+    flag4 = create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RAISED,
+        updates=[
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=1)},
+            {"status": FlagStatus.RAISED, "date_created": base_date - timedelta(days=4)},
+        ],
+    )
+
+    results = get_change_requests_for_application(app_id, only_raised=True, sort_descending=True)
+    assert len(results) == 3
+
+    assert flag4.id == results[0].id and flag3.id == results[1].id and flag1.id == results[2].id
+
+
+@pytest.mark.apps_to_insert([{**test_input_data[0]}])
+def test_no_change_requests(_db, seed_application_records):
+    app_id = seed_application_records[0]["application_id"]
+    results = get_change_requests_for_application(app_id)
+    assert len(results) == 0
+
+
+@pytest.mark.apps_to_insert([{**test_input_data[0]}])
+def test_exclude_non_change_requests(_db, seed_application_records):
+    app_id = seed_application_records[0]["application_id"]
+    create_change_request(
+        _db,
+        app_id,
+        FlagStatus.RAISED,
+        updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}],
+        is_change_request=False,
+    )
+    create_change_request(
+        _db, app_id, FlagStatus.RAISED, updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}]
+    )
+
+    results = get_change_requests_for_application(app_id)
+    assert len(results) == 1
+    assert results[0].is_change_request is True
+
+
+def test_no_previous_change_requests(mocker):
+    today_date = datetime(2025, 2, 4).date()
+    application_id = "mock-application-id"
+    mocker.patch(
+        "pre_award.assessment_store.db.queries.flags.queries.get_change_requests_for_application", return_value=[]
+    )
+
+    result = is_first_change_request_for_date(application_id, today_date)
+    assert result is True
+
+
+def test_latest_request_previous_day(mocker):
+    today_date = datetime(2025, 2, 4).date()
+    application_id = "mock-application-id"
+    yesterday = datetime(2025, 2, 3)
+    mock_flag = create_change_request(
+        None, application_id, FlagStatus.RAISED, updates=[{"date_created": yesterday, "status": FlagStatus.RAISED}]
+    )
+
+    mocker.patch(
+        "pre_award.assessment_store.db.queries.flags.queries.get_change_requests_for_application",
+        return_value=[mock_flag],
+    )
+
+    result = is_first_change_request_for_date(application_id, today_date)
+    assert result is True
+
+
+def test_latest_request_today(mocker):
+    today_date = datetime(2025, 2, 4).date()
+    application_id = "mock-application-id"
+    today_datetime = datetime(2025, 2, 4, 10, 0)
+    mock_flag = create_change_request(
+        None, application_id, FlagStatus.RAISED, updates=[{"date_created": today_datetime, "status": FlagStatus.RAISED}]
+    )
+
+    mocker.patch(
+        "pre_award.assessment_store.db.queries.flags.queries.get_change_requests_for_application",
+        return_value=[mock_flag],
+    )
+
+    result = is_first_change_request_for_date(application_id, today_date)
+    assert result is False
+
+
+def test_multiple_updates_none_today(mocker):
+    today_date = datetime(2025, 2, 4).date()
+    application_id = "mock-application-id"
+    updates = [
+        {"date_created": datetime(2025, 2, 2), "status": FlagStatus.RAISED},
+        {"date_created": datetime(2025, 2, 3), "status": FlagStatus.RESOLVED},
+    ]
+
+    mock_flag = create_change_request(None, application_id, FlagStatus.RAISED, updates=updates)
+
+    mocker.patch(
+        "pre_award.assessment_store.db.queries.flags.queries.get_change_requests_for_application",
+        return_value=[mock_flag],
+    )
+
+    result = is_first_change_request_for_date(application_id, today_date)
+    assert result is True
+
+
+def test_multiple_updates_with_today(mocker):
+    today_date = datetime(2025, 2, 4).date()
+    application_id = "mock-application-id"
+    updates = [
+        {"date_created": datetime(2025, 2, 2), "status": FlagStatus.RAISED},
+        {"date_created": datetime(2025, 2, 4, 9, 0), "status": FlagStatus.RAISED},
+    ]
+
+    mock_flag = create_change_request(None, application_id, FlagStatus.RAISED, updates=updates)
+
+    mocker.patch(
+        "pre_award.assessment_store.db.queries.flags.queries.get_change_requests_for_application",
+        return_value=[mock_flag],
+    )
+
+    result = is_first_change_request_for_date(application_id, today_date)
+    assert result is False

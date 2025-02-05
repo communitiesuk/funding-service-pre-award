@@ -195,7 +195,7 @@ class DefaultConfig(object):
 
     # Applicant Frontend
     APPLICANT_FRONTEND_HOST = environ.get("APPLICANT_FRONTEND_HOST", "frontend")
-
+    FUND_APPLICATION_ENDPOINT = "/funding-round/{fund_short_name}/{round_short_name}"
     # Assessment Frontend
     FSD_ASSESSMENT_SESSION_TIMEOUT_SECONDS = CommonConfig.FSD_SESSION_TIMEOUT_SECONDS
     FUND_STORE_FUND_ENDPOINT = CommonConfig.FUND_ENDPOINT

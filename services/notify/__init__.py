@@ -121,6 +121,7 @@ class NotificationService:
     )
 
     CHANGE_RECEIVED_TEMPLATE_ID = os.environ.get("CHANGE_RECEIVED_TEMPLATE_ID", "cc1a6287-7d70-4264-84aa-0f8dbf9341dc")
+    CHANGE_REQUEST_TEMPLATE_ID = os.environ.get("CHANGE_REQUEST_TEMPLATE_ID", "272d50bf-88f1-4a2c-9e38-02ea54bd389c")
 
     FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS = "FundingService@communities.gov.uk"
 
@@ -442,7 +443,32 @@ class NotificationService:
                 "contact email": contact_help_email,
             },
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(self.FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS),
+            govuk_notify_reference=govuk_notify_reference,)
+        
+    def send_requested_changes_email(
+        self,
+        email_address: str,
+        application_reference: str,
+        fund_name: str,
+        round_name: str,
+        application_deadline: str,
+        apply_fund_url: str,
+        contact_email: str,
+        govuk_notify_reference: str | None = None,
+    ) -> Notification:
+        return self._send_email(
+            email_address,
+            self.CHANGE_REQUEST_TEMPLATE_ID,
+            personalisation={
+                "name of fund": fund_name,
+                "application reference": application_reference,
+                "round name": round_name,
+                "contact email": contact_email,
+                "sign in link": apply_fund_url,
+                "application deadline": application_deadline,
+            },
             govuk_notify_reference=govuk_notify_reference,
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(self.FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS),
         )
 
 

@@ -7,7 +7,7 @@ import json
 import time
 import zipfile
 from collections import OrderedDict
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import quote_plus, unquote_plus
 
 from flask import Response, abort, current_app, g, redirect, render_template, request, session, url_for
@@ -114,6 +114,7 @@ from pre_award.assess.services.data_services import (
     get_tags_for_fund_round,
     get_users_for_fund,
     match_comment_to_theme,
+    notify_applicant_changes_requested,
     submit_change_request,
     submit_comment,
     update_assessment_record_status,
@@ -139,6 +140,7 @@ from pre_award.assess.themes.deprecated_theme_mapper import (
     order_entire_application_by_themes,
 )
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
+from pre_award.assessment_store.db.queries.flags.queries import is_first_change_request_for_date
 from pre_award.assessment_store.db.queries.scores.queries import approve_sub_criteria
 from pre_award.common.blueprints import Blueprint
 from pre_award.config import Config
@@ -1342,6 +1344,8 @@ def request_changes(application_id, sub_criteria_id, theme_id):
     field_ids = [question["field_id"] for question in theme_answers_response]
     form = build_request_changes_form(field_ids)
     if request.method == "POST" and form.validate_on_submit():
+        today_date = datetime.now(tz=timezone.utc).date()
+        send_notification = is_first_change_request_for_date(application_id=application_id, date=today_date)
         justification_data = {field_id: getattr(form, f"reason_{field_id}").data for field_id in field_ids}
         for field_id, justification in justification_data.items():
             if not justification.strip():
@@ -1360,6 +1364,10 @@ def request_changes(application_id, sub_criteria_id, theme_id):
                 application_id=application_id,
                 status=WorkflowStatus.CHANGE_REQUESTED,
             )
+            
+            if send_notification:
+                notify_applicant_changes_requested(application_id=application_id)
+                send_notification = False
 
         mark_application_with_requested_changes(application_id=application_id, field_ids=form.field_ids.data)
 
