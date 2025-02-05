@@ -1,0 +1,48 @@
+{% extends "assess/base.html" %}
+{%- from "govuk_frontend_jinja/components/panel/macro.html" import govukPanel -%}
+
+{% set pageHeading -%}
+Request changes –
+{% if current_theme.id == sub_criteria.id %}
+  {{ sub_criteria.name }} – {{ sub_criteria.project_name }}
+{% else %}
+  {{ current_theme.name }} – {{ sub_criteria.name }} – {{ sub_criteria.project_name }}
+{% endif %}
+{% endset %}
+
+{% block header %}
+  {{ super() }}
+  {% include "assess/components/header.html" %}
+{% endblock header %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half-from-desktop">
+      {{ govukPanel({
+          "titleText": "Your request for changes has been sent",
+      }) }}
+      <h1 class="govuk-heading-m govuk-!-margin-top-7">
+        What happens next
+      </h1>
+      <p class="govuk-body">
+        Your change request has been sent to the applicant and we've sent them an email
+        to let them know.
+      </p>
+      <p class="govuk-body">
+        We will email you when the applicant makes changes.
+      </p>
+      <p class="govuk-body">
+        The status for this criteria will be sent to <b>Change requested</b>.
+      </p>
+      <a
+        class="govuk-link"
+        href="{{ url_for(
+          "assessment_bp.application",
+          application_id=application_id
+        ) }}"
+      >
+        Back to application
+      </a>
+    </div>
+  </div>
+{% endblock content %}
