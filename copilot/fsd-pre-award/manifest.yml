@@ -136,11 +136,11 @@ environments:
         variables:
           FORWARD_PORT: 8080
           CLIENT_MAX_BODY_SIZE: 10m
+          PROXY_REQUEST_BUFFERING: off
+          PROXY_BUFFERING: off
         secrets:
           BASIC_AUTH_USERNAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_USERNAME
           BASIC_AUTH_PASSWORD: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_PASSWORD
-          PROXY_REQUEST_BUFFERING: off
-          PROXY_BUFFERING: off
     http:
       target_container: nginx
       healthcheck:
@@ -169,11 +169,11 @@ environments:
         variables:
           FORWARD_PORT: 8080
           CLIENT_MAX_BODY_SIZE: 10m
+          PROXY_REQUEST_BUFFERING: off
+          PROXY_BUFFERING: off
         secrets:
           BASIC_AUTH_USERNAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_USERNAME
           BASIC_AUTH_PASSWORD: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_PASSWORD
-          PROXY_REQUEST_BUFFERING: off
-          PROXY_BUFFERING: off
     http:
       target_container: nginx
       healthcheck:
