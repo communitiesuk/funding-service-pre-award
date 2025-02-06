@@ -23,6 +23,7 @@ http:
     - frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
     - assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
     - authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
+    - apply.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk
 # Your service is reachable at "http://fsd-pre-award.${COPILOT_SERVICE_DISCOVERY_ENDPOINT}:8080" but is not public.
 
 # Configuration for your containers and service.
