@@ -243,27 +243,40 @@ def search_applications(**params):
     return found_apps
 
 
-def update_application_fields(existing_json_blob, new_json_blob) -> set:
-    field_map = {}
-    changed_fields = set()
-    for form in existing_json_blob["forms"]:
-        for section in form["questions"]:
-            for field in section["fields"]:
-                field_map[field["key"]] = field["answer"]
+def iter_fields(json_blob):
+    """Generator to yield each field from a JSON blob."""
+    for form in json_blob.get("forms", []):
+        for section in form.get("questions", []):
+            for field in section.get("fields", []):
+                yield field
 
-    for form in new_json_blob["forms"]:
-        for section in form["questions"]:
-            for field in section["fields"]:
-                if field["answer"] != field_map.get(field["key"]):
-                    changed_fields.add(field["key"])
-                    if "history_log" in field:
-                        field["history_log"].append(
-                            {datetime.now(tz=timezone.utc).isoformat(): field_map[field["key"]]}
-                        )
-                    else:
-                        field["history_log"] = [
-                            {datetime.now(tz=timezone.utc).isoformat(): field_map.get(field["key"], None)}
-                        ]
+
+def update_field_history(existing_field):
+    """Returns an updated history log for the field given the old answer."""
+    current_timestamp = datetime.now(tz=timezone.utc).isoformat()
+    history = existing_field.get("history_log")
+    old_answer = existing_field.get("answer")
+    if history is None:
+        history = []
+    history.append({current_timestamp: old_answer})
+    return history
+
+
+def update_application_fields(existing_json_blob, new_json_blob) -> set:
+    # Build a mapping of key -> existing field from the existing JSON blob.
+    existing_fields = {field["key"]: field for field in iter_fields(existing_json_blob)}
+    changed_fields = set()
+
+    for field in iter_fields(new_json_blob):
+        key = field["key"]
+        new_answer = field.get("answer")
+        old_answer = existing_fields.get(key, {}).get("answer")
+        # Only update if the answer has changed.
+        if new_answer != old_answer:
+            changed_fields.add(key)
+            # Update history_log using the helper function.
+            field["history_log"] = update_field_history(existing_fields.get(key, {}))
+
     return changed_fields
 
 
