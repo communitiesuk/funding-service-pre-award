@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any, List, Literal, Optional
 
 from alembic_utils.pg_extension import PGExtension
 from sqlalchemy import ColumnElement, Enum, ForeignKey, UniqueConstraint, func
+from sqlalchemy.dialects.postgresql import CITEXT
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -20,6 +21,7 @@ ltree_extension = PGExtension(
     schema="public",
     signature="ltree",
 )
+citext_extension = PGExtension(schema="public", signature="citext")
 
 
 class Fund(Model):
@@ -29,7 +31,7 @@ class Fund(Model):
     )
     name_json: Mapped[dict[Literal["en", "cy"], str]]
     title_json: Mapped[dict[Literal["en", "cy"], str]]
-    short_name: Mapped[str] = mapped_column(unique=True)
+    short_name: Mapped[str] = mapped_column(CITEXT, nullable=False, unique=True)
     description_json: Mapped[dict[Literal["en", "cy"], str]]
     rounds: Mapped[List["Round"]] = relationship("Round")
     welsh_available: Mapped[bool] = mapped_column(default=False, nullable=False)
@@ -67,7 +69,7 @@ class Round(Model):
     )
     fund: Mapped[Fund] = relationship(lazy=True)
     title_json: Mapped[dict[Literal["en", "cy"], str]]
-    short_name: Mapped[str]
+    short_name: Mapped[str] = mapped_column(CITEXT, nullable=False)
     opens: Mapped[Optional[datetime]]
     deadline: Mapped[Optional[datetime]]
     assessment_start: Mapped[Optional[datetime]]
