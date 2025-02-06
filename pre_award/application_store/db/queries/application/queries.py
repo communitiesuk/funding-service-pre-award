@@ -435,6 +435,6 @@ def mark_application_with_requested_changes(application_id: str, field_ids: list
                     field["answer"] = False
 
     if application_should_update:
-        application.status = ApplicationStatus.CHANGE_REQUESTED
+        application.status = ApplicationStatus.IN_PROGRESS
 
     db.session.commit()

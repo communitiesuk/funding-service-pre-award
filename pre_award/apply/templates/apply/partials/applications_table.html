@@ -38,7 +38,7 @@
                     },
                     {
                         'text':  govukTag({
-                            'text': application.status|status_translation if application.status != "CHANGE_REQUESTED" else "To review",
+                            'text': application.status|status_translation,
                             'classes': status_class,
                         })
                     },

@@ -703,6 +703,6 @@ def test_mark_application_with_requested_changes_updates_forms_and_application(
                         assert field["answer"] is True
 
     if application_changed:
-        assert updated_application.status == ApplicationStatus.CHANGE_REQUESTED
+        assert updated_application.status == ApplicationStatus.IN_PROGRESS
     else:
         assert updated_application.status == ApplicationStatus.COMPLETED
