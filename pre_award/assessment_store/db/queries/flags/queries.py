@@ -22,8 +22,10 @@ def get_change_requests_for_application(application_id, only_raised=False, sort_
         application_id (UUID or str): The unique identifier of the application.
         only_raised (bool, optional): If True, filters the results to include only change requests
                                       with a status of 'RAISED'
-        sort_descending (bool, optional): If True, sorts the change requests in descending order
+        sort_by_update (bool, optional): If True, sorts the change requests in descending order
                                           based on the latest update date.
+        sort_by_raised (bool, optional): TODO: If True, sorts the change requests in descending order
+                                          based on when they were raised (created).
 
     Returns:
         list: A list of AssessmentFlag representing the change requests for the application.
