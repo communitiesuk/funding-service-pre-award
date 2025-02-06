@@ -346,7 +346,6 @@ class NotificationService:
         self,
         email_address: str,
         fund_name: str,
-        application_reference: str,
         round_name: str,
         deadline: str,
         contact_help_email: str,
@@ -357,7 +356,6 @@ class NotificationService:
             self.APPLICATION_DEADLINE_REMINDER_TEMPLATE_ID,
             personalisation={
                 "name of fund": fund_name,
-                "application reference": application_reference,
                 "round name": round_name,
                 "application deadline": deadline,
             },
