@@ -4,11 +4,13 @@ Contains test configuration.
 
 import multiprocessing
 import platform
+import uuid
 
 import pytest
 from flask import Flask
 
 from app import create_app  # noqa: E402
+from services.notify import Notification
 from tests.pre_award.authenticator_tests.testing.mocks.mocks.redis_magic_links import RedisMLinks
 from tests.pre_award.authenticator_tests.testing.mocks.mocks.redis_sessions import RedisSessions
 
@@ -47,7 +49,7 @@ def mock_notification_service_calls(mocker):
 
     mocker.patch(
         "services.notify.NotificationService._send_email",
-        side_effect=lambda *args, **kwargs: calls.append(mocker.call(*args, **kwargs)),
+        side_effect=lambda *args, **kwargs: calls.append(mocker.call(*args, **kwargs)) or Notification(id=uuid.uuid4()),
     )
 
     yield calls

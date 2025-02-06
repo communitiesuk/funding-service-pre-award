@@ -2,19 +2,19 @@ import dataclasses
 import os
 import uuid
 from datetime import datetime
-from typing import Literal
+from typing import Any, Literal, cast
 
 import pytz
-from flask import current_app
+from flask import Flask, current_app
 from fsd_utils import NotifyConstants
-from notifications_python_client import NotificationsAPIClient
+from notifications_python_client import NotificationsAPIClient  # type: ignore[attr-defined]
 from notifications_python_client.errors import APIError, TokenError
 
 
 class NotificationError(Exception):
     def __init__(
         self,
-        message="There was a problem sending the email through GOV.UK Notify",
+        message: str = "There was a problem sending the email through GOV.UK Notify",
     ):
         self.message = message
         super().__init__(self.message)
@@ -25,24 +25,21 @@ class Notification:
     id: uuid.UUID
 
 
-def _format_timestamp_to_human_readable(submission_date):
+def _format_timestamp_to_human_readable(submission_date: datetime | None) -> str | None:
     if submission_date is None:
         return submission_date
 
     return submission_date.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
 
 
-def _format_naive_utc_timestamp_to_europe_london_readable(submission_date):
-    if submission_date is None:
-        return submission_date
-
+def _format_naive_utc_timestamp_to_europe_london_readable(submission_date: str) -> str:
     UTC_timezone = pytz.timezone("UTC")
     UK_timezone = pytz.timezone("Europe/London")
     UK_datetime = UTC_timezone.localize(datetime.strptime(submission_date, "%Y-%m-%dT%H:%M:%S.%f")).astimezone(
         UK_timezone
     )
 
-    return _format_timestamp_to_human_readable(UK_datetime)
+    return cast(str, _format_timestamp_to_human_readable(UK_datetime))
 
 
 class NotificationService:
@@ -138,18 +135,18 @@ class NotificationService:
         "HighStreetRentalAuctions@levellingup.gov.uk": "0874cafb-a297-4f3c-bb3f-99bc578cce4a",
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.client: NotificationsAPIClient | None = None
 
-    def init_app(self, app):
+    def init_app(self, app: Flask) -> None:
         app.extensions["notification_service"] = self
-        app.extensions["notification_service.client"] = NotificationsAPIClient(app.config["GOV_NOTIFY_API_KEY"])
+        app.extensions["notification_service.client"] = NotificationsAPIClient(app.config["GOV_NOTIFY_API_KEY"])  # type: ignore[no-untyped-call]
 
     def _send_email(
         self,
         email_address: str,
         template_id: str,
-        personalisation: dict | None,
+        personalisation: dict[str, Any] | None,
         govuk_notify_reference: str | None = None,
         email_reply_to_id: str | None = None,
         one_click_unsubscribe_url: str | None = None,
@@ -212,7 +209,7 @@ class NotificationService:
     ) -> Notification:
         template_id = self.EXPRESSION_OF_INTEREST_TEMPLATE_ID[fund_id][NotifyConstants.TEMPLATE_TYPE_EOI_PASS][
             "template_id"
-        ].get(language, "en")
+        ].get(language, "en")  # type: ignore[attr-defined]
 
         submission_date = _format_naive_utc_timestamp_to_europe_london_readable(submission_date)
 
@@ -253,7 +250,7 @@ class NotificationService:
     ) -> Notification:
         template_id = self.EXPRESSION_OF_INTEREST_TEMPLATE_ID[fund_id][
             NotifyConstants.TEMPLATE_TYPE_EOI_PASS_W_CAVEATS
-        ]["template_id"].get(language, "en")
+        ]["template_id"].get(language, "en")  # type: ignore[attr-defined]
 
         submission_date = _format_naive_utc_timestamp_to_europe_london_readable(submission_date)
 
@@ -354,8 +351,8 @@ class NotificationService:
         email_address: str,
         fund_name: str,
         round_name: str,
-        deadline: str,
-        contact_help_email: str,
+        deadline: datetime,
+        contact_help_email: str | None,
         govuk_notify_reference: str | None = None,
     ) -> Notification:
         return self._send_email(
@@ -367,7 +364,7 @@ class NotificationService:
                 "application deadline": _format_timestamp_to_human_readable(deadline),
             },
             govuk_notify_reference=govuk_notify_reference,
-            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),  # type: ignore[arg-type]
         )
 
     def send_assessment_assigned_email(
@@ -424,4 +421,4 @@ class NotificationService:
 
 
 def get_notification_service() -> NotificationService:
-    return current_app.extensions["notification_service"]
+    return cast(NotificationService, current_app.extensions["notification_service"])

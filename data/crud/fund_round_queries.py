@@ -1,4 +1,6 @@
-from sqlalchemy import select
+from typing import Sequence
+
+from sqlalchemy import func, select
 from sqlalchemy.orm import contains_eager
 
 from data.models import Fund, Round
@@ -19,3 +21,27 @@ def get_round(fund_short_name: str, round_short_name: str) -> Round | None:
         .where(Round.is_not_yet_open.is_(False))
     )
     return round
+
+
+def get_rounds_for_application_deadline_reminders() -> Sequence[Round]:
+    """
+    Retrieve rounds that are eligible for sending application deadline reminder emails "now".
+
+    `round.reminder_date` and `round.deadline` are naive timestamps in Europe/London local time. `func.now()` by
+    default returns a UTC timestamp from postgres, so in order to do a correct comparison we need to tell postgres
+    that the reminder_date is actually in the europe/london timezone.
+    """
+    return db.session.scalars(
+        select(Round)
+        .join(Round.fund)
+        .where(
+            Round.application_reminder_sent.is_(False),
+            func.timezone("Europe/London", Round.reminder_date) <= func.now(),
+            func.timezone("Europe/London", Round.deadline) > func.now(),
+        )
+    ).all()
+
+
+def set_application_reminder_sent(round: Round) -> None:
+    round.application_reminder_sent = True
+    db.session.commit()

@@ -70,12 +70,12 @@ class Round(Model):
     fund: Mapped[Fund] = relationship(lazy=True)
     title_json: Mapped[dict[Literal["en", "cy"], str]]
     short_name: Mapped[str] = mapped_column(CITEXT, nullable=False)
-    opens: Mapped[Optional[datetime]]
-    deadline: Mapped[Optional[datetime]]
-    assessment_start: Mapped[Optional[datetime]]
+    opens: Mapped[Optional[datetime]]  # In Europe/London timezone, stored without tzinfo
+    deadline: Mapped[Optional[datetime]]  # In Europe/London timezone, stored without tzinfo
+    assessment_start: Mapped[Optional[datetime]]  # In Europe/London timezone, stored without tzinfo
     application_reminder_sent: Mapped[bool] = mapped_column(default=False)
-    reminder_date: Mapped[Optional[datetime]]
-    assessment_deadline: Mapped[Optional[datetime]]
+    reminder_date: Mapped[Optional[datetime]]  # In Europe/London timezone, stored without tzinfo
+    assessment_deadline: Mapped[Optional[datetime]]  # In Europe/London timezone, stored without tzinfo
     prospectus: Mapped[str]
     privacy_notice: Mapped[str]
     contact_email: Mapped[Optional[str]]
