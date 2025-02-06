@@ -869,9 +869,8 @@ def notify_applicant_changes_requested(application_id: str):
     fund = db.session.query(FundModel).filter(FundModel.id == application.fund_id).one()
     round = db.session.query(RoundModel).filter(RoundModel.id == application.round_id).one()
     round_deadline = round.deadline.strftime("%-d %B %Y")
-    apply_fund_url = Config.APPLY_HOST + Config.FUND_APPLICATION_ENDPOINT.format(
-        fund_short_name=fund.short_name, round_short_name=round.short_name
-    )
+    apply_fund_url = Config.APPLY_HOST + f"/funding-round/{fund.short_name}/{round.short_name}"
+
     get_notification_service().send_requested_changes_email(
         email_address=account.email,
         application_reference=application.reference,
