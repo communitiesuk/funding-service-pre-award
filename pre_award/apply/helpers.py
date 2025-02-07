@@ -124,6 +124,18 @@ def format_rehydrate_payload(
         ),
         dict(application_id=application_id, markAsCompleteEnabled=markAsCompleteEnabled),
     )
+
+    # Filter out change requests for current form
+    if change_requests is None:
+        form_change_requests = None
+    else:
+        # Extract all field_ids present in form_data
+        existing_field_ids = [field["key"] for question in form_data["questions"] for field in question["fields"]]
+
+        form_change_requests = {
+            field_id: messages for (field_id, messages) in change_requests.items() if field_id in existing_field_ids
+        }
+
     formatted_data = {}
 
     formatted_data["options"] = {
@@ -140,7 +152,7 @@ def format_rehydrate_payload(
     formatted_data["metadata"]["fund_name"] = fund_name
     formatted_data["metadata"]["round_name"] = round_name
     formatted_data["metadata"]["has_eligibility"] = has_eligibility
-    formatted_data["metadata"]["change_requests"] = change_requests
+    formatted_data["metadata"]["change_requests"] = form_change_requests
 
     if round_close_notification_url is not None:
         formatted_data["metadata"]["round_close_notification_url"] = round_close_notification_url
