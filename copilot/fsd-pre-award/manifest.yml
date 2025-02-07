@@ -101,7 +101,7 @@ environments:
       APPLICANT_FRONTEND_HOST: "https://apply.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
       APPLY_HOST: "apply.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
       AUTH_HOST: "account.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
-      AUTHENTICATOR_HOST: "account.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk" # TODO Remove duplicate env var
+      AUTHENTICATOR_HOST: "https://account.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
       FORM_DESIGNER_HOST: "https://form-designer.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
       FORMS_SERVICE_PUBLIC_HOST: "https://application-questions.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
       FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
