@@ -62,6 +62,7 @@ variables:
   APPLY_HOST: "frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   ASSESS_HOST: "assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   AUTH_HOST: "authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  AUTHENTICATOR_HOST: "authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   FORM_DESIGNER_HOST: "https://form-designer.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   FORMS_SERVICE_PUBLIC_HOST: "https://forms.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
@@ -80,7 +81,6 @@ secrets:
   SECRET_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SECRET_KEY
   PREAWARD_DB_SECRET:
     from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-fsdpreawardstoresclusterAuroraSecret
-  AUTHENTICATOR_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AUTHENTICATOR_HOST
   AZURE_AD_CLIENT_ID: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AZURE_AD_CLIENT_ID
   AZURE_AD_CLIENT_SECRET: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AZURE_AD_CLIENT_SECRET
   AZURE_AD_TENANT_ID: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AZURE_AD_TENANT_ID
@@ -101,7 +101,8 @@ environments:
       ASSESSMENT_FRONTEND_HOST: "https://assess.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk" # TODO Remove duplicate env var
       APPLICANT_FRONTEND_HOST: "https://apply.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
       APPLY_HOST: "apply.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
-      AUTH_HOST: "account.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk" # TODO Remove duplicate env var
+      AUTH_HOST: "account.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
+      AUTHENTICATOR_HOST: "account.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk" # TODO Remove duplicate env var
       FORM_DESIGNER_HOST: "https://form-designer.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
       FORMS_SERVICE_PUBLIC_HOST: "https://application-questions.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
       FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.${COPILOT_ENVIRONMENT_NAME}.access-funding.communities.gov.uk"
