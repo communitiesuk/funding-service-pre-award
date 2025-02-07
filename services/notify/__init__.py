@@ -25,7 +25,14 @@ class Notification:
     id: uuid.UUID
 
 
-def _format_submitted_datetime(submission_date):
+def _format_timestamp_to_human_readable(submission_date):
+    if submission_date is None:
+        return submission_date
+
+    return submission_date.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
+
+
+def _format_naive_utc_timestamp_to_europe_london_readable(submission_date):
     if submission_date is None:
         return submission_date
 
@@ -35,7 +42,7 @@ def _format_submitted_datetime(submission_date):
         UK_timezone
     )
 
-    return UK_datetime.strftime(f"{'%d %B %Y'} at {'%I:%M%p'}").replace("AM", "am").replace("PM", "pm")
+    return _format_timestamp_to_human_readable(UK_datetime)
 
 
 class NotificationService:
@@ -207,7 +214,7 @@ class NotificationService:
             "template_id"
         ].get(language, "en")
 
-        submission_date = _format_submitted_datetime(submission_date)
+        submission_date = _format_naive_utc_timestamp_to_europe_london_readable(submission_date)
 
         return self._send_email(
             email_address,
@@ -248,7 +255,7 @@ class NotificationService:
             NotifyConstants.TEMPLATE_TYPE_EOI_PASS_W_CAVEATS
         ]["template_id"].get(language, "en")
 
-        submission_date = _format_submitted_datetime(submission_date)
+        submission_date = _format_naive_utc_timestamp_to_europe_london_readable(submission_date)
 
         return self._send_email(
             email_address,
@@ -290,7 +297,7 @@ class NotificationService:
             else self.APPLICATION_SUBMISSION_TEMPLATE_ID_EN
         )
 
-        submission_date = _format_submitted_datetime(submission_date)
+        submission_date = _format_naive_utc_timestamp_to_europe_london_readable(submission_date)
 
         return self._send_email(
             email_address,
@@ -357,7 +364,7 @@ class NotificationService:
             personalisation={
                 "name of fund": fund_name,
                 "round name": round_name,
-                "application deadline": deadline,
+                "application deadline": _format_timestamp_to_human_readable(deadline),
             },
             govuk_notify_reference=govuk_notify_reference,
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),
