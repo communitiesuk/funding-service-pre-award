@@ -99,14 +99,6 @@ secrets:
 # You can override any of the values defined above by environment.
 environments:
   dev:
-    http:
-      alias:
-        - name: assessment.dev.access-funding.test.levellingup.gov.uk
-          hosted_zone: Z0988423GWW2B561EM4Y
-        - name: authenticator.dev.access-funding.test.levellingup.gov.uk
-          hosted_zone: Z0988423GWW2B561EM4Y
-        - name: frontend.dev.access-funding.test.levellingup.gov.uk
-          hosted_zone: Z0988423GWW2B561EM4Y
     variables:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
       COOKIE_DOMAIN: ".dev.access-funding.test.levellingup.gov.uk"
@@ -126,7 +118,13 @@ environments:
           BASIC_AUTH_USERNAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_USERNAME
           BASIC_AUTH_PASSWORD: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_PASSWORD
     http:
-      hosted_zone: Z0909689EN35NO5KZWHS
+      alias:
+        - name: assessment.dev.access-funding.test.levellingup.gov.uk
+          hosted_zone: Z0988423GWW2B561EM4Y
+        - name: authenticator.dev.access-funding.test.levellingup.gov.uk
+          hosted_zone: Z0988423GWW2B561EM4Y
+        - name: frontend.dev.access-funding.test.levellingup.gov.uk
+          hosted_zone: Z0988423GWW2B561EM4Y
       target_container: nginx
       healthcheck:
         path: /healthcheck
