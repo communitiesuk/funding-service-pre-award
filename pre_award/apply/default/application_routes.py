@@ -11,7 +11,6 @@ from fsd_utils.simple_utils.date_utils import (
     current_datetime_after_given_iso_string,
 )
 
-from pre_award.application_store.db.models.application.enums import Status
 from pre_award.apply.constants import ApplicationStatus
 from pre_award.apply.default.data import (
     determine_round_status,
@@ -280,7 +279,10 @@ def tasklist(application_id):
         "in_progress_status": ApplicationStatus.IN_PROGRESS.name,
         "completed_status": ApplicationStatus.COMPLETED.name,
         "submitted_status": ApplicationStatus.SUBMITTED.name,
-        "change_requested_status": Status.CHANGE_REQUESTED.name,
+        "change_requested_status": ApplicationStatus.CHANGE_REQUESTED.name,
+        "has_received_change_requests": any(
+            form["status"] == ApplicationStatus.CHANGE_REQUESTED.name for form in application.forms
+        ),
         "has_section_feedback": round_data.feedback_survey_config.has_section_feedback,
         "number_of_forms": len(application.forms)
         + sum(
