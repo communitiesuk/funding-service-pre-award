@@ -618,7 +618,7 @@ def test_is_research_survey_complete(mocker, research_survey_data, exp_result):
                 has_research_survey=False,
                 is_research_survey_optional=False,
             ),
-            "CHANGE_REQUESTED",
+            "IN_PROGRESS",
         ),
     ],
 )
