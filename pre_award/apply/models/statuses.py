@@ -10,5 +10,6 @@ def get_formatted(value: str):
         "NOT_SUBMITTED": gettext("Not Submitted"),
         "READY_TO_SUBMIT": gettext("Ready to Submit"),
         "CHANGE_REQUESTED": "Change Requested",
+        "REVIEWED": "Reviewed",
     }
     return statuses.get(value, value.replace("_", " ").strip().title())

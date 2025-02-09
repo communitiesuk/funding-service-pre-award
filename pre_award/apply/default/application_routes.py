@@ -2,7 +2,7 @@ from functools import wraps
 from http.client import METHOD_NOT_ALLOWED
 
 import requests
-from flask import abort, current_app, g, make_response, redirect, render_template, request, url_for
+from flask import abort, current_app, flash, g, make_response, redirect, render_template, request, url_for
 from flask_babel import force_locale, gettext
 from flask_wtf import FlaskForm
 from fsd_utils import Decision
@@ -12,6 +12,7 @@ from fsd_utils.simple_utils.date_utils import (
 )
 
 from pre_award.application_store.db.models.application.enums import Status
+from pre_award.application_store.db.models.forms.enums import Status as FormStatus
 from pre_award.apply.constants import ApplicationStatus
 from pre_award.apply.default.data import (
     determine_round_status,
@@ -281,6 +282,7 @@ def tasklist(application_id):
         "completed_status": ApplicationStatus.COMPLETED.name,
         "submitted_status": ApplicationStatus.SUBMITTED.name,
         "change_requested_status": Status.CHANGE_REQUESTED.name,
+        "reviewed_status": FormStatus.REVIEWED.name,
         "has_section_feedback": round_data.feedback_survey_config.has_section_feedback,
         "number_of_forms": len(application.forms)
         + sum(
@@ -385,6 +387,10 @@ def continue_application(application_id):
 
     form_data = application.get_form_data(application, form_name)
     change_requests = prepare_change_requests_metadata(application_id)
+
+    if form_data["status"] == FormStatus.REVIEWED.name:
+        flash("This section has already been reviewed and cannot be edited.")
+        return redirect(url_for("application_routes.tasklist", application_id=application_id))
 
     rehydrate_payload = format_rehydrate_payload(
         form_data=form_data,

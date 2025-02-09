@@ -1144,6 +1144,7 @@ def display_sub_criteria(
         application_id=application_id, sub_criteria_id=sub_criteria_id, score_history=False
     )
     theme_id = request.args.get("theme_id", sub_criteria.themes[0].id)
+
     comment_form = CommentsForm()
     approval_form = ApprovalForm()
     try:
@@ -1175,7 +1176,12 @@ def display_sub_criteria(
 
     if "approve" in request.form and approval_form.validate_on_submit():
         return redirect(
-            url_for("assessment_bp.accept_changes", application_id=application_id, sub_criteria_id=sub_criteria_id)
+            url_for(
+                "assessment_bp.accept_changes",
+                application_id=application_id,
+                sub_criteria_id=sub_criteria_id,
+                theme_id=theme_id,
+            )
         )
 
     state = get_state_for_tasklist_banner(application_id)
@@ -1284,11 +1290,11 @@ def display_sub_criteria(
 
 
 @assessment_bp.route(
-    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/accept_changes",
+    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/accept_changes",
     methods=["GET", "POST"],
 )
 @check_access_application_id
-def accept_changes(application_id, sub_criteria_id):
+def accept_changes(application_id, sub_criteria_id, theme_id):
     form = ChangeRequestForm()
     state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
@@ -1302,6 +1308,7 @@ def accept_changes(application_id, sub_criteria_id):
             sub_criteria_id=sub_criteria_id,
             user_id=g.account_id,
             message=form.comment.data,
+            theme_id=theme_id,
         )
         return render_template(
             "assessments/change_request_accepted.html",

@@ -5,6 +5,7 @@
 {% from "apply/partials/round_closed_warning.html" import round_closed_warning %}
 {% from "apply/partials/migration_banner.html" import migration_banner %}
 {% from "apply/macros/contact-details.html" import fs_contact_details %}
+{% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 {% block beforeContent %}
 <a href="{{ dashboard_url }}" class="govuk-back-link"> {% trans %}Back to your applications{% endtrans %}</a>
 {% endblock beforeContent %}
@@ -18,6 +19,19 @@
     </div>
 </div>
 {% endif %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for cagtegory, message in messages %}
+      {{ govukNotificationBanner({
+        "type": category,
+        "titleText": "Important" if category == "warning" else "Information",
+        "text": message
+      }) }}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         {% if is_expression_of_interest %}

@@ -11,6 +11,9 @@ from flask import current_app as app
 from sqlalchemy import select
 from sqlalchemy.orm.exc import NoResultFound
 
+from pre_award.application_store.db.models.application.applications import Applications
+from pre_award.application_store.db.models.forms.enums import Status as FormStatus
+from pre_award.assess.services.data_services import get_sub_criteria_theme_answers_all
 from pre_award.assessment_store.db.models import AssessmentRecord
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as ApplicationStatus
 from pre_award.assessment_store.db.models.score import AssessmentRound, Score, ScoringSystem
@@ -185,7 +188,7 @@ def insert_scoring_system_for_round_id(round_id: str, scoring_system_id: str) ->
     return inserted_assessment_round
 
 
-def approve_sub_criteria(application_id, sub_criteria_id, user_id, message):
+def approve_sub_criteria(application_id, sub_criteria_id, user_id, message, theme_id):
     # Temporary solution to "accept" a sub-criteria is to provide it a non-zero score
     create_score_for_app_sub_crit(
         score=1,
@@ -199,5 +202,20 @@ def approve_sub_criteria(application_id, sub_criteria_id, user_id, message):
         application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=user_id
     )
 
+    theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
+    field_ids = [question["field_id"] for question in theme_answers_response]
+    mark_form_approved(application_id=application_id, field_ids=field_ids)
+
     if check_all_change_requests_accepted(application_id=application_id):
         update_application_status(application_id=application_id, status=ApplicationStatus.IN_PROGRESS)
+
+
+def mark_form_approved(application_id: str, field_ids: list):
+    application = db.session.query(Applications).filter_by(id=application_id).first()
+    for form in application.forms:
+        for category in form.json:
+            for field in category["fields"]:
+                if field["key"] in field_ids:
+                    form.status = FormStatus.REVIEWED
+
+    db.session.commit()

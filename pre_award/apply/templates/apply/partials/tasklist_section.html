@@ -20,6 +20,10 @@
       <strong class="govuk-tag govuk-tag--orange">
         {{ application_status("CHANGE_REQUESTED") }}
       </strong>
+    {% elif status_value == application_meta_data["reviewed_status"] %}
+      <strong class="govuk-tag govuk-tag--green">
+        {{ application_status("REVIEWED") }}
+      </strong>
     {% endif %}
   </span>
 {% endmacro %}
@@ -37,9 +41,14 @@
       {% for form in section["forms"] %}
       <li class="app-task-list__item task-list__new-design">
         <span class="app-task-list__task-name">
+          {% if not form["state"]["status"] == "REVIEWED" %}
           <a class="govuk-body govuk-link govuk-link--no-visited-state" href="{{ url_for("application_routes.continue_application", application_id=application_meta_data["application_id"], form_name=form["form_name"]) }}">
             {{ form["form_title"] }}
           </a>
+          {% else %}
+            {{ form["form_title"] }}
+          {% endif %}
+
         </span>
         {{ derive_status_tag(form["state"]["status"], application_meta_data, application_status) }}
       </li>
