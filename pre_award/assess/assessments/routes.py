@@ -10,17 +10,7 @@ from collections import OrderedDict
 from datetime import datetime
 from urllib.parse import quote_plus, unquote_plus
 
-from flask import (
-    Response,
-    abort,
-    current_app,
-    g,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for,
-)
+from flask import Response, abort, current_app, g, redirect, render_template, request, session, url_for
 from fsd_utils import extract_questions_and_answers
 from fsd_utils.sqs_scheduler.context_aware_executor import ContextAwareExecutor
 from markupsafe import escape
@@ -46,6 +36,7 @@ from pre_award.assess.assessments.forms.assignment_forms import (
     AssessorTypeForm,
     AssignmentOverviewForm,
 )
+from pre_award.assess.assessments.forms.change_request_form import ChangeRequestForm
 from pre_award.assess.assessments.forms.comments_form import CommentsForm
 from pre_award.assess.assessments.forms.mark_qa_complete_form import MarkQaCompleteForm
 from pre_award.assess.assessments.helpers import (
@@ -91,7 +82,7 @@ from pre_award.assess.config.display_value_mappings import (
     landing_filters,
     search_params_default,
 )
-from pre_award.assess.flagging.forms.request_changes_form import RequestChangesForm
+from pre_award.assess.flagging.forms.request_changes_form import build_request_changes_form
 from pre_award.assess.scoring.forms.scores_and_justifications import ApprovalForm
 from pre_award.assess.scoring.helpers import get_scoring_class
 from pre_award.assess.services.aws import get_file_for_download_from_aws
@@ -1183,15 +1174,8 @@ def display_sub_criteria(
         )
 
     if "approve" in request.form and approval_form.validate_on_submit():
-        approve_sub_criteria(application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=g.account_id)
-
         return redirect(
-            url_for(
-                "assessment_bp.display_sub_criteria",
-                application_id=application_id,
-                sub_criteria_id=sub_criteria_id,
-                theme_id=theme_id,
-            )
+            url_for("assessment_bp.accept_changes", application_id=application_id, sub_criteria_id=sub_criteria_id)
         )
 
     state = get_state_for_tasklist_banner(application_id)
@@ -1300,6 +1284,50 @@ def display_sub_criteria(
 
 
 @assessment_bp.route(
+    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/accept_changes",
+    methods=["GET", "POST"],
+)
+@check_access_application_id
+def accept_changes(application_id, sub_criteria_id):
+    form = ChangeRequestForm()
+    state = get_state_for_tasklist_banner(application_id)
+    flags_list = get_flags(application_id)
+    flag_status = determine_flag_status(flags_list)
+    sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
+    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+
+    if request.method == "POST" and form.validate_on_submit():
+        approve_sub_criteria(
+            application_id=application_id,
+            sub_criteria_id=sub_criteria_id,
+            user_id=g.account_id,
+            message=form.comment.data,
+        )
+        return render_template(
+            "assessments/change_request_accepted.html",
+            fund=get_fund(sub_criteria.fund_id),
+            application_id=application_id,
+            sub_criteria=sub_criteria,
+            state=state,
+            migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
+            flag_status=flag_status,
+            assessment_status=assessment_status,
+        )
+
+    return render_template(
+        "assessments/change_request_accept_comment.html",
+        fund=get_fund(sub_criteria.fund_id),
+        application_id=application_id,
+        sub_criteria=sub_criteria,
+        state=state,
+        migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
+        flag_status=flag_status,
+        assessment_status=assessment_status,
+        change_request_form=form,
+    )
+
+
+@assessment_bp.route(
     "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/request_change",
     methods=["GET", "POST"],
 )
@@ -1311,31 +1339,33 @@ def request_changes(application_id, sub_criteria_id, theme_id):
     assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
 
-    form = RequestChangesForm(
-        question_choices=[(question["field_id"], question["question"]) for question in theme_answers_response]
-    )
-
+    field_ids = [question["field_id"] for question in theme_answers_response]
+    form = build_request_changes_form(field_ids)
     if request.method == "POST" and form.validate_on_submit():
-        submit_change_request(
-            application_id=application_id,
-            flag_type=FlagType.RAISED.name,
-            user_id=g.account_id,
-            justification=form.justification.data,
-            field_ids=form.field_ids.data,
-            section=[sub_criteria_id],
-            is_change_request=True,
-        )
+        justification_data = {field_id: getattr(form, f"reason_{field_id}").data for field_id in field_ids}
+        for field_id, justification in justification_data.items():
+            if not justification.strip():
+                continue
+            submit_change_request(
+                application_id=application_id,
+                flag_type=FlagType.RAISED.name,
+                user_id=g.account_id,
+                justification=justification,
+                field_ids=[field_id],
+                section=[sub_criteria_id],
+                is_change_request=True,
+            )
 
-        update_assessment_record_status(
-            application_id=application_id,
-            status=WorkflowStatus.CHANGE_REQUESTED,
-        )
+            update_assessment_record_status(
+                application_id=application_id,
+                status=WorkflowStatus.CHANGE_REQUESTED,
+            )
 
         mark_application_with_requested_changes(application_id=application_id, field_ids=form.field_ids.data)
 
         return redirect(
             url_for(
-                "assessment_bp.display_sub_criteria",
+                "assessment_bp.success_page",
                 application_id=application_id,
                 sub_criteria_id=sub_criteria_id,
                 theme_id=theme_id,
@@ -1346,8 +1376,13 @@ def request_changes(application_id, sub_criteria_id, theme_id):
         "assessments/request_changes.html",
         form=form,
         question_choices=[
-            {"text": label, "value": value, "checked": value in (form.field_ids.data or [])}
-            for value, label in form.field_ids.choices
+            {
+                "text": question["question"],
+                "response": question.get("answer", ""),
+                "value": question["field_id"],
+                "checked": question["field_id"] in (form.field_ids.data or []),
+            }
+            for question in theme_answers_response
         ],
         state=state,
         sub_criteria=sub_criteria,
@@ -1500,7 +1535,7 @@ def application(application_id):
     state = get_state_for_tasklist_banner(application_id)
 
     scoring_form = get_scoring_class(state.round_id)()
-
+    fund = get_fund(state.fund_id)
     fund_round = get_round(
         state.fund_id,
         state.round_id,
@@ -1638,6 +1673,7 @@ def application(application_id):
         comment_id=comment_id,
         comment_form=comment_form,
         comments=theme_matched_comments,
+        fund=fund,
     )
 
 
@@ -1826,4 +1862,26 @@ def view_entire_application(application_id):
         state=state,
         application_id=application_id,
         mapped_answers=map_answers,
+    )
+
+
+@assessment_bp.route(
+    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/request_change/success",
+    methods=["GET"],
+)
+@check_access_application_id
+def success_page(application_id, sub_criteria_id, theme_id):
+    sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
+    current_theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
+    state = get_state_for_tasklist_banner(application_id)
+    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    return render_template(
+        "assessments/change_request_success_page.html",
+        application_id=application_id,
+        theme_id=theme_id,
+        fund=get_fund(sub_criteria.fund_id),
+        current_theme=current_theme,
+        state=state,
+        sub_criteria=sub_criteria,
+        assessment_status=assessment_status,
     )

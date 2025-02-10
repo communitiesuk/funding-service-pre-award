@@ -36,6 +36,11 @@ class DevelopmentConfig(Config):
             "'sha256-biLFinpqYMtWHmXfkA1BPeCY0/fNt46SAZ+BBk5YUog='",
             "'sha256-0EZqoz+oBhx7gF4nvY2bSqoGyy4zLjNF+SDQXGp/ZrY='",
             "'sha256-1NkfmhNaD94k7thbpTCKG0dKnMcxprj9kdSKzKR6K/k='",
+            "'sha256-9KTa3VNMmypk8vbtqjwun0pXQtx5+yn5QoD/WlzV4qM='",
+            "'sha256-fQY5fP3hSW2gDBpf5aHxpgfqCUocwOYh6zrfhhLsenY='",
+            "'sha256-fHdQRrIUf6pjwHfX7CTFKabEZ1qmGXrWk9TRExXo9ZY='",
+            "'sha256-Hw2dKmajmSN3MPIUjiOlZtZGa+LcQKY3gdW95UOmTAk='",
+            "'sha256-7eLPjKEGogf4iYql5CFUp5LBUXCOKJkJ52Lrgz5DOg0='",
         ]
     )
 

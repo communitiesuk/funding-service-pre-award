@@ -2,23 +2,34 @@
 {% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
 {% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "apply/macros/contact-details.html" import fs_contact_details %}
 {% block head %}
     {{super()}}
-  <link rel="stylesheet" href="{{ url_for('static', filename='fs/styles/apply.css' ) }}"> </link>
 {% endblock head %}
+{% block pageTitle %}
+  {% if not fund or not round %}
+        {% trans %}Access Funding{% endtrans %}
+  {% else %}
+    {% if round.is_expression_of_interest %}
+        {% trans fund_title=fund.title%}Start or continue an {{ fund_title }}{%endtrans%}
+    {% else %}
+        {% trans fund_title=fund.title%}Start or continue an application for {{ fund_title }}{%endtrans%}
+    {% endif %}
+  {% endif %}
+{% endblock pageTitle %}
 
 
 {% block content %}
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <span class="govuk-caption-xl">{{ fund.fund_name}} {{ round.round_title }}</span>
+            <span class="govuk-caption-xl">{{ fund.name}} {{ round.title }}</span>
             <h1 class="govuk-heading-xl">{%trans fund_title=fund.title%}Start or continue an application for {{ fund_title }}{%endtrans%}</h1>
 
             {% if round.is_past_submission_deadline %}
 
                 {% set closed_html %}
-                    <p class="govuk-notification-banner__heading">{%trans fund_round_names = fund.fund_name + " " + round.round_title%}Window closed - {{fund_round_names}}{% endtrans %}</p>
+                    <p class="govuk-notification-banner__heading">{%trans fund_round_names = fund.name + " " + round.title%}Window closed - {{fund_round_names}}{% endtrans %}</p>
                     <p class="govuk-body">
                         ({% trans closed_date = round.deadline|datetime_format_respect_lang %}Closed: {{ closed_date }}{% endtrans %})
                     </p>
@@ -27,7 +38,7 @@
                     </p>
                 {%endset%}
                 {{govukNotificationBanner({
-                    "titleText": gettext("Important"),
+                    "titleText": _("Important"),
                     "html": closed_html
                 })}}
             {% endif %}
@@ -40,9 +51,9 @@
                 "html": availableInLanguageHtml
                 }) }}
             {% endif %}
-            {% if round.round_instructions %}
+            {% if round.instructions %}
                 <p class="govuk-body">
-                    {{ round.round_instructions | safe }}
+                    {{ round.instructions | safe }}
                 </p>
             {% endif %}
             {% if round.prospectus %}
@@ -58,15 +69,11 @@
             {{ govukButton({
                 "isStartButton": true,
                 "href" : url_for("magic_links_bp.new", fund=fund.short_name, round=round.short_name),
-                "text": gettext("Enter your email address")
+                "text": _("Enter your email address")
             }) }}
-            <h2 class="govuk-heading-m">{% trans %}Get help{% endtrans %} </h2>
-            <p class="govuk-body">
-                {% trans %}If you need help, contact us through our <a class="govuk-link" href="{{ support_desk_apply }}" target="_blank">support desk</a>{% endtrans %}.
-            </p>
-            <p class="govuk-body">
-                {% trans %}Do not send any applications or attachments from the service desk portal. We'll only accept applications through this service.{% endtrans %}
-            </p>
+            <h2 class="govuk-heading-m">{% trans %}Get help with your application{% endtrans %} </h2>
+
+            {{ fs_contact_details(support_desk_apply) }}
         </div>
       </div>
 

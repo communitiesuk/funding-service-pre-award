@@ -1,6 +1,7 @@
 from typing import Dict
 
 from sqlalchemy import select
+from sqlalchemy.orm import contains_eager
 
 from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
@@ -109,3 +110,31 @@ def resolve_open_change_requests_for_sub_criteria(
     db.session.commit()
 
     return open_change_requests
+
+
+def prepare_change_requests_metadata(application_id: str) -> dict[str, list] | None:
+    assessment_flags = (
+        db.session.query(AssessmentFlag)
+        .join(FlagUpdate)
+        .filter(
+            AssessmentFlag.is_change_request.is_(True),
+            AssessmentFlag.application_id == application_id,
+            AssessmentFlag.latest_status == FlagStatus.RAISED,
+        )
+        .options(contains_eager(AssessmentFlag.updates))
+        .filter(FlagUpdate.status == FlagStatus.RAISED)
+        .all()
+    )
+
+    if not assessment_flags:
+        return None
+
+    assessor_change_requests: dict[str, list] = {}
+    for change_request in assessment_flags:
+        for field_id in change_request.field_ids:
+            if field_id not in assessor_change_requests:
+                assessor_change_requests[field_id] = []
+
+            assessor_change_requests[field_id].extend([update.justification for update in change_request.updates])
+
+    return assessor_change_requests

@@ -1,6 +1,6 @@
 {% extends "apply/base.html" %}
 
-{% from "apply/partials/contact_details.html" import contact_details %}
+{% from "apply/macros/contact-details.html" import fs_contact_details %}
 
 {% set pageHeading %}Page not found{% endset %}
 
@@ -13,14 +13,7 @@
             <p class="govuk-body">If the web address is correct or you selected a link or a button, contact
                 us to speak to an adviser.</p>
 
-            {{ contact_details(
-                support_desk_apply,
-                "",
-                "",
-                "Monday to Friday",
-                "9am to 5pm"
-                )
-            }}
+            {{ fs_contact_details(support_desk_apply) }}
         </div>
     </div>
 {% endblock content %}

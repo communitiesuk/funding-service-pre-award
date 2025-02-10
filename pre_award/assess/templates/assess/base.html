@@ -1,6 +1,6 @@
 {% extends "govuk_frontend_jinja/template.html" %}
+
 {% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
-{% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
 
 {% set assetPath = url_for('static', filename='assess').rstrip('/') %}
 
@@ -12,18 +12,20 @@
 
 {% block header %}
   {{ govukHeader({
-    homepageUrl: "#"
+    "homepageUrl": "/",
+    "serviceName": "Assess grant applications",
+    "useTudorCrown": true,
   }) }}
 {% endblock header %}
 
 {% block main %}
-<div class="govuk-width-container {{ containerClasses }}">
-  {% block beforeContent %}{% endblock beforeContent %}
-  <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content" role="main"{% if mainLang %} lang="{{ mainLang }}"{% endif %}>
-    {% block content %}{% endblock content %}
-  </main>
-</div>
-{% endblock main %}
+  <div class="govuk-width-container {%- if containerClasses %} {{ containerClasses }}{% endif %}">
+    {% block beforeContent %}{% endblock beforeContent %}
+    <main class="govuk-main-wrapper {%- if mainClasses %} {{ mainClasses }}{% endif %}" id="main-content" {%- if mainLang %} lang="{{ mainLang }}"{% endif %}>
+      {% block content %}{% endblock content %}
+    </main>
+  </div>
+{% endblock %}
 
 {% block footer %}
   {% include "assess/footer.html" %}
@@ -31,15 +33,14 @@
 
 {% block bodyEnd %}
   <!--[if gt IE 8]><!-->
-    <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/govuk-frontend/govuk-frontend-4.7.0.min.js') }}"></script>
+    <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/govuk-frontend/govuk-frontend-4.8.0.min.js') }}"></script>
     <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/js/main.min.js') }}"></script>
   <!--<![endif]-->
-    <!-- Google Tag Manager (noscript) -->
-    {# djlint:off #}
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M5J9Q8HV"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    {# djlint:on #}
-    <!-- End Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager (noscript) -->
+  {# djlint:off #}
+  <noscript>
+      <iframe title="Google Tag Manager" src="https://www.googletagmanager.com/ns.html?id=GTM-M5J9Q8HV" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+  {# djlint:on #}
+  <!-- End Google Tag Manager (noscript) -->
 {% endblock bodyEnd %}

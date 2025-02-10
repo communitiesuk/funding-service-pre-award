@@ -15,17 +15,20 @@
                     sub_criteria_id=sub_criteria.id) }}">
             {{ approval_form.csrf_token }}
             <input type="hidden" name="approve" value="1" />
-            <button type="submit" class="govuk-button primary-button">Approve</button>
-            <a
-                href="{{ url_for(
-                    'assessment_bp.request_changes',
-                    application_id=application_id,
-                    sub_criteria_id=sub_criteria.id,
-                    theme_id=current_theme_id,
-                )}}"
-                class="govuk-button secondary-button">
-                Request changes
-            </a>
+            {{ govukButton({
+                "text": "Approve"
+            }) }}
+            {% set request_changes_url = url_for(
+                'assessment_bp.request_changes',
+                application_id=application_id,
+                sub_criteria_id=sub_criteria.id,
+                theme_id=current_theme_id
+            ) %}
+            {{ govukButton({
+                "text": "Request changes",
+                "classes": "govuk-button--secondary",
+                "href": request_changes_url
+            }) }}
         </form>
         </div>
     </div>

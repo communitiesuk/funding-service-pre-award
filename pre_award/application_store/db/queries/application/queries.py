@@ -261,8 +261,9 @@ def update_application_fields(existing_json_blob, new_json_blob) -> set:
                             {datetime.now(tz=timezone.utc).isoformat(): field_map[field["key"]]}
                         )
                     else:
-                        field["history_log"] = [{datetime.now(tz=timezone.utc).isoformat(): field_map[field["key"]]}]
-
+                        field["history_log"] = [
+                            {datetime.now(tz=timezone.utc).isoformat(): field_map.get(field["key"], None)}
+                        ]
     return changed_fields
 
 
@@ -307,7 +308,8 @@ def submit_application(application_id) -> Applications:  # noqa: C901
 
             # updating row json blob
             update_application_fields(existing_application.jsonb_blob, row["jsonb_blob"])
-            row["workflow_status"] = WorkflowStatus.CHANGE_RECEIVED
+            if existing_application.workflow_status == WorkflowStatus.CHANGE_REQUESTED:
+                row["workflow_status"] = WorkflowStatus.CHANGE_RECEIVED
 
             stmt = postgres_insert(AssessmentRecord).values(row)
 
@@ -433,6 +435,6 @@ def mark_application_with_requested_changes(application_id: str, field_ids: list
                     field["answer"] = False
 
     if application_should_update:
-        application.status = ApplicationStatus.CHANGE_REQUESTED
+        application.status = ApplicationStatus.IN_PROGRESS
 
     db.session.commit()

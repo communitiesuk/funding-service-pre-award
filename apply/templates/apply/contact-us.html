@@ -1,0 +1,21 @@
+{% extends "apply/apply-base.html" %}
+
+{% from "apply/macros/contact-details.html" import fs_contact_details %}
+
+
+{% set pageHeading %}{% trans %}Get help with your application{% endtrans %}{% endset %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            {% if fund %}
+                <p class="govuk-caption-xl">{% trans fund_name=fund.name%}Contact {{ fund_name }}{% endtrans %}</p>
+            {% else %}
+                <p class="govuk-caption-xl">{% trans %}Contact page{% endtrans %}</p>
+            {% endif %}
+
+            <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
+            {{ fs_contact_details(support_desk_apply) }}
+        </div>
+    </div>
+{% endblock content %}

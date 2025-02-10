@@ -1,27 +1,34 @@
 from flask_wtf import FlaskForm
 from wtforms import SelectMultipleField, TextAreaField
-from wtforms.validators import InputRequired, length
+from wtforms.validators import InputRequired, Length
 
 from pre_award.config import Config
 
 
-class RequestChangesForm(FlaskForm):
-    justification = TextAreaField(
-        "Reason for request changes",
-        validators=[
-            length(max=Config.TEXT_AREA_INPUT_MAX_CHARACTERS),
-            InputRequired(message="Provide a reason for requesting changes to this application"),
-        ],
-    )
-    field_ids = SelectMultipleField(
-        "Questions to change",
-        choices=None,
-        validators=[
-            InputRequired(message="Select which question(s) you are requesting changes to"),
-        ],
-    )
+def build_request_changes_form(question_choices):
+    class RequestChangesForm(FlaskForm):
+        field_ids = SelectMultipleField(
+            "Questions to change",
+            choices=question_choices,
+            validators=[
+                InputRequired(message="Select which question(s) you are requesting changes to"),
+            ],
+        )
 
-    def __init__(self, question_choices=None):
-        super().__init__()
+    form = RequestChangesForm()
 
-        self.field_ids.choices = question_choices
+    selected_field_ids = form.field_ids.data or []
+
+    for field_id in question_choices:
+        field_name = f"reason_{field_id}"
+
+        validators = [Length(max=Config.TEXT_AREA_INPUT_MAX_CHARACTERS)]
+        if field_id in selected_field_ids:
+            validators.append(InputRequired(message="Provide a reason for requesting changes to this application"))
+        text_area_field = TextAreaField(
+            label=field_name,
+            validators=validators,
+        )
+        setattr(RequestChangesForm, field_name, text_area_field)
+
+    return RequestChangesForm()

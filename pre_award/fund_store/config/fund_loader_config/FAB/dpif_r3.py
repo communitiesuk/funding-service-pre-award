@@ -88,12 +88,7 @@ LOADER_CONFIG = {
         "assessment_deadline": "2025-05-16T23:59:00",
         "prospectus": "https://www.localdigital.gov.uk/digital-planning/digital-planning-improvement-fund-2024/",
         "privacy_notice": "https://www.gov.uk/guidance/digital-planning-improvement-fund-privacy-notice",
-        "reference_contact_page_over_email": True,
         "contact_email": "digitalplanningteam@communities.gov.uk",
-        "contact_phone": "",
-        "contact_textphone": "",
-        "support_times": "9am to 5pm",
-        "support_days": "Monday to Friday",
         "instructions_json": {
             "en": "You must have received an invitation to apply, which should include the fund's prospectus. If you have not received the prospectus, contact digitalplanningteam@communities.gov.uk",
             "cy": None,
@@ -132,10 +127,6 @@ LOADER_CONFIG = {
         },
         "eligibility_config": {"has_eligibility": False},
         "title_json": {"en": "Round 3", "cy": None},
-        "contact_us_banner_json": {
-            "en": "<p  class='govuk-body'>Contact the Digital Planning Improvement Fund if you have any questions.</p>",
-            "cy": None,
-        },
     },
     "base_path": 1047,
 }

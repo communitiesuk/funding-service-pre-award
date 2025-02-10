@@ -13,9 +13,7 @@ import redis
 from fsd_utils import CommonConfig, configclass
 from fsd_utils.authentication.config import SupportedApp
 
-from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
-    fund_round_to_assessment_mapping,
-)
+from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import fund_round_to_assessment_mapping
 
 SafeAppConfig = namedtuple("SafeAppConfig", ("login_url", "logout_endpoint", "service_title"))
 

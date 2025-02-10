@@ -2,8 +2,8 @@
 {% from "assess/macros/logout_partial.html" import logout_partial %}
 {% macro tag_header(backLinkTitle, backLinkHref, fund_round, sso_logout_url) %}
     <header role="banner" data-module="govuk-header">
-        <nav class="govuk-width-container govuk-header__navigation">
-            <div class="govuk-phase-banner flex-parent-element">
+        <nav class="govuk-width-container govuk-header__navigation govuk-!-padding-top-3">
+            <div class="flex-parent-element">
                 <p class="govuk-!-text-align-left govuk-!-margin-left-3 flex-parent-element flexed-element-margins-collapse">
                     {{ govukBackLink({'href': backLinkHref, 'html': 'Back to <b>'+backLinkTitle+'</b>', 'attributes': {'data-qa': 'back-to-assessment-dashboard'} }) }}
                 </p>

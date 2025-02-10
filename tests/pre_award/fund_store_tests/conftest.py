@@ -143,13 +143,7 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
                 "assessment_deadline": "2024-02-28 12:00:00",
                 "prospectus": "http://google.com",
                 "privacy_notice": "http://google.com",
-                "reference_contact_page_over_email": False,
-                "contact_us_banner_json": {"en": "", "cy": ""},
                 "contact_email": "contact@example.com",
-                "contact_phone": "01234567890",
-                "contact_textphone": "1234",
-                "support_times": "8am - 12:30pm",
-                "support_days": "Monday and Tuesday",
                 "instructions_json": {"en": "Instructions to fill out the form"},
                 "project_name_field_id": "abc123",
                 "feedback_link": "www.feedback.link",
@@ -233,10 +227,6 @@ def mock_get_fund_round(mocker):
         "prospectus": "",
         "privacy_notice": "",
         "contact_email": "",
-        "contact_phone": "",
-        "contact_textphone": "",
-        "support_days": "",
-        "support_times": "",
     }
     mock_round: Round = Round(title_json={"en": "Round 1"}, short_name="RND1", **round_config)
     mocker.patch("pre_award.fund_store.api.routes.get_all_funds", return_value=[mock_fund])

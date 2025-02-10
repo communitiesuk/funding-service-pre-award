@@ -37,6 +37,10 @@ class TestUserValidation:
             "pre_award.apply.default.application_routes.determine_round_status",
             return_value=RoundStatus(False, False, True),
         )
+        mocker.patch(
+            "pre_award.apply.default.application_routes.prepare_change_requests_metadata",
+            return_value=[],
+        )
         expected_redirect_url = DefaultConfig.FORM_REHYDRATION_URL.format(rehydration_token=self.REHYDRATION_TOKEN)
         response = apply_test_client.get(f"/continue_application/{self.TEST_ID}", follow_redirects=False)
         assert 302 == response.status_code, "Incorrect status code"

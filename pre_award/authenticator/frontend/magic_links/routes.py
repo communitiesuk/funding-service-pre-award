@@ -115,7 +115,6 @@ def landing(link_id):
             round_prospectus=round_prospectus,
             migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
             support_desk_apply=Config.SUPPORT_DESK_APPLY,
-            link_to_contact_us_page=round_data.reference_contact_page_over_email,
             has_previous_applications=has_previous_applications,
             has_eligibility=round_data.has_eligibility,
         )

@@ -2,6 +2,7 @@
 -%}
 {% from "authenticator/partials/migration_banner.html" import migration_banner %}
 {% extends "authenticator/base.html" %}
+{% from "apply/macros/contact-details.html" import fs_contact_details %}
 
 {% block content %}
 
@@ -68,20 +69,11 @@
         {% trans %}Read our privacy notice for more information.{% endtrans %}
         </a>
     </p>
-
-    <h2 class="govuk-heading-m">
-        {% trans %}Get help{% endtrans %}
+    <h2 class="govuk-heading govuk-heading-s">
+        {% trans %}Get help with your application{% endtrans %}
     </h2>
-    <p>
-        {% if link_to_contact_us_page %}
-            {% trans %}If you have questions about the form or the fund,{% endtrans %}
-            <a class="govuk-link" href="{{ contact_us_url }}">{% trans %}contact us.{% endtrans %}</a>
-        {% else %}
-        {% trans %}If you have any questions about the form or the fund, contact us through our {% endtrans %}
-        <a class="govuk-link" href="{{ support_desk_apply }}" target="_blank">{% trans %}support desk{% endtrans %}</a>.
-        {% endif %}
-    </p>
-    <p>{% trans %}Do not send any applications or attachments through the support desk. We'll only accept applications through this service.{% endtrans %}</p>
+
+    {{ fs_contact_details(support_desk_apply) }}
   </div>
 </div>
 

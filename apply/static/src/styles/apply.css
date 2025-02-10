@@ -1,4 +1,27 @@
-/* TODO Remove once frontend jinja macros updated and we can use macros for headers - see apply-base.html */
-.header-pointer-events-none {
+/* Custom CSS for Apply */
+
+/* Stops the gov.uk and logo in the header from looking like a link */
+a.govuk-header__link--homepage {
     pointer-events: none;
   }
+
+/* Makes the signout button in the header look like a link */
+ .app-header__button--signout{
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  color: inherit;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+ .app-header__button--signout:hover {
+  background-color: #000000;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+}

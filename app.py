@@ -8,6 +8,7 @@ from flask.json.provider import DefaultJSONProvider
 from flask_assets import Environment
 from flask_babel import Babel, gettext, pgettext
 from flask_compress import Compress
+from flipper import FeatureFlagClient, MemoryFeatureFlagStore
 
 from common.utils.filters import datetime_format_respect_lang
 
@@ -121,6 +122,9 @@ def create_app() -> Flask:  # noqa: C901
         initialise_toggles_redis_store(flask_app)
         toggle_client = create_toggles_client()
         load_toggles(Config.FEATURE_CONFIG, toggle_client)
+    else:
+        toggle_client = FeatureFlagClient(MemoryFeatureFlagStore())
+        load_toggles(Config.FEATURE_CONFIG, toggle_client)
 
     Babel(flask_app, locale_selector=get_lang)
     LanguageSelector(flask_app)
@@ -152,6 +156,7 @@ def create_app() -> Flask:  # noqa: C901
     flask_app.jinja_env.trim_blocks = True
     flask_app.jinja_env.lstrip_blocks = True
     flask_app.jinja_env.add_extension("jinja2.ext.i18n")
+    flask_app.jinja_env.add_extension("jinja2.ext.do")
     flask_app.jinja_env.globals["get_lang"] = get_lang
     flask_app.jinja_env.globals["pgettext"] = pgettext
 
@@ -204,6 +209,7 @@ def create_app() -> Flask:  # noqa: C901
     # These are required to associated errorhandlers and before/after request decorators with their blueprints
     import pre_award.apply.default.error_routes  # noqa
     import pre_award.assess.blueprint_middleware  # noqa
+    from apply.routes import apply_bp
     from pre_award.apply.default.account_routes import account_bp
     from pre_award.apply.default.application_routes import application_bp
     from pre_award.apply.default.content_routes import content_bp
@@ -222,7 +228,6 @@ def create_app() -> Flask:  # noqa: C901
     from pre_award.authenticator.frontend.sso.routes import sso_bp
     from pre_award.authenticator.frontend.user.routes import user_bp
     from pre_award.common.error_routes import internal_server_error, not_found
-    from apply.routes import apply_bp
 
     flask_app.register_error_handler(404, not_found)
     flask_app.register_error_handler(500, internal_server_error)
@@ -389,8 +394,8 @@ def create_app() -> Flask:  # noqa: C901
                         round=round.short_name,
                     ),
                     contact_us_url=url_for(
-                        "content_routes.contact_us",
-                        fund=fund.short_name,
+                        "apply_routes.contact_us",
+                        fund_short_name=fund.short_name,
                         round=round.short_name,
                     ),
                     privacy_url=url_for(
@@ -414,7 +419,7 @@ def create_app() -> Flask:  # noqa: C901
             )
         return dict(
             accessibility_statement_url=url_for("content_routes.accessibility_statement"),
-            contact_us_url=url_for("content_routes.contact_us"),
+            contact_us_url=url_for("apply_routes.contact_us"),
             privacy_url=url_for("content_routes.privacy"),
             feedback_url=url_for("content_routes.feedback"),
         )

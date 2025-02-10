@@ -33,6 +33,11 @@ This service depends on:
 * Pre-commit hooks can either be installed using pip `pip install pre-commit` or homebrew (for Mac users) `brew install pre-commit`
 * From your checkout directory run `pre-commit install` to set up the git hook scripts
 
+### MyPy
+This repository includes `mypy` as a pre-commit check to run static type checking, see [mypy.readthedocs.io](https://mypy.readthedocs.io/en/stable/index.html) for details.
+
+It can be run manually with `uv run mypy`
+
 
 ## Data
 
