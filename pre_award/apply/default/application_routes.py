@@ -280,9 +280,7 @@ def tasklist(application_id):
         "completed_status": ApplicationStatus.COMPLETED.name,
         "submitted_status": ApplicationStatus.SUBMITTED.name,
         "change_requested_status": ApplicationStatus.CHANGE_REQUESTED.name,
-        "has_received_change_requests": any(
-            form["status"] == ApplicationStatus.CHANGE_REQUESTED.name for form in application.forms
-        ),
+        "is_resubmission": False if application.date_submitted == "null" else True,
         "has_section_feedback": round_data.feedback_survey_config.has_section_feedback,
         "number_of_forms": len(application.forms)
         + sum(

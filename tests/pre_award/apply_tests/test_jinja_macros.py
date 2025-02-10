@@ -18,7 +18,7 @@ def test_tasklist_section_without_change_requests(app: Flask) -> None:
             },
             application_meta_data={
                 "application_id": "12345",
-                "has_received_change_requests": False,
+                "is_resubmission": False,
                 "change_requested_status": "CHANGE_REQUESTED",
             },
             application_status=get_formatted,
@@ -46,7 +46,7 @@ def test_tasklist_section_with_change_requests(app: Flask) -> None:
             },
             application_meta_data={
                 "application_id": "12345",
-                "has_received_change_requests": True,
+                "is_resubmission": True,
                 "change_requested_status": "CHANGE_REQUESTED",
             },
             application_status=get_formatted,
