@@ -101,7 +101,7 @@ dev = [
     "beautifulsoup4==4.12.3",
     "click==8.1.7",
     "colored==2.2.4",
-    "debugpy==1.8.11",
+    "debugpy==1.8.12",
     "deepdiff==8.1.1",
     "dparse==0.6.4",
     "invoke==2.2.0",
