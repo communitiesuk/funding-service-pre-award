@@ -95,6 +95,7 @@ mccabe.max-complexity = 12
 
 [tool.uv]
 
+
 [dependency-groups]
 dev = [
     "asserts==0.13.1",
@@ -133,13 +134,15 @@ packages = ["apply", "common", "data"]
 [[tool.mypy.overrides]]
 module = [
     "flask_babel",
-    "fsd_utils.*"
+    "fsd_utils.*",
 ]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = [
     "pre_award.*",
+    "static_assets",
+    "app",
     "fsd_utils.*"
 ]
 ignore_errors = true

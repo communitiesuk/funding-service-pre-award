@@ -21,6 +21,8 @@ class UnitTestConfig(Config):
     ACCOUNT_STORE_API_HOST = CommonConfig.TEST_ACCOUNT_STORE_API_HOST
     FUND_STORE_API_HOST = Config.TEST_FUND_STORE_API_HOST
 
+    SQLALCHEMY_ECHO = False
+
     # Security
     FORCE_HTTPS = False
 

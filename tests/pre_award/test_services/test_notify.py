@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 
 import pytest
 import responses
@@ -244,9 +245,8 @@ class TestNotificationService:
                         "template_id": "e41cc73d-6947-4cbb-aedd-4ab2f470a2d2",
                         "personalisation": {
                             "name of fund": "test fund",
-                            "application reference": "app-123",
                             "round name": "test round",
-                            "application deadline": "2025-01-01T10:00:00",
+                            "application deadline": "01 January 2025 at 10:00am",
                         },
                         "reference": "abc123",
                     }
@@ -258,9 +258,8 @@ class TestNotificationService:
         resp = get_notification_service().send_application_deadline_reminder_email(
             "test@test.com",
             fund_name="test fund",
-            application_reference="app-123",
             round_name="test round",
-            deadline="2025-01-01T10:00:00",
+            deadline=datetime(2025, 1, 1, 10),
             contact_help_email="contact@test.com",
             govuk_notify_reference="abc123",
         )
