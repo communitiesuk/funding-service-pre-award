@@ -1,4 +1,4 @@
-def test_healthchecks_endpoint(flask_test_client):
+def test_healthchecks_endpoint(flask_test_client, session):
     response = flask_test_client.get("/healthcheck")
 
     expected_dict = {

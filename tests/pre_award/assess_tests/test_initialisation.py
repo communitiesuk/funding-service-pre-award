@@ -22,9 +22,3 @@ def test_flask_initiates(assess_test_client, mock_get_funds):
     )
     response = assess_test_client.get("/", follow_redirects=True)
     assert response.status_code == 200
-
-
-def testHealthcheckRoute(assess_test_client, mock_get_funds):
-    result = assess_test_client.get("/healthcheck")
-    assert result.status_code == 200, "Unexpected status code"
-    assert {"check_flask_running": "OK"} in result.json["checks"]
