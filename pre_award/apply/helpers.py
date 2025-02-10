@@ -134,7 +134,7 @@ def format_rehydrate_payload(
 
         form_change_requests = {
             field_id: messages for (field_id, messages) in change_requests.items() if field_id in existing_field_ids
-        }
+        } or None
 
     formatted_data = {}
 
