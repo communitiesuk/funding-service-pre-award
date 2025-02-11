@@ -343,3 +343,38 @@ class TestNotificationService:
         )
         assert resp == Notification(id=uuid.UUID("00000000-0000-0000-0000-000000000006"))
         assert request_matcher.call_count == 1
+
+    @responses.activate
+    def test_send_change_received_email(self, app):
+        request_matcher = responses.post(
+            url="https://api.notifications.service.gov.uk/v2/notifications/email",
+            status=201,
+            match=[
+                matchers.json_params_matcher(
+                    {
+                        "email_address": "test@test.com",
+                        "template_id": NotificationService.CHANGE_RECEIVED_TEMPLATE_ID,
+                        "personalisation": {
+                            "name of fund": "COF-EOI",
+                            "round name": "test round",
+                            "sign in link": "https://prospectus",
+                            "contact email": "contact@test.com",
+                        },
+                        "email_reply_to_id": "10668b8d-9472-4ce8-ae07-4fcc7bf93a9d",
+                        "reference": "abc123",
+                    }
+                )
+            ],
+            json={"id": "00000000-0000-0000-0000-000000000007"},  # partial GOV.UK Notify response
+        )
+
+        resp = get_notification_service().send_change_received_email(
+            "test@test.com",
+            fund_name="COF-EOI",
+            round_name="test round",
+            assess_url="https://prospectus",
+            contact_help_email="contact@test.com",
+            govuk_notify_reference="abc123",
+        )
+        assert resp == Notification(id=uuid.UUID("00000000-0000-0000-0000-000000000007"))
+        assert request_matcher.call_count == 1

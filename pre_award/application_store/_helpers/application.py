@@ -3,6 +3,7 @@ from operator import itemgetter
 from flask import current_app
 from fsd_utils import Decision
 
+from data.models import Fund as FundModel
 from pre_award.application_store.config.key_report_mappings.mappings import (
     ROUND_ID_TO_KEY_REPORT_MAPPING,
 )
@@ -10,6 +11,8 @@ from pre_award.application_store.db.queries.application import create_qa_base64f
 from pre_award.application_store.db.queries.reporting.queries import (
     map_application_key_fields,
 )
+from pre_award.config import Config
+from pre_award.db import db
 from services.notify import NotificationError, get_notification_service
 
 
@@ -45,6 +48,7 @@ def send_submit_notification(
     del application_data["forms"]
     full_name = account.full_name
 
+    fund = db.session.query(FundModel).filter(FundModel.id == application.fund_id).one()
     questions = application_data.get("questions_file")
     submission_date = application_data.get("date_submitted")
     fund_name = application_data.get("fund_name")
@@ -112,6 +116,15 @@ def send_submit_notification(
                 return
     else:
         try:
+            if submission_date:
+                notification = get_notification_service().send_change_received_email(
+                    email_address=account.email,
+                    fund_name=fund_name,
+                    round_name=round_name,
+                    assess_url=Config.ASSESS_HOST
+                    + f"/assess/fund_dashboard/{fund.short_name}/{round_data.short_name}/",
+                    contact_help_email=round_data.contact_email,
+                )
             notification = get_notification_service().send_submit_application_email(
                 email_address=account.email,
                 language=language,
