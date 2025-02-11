@@ -36,23 +36,21 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
 
-  pre_deploy_tests:
+  check_db_migrations:
     needs: [setup]
     uses: communitiesuk/funding-service-design-workflows/.github/workflows/pre-deploy.yml@main
     with:
       postgres_unit_testing: false
       check_db_migrations: ${{ needs.setup.outputs.jobs_to_run == '[]'}}
-      assets_required: true
-
-  type_checks:
-    if: ${{ needs.setup.outputs.jobs_to_run == '[]' }}
+      assets_required: false
+  pre_deploy_tests:
     needs: [setup]
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up Python
-        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5
         with:
           python-version: 3.10.x
       - name: Install uv
@@ -61,7 +59,16 @@ jobs:
           enable-cache: true
       - name: install dependencies
         run: uv sync
+      - name: build static assets
+        env:
+          FLASK_ENV: "development"
+        run: uv run python build.py
+      - name: run unit tests
+        env:
+          GOV_NOTIFY_API_KEY: ${{ secrets.GOV_NOTIFY_API_KEY }}
+        run: uv run pytest -n 2 .
       - name: run type checking
+        if: ${{ needs.setup.outputs.jobs_to_run == '[]' }}
         run: uv run mypy
 
   paketo_build:
