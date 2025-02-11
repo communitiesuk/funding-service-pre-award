@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from apply.tasks import send_incomplete_application_reminder_impl
+from apply.tasks import send_application_deadline_reminders_impl
 from pre_award.application_store.db.models.application.enums import Status
 from tests.integration.seeding import seed_account, seed_application, seed_fund, seed_round
 from tests.pre_award.utils import AnyStringMatching
@@ -17,7 +17,7 @@ class TestSendIncompleteApplicationReminderTask:
         self, app, session, caplog, mock_notification_service_calls
     ):
         with app.app_context():
-            send_incomplete_application_reminder_impl()
+            send_application_deadline_reminders_impl()
 
         assert caplog.messages == [
             "Starting to send incomplete application reminders",
@@ -40,7 +40,7 @@ class TestSendIncompleteApplicationReminderTask:
             account2 = seed_account(session)
             _ = seed_application(session, fund, round, account2, started_at=datetime(2020, 1, 2))
 
-            send_incomplete_application_reminder_impl()
+            send_application_deadline_reminders_impl()
 
             assert len(mock_notification_service_calls) == 2
 
@@ -68,7 +68,7 @@ class TestSendIncompleteApplicationReminderTask:
             _ = seed_application(session, fund, round, account, started_at=datetime(2020, 1, 2))
             _ = seed_application(session, fund, round, account, started_at=datetime(2020, 1, 3))
 
-            send_incomplete_application_reminder_impl()
+            send_application_deadline_reminders_impl()
 
             assert len(mock_notification_service_calls) == 1
 
@@ -93,7 +93,7 @@ class TestSendIncompleteApplicationReminderTask:
             account = seed_account(session)
             _ = seed_application(session, fund, round, account)
 
-            send_incomplete_application_reminder_impl()
+            send_application_deadline_reminders_impl()
 
             assert len(mock_notification_service_calls) == 0
 
@@ -120,7 +120,7 @@ class TestSendIncompleteApplicationReminderTask:
             account3 = seed_account(session)
             _ = seed_application(session, fund, round, account3, status=Status.CHANGE_RECEIVED)
 
-            send_incomplete_application_reminder_impl()
+            send_application_deadline_reminders_impl()
 
             assert len(mock_notification_service_calls) == 1
 
