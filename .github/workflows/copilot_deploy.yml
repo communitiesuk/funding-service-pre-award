@@ -40,7 +40,7 @@ jobs:
     needs: [setup]
     uses: communitiesuk/funding-service-design-workflows/.github/workflows/pre-deploy.yml@main
     with:
-      postgres_unit_testing: true
+      postgres_unit_testing: false
       check_db_migrations: ${{ needs.setup.outputs.jobs_to_run == '[]'}}
       assets_required: true
 

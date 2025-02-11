@@ -132,13 +132,13 @@ class TestSendAppOnClosure:
         mocker,
         client,
         seed_application_records,
-        _db,
+        db,
         unique_fund_round,
         mocked_get_fund,
     ):
         seed_application_records[0].status = "IN_PROGRESS"
-        _db.session.add(seed_application_records[0])
-        _db.session.commit()
+        db.session.add(seed_application_records[0])
+        db.session.commit()
 
         mocker.patch(
             "pre_award.application_store.scripts.send_application_on_closure.get_fund_round",

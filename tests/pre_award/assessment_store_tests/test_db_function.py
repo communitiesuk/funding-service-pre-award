@@ -47,18 +47,18 @@ def test_select_field_by_id(seed_application_records):
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_non_blob_columns_mutable(_db, seed_application_records):
+def test_non_blob_columns_mutable(db, seed_application_records):
     """test_non_blob_columns_mutable Tests we haven't made the whole table
     immutable by accident when making the json blob immutable."""
 
     try:
         picked_row = get_assessment_record(seed_application_records[0]["application_id"])
         picked_row.workflow_status = "IN_PROGRESS"
-        _db.session.commit()
+        db.session.commit()
     except sqlalchemy.exc.InternalError as e:
         raise AssertionError from e
     finally:
-        _db.session.rollback()
+        db.session.rollback()
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
@@ -331,17 +331,17 @@ def test_get_sub_criteria_to_has_comment_map(seed_application_records):
     ],
 )
 @pytest.mark.apps_to_insert(test_input_data)
-def test_update_workflow_status_on_insert(_db, insertion_object, seed_application_records):
+def test_update_workflow_status_on_insert(db, insertion_object, seed_application_records):
     application_id = seed_application_records[0]["application_id"]
     assessment_record = (
-        _db.session.query(AssessmentRecord).where(AssessmentRecord.application_id == application_id).first()
+        db.session.query(AssessmentRecord).where(AssessmentRecord.application_id == application_id).first()
     )
 
     assert assessment_record.workflow_status == Status.NOT_STARTED
 
     insertion_object.application_id = application_id
-    _db.session.add(insertion_object)
-    _db.session.commit()
+    db.session.add(insertion_object)
+    db.session.commit()
 
     assert assessment_record.workflow_status == Status.IN_PROGRESS
 

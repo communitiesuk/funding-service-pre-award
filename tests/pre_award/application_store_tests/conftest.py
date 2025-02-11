@@ -3,7 +3,6 @@ from typing import Any
 from uuid import uuid4
 
 import pytest
-from flask import Flask
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
@@ -22,13 +21,6 @@ from tests.pre_award.application_store_tests.helpers import (
 )
 
 
-@pytest.fixture(scope="session")
-def app(request) -> Flask:
-    app = create_app()
-    request.getfixturevalue("mock_redis")
-    yield app
-
-
 class _FlaskClientWithHost(FlaskClient):
     def open(
         self,
@@ -45,7 +37,7 @@ class _FlaskClientWithHost(FlaskClient):
 
 
 @pytest.fixture(scope="function")
-def flask_test_client():
+def flask_test_client(db):
     app = create_app()
     app.test_client_class = _FlaskClientWithHost
     yield app.test_client()
@@ -101,8 +93,7 @@ def create_app_with_blank_forms(app_to_create: dict) -> Applications:
 def seed_application_records(
     request,
     app,
-    clear_test_data,
-    enable_preserve_test_data,
+    db,
     unique_fund_round,
 ):
     """
@@ -188,9 +179,7 @@ def add_org_data_for_reports(application, unique_append, client):
 
 
 @pytest.fixture(scope="function")
-def seed_data_multiple_funds_rounds(
-    request, mocker, app, clear_test_data, enable_preserve_test_data, flask_test_client
-):
+def seed_data_multiple_funds_rounds(request, mocker, app, db, flask_test_client):
     """
     Alternative to seed_application_records above that allows you to specify
     a set of funds/rounds and how many applications per round to allow

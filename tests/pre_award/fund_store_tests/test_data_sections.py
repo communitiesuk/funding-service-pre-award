@@ -49,7 +49,7 @@ def test_get_assessment_sections(seed_dynamic_data):
     assert len(sections[0].children[0].children) == 0
 
 
-def test_load_application_sections(clear_test_data):
+def test_load_application_sections(db):
     insert_fund_data(fund_config)
     upsert_round_data(rounds_config)
 

@@ -34,7 +34,7 @@ tags_incorrect_format = [
 ]
 
 
-def test_insert_tags(_db, clear_test_data, get_tag_types):
+def test_insert_tags(db, get_tag_types):
     fund_id_test = str(uuid4())
     round_id_test = str(uuid4())
     tag_type_ids = [t["id"] for t in get_tag_types]
@@ -66,7 +66,7 @@ def test_insert_tags(_db, clear_test_data, get_tag_types):
     assert [tag.value in tag_values for tag in result]
 
 
-def test_insert_tags_fails_for_tag_with_special_chars(_db, clear_test_data, get_tag_types):
+def test_insert_tags_fails_for_tag_with_special_chars(db, get_tag_types):
     tag_type_ids = [t["id"] for t in get_tag_types]
     tag_special_chars = [
         {
@@ -80,10 +80,10 @@ def test_insert_tags_fails_for_tag_with_special_chars(_db, clear_test_data, get_
     with pytest.raises(ValueError) as e_info:
         insert_tags(tag_special_chars, fund_id_test, round_id_test)
     assert "The value should only contain apostrophes, hyphens, letters, digits, and spaces." in str(e_info.value)
-    _db.session.remove()
+    db.session.remove()
 
 
-def test_insert_tags_for_same_fund_round_twice_fails(_db, clear_test_data, get_tag_types):
+def test_insert_tags_for_same_fund_round_twice_fails(db, get_tag_types):
     fund_id_test = str(uuid4())
     round_id_test = str(uuid4())
     tag_type_ids = [t["id"] for t in get_tag_types]
@@ -100,10 +100,10 @@ def test_insert_tags_for_same_fund_round_twice_fails(_db, clear_test_data, get_t
         insert_tags(tags_correct_format, fund_id_test, round_id_test)
 
     assert "duplicate key value violates" in str(e_info.value)
-    _db.session.remove()
+    db.session.remove()
 
 
-def test_insert_duplicate_tags_same_payload_fails(_db, clear_test_data, get_tag_types):
+def test_insert_duplicate_tags_same_payload_fails(db, get_tag_types):
     fund_id_test = str(uuid4())
     round_id_test = str(uuid4())
     tag_type_ids = [t["id"] for t in get_tag_types]
@@ -124,10 +124,10 @@ def test_insert_duplicate_tags_same_payload_fails(_db, clear_test_data, get_tag_
         insert_tags(same_tags_with_different_cases, fund_id_test, round_id_test)
 
     assert "duplicate key value violates" in str(e_info.value)
-    _db.session.remove()
+    db.session.remove()
 
 
-def test_insert_duplicate_tags_not_case_sensitive_fails(_db, clear_test_data, get_tag_types):
+def test_insert_duplicate_tags_not_case_sensitive_fails(db, get_tag_types):
     fund_id_test = str(uuid4())
     round_id_test = str(uuid4())
     tag_type_ids = [t["id"] for t in get_tag_types]
@@ -148,20 +148,20 @@ def test_insert_duplicate_tags_not_case_sensitive_fails(_db, clear_test_data, ge
         insert_tags(same_tags_with_different_cases, fund_id_test, round_id_test)
 
     assert "duplicate key value violates" in str(e_info.value)
-    _db.session.remove()
+    db.session.remove()
 
 
-def test_insert_tags_bad_tag_format(_db, clear_test_data):
+def test_insert_tags_bad_tag_format(db):
     fund_id_test = str(uuid4())
     round_id_test = str(uuid4())
     with pytest.raises(Exception) as e_info:
         insert_tags(tags_incorrect_format, fund_id_test, round_id_test)
 
     assert "'NoneType' object has no attribute 'strip" in str(e_info.value)
-    _db.session.remove()
+    db.session.remove()
 
 
-def test_insert_tag_with_unknown_type_id_fails(_db, clear_test_data):
+def test_insert_tag_with_unknown_type_id_fails(db):
     fund_id_test = str(uuid4())
     round_id_test = str(uuid4())
     tags_unknown_tag_type = [
@@ -177,10 +177,10 @@ def test_insert_tag_with_unknown_type_id_fails(_db, clear_test_data):
     assert "ForeignKeyViolation" in str(e_info.value)
     # This operation cleans up the session resources and ensures
     # that the session is properly closed following the raised error.
-    _db.session.remove()
+    db.session.remove()
 
 
-def test_get_tags(_db, clear_test_data, get_tag_types):
+def test_get_tags(db, get_tag_types):
     fund_id_test = str(uuid4())
     round_id_test = str(uuid4())
     tag_type_ids = [t["id"] for t in get_tag_types]
@@ -216,7 +216,7 @@ def test_get_tags(_db, clear_test_data, get_tag_types):
     )
 
 
-def test_deactivate_tags(app, _db, clear_test_data, seed_tags):
+def test_deactivate_tags(app, db, seed_tags):
     seeded_tag = seed_tags[0]
     fund_id_test = seeded_tag["fund_id"]
     round_id_test = seeded_tag["round_id"]
@@ -252,7 +252,7 @@ def test_deactivate_tags(app, _db, clear_test_data, seed_tags):
         assert result.data.decode("utf-8") == ""
 
 
-def test_deactivate_tags_fails_for_non_existent(app, _db, clear_test_data, seed_tags):
+def test_deactivate_tags_fails_for_non_existent(app, db, seed_tags):
     seeded_tag = seed_tags[0]
     fund_id_test = seeded_tag["fund_id"]
     round_id_test = seeded_tag["round_id"]

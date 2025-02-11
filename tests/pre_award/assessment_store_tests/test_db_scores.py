@@ -22,7 +22,7 @@ from tests.pre_award.assessment_store_tests.conftest import test_input_data
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_create_scores_for_application_sub_crit(_db, seed_application_records):
+def test_create_scores_for_application_sub_crit(db, seed_application_records):
     """test_create_scores_for_application_sub_crit Tests we can create score
     records in the scores table in the appropriate format."""
 
@@ -162,7 +162,7 @@ def test_get_progress_for_applications(seed_application_records):
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_get_sub_criteria_to_latest_score_map(_db, seed_application_records):
+def test_get_sub_criteria_to_latest_score_map(db, seed_application_records):
     application_id = seed_application_records[0]["application_id"]
     sub_criteria_1_id = str(uuid.uuid4())
     sub_criteria_2_id = str(uuid.uuid4())
@@ -222,8 +222,8 @@ def test_get_sub_criteria_to_latest_score_map(_db, seed_application_records):
             user_id=user_id,
         ),
     ]
-    _db.session.add_all(scores)
-    _db.session.commit()
+    db.session.add_all(scores)
+    db.session.commit()
 
     result = get_sub_criteria_to_latest_score_map(str(application_id))
 
@@ -249,7 +249,7 @@ def test_get_scoring_system(seed_scoring_system):
         assert returned_scoring_system["round_id"] == round_id
 
 
-def test_all_change_requests_accepted(_db):
+def test_all_change_requests_accepted(db):
     application_id = uuid.uuid4()
     sub_criteria_1_id = str(uuid.uuid4())
     user_id = str(uuid.uuid4())
@@ -288,16 +288,16 @@ def test_all_change_requests_accepted(_db):
         is_change_request=True,
     )
 
-    _db.session.add(application)
-    _db.session.add(a_score)
-    _db.session.add(a_change_request)
-    _db.session.commit()
+    db.session.add(application)
+    db.session.add(a_score)
+    db.session.add(a_change_request)
+    db.session.commit()
 
     check_all_change_requests_accepted(application_id)
 
 
 @pytest.fixture
-def setup_application_with_requests_and_scores(_db):
+def setup_application_with_requests_and_scores(db):
     def _create_app_and_data(
         score_data=None,
         flag_data=None,
@@ -318,12 +318,12 @@ def setup_application_with_requests_and_scores(_db):
             asset_type="an_asset_type",
             jsonb_blob={},
         )
-        _db.session.add(application)
-        _db.session.flush()
+        db.session.add(application)
+        db.session.flush()
 
         if score_data:
             for sub_criteria_id, score_value in score_data:
-                _db.session.add(
+                db.session.add(
                     Score(
                         application_id=application_id,
                         sub_criteria_id=sub_criteria_id,
@@ -336,7 +336,7 @@ def setup_application_with_requests_and_scores(_db):
 
         if flag_data:
             for sections in flag_data:
-                _db.session.add(
+                db.session.add(
                     AssessmentFlag(
                         application_id=application_id,
                         sections_to_flag=sections,
@@ -348,7 +348,7 @@ def setup_application_with_requests_and_scores(_db):
                     )
                 )
 
-        _db.session.commit()
+        db.session.commit()
         return application_id
 
     return _create_app_and_data
@@ -362,7 +362,7 @@ def setup_application_with_requests_and_scores(_db):
     ],
 )
 def test_single_request_with_parametrized_score(
-    _db, setup_application_with_requests_and_scores, score_value, expected_result
+    setup_application_with_requests_and_scores, score_value, expected_result
 ):
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(
@@ -373,7 +373,7 @@ def test_single_request_with_parametrized_score(
     assert result == expected_result
 
 
-def test_multiple_requests_all_accepted(_db, setup_application_with_requests_and_scores):
+def test_multiple_requests_all_accepted(db, setup_application_with_requests_and_scores):
     sub_criteria_1_id = str(uuid.uuid4())
     sub_criteria_2_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(
@@ -390,7 +390,7 @@ def test_multiple_requests_all_accepted(_db, setup_application_with_requests_and
     assert result is True
 
 
-def test_multiple_change_requests_one_section_accepted(_db, setup_application_with_requests_and_scores):
+def test_multiple_change_requests_one_section_accepted(db, setup_application_with_requests_and_scores):
     sub_criteria_1_id = str(uuid.uuid4())
     sub_criteria_2_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(
@@ -406,7 +406,7 @@ def test_multiple_change_requests_one_section_accepted(_db, setup_application_wi
     assert result is False
 
 
-def test_change_request_multiple_sections_none_accepted(_db, setup_application_with_requests_and_scores):
+def test_change_request_multiple_sections_none_accepted(db, setup_application_with_requests_and_scores):
     sub_criteria_1_id = str(uuid.uuid4())
     sub_criteria_2_id = str(uuid.uuid4())
     sub_criteria_3_id = str(uuid.uuid4())
@@ -419,7 +419,7 @@ def test_change_request_multiple_sections_none_accepted(_db, setup_application_w
     assert result is False
 
 
-def test_change_request_multiple_sections_all_accepted(_db, setup_application_with_requests_and_scores):
+def test_change_request_multiple_sections_all_accepted(db, setup_application_with_requests_and_scores):
     sub_criteria_1_id = str(uuid.uuid4())
     sub_criteria_2_id = str(uuid.uuid4())
     sub_criteria_3_id = str(uuid.uuid4())
@@ -435,7 +435,7 @@ def test_change_request_multiple_sections_all_accepted(_db, setup_application_wi
     assert result is True
 
 
-def test_approve_sub_criteria_resolves_change_request(_db, setup_application_with_requests_and_scores):
+def test_approve_sub_criteria_resolves_change_request(db, setup_application_with_requests_and_scores):
     section_1 = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[section_1], [section_1]])
 
@@ -447,7 +447,7 @@ def test_approve_sub_criteria_resolves_change_request(_db, setup_application_wit
     assert all(cr.latest_status == FlagStatus.RESOLVED for cr in change_requests)
 
 
-def test_approve_sub_criteria_creates_score(_db, setup_application_with_requests_and_scores):
+def test_approve_sub_criteria_creates_score(db, setup_application_with_requests_and_scores):
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id]])
 
@@ -455,13 +455,13 @@ def test_approve_sub_criteria_creates_score(_db, setup_application_with_requests
         application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()), message="test"
     )
 
-    scores = _db.session.query(Score).filter_by(application_id=application_id, sub_criteria_id=sub_criteria_id).all()
+    scores = db.session.query(Score).filter_by(application_id=application_id, sub_criteria_id=sub_criteria_id).all()
     assert len(scores) == 1
     assert scores[0].score == 1
     assert scores[0].justification == "test"
 
 
-def test_approve_sub_criteria_updates_application_status(_db, setup_application_with_requests_and_scores):
+def test_approve_sub_criteria_updates_application_status(db, setup_application_with_requests_and_scores):
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id]])
 
@@ -469,13 +469,11 @@ def test_approve_sub_criteria_updates_application_status(_db, setup_application_
         application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()), message="test"
     )
 
-    application = _db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
+    application = db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
     assert application.workflow_status == ApplicationStatus.IN_PROGRESS
 
 
-def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(
-    _db, setup_application_with_requests_and_scores
-):
+def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(setup_application_with_requests_and_scores, db):
     sub_criteria_id_1 = str(uuid.uuid4())
     sub_criteria_id_2 = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id_1], [sub_criteria_id_2]])
@@ -492,7 +490,7 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(
     assert len(unresolved_requests) == 1
     assert unresolved_requests[0].sections_to_flag == [sub_criteria_id_2]
 
-    application = _db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
+    application = db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
     assert application.workflow_status == ApplicationStatus.CHANGE_REQUESTED
 
     # Approving last remaining sub-criteria should change application status
@@ -507,13 +505,11 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(
     assert len(resolved_requests) == 2
     assert len(unresolved_requests) == 0
 
-    application = _db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
+    application = db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
     assert application.workflow_status == ApplicationStatus.IN_PROGRESS
 
 
-def test_approve_sub_criteria_multiple_change_requests_same_subcriteria(
-    _db, setup_application_with_requests_and_scores
-):
+def test_approve_sub_criteria_multiple_change_requests_same_subcriteria(setup_application_with_requests_and_scores):
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id], [sub_criteria_id]])
 
