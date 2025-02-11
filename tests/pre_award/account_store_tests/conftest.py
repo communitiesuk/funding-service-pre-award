@@ -13,13 +13,6 @@ from pre_award.account_store.db.models.account import Account
 from pre_award.account_store.db.models.role import Role
 from pre_award.config import Config
 
-#
-# @pytest.fixture(scope="session")
-# def app(request) -> Flask:
-#     app = create_app()
-#     request.getfixturevalue("mock_redis")
-#     yield app
-
 
 class _FlaskClientWithHost(FlaskClient):
     def open(

@@ -174,13 +174,6 @@ def seed_dynamic_data(request, app, db):
     yield inserted_data
 
 
-# @pytest.fixture(scope="session")
-# def app(request) -> Flask:
-#     app = create_app()
-#     request.getfixturevalue("mock_redis")
-#     yield app
-
-
 class _FlaskClientWithHost(FlaskClient):
     def open(
         self,

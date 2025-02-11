@@ -294,16 +294,6 @@ def get_tag_types(request, app, db):
         yield serialised_tag_types
 
 
-#
-# @pytest.fixture(scope="session")
-# def app(request):
-#     attach_listeners()
-#
-#     app = create_app()
-#     request.getfixturevalue("mock_redis")
-#     yield app
-
-
 class _FlaskClientWithHost(FlaskClient):
     def open(
         self,

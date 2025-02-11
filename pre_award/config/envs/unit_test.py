@@ -31,10 +31,6 @@ class UnitTestConfig(Config):
 
     # Database
     WARN_IF_QUERIES_OVER_MS = 5
-    # SQLALCHEMY_DATABASE_URI = environ.get(
-    #     "DATABASE_URL",
-    #     "postgresql://postgres:password@localhost:5432/pre_award_stores_test",  # pragma: allowlist secret
-    # )
 
     # ---------------
     # AWS Config
