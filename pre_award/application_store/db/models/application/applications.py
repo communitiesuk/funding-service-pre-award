@@ -20,7 +20,7 @@ class Applications(BaseModel):
         primary_key=True,
         nullable=False,
     )
-    account_id = Column("account_id", db.String(), nullable=False)
+    account_id = Column("account_id", db.ForeignKey("account.id"), nullable=False)
     fund_id = Column("fund_id", db.String(), nullable=False)
     round_id = Column("round_id", db.String(), nullable=False)
     key = Column("key", db.String(), nullable=False)
