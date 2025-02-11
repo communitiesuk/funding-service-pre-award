@@ -1364,7 +1364,7 @@ def request_changes(application_id, sub_criteria_id, theme_id):
                 application_id=application_id,
                 status=WorkflowStatus.CHANGE_REQUESTED,
             )
-            
+
             if send_notification:
                 notify_applicant_changes_requested(application_id=application_id)
                 send_notification = False
