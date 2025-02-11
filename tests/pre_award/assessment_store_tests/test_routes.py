@@ -456,9 +456,9 @@ def test_get_application_fields_export(flask_test_client, seed_application_recor
 
 @pytest.mark.apps_to_insert([test_input_data[0].copy() for x in range(4)])
 @pytest.mark.unique_fund_round(True)
-def test_get_export_data_with_and_without_timezone(_db, seed_application_records):
+def test_get_export_data_with_and_without_timezone(db, seed_application_records):
     round_id = seed_application_records[0]["round_id"]
-    assessment_records = _db.session.execute(select(AssessmentRecord)).scalars().all()
+    assessment_records = db.session.execute(select(AssessmentRecord)).scalars().all()
 
     # Date strings with and without timezone information
     date_strings = [

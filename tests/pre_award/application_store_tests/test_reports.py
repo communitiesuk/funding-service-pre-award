@@ -6,7 +6,7 @@ from tests.pre_award.application_store_tests.helpers import get_row_by_pk, test_
 
 
 @pytest.mark.apps_to_insert(test_application_data)
-def test_get_application_statuses_csv(flask_test_client, seed_application_records, _db):
+def test_get_application_statuses_csv(flask_test_client, seed_application_records, db):
     response = flask_test_client.get(
         "/application/applications/reporting/applications_statuses_data",
         follow_redirects=True,
@@ -20,8 +20,8 @@ def test_get_application_statuses_csv(flask_test_client, seed_application_record
 
     app = get_row_by_pk(Applications, seed_application_records[0].id)
     app.status = "IN_PROGRESS"
-    _db.session.add(app)
-    _db.session.commit()
+    db.session.add(app)
+    db.session.commit()
 
     response = flask_test_client.get(
         "/application/applications/reporting/applications_statuses_data",
@@ -99,13 +99,13 @@ def test_get_application_statuses_json_multi_fund(
     exp_completed,
     flask_test_client,
     seed_data_multiple_funds_rounds,
-    _db,
+    db,
     mock_get_round,
 ):
     app = get_row_by_pk(Applications, seed_data_multiple_funds_rounds[0][1][0][1][0])
     app.status = "COMPLETED"
-    _db.session.add(app)
-    _db.session.commit()
+    db.session.add(app)
+    db.session.commit()
     fund_ids = [seed_data_multiple_funds_rounds[idx][0] for idx in fund_idx]
     fund_params = ["fund_id=" + str(id) for id in fund_ids]
     round_ids = [seed_data_multiple_funds_rounds[0][1][idx][0] for idx in round_idx]

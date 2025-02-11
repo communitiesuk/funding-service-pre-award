@@ -36,7 +36,6 @@ from pre_award.assessment_store.db.queries.tags.queries import insert_tags
 from pre_award.assessment_store.db.schemas.schemas import TagSchema, TagTypeSchema
 from pre_award.config import Config
 from pre_award.db import db
-from tests.pre_award.assessment_store_tests._sql_infos import attach_listeners
 
 with open("tests/pre_award/assessment_store_tests/test_data/hand-crafted-apps.json", "r") as f:
     test_input_data = json.load(f)
@@ -117,7 +116,7 @@ def bulk_insert_application_record(
 
 
 @pytest.fixture(scope="function")
-def seed_application_records(request, app, clear_test_data, enable_preserve_test_data, _db):
+def seed_application_records(request, db):
     """Inserts test assessment_record data into the unit test DB according to
     what's supplied using the marker apps_to_insert.
 
@@ -172,11 +171,11 @@ def seed_application_records(request, app, clear_test_data, enable_preserve_test
                 field_ids=[],
                 is_change_request=False,
             )
-            _db.session.add(assessment_flag)
+            db.session.add(assessment_flag)
         for t in app_tags:
             tag = TagAssociation(application_id=app_id, tag_value=t)
-            _db.session.add(tag)
-        _db.session.commit()
+            db.session.add(tag)
+        db.session.commit()
     # Supplied the rows we inserted for tests to use in their actions
     yield inserted_applications
 
@@ -189,16 +188,14 @@ def seed_application_records(request, app, clear_test_data, enable_preserve_test
     CommentsUpdate.query.delete()
     Comment.query.delete()
     AssessmentRecord.query.delete()
-    _db.session.commit()
+    db.session.commit()
 
 
 @pytest.fixture(scope="function")
 def seed_tags(
     request,
     app,
-    clear_test_data,
-    enable_preserve_test_data,
-    _db,
+    db,
     get_tag_types,
 ):
     tag_type_ids = [t["id"] for t in get_tag_types]
@@ -227,8 +224,7 @@ def seed_tags(
 def seed_scoring_system(
     request,
     app,
-    _db,
-    clear_test_data,
+    db,
 ):
     """Inserts the scoring_systems for each round_id.
 
@@ -272,8 +268,8 @@ def seed_scoring_system(
         },
     ]
 
-    _db.session.query(AssessmentRound).delete()
-    _db.session.commit()
+    db.session.query(AssessmentRound).delete()
+    db.session.commit()
 
     for scoring_system in scoring_system_for_rounds:
         insert_scoring_system_for_round_id(scoring_system["round_id"], scoring_system["scoring_system_id"])
@@ -281,30 +277,21 @@ def seed_scoring_system(
 
 
 @pytest.fixture(scope="function")
-def get_tag_types(request, app, clear_test_data, enable_preserve_test_data, _db):
+def get_tag_types(request, app, db):
     tag_type = TagType(
         id=uuid4(),
         purpose=uuid4(),
         description="Test tag type",
     )
 
-    _db.session.add(tag_type)
-    _db.session.commit()
+    db.session.add(tag_type)
+    db.session.commit()
 
-    tag_types = _db.session.query(TagType).all()
+    tag_types = db.session.query(TagType).all()
     if tag_types:
         serialiser = TagTypeSchema()
         serialised_tag_types = [serialiser.dump(r) for r in tag_types]
         yield serialised_tag_types
-
-
-@pytest.fixture(scope="session")
-def app(request):
-    attach_listeners()
-
-    app = create_app()
-    request.getfixturevalue("mock_redis")
-    yield app
 
 
 class _FlaskClientWithHost(FlaskClient):

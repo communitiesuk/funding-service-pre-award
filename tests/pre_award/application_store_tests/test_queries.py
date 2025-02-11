@@ -566,7 +566,7 @@ def test_map_round_id_to_report_fields(round_id, exp_mapping):
 
 
 @pytest.fixture
-def application_with_forms(_db):
+def application_with_forms(db):
     application_id = uuid4()
 
     forms = [
@@ -653,8 +653,8 @@ def application_with_forms(_db):
         forms=forms,
     )
 
-    _db.session.add(application)
-    _db.session.commit()
+    db.session.add(application)
+    db.session.commit()
 
     return application
 
@@ -670,14 +670,14 @@ def application_with_forms(_db):
     ],
 )
 def test_mark_application_with_requested_changes_updates_forms_and_application(
-    _db, application_with_forms, fields_to_change
+    application_with_forms, fields_to_change, db
 ):
     application = application_with_forms
     application_id = application.id
 
     mark_application_with_requested_changes(application_id=application_id, field_ids=fields_to_change)
 
-    updated_application = _db.session.query(type(application)).get(application_id)
+    updated_application = db.session.query(type(application)).get(application_id)
     updated_forms = updated_application.forms
 
     application_changed = False

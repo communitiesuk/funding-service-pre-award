@@ -24,7 +24,9 @@ from tests.pre_award.application_store_tests.helpers import (
 
 
 @pytest.mark.unique_fund_round(True)
-def test_create_application_is_successful(flask_test_client, unique_fund_round, mock_get_application_display_config):
+def test_create_application_is_successful(
+    flask_test_client, unique_fund_round, mock_get_application_display_config, db
+):
     """
     GIVEN We have a functioning Application Store API
     WHEN we try to create an application
@@ -108,9 +110,7 @@ def test_create_application_language_choice(
     )
 
 
-def test_create_application_creates_formatted_reference(
-    flask_test_client, clear_test_data, mock_get_application_display_config
-):
+def test_create_application_creates_formatted_reference(flask_test_client, mock_get_application_display_config, db):
     """
     GIVEN We have a functioning Application Store API
     WHEN we try to create an application
@@ -137,7 +137,7 @@ def test_create_application_creates_formatted_reference(
 def test_create_application_creates_unique_reference(
     flask_test_client,
     mock_random_choices,
-    clear_test_data,
+    db,
     mock_get_application_display_config,
 ):
     """
@@ -603,7 +603,7 @@ def test_form_data_save_with_closed_round(flask_test_client, seed_application_re
 
 
 @pytest.mark.apps_to_insert([test_application_data[2]])
-def test_put_returns_400_on_submitted_application(flask_test_client, _db, seed_application_records):
+def test_put_returns_400_on_submitted_application(flask_test_client, db, seed_application_records):
     """
     GIVEN We have a functioning Application Store API
     WHEN A there is an application with a status of SUBMITTED
@@ -611,8 +611,8 @@ def test_put_returns_400_on_submitted_application(flask_test_client, _db, seed_a
     """
 
     seed_application_records[0].status = "SUBMITTED"
-    _db.session.add(seed_application_records[0])
-    _db.session.commit()
+    db.session.add(seed_application_records[0])
+    db.session.commit()
     section_put = {
         "metadata": {
             "application_id": str(seed_application_records[0].id),

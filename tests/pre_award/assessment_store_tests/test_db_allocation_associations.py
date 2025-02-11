@@ -13,7 +13,7 @@ from tests.pre_award.assessment_store_tests.conftest import test_input_data
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_get_users_for_application(_db, seed_application_records):
+def test_get_users_for_application(db, seed_application_records):
     user_id_1 = str(uuid.uuid4())
     user_id_2 = str(uuid.uuid4())
     assigner_id = str(uuid.uuid4())
@@ -42,10 +42,10 @@ def test_get_users_for_application(_db, seed_application_records):
             }
         },
     )
-    _db.session.add(allocation_association_1)
-    _db.session.commit()
-    _db.session.add(allocation_association_2)
-    _db.session.commit()
+    db.session.add(allocation_association_1)
+    db.session.commit()
+    db.session.add(allocation_association_2)
+    db.session.commit()
     users = get_user_application_associations(application_id=app_id)
     assert len(users) == 2
 
@@ -59,7 +59,7 @@ def test_get_users_for_application(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}, {**test_input_data[1]}])
-def test_get_applications_for_user(_db, seed_application_records):
+def test_get_applications_for_user(db, seed_application_records):
     user_id = str(uuid.uuid4())
     assigner_id_1 = str(uuid.uuid4())
     assigner_id_2 = str(uuid.uuid4())
@@ -89,10 +89,10 @@ def test_get_applications_for_user(_db, seed_application_records):
             }
         },
     )
-    _db.session.add(allocation_association_1)
-    _db.session.commit()
-    _db.session.add(allocation_association_2)
-    _db.session.commit()
+    db.session.add(allocation_association_1)
+    db.session.commit()
+    db.session.add(allocation_association_2)
+    db.session.commit()
     applications = get_user_application_associations(user_id=user_id)
     assert len(applications) == 2
 
@@ -110,7 +110,7 @@ def test_get_applications_for_user(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_create_user_application_association(_db, seed_application_records):
+def test_create_user_application_association(db, seed_application_records):
     user_id = str(uuid.uuid4())
     assigner_id = str(uuid.uuid4())
     app_id = seed_application_records[0]["application_id"]
@@ -127,7 +127,7 @@ def test_create_user_application_association(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_update_user_application_association(_db, seed_application_records):
+def test_update_user_application_association(db, seed_application_records):
     user_id = str(uuid.uuid4())
     assigner_id_1 = str(uuid.uuid4())
     assigner_id_2 = str(uuid.uuid4())
@@ -145,7 +145,7 @@ def test_update_user_application_association(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_duplicate_user_application_association(_db, seed_application_records):
+def test_duplicate_user_application_association(db, seed_application_records):
     user_id = str(uuid.uuid4())
     app_id = seed_application_records[0]["application_id"]
     updated_association = create_user_application_association(app_id, user_id, str(uuid.uuid4()))

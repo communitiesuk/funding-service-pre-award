@@ -9,7 +9,7 @@ from tests.pre_award.assessment_store_tests.conftest import test_input_data
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_create_qa_complete_record_for_application(_db, seed_application_records):
+def test_create_qa_complete_record_for_application(db, seed_application_records):
     """test_create_qa_complete_record Tests we can create qa_complete records in
     the qa_complete table in the appropriate format."""
     picked_row = get_assessment_record(seed_application_records[0]["application_id"])
@@ -22,7 +22,7 @@ def test_create_qa_complete_record_for_application(_db, seed_application_records
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_get_qa_complete_record_for_application(_db, seed_application_records):
+def test_get_qa_complete_record_for_application(db, seed_application_records):
     """test_get_qa_complete_record Tests we can get qa_complete records in the
     qa_complete table in the appropriate format."""
     picked_row = get_assessment_record(seed_application_records[0]["application_id"])

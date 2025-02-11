@@ -110,7 +110,7 @@ def new_json_blob():
 
 
 @pytest.fixture
-def setup_completed_application(_db, app, clear_test_data, mocker, mock_get_files):
+def setup_completed_application(db, app, mocker, mock_get_files):
     with open("tests/pre_award/application_store_tests/seed_data/COF_R4W2_all_forms.json", "r") as f:
         cof_application = json.load(f)
         forms = cof_application["forms"]
@@ -120,8 +120,8 @@ def setup_completed_application(_db, app, clear_test_data, mocker, mock_get_file
     )
     target_application.project_name = "test"
     target_application.date_submitted = datetime.fromisoformat(cof_application["date_submitted"])
-    _db.session.add(target_application)
-    _db.session.commit()
+    db.session.add(target_application)
+    db.session.commit()
 
     application_id = target_application.id
     add_new_forms(forms=empty_forms, application_id=application_id)
@@ -137,7 +137,7 @@ def setup_completed_application(_db, app, clear_test_data, mocker, mock_get_file
 
 
 def test_submit_application_with_location_bad_key(
-    _db,
+    db,
     monkeypatch,
     setup_completed_application,
     mock_successful_location_call,
@@ -158,14 +158,14 @@ def test_submit_application_with_location_bad_key(
 
     submit_application(application_id)
     assessment_record: AssessmentRecord = (
-        _db.session.query(AssessmentRecord).where(AssessmentRecord.application_id == application_id).one()
+        db.session.query(AssessmentRecord).where(AssessmentRecord.application_id == application_id).one()
     )
     assert assessment_record
     assert assessment_record.location_json_blob
     assert assessment_record.location_json_blob["error"] is True
 
 
-def test_submit_application_with_location(_db, setup_completed_application, monkeypatch, mock_successful_location_call):
+def test_submit_application_with_location(db, setup_completed_application, monkeypatch, mock_successful_location_call):
     fund_round_data_key_mappings = {
         "TESTTEST": {
             "location": "EfdliG",
@@ -183,7 +183,7 @@ def test_submit_application_with_location(_db, setup_completed_application, monk
 
     submit_application(application_id)
     assessment_record: AssessmentRecord = (
-        _db.session.query(AssessmentRecord).where(AssessmentRecord.application_id == application_id).one()
+        db.session.query(AssessmentRecord).where(AssessmentRecord.application_id == application_id).one()
     )
     assert assessment_record
     assert assessment_record.location_json_blob
@@ -194,7 +194,7 @@ def test_submit_application_with_location(_db, setup_completed_application, monk
 def test_submit_route_success(
     flask_test_client,
     mock_successful_submit_notification,
-    _db,
+    db,
     seed_application_records,
     mocker,
     mock_get_fund_data,
@@ -207,8 +207,8 @@ def test_submit_route_success(
     application_id = target_application.id
     target_application.project_name = "unit test project"
 
-    _db.session.add(target_application)
-    _db.session.commit()
+    db.session.add(target_application)
+    db.session.commit()
 
     response = flask_test_client.post(
         f"/application/applications/{application_id}/submit",
@@ -218,13 +218,13 @@ def test_submit_route_success(
     assert response.status_code == 201
     assert all(k in response.json for k in ("id", "email", "reference", "eoi_decision"))
 
-    _db.session.expunge(target_application)
-    application_after_submit = _db.session.query(Applications).where(Applications.id == application_id).one()
+    db.session.expunge(target_application)
+    application_after_submit = db.session.query(Applications).where(Applications.id == application_id).one()
 
     assert application_after_submit.status == ApplicationStatus.SUBMITTED
 
     assessment_record: AssessmentRecord = (
-        _db.session.query(AssessmentRecord).where(AssessmentRecord.application_id == application_id).one()
+        db.session.query(AssessmentRecord).where(AssessmentRecord.application_id == application_id).one()
     )
     assert assessment_record
     assert assessment_record.jsonb_blob["forms"]
@@ -252,13 +252,13 @@ def test_submit_route_submit_error(flask_test_client, seed_application_records, 
 
 
 def test_submit_application_raises_error_on_db_violation(
-    seed_application_records, mocker, _db, mock_data_key_mappings, mock_successful_location_call, mock_get_files
+    seed_application_records, mocker, db, mock_data_key_mappings, mock_successful_location_call, mock_get_files
 ):
     target_application = seed_application_records[0]
     target_application.project_name = None  # will cause not null constraint violation
 
-    _db.session.add(target_application)
-    _db.session.commit()
+    db.session.add(target_application)
+    db.session.commit()
     application_id = target_application.id
     with pytest.raises(SubmitError) as se:
         submit_application(application_id)
@@ -269,7 +269,7 @@ def test_submit_application_raises_error_on_db_violation(
 def test_submit_application_route_succeeds_on_notify_error(
     seed_application_records,
     mocker,
-    _db,
+    db,
     flask_test_client,
     mock_data_key_mappings,
     mock_get_files,
@@ -279,8 +279,8 @@ def test_submit_application_route_succeeds_on_notify_error(
     application_id = target_application.id
     target_application.project_name = "unit test project"
 
-    _db.session.add(target_application)
-    _db.session.commit()
+    db.session.add(target_application)
+    db.session.commit()
 
     mocker.patch(
         "pre_award.application_store.api.routes.application.routes.send_submit_notification",
@@ -353,7 +353,7 @@ def test_send_submit_notification_do_not_send(mocker, app, mock_get_files, eoi_r
 )
 def test_send_submit_notification(
     mocker,
-    _db,
+    db,
     app,
     setup_completed_application,
     mock_get_files,
@@ -391,7 +391,7 @@ def test_send_submit_notification(
         },
     )
 
-    application = _db.session.get(Applications, setup_completed_application)
+    application = db.session.get(Applications, setup_completed_application)
     application_with_form_json = get_application(setup_completed_application, as_json=True, include_forms=True)
 
     if eoi_result:
@@ -428,7 +428,7 @@ def test_send_submit_notification(
 
 
 @pytest.fixture
-def setup_submitted_application(_db, setup_completed_application, monkeypatch, mock_successful_location_call):
+def setup_submitted_application(db, setup_completed_application, monkeypatch, mock_successful_location_call):
     fund_round_data_key_mappings = {
         "TESTTEST": {
             "location": None,
@@ -449,10 +449,10 @@ def setup_submitted_application(_db, setup_completed_application, monkeypatch, m
 
 
 def test_derive_values_script(
-    setup_submitted_application, _db, monkeypatch, mock_data_key_mappings, mock_successful_location_call
+    setup_submitted_application, db, monkeypatch, mock_data_key_mappings, mock_successful_location_call
 ):
     application_id = str(setup_submitted_application)
-    assessment_record: AssessmentRecord = _db.session.get(AssessmentRecord, application_id)
+    assessment_record: AssessmentRecord = db.session.get(AssessmentRecord, application_id)
     assert assessment_record.asset_type == "No asset type specified."
     assert assessment_record.funding_amount_requested == 0
     assert assessment_record.location_json_blob == {
@@ -484,7 +484,7 @@ def test_derive_values_script(
     # call script and say not confirmation prompt (no commit)
     result = runner.invoke(derive_assessment_values, ["-a", application_id], input="n")
     assert result.exit_code == 0
-    assessment_record_2: AssessmentRecord = _db.session.get(AssessmentRecord, application_id)
+    assessment_record_2: AssessmentRecord = db.session.get(AssessmentRecord, application_id)
     assert assessment_record_2.asset_type == "No asset type specified."
     assert assessment_record_2.funding_amount_requested == 0
     assert assessment_record_2.location_json_blob == {
@@ -499,7 +499,7 @@ def test_derive_values_script(
     # Call script again but yes to prompt (commit == True)
     result = runner.invoke(derive_assessment_values, ["-a", application_id], input="y")
     assert result.exit_code == 0
-    assessment_record_2: AssessmentRecord = _db.session.get(AssessmentRecord, application_id)
+    assessment_record_2: AssessmentRecord = db.session.get(AssessmentRecord, application_id)
     assert assessment_record_2.asset_type == "cinema"
     assert assessment_record_2.funding_amount_requested == 1524
     assert assessment_record_2.location_json_blob["error"] is False
@@ -518,10 +518,10 @@ def test_derive_values_script(
         "rounds": [],
     }
 )
-def test_fields_resubmitted_uncompeted_application(setup_submitted_application, mocker, _db):
+def test_fields_resubmitted_uncompeted_application(setup_submitted_application, mocker, db):
     application_id = str(setup_submitted_application)
     application = get_application(application_id, include_forms=True)
-    resubmitted_assessment = _db.session.get(AssessmentRecord, application_id)
+    resubmitted_assessment = db.session.get(AssessmentRecord, application_id)
     resubmitted_assessment.workflow_status = Status.CHANGE_REQUESTED
 
     # Modify answer to a question
@@ -532,11 +532,11 @@ def test_fields_resubmitted_uncompeted_application(setup_submitted_application, 
     # Modify project name (to test derived values)
     application.project_name = "A test project for resubmission"
 
-    _db.session.add(application)
-    _db.session.commit()
+    db.session.add(application)
+    db.session.commit()
 
     submit_application(application_id)
-    resubmitted_assessment = _db.session.get(AssessmentRecord, application_id)
+    resubmitted_assessment = db.session.get(AssessmentRecord, application_id)
 
     for form in resubmitted_assessment.jsonb_blob["forms"]:
         for section in form["questions"]:
@@ -565,7 +565,7 @@ def test_fields_resubmitted_uncompeted_application(setup_submitted_application, 
         "rounds": [],
     }
 )
-def test_flags_resubmitted_uncompeted_application(setup_submitted_application, _db):
+def test_flags_resubmitted_uncompeted_application(setup_submitted_application, db):
     application_id = str(setup_submitted_application)
     application = get_application(application_id, include_forms=True)
 
@@ -631,24 +631,24 @@ def test_flags_resubmitted_uncompeted_application(setup_submitted_application, _
         is_change_request=False,
     )
 
-    _db.session.add(assessment_flag_1)
-    _db.session.add(assessment_flag_2)
-    _db.session.add(assessment_flag_3)
-    _db.session.add(application)
-    _db.session.commit()
+    db.session.add(assessment_flag_1)
+    db.session.add(assessment_flag_2)
+    db.session.add(assessment_flag_3)
+    db.session.add(application)
+    db.session.commit()
 
     submit_application(application_id)
-    resubmitted_assessment = _db.session.get(AssessmentRecord, application_id)
+    resubmitted_assessment = db.session.get(AssessmentRecord, application_id)
 
     assert resubmitted_assessment.project_name == application.project_name
 
     updated_assessment_flags = (
-        _db.session.query(AssessmentFlag)
+        db.session.query(AssessmentFlag)
         .filter(AssessmentFlag.application_id == application_id, AssessmentFlag.latest_status == FlagStatus.RESOLVED)
         .all()
     )
     updated_flag_updates = (
-        _db.session.query(FlagUpdate)
+        db.session.query(FlagUpdate)
         .join(AssessmentFlag)
         .filter(AssessmentFlag.application_id == application_id, FlagUpdate.status == FlagStatus.RESOLVED)
         .all()
@@ -674,7 +674,7 @@ def test_flags_resubmitted_uncompeted_application(setup_submitted_application, _
         "rounds": [],
     }
 )
-def test_resubmitted_application_from_competed_fund(setup_submitted_application, _db):
+def test_resubmitted_application_from_competed_fund(setup_submitted_application, db):
     application_id = str(setup_submitted_application)
     application = get_application(application_id, include_forms=True)
 
@@ -687,11 +687,11 @@ def test_resubmitted_application_from_competed_fund(setup_submitted_application,
     original_project_name = application.project_name
     application.project_name = "A test project for resubmission"
 
-    _db.session.add(application)
-    _db.session.commit()
+    db.session.add(application)
+    db.session.commit()
 
     submit_application(application_id)
-    resubmitted_assessment = _db.session.get(AssessmentRecord, application_id)
+    resubmitted_assessment = db.session.get(AssessmentRecord, application_id)
 
     for form in resubmitted_assessment.jsonb_blob["forms"]:
         for section in form["questions"]:
@@ -776,11 +776,11 @@ def test_existing_history_log_is_appended(existing_json_blob, new_json_blob, moc
     }
 )
 def test_assessment_records_workflow_status(
-    mocker: MockerFixture, setup_submitted_application: Applications, _db: Session
+    mocker: MockerFixture, setup_submitted_application: Applications, db: Session
 ) -> None:
     application_id = str(setup_submitted_application)
     application = get_application(application_id, include_forms=True)
-    assessment_record = _db.session.get(AssessmentRecord, application_id)
+    assessment_record = db.session.get(AssessmentRecord, application_id)
     mocker.patch(
         "pre_award.application_store.db.queries.application.queries.db.session.scalar", return_value=assessment_record
     )
@@ -792,22 +792,22 @@ def test_assessment_records_workflow_status(
     # Resubmit an already submitted application (e.g. by refreshing "Application Submitted" success page)
     submit_application(application_id)
     assert application.status.name == "SUBMITTED"  # type: ignore
-    assessment_record = _db.session.get(AssessmentRecord, application_id)
+    assessment_record = db.session.get(AssessmentRecord, application_id)
     # workflow_status shouldn't change on resubmission
     assert assessment_record.workflow_status.name == "NOT_STARTED"
 
     # Simulate a change request to the application
     application.status = ApplicationStatus.CHANGE_REQUESTED  # type: ignore
     assessment_record.workflow_status = WorkflowStatus.CHANGE_REQUESTED
-    _db.session.commit()
+    db.session.commit()
 
     # Simulate reviewing and completing the section
     application.status = ApplicationStatus.COMPLETED  # type: ignore
-    _db.session.commit()
+    db.session.commit()
 
     # Resubmit application after changes have been made
     submit_application(application_id)
-    application = _db.session.get(Applications, application_id)
+    application = db.session.get(Applications, application_id)
     assert application.status.name == "SUBMITTED"  # type: ignore
-    assessment_record = _db.session.get(AssessmentRecord, application_id)
+    assessment_record = db.session.get(AssessmentRecord, application_id)
     assert assessment_record.workflow_status.name == "CHANGE_RECEIVED"

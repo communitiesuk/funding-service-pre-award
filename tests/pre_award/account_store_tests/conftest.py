@@ -6,21 +6,12 @@ from typing import Any
 from uuid import uuid4
 
 import pytest
-from flask import Flask
 from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
-from app import create_app  # noqa: E402
 from pre_award.account_store.db.models.account import Account
 from pre_award.account_store.db.models.role import Role
 from pre_award.config import Config
-
-
-@pytest.fixture(scope="session")
-def app(request) -> Flask:
-    app = create_app()
-    request.getfixturevalue("mock_redis")
-    yield app
 
 
 class _FlaskClientWithHost(FlaskClient):
@@ -83,27 +74,27 @@ def create_user_with_roles(user_config, db):
 
 
 @pytest.fixture(scope="session")
-def seed_test_data(request, app, clear_test_data, _db):
+def seed_test_data(request, app, db):
     marker = request.node.get_closest_marker("user_config")
     if not marker:
         users_to_create = [test_user_1, test_user_2, test_user_to_update]
     else:
         users_to_create = marker.args[0]
     for user in users_to_create:
-        create_user_with_roles(user, _db)
+        create_user_with_roles(user, db)
     yield users_to_create
 
 
 @pytest.fixture(scope="function")
-def seed_test_data_fn(request, app, clear_test_data, _db):
+def seed_test_data_fn(request, app, db):
     marker = request.node.get_closest_marker("user_config")
     if not marker:
         users_to_create = [test_user_1, test_user_2, test_user_to_update]
     else:
         users_to_create = marker.args[0]
     for user in users_to_create:
-        create_user_with_roles(user, _db)
+        create_user_with_roles(user, db)
     yield users_to_create
     Role.query.delete()
     Account.query.delete()
-    _db.session.commit()
+    db.session.commit()

@@ -19,11 +19,11 @@ from tests.pre_award.assessment_store_tests.test_data.flags import add_flag_upda
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_create_flag(_db, seed_application_records):
+def test_create_flag(db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
 
     stmt = select(AssessmentRecord).where(AssessmentRecord.application_id == app_id)
-    results = _db.session.scalars(stmt).all()
+    results = db.session.scalars(stmt).all()
 
     assert len(results) == 1
     assert len(results[0].flags) == 0
@@ -41,18 +41,18 @@ def test_create_flag(_db, seed_application_records):
     assert create_result.latest_status == FlagStatus.RAISED
 
     stmt = select(AssessmentRecord).where(AssessmentRecord.application_id == app_id)
-    results = _db.session.scalars(stmt).all()
+    results = db.session.scalars(stmt).all()
 
     assert len(results) == 1
     assert len(results[0].flags) == 1
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0], "flags": [flag_config[0]]}])
-def test_add_flag_update(_db, seed_application_records):
+def test_add_flag_update(db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
 
     stmt = select(AssessmentRecord).where(AssessmentRecord.application_id == app_id)
-    results = _db.session.scalars(stmt).all()
+    results = db.session.scalars(stmt).all()
 
     assert len(results) == 1
     assert len(results[0].flags) == 1
@@ -66,7 +66,7 @@ def test_add_flag_update(_db, seed_application_records):
     assert updated_flag.latest_allocation == add_flag_update_request_json["allocation"]
 
     stmt = select(AssessmentRecord).where(AssessmentRecord.application_id == app_id)
-    results = _db.session.scalars(stmt).all()
+    results = db.session.scalars(stmt).all()
 
     assert len(results) == 1
     assert len(results[0].flags) == 1
@@ -76,7 +76,7 @@ def test_add_flag_update(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0], "flags": [flag_config[0]]}])
-def test_get_flags_for_application(_db, seed_application_records):
+def test_get_flags_for_application(db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
     result = get_flags_for_application(app_id)
     assert len(result) == 1
@@ -126,7 +126,7 @@ def test_get_flags_for_application(_db, seed_application_records):
     ]
 )
 def test_get_most_recent_metadata_statuses_for_fund_round_id(
-    _db, status_or_flag, expected_application_count, seed_application_records
+    status_or_flag, expected_application_count, seed_application_records, db
 ):
     from pre_award.assessment_store.db.queries.assessment_records.queries import (
         get_metadata_for_fund_round_id,
@@ -136,8 +136,8 @@ def test_get_most_recent_metadata_statuses_for_fund_round_id(
     app_2 = get_assessment_record(seed_application_records[1]["application_id"])
     app_1.workflow_status = Status.IN_PROGRESS
     app_2.workflow_status = Status.COMPLETED
-    _db.session.add_all([app_1, app_2])
-    _db.session.commit()
+    db.session.add_all([app_1, app_2])
+    db.session.commit()
 
     metadata = get_metadata_for_fund_round_id(
         seed_application_records[0]["fund_id"],

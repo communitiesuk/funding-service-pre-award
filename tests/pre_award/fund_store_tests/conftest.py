@@ -7,7 +7,6 @@ from typing import Any
 from uuid import uuid4
 
 import pytest
-from flask import Flask
 from flask.testing import FlaskClient
 from sqlalchemy_utils import Ltree
 from werkzeug.test import TestResponse
@@ -20,7 +19,7 @@ from pre_award.fund_store.db.queries import insert_fund_data, insert_sections, u
 
 
 @pytest.fixture(scope="session")
-def seed_dynamic_data(request, app, clear_test_data, _db):
+def seed_dynamic_data(request, app, db):
     marker = request.node.get_closest_marker("seed_config")
     fund_count = 0
     round_count = 0
@@ -173,13 +172,6 @@ def seed_dynamic_data(request, app, clear_test_data, _db):
                 insert_sections(round["sections"])
 
     yield inserted_data
-
-
-@pytest.fixture(scope="session")
-def app(request) -> Flask:
-    app = create_app()
-    request.getfixturevalue("mock_redis")
-    yield app
 
 
 class _FlaskClientWithHost(FlaskClient):
