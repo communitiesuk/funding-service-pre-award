@@ -8,7 +8,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Local authority details", "cy": ""},
             "tree_path": "1057.1.1.1",
-            "form_name_json": {"en": "local-authority-details", "cy": ""},
+            "form_name_json": {"en": "lpdf-r2-local-authority-details", "cy": ""},
         },
         {
             "section_name": {"en": "2. Spending proposals", "cy": ""},
@@ -18,7 +18,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "2.1 Spending proposals", "cy": ""},
             "tree_path": "1057.1.2.1",
-            "form_name_json": {"en": "spending-proposals", "cy": ""},
+            "form_name_json": {"en": "lpdf-r2-spending-proposals", "cy": ""},
         },
         {
             "section_name": {"en": "3. Open Digital Planning", "cy": ""},
@@ -28,7 +28,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "3.1 Open Digital Planning", "cy": ""},
             "tree_path": "1057.1.3.1",
-            "form_name_json": {"en": "open-digital-planning", "cy": ""},
+            "form_name_json": {"en": "lpdf-r2-open-digital-planning", "cy": ""},
         },
         {
             "section_name": {"en": "4. Declarations", "cy": ""},
@@ -38,7 +38,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "4.1 Declarations", "cy": ""},
             "tree_path": "1057.1.4.1",
-            "form_name_json": {"en": "declarations", "cy": ""},
+            "form_name_json": {"en": "lpdf-r2-declarations", "cy": ""},
         },
     ],
     "fund_config": {

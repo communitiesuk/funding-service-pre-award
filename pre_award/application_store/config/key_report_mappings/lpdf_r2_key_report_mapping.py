@@ -7,12 +7,12 @@ LPDF_R2_KEY_REPORT_MAPPING = KeyReportMapping(
     round_id="4b519371-aa10-4d9d-ae28-1ff1739af5d3",
     mapping=[
         FormMappingItem(
-            form_name="local-authority-details",
+            form_name="lpdf-r2-local-authority-details",
             key="RoLhhf",
             return_field="organisation_name",
         ),
         FormMappingItem(
-            form_name="local-authority-details",
+            form_name="lpdf-r2-local-authority-details",
             key="BkuACU",
             return_field="applicant_email",
         ),
