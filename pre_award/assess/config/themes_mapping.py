@@ -113,6 +113,12 @@ def ordered_themes(fund_round_short_name):
             "open_digital_planning",
             "declarations",
         ],
+        "LPDFR2": [
+            "local_authority_name",
+            "spending_proposals",
+            "open_digital_planning",
+            "declarations",
+        ],
         "GBRFR1": [
             "local_authority_name",
             "spending_proposals",

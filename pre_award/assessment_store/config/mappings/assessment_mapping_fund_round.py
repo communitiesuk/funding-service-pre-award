@@ -92,6 +92,9 @@ from pre_award.assessment_store.config.mappings.hsra_mapping_parts.vr_unscored_s
 from pre_award.assessment_store.config.mappings.lpdf_mapping_parts.r1_unscored_criteria import (
     unscored_sections as lpdf_unscored_sections,
 )
+from pre_award.assessment_store.config.mappings.lpdf_mapping_parts.r2_unscored_criteria import (
+    unscored_sections as lpdf_unscored_sections_r2,
+)
 from pre_award.assessment_store.config.mappings.nstf_mapping_parts.r2_scored_criteria import (
     scored_criteria as nstf_scored_criteria,
 )
@@ -146,6 +149,7 @@ GBRF_ROUND_1_ID = "e480f03f-e3e0-4bd0-9026-dfed52cc3982"
 
 LPDF_FUND_ID = "b1c13e1e-8fda-41bd-8abb-28e56f9d9322"
 LPDF_ROUND_1_ID = "f1d514da-0282-4a96-82c4-25c09645d0b0"
+LPDF_ROUND_2_ID = "4b519371-aa10-4d9d-ae28-1ff1739af5d3"
 
 # ASSESSMENT DISPLAY CONFIGURATION
 
@@ -158,6 +162,11 @@ fund_round_to_assessment_mapping = {
     f"{LPDF_FUND_ID}:{LPDF_ROUND_1_ID}": {
         "schema_id": "lpdf_r1_assessment",
         "unscored_sections": lpdf_unscored_sections,
+        "scored_criteria": [],
+    },
+    f"{LPDF_FUND_ID}:{LPDF_ROUND_2_ID}": {
+        "schema_id": "lpdf_r2_assessment",
+        "unscored_sections": lpdf_unscored_sections_r2,
         "scored_criteria": [],
     },
     f"{DPIF_FUND_ID}:{DPIF_ROUND_3_ID}": {
@@ -287,6 +296,12 @@ fund_round_data_key_mappings = {
         "funding_two": None,
     },
     "LPDFR1": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": None,
+        "funding_two": None,
+    },
+    "LPDFR2": {
         "location": None,
         "asset_type": None,
         "funding_one": None,
@@ -1637,6 +1652,11 @@ fund_round_mapping_config = {
     "LPDFR1": {
         "fund_id": LPDF_FUND_ID,
         "round_id": LPDF_ROUND_1_ID,
+        "type_of_application": "LPDF",
+    },
+    "LPDFR2": {
+        "fund_id": LPDF_FUND_ID,
+        "round_id": LPDF_ROUND_2_ID,
         "type_of_application": "LPDF",
     },
     "DPIFR3": {
