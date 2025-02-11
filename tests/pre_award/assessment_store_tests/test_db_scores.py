@@ -489,7 +489,7 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(setup_ap
         application_id=application_id, sub_criteria_id=sub_criteria_id_1, user_id=str(uuid.uuid4()), message="test"
     )
 
-    change_requests = get_change_requests_for_application(application_id, only_raised=False, sort_descending=True)
+    change_requests = get_change_requests_for_application(application_id, only_raised=False, sort_by_update=True)
     resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
     unresolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RAISED]
 

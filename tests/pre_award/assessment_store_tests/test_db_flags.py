@@ -293,7 +293,7 @@ def test_get_only_raised_change_requests(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_sort_descending(_db, seed_application_records):
+def test_sort_by_update(_db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
     base_date = datetime(2025, 2, 4)
 
@@ -328,7 +328,7 @@ def test_sort_descending(_db, seed_application_records):
         ],
     )
 
-    results = get_change_requests_for_application(app_id, sort_descending=True)
+    results = get_change_requests_for_application(app_id, sort_by_update=True)
     assert len(results) == 3
     assert results[0].id == flag1.id and results[1].id == flag3.id and results[2].id == flag2.id, (
         "Flags returned in wrong order"
@@ -336,7 +336,7 @@ def test_sort_descending(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_sort_descending_only_raised(_db, seed_application_records):
+def test_sort_by_update_only_raised(_db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
     base_date = datetime(2025, 2, 4)
 
@@ -379,7 +379,7 @@ def test_sort_descending_only_raised(_db, seed_application_records):
         ],
     )
 
-    results = get_change_requests_for_application(app_id, only_raised=True, sort_descending=True)
+    results = get_change_requests_for_application(app_id, only_raised=True, sort_by_update=True)
     assert len(results) == 3
 
     assert flag4.id == results[0].id and flag3.id == results[1].id and flag1.id == results[2].id
