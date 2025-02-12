@@ -3,7 +3,6 @@ from operator import itemgetter
 from flask import current_app
 from fsd_utils import Decision
 
-from data.models import Fund as FundModel
 from pre_award.application_store.config.key_report_mappings.mappings import (
     ROUND_ID_TO_KEY_REPORT_MAPPING,
 )
@@ -12,7 +11,6 @@ from pre_award.application_store.db.queries.reporting.queries import (
     map_application_key_fields,
 )
 from pre_award.config import Config
-from pre_award.db import db
 from services.notify import NotificationError, get_notification_service
 
 
@@ -136,17 +134,17 @@ def send_submit_notification(
         )
 
 
-def send_change_received_notification(application, account, application_with_form_json_and_fund_name, round_data):
+def send_change_received_notification(account, application_with_form_json_and_fund_name, round_data):
     application_data = create_qa_base64file(application_with_form_json_and_fund_name, True)
     del application_data["forms"]
     fund_name = application_data.get("fund_name")
     round_name = application_data.get("round_name")
-    fund = db.session.query(FundModel).filter(FundModel.id == application.fund_id).one()
+    fund_short_name = application_data.get("fund_short_name")
 
     get_notification_service().send_change_received_email(
         email_address=account.email,
         fund_name=fund_name,
         round_name=round_name,
-        assess_url=Config.ASSESS_HOST + f"/assess/fund_dashboard/{fund.short_name}/{round_data.short_name}/",
+        assess_url=Config.ASSESS_HOST + f"/assess/fund_dashboard/{fund_short_name}/{round_data.short_name}/",
         contact_help_email=round_data.contact_email,
     )

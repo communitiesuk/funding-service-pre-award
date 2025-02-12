@@ -238,6 +238,7 @@ class SubmitApplicationView(MethodView):
                 application_with_form_json_and_fund_name = {
                     **application_with_form_json,
                     "fund_name": fund_data.name_json[language],
+                    "fund_short_name": fund_data.short_name,
                     "round_name": round_data.title_json[language],
                     "prospectus_url": round_data.prospectus_url,
                 }
@@ -246,7 +247,6 @@ class SubmitApplicationView(MethodView):
                     send_change_received_notification(
                         account=account,
                         application_with_form_json_and_fund_name=application_with_form_json_and_fund_name,
-                        application=application,
                         round_data=round_data,
                     )
 
