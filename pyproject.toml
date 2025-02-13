@@ -9,10 +9,10 @@ requires-python = ">=3.10, <3.11"
 dependencies = [
     "airium==0.2.6",
     "alembic-utils==0.8.6",
-    "babel==2.16.0",
-    "beautifulsoup4==4.12.3",
-    "boto3==1.36.16",
-    "colored==2.2.4",
+    "babel==2.17.0",
+    "beautifulsoup4==4.13.3",
+    "boto3==1.36.19",
+    "colored==2.3.0",
     "cssmin==0.2.0",
     "dataclass-dict-convert==1.7.4",
     "email-validator==2.2.0",
@@ -52,7 +52,7 @@ dependencies = [
     "slugify==0.0.1",
     "sqlalchemy-json==0.7.0",
     "sqlalchemy-utils==0.41.2",
-    "sqlalchemy[mypy]==2.0.37",
+    "sqlalchemy[mypy]==2.0.38",
     "xhtml2pdf==0.2.16",
     "notifications-python-client==10.0.1",
     "funding-service-design-utils[toggles]==6.0.2",
@@ -99,9 +99,9 @@ mccabe.max-complexity = 12
 [dependency-groups]
 dev = [
     "asserts==0.13.1",
-    "beautifulsoup4==4.12.3",
+    "beautifulsoup4==4.13.3",
     "click==8.1.7",
-    "colored==2.2.4",
+    "colored==2.3.0",
     "debugpy==1.8.12",
     "deepdiff==8.1.1",
     "dparse==0.6.4",
@@ -124,10 +124,10 @@ dev = [
     "types-pymysql==1.1.0.20241103",
     "types-colorama==0.4.15.20240311",
     "types-psycopg2==2.9.21.20250121",
-    "mypy==1.13.0",
+    "mypy==1.15.0",
     "types-babel==2.11.0.15",
-    "testcontainers>=4.9.1",
-    "pytest-xdist>=3.6.1",
+    "testcontainers==4.9.1",
+    "pytest-xdist==3.6.1",
 ]
 [tool.mypy]
 strict = true
