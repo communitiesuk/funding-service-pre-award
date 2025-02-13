@@ -2,7 +2,7 @@ FROM python:3.10-bullseye@sha256:86ae49e94b125580c964601409b9e8da5812e0e382df2b2
 
 WORKDIR /app
 
-COPY --from=ghcr.io/astral-sh/uv:latest@sha256:bb74263127d6451222fe7f71b330edfb189ab1c98d7898df2401fbf4f272d9b9 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:latest@sha256:7bff3c3776ec467fc1437960f2c469d8beb30f536a6465a3350c647ccd260ec2 /uv /uvx /bin/
 
 # Install the project's dependencies using the lockfile and settings
 RUN --mount=type=cache,target=/root/.cache/uv \
