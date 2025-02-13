@@ -1354,7 +1354,9 @@ def request_changes(application_id, sub_criteria_id, theme_id):
     assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
 
-    field_ids = [question["field_id"] for question in theme_answers_response]
+    filtered_questions = filter_questions(theme_answers_response)
+
+    field_ids = [question["field_id"] for question in filtered_questions]
     form = build_request_changes_form(field_ids)
     if request.method == "POST" and form.validate_on_submit():
         today_date = datetime.now(tz=timezone.utc).date()
@@ -1403,7 +1405,7 @@ def request_changes(application_id, sub_criteria_id, theme_id):
                 "value": question["field_id"],
                 "checked": question["field_id"] in (form.field_ids.data or []),
             }
-            for question in theme_answers_response
+            for question in filtered_questions
         ],
         state=state,
         sub_criteria=sub_criteria,
@@ -1911,3 +1913,7 @@ def success_page(application_id, sub_criteria_id, theme_id):
         sub_criteria=sub_criteria,
         assessment_status=assessment_status,
     )
+
+
+def filter_questions(theme_questions):
+    return [question for question in theme_questions if "answer" in question and question["answer"] is not None]
