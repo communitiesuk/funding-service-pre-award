@@ -37,13 +37,44 @@ jobs:
       environment: ${{ inputs.environment }}
 
   check_db_migrations:
+    name: Check DB migrations
     needs: [setup]
-    uses: communitiesuk/funding-service-design-workflows/.github/workflows/pre-deploy.yml@main
-    with:
-      postgres_unit_testing: false
-      check_db_migrations: ${{ needs.setup.outputs.jobs_to_run == '[]'}}
-      assets_required: false
-  pre_deploy_tests:
+    runs-on: ubuntu-latest
+    if: ${{ needs.setup.outputs.jobs_to_run == '[]' }}
+    services:
+      postgres:
+        # Docker Hub image
+        image: postgres:16.2@sha256:4aea012537edfad80f98d870a36e6b90b4c09b27be7f4b4759d72db863baeebb
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: password  # pragma: allowlist secret
+          POSTGRES_DB: pre_award_stores
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+    - name: Install the latest version of uv
+      uses: astral-sh/setup-uv@4db96194c378173c656ce18a155ffc14a9fc4355 # v5
+      with:
+        enable-cache: true
+    - name: Check DB is up to date
+      env:
+        FLASK_ENV: unit_test
+      run: uv run --frozen flask db upgrade && uv run --frozen flask db check
+    - name: Check that .current-alembic-head is pinned
+      env:
+        FLASK_ENV: unit_test
+      run: |
+        uv run --frozen flask db current | grep "$(cat ./db/migrations/.current-alembic-head) (head)"
+
+  unit_tests:
     needs: [setup]
     runs-on: ubuntu-latest
     steps:
@@ -67,6 +98,23 @@ jobs:
         env:
           GOV_NOTIFY_API_KEY: ${{ secrets.GOV_NOTIFY_API_KEY }}
         run: uv run pytest -n 2 .
+
+  type_checking:
+    needs: [ setup ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5
+        with:
+          python-version: 3.10.x
+      - name: Install uv
+        uses: astral-sh/setup-uv@4db96194c378173c656ce18a155ffc14a9fc4355 # v5
+        with:
+          enable-cache: true
+      - name: install dependencies
+        run: uv sync
       - name: run type checking
         if: ${{ needs.setup.outputs.jobs_to_run == '[]' }}
         run: uv run mypy
@@ -83,7 +131,7 @@ jobs:
       assets_required: true
 
   dev_deploy:
-    needs: [ pre_deploy_tests, paketo_build, setup ]
+    needs: [ unit_tests, type_checking, check_db_migrations, paketo_build, setup ]
     if: ${{ contains(fromJSON(needs.setup.outputs.jobs_to_run), 'dev') }}
     uses: communitiesuk/funding-service-design-workflows/.github/workflows/standard-deploy.yml@main
     secrets:
