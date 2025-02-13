@@ -1,4 +1,4 @@
-{% macro navbar(application_id, sub_criteria, current_theme_id, is_score_page=False) %}
+{% macro navbar(application_id, sub_criteria, current_theme_id, is_score_page=False, is_zero_to_one_scoring=False ) %}
 <nav class="assessment-navigation">
     <ul class="govuk-list">
         {% for theme in sub_criteria.themes %}
@@ -16,18 +16,18 @@
         {% endfor %}
     </ul>
 
-{% if g.access_controller.has_any_assessor_role and sub_criteria.is_scored %}
-    <ul class="govuk-list">
-        <li>
-            {% if not is_score_page %}
-            <a id="score-subcriteria-link" class="govuk-link govuk-link--no-visited-state" href="{{ url_for('scoring_bp.score',application_id=application_id,sub_criteria_id=sub_criteria.id) }}">
-            {% endif %}
-            Score the subcriteria
-            {% if not is_score_page %}
-            </a>
-            {% endif %}
-        </li>
-    </ul>
+{% if g.access_controller.has_any_assessor_role and sub_criteria.is_scored and not is_zero_to_one_scoring %}
+        <ul class="govuk-list">
+            <li>
+                {% if not is_score_page %}
+                <a id="score-subcriteria-link" class="govuk-link govuk-link--no-visited-state" href="{{ url_for('scoring_bp.score',application_id=application_id,sub_criteria_id=sub_criteria.id) }}">
+                {% endif %}
+                Score the subcriteria
+                {% if not is_score_page %}
+                </a>
+                {% endif %}
+            </li>
+        </ul>
 {% endif %}
 </nav>
 

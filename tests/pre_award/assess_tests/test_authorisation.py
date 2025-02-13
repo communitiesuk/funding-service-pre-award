@@ -651,3 +651,54 @@ class TestAuthorisation:
             assert b"Resolve flag" in response.data
         else:
             assert b"Resolve flag" not in response.data
+
+    @pytest.mark.parametrize(
+        "mock_scoring_system_name",
+        [
+            "ZeroToOne",
+            "OneToFive",
+            "ZeroToThree",
+        ],
+    )
+    @pytest.mark.application_id("resolved_app")
+    @pytest.mark.sub_criteria_id("test_sub_criteria_id")
+    def test_hiding_score_subcriteria_button(
+        self,
+        assess_test_client,
+        request,
+        mocker,
+        mock_get_sub_criteria,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_comments,
+        mock_get_application_metadata,
+        mock_get_sub_criteria_theme,
+        mock_get_assessor_tasklist_state,
+        mock_get_bulk_accounts,
+        mock_scoring_system_name,
+    ):
+        # Mocking fsd-user-token cookie
+        token = create_valid_token(test_assessor_claims)  # Use a generic claim for the test
+        assess_test_client.set_cookie("fsd_user_token", token)
+
+        # Apply the mock for get_application_scoring_system_name
+        with mocker.patch(
+            "pre_award.assess.assessments.routes.get_application_scoring_system_name",
+            return_value=mock_scoring_system_name,
+        ):
+            # Send a request to the route you want to test
+            application_id = request.node.get_closest_marker("application_id").args[0]
+            sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
+
+            response = assess_test_client.get(
+                f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}"  # noqa
+            )
+
+            assert response.status_code == 200, "Wrong status code on response"
+
+            soup = BeautifulSoup(response.data, "html.parser")
+            if mock_scoring_system_name == "ZeroToOne":
+                assert "Score the subcriteria" not in soup.get_text()
+            else:
+                assert "Score the subcriteria" in soup.get_text()

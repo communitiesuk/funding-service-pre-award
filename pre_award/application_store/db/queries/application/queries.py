@@ -24,6 +24,7 @@ from pre_award.application_store.external_services.aws import FileData, list_fil
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
 from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
+from pre_award.assessment_store.db.models.score.scores import AssessmentRound, ScoringSystem
 from pre_award.assessment_store.db.queries.assessment_records._helpers import derive_application_values
 from pre_award.config import Config
 from pre_award.db import db
@@ -451,3 +452,16 @@ def mark_application_with_requested_changes(application_id: str, field_ids: list
         application.status = ApplicationStatus.IN_PROGRESS
 
     db.session.commit()
+
+
+def get_application_scoring_system_name(app_id) -> str:
+    scoring_system_name = (
+        db.session.query(ScoringSystem.scoring_system_name)
+        .select_from(AssessmentRound)
+        .join(ScoringSystem, AssessmentRound.scoring_system_id == ScoringSystem.id)
+        .join(AssessmentRecord, AssessmentRecord.round_id == AssessmentRound.round_id)
+        .filter(AssessmentRecord.application_id == app_id)
+        .scalar()
+    )
+
+    return scoring_system_name.name
