@@ -124,7 +124,7 @@ dev = [
     "types-pymysql==1.1.0.20241103",
     "types-colorama==0.4.15.20240311",
     "types-psycopg2==2.9.21.20250121",
-    "mypy==1.13.0",
+    "mypy==1.15.0",
     "types-babel==2.11.0.15",
     "testcontainers==4.9.1",
     "pytest-xdist==3.6.1",
