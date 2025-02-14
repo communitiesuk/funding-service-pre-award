@@ -7,7 +7,7 @@ from fsd_utils import evaluate_response
 from sqlalchemy.orm.exc import NoResultFound
 
 from pre_award.application_store._helpers import get_blank_forms, order_applications
-from pre_award.application_store._helpers.application import send_submit_notification
+from pre_award.application_store._helpers.application import send_change_received_notification, send_submit_notification
 from pre_award.application_store.db.exceptions.submit import SubmitError
 from pre_award.application_store.db.models.application.enums import Status
 from pre_award.application_store.db.queries import (
@@ -204,8 +204,13 @@ class SubmitApplicationView(MethodView):
 
     def post(self, application_id):
         should_send_email = True
+        send_email_to_assessor = False
         if request.args.get("dont_send_email") == "true":
             should_send_email = False
+
+        check_application = get_application(application_id)
+        if check_application.date_submitted is not None:
+            send_email_to_assessor = True
 
         # Do the submission
         try:
@@ -233,9 +238,17 @@ class SubmitApplicationView(MethodView):
                 application_with_form_json_and_fund_name = {
                     **application_with_form_json,
                     "fund_name": fund_data.name_json[language],
+                    "fund_short_name": fund_data.short_name,
                     "round_name": round_data.title_json[language],
                     "prospectus_url": round_data.prospectus_url,
                 }
+
+                if send_email_to_assessor:
+                    send_change_received_notification(
+                        account=account,
+                        fund=fund_data,
+                        round_data=round_data,
+                    )
 
                 send_submit_notification(
                     application_with_form_json=application_with_form_json,

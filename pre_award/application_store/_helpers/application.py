@@ -10,6 +10,7 @@ from pre_award.application_store.db.queries.application import create_qa_base64f
 from pre_award.application_store.db.queries.reporting.queries import (
     map_application_key_fields,
 )
+from pre_award.config import Config
 from services.notify import NotificationError, get_notification_service
 
 
@@ -131,3 +132,13 @@ def send_submit_notification(
             "Sent notification %(notification_id)s for application %(application_reference)s",
             dict(notification_id=notification.id, application_reference=application_reference),
         )
+
+
+def send_change_received_notification(account, fund, round_data):
+    get_notification_service().send_change_received_email(
+        email_address=account.email,
+        fund_name=fund.name_json["en"],
+        round_name=round_data.title,
+        assess_url=Config.ASSESS_HOST + f"/assess/fund_dashboard/{fund.short_name}/{round_data.short_name}/",
+        contact_help_email=round_data.contact_email,
+    )

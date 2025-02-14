@@ -120,6 +120,8 @@ class NotificationService:
         "ASSESSMENT_APPLICATION_UNASSIGNED", "9cfaa46c-f122-4532-a9f6-b3c773de6555"
     )
 
+    CHANGE_RECEIVED_TEMPLATE_ID = os.environ.get("CHANGE_RECEIVED_TEMPLATE_ID", "cc1a6287-7d70-4264-84aa-0f8dbf9341dc")
+
     FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS = "FundingService@communities.gov.uk"
 
     # E.G. "EMAIL": "GOV_NOTIFY_ID"
@@ -417,6 +419,30 @@ class NotificationService:
             },
             govuk_notify_reference=govuk_notify_reference,
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(self.FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS),
+        )
+
+    def send_change_received_email(
+        self,
+        email_address: str,
+        fund_name: str,
+        round_name: str,
+        contact_help_email: str,
+        assess_url: str,
+        govuk_notify_reference: str | None = None,
+    ) -> Notification:
+        template_id = self.CHANGE_RECEIVED_TEMPLATE_ID
+
+        return self._send_email(
+            email_address,
+            template_id,
+            personalisation={
+                "name of fund": fund_name,
+                "round name": round_name,
+                "sign in link": assess_url,
+                "contact email": contact_help_email,
+            },
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(self.FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS),
+            govuk_notify_reference=govuk_notify_reference,
         )
 
 

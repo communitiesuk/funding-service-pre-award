@@ -10,7 +10,7 @@ from flask_session import Session
 from fsd_utils import Decision, NotifyConstants
 from pytest_mock import MockerFixture
 
-from pre_award.application_store._helpers.application import send_submit_notification
+from pre_award.application_store._helpers.application import send_change_received_notification, send_submit_notification
 from pre_award.application_store.db.exceptions.submit import SubmitError
 from pre_award.application_store.db.models.application.applications import Applications
 from pre_award.application_store.db.models.application.enums import Status as ApplicationStatus
@@ -32,6 +32,8 @@ from pre_award.assessment_store.db.models.assessment_record.enums import Status 
 from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
 from pre_award.assessment_store.scripts.derive_assessment_values import derive_assessment_values
+from pre_award.config import Config
+from services.notify import NotificationService
 from tests.pre_award.assessment_store_tests.test_assessment_mapping_fund_round import COF_FUND_ID
 from tests.pre_award.utils import AnyStringMatching
 
@@ -811,3 +813,56 @@ def test_assessment_records_workflow_status(
     assert application.status.name == "SUBMITTED"  # type: ignore
     assessment_record = db.session.get(AssessmentRecord, application_id)
     assert assessment_record.workflow_status.name == "CHANGE_RECEIVED"
+
+
+@pytest.mark.parametrize(
+    "exp_template, exp_personalisation",
+    [
+        (
+            "00000000-0000-0000-0000-000000000004",
+            {
+                "name of fund": "Community Ownership Fund",
+                "round name": "test",
+                "sign in link": Config.ASSESS_HOST + "/assess/fund_dashboard/COF/test/",
+                "contact email": "contact@test.com",
+            },
+        )
+    ],
+)
+def test_send_change_received_notification(
+    mocker,
+    db,
+    app,
+    setup_completed_application,
+    mock_get_files,
+    exp_template,
+    exp_personalisation,
+    mock_notification_service_calls,
+):
+    mock_account = MagicMock(email="test@test.com", full_name="Test User")
+    mock_round = MagicMock(title="test", contact_email="contact@test.com", short_name="test")
+    mocker.patch(
+        "services.notify.NotificationService.CHANGE_RECEIVED_TEMPLATE_ID",
+        "00000000-0000-0000-0000-000000000004",
+    )
+
+    fund_id = get_fund_id(setup_completed_application)
+    fund_data = get_fund(fund_id)
+
+    send_change_received_notification(
+        account=mock_account,
+        fund=fund_data,
+        round_data=mock_round,
+    )
+    assert len(mock_notification_service_calls) == 1
+    assert mock_notification_service_calls == [
+        mocker.call(
+            "test@test.com",
+            exp_template,
+            personalisation=exp_personalisation,
+            govuk_notify_reference=None,
+            email_reply_to_id=NotificationService.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(
+                NotificationService.FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS
+            ),
+        )
+    ]
