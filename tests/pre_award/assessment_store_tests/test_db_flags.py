@@ -258,13 +258,13 @@ def create_change_request(db, application_id, status, updates=None, is_change_re
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_get_all_change_requests(_db, seed_application_records):
+def test_get_all_change_requests(db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
     create_change_request(
-        _db, app_id, FlagStatus.RAISED, updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}]
+        db, app_id, FlagStatus.RAISED, updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}]
     )
     create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RESOLVED,
         updates=[{"status": FlagStatus.RESOLVED, "date_created": datetime(2025, 2, 4) - timedelta(days=1)}],
@@ -275,13 +275,13 @@ def test_get_all_change_requests(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_get_only_raised_change_requests(_db, seed_application_records):
+def test_get_only_raised_change_requests(db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
     create_change_request(
-        _db, app_id, FlagStatus.RAISED, updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}]
+        db, app_id, FlagStatus.RAISED, updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}]
     )
     create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RESOLVED,
         updates=[{"status": FlagStatus.RESOLVED, "date_created": datetime(2025, 2, 4) - timedelta(days=1)}],
@@ -293,12 +293,12 @@ def test_get_only_raised_change_requests(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_sort_by_update(_db, seed_application_records):
+def test_sort_by_update(db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
     base_date = datetime(2025, 2, 4)
 
     flag1 = create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RAISED,
         updates=[
@@ -308,7 +308,7 @@ def test_sort_by_update(_db, seed_application_records):
         ],
     )
     flag2 = create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RAISED,
         updates=[
@@ -317,7 +317,7 @@ def test_sort_by_update(_db, seed_application_records):
         ],
     )
     flag3 = create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RESOLVED,
         updates=[
@@ -336,12 +336,12 @@ def test_sort_by_update(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_sort_by_update_only_raised(_db, seed_application_records):
+def test_sort_by_update_only_raised(db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
     base_date = datetime(2025, 2, 4)
 
     flag1 = create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RAISED,
         updates=[
@@ -351,7 +351,7 @@ def test_sort_by_update_only_raised(_db, seed_application_records):
         ],
     )
     create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RESOLVED,
         updates=[
@@ -360,7 +360,7 @@ def test_sort_by_update_only_raised(_db, seed_application_records):
         ],
     )
     flag3 = create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RAISED,
         updates=[
@@ -370,7 +370,7 @@ def test_sort_by_update_only_raised(_db, seed_application_records):
         ],
     )
     flag4 = create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RAISED,
         updates=[
@@ -386,24 +386,24 @@ def test_sort_by_update_only_raised(_db, seed_application_records):
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_no_change_requests(_db, seed_application_records):
+def test_no_change_requests(db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
     results = get_change_requests_for_application(app_id)
     assert len(results) == 0
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_exclude_non_change_requests(_db, seed_application_records):
+def test_exclude_non_change_requests(db, seed_application_records):
     app_id = seed_application_records[0]["application_id"]
     create_change_request(
-        _db,
+        db,
         app_id,
         FlagStatus.RAISED,
         updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}],
         is_change_request=False,
     )
     create_change_request(
-        _db, app_id, FlagStatus.RAISED, updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}]
+        db, app_id, FlagStatus.RAISED, updates=[{"status": FlagStatus.RAISED, "date_created": datetime(2025, 2, 4)}]
     )
 
     results = get_change_requests_for_application(app_id)
