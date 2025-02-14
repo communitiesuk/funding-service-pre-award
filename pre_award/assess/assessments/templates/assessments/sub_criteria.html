@@ -59,7 +59,7 @@ Error:
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-        {{ navbar(application_id=application_id, sub_criteria=sub_criteria, current_theme_id=current_theme.id, is_zero_to_one_scoring=is_zero_to_one_scoring) }}
+        {{ navbar(application_id, sub_criteria, current_theme.id) }}
     </div>
     <div class="theme govuk-grid-column-two-thirds">
         {% for change_request in change_requests %}
