@@ -16,10 +16,7 @@ from fsd_utils.sqs_scheduler.context_aware_executor import ContextAwareExecutor
 from markupsafe import escape
 from werkzeug.datastructures import ImmutableMultiDict, MultiDict
 
-from pre_award.application_store.db.queries.application.queries import (
-    get_application_scoring_system_name,
-    mark_application_with_requested_changes,
-)
+from pre_award.application_store.db.queries.application.queries import mark_application_with_requested_changes
 from pre_award.assess.assessments.activity_trail import (
     AssociatedTags,
     CheckboxForm,
@@ -1252,9 +1249,6 @@ def display_sub_criteria(
             )
         )
 
-    scoring_system_name = get_application_scoring_system_name(application_id)
-    is_zero_to_one_scoring = scoring_system_name == "ZeroToOne"
-
     common_template_config = {
         "sub_criteria": sub_criteria,
         "score": score[0] if score else None,
@@ -1273,7 +1267,6 @@ def display_sub_criteria(
         "flag_status": flag_status,
         "assessment_status": assessment_status,
         "pagination": state.get_pagination_from_sub_criteria_id(sub_criteria_id),
-        "is_zero_to_one_scoring": is_zero_to_one_scoring,
     }
 
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)

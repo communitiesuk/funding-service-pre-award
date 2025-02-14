@@ -642,10 +642,6 @@ def mock_get_comments(mocker):
             return_value=mock_comments,
         ),
     )
-    mocker.patch(
-        "pre_award.assess.assessments.routes.get_application_scoring_system_name",
-        return_value="OneToFive",
-    )
     yield
 
 
@@ -655,10 +651,6 @@ def mock_get_scores(mocker):
     mocker.patch(
         "pre_award.assess.scoring.routes.get_score_and_justification",
         return_value=mock_scores,
-    )
-    mocker.patch(
-        "pre_award.assess.assessments.routes.get_application_scoring_system_name",
-        return_value="OneToFive",
     )
     yield
 
