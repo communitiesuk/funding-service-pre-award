@@ -1,0 +1,213 @@
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      image_location:
+        description: "Location of the image to deploy."
+        type: string
+        required: false
+      alert_slack_on_failure:
+        description: "Sends an alert to the prod alerts channel if deployment fails"
+        required: true
+        default: false
+        type: boolean
+      notify_slack_on_deployment:
+        description: "Send messages to the deployments channel when deploys start+finish."
+        default: false
+        type: boolean
+    secrets:
+      AWS_ACCOUNT:
+        required: true
+      FSD_GH_APP_ID:
+        required: true
+      FSD_GH_APP_KEY:
+        required: true
+      FS_BASIC_AUTH_USERNAME:
+        required: true
+      FS_BASIC_AUTH_PASSWORD:
+        required: true
+      SLACK_BOT_TOKEN:
+        required: false
+      SLACK_NOTIFICATION_CHANNEL_ID:
+        required: false
+      SLACK_DEPLOYMENTS_CHANNEL_ID:
+        description: "[required if notify_slack_on_deployment=true]"
+        required: false
+
+jobs:
+  notify_slack_start:
+    name: Notify Slack of deployment starting
+    if: ${{ inputs.notify_slack_on_deployment }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Slack message for start of deployment
+      id: slack_start_deployment_message
+      uses: communitiesuk/funding-service-design-workflows/.github/actions/slack_deployment_message@main
+      with:
+        stage: 'start'
+        app_name: pre-award
+        environment: ${{ inputs.environment }}
+        workflow_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
+        slack_channel_id: ${{ secrets.SLACK_DEPLOYMENTS_CHANNEL_ID }}
+    outputs:
+      slack_start_message_ts: ${{ steps.slack_start_deployment_message.slack_start_message_ts }}
+      deployment_start_ts: ${{ steps.slack_start_deployment_message.timestamp }}
+
+
+  db_migrations:
+    name: Run DB migrations
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+    - name: Git clone the repository
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+    - name: Get current date
+      shell: bash
+      id: currentdatetime
+      run: echo "datetime=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
+      with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/GithubCopilotDeploy
+        role-session-name: "pre-award_${{ inputs.environemnt }}_copilot_${{ steps.currentdatetime.outputs.datetime }}"
+        aws-region: eu-west-2
+
+    - name: Install AWS Copilot CLI
+      shell: bash
+      run: |
+        curl -Lo aws-copilot https://github.com/aws/copilot-cli/releases/latest/download/copilot-linux && chmod +x aws-copilot && sudo mv aws-copilot /usr/local/bin/copilot
+
+    - name: confirm copilot env
+      shell: bash
+      run: |
+        if [ $(copilot env ls) != "${{ inputs.environment }}" ]; then
+          echo $(copilot env ls)
+          exit 1
+        fi
+
+    - name: Update manifest
+      run: |
+        yq -i '.variables.GITHUB_SHA = "${{ github.sha }}"'  copilot/fsd-pre-award/manifest.yml
+        yq -i ".image.location = \"${{ inputs.image_location }}\""  copilot/fsd-pre-award/manifest.yml
+        yq -i "del(.image.build)"  copilot/fsd-pre-award/manifest.yml
+
+    - name: Run database migrations
+      id: db_migrations
+      run: scripts/migration-task-script.py ${{ inputs.environment }} ${{ inputs.image_location }}
+
+  deploy:
+    name: ${{ matrix.deployment }}
+    needs: [ db_migrations ]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - deployment: pre-award
+            command: svc
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+    - name: Git clone the repository
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+    - name: Get current date
+      shell: bash
+      id: currentdatetime
+      run: echo "datetime=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
+      with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/GithubCopilotDeploy
+        role-session-name: "${{ matrix.app_name }}_${{ inputs.environemnt }}_copilot_${{ steps.currentdatetime.outputs.datetime }}"
+        aws-region: eu-west-2
+
+    - name: Install AWS Copilot CLI
+      shell: bash
+      run: |
+        curl -Lo aws-copilot https://github.com/aws/copilot-cli/releases/latest/download/copilot-linux && chmod +x aws-copilot && sudo mv aws-copilot /usr/local/bin/copilot
+
+    - name: confirm copilot env
+      shell: bash
+      run: |
+        if [ $(copilot env ls) != "${{ inputs.environment }}" ]; then
+          echo $(copilot env ls)
+          exit 1
+        fi
+
+    - name: Update manifest
+      run: |
+        yq -i '.variables.GITHUB_SHA = "${{ github.sha }}"'  copilot/fsd-${{ matrix.deployment }}/manifest.yml
+        yq -i ".image.location = \"${{ inputs.image_location }}\""  copilot/fsd-${{ matrix.deployment }}/manifest.yml
+        yq -i "del(.image.build)"  copilot/fsd-${{ matrix.deployment }}/manifest.yml
+
+    - name: Copilot ${{ inputs.environment }} deploy
+      id: deploy_build
+      run: |
+        copilot ${{ matrix.command }} init --app pre-award --name fsd-${{ matrix.deployment }} || true
+        copilot ${{ matrix.command }} deploy --env ${{ inputs.environment }} --app pre-award --name fsd-${{ matrix.deployment }}
+
+  e2e_test:
+    name: Run end-to-end (browser) tests
+    if: ${{ inputs.environment == 'dev' || inputs.environment == 'test' || inputs.environment == 'uat' }}  # Do not run these against the prod environment without addressing the auth/JWT self-signing done by e2e tests.
+    needs: [ deploy ]
+    uses: communitiesuk/funding-service-design-workflows/.github/workflows/run-shared-tests.yml@main
+    with:
+      run_e2e_tests_assessment: ${{ inputs.run_e2e_tests_assessment }}
+      run_e2e_tests_application: ${{ inputs.run_e2e_tests_application }}
+      run_e2e_tests_python: ${{ inputs.environment == 'dev' || inputs.environment == 'test' }}
+      env_name: ${{ inputs.environment }}
+    secrets:
+      FSD_GH_APP_ID: ${{ secrets.FSD_GH_APP_ID }}
+      FSD_GH_APP_KEY: ${{ secrets.FSD_GH_APP_KEY }}
+      FS_BASIC_AUTH_USERNAME: ${{ secrets.FS_BASIC_AUTH_USERNAME }}
+      FS_BASIC_AUTH_PASSWORD: ${{ secrets.FS_BASIC_AUTH_PASSWORD }}
+      AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
+
+  alert_slack_on_failure:
+    name: Alert Slack if deployment fails
+    needs: [ db_migrations, deploy, e2e_test ]
+    if: ${{ inputs.alert_slack_on_failure && always() && (needs.db_migrations.result == 'failure' || needs.deploy.result == 'failure' || needs.e2e_test.result == 'failure') }}
+    uses: communitiesuk/funding-service-design-workflows/.github/workflows/notify-slack-deployment-failed.yml@main
+    with:
+      app_name: pre-award
+      env_name: ${{ inputs.environment }}
+      github_username: ${{ github.actor }}
+      workflow_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      compare_url: ${{ github.event_name == 'push' && github.event.compare || null }}
+    secrets:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_NOTIFICATION_CHANNEL_ID: ${{ secrets.SLACK_NOTIFICATION_CHANNEL_ID }}
+
+  notify_slack_end:
+    name: Notify Slack of deployment ending
+    needs: [ notify_slack_start, db_migrations, e2e_test ]
+    runs-on: ubuntu-latest
+    if: ${{ always() && inputs.notify_slack_on_deployment && needs.notify_slack_start.outcome == 'success' }}
+    steps:
+    - name: Slack message for start of deployment
+      id: slack_start_deployment_message
+      uses: communitiesuk/funding-service-design-workflows/.github/actions/slack_deployment_message@main
+      with:
+        stage: 'end'
+        app_name: pre-award
+        environment: ${{ inputs.environment }}
+        workflow_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
+        slack_channel_id: ${{ secrets.SLACK_DEPLOYMENTS_CHANNEL_ID }}
+
+        status: "${{ ( (needs.db_migrations.outcome == 'skipped' || needs.db_migrations.outcome == 'success') && needs.deploy.outcome == 'success' && needs.e2e_test.outcome == 'success') && 'success' || 'failed' }}"
+        slack_message_ts: ${{ needs.notify_slack_start.outputs.slack_start_message_ts }}
+        deployment_start_ts: ${{ needs.notify_slack_start.outputs.deployment_start_ts }}
