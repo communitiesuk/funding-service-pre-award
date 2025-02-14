@@ -18,6 +18,16 @@ on:
         description: "Send messages to the deployments channel when deploys start+finish."
         default: false
         type: boolean
+      run_e2e_tests_assessment:
+        required: false
+        default: true
+        type: boolean
+        description: Run assess (node) e2e tests
+      run_e2e_tests_application:
+        required: false
+        default: true
+        type: boolean
+        description: Run apply (node) e2e tests
     secrets:
       AWS_ACCOUNT:
         required: true
