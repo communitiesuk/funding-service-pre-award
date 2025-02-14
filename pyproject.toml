@@ -103,7 +103,7 @@ dev = [
     "click==8.1.7",
     "colored==2.3.0",
     "debugpy==1.8.12",
-    "deepdiff==8.1.1",
+    "deepdiff==8.2.0",
     "dparse==0.6.4",
     "invoke==2.2.0",
     "invoke==2.2.0",
