@@ -315,7 +315,6 @@ def get_round(fid: str, rid: str, use_short_name: bool = False, ttl_hash=None) -
         fund_id=fid, round_id=rid, use_short_name=use_short_name
     )
     round_response = get_data(round_endpoint)
-    current_app.logger.info(round_response)
     if round_response and "assessment_deadline" in round_response:
         round_dict = Round.from_dict(round_response)
         return round_dict

@@ -2,7 +2,7 @@ import copy
 import json
 from uuid import UUID
 
-from flask import current_app, make_response
+from flask import make_response
 
 from pre_award.assess.services.models.flag import FlagType
 from pre_award.assessment_store.db.models.assessment_record.enums import Status
@@ -66,8 +66,6 @@ def transform_to_assessor_task_list_metadata(
     change_requests: list[AssessmentFlag],
     workflow_status: str,
 ) -> tuple[list[dict], list[dict]]:
-    current_app.logger.info("Configured fund-rounds:")
-    current_app.logger.info(Config.ASSESSMENT_MAPPING_CONFIG.keys())
     mapping = copy.deepcopy(Config.ASSESSMENT_MAPPING_CONFIG[f"{fund_id}:{round_id}"])
 
     sections = [

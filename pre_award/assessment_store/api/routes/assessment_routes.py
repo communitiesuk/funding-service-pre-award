@@ -152,23 +152,14 @@ def sub_criteria(application_id, sub_criteria_id) -> Dict:
     :return: A sub criteria dictionary.
 
     """
-    current_app.logger.info(
-        "Processing request for sub criteria: %(sub_criteria_id)s.", dict(sub_criteria_id=sub_criteria_id)
-    )
     metadata = find_assessor_task_list_state(application_id)
-    current_app.logger.info(
-        "Searching assessment mapping for sub criteria: %(sub_criteria_id)s.", dict(sub_criteria_id=sub_criteria_id)
-    )
     sub_criteria_config_from_mapping = return_subcriteria_from_mapping(
         sub_criteria_id,
         metadata["fund_id"],
         metadata["round_id"],
         metadata["language"],
     )
-    current_app.logger.info(
-        "Getting application subcriteria metadata for application: %(sub_criteria_id)s.",
-        dict(sub_criteria_id=sub_criteria_id),
-    )
+
     application_metadata_for_subcriteria = get_assessment_sub_critera_state(application_id)
     sub_criteria = SubCriteria.from_filtered_dict(
         {
