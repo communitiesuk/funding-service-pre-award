@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from pre_award.application_store.db.models import Applications
-from pre_award.application_store.db.models.application.enums import Status as ApplicationStatus
 from pre_award.application_store.db.models.forms.enums import Status as FormStatus
 from pre_award.application_store.db.models.forms.forms import Forms
 from pre_award.application_store.db.queries import get_feedback
@@ -82,7 +81,7 @@ def update_application_status(
 
     form_statuses = [form.status.name for form in application_with_forms.forms]
     if "CHANGE_REQUESTED" in form_statuses:
-        status = ApplicationStatus.CHANGE_REQUESTED.name
+        status = "IN_PROGRESS"
     elif "IN_PROGRESS" in form_statuses:
         status = "IN_PROGRESS"
     elif "COMPLETED" in form_statuses and ("NOT_STARTED" in form_statuses or not all_feedback_and_survey_completed):

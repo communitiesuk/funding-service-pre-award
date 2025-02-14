@@ -745,7 +745,7 @@ def test_multiple_fields_changed(existing_json_blob, new_json_blob, mock_now):
 @pytest.mark.parametrize("mock_now", ["2024-01-01T12:00:00+00:00"])
 def test_existing_history_log_is_appended(existing_json_blob, new_json_blob, mock_now):
     # Set up existing history log for field
-    new_json_blob["forms"][0]["questions"][0]["fields"][1]["history_log"] = [
+    existing_json_blob["forms"][0]["questions"][0]["fields"][1]["history_log"] = [
         {"2023-12-31T23:59:59+00:00": "previous_value"}
     ]
     new_json_blob["forms"][0]["questions"][0]["fields"][1]["answer"] = "another_new_value"
