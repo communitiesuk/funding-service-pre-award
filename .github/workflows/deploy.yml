@@ -53,25 +53,6 @@ on:
         required: false
 
 jobs:
-  notify_slack_start:
-    name: Notify Slack of deployment starting
-    if: ${{ inputs.notify_slack_on_deployment }}
-    runs-on: ubuntu-latest
-    steps:
-    - name: Slack message for start of deployment
-      id: slack_start_deployment_message
-      uses: communitiesuk/funding-service-design-workflows/.github/actions/slack_deployment_message@main
-      with:
-        stage: 'start'
-        app_name: pre-award
-        environment: ${{ inputs.environment }}
-        workflow_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
-        slack_channel_id: ${{ secrets.SLACK_DEPLOYMENTS_CHANNEL_ID }}
-    outputs:
-      slack_start_message_ts: ${{ steps.slack_start_deployment_message.slack_start_message_ts }}
-      deployment_start_ts: ${{ steps.slack_start_deployment_message.timestamp }}
-
   deploy:
     name: ${{ matrix.deployment }}
     strategy:
@@ -85,7 +66,22 @@ jobs:
       contents: read  # This is required for actions/checkout
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    outputs:
+      slack_start_message_ts: ${{ steps.slack_start_deployment_message.outputs.slack_start_message_ts }}
+      deployment_start_ts: ${{ steps.slack_start_deployment_message.outputs.timestamp }}
     steps:
+    - name: Slack message for start of deployment
+      id: slack_start_deployment_message
+      if: ${{ matrix.deployment == 'pre-award' && inputs.notify_slack_on_deployment }}
+      uses: communitiesuk/funding-service-design-workflows/.github/actions/slack_deployment_message@main
+      with:
+        stage: 'start'
+        app_name: pre-award
+        environment: ${{ inputs.environment }}
+        workflow_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
+        slack_channel_id: ${{ secrets.SLACK_DEPLOYMENTS_CHANNEL_ID }}
+
     - name: Git clone the repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
@@ -164,12 +160,12 @@ jobs:
 
   notify_slack_end:
     name: Notify Slack of deployment ending
-    needs: [ notify_slack_start, e2e_test ]
+    needs: [ deploy, e2e_test ]
     runs-on: ubuntu-latest
-    if: ${{ always() && inputs.notify_slack_on_deployment && needs.notify_slack_start.outcome == 'success' }}
+    if: ${{ always() && inputs.notify_slack_on_deployment && needs.deploy.result == 'success' }}
     steps:
-    - name: Slack message for start of deployment
-      id: slack_start_deployment_message
+    - name: Slack message for end of deployment
+      id: slack_end_deployment_message
       uses: communitiesuk/funding-service-design-workflows/.github/actions/slack_deployment_message@main
       with:
         stage: 'end'
@@ -179,6 +175,6 @@ jobs:
         slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
         slack_channel_id: ${{ secrets.SLACK_DEPLOYMENTS_CHANNEL_ID }}
 
-        status: "${{ ( needs.deploy.outcome == 'success' && needs.e2e_test.outcome == 'success') && 'success' || 'failed' }}"
-        slack_message_ts: ${{ needs.notify_slack_start.outputs.slack_start_message_ts }}
-        deployment_start_ts: ${{ needs.notify_slack_start.outputs.deployment_start_ts }}
+        status: "${{ ( needs.deploy.result == 'success' && needs.e2e_test.result == 'success') && 'success' || 'failed' }}"
+        slack_message_ts: ${{ needs.deploy.outputs.slack_start_message_ts }}
+        deployment_start_ts: ${{ needs.deploy.outputs.deployment_start_ts }}
