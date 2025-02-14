@@ -23,6 +23,11 @@ on:
         default: true
         type: boolean
         description: Run apply (node) e2e tests
+      run_e2e_tests_python:
+        required: false
+        default: true
+        type: boolean
+        description: Run python e2e tests
   push:
 
 jobs:
@@ -146,6 +151,9 @@ jobs:
       image_location: ${{ needs.paketo_build.outputs.image_location }}
       alert_slack_on_failure: false
       notify_slack_on_deployment: false
+      run_e2e_tests_assessment: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_assessment }}
+      run_e2e_tests_application: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_application }}
+      run_e2e_tests_python: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_python }}
 
   test_deploy:
     needs: [ setup, unit_tests, type_checking, paketo_build ]
@@ -168,6 +176,9 @@ jobs:
       image_location: ${{ needs.paketo_build.outputs.image_location }}
       alert_slack_on_failure: true
       notify_slack_on_deployment: false
+      run_e2e_tests_assessment: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_assessment }}
+      run_e2e_tests_application: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_application }}
+      run_e2e_tests_python: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_python }}
 
   uat_deploy:
     needs: [ setup, unit_tests, type_checking, paketo_build, test_deploy ]
@@ -190,6 +201,9 @@ jobs:
       image_location: ${{ needs.paketo_build.outputs.image_location }}
       alert_slack_on_failure: true
       notify_slack_on_deployment: false
+      run_e2e_tests_assessment: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_assessment }}
+      run_e2e_tests_application: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_application }}
+      run_e2e_tests_python: false  # Never been turned on for UAT yet
 
   prod_deploy:
     needs: [ setup, unit_tests, type_checking, paketo_build, test_deploy, uat_deploy ]
@@ -212,3 +226,6 @@ jobs:
       image_location: ${{ needs.paketo_build.outputs.image_location }}
       alert_slack_on_failure: true
       notify_slack_on_deployment: true
+      run_e2e_tests_assessment: false
+      run_e2e_tests_application: false
+      run_e2e_tests_python: false
