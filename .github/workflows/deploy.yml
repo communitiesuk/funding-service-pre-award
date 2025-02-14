@@ -175,6 +175,6 @@ jobs:
         slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
         slack_channel_id: ${{ secrets.SLACK_DEPLOYMENTS_CHANNEL_ID }}
 
-        status: "${{ ( needs.deploy.result == 'success' && needs.e2e_test.result == 'success') && 'success' || 'failed' }}"
+        status: "${{ (needs.deploy.result == 'success' && (needs.e2e_test.result == 'skipped' || needs.e2e_test.result == 'success')) && 'success' || 'failed' }}"
         slack_message_ts: ${{ needs.deploy.outputs.slack_start_message_ts }}
         deployment_start_ts: ${{ needs.deploy.outputs.deployment_start_ts }}
