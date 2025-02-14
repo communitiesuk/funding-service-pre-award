@@ -144,7 +144,7 @@ jobs:
     with:
       environment: dev
       image_location: ${{ needs.paketo_build.outputs.image_location }}
-      slack_alert_on_failure: false
+      alert_slack_on_failure: false
       notify_slack_on_deployment: false
 
   test_deploy:
@@ -166,7 +166,7 @@ jobs:
     with:
       environment: test
       image_location: ${{ needs.paketo_build.outputs.image_location }}
-      slack_alert_on_failure: true
+      alert_slack_on_failure: true
       notify_slack_on_deployment: false
 
   uat_deploy:
@@ -188,7 +188,7 @@ jobs:
     with:
       environment: uat
       image_location: ${{ needs.paketo_build.outputs.image_location }}
-      slack_alert_on_failure: true
+      alert_slack_on_failure: true
       notify_slack_on_deployment: false
 
   prod_deploy:
@@ -210,5 +210,5 @@ jobs:
     with:
       environment: prod
       image_location: ${{ needs.paketo_build.outputs.image_location }}
-      slack_alert_on_failure: true
+      alert_slack_on_failure: true
       notify_slack_on_deployment: true

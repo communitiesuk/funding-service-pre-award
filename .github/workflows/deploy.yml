@@ -9,7 +9,7 @@ on:
         description: "Location of the image to deploy."
         type: string
         required: false
-      slack_alert_on_failure:
+      alert_slack_on_failure:
         description: "Sends an alert to the prod alerts channel if deployment fails"
         required: true
         default: false
@@ -179,7 +179,7 @@ jobs:
   alert_slack_on_failure:
     name: Alert Slack if deployment fails
     needs: [ db_migrations, deploy, e2e_test ]
-    if: ${{ inputs.slack_alert_on_failure && always() && (needs.db_migrations.result == 'failure' || needs.deploy.result == 'failure' || needs.e2e_test.result == 'failure') }}
+    if: ${{ inputs.alert_slack_on_failure && always() && (needs.db_migrations.result == 'failure' || needs.deploy.result == 'failure' || needs.e2e_test.result == 'failure') }}
     uses: communitiesuk/funding-service-design-workflows/.github/workflows/notify-slack-deployment-failed.yml@main
     with:
       app_name: pre-award
