@@ -665,11 +665,13 @@ def get_sub_criteria_theme_answers_all(
         f"{Config.SUB_CRITERIA_THEME_ANSWERS_ENDPOINT.format(application_id=application_id)}"
     )
     theme_mapping_data = get_data(theme_mapping_data_url)
-    return map_application_with_sub_criteria_themes_fields(
+    theme_question_answers = map_application_with_sub_criteria_themes_fields(
         theme_mapping_data["application_json"],
         theme_mapping_data["sub_criterias"],
         theme_id,
     )
+    mark_themes_needing_assessor_review(theme_mapping_data["application_json"], theme_question_answers)
+    return theme_question_answers
 
 
 def get_all_sub_criterias_with_application_json(application_id: str):
@@ -679,6 +681,19 @@ def get_all_sub_criterias_with_application_json(application_id: str):
     )
     theme_mapping_data = get_data(theme_mapping_data_url)
     return theme_mapping_data
+
+
+def mark_themes_needing_assessor_review(application_json, theme_fields):
+    flag_for_assessor = set()
+    for form in application_json["jsonb_blob"]["forms"]:
+        for section in form["questions"]:
+            for field in section["fields"]:
+                if field.get("flag_for_assessor"):
+                    flag_for_assessor.add(field["key"])
+
+    for theme in theme_fields:
+        if theme["field_id"] in flag_for_assessor:
+            theme["flag_for_assessor"] = True
 
 
 def get_comments(

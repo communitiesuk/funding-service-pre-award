@@ -262,7 +262,7 @@ def update_field_history(existing_field):
     return history
 
 
-def update_application_fields(existing_json_blob, new_json_blob) -> set:
+def update_application_fields(existing_json_blob, new_json_blob, change_request_fields) -> set:
     # Build a mapping of key -> existing field from the existing JSON blob.
     existing_fields = {field["key"]: field for field in iter_fields(existing_json_blob)}
     changed_fields = set()
@@ -276,6 +276,8 @@ def update_application_fields(existing_json_blob, new_json_blob) -> set:
             changed_fields.add(key)
             # Update history_log using the helper function.
             field["history_log"] = update_field_history(existing_fields.get(key, {}))
+            if field["key"] not in change_request_fields:
+                field["flag_for_assessor"] = True
 
     return changed_fields
 
@@ -320,7 +322,11 @@ def submit_application(application_id) -> Applications:  # noqa: C901
             # For uncompeted funds, the application may already exist and this may be a resubmission.
 
             # updating row json blob
-            update_application_fields(existing_application.jsonb_blob, row["jsonb_blob"])
+            change_requests = existing_application.change_requests
+            change_request_fields = set(
+                field_id for change_request in change_requests for field_id in change_request.field_ids
+            )
+            update_application_fields(existing_application.jsonb_blob, row["jsonb_blob"], change_request_fields)
             if existing_application.workflow_status == WorkflowStatus.CHANGE_REQUESTED:
                 row["workflow_status"] = WorkflowStatus.CHANGE_RECEIVED
 
