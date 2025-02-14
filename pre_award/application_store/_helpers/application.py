@@ -134,17 +134,11 @@ def send_submit_notification(
         )
 
 
-def send_change_received_notification(account, application_with_form_json_and_fund_name, round_data):
-    application_data = create_qa_base64file(application_with_form_json_and_fund_name, True)
-    del application_data["forms"]
-    fund_name = application_data.get("fund_name")
-    round_name = application_data.get("round_name")
-    fund_short_name = application_data.get("fund_short_name")
-
+def send_change_received_notification(account, fund, round_data):
     get_notification_service().send_change_received_email(
         email_address=account.email,
-        fund_name=fund_name,
-        round_name=round_name,
-        assess_url=Config.ASSESS_HOST + f"/assess/fund_dashboard/{fund_short_name}/{round_data.short_name}/",
+        fund_name=fund.name_json["en"],
+        round_name=round_data.title,
+        assess_url=Config.ASSESS_HOST + f"/assess/fund_dashboard/{fund.short_name}/{round_data.short_name}/",
         contact_help_email=round_data.contact_email,
     )

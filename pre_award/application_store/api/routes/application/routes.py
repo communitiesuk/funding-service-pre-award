@@ -246,7 +246,7 @@ class SubmitApplicationView(MethodView):
                 if send_email_to_assessor:
                     send_change_received_notification(
                         account=account,
-                        application_with_form_json_and_fund_name=application_with_form_json_and_fund_name,
+                        fund=fund_data,
                         round_data=round_data,
                     )
 

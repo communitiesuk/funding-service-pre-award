@@ -822,7 +822,7 @@ def test_assessment_records_workflow_status(
             "00000000-0000-0000-0000-000000000004",
             {
                 "name of fund": "Community Ownership Fund",
-                "round name": "round title",
+                "round name": "test",
                 "sign in link": Config.ASSESS_HOST + "/assess/fund_dashboard/COF/test/",
                 "contact email": "contact@test.com",
             },
@@ -840,28 +840,18 @@ def test_send_change_received_notification(
     mock_notification_service_calls,
 ):
     mock_account = MagicMock(email="test@test.com", full_name="Test User")
-    mock_round = MagicMock(contact_email="contact@test.com", short_name="test")
+    mock_round = MagicMock(title="test", contact_email="contact@test.com", short_name="test")
     mocker.patch(
         "services.notify.NotificationService.CHANGE_RECEIVED_TEMPLATE_ID",
         "00000000-0000-0000-0000-000000000004",
     )
 
-    application_with_form_json = get_application(setup_completed_application, as_json=True, include_forms=True)
-
     fund_id = get_fund_id(setup_completed_application)
     fund_data = get_fund(fund_id)
-    language = application_with_form_json["language"]
-    application_with_form_json_and_fund_name = {
-        **application_with_form_json,
-        "fund_name": fund_data.name_json[language],
-        "round_name": "round title",
-        "fund_short_name": fund_data.short_name,
-        "prospectus_url": "https://prospectus",
-    }
 
     send_change_received_notification(
         account=mock_account,
-        application_with_form_json_and_fund_name=application_with_form_json_and_fund_name,
+        fund=fund_data,
         round_data=mock_round,
     )
     assert len(mock_notification_service_calls) == 1
