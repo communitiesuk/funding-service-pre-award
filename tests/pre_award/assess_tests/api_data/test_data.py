@@ -278,27 +278,27 @@ uncompeted_app = {
     "criteria_sub_criteria_id": "test_uncomp_sub_criteria_id",
     "flags": [
         {
-            "id": "1c5e8bea-f5ed-4b74-8823-e64fec27a7dc",
+            "id": "f5f6f21f-de43-4bce-9e33-ea39403653c6",
             "latest_status": FlagType.RESOLVED.value,
-            "latest_allocation": "test_team",
-            "application_id": resolved_app_id,
-            "sections_to_flag": ["Test section"],
+            "latest_allocation": "uf_test_team",
+            "application_id": uncompeted_app_id,
+            "sections_to_flag": ["UF Test section"],
             "field_ids": [],
             "is_change_request": False,
             "updates": [
                 {
-                    "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
+                    "id": "a9b8e6a0-858b-4cdc-8117-30c661c2416b",
                     "user_id": test_user_id_lead_assessor,
-                    "date_created": "2023-02-20 12:00:00",
-                    "justification": "Test",
+                    "date_created": "2024-02-20 12:00:00",
+                    "justification": "UF Test",
                     "status": FlagType.RAISED.value,
                     "allocation": None,
                 },
                 {
-                    "id": "316f607a-03b7-4592-b927-5021a28b7d6a",
+                    "id": "a9b8e6a0-858b-4cdc-8117-30c661c2416b",
                     "user_id": test_user_id_lead_assessor,
-                    "date_created": "2023-02-20 12:00:00",
-                    "justification": "Test",
+                    "date_created": "2024-02-20 12:00:00",
+                    "justification": "UF Test",
                     "status": FlagType.RESOLVED.value,
                     "allocation": None,
                 },
@@ -308,15 +308,15 @@ uncompeted_app = {
     "tag_associations": [
         {
             "associated": True,
-            "id": "f908512a-25ef-4ec8-9850-b5a9c867992f",
+            "id": "0a1ca013-481f-476b-a771-1b2ccd823cde",
             "user_id": test_user_id_lead_assessor,
             "tag": {
                 "active": True,
                 "creator_user_id": test_user_id_lead_assessor,
-                "id": "62ea161d-8593-4943-8676-baae283cd979",
+                "id": "efa474df-5e0d-4d5c-a286-7e058da61c15",
                 "value": "Tag one red",
                 "tag_type": {
-                    "id": "7e7ecf78-9239-498a-9086-008043230a69",
+                    "id": "4d4eb086-1404-4f82-9955-19e05fa18ce5",
                     "purpose": "NEGATIVE",
                 },
             },
