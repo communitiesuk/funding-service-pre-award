@@ -443,8 +443,9 @@ class NotificationService:
                 "contact email": contact_help_email,
             },
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(self.FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS),
-            govuk_notify_reference=govuk_notify_reference,)
-        
+            govuk_notify_reference=govuk_notify_reference,
+        )
+
     def send_requested_changes_email(
         self,
         email_address: str,
