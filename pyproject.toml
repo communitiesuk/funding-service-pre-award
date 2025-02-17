@@ -20,7 +20,7 @@ dependencies = [
     "flask-babel==4.0.0",
     "flask-compress==1.17",
     "flask-json==0.4.0",
-    "flask-marshmallow==1.2.1",
+    "flask-marshmallow==1.3.0",
     "flask-migrate==4.1.0",
     "flask-redis==0.4.0",
     "flask-restx==1.3.0",
