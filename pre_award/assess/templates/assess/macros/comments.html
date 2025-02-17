@@ -1,6 +1,24 @@
-{% macro comment(comments, application_id, scroll_comments, display_comment_box, display_comment_edit_box) %}
+{% macro comment(comments, application_id, scroll_comments, display_comment_box, display_comment_edit_box, sub_criteria=False, current_theme=False) %}
         <div class="govuk-!-margin-top-7 govuk-!-margin-bottom-5" id="comments">
             <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Comments</h2>
+            {% if sub_criteria and current_theme and display_comment_box != True and not display_comment_edit_box %}
+                <a
+                    id="comment"
+                    class="govuk-link govuk-link--no-visited-state"
+                    type="submit"
+                    data-module="govuk-button"
+                    href="{{ url_for(
+                        'assessment_bp.display_sub_criteria',
+                        application_id=application_id,
+                        sub_criteria_id=sub_criteria.id,
+                        theme_id=current_theme.id,
+                        add_comment='1',
+                        _anchor='comment'
+                    ) }}"
+                >
+                    Add a comment
+                </a>
+            {% endif %}
             <div id="more-detail-hint" class="govuk-hint">
                 <p class="govuk-body govuk-!-margin-top-2">Summarise any thoughts you have on the assessment.</p>
             </div>

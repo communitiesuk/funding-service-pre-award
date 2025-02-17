@@ -21,9 +21,7 @@ from pre_award.assess.services.models.round import Round
 from pre_award.assess.services.models.sub_criteria import SubCriteria
 from pre_award.assess.shared.helpers import get_ttl_hash
 from pre_award.assess.tagging.models.tag import AssociatedTag, Tag, TagType
-from pre_award.assess.themes.deprecated_theme_mapper import (
-    map_application_with_sub_criteria_themes_fields,
-)
+from pre_award.assess.themes.deprecated_theme_mapper import map_application_with_sub_criteria_themes_fields
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
 from pre_award.common.locale_selector.get_lang import get_lang
@@ -545,7 +543,7 @@ def get_flags(application_id: str) -> List[Flag]:
 
 
 def get_change_requests(application_id: str) -> List[Flag]:
-    flags_data = get_data(Config.ASSESSMENT_FLAGS_ENDPOINT.format(application_id=application_id))
+    flags_data = get_data(Config.ASSESSMENT_CHANGE_REQUESTS_ENDPOINT.format(application_id=application_id))
 
     if flags_data:
         return [flag for flag in Flag.from_list(flags_data) if flag.is_change_request]

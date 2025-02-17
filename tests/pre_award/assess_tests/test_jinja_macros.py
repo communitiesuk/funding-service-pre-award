@@ -805,7 +805,7 @@ class TestJinjaMacros(object):
             assert any("test@example.com" in info.text for info in user_info), "User info not found"
 
             date_created = alert_div.find("p", class_="govuk-body-s").find_next_sibling("p", class_="govuk-body-s")
-            assert date_created is not None and re.match(r"\d{2}/\d{2}/\d{4} at \d{2}:\d{2}", date_created.text), (
+            assert date_created is not None and re.match(r"\d{2} \w+ \d{4} at \d{2}:\d{2}", date_created.text), (
                 "Date created not found"
             )
 

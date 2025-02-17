@@ -29,21 +29,21 @@ test_lead_assessor_claims = {
     "accountId": "lead",
     "email": "lead@test.com",
     "fullName": "Test User",
-    "roles": ["TF_LEAD_ASSESSOR", "TF_ASSESSOR", "TF_COMMENTER"],
+    "roles": ["TF_LEAD_ASSESSOR", "TF_ASSESSOR", "TF_COMMENTER", "UF_LEAD_ASSESSOR", "UF_ASSESSOR", "UF_COMMENTER"],
 }
 
 test_assessor_claims = {
     "accountId": "assessor",
     "email": "assessor@test.com",
     "fullName": "Test User",
-    "roles": ["TF_ASSESSOR", "TF_COMMENTER"],
+    "roles": ["TF_ASSESSOR", "TF_COMMENTER", "UF_ASSESSOR", "UF_COMMENTER"],
 }
 
 test_commenter_claims = {
     "accountId": "commenter",
     "email": "commenter@test.com",
     "fullName": "Test User",
-    "roles": ["TF_COMMENTER"],
+    "roles": ["TF_COMMENTER", "UF_COMMENTER"],
 }
 
 test_roleless_user_claims = {
@@ -201,10 +201,16 @@ def mock_get_sub_criteria_banner_state(request):
 
 
 @pytest.fixture(scope="function")
-def mock_get_fund(mocker):
+def mock_get_fund(request, mocker):
     from pre_award.assess.services.models.fund import Fund
 
-    mock_fund_info = Fund.from_json(mock_api_results["fund_store/funds/{fund_id}"])
+    fund_id_marker = request.node.get_closest_marker("fund_id")
+    if fund_id_marker:
+        fund_id = fund_id_marker.args[0]
+    else:
+        fund_id = "{fund_id}"
+
+    mock_fund_info = Fund.from_json(mock_api_results[f"fund_store/funds/{fund_id}"])
 
     mock_funcs = [
         "pre_award.assess.assessments.routes.get_fund",

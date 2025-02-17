@@ -88,6 +88,30 @@ def test_get_flags_for_application(db, seed_application_records):
     assert result[0].sections_to_flag[0] == "Test section 1"
 
 
+@pytest.mark.apps_to_insert([{**test_input_data[0], "flags": [flag_config[0], flag_config[1], flag_config[2]]}])
+def test_get_change_requests_for_application(db, seed_application_records):
+    app_id = seed_application_records[0]["application_id"]
+
+    # Test without sorting
+    result = get_change_requests_for_application(app_id)
+    assert len(result) == 3
+    assert result[0].updates[0].justification == "Test justification 1"
+    assert result[1].updates[0].justification == "Test justification 2"
+    assert result[2].updates[0].justification == "Test justification 3"
+
+    # Test with sorting by raised date
+    result_sorted = get_change_requests_for_application(app_id, sort_by_raised=True)
+    assert len(result_sorted) == 3
+    assert (
+        result_sorted[0].updates[0].date_created
+        > result_sorted[1].updates[0].date_created
+        > result_sorted[2].updates[0].date_created
+    )
+    assert result_sorted[0].updates[0].justification == "Test justification 3"
+    assert result_sorted[1].updates[0].justification == "Test justification 2"
+    assert result_sorted[2].updates[0].justification == "Test justification 1"
+
+
 # @pytest.mark.skip(reason="integrate flags into seeded data")
 @pytest.mark.parametrize(
     "status_or_flag, expected_application_count",
@@ -132,9 +156,7 @@ def test_get_flags_for_application(db, seed_application_records):
 def test_get_most_recent_metadata_statuses_for_fund_round_id(
     status_or_flag, expected_application_count, seed_application_records, db
 ):
-    from pre_award.assessment_store.db.queries.assessment_records.queries import (
-        get_metadata_for_fund_round_id,
-    )
+    from pre_award.assessment_store.db.queries.assessment_records.queries import get_metadata_for_fund_round_id
 
     app_1 = get_assessment_record(seed_application_records[0]["application_id"])
     app_2 = get_assessment_record(seed_application_records[1]["application_id"])
