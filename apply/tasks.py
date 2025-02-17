@@ -11,7 +11,7 @@ from data.crud.fund_round_queries import get_rounds_for_application_deadline_rem
 from services.notify import NotificationError, get_notification_service
 
 
-def send_incomplete_application_reminder_impl() -> None:
+def send_application_deadline_reminders_impl() -> None:
     """
     Sends an email to each account that has one or more incomplete applications for an application round
     that has reminders enabled.
@@ -63,7 +63,7 @@ def send_incomplete_application_reminder_impl() -> None:
 
 
 @task
-def send_incomplete_application_reminder(c: Context) -> None:
+def send_application_deadline_reminders(c: Context) -> None:
     app = create_app()
     with app.app_context():
-        send_incomplete_application_reminder_impl()
+        send_application_deadline_reminders_impl()
