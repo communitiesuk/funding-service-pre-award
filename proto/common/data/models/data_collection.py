@@ -23,7 +23,9 @@ class ProtoDataCollectionDefinition(db.Model):
         "ProtoReportingRound", back_populates="data_collection_definition"
     )
     sections: Mapped[Optional[list["ProtoDataCollectionDefinitionSection"]]] = relationship(
-        "ProtoDataCollectionDefinitionSection", back_populates="definition"
+        "ProtoDataCollectionDefinitionSection",
+        back_populates="definition",
+        order_by="ProtoDataCollectionDefinitionSection.order",
     )
 
 
