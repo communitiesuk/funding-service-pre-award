@@ -91,7 +91,7 @@ class ProtoDataCollectionDefinitionQuestion(db.Model):
     dependent_conditions: Mapped[list["ProtoDataCollectionQuestionCondition"]] = relationship(
         primaryjoin="ProtoDataCollectionDefinitionQuestion.id==ProtoDataCollectionQuestionCondition.depends_on_question_id",
     )
-    condition_combination_type = Column(ENUM(ConditionCombination), nullable=False, default=ConditionCombination.AND)
+    condition_combination_type = Column(ENUM(ConditionCombination), nullable=True, default=ConditionCombination.AND)
 
     def __repr__(self):
         return f"<ProtoDataCollectionDefinitionQuestion {self.slug} section={self.section}>"
@@ -108,7 +108,9 @@ class ProtoDataCollectionQuestionCondition(db.Model):
         "ProtoDataCollectionDefinitionQuestion", back_populates="conditions", foreign_keys=[question_id]
     )
 
-    depends_on_question_id: Mapped[int] = mapped_column(db.ForeignKey(ProtoDataCollectionDefinitionQuestion.id))
+    depends_on_question_id: Mapped[int] = mapped_column(
+        db.ForeignKey(ProtoDataCollectionDefinitionQuestion.id), nullable=True
+    )
     depends_on_question: Mapped["ProtoDataCollectionDefinitionQuestion"] = relationship(
         "ProtoDataCollectionDefinitionQuestion",
         back_populates="dependent_conditions",
