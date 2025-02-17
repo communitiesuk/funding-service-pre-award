@@ -7,6 +7,10 @@ import requests
 from flask import abort, current_app
 from sqlalchemy import select
 
+from data.models import Fund as FundModel
+from data.models import Round as RoundModel
+from pre_award.account_store.db.models.account import Account
+from pre_award.application_store.db.queries.application.queries import get_application
 from pre_award.assess.scoring.models.score import Score
 from pre_award.assess.services.models.application import Application
 from pre_award.assess.services.models.banner import Banner
@@ -25,6 +29,7 @@ from pre_award.assessment_store.db.models.assessment_record.enums import Status 
 from pre_award.common.locale_selector.get_lang import get_lang
 from pre_award.config import Config
 from pre_award.db import db
+from services.notify import get_notification_service
 
 
 def get_data(endpoint: str, payload: Dict = None):
@@ -855,6 +860,26 @@ def get_scoring_system(round_id: str) -> List[Flag]:
     current_app.logger.info("Calling endpoint '%(scoring_endpoint)s'.", dict(scoring_endpoint=scoring_endpoint))
     scoring_system = get_data(scoring_endpoint)["scoring_system"]
     return scoring_system
+
+
+def notify_applicant_changes_requested(application_id: str):
+    application = get_application(app_id=application_id)
+    language = application.language
+    account = db.session.query(Account).filter(Account.id == application.account_id).one()
+    fund = db.session.query(FundModel).filter(FundModel.id == application.fund_id).one()
+    round = db.session.query(RoundModel).filter(RoundModel.id == application.round_id).one()
+    round_deadline = round.deadline.strftime("%-d %B %Y")
+    apply_fund_url = Config.APPLY_HOST + f"/funding-round/{fund.short_name}/{round.short_name}"
+
+    get_notification_service().send_requested_changes_email(
+        email_address=account.email,
+        application_reference=application.reference,
+        fund_name=fund.name_json[language.name],
+        round_name=round.title_json[language.name],
+        apply_fund_url=apply_fund_url,
+        application_deadline=round_deadline,
+        contact_email=round.contact_email,
+    )
 
 
 def assign_user_to_assessment(
