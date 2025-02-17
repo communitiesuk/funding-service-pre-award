@@ -94,9 +94,7 @@ def get_all_flags_for_application(application_id):
 
 @assessment_flag_bp.get("/change_requests/<application_id>")
 def get_all_change_requests_for_application(application_id):
-    current_app.logger.info(
-        "Get all change requests for application %(application_id)s", dict(application_id=application_id)
-    )
+    current_app.logger.info("Get all change requests for applications")
     flags = get_change_requests_for_application(application_id=application_id, sort_by_raised=True)
     flag_schema = AssessmentFlagSchema()
     return flag_schema.dump(flags, many=True)
