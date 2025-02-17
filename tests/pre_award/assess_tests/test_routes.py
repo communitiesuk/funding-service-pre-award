@@ -1046,7 +1046,7 @@ class TestRoutes:
             == "Flagged for test_team - Assessment stopped"
         )
         assert b"Lead User (Lead assessor) lead@test.com" in response.data
-        assert b"20/02/2023 at 12:00" in response.data
+        assert b"20 February 2023 at 12:00" in response.data
 
     @pytest.mark.application_id("resolved_app")
     def test_application_route_should_show_resolved_flag(
@@ -1308,7 +1308,7 @@ class TestRoutes:
 
         assert response.status_code == 200
         assert b"Marked as QA complete" in response.data
-        assert b"20/02/2023 at 12:00" in response.data
+        assert b"20 February 2023 at 12:00" in response.data
 
     @pytest.mark.application_id("flagged_qa_completed_app")
     def test_qa_completed_flagged_application(
@@ -1339,7 +1339,7 @@ class TestRoutes:
 
         assert response.status_code == 200
         assert b"Marked as QA complete" in response.data
-        assert b"20/02/2023 at 12:00" in response.data
+        assert b"20 February 2023 at 12:00" in response.data
         assert b"Section(s) flagged" in response.data
         assert b"Reason" in response.data
         assert b"Resolve flag" in response.data
@@ -1491,11 +1491,12 @@ class TestRoutes:
         assert sample_2 in response.text
 
     @pytest.mark.application_id("uncompeted_app")
+    @pytest.mark.fund_id("UNCOMPETED_FUND")
     def test_change_received_notification_banner(
         self,
         assess_test_client,
-        mock_get_funds,
         mock_get_fund,
+        mock_get_funds,
         mock_get_round,
         mock_get_application_metadata,
         mock_get_assessor_tasklist_state,
