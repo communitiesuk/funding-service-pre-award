@@ -8,7 +8,7 @@ from pre_award.assessment_store.api.routes.progress_routes import get_progress_f
 from pre_award.assessment_store.api.routes.score_routes import get_scoring_system_name_for_round_id
 from pre_award.assessment_store.db.models import AssessmentFlag, AssessmentRecord, Score
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as ApplicationStatus
-from pre_award.assessment_store.db.models.flags import FlagStatus
+from pre_award.assessment_store.db.models.flags import FlagStatus, FlagUpdate
 from pre_award.assessment_store.db.queries.assessment_records.queries import check_all_change_requests_accepted
 from pre_award.assessment_store.db.queries.flags.queries import get_change_requests_for_application
 from pre_award.assessment_store.db.queries.scores.queries import (
@@ -342,7 +342,14 @@ def setup_application_with_requests_and_scores(db):
                         sections_to_flag=sections,
                         latest_allocation=[],
                         latest_status=FlagStatus.RAISED,
-                        updates=[],
+                        updates=[
+                            FlagUpdate(
+                                justification="None",
+                                user_id=user_id,
+                                status=FlagStatus.RAISED,
+                                allocation=None,
+                            )
+                        ],
                         field_ids=["some_id"],
                         is_change_request=True,
                     )
@@ -482,7 +489,7 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(setup_ap
         application_id=application_id, sub_criteria_id=sub_criteria_id_1, user_id=str(uuid.uuid4()), message="test"
     )
 
-    change_requests = get_change_requests_for_application(application_id)
+    change_requests = get_change_requests_for_application(application_id, only_raised=False, sort_by_update=True)
     resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
     unresolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RAISED]
 
