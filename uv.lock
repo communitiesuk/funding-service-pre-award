@@ -908,7 +908,7 @@ requires-dist = [
     { name = "jsmin", specifier = "==3.0.1" },
     { name = "jsonpath-rw-ext", specifier = "==1.2.2" },
     { name = "marshmallow-enum", specifier = "==1.5.1" },
-    { name = "marshmallow-sqlalchemy", specifier = "==1.0.0" },
+    { name = "marshmallow-sqlalchemy", specifier = "==1.4.1" },
     { name = "msal", specifier = "==1.31.1" },
     { name = "notifications-python-client", specifier = "==10.0.1" },
     { name = "num2words", specifier = "==0.5.14" },
@@ -1312,15 +1312,15 @@ wheels = [
 
 [[package]]
 name = "marshmallow-sqlalchemy"
-version = "1.0.0"
+version = "1.4.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "marshmallow" },
     { name = "sqlalchemy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ca/e5/6ed1255b8b252cbc063082c85db3690ff40118c891ebda3cf633ec065322/marshmallow_sqlalchemy-1.0.0.tar.gz", hash = "sha256:20a0f2fcdd5bddc86444fa01461f17f9b6a12a8ddd4ca8c9b34fe2f2e35d00a2", size = 49747 }
+sdist = { url = "https://files.pythonhosted.org/packages/46/80/34c7e1dc67e7ab37c7b763eeb49ba7aa1e203da158421193bb657666b54d/marshmallow_sqlalchemy-1.4.1.tar.gz", hash = "sha256:b4aa964356d00e178bdb8469a28daa9022b375ff4f5c04f8e2b9aafe1e65c529", size = 51343 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/99/32/95b3e03d41480e5e8963034ed569e94cd5febe64bc23240936b108592bbb/marshmallow_sqlalchemy-1.0.0-py3-none-any.whl", hash = "sha256:f415d57809e3555b6323356589aba91e36e4470f35953d3a10c755ac5c3307df", size = 14427 },
+    { url = "https://files.pythonhosted.org/packages/66/58/51c93752a72b865a9726618ea5ff13a4c8548520230ffa6f71ea787fd760/marshmallow_sqlalchemy-1.4.1-py3-none-any.whl", hash = "sha256:9a3dd88a2b24f425fbffb3fea8aeb7f424a932fc97372a9f1338b7a379396191", size = 16651 },
 ]
 
 [[package]]
