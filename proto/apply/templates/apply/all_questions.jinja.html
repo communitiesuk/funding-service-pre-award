@@ -1,0 +1,12 @@
+{% extends "apply/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}All Questions{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">All questions for {{ grant.title }} - {{ round.title_json["en"] }}</h1>
+        {{ all_questions }}
+    </div>
+</div>
+{% endblock %}

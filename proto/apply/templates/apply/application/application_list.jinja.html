@@ -116,6 +116,9 @@
             }) }}
         </form>
         {% endif %}
+        <p class="govuk-body">
+            View a list of <a href="{{ url_for('proto_apply.application.view_all_questions', grant_code=grant.short_name, round_code=active_round.short_name) }}">all the questions</a> we will ask in this application
+        </p>
     </div>
 </div>
 {% endblock content %}
