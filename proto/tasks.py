@@ -5,7 +5,7 @@ from invoke import task
 from sqlalchemy import text
 
 from proto.common.data.models import ProtoDataCollectionDefinitionQuestion, TemplateSection
-from proto.common.data.models.data_collection import ProtoDataCollectionQuestionCondition
+from proto.common.data.models.data_collection import ConditionCombination, ProtoDataCollectionQuestionCondition
 from proto.common.data.models.question_bank import DataStandard, QuestionType, TemplateQuestion, TemplateType
 
 
@@ -307,6 +307,7 @@ def _create_conditional_question():
             data_source=None,
             data_standard_id=None,  # TODO should this be the same as org name?
             section_id=org_info_section_id,
+            condition_combination_type=ConditionCombination.AND,
         ),
     }
 

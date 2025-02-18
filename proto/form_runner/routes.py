@@ -34,21 +34,23 @@ def _next_url_for_question(
     current_question: ProtoDataCollectionDefinitionQuestion,
     from_check_your_answers: bool,
 ):
-    if from_check_your_answers:
-        return url_for(
-            "proto_form_runner.check_your_answers",
-            application_external_id=application_external_id,
-            section_slug=section_definition.slug,
-        )
     next_question = get_next_question_for_data_collection_instance(
         section_instance_data=section_instance_data, current_question_definition=current_question
     )
 
-    # question_slugs = [question.slug for question in section_definition.questions]
-    # curr_index = question_slugs.index(current_question.slug)
-    # if curr_index == len(question_slugs) - 1:
+    goto_check_your_answers = False
     if next_question is None:
         # TODO: section could have an attribute to toggle on/off 'show check-your-answers' page
+        goto_check_your_answers = True
+
+    elif from_check_your_answers:
+        existing_answer_for_next_question = get_answer_text_for_question_from_section_data(
+            question=next_question, section_data=section_instance_data
+        )
+        if existing_answer_for_next_question:
+            goto_check_your_answers = True
+
+    if goto_check_your_answers:
         return url_for(
             "proto_form_runner.check_your_answers",
             application_external_id=application_external_id,
@@ -60,6 +62,7 @@ def _next_url_for_question(
         application_external_id=application_external_id,
         section_slug=section_definition.slug,
         question_slug=next_question.slug,
+        from_cya=from_check_your_answers,
     )
 
 
