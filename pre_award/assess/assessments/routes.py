@@ -1189,6 +1189,8 @@ def display_sub_criteria(
         get_change_requests_for_application(application_id=application_id, sort_by_raised=True), many=True
     )
 
+    all_change_requests = []
+
     if change_requests_desc:
         all_change_requests = [flag for flag in Flag.from_list(change_requests_desc) if flag.is_change_request]
 
