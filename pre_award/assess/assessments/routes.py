@@ -64,6 +64,7 @@ from pre_award.assess.assessments.models.location_data import LocationData
 from pre_award.assess.assessments.models.round_summary import create_round_summaries, is_after_today
 from pre_award.assess.assessments.status import (
     all_status_completed,
+    update_ar_status_to_completed,
     update_ar_status_to_qa_completed,
 )
 from pre_award.assess.authentication.validation import (
@@ -1517,6 +1518,13 @@ def download_multiple_files(files, folder_name):
     )
 
 
+def handle_application_post_request(application_id):
+    action = request.form.get("action", None)
+    if request.method == "POST":
+        if action != "save_comment":
+            update_ar_status_to_completed(application_id)
+
+
 @assessment_bp.route("/application/<application_id>", methods=["GET", "POST"])
 @check_access_application_id
 def application(application_id):
@@ -1527,6 +1535,8 @@ def application(application_id):
     :param application_id:
     :return:
     """
+
+    handle_application_post_request(application_id)
 
     state = get_state_for_tasklist_banner(application_id)
 
