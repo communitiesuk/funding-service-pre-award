@@ -15,7 +15,10 @@ from proto.common.data.services.applications import (
     upsert_question_data,
 )
 from proto.common.data.services.question_bank import get_application_question
-from proto.form_runner.form_route_helper import get_next_question_for_data_collection_instance
+from proto.form_runner.form_route_helper import (
+    get_next_question_for_data_collection_instance,
+    get_visible_questions_for_section_instance,
+)
 from proto.form_runner.forms import MarkAsCompleteForm, build_question_form
 from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
 
@@ -152,4 +155,7 @@ def check_your_answers(application_external_id, section_slug):
         get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
         form=form,
         account=account,
+        visible_questions=get_visible_questions_for_section_instance(
+            section_instance_data=section_data, section_definition=section_data.section
+        ),
     )
