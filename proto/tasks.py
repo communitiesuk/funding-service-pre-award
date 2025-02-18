@@ -110,7 +110,7 @@ def insert_question_bank_data():
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
         ),
-        "risk-name": TemplateQuestion(
+        "organisation-name": TemplateQuestion(
             slug="organisation-name",
             type=QuestionType.TEXT_INPUT,
             title="What is the name of your organisation?",
@@ -254,10 +254,10 @@ def insert_question_bank_data():
             template_section_id=template_sections_to_create["monitoring-risk-information"].id,
         ),
     }
-    for tq_slug, tq_instance in template_questions_to_create.items():
+    for _, tq_instance in template_questions_to_create.items():
         tq_id = db.session.execute(
             text("select id from template_question where template_section_id = :template_section_id and slug = :slug"),
-            dict(template_section_id=tq_instance.template_section_id, slug=tq_slug),
+            dict(template_section_id=tq_instance.template_section_id, slug=tq_instance.slug),
         ).scalar_one_or_none()
         if not tq_id:
             db.session.add(tq_instance)
