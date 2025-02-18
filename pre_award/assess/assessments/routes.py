@@ -100,7 +100,6 @@ from pre_award.assess.services.data_services import (
     get_assessment_progress,
     get_associated_tags_for_application,
     get_bulk_accounts_dict,
-    get_change_requests,
     get_comments,
     get_flags,
     get_fund,
@@ -120,7 +119,7 @@ from pre_award.assess.services.data_services import (
     update_assessment_record_status,
 )
 from pre_award.assess.services.models.comment import CommentType
-from pre_award.assess.services.models.flag import FlagType
+from pre_award.assess.services.models.flag import Flag, FlagType
 from pre_award.assess.services.models.fund import Fund
 from pre_award.assess.services.models.round import Round
 from pre_award.assess.services.models.theme import Theme
@@ -140,8 +139,12 @@ from pre_award.assess.themes.deprecated_theme_mapper import (
     order_entire_application_by_themes,
 )
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
-from pre_award.assessment_store.db.queries.flags.queries import is_first_change_request_for_date
+from pre_award.assessment_store.db.queries.flags.queries import (
+    get_change_requests_for_application,
+    is_first_change_request_for_date,
+)
 from pre_award.assessment_store.db.queries.scores.queries import approve_sub_criteria
+from pre_award.assessment_store.db.schemas.schemas import AssessmentFlagSchema
 from pre_award.common.blueprints import Blueprint
 from pre_award.config import Config
 
@@ -1182,7 +1185,13 @@ def display_sub_criteria(
 
     state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
-    all_change_requests = get_change_requests(application_id)
+    change_requests_desc = AssessmentFlagSchema().dump(
+        get_change_requests_for_application(application_id=application_id, sort_by_raised=True), many=True
+    )
+
+    if change_requests_desc:
+        all_change_requests = [flag for flag in Flag.from_list(change_requests_desc) if flag.is_change_request]
+
     sub_criteria_change_requests = [
         change_request for change_request in all_change_requests if sub_criteria_id in change_request.sections_to_flag
     ]
