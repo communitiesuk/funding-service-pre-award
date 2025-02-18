@@ -9,6 +9,13 @@ def get_answer_text_for_question_from_section_data(
     return get_answer_text_for_question(question, section_data.data.get(answer_id, {}).get("answer"))
 
 
+def get_answer_value_for_question_from_section_data(
+    question: ProtoDataCollectionDefinitionQuestion, section_data: ProtoDataCollectionInstanceSectionData
+):
+    answer_id = str(question.id)
+    return get_answer_value_for_question(question, section_data.data.get(answer_id, {}).get("answer"))
+
+
 def get_answer_text_for_question(question: ProtoDataCollectionDefinitionQuestion, answer_data):
     if not answer_data:
         return None

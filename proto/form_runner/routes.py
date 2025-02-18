@@ -20,7 +20,10 @@ from proto.form_runner.form_route_helper import (
     get_visible_questions_for_section_instance,
 )
 from proto.form_runner.forms import MarkAsCompleteForm, build_question_form
-from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
+from proto.form_runner.helpers import (
+    get_answer_text_for_question_from_section_data,
+    get_answer_value_for_question_from_section_data,
+)
 
 runner_blueprint = Blueprint("proto_form_runner", __name__)
 
@@ -47,7 +50,7 @@ def _next_url_for_question(
         goto_check_your_answers = True
 
     elif from_check_your_answers:
-        existing_answer_for_next_question = get_answer_text_for_question_from_section_data(
+        existing_answer_for_next_question = get_answer_value_for_question_from_section_data(
             question=next_question, section_data=section_instance_data
         )
         if existing_answer_for_next_question:

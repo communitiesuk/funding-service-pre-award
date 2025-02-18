@@ -7,7 +7,9 @@ from proto.common.data.models.data_collection import (
     ProtoDataCollectionInstanceSectionData,
     ProtoDataCollectionQuestionCondition,
 )
-from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
+from proto.form_runner.helpers import (
+    get_answer_value_for_question_from_section_data,
+)
 
 
 def get_visible_questions_for_section_instance(
@@ -39,7 +41,7 @@ def get_visible_questions_for_section_instance(
 def evaluate_condition(
     section_data: ProtoDataCollectionInstanceSectionData, condition: ProtoDataCollectionQuestionCondition
 ) -> bool:
-    depends_on_answer_text = get_answer_text_for_question_from_section_data(
+    depends_on_answer_text = get_answer_value_for_question_from_section_data(
         section_data=section_data, question=condition.depends_on_question
     )
 

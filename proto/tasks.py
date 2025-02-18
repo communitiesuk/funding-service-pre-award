@@ -309,6 +309,53 @@ def _create_conditional_question():
             section_id=org_info_section_id,
             condition_combination_type=ConditionCombination.AND,
         ),
+        "organisation-type": ProtoDataCollectionDefinitionQuestion(
+            slug="organisation-type",
+            type=QuestionType.RADIOS,
+            title="What type of organisation are you in?",
+            hint=None,
+            order=6,
+            data_source=[
+                {"value": "charity", "label": "Charity"},
+                {"value": "local-authority", "label": "Local Authority"},
+                {"value": "limited-company", "label": "Limited company"},
+                {"value": "other", "label": "Other"},
+            ],
+            section_id=org_info_section_id,
+        ),
+        "local-authority-name": ProtoDataCollectionDefinitionQuestion(
+            slug="local-authority-name",
+            type=QuestionType.TEXT_INPUT,
+            title="What is the name of your local authority?",
+            hint="Would really be a drop down, only show if selected LA on type of organisation",
+            order=7,
+            data_source=None,
+            data_standard_id=None,
+            section_id=org_info_section_id,
+            condition_combination_type=ConditionCombination.AND,
+        ),
+        "organisation-type-other": ProtoDataCollectionDefinitionQuestion(
+            slug="organisation-type-other",
+            type=QuestionType.TEXT_INPUT,
+            title="What type of organisation are you in (other)?",
+            hint="If you selected other",
+            order=8,
+            data_source=None,
+            data_standard_id=None,
+            section_id=org_info_section_id,
+            condition_combination_type=ConditionCombination.AND,
+        ),
+        "company-registration-number": ProtoDataCollectionDefinitionQuestion(
+            slug="company-registration-number",
+            type=QuestionType.TEXT_INPUT,
+            title="What is your company registration number?",
+            hint="If you selected charity or limited company, or other",
+            order=9,
+            data_source=None,
+            data_standard_id=None,
+            section_id=org_info_section_id,
+            condition_combination_type=ConditionCombination.OR,
+        ),
     }
 
     for q_slug, q_instance in questions_to_create.items():
@@ -341,21 +388,56 @@ def _create_conditional_question():
                 # Would we want to point to the specific item in the list incase that changes? Probably too
                 # complicated at start
             },
-        )
+        ),
+        ProtoDataCollectionQuestionCondition(
+            question_id=questions_to_create["local-authority-name"].id,
+            depends_on_question_id=questions_to_create["organisation-type"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "local-authority",
+            },
+        ),
+        ProtoDataCollectionQuestionCondition(
+            question_id=questions_to_create["company-registration-number"].id,
+            depends_on_question_id=questions_to_create["organisation-type"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "limited-company",
+            },
+        ),
+        ProtoDataCollectionQuestionCondition(
+            question_id=questions_to_create["company-registration-number"].id,
+            depends_on_question_id=questions_to_create["organisation-type"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "charity",
+            },
+        ),
+        ProtoDataCollectionQuestionCondition(
+            question_id=questions_to_create["company-registration-number"].id,
+            depends_on_question_id=questions_to_create["organisation-type"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "other",
+            },
+        ),
+        ProtoDataCollectionQuestionCondition(
+            question_id=questions_to_create["organisation-type-other"].id,
+            depends_on_question_id=questions_to_create["organisation-type"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "other",
+            },
+        ),
     ]
+    db.session.execute(text("delete from proto_data_collection_question_condition"))
     for c_instance in conditions_to_create:
-        c_id = db.session.execute(
-            text(
-                "select id from proto_data_collection_question_condition where question_id=:question_id and "
-                "depends_on_question_id=:depends_on_question_id"
-            ),
-            dict(question_id=c_instance.question_id, depends_on_question_id=c_instance.depends_on_question_id),
-        ).scalar_one_or_none()
-        if not c_id:
-            db.session.add(c_instance)
-        else:
-            c_instance.id = c_id
-            db.session.merge(c_instance)
+        db.session.add(c_instance)
         db.session.flush()
     db.session.commit()
 
