@@ -6,6 +6,7 @@ from pre_award.assess.scoring.forms.rescore_form import RescoreForm
 from pre_award.assess.scoring.helpers import get_scoring_class
 from pre_award.assess.services.data_services import (
     get_comments,
+    get_fund,
     get_score_and_justification,
     get_sub_criteria,
     match_comment_to_theme,
@@ -101,6 +102,7 @@ def score(
         is_rescore=is_rescore,
         sub_criteria=sub_criteria,
         state=state,
+        fund=get_fund(state.fund_id),
         comments=theme_matched_comments,
         flag_status=flag_status,
         assessment_status=assessment_status,

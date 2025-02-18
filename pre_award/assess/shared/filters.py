@@ -41,7 +41,7 @@ def utc_to_bst(value, tz="Europe/London", export_format=False):
     if export_format:
         return local_time.strftime("%d/%m/%Y %H:%M:%S")
     else:
-        return local_time.strftime("%d/%m/%Y at %H:%M")
+        return local_time.strftime("%d %B %Y at %H:%M")
 
 
 def format_date(value, from_, to_):
