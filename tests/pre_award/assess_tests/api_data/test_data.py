@@ -2,8 +2,11 @@
 # General config
 # ruff: noqa
 from dataclasses import dataclass
+from uuid import uuid4
 
 from pre_award.assess.services.models.flag import FlagType
+from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
 
 test_fund_id = "test-fund"
 test_round_id = "test-round"
@@ -232,6 +235,18 @@ resolved_app = {
             ],
         },
     ],
+    "assessment_flags": [
+        AssessmentFlag(
+            application_id=uuid4(),
+            id=uuid4(),
+            latest_status=FlagStatus.RAISED,
+            latest_allocation="TEAM_23",
+            sections_to_flag=[],
+            updates=[],
+            field_ids=[],
+            is_change_request=True,
+        )
+    ],
     "tag_associations": [
         {
             "associated": True,
@@ -304,6 +319,18 @@ uncompeted_app = {
                 },
             ],
         },
+    ],
+    "assessment_flags": [
+        AssessmentFlag(
+            application_id=uuid4(),
+            id=uuid4(),
+            latest_status=FlagStatus.RAISED,
+            latest_allocation="TEAM_34",
+            sections_to_flag=[],
+            updates=[],
+            field_ids=[],
+            is_change_request=True,
+        )
     ],
     "tag_associations": [
         {
@@ -842,6 +869,8 @@ mock_api_results = {
     "assessment_store/flag_data?flag_id=flagged_qa_completed_app": flagged_qa_completed_app["flags"][-1],
     "assessment_store/flags?application_id=flagged_app": flagged_app["flags"],
     "assessment_store/flags?application_id=resolved_app": resolved_app["flags"],
+    "assessment_store/assessment_flags?application_id=resolved_app": resolved_app["assessment_flags"],
+    "assessment_store/assessment_flags?application_id=uncompeted_app": uncompeted_app["assessment_flags"],
     "assessment_store/flags?application_id=uncompeted_app": uncompeted_app["flags"],
     "assessment_store/flags?application_id=stopped_app": stopped_app["flags"],
     "assessment_store/flags?application_id=flagged_qa_completed_app": flagged_qa_completed_app["flags"],

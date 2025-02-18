@@ -1414,6 +1414,7 @@ class TestRoutes:
         mock_get_sub_criteria_theme,
         mock_get_assessor_tasklist_state,
         mock_get_bulk_accounts,
+        mock_get_assessment_flags,
     ):
         # Mocking fsd-user-token cookie
         token = create_valid_token(test_commenter_claims)
