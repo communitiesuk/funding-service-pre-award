@@ -519,6 +519,23 @@ def mock_get_flags(request, mocker):
 
 
 @pytest.fixture(scope="function")
+def mock_get_assessment_flags(request, mocker):
+    marker = request.node.get_closest_marker("application_id")
+    application_id = marker.args[0]
+
+    mock_flag_info = mock_api_results[f"assessment_store/assessment_flags?application_id={application_id}"]
+
+    mock_funcs = [
+        "pre_award.assess.assessments.routes.get_change_requests_for_application",
+    ]
+
+    mocked_flags = []
+    for mock_func in mock_funcs:
+        mocked_flags.append(mocker.patch(mock_func, return_value=mock_flag_info))
+    yield mocked_flags
+
+
+@pytest.fixture(scope="function")
 def mock_submit_flag(request, mocker):
     all_submit_flag_funcs = ["pre_award.assess.flagging.helpers.submit_flagassess.flagging.routes.submit_flag"]
     marker_submit_flag_paths = request.node.get_closest_marker("submit_flag_paths")
