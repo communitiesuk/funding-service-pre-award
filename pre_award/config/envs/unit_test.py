@@ -43,7 +43,6 @@ class UnitTestConfig(Config):
     # ---------------
     # S3 Config
     # ---------------
-    AWS_MSG_BUCKET_NAME = "fsd-notification-bucket"
 
     # ----------------------
     # FRONTENDS CONFIG
@@ -110,6 +109,5 @@ class UnitTestConfig(Config):
     # ---------------
     # S3 Config
     # ---------------
-    AWS_MSG_BUCKET_NAME = "fsd-notification-bucket"
 
     GOV_NOTIFY_API_KEY = "test-00000000-0000-0000-0000-000000000000-00000000-0000-0000-0000-000000000000"

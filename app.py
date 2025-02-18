@@ -26,7 +26,6 @@ from fsd_utils import init_sentry
 from fsd_utils.healthchecks.checkers import DbChecker, FlaskRunningChecker, RedisChecker
 from fsd_utils.healthchecks.healthcheck import Healthcheck
 from fsd_utils.logging import logging
-from fsd_utils.services.aws_extended_client import SQSExtendedClient
 from fsd_utils.toggles.toggles import create_toggles_client, initialise_toggles_redis_store, load_toggles
 from jinja2 import ChoiceLoader, PackageLoader, PrefixLoader
 from sqlalchemy_utils import Ltree
@@ -283,9 +282,6 @@ def create_app() -> Flask:  # noqa: C901
     # Configure application security with Talisman
     Talisman(flask_app, **Config.TALISMAN_SETTINGS)
 
-    # Initialize sqs extended client
-    create_sqs_extended_client(flask_app)
-
     from pre_award.db import db, migrate
 
     # Bind SQLAlchemy ORM to Flask app
@@ -475,29 +471,3 @@ def create_app() -> Flask:  # noqa: C901
             return make_response("404"), 404
 
     return flask_app
-
-
-def create_sqs_extended_client(flask_app):
-    if (
-        getenv("AWS_ACCESS_KEY_ID", "Access Key Not Available") == "Access Key Not Available"
-        and getenv("AWS_SECRET_ACCESS_KEY", "Secret Key Not Available") == "Secret Key Not Available"
-    ):
-        flask_app.extensions["sqs_extended_client"] = SQSExtendedClient(
-            region_name=Config.AWS_REGION,
-            endpoint_url=getenv("AWS_ENDPOINT_OVERRIDE", None),
-            large_payload_support=Config.AWS_MSG_BUCKET_NAME,
-            always_through_s3=True,
-            delete_payload_from_s3=True,
-            logger=flask_app.logger,
-        )
-    else:
-        flask_app.extensions["sqs_extended_client"] = SQSExtendedClient(
-            aws_access_key_id=Config.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=Config.AWS_SECRET_ACCESS_KEY,
-            region_name=Config.AWS_REGION,
-            endpoint_url=getenv("AWS_ENDPOINT_OVERRIDE", None),
-            large_payload_support=Config.AWS_MSG_BUCKET_NAME,
-            always_through_s3=True,
-            delete_payload_from_s3=True,
-            logger=flask_app.logger,
-        )
