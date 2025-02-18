@@ -218,6 +218,7 @@ def mock_get_fund(request, mocker):
         "pre_award.assess.flagging.helpers.get_fund",
         "pre_award.assess.tagging.routes.get_fund",
         "pre_award.assess.services.shared_data_helpers.get_fund",
+        "pre_award.assess.scoring.routes.get_fund",
     ]
 
     for mock_func in mock_funcs:
