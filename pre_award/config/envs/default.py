@@ -93,14 +93,7 @@ class DefaultConfig(object):
     # ---------------
     # S3 Config
     # ---------------
-    AWS_MSG_BUCKET_NAME = environ.get("AWS_MSG_BUCKET_NAME")
     AWS_BUCKET_NAME = environ.get("AWS_BUCKET_NAME")
-
-    # ---------------
-    # SQS Config
-    # ---------------
-    AWS_SQS_NOTIF_APP_PRIMARY_QUEUE_URL = environ.get("AWS_SQS_NOTIF_APP_PRIMARY_QUEUE_URL")
-    AWS_SQS_NOTIF_APP_SECONDARY_QUEUE_URL = environ.get("AWS_SQS_NOTIF_APP_SECONDARY_QUEUE_URL")
 
     # ----------------------
     # FRONTENDS CONFIG
