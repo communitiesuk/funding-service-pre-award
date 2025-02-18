@@ -542,15 +542,6 @@ def get_flags(application_id: str) -> List[Flag]:
         return []
 
 
-def get_change_requests(application_id: str) -> List[Flag]:
-    flags_data = get_data(Config.ASSESSMENT_CHANGE_REQUESTS_ENDPOINT.format(application_id=application_id))
-
-    if flags_data:
-        return [flag for flag in Flag.from_list(flags_data) if flag.is_change_request]
-    else:
-        return []
-
-
 def get_qa_complete(application_id: str) -> dict:
     qa_complete = get_data(Config.ASSESSMENT_GET_QA_STATUS_ENDPOINT.format(application_id=application_id))
     return qa_complete

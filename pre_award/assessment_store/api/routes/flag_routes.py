@@ -5,7 +5,6 @@ from pre_award.assessment_store.db.queries import get_metadata_for_fund_round_id
 from pre_award.assessment_store.db.queries.flags.queries import (
     add_flag_for_application,
     add_update_to_assessment_flag,
-    get_change_requests_for_application,
     get_flag_by_id,
     get_flags_for_application,
 )
@@ -88,14 +87,6 @@ def get_flag():
 def get_all_flags_for_application(application_id):
     current_app.logger.info("Get all flags for application %(application_id)s", dict(application_id=application_id))
     flags = get_flags_for_application(application_id)
-    flag_schema = AssessmentFlagSchema()
-    return flag_schema.dump(flags, many=True)
-
-
-@assessment_flag_bp.get("/change_requests/<application_id>")
-def get_all_change_requests_for_application(application_id):
-    current_app.logger.info("Get all change requests for applications")
-    flags = get_change_requests_for_application(application_id=application_id, sort_by_raised=True)
     flag_schema = AssessmentFlagSchema()
     return flag_schema.dump(flags, many=True)
 

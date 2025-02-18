@@ -420,6 +420,21 @@ def create_app() -> Flask:  # noqa: C901
             feedback_url=url_for("content_routes.feedback"),
         )
 
+    @flask_app.context_processor
+    def is_uncompeted_flow():
+        def _is_uncompeted_flow(fund=None):
+            fund = fund if fund else find_fund_in_request()
+            toggle_dict = (
+                {feature.name: feature.is_enabled() for feature in toggle_client.list()} if toggle_client else {}
+            )
+            return (
+                toggle_dict.get("UNCOMPETED_WORKFLOW")
+                and fund.funding_type == "UNCOMPETED"
+                and fund.short_name != "DPIF"
+            )
+
+        return dict(is_uncompeted_flow=_is_uncompeted_flow)
+
     @flask_app.after_request
     def after_request(response):
         if request.host == current_app.config["API_HOST"]:

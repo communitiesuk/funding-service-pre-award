@@ -403,7 +403,6 @@ class DefaultConfig(object):
     ASSESSMENT_PROGRESS_ENDPOINT = ASSESSMENT_STORE_API_HOST + "/progress/{fund_id}/{round_id}"
 
     ASSESSMENT_FLAGS_ENDPOINT = ASSESSMENT_STORE_API_HOST + "/flags/{application_id}"
-    ASSESSMENT_CHANGE_REQUESTS_ENDPOINT = ASSESSMENT_STORE_API_HOST + "/change_requests/{application_id}"
     ASSESSMENT_FLAGS_POST_ENDPOINT = ASSESSMENT_STORE_API_HOST + "/flags/"
     ASSESSMENT_FLAG_ENDPOINT = ASSESSMENT_STORE_API_HOST + "/flag_data?flag_id={flag_id}"
     ASSESSMENT_TAGS_ENDPOINT = ASSESSMENT_STORE_API_HOST + "/funds/{fund_id}/rounds/{round_id}/tags?{params}"
