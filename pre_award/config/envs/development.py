@@ -57,7 +57,6 @@ class DevelopmentConfig(Config):
     # ---------------
     # S3 Config
     # ---------------
-    AWS_MSG_BUCKET_NAME = "fsd-notification-bucket"
 
     USE_LOCAL_DATA = strtobool(getenv("USE_LOCAL_DATA", "True"))
     SESSION_COOKIE_SECURE = False
