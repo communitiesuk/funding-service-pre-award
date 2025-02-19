@@ -64,7 +64,7 @@
         {% if answer %}
           <span>{{ answer }}</span>
         {% else %}
-          <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_form_runner.ask_application_question', application_external_id=application.external_id, section_slug=section.slug, question_slug=question.slug, from_cya='') }}">
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_form_runner.ask_application_question', application_external_id=application.external_id, section_slug=section.slug, question_slug=question.slug, from_cya='True') }}">
             {# this should use the question "name" which I should add to record alongside it #}
             {# i.e project name - What is your project name? #}
             {% trans %}Enter answer{% endtrans %}
@@ -77,7 +77,7 @@
             "value": { "html": valueHtml },
             "actions": {
               "items": [
-                { "href": url_for('proto_form_runner.ask_application_question', application_external_id=application.external_id, section_slug=section.slug, question_slug=question.slug, from_cya=''), "text": "Change", "visuallyHiddenText": question.title, "classes": "govuk-link--no-visited-state" }
+                { "href": url_for('proto_form_runner.ask_application_question', application_external_id=application.external_id, section_slug=section.slug, question_slug=question.slug, from_cya='True'), "text": "Change", "visuallyHiddenText": question.title, "classes": "govuk-link--no-visited-state" }
               ] if answer
             } if not application.is_submitted
           }

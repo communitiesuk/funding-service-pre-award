@@ -102,7 +102,7 @@ def ask_application_question(application_external_id, section_slug, question_slu
     application = get_application(application_external_id)
     question = get_application_question(application.round.data_collection_definition_id, section_slug, question_slug)
     form = build_question_form(application, question)
-    from_check_your_answers = "from_cya" in request.args
+    from_check_your_answers = request.args.get("from_cya", "False") == "True"
     if form.validate_on_submit():
         upsert_question_data(application, question, form.question.data)
         section_instance_data = next(
