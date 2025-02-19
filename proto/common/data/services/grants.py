@@ -3,7 +3,7 @@ from datetime import date
 import psycopg2
 import sqlalchemy.exc
 from flask_babel import lazy_gettext as _l
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.orm import contains_eager, joinedload
 
 from db import db
@@ -101,6 +101,14 @@ def create_grant(
 def update_grant(grant: Fund, status: FundStatus | None = None, prospectus_link: str | None = None):
     if status is not None:
         grant.proto_status = status
+        if status == FundStatus.LIVE:
+            db.session.execute(text("truncate table proto_comment"))
+            db.session.execute(text("truncate table proto_score"))
+            db.session.execute(
+                text(
+                    "delete from proto_application using round, fund where proto_application.round_id = round.id and round.fund_id = fund.id and fund.id = :fund_id",
+                ).bindparams(fund_id=grant.id)
+            )
 
     if prospectus_link:
         grant.proto_prospectus_link = prospectus_link
