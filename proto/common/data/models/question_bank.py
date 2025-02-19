@@ -9,6 +9,9 @@ from sqlalchemy.testing.schema import mapped_column
 from db import db
 from proto.common.data.models import t_data_source
 
+# from proto.common.data.models.data_collection import ConditionCombination
+from proto.common.data.models.types import pk_int
+
 if TYPE_CHECKING:
     pass
 
@@ -81,5 +84,37 @@ class TemplateQuestion(db.Model):
     data_standard_id: Mapped[int | None] = mapped_column(db.ForeignKey(DataStandard.id))
     data_standard: Mapped[DataStandard | None] = relationship(DataStandard)
 
+    conditions: Mapped[list["TemplateQuestionCondition"]] = relationship(
+        primaryjoin="TemplateQuestion.id==TemplateQuestionCondition.question_id",
+    )
+    dependent_conditions: Mapped[list["TemplateQuestionCondition"]] = relationship(
+        primaryjoin="TemplateQuestion.id==TemplateQuestionCondition.depends_on_question_id",
+    )
+    # condition_combination_type = Column(ENUM("ConditionCombination"), nullable=True)
+
     def __repr__(self):
         return f"<TemplateQuestion {self.slug} template_section={self.template_section}>"
+
+
+# opted to just copy this here for now following precedent
+# we could decide if theres any de-duping we want to do around these
+# when they're all in
+class TemplateQuestionCondition(db.Model):
+    __table_args__ = ()
+    id: Mapped[pk_int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
+
+    question_id: Mapped[int] = mapped_column(db.ForeignKey(TemplateQuestion.id))
+    question: Mapped["TemplateQuestion"] = relationship(
+        "TemplateQuestion", back_populates="conditions", foreign_keys=[question_id]
+    )
+
+    depends_on_question_id: Mapped[int] = mapped_column(db.ForeignKey(TemplateQuestion.id), nullable=True)
+    depends_on_question: Mapped["TemplateQuestion"] = relationship(
+        "TemplateQuestion",
+        back_populates="dependent_conditions",
+        foreign_keys=[depends_on_question_id],
+    )
+
+    criteria: Mapped[dict] = mapped_column(nullable=False, default=dict)

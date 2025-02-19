@@ -8,7 +8,7 @@ from proto.common.data.models import (
     TemplateQuestion,
     TemplateSection,
 )
-from proto.common.data.models.data_collection import ProtoDataCollectionDefinition
+from proto.common.data.models.data_collection import ProtoDataCollectionDefinition, ProtoDataCollectionQuestionCondition
 from proto.common.data.models.question_bank import TemplateType
 from proto.common.helpers import make_url_slug
 
@@ -96,8 +96,23 @@ def add_template_sections_to_data_collection_definition(round, template_section_
                 data_standard_id=template_question.data_standard_id,
                 section_id=section.id,
                 template_question_id=template_question.id,
+                # condition_combination_type=template_question.condition_combination_type
             )
             section.questions.append(question)
+
+        # now that new questions all exist
+        for template_question in template_section.template_questions:
+            for template_condition in template_question.conditions:
+                question = next(
+                    q for q in section.questions if q.template_question_id == template_condition.question.id
+                )
+                depends_on_question = next(
+                    q for q in section.questions if q.template_question_id == template_condition.depends_on_question.id
+                )
+                condition = ProtoDataCollectionQuestionCondition(
+                    question=question, depends_on_question=depends_on_question, criteria=template_condition.criteria
+                )
+                question.conditions.append(condition)
 
     db.session.commit()
 

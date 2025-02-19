@@ -6,7 +6,13 @@ from sqlalchemy import text
 
 from proto.common.data.models import ProtoDataCollectionDefinitionQuestion, TemplateSection
 from proto.common.data.models.data_collection import ConditionCombination, ProtoDataCollectionQuestionCondition
-from proto.common.data.models.question_bank import DataStandard, QuestionType, TemplateQuestion, TemplateType
+from proto.common.data.models.question_bank import (
+    DataStandard,
+    QuestionType,
+    TemplateQuestion,
+    TemplateQuestionCondition,
+    TemplateType,
+)
 
 
 @contextmanager
@@ -136,12 +142,45 @@ def insert_question_bank_data():
             data_standard_id=data_standards_to_create["organisation.schema.json#properties/type"].id,
             template_section_id=template_sections_to_create["organisation-information"].id,
         ),
+        "local-authority-name": TemplateQuestion(
+            slug="local-authority-name",
+            type=QuestionType.TEXT_INPUT,
+            title="What is the name of your local authority?",
+            hint="Would really be a drop down, only show if selected LA on type of organisation",
+            order=3,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["organisation-information"].id,
+            # condition_combination_type=ConditionCombination.AND,
+        ),
+        "organisation-type-other": TemplateQuestion(
+            slug="organisation-type-other",
+            type=QuestionType.TEXT_INPUT,
+            title="What type of organisation are you in (other)?",
+            hint="If you selected other",
+            order=4,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["organisation-information"].id,
+            # condition_combination_type=ConditionCombination.AND,
+        ),
+        "company-registration-number": TemplateQuestion(
+            slug="company-registration-number",
+            type=QuestionType.TEXT_INPUT,
+            title="What is your company registration number?",
+            hint="If you selected charity or limited company, or other",
+            order=5,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["organisation-information"].id,
+            # condition_combination_type=ConditionCombination.OR,
+        ),
         "organisation-owner": TemplateQuestion(
             slug="organisation-owner",
             type=QuestionType.TEXT_INPUT,
             title="Who is your organisation's owner?",
             hint=None,
-            order=3,
+            order=6,
             data_source=None,
             data_standard_id=data_standards_to_create["user.schema.json#properties/full_name"].id,
             template_section_id=template_sections_to_create["organisation-information"].id,
@@ -266,6 +305,52 @@ def insert_question_bank_data():
             tq_instance.id = tq_id
             db.session.merge(tq_instance)
         db.session.flush()
+    db.session.commit()
+
+    conditions_to_create = [
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["local-authority-name"].id,
+            depends_on_question_id=template_questions_to_create["organisation-kind"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "local-authority",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["company-registration-number"].id,
+            depends_on_question_id=template_questions_to_create["organisation-kind"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "limited-company",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["company-registration-number"].id,
+            depends_on_question_id=template_questions_to_create["organisation-kind"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "charity",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["organisation-type-other"].id,
+            depends_on_question_id=template_questions_to_create["organisation-kind"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "other",
+            },
+        ),
+    ]
+
+    db.session.execute(text("delete from template_question_condition"))
+    for c_instance in conditions_to_create:
+        db.session.add(c_instance)
+        db.session.flush()
+    db.session.commit()
 
     db.session.commit()
 
