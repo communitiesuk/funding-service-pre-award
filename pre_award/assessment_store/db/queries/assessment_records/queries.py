@@ -736,7 +736,7 @@ def get_export_data(  # noqa: C901 - historical sadness
     assessment_metadatas: list,
     language: str,  # noqa
 ) -> List[Dict]:  # noqa
-    form_fields = list_of_fields[report_type].get("form_fields", {})
+    form_fields = list_of_fields.get(report_type, {}).get("form_fields", {})
     field_ids = form_fields.keys()
     final_list = []
 
