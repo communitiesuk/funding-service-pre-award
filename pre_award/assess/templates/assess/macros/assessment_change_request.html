@@ -1,11 +1,15 @@
 {% macro assessment_change_request(flag, questions, user_info) %}
     <div class="comment-group">
-        <p class="govuk-body">
-            <strong>Date:</strong>
-            <span class="govuk-!-font-weight-regular govuk-!-margin-right-9">{{ flag.date_created|utc_to_bst }}</span>
-            <strong>Assessor: </strong>
-            {{ user_info["full_name"] or "N/A" }} {{ user_info["email_address"] }}
-        </p>
+        <div class="govuk-body govuk-grid-row">
+            <div class="govuk-grid-column-one-half">
+                <strong>Date:</strong>
+                <span class="govuk-!-font-weight-regular">{{ flag.date_created|utc_to_bst }}</span>
+            </div>
+            <div class="govuk-grid-column-one-half govuk-!-text-align-right">
+                <strong>Assessor: </strong>
+                {{ user_info["full_name"] or "N/A" }} {{ user_info["email_address"] }}
+            </div>
+        </div>
         <p class="govuk-body">
             {% for field_id in flag.field_ids %}
                 <strong>{{ questions[field_id] }}</strong>
