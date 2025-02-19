@@ -44,17 +44,22 @@ def evaluate_condition(
     depends_on_answer_text = get_answer_value_for_question_from_section_data(
         section_data=section_data, question=condition.depends_on_question
     )
-
+    if not depends_on_answer_text:
+        return False
     operator = condition.criteria["operator"]
     value_to_compare = condition.criteria["value"]
 
     match operator:
         case "EQUALS":
             return value_to_compare == depends_on_answer_text
-        case "GREATER":
-            return value_to_compare > depends_on_answer_text
-        case "LESS":
-            return value_to_compare < depends_on_answer_text
+        case "GREATERTHAN":
+            return int(value_to_compare) < int(depends_on_answer_text)
+        case "GREATERTHANEQUALS":
+            return int(value_to_compare) <= int(depends_on_answer_text)
+        case "LESSTHAN":
+            return int(value_to_compare) > int(depends_on_answer_text)
+        case "LESSTHANEQUALS":
+            return int(value_to_compare) >= int(depends_on_answer_text)
         case _:
             return False
 

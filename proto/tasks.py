@@ -287,6 +287,10 @@ def _create_conditional_question():
         text("select id from proto_data_collection_definition_section where slug=:slug"),
         dict(slug="organisation-information"),
     ).scalar_one_or_none()
+    project_info_section_id = db.session.execute(
+        text("select id from proto_data_collection_definition_section where slug=:slug"),
+        dict(slug="project-information"),
+    ).scalar_one_or_none()
     questions_to_create = {
         "organisation-other-names": ProtoDataCollectionDefinitionQuestion(
             slug="organisation-other-names",
@@ -355,6 +359,36 @@ def _create_conditional_question():
             data_standard_id=None,
             section_id=org_info_section_id,
             condition_combination_type=ConditionCombination.OR,
+        ),
+        "project-size": ProtoDataCollectionDefinitionQuestion(
+            slug="project-size",
+            type=QuestionType.TEXT_INPUT,
+            title="How many people will work on the project?",
+            hint="Can be to the nearest 10",
+            order=3,
+            data_source=None,
+            data_standard_id=None,
+            section_id=project_info_section_id,
+        ),
+        "project-size-big": ProtoDataCollectionDefinitionQuestion(
+            slug="project-size-big",
+            type=QuestionType.TEXT_INPUT,
+            title="What's the make up of this team?",
+            hint="eg. expected to be 1 head chef, 2 sous chefs, 10 waiters, 1 front of house",
+            order=4,
+            data_source=None,
+            data_standard_id=None,
+            section_id=project_info_section_id,
+        ),
+        "project-size-small": ProtoDataCollectionDefinitionQuestion(
+            slug="project-size-small",
+            type=QuestionType.TEXT_INPUT,
+            title="How many cups of tea do you expect to get through in a day?",
+            hint=None,
+            order=5,
+            data_source=None,
+            data_standard_id=None,
+            section_id=project_info_section_id,
         ),
     }
 
@@ -432,6 +466,24 @@ def _create_conditional_question():
                 "operator": "EQUALS",
                 "value_type": "QUESTION_VALUE",
                 "value": "other",
+            },
+        ),
+        ProtoDataCollectionQuestionCondition(
+            question_id=questions_to_create["project-size-big"].id,
+            depends_on_question_id=questions_to_create["project-size"].id,
+            criteria={
+                "operator": "GREATERTHANEQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "20",
+            },
+        ),
+        ProtoDataCollectionQuestionCondition(
+            question_id=questions_to_create["project-size-small"].id,
+            depends_on_question_id=questions_to_create["project-size"].id,
+            criteria={
+                "operator": "LESSTHAN",
+                "value_type": "QUESTION_VALUE",
+                "value": "20",
             },
         ),
     ]
