@@ -96,7 +96,7 @@ def add_template_sections_to_data_collection_definition(round, template_section_
                 data_standard_id=template_question.data_standard_id,
                 section_id=section.id,
                 template_question_id=template_question.id,
-                # condition_combination_type=template_question.condition_combination_type
+                condition_combination_type=template_question.condition_combination_type,
             )
             section.questions.append(question)
 

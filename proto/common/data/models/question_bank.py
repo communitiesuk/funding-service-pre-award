@@ -1,6 +1,6 @@
 import enum
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import CheckConstraint, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, relationship
@@ -8,8 +8,6 @@ from sqlalchemy.testing.schema import mapped_column
 
 from db import db
 from proto.common.data.models import t_data_source
-
-# from proto.common.data.models.data_collection import ConditionCombination
 from proto.common.data.models.types import pk_int
 
 if TYPE_CHECKING:
@@ -61,6 +59,11 @@ class QuestionType(str, enum.Enum):
     RADIOS = "radio"
 
 
+class ConditionCombination(str, enum.Enum):
+    AND = "and"  # All conditions that apply to this question must evaluate to 'True' in order to show it
+    OR = "or"  # Any single condition that applies to this question must evaluate to 'True' in order to show it
+
+
 class TemplateQuestion(db.Model):
     __table_args__ = (
         CheckConstraint(r"regexp_like(slug, '[a-z\-]+')", name="slug"),
@@ -90,7 +93,7 @@ class TemplateQuestion(db.Model):
     dependent_conditions: Mapped[list["TemplateQuestionCondition"]] = relationship(
         primaryjoin="TemplateQuestion.id==TemplateQuestionCondition.depends_on_question_id",
     )
-    # condition_combination_type = Column(ENUM("ConditionCombination"), nullable=True)
+    condition_combination_type: Mapped[Optional[ConditionCombination]] = mapped_column(default=ConditionCombination.AND)
 
     def __repr__(self):
         return f"<TemplateQuestion {self.slug} template_section={self.template_section}>"

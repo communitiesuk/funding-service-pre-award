@@ -1,15 +1,13 @@
 from datetime import datetime
-from enum import Enum
 from typing import List, Optional
 
-from sqlalchemy import CheckConstraint, Column, ForeignKey, UniqueConstraint, func
-from sqlalchemy.dialects.postgresql import ENUM
+from sqlalchemy import CheckConstraint, ForeignKey, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
 from proto.common.data.models import DataStandard, ProtoReportingRound, Round, TemplateQuestion, t_data_source
 from proto.common.data.models.proto_score import ProtoScore
-from proto.common.data.models.question_bank import QuestionType
+from proto.common.data.models.question_bank import ConditionCombination, QuestionType
 from proto.common.data.models.types import pk_int
 
 
@@ -55,11 +53,6 @@ class ProtoDataCollectionDefinitionSection(db.Model):
         return f"<ProtoDataCollectionDefinitionSection {self.slug}>"
 
 
-class ConditionCombination(str, Enum):
-    AND = "and"  # All conditions that apply to this question must evaluate to 'True' in order to show it
-    OR = "or"  # Any single condition that applies to this question must evaluate to 'True' in order to show it
-
-
 class ProtoDataCollectionDefinitionQuestion(db.Model):
     __table_args__ = (
         CheckConstraint(r"regexp_like(slug, '[a-z\-]+')", name="slug"),
@@ -93,7 +86,7 @@ class ProtoDataCollectionDefinitionQuestion(db.Model):
     dependent_conditions: Mapped[list["ProtoDataCollectionQuestionCondition"]] = relationship(
         primaryjoin="ProtoDataCollectionDefinitionQuestion.id==ProtoDataCollectionQuestionCondition.depends_on_question_id",
     )
-    condition_combination_type = Column(ENUM(ConditionCombination), nullable=True, default=ConditionCombination.AND)
+    condition_combination_type: Mapped[Optional[ConditionCombination]] = mapped_column(default=ConditionCombination.AND)
 
     def __repr__(self):
         return f"<ProtoDataCollectionDefinitionQuestion {self.slug} section={self.section}>"

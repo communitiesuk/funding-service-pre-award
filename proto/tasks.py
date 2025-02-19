@@ -4,8 +4,8 @@ from contextlib import contextmanager
 from invoke import task
 from sqlalchemy import text
 
-from proto.common.data.models import ProtoDataCollectionDefinitionQuestion, TemplateSection
-from proto.common.data.models.data_collection import ConditionCombination, ProtoDataCollectionQuestionCondition
+from proto.common.data.models import TemplateSection
+from proto.common.data.models.data_collection import ConditionCombination
 from proto.common.data.models.question_bank import (
     DataStandard,
     QuestionType,
@@ -107,12 +107,42 @@ def insert_question_bank_data():
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
         ),
+        "project-size": TemplateQuestion(
+            slug="project-size",
+            type=QuestionType.TEXT_INPUT,
+            title="How many people will work on the project?",
+            hint="Can be to the nearest 10",
+            order=2,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["project-information"].id,
+        ),
+        "project-size-big": TemplateQuestion(
+            slug="project-size-big",
+            type=QuestionType.TEXT_INPUT,
+            title="What's the make up of this team?",
+            hint="eg. expected to be 1 head chef, 2 sous chefs, 10 waiters, 1 front of house",
+            order=3,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["project-information"].id,
+        ),
+        "project-size-small": TemplateQuestion(
+            slug="project-size-small",
+            type=QuestionType.TEXT_INPUT,
+            title="How many cups of tea do you expect to get through in a day?",
+            hint=None,
+            order=4,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["project-information"].id,
+        ),
         "project-about": TemplateQuestion(
             slug="project-about",
             type=QuestionType.TEXTAREA,
             title="What is your project about?",
             hint="Give a brief summary of your project, including what you hope to achieve",
-            order=2,
+            order=5,
             data_source=None,
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
@@ -151,7 +181,7 @@ def insert_question_bank_data():
             data_source=None,
             data_standard_id=None,
             template_section_id=template_sections_to_create["organisation-information"].id,
-            # condition_combination_type=ConditionCombination.AND,
+            condition_combination_type=ConditionCombination.AND,
         ),
         "organisation-type-other": TemplateQuestion(
             slug="organisation-type-other",
@@ -162,7 +192,7 @@ def insert_question_bank_data():
             data_source=None,
             data_standard_id=None,
             template_section_id=template_sections_to_create["organisation-information"].id,
-            # condition_combination_type=ConditionCombination.AND,
+            condition_combination_type=ConditionCombination.AND,
         ),
         "company-registration-number": TemplateQuestion(
             slug="company-registration-number",
@@ -173,7 +203,7 @@ def insert_question_bank_data():
             data_source=None,
             data_standard_id=None,
             template_section_id=template_sections_to_create["organisation-information"].id,
-            # condition_combination_type=ConditionCombination.OR,
+            condition_combination_type=ConditionCombination.OR,
         ),
         "organisation-owner": TemplateQuestion(
             slug="organisation-owner",
@@ -344,6 +374,24 @@ def insert_question_bank_data():
                 "value": "other",
             },
         ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["project-size-big"].id,
+            depends_on_question_id=template_questions_to_create["project-size"].id,
+            criteria={
+                "operator": "GREATERTHANEQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "20",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["project-size-small"].id,
+            depends_on_question_id=template_questions_to_create["project-size"].id,
+            criteria={
+                "operator": "LESSTHAN",
+                "value_type": "QUESTION_VALUE",
+                "value": "20",
+            },
+        ),
     ]
 
     db.session.execute(text("delete from template_question_condition"))
@@ -363,227 +411,3 @@ def seed_question_bank(c):
         app = create_app()
         with app.app_context():
             insert_question_bank_data()
-
-
-def _create_conditional_question():
-    from db import db
-
-    org_info_section_id = db.session.execute(
-        text("select id from proto_data_collection_definition_section where slug=:slug"),
-        dict(slug="organisation-information"),
-    ).scalar_one_or_none()
-    project_info_section_id = db.session.execute(
-        text("select id from proto_data_collection_definition_section where slug=:slug"),
-        dict(slug="project-information"),
-    ).scalar_one_or_none()
-    questions_to_create = {
-        "organisation-other-names": ProtoDataCollectionDefinitionQuestion(
-            slug="organisation-other-names",
-            type=QuestionType.RADIOS,
-            title="Does your organisation use any other names?",
-            hint=None,
-            order=4,
-            data_source=[{"value": "Yes", "label": "Yes"}, {"value": "No", "label": "No"}],
-            data_standard_id=None,
-            section_id=org_info_section_id,
-        ),
-        "alternative-organisation-names": ProtoDataCollectionDefinitionQuestion(
-            slug="alternative-organisation-names",
-            type=QuestionType.TEXT_INPUT,
-            title="What is your organisation alternative name?",
-            hint=None,
-            order=5,
-            data_source=None,
-            data_standard_id=None,  # TODO should this be the same as org name?
-            section_id=org_info_section_id,
-            condition_combination_type=ConditionCombination.AND,
-        ),
-        "organisation-type": ProtoDataCollectionDefinitionQuestion(
-            slug="organisation-type",
-            type=QuestionType.RADIOS,
-            title="What type of organisation are you in?",
-            hint=None,
-            order=6,
-            data_source=[
-                {"value": "charity", "label": "Charity"},
-                {"value": "local-authority", "label": "Local Authority"},
-                {"value": "limited-company", "label": "Limited company"},
-                {"value": "other", "label": "Other"},
-            ],
-            section_id=org_info_section_id,
-        ),
-        "local-authority-name": ProtoDataCollectionDefinitionQuestion(
-            slug="local-authority-name",
-            type=QuestionType.TEXT_INPUT,
-            title="What is the name of your local authority?",
-            hint="Would really be a drop down, only show if selected LA on type of organisation",
-            order=7,
-            data_source=None,
-            data_standard_id=None,
-            section_id=org_info_section_id,
-            condition_combination_type=ConditionCombination.AND,
-        ),
-        "organisation-type-other": ProtoDataCollectionDefinitionQuestion(
-            slug="organisation-type-other",
-            type=QuestionType.TEXT_INPUT,
-            title="What type of organisation are you in (other)?",
-            hint="If you selected other",
-            order=8,
-            data_source=None,
-            data_standard_id=None,
-            section_id=org_info_section_id,
-            condition_combination_type=ConditionCombination.AND,
-        ),
-        "company-registration-number": ProtoDataCollectionDefinitionQuestion(
-            slug="company-registration-number",
-            type=QuestionType.TEXT_INPUT,
-            title="What is your company registration number?",
-            hint="If you selected charity or limited company, or other",
-            order=9,
-            data_source=None,
-            data_standard_id=None,
-            section_id=org_info_section_id,
-            condition_combination_type=ConditionCombination.OR,
-        ),
-        "project-size": ProtoDataCollectionDefinitionQuestion(
-            slug="project-size",
-            type=QuestionType.TEXT_INPUT,
-            title="How many people will work on the project?",
-            hint="Can be to the nearest 10",
-            order=3,
-            data_source=None,
-            data_standard_id=None,
-            section_id=project_info_section_id,
-        ),
-        "project-size-big": ProtoDataCollectionDefinitionQuestion(
-            slug="project-size-big",
-            type=QuestionType.TEXT_INPUT,
-            title="What's the make up of this team?",
-            hint="eg. expected to be 1 head chef, 2 sous chefs, 10 waiters, 1 front of house",
-            order=4,
-            data_source=None,
-            data_standard_id=None,
-            section_id=project_info_section_id,
-        ),
-        "project-size-small": ProtoDataCollectionDefinitionQuestion(
-            slug="project-size-small",
-            type=QuestionType.TEXT_INPUT,
-            title="How many cups of tea do you expect to get through in a day?",
-            hint=None,
-            order=5,
-            data_source=None,
-            data_standard_id=None,
-            section_id=project_info_section_id,
-        ),
-    }
-
-    for q_slug, q_instance in questions_to_create.items():
-        q_id = db.session.execute(
-            text(
-                "select id from proto_data_collection_definition_question where section_id ="
-                " :section_id and slug = :slug"
-            ),
-            dict(section_id=q_instance.section_id, slug=q_slug),
-        ).scalar_one_or_none()
-        if not q_id:
-            db.session.add(q_instance)
-        else:
-            q_instance.id = q_id
-            db.session.merge(q_instance)
-        db.session.flush()
-    db.session.commit()
-
-    conditions_to_create = [
-        ProtoDataCollectionQuestionCondition(
-            question_id=questions_to_create["alternative-organisation-names"].id,
-            depends_on_question_id=questions_to_create["organisation-other-names"].id,
-            criteria={
-                "operator": "EQUALS",  # less than, greater than
-                "value_type": "QUESTION_VALUE",  # question_value means we use the depends_on_question_id
-                # (which could be in a different section?)
-                # More use if using this structure for validation - could point at another section or data collection.
-                "value": "Yes",  # in the UI we could populate this with a list of possible values for depends_on
-                # fields of type radio.
-                # Would we want to point to the specific item in the list incase that changes? Probably too
-                # complicated at start
-            },
-        ),
-        ProtoDataCollectionQuestionCondition(
-            question_id=questions_to_create["local-authority-name"].id,
-            depends_on_question_id=questions_to_create["organisation-type"].id,
-            criteria={
-                "operator": "EQUALS",
-                "value_type": "QUESTION_VALUE",
-                "value": "local-authority",
-            },
-        ),
-        ProtoDataCollectionQuestionCondition(
-            question_id=questions_to_create["company-registration-number"].id,
-            depends_on_question_id=questions_to_create["organisation-type"].id,
-            criteria={
-                "operator": "EQUALS",
-                "value_type": "QUESTION_VALUE",
-                "value": "limited-company",
-            },
-        ),
-        ProtoDataCollectionQuestionCondition(
-            question_id=questions_to_create["company-registration-number"].id,
-            depends_on_question_id=questions_to_create["organisation-type"].id,
-            criteria={
-                "operator": "EQUALS",
-                "value_type": "QUESTION_VALUE",
-                "value": "charity",
-            },
-        ),
-        ProtoDataCollectionQuestionCondition(
-            question_id=questions_to_create["company-registration-number"].id,
-            depends_on_question_id=questions_to_create["organisation-type"].id,
-            criteria={
-                "operator": "EQUALS",
-                "value_type": "QUESTION_VALUE",
-                "value": "other",
-            },
-        ),
-        ProtoDataCollectionQuestionCondition(
-            question_id=questions_to_create["organisation-type-other"].id,
-            depends_on_question_id=questions_to_create["organisation-type"].id,
-            criteria={
-                "operator": "EQUALS",
-                "value_type": "QUESTION_VALUE",
-                "value": "other",
-            },
-        ),
-        ProtoDataCollectionQuestionCondition(
-            question_id=questions_to_create["project-size-big"].id,
-            depends_on_question_id=questions_to_create["project-size"].id,
-            criteria={
-                "operator": "GREATERTHANEQUALS",
-                "value_type": "QUESTION_VALUE",
-                "value": "20",
-            },
-        ),
-        ProtoDataCollectionQuestionCondition(
-            question_id=questions_to_create["project-size-small"].id,
-            depends_on_question_id=questions_to_create["project-size"].id,
-            criteria={
-                "operator": "LESSTHAN",
-                "value_type": "QUESTION_VALUE",
-                "value": "20",
-            },
-        ),
-    ]
-    db.session.execute(text("delete from proto_data_collection_question_condition"))
-    for c_instance in conditions_to_create:
-        db.session.add(c_instance)
-        db.session.flush()
-    db.session.commit()
-
-
-@task
-def create_conditional_question(c):
-    from app import create_app
-
-    with _env_var("FLASK_ENV", "development"):
-        app = create_app()
-        with app.app_context():
-            _create_conditional_question()
