@@ -1,6 +1,6 @@
 from typing import Dict
 
-from sqlalchemy import desc, func, select
+from sqlalchemy import and_, desc, func, select
 from sqlalchemy.orm import contains_eager
 
 from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
@@ -24,7 +24,7 @@ def get_change_requests_for_application(application_id, only_raised=False, sort_
                                       with a status of 'RAISED'
         sort_by_update (bool, optional): If True, sorts the change requests in descending order
                                           based on the latest update date.
-        sort_by_raised (bool, optional): TODO: If True, sorts the change requests in descending order
+        sort_by_raised (bool, optional): If True, sorts the change requests in descending order
                                           based on when they were raised (created).
 
     Returns:
@@ -39,7 +39,14 @@ def get_change_requests_for_application(application_id, only_raised=False, sort_
         # Order change requests according to their latest update
         stmt = stmt.join(FlagUpdate).group_by(AssessmentFlag.id).order_by(desc(func.max(FlagUpdate.date_created)))
     elif sort_by_raised:
-        pass
+        stmt = (
+            stmt.join(
+                FlagUpdate,
+                and_(FlagUpdate.assessment_flag_id == AssessmentFlag.id, FlagUpdate.status == FlagStatus.RAISED),
+            )
+            .group_by(AssessmentFlag.id)
+            .order_by(desc(func.max(FlagUpdate.date_created)))
+        )
 
     results = db.session.scalars(stmt).all()
     return results

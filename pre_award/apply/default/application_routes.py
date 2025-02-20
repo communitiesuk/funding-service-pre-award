@@ -7,9 +7,7 @@ from flask_babel import force_locale, gettext
 from flask_wtf import FlaskForm
 from fsd_utils import Decision
 from fsd_utils.authentication.decorators import login_required
-from fsd_utils.simple_utils.date_utils import (
-    current_datetime_after_given_iso_string,
-)
+from fsd_utils.simple_utils.date_utils import current_datetime_after_given_iso_string
 
 from pre_award.apply.constants import ApplicationStatus
 from pre_award.apply.default.data import (

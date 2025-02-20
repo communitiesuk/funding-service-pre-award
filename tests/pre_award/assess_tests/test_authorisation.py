@@ -157,8 +157,9 @@ class TestAuthorisation:
             (test_lead_assessor_claims, True),
         ],
     )
-    @pytest.mark.application_id("resolved_app")
-    @pytest.mark.sub_criteria_id("test_sub_criteria_id")
+    @pytest.mark.application_id("uncompeted_app")
+    @pytest.mark.fund_id("UNCOMPETED_FUND")
+    @pytest.mark.sub_criteria_id("test_uncomp_sub_criteria_id")
     def test_scoring_permissions_for_users(
         self,
         assess_test_client,
@@ -175,6 +176,7 @@ class TestAuthorisation:
         mock_get_bulk_accounts,
         claims,
         ability_to_score,
+        mock_get_assessment_flags,
     ):
         # Mocking fsd-user-token cookie
         token = create_valid_token(claims)
@@ -192,14 +194,29 @@ class TestAuthorisation:
         assert 200 == response.status_code, "Wrong status code on response"
 
         soup = BeautifulSoup(response.data, "html.parser")
-        assert (
+        if (
             soup.title.string
             == "test_theme_name – test_sub_criteria – Project In prog and Res – Assessment Hub – GOV.UK"
-        )
-        if ability_to_score:
-            assert b"score-subcriteria-link" in response.data and b"Score the subcriteria" in response.data, (
-                f"Sidebar should contain score subcriteria link or link to score subcriteria: {response.data}"
+        ):
+            assert (
+                soup.title.string
+                == "test_theme_name – test_sub_criteria – Project In prog and Res – Assessment Hub – GOV.UK"
             )
+        else:
+            assert (
+                soup.title.string == "test_theme_name – test_uncomp_sub_criteria – Uncompeted project In prog and Res –"
+                " Assessment Hub – GOV.UK"
+            )
+        if ability_to_score:
+            if b"score-subcriteria-link" in response.data and b"Score the subcriteria" in response.data:
+                assert b"score-subcriteria-link" in response.data and b"Score the subcriteria" in response.data, (
+                    f"Sidebar should contain score subcriteria link or link to score subcriteria: {response.data}"
+                )
+            else:
+                assert b"Accept and save" in response.data and b"Request changes" in response.data, (
+                    "Subcriteria page should contain accept and save "
+                    "and request changes button and link: {response.data}"
+                )
         else:
             assert b"score-subcriteria-link" not in response.data and b"Score the subcriteria" not in response.data, (
                 f"Sidebar should not contain score subcriteria link or link to score subcriteria: {response.data}"
@@ -231,6 +248,7 @@ class TestAuthorisation:
         mock_get_sub_criteria_theme,
         mock_get_assessor_tasklist_state,
         mock_get_bulk_accounts,
+        mock_get_assessment_flags,
     ):
         """
         GIVEN authorized users
@@ -315,6 +333,7 @@ class TestAuthorisation:
         mock_get_sub_criteria_theme,
         mock_get_assessor_tasklist_state,
         mock_get_bulk_accounts,
+        mock_get_assessment_flags,
     ):
         """
         GIVEN authorized users

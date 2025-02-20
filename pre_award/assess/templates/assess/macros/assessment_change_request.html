@@ -1,43 +1,26 @@
-{% from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner %}
-
-{% macro assessment_change_request(flag, questions, user_info, application_id) %}
-    {% set title_html %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half">
-            Change Requested
+{% macro assessment_change_request(flag, questions, user_info) %}
+    <div class="comment-group">
+        <div class="govuk-body govuk-grid-row">
+            <div class="govuk-grid-column-one-third">
+                <strong>Date:</strong>
+                <span class="govuk-!-font-weight-regular">{{ flag.date_created|utc_to_bst }}</span>
+            </div>
+            <div class="govuk-grid-column-two-third govuk-!-text-align-right">
+                <strong>Assessor: </strong>
+                {{ user_info["full_name"] or "N/A" }} {{ user_info["email_address"] }}
+            </div>
         </div>
-        <div class="govuk-grid-column-one-half govuk-!-text-align-right">
-            <span class="govuk-!-font-weight-regular">{{ flag.date_created | utc_to_bst }}</span>
-        </div>
-    </div>
-    {% endset %}
-    {% set notification_banner_html %}
-    <p class="govuk-body">
-        <strong>Section</strong><br>
-        <ul>
+        <p class="govuk-body">
             {% for field_id in flag.field_ids %}
-                <li>{{ questions[field_id] }}</li>
+                <strong>{{ questions[field_id] }}</strong>
+            {% endfor %}<br>
+            {% for update in flag.updates %}
+                {% if update["status"].name == "RAISED" %}
+                    {{ update["justification"] }}
+                {% endif %}
+            {% else %}
+                N/A
             {% endfor %}
-        </ul>
-    </p>
-    <p class="govuk-body">
-        <strong>Reason</strong><br>
-        {% for update in flag.updates %}
-            {% if update["status"].name == "RAISED" %}
-                {{ update["justification"] }}
-            {% endif %}
-        {% else %}
-            N/A
-        {% endfor %}
-    </p>
-    <p class="govuk-body">
-        <strong>Requested by</strong><br>
-        {{ user_info["full_name"] or "N/A" }} ({{ user_info["highest_role"] | all_caps_to_human }}) {{ user_info["email_address"] }}
-    </p>
-    {% endset %}
-
-    {{ govukNotificationBanner({
-        "html": notification_banner_html,
-        "titleHtml": title_html
-    }) }}
+        </p>
+    </div>
 {% endmacro %}
