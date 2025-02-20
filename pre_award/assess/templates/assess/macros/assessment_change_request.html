@@ -1,11 +1,11 @@
 {% macro assessment_change_request(flag, questions, user_info) %}
     <div class="comment-group">
         <div class="govuk-body govuk-grid-row">
-            <div class="govuk-grid-column-one-half">
+            <div class="govuk-grid-column-one-third">
                 <strong>Date:</strong>
                 <span class="govuk-!-font-weight-regular">{{ flag.date_created|utc_to_bst }}</span>
             </div>
-            <div class="govuk-grid-column-one-half govuk-!-text-align-right">
+            <div class="govuk-grid-column-two-third govuk-!-text-align-right">
                 <strong>Assessor: </strong>
                 {{ user_info["full_name"] or "N/A" }} {{ user_info["email_address"] }}
             </div>
