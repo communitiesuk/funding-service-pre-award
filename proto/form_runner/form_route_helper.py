@@ -26,7 +26,9 @@ def get_visible_questions_for_section_instance(
 
         condition_results = []
         for condition in question.conditions:
-            condition_results.append(evaluate_condition(condition=condition, section_data=section_instance_data))
+            condition_results.append(
+                evaluate_condition(condition=condition, all_section_data=section_instance_data.instance.section_data)
+            )
 
         if condition_combo_operator == ConditionCombination.AND:
             if all(condition_results):
@@ -39,8 +41,9 @@ def get_visible_questions_for_section_instance(
 
 
 def evaluate_condition(
-    section_data: ProtoDataCollectionInstanceSectionData, condition: ProtoDataCollectionQuestionCondition
+    all_section_data: list[ProtoDataCollectionInstanceSectionData], condition: ProtoDataCollectionQuestionCondition
 ) -> bool:
+    section_data = next(sd for sd in all_section_data if sd.section_id == condition.depends_on_question.section_id)
     depends_on_answer_text = get_answer_value_for_question_from_section_data(
         section_data=section_data, question=condition.depends_on_question
     )

@@ -81,6 +81,7 @@ def add_template_sections_to_data_collection_definition(round, template_section_
             title=template_section.title,
             order=template_section.order,
             definition_id=round.data_collection_definition_id,
+            template_section_id=template_section.id,
         )
         db.session.add(section)
         sections.append(section)
@@ -100,14 +101,36 @@ def add_template_sections_to_data_collection_definition(round, template_section_
             )
             section.questions.append(question)
 
+        def _get_question_from_different_section(
+            section_instance: ProtoDataCollectionDefinitionSection, template_question: TemplateQuestion
+        ):
+            # This assumes that the question that a condition depends on has been created first.
+            # Which should be true since we respect question ordering...
+            target_section = next(
+                s
+                for s in section_instance.definition.sections
+                if s.template_section_id == template_question.template_section_id
+            )
+            depends_on_question = next(
+                q for q in target_section.questions if q.template_question_id == template_question.id
+            )
+            return depends_on_question
+
         # now that new questions all exist
+
         for template_question in template_section.template_questions:
             for template_condition in template_question.conditions:
                 question = next(
                     q for q in section.questions if q.template_question_id == template_condition.question.id
                 )
-                depends_on_question = next(
-                    q for q in section.questions if q.template_question_id == template_condition.depends_on_question.id
+                depends_on_question = (
+                    next(
+                        q
+                        for q in section.questions
+                        if q.template_question_id == template_condition.depends_on_question.id
+                    )
+                    if template_section.id == template_condition.depends_on_question.template_section_id
+                    else _get_question_from_different_section(section, template_condition.depends_on_question)
                 )
                 condition = ProtoDataCollectionQuestionCondition(
                     question=question, depends_on_question=depends_on_question, criteria=template_condition.criteria

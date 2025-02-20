@@ -119,5 +119,11 @@ class TemplateQuestionCondition(db.Model):
         back_populates="dependent_conditions",
         foreign_keys=[depends_on_question_id],
     )
+    # depends_on_section_id: Mapped[int] = mapped_column(db.ForeignKey(TemplateSection.id), nullable=True)
+    # depends_on_section: Mapped["TemplateQuestion"] = relationship(
+    #     "TemplateSection",
+    #     #back_populates="dependent_conditions",
+    #     foreign_keys=[depends_on_section_id],
+    # )
 
     criteria: Mapped[dict] = mapped_column(nullable=False, default=dict)

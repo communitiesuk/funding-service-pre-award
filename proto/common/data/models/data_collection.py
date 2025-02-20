@@ -5,7 +5,14 @@ from sqlalchemy import CheckConstraint, ForeignKey, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
-from proto.common.data.models import DataStandard, ProtoReportingRound, Round, TemplateQuestion, t_data_source
+from proto.common.data.models import (
+    DataStandard,
+    ProtoReportingRound,
+    Round,
+    TemplateQuestion,
+    TemplateSection,
+    t_data_source,
+)
 from proto.common.data.models.proto_score import ProtoScore
 from proto.common.data.models.question_bank import ConditionCombination, QuestionType
 from proto.common.data.models.types import pk_int
@@ -48,6 +55,8 @@ class ProtoDataCollectionDefinitionSection(db.Model):
     questions: Mapped[list["ProtoDataCollectionDefinitionQuestion"]] = relationship(
         "ProtoDataCollectionDefinitionQuestion", order_by="ProtoDataCollectionDefinitionQuestion.order"
     )
+    template_section_id: Mapped[int | None] = mapped_column(db.ForeignKey(TemplateSection.id))
+    template_section: Mapped[TemplateSection] = relationship(TemplateSection, lazy="select")
 
     def __repr__(self):
         return f"<ProtoDataCollectionDefinitionSection {self.slug}>"
