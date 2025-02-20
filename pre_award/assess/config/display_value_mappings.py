@@ -30,7 +30,7 @@ assessment_statuses = {
     "STOPPED": "Stopped",
     "MULTIPLE_FLAGS": "Multiple flags to resolve",
     "CHANGE_REQUESTED": "Change requested",
-    "CHANGE_RECEIVED": "Change received",
+    "CHANGE_RECEIVED": "Review changes",
 }
 
 funding_types = {
