@@ -1,0 +1,30 @@
+# Delete the task role resource
+# - op: remove
+#   path: /Resources/TaskRole
+
+# Add a service connect alias
+# - op: add
+#   path: /Resources/Service/Properties/ServiceConnectConfiguration/Services/0/ClientAliases/-
+#   value:
+#     Port: !Ref TargetPort
+#     DnsName: yamlpatchiscool
+
+# Replace the task role in the task definition
+# - op: replace
+#   path: /Resources/TaskDefinition/Properties/TaskRoleArn
+#   value: arn:aws:iam::123456789012:role/MyTaskRole
+
+# Replace listener rules
+- op: replace
+  path: /Resources/HTTPListenerRuleWithDomain/Properties/Conditions/0/HostHeaderConfig/Values
+  value:
+    - account.access-funding.dev.communities.gov.uk
+    - apply.access-funding.dev.communities.gov.uk
+    - assess.access-funding.dev.communities.gov.uk
+
+- op: replace
+  path: /Resources/HTTPSListenerRule/Properties/Conditions/0/HostHeaderConfig/Values
+  value:
+    - account.access-funding.dev.communities.gov.uk
+    - apply.access-funding.dev.communities.gov.uk
+    - assess.access-funding.dev.communities.gov.uk
