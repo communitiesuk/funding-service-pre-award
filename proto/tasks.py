@@ -5,7 +5,14 @@ from invoke import task
 from sqlalchemy import text
 
 from proto.common.data.models import TemplateSection
-from proto.common.data.models.question_bank import DataStandard, QuestionType, TemplateQuestion, TemplateType
+from proto.common.data.models.data_collection import ConditionCombination
+from proto.common.data.models.question_bank import (
+    DataStandard,
+    QuestionType,
+    TemplateQuestion,
+    TemplateQuestionCondition,
+    TemplateType,
+)
 
 
 @contextmanager
@@ -100,12 +107,42 @@ def insert_question_bank_data():
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
         ),
+        "project-size": TemplateQuestion(
+            slug="project-size",
+            type=QuestionType.TEXT_INPUT,
+            title="How many people will work on the project?",
+            hint="Can be to the nearest 10",
+            order=2,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["project-information"].id,
+        ),
+        "project-size-big": TemplateQuestion(
+            slug="project-size-big",
+            type=QuestionType.TEXT_INPUT,
+            title="What's the make up of this team?",
+            hint="eg. expected to be 1 head chef, 2 sous chefs, 10 waiters, 1 front of house",
+            order=3,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["project-information"].id,
+        ),
+        "project-size-small": TemplateQuestion(
+            slug="project-size-small",
+            type=QuestionType.TEXT_INPUT,
+            title="How many cups of tea do you expect to get through in a day?",
+            hint=None,
+            order=4,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["project-information"].id,
+        ),
         "project-about": TemplateQuestion(
             slug="project-about",
             type=QuestionType.TEXTAREA,
             title="What is your project about?",
             hint="Give a brief summary of your project, including what you hope to achieve",
-            order=2,
+            order=5,
             data_source=None,
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
@@ -135,15 +172,63 @@ def insert_question_bank_data():
             data_standard_id=data_standards_to_create["organisation.schema.json#properties/type"].id,
             template_section_id=template_sections_to_create["organisation-information"].id,
         ),
+        "local-authority-name": TemplateQuestion(
+            slug="local-authority-name",
+            type=QuestionType.TEXT_INPUT,
+            title="What is the name of your local authority?",
+            hint=None,
+            order=3,
+            data_source=[
+                {"value": "cornwall-ua", "label": "Cornwall Unitary Authority"},
+                {"value": "newport-cc", "label": "Newport City Council"},
+                {"value": "torfaen-bc", "label": "Torfaen Borough Authority"},
+            ],
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["organisation-information"].id,
+            condition_combination_type=ConditionCombination.AND,
+        ),
+        "organisation-type-other": TemplateQuestion(
+            slug="organisation-type-other",
+            type=QuestionType.TEXT_INPUT,
+            title="What type of organisation are you in (other)?",
+            hint=None,
+            order=4,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["organisation-information"].id,
+            condition_combination_type=ConditionCombination.AND,
+        ),
+        "company-registration-number": TemplateQuestion(
+            slug="company-registration-number",
+            type=QuestionType.TEXT_INPUT,
+            title="What is your company registration number?",
+            hint=None,
+            order=5,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["organisation-information"].id,
+            condition_combination_type=ConditionCombination.OR,
+        ),
         "organisation-owner": TemplateQuestion(
             slug="organisation-owner",
             type=QuestionType.TEXT_INPUT,
             title="Who is your organisation's owner?",
             hint=None,
-            order=3,
+            order=6,
             data_source=None,
             data_standard_id=data_standards_to_create["user.schema.json#properties/full_name"].id,
             template_section_id=template_sections_to_create["organisation-information"].id,
+        ),
+        "organisation-annual-turnover": TemplateQuestion(
+            slug="organisation-annual-turnover",
+            type=QuestionType.TEXT_INPUT,
+            title="What is your organisation's annual turnover?",
+            hint="To the nearest £10k",
+            order=7,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["organisation-information"].id,
+            condition_combination_type=ConditionCombination.AND,
         ),
         "risk-title": TemplateQuestion(
             slug="risk-title",
@@ -265,6 +350,79 @@ def insert_question_bank_data():
             tq_instance.id = tq_id
             db.session.merge(tq_instance)
         db.session.flush()
+    db.session.commit()
+
+    conditions_to_create = [
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["local-authority-name"].id,
+            depends_on_question_id=template_questions_to_create["organisation-kind"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "local-authority",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["company-registration-number"].id,
+            depends_on_question_id=template_questions_to_create["organisation-kind"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "limited-company",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["company-registration-number"].id,
+            depends_on_question_id=template_questions_to_create["organisation-kind"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "charity",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["organisation-type-other"].id,
+            depends_on_question_id=template_questions_to_create["organisation-kind"].id,
+            criteria={
+                "operator": "EQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "other",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["project-size-big"].id,
+            depends_on_question_id=template_questions_to_create["project-size"].id,
+            criteria={
+                "operator": "GREATERTHANEQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "20",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["project-size-small"].id,
+            depends_on_question_id=template_questions_to_create["project-size"].id,
+            criteria={
+                "operator": "LESSTHAN",
+                "value_type": "QUESTION_VALUE",
+                "value": "20",
+            },
+        ),
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["organisation-annual-turnover"].id,
+            depends_on_question_id=template_questions_to_create["project-size"].id,
+            criteria={
+                "operator": "GREATERTHANEQUALS",
+                "value_type": "QUESTION_VALUE",
+                "value": "30",
+            },
+        ),
+    ]
+
+    db.session.execute(text("delete from template_question_condition"))
+    for c_instance in conditions_to_create:
+        db.session.add(c_instance)
+        db.session.flush()
+    db.session.commit()
 
     db.session.commit()
 

@@ -5,9 +5,16 @@ from sqlalchemy import CheckConstraint, ForeignKey, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
-from proto.common.data.models import DataStandard, ProtoReportingRound, Round, TemplateQuestion, t_data_source
+from proto.common.data.models import (
+    DataStandard,
+    ProtoReportingRound,
+    Round,
+    TemplateQuestion,
+    TemplateSection,
+    t_data_source,
+)
 from proto.common.data.models.proto_score import ProtoScore
-from proto.common.data.models.question_bank import QuestionType
+from proto.common.data.models.question_bank import ConditionCombination, QuestionType
 from proto.common.data.models.types import pk_int
 
 
@@ -21,7 +28,9 @@ class ProtoDataCollectionDefinition(db.Model):
         "ProtoReportingRound", back_populates="data_collection_definition"
     )
     sections: Mapped[Optional[list["ProtoDataCollectionDefinitionSection"]]] = relationship(
-        "ProtoDataCollectionDefinitionSection", back_populates="definition"
+        "ProtoDataCollectionDefinitionSection",
+        back_populates="definition",
+        order_by="ProtoDataCollectionDefinitionSection.order",
     )
 
 
@@ -46,6 +55,8 @@ class ProtoDataCollectionDefinitionSection(db.Model):
     questions: Mapped[list["ProtoDataCollectionDefinitionQuestion"]] = relationship(
         "ProtoDataCollectionDefinitionQuestion", order_by="ProtoDataCollectionDefinitionQuestion.order"
     )
+    template_section_id: Mapped[int | None] = mapped_column(db.ForeignKey(TemplateSection.id))
+    template_section: Mapped[TemplateSection] = relationship(TemplateSection, lazy="select")
 
     def __repr__(self):
         return f"<ProtoDataCollectionDefinitionSection {self.slug}>"
@@ -78,8 +89,39 @@ class ProtoDataCollectionDefinitionQuestion(db.Model):
     data_standard_id: Mapped[int | None] = mapped_column(db.ForeignKey(DataStandard.id))
     data_standard: Mapped[DataStandard | None] = relationship(DataStandard)
 
+    conditions: Mapped[list["ProtoDataCollectionQuestionCondition"]] = relationship(
+        primaryjoin="ProtoDataCollectionDefinitionQuestion.id==ProtoDataCollectionQuestionCondition.question_id",
+    )
+    dependent_conditions: Mapped[list["ProtoDataCollectionQuestionCondition"]] = relationship(
+        primaryjoin="ProtoDataCollectionDefinitionQuestion.id==ProtoDataCollectionQuestionCondition.depends_on_question_id",
+    )
+    condition_combination_type: Mapped[Optional[ConditionCombination]] = mapped_column(default=ConditionCombination.AND)
+
     def __repr__(self):
         return f"<ProtoDataCollectionDefinitionQuestion {self.slug} section={self.section}>"
+
+
+class ProtoDataCollectionQuestionCondition(db.Model):
+    __table_args__ = ()
+    id: Mapped[pk_int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
+
+    question_id: Mapped[int] = mapped_column(db.ForeignKey(ProtoDataCollectionDefinitionQuestion.id))
+    question: Mapped["ProtoDataCollectionDefinitionQuestion"] = relationship(
+        "ProtoDataCollectionDefinitionQuestion", back_populates="conditions", foreign_keys=[question_id]
+    )
+
+    depends_on_question_id: Mapped[int] = mapped_column(
+        db.ForeignKey(ProtoDataCollectionDefinitionQuestion.id), nullable=True
+    )
+    depends_on_question: Mapped["ProtoDataCollectionDefinitionQuestion"] = relationship(
+        "ProtoDataCollectionDefinitionQuestion",
+        back_populates="dependent_conditions",
+        foreign_keys=[depends_on_question_id],
+    )
+
+    criteria: Mapped[dict] = mapped_column(nullable=False, default=dict)
 
 
 class ProtoDataCollectionInstance(db.Model):

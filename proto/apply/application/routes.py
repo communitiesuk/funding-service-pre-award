@@ -9,7 +9,7 @@ from proto.common.data.services.applications import (
     get_applications,
     submit_application,
 )
-from proto.common.data.services.grants import get_active_round, get_grant
+from proto.common.data.services.grants import get_active_round, get_grant, get_grant_and_round
 
 application_blueprint = Blueprint("application", __name__)
 
@@ -49,6 +49,19 @@ def application_new_handler(short_code):
     application = create_application(preview=False, round_id=active_round.id, account_id=g.account.id)
     return redirect(
         url_for("proto_apply.application.application_tasklist", application_external_id=application.external_id)
+    )
+
+
+@application_blueprint.get("/grant/<grant_code>/<round_code>/all_questions")
+@is_authenticated
+def view_all_questions(grant_code, round_code):
+    grant, round = get_grant_and_round(grant_code=grant_code, round_code=round_code)
+
+    return render_template(
+        "apply/all_questions.jinja.html",
+        grant=grant,
+        round=round,
+        data_collection_definition=round.data_collection_definition,
     )
 
 
