@@ -423,35 +423,71 @@ def test_get_tag_none_exists(flask_test_client, mocker):
         assert response.status_code == 404
 
 
-@pytest.mark.apps_to_insert([test_input_data[0].copy() for x in range(4)])
+@pytest.mark.apps_to_insert([test_input_data[0].copy() for _ in range(4)])
 @pytest.mark.unique_fund_round(True)
-def test_get_application_fields_export(flask_test_client, seed_application_records, monkeypatch):
+@pytest.mark.parametrize(
+    "fund_config, round_config, expected_keys",
+    [
+        (None, None, {"Application ID", "Date Submitted", "Short ID"}),
+        (
+            {
+                "ASSESSOR_EXPORT": {
+                    "form_fields": {
+                        "aHIGbK": {"en": {"title": "Charity number "}},
+                        "aAeszH": {"en": {"title": "Do you need to do any further feasibility work?"}},
+                        "ozgwXq": {"en": {"title": "Risks to your project (document upload)"}},
+                        "KAgrBz": {"en": {"title": "Project name"}},
+                    }
+                }
+            },
+            None,
+            {
+                "Application ID",
+                "Date Submitted",
+                "Short ID",
+                "Charity number ",
+                "Do you need to do any further feasibility work?",
+                "Risks to your project (document upload)",
+                "Project name",
+            },
+        ),
+        (
+            {
+                "ASSESSOR_EXPORT": {
+                    "form_fields": {
+                        "aHIGbK": {"en": {"title": "Charity number "}},
+                        "aAeszH": {"en": {"title": "Do you need to do any further feasibility work?"}},
+                        "ozgwXq": {"en": {"title": "Risks to your project (document upload)"}},
+                        "KAgrBz": {"en": {"title": "Project name"}},
+                    }
+                }
+            },
+            {
+                "ASSESSOR_EXPORT": {
+                    "form_fields": {
+                        "xYz123": {"en": {"title": "Special round field"}},
+                    }
+                }
+            },
+            {"Application ID", "Date Submitted", "Short ID", "Special round field"},
+        ),
+    ],
+)
+def test_get_application_fields_export(
+    flask_test_client, seed_application_records, monkeypatch, fund_config, round_config, expected_keys
+):
     fund_id = seed_application_records[0]["fund_id"]
     round_id = seed_application_records[0]["round_id"]
 
-    monkeypatch.setitem(
-        applicant_info_mapping,
-        f"{fund_id}",
-        {
-            "ASSESSOR_EXPORT": {
-                "form_fields": {
-                    "aHIGbK": {"en": {"title": "Charity number "}},
-                    "aAeszH": {"en": {"title": "Do you need to do any further feasibility work?"}},
-                    "ozgwXq": {"en": {"title": "Risks to your project (document upload)"}},
-                    "KAgrBz": {"en": {"title": "Project name"}},
-                }
-            }
-        },
-    )
+    if round_config:
+        monkeypatch.setitem(applicant_info_mapping, f"{fund_id}:{round_id}", round_config)
+    if fund_config:
+        monkeypatch.setitem(applicant_info_mapping, f"{fund_id}", fund_config)
 
-    result = flask_test_client.get(f"/assessment/application_fields_export/{fund_id}/{round_id}/ASSESSOR_EXPORT").json  # noqa
+    result = flask_test_client.get(f"/assessment/application_fields_export/{fund_id}/{round_id}/ASSESSOR_EXPORT").json
 
-    # TODO add some test data for cy_list
-    assert len(result["en_list"]) == 4
-    assert result["en_list"][0]["Charity number "] == "Test"
-    assert result["en_list"][0]["Do you need to do any further feasibility work?"] is False
-    assert result["en_list"][0]["Project name"] == "Save the humble pub in Bangor"
-    assert result["en_list"][0]["Risks to your project (document upload)"] == "sample1.doc"
+    response_keys = set(result["en_list"][0].keys())
+    assert response_keys == expected_keys
 
 
 @pytest.mark.apps_to_insert([test_input_data[0].copy() for x in range(4)])
