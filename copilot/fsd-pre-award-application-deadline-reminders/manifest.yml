@@ -62,3 +62,20 @@ secrets:
   RSA256_PUBLIC_KEY_BASE64: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/RSA256_PUBLIC_KEY_BASE64
   RSA256_PRIVATE_KEY_BASE64: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/RSA256_PRIVATE_KEY_BASE64
   GOV_NOTIFY_API_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/GOV_NOTIFY_API_KEY
+
+environments:
+  prod:
+    variables:
+      FLASK_ENV: production
+      ASSESSMENT_FRONTEND_HOST: "https://assessment.access-funding.levellingup.gov.uk"
+      ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: false
+      COOKIE_DOMAIN: ".access-funding.levellingup.gov.uk"
+      APPLY_HOST: "frontend.access-funding.levellingup.gov.uk"
+      ASSESS_HOST: "assessment.access-funding.levellingup.gov.uk"
+      AUTH_HOST: "authenticator.access-funding.levellingup.gov.uk"
+      API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local:8080"
+      APPLICANT_FRONTEND_HOST: "https://frontend.access-funding.levellingup.gov.uk" # TODO: remove me when all frontends combined
+      FORMS_SERVICE_PUBLIC_HOST: "https://forms.access-funding.levellingup.gov.uk"
+      POST_AWARD_FRONTEND_HOST: "https://find-monitoring-data.access-funding.levellingup.gov.uk"
+      POST_AWARD_SUBMIT_HOST: "https://submit-monitoring-data.access-funding.levellingup.gov.uk"
+      SENTRY_TRACES_SAMPLE_RATE: 0.02
