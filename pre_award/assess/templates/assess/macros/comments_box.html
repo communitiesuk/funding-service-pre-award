@@ -23,6 +23,8 @@
             } if comment_form.comment.errors
             }) }}
 
+            <input type="hidden" name="action" value="save_comment">
+
             {{ govukButton({
                 "text": "Save comment",
                 "type": "submit",
