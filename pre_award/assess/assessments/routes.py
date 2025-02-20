@@ -1262,6 +1262,9 @@ def display_sub_criteria(
             )
         )
 
+    theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
+    answers_meta = applicants_response.create_ui_components(theme_answers_response, application_id)
+
     common_template_config = {
         "sub_criteria": sub_criteria,
         "score": score[0] if score else None,
@@ -1269,6 +1272,9 @@ def display_sub_criteria(
         "application_id": application_id,
         "comments": theme_matched_comments,
         "change_requests": sub_criteria_change_requests,
+        "unrequested_changes": [
+            theme["question"] for theme in theme_answers_response if theme.get("flag_for_assessor")
+        ],
         "accounts_list": approval_change_request_users,
         "is_flaggable": False,  # Flag button is disabled in sub-criteria page,
         "display_comment_box": add_comment_argument,
@@ -1281,10 +1287,6 @@ def display_sub_criteria(
         "assessment_status": assessment_status,
         "pagination": state.get_pagination_from_sub_criteria_id(sub_criteria_id),
     }
-
-    theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
-
-    answers_meta = applicants_response.create_ui_components(theme_answers_response, application_id)
 
     return render_template(
         "assessments/sub_criteria.html",
