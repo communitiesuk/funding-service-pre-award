@@ -16,7 +16,7 @@ from proto.form_runner.helpers import (
 def get_visible_questions_for_section_instance(
     section_definition: ProtoDataCollectionDefinitionSection,
     section_instance_data: ProtoDataCollectionInstanceSectionData,
-):
+) -> list[ProtoDataCollectionDefinitionQuestion]:
     visible_questions = []
     for question in section_definition.questions:
         if not question.conditions:
@@ -79,7 +79,7 @@ def evaluate_condition(
 def get_next_question_for_data_collection_instance(
     section_instance_data: ProtoDataCollectionInstanceSectionData,
     current_question_definition: ProtoDataCollectionDefinitionQuestion,
-) -> ProtoDataCollectionDefinitionQuestion | None:
+):
     visible_questions = get_visible_questions_for_section_instance(
         current_question_definition.section, section_instance_data
     )
@@ -88,3 +88,17 @@ def get_next_question_for_data_collection_instance(
     if index_current_question == len(visible_questions) - 1:
         return None
     return visible_questions[index_current_question + 1]
+
+
+# assumes you're not going to land here from the 0th (given logic elsewhere)
+# we'd want to check that anyay for real (these should also just be helpers on a nice class)
+def get_previous_question_for_data_collection_instance(
+    section_instance_data: ProtoDataCollectionInstanceSectionData,
+    current_question_definition: ProtoDataCollectionDefinitionQuestion,
+):
+    visible_questions = get_visible_questions_for_section_instance(
+        current_question_definition.section, section_instance_data
+    )
+
+    index_current_question = visible_questions.index(current_question_definition)
+    return visible_questions[index_current_question - 1]

@@ -18,6 +18,7 @@ from proto.common.data.services.question_bank import get_application_question
 from proto.form_runner.expressions import build_context_injector
 from proto.form_runner.form_route_helper import (
     get_next_question_for_data_collection_instance,
+    get_previous_question_for_data_collection_instance,
     get_visible_questions_for_section_instance,
 )
 from proto.form_runner.forms import MarkAsCompleteForm, build_question_form
@@ -73,7 +74,7 @@ def _next_url_for_question(
     )
 
 
-def _back_link_for_question(question, application_external_id, from_check_your_answers):
+def _back_link_for_question(question, application_external_id, from_check_your_answers, section_instance_data):
     if from_check_your_answers:
         return url_for(
             "proto_form_runner.check_your_answers",
@@ -84,13 +85,17 @@ def _back_link_for_question(question, application_external_id, from_check_your_a
     if question.slug == question.section.questions[0].slug:
         return url_for("proto_apply.application.application_tasklist", application_external_id=application_external_id)
 
-    previous_question_index = question.section.questions.index(question) - 1
+    # doesn't explicitly handle if section_instance_data is None which it should
+    # it's very unlikley given how its set up right now but its fragile
+    previous_question = get_previous_question_for_data_collection_instance(
+        section_instance_data=section_instance_data, current_question_definition=question
+    )
 
     return url_for(
         "proto_form_runner.ask_application_question",
         application_external_id=application_external_id,
         section_slug=question.section.slug,
-        question_slug=question.section.questions[previous_question_index].slug,
+        question_slug=previous_question.slug,
     )
 
 
@@ -104,12 +109,18 @@ def ask_application_question(application_external_id, section_slug, question_slu
     question = get_application_question(application.round.data_collection_definition_id, section_slug, question_slug)
     form = build_question_form(application, question)
     from_check_your_answers = request.args.get("from_cya", "False") == "True"
+
     if form.validate_on_submit():
         upsert_question_data(application, question, form.question.data)
+        # this needs to happen after we've upserted otherwise it will be missing the latest
+        # question to validate conditions
         section_instance_data = next(
-            section_data
-            for section_data in application.data_collection_instance.section_data
-            if section_data.section_id == question.section_id
+            (
+                section_data
+                for section_data in application.data_collection_instance.section_data
+                if section_data.section_id == question.section_id
+            ),
+            None,
         )
         return redirect(
             _next_url_for_question(
@@ -121,6 +132,15 @@ def ask_application_question(application_external_id, section_slug, question_slu
             )
         )
 
+    section_instance_data = next(
+        (
+            section_data
+            for section_data in application.data_collection_instance.section_data
+            if section_data.section_id == question.section_id
+        ),
+        None,
+    )
+
     return render_template(
         "form_runner/question_page.html",
         application=application,
@@ -128,7 +148,9 @@ def ask_application_question(application_external_id, section_slug, question_slu
         QuestionType=QuestionType,
         section=question.section,
         form=form,
-        back_link=_back_link_for_question(question, application_external_id, from_check_your_answers),
+        back_link=_back_link_for_question(
+            question, application_external_id, from_check_your_answers, section_instance_data=section_instance_data
+        ),
         account=account,
     )
 
