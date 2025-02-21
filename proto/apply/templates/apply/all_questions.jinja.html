@@ -1,0 +1,48 @@
+{% extends "apply/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}All Questions{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">All questions for {{ grant.title }} - {{ round.title_json["en"] }}</h1>
+        {% for section in data_collection_definition.sections %}
+            <h2 class="govuk-heading-m">{{ section.order }}. {{ section.title }}</h2>
+            {%  for question in section.questions %}
+                <h3 class="govuk-heading-s">{{ section.order }}.{{ question.order }}. {{ question.title }}</h3>
+                {% if question.hint %}
+                    <p class="govuk-body">{{ question.hint }}</p>
+                {% endif %}
+                {% if question.data_source %}
+                    <ul class="govuk-list govuk-list--bullet">
+                        {% for item in question.data_source %}
+                            <li>{{ item.label }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if question.dependent_conditions %}
+                    {% for condition in question.dependent_conditions %}
+                        <p class="govuk-body">
+                        {% if condition.criteria["operator"] == "EQUALS" %}
+                            If '{{ condition.criteria.value }}', go to question {{ condition.question.section.order }}. {{ condition.question.order }} ({{ condition.question.title }})
+                        {% endif %}
+                        {% if condition.criteria["operator"] == "GREATERTHAN" %}
+                            If greater than '{{ condition.criteria.value }}', go to question {{ condition.question.section.order }}. {{ condition.question.order }} ({{ condition.question.title }})
+                        {% endif %}
+                        {% if condition.criteria["operator"] == "GREATERTHANEQUALS" %}
+                            If greater than or equal to '{{ condition.criteria.value }}', go to question {{ condition.question.section.order }}. {{ condition.question.order }} ({{ condition.question.title }})
+                        {% endif %}
+                        {% if condition.criteria["operator"] == "LESSTHAN" %}
+                            If less than '{{ condition.criteria.value }}', go to question {{ condition.question.section.order }}. {{ condition.question.order }} ({{ condition.question.title }})
+                        {% endif %}
+                        {% if condition.criteria["operator"] == "LESSTHANEQUALS" %}
+                            If less than or equals to '{{ condition.criteria.value }}', go to question {{ condition.question.section.order }}. {{ condition.question.order }} ({{ condition.question.title }})
+                        {% endif %}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {%  endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -2,6 +2,11 @@ from flask import g, redirect, render_template, request, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
+from proto.common.data.models import (
+    ProtoDataCollectionDefinitionQuestion,
+    ProtoDataCollectionDefinitionSection,
+    ProtoDataCollectionInstanceSectionData,
+)
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.services.applications import (
     get_application,
@@ -10,8 +15,15 @@ from proto.common.data.services.applications import (
     upsert_question_data,
 )
 from proto.common.data.services.question_bank import get_application_question
+from proto.form_runner.form_route_helper import (
+    get_next_question_for_data_collection_instance,
+    get_visible_questions_for_section_instance,
+)
 from proto.form_runner.forms import MarkAsCompleteForm, build_question_form
-from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
+from proto.form_runner.helpers import (
+    get_answer_text_for_question_from_section_data,
+    get_answer_value_for_question_from_section_data,
+)
 
 runner_blueprint = Blueprint("proto_form_runner", __name__)
 
@@ -21,29 +33,42 @@ def _grants_service_nav():
     return dict(active_navigation_tab="your_grants")
 
 
-def _next_url_for_question(application_external_id, section, current_question_slug, from_check_your_answers):
-    if from_check_your_answers:
-        return url_for(
-            "proto_form_runner.check_your_answers",
-            application_external_id=application_external_id,
-            section_slug=section.slug,
-        )
+def _next_url_for_question(
+    application_external_id,
+    section_definition: ProtoDataCollectionDefinitionSection,
+    section_instance_data: ProtoDataCollectionInstanceSectionData,
+    current_question: ProtoDataCollectionDefinitionQuestion,
+    from_check_your_answers: bool,
+):
+    next_question = get_next_question_for_data_collection_instance(
+        section_instance_data=section_instance_data, current_question_definition=current_question
+    )
 
-    question_slugs = [question.slug for question in section.questions]
-    curr_index = question_slugs.index(current_question_slug)
-    if curr_index == len(question_slugs) - 1:
+    goto_check_your_answers = False
+    if next_question is None:
         # TODO: section could have an attribute to toggle on/off 'show check-your-answers' page
+        goto_check_your_answers = True
+
+    elif from_check_your_answers:
+        existing_answer_for_next_question = get_answer_value_for_question_from_section_data(
+            question=next_question, section_data=section_instance_data
+        )
+        if existing_answer_for_next_question:
+            goto_check_your_answers = True
+
+    if goto_check_your_answers:
         return url_for(
             "proto_form_runner.check_your_answers",
             application_external_id=application_external_id,
-            section_slug=section.slug,
+            section_slug=section_definition.slug,
         )
 
     return url_for(
         "proto_form_runner.ask_application_question",
         application_external_id=application_external_id,
-        section_slug=section.slug,
-        question_slug=question_slugs[curr_index + 1],
+        section_slug=section_definition.slug,
+        question_slug=next_question.slug,
+        from_cya=from_check_your_answers,
     )
 
 
@@ -77,11 +102,22 @@ def ask_application_question(application_external_id, section_slug, question_slu
     application = get_application(application_external_id)
     question = get_application_question(application.round.data_collection_definition_id, section_slug, question_slug)
     form = build_question_form(application, question)
-    from_check_your_answers = "from_cya" in request.args
+    from_check_your_answers = request.args.get("from_cya", "False") == "True"
     if form.validate_on_submit():
         upsert_question_data(application, question, form.question.data)
+        section_instance_data = next(
+            section_data
+            for section_data in application.data_collection_instance.section_data
+            if section_data.section_id == question.section_id
+        )
         return redirect(
-            _next_url_for_question(application_external_id, question.section, question_slug, from_check_your_answers)
+            _next_url_for_question(
+                application_external_id=application_external_id,
+                section_definition=question.section,
+                section_instance_data=section_instance_data,
+                current_question=question,
+                from_check_your_answers=from_check_your_answers,
+            )
         )
 
     return render_template(
@@ -122,4 +158,7 @@ def check_your_answers(application_external_id, section_slug):
         get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
         form=form,
         account=account,
+        visible_questions=get_visible_questions_for_section_instance(
+            section_instance_data=section_data, section_definition=section_data.section
+        ),
     )

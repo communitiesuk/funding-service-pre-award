@@ -37,24 +37,18 @@
         {# short answers in-line and longer answers break onto a new line #}
         {% for section_data in application.data_collection_instance.section_data %}
         {% set section = section_data.section %}
-        {% set data = section_data.data %}
         <h2 class="govuk-heading-m">{{ section.title }}<h2>
         <hr class="govuk-section-break govuk-section-break--visible">
 
         {% set rows =[] %}
-        {% for question in section.questions %}
-        {# still the feeling of use enums not names #}
-        {% if question.type.name == "RADIOS" %}
-            {% set answer = data.get(question.id | string).get("answer").get("label") %}
-        {% else %}
-            {# "text like" answers catch-all #}
-            {% set answer = data.get(question.id | string).get("answer") %}
-        {% endif %}
 
-        {% set rows = rows.append({
-            "key": { "text": question.title },
-            "value": { "text": answer }
-        }) %}
+        {# This definitely wants to be done in a generic class util that builds up this information once and then it can be #}
+        {# accessed but following precedent for now #}
+        {% for question in get_visible_questions_for_section_instance(section_data.section, section_data) %}
+            {% set rows = rows.append({
+                "key": { "text": question.title },
+                "value": { "text": get_answer_text_for_question_from_section_data(question, section_data) }
+            }) %}
         {% endfor %}
         {{ govukSummaryList({
             "firstCellIsHeader": false,

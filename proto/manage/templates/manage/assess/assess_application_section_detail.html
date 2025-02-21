@@ -64,17 +64,11 @@
         <h1 class="govuk-heading-l">{{ section.title }}</h1>
 
         {% set rows =[] %}
-        {% for question in section.questions %}
-        {% if question.type.name == "RADIOS" %}
-            {% set answer = data.get(question.id | string).get("answer").get("label") %}
-        {% else %}
-            {% set answer = data.get(question.id | string).get("answer") %}
-        {% endif %}
-
-        {% set rows = rows.append({
-            "key": { "text": question.title },
-            "value": { "text": answer }
-        }) %}
+        {% for question in get_visible_questions_for_section_instance(section_data.section, section_data) %}
+            {% set rows = rows.append({
+                "key": { "text": question.title },
+                "value": { "text": get_answer_text_for_question_from_section_data(question, section_data) }
+            }) %}
         {% endfor %}
         {{ govukSummaryList({
             "firstCellIsHeader": false,

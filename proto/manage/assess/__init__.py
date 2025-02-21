@@ -15,6 +15,8 @@ from proto.common.data.services.applications import (
     search_applications,
 )
 from proto.common.data.services.grants import get_active_round, get_all_grants_with_rounds, get_grant
+from proto.form_runner.form_route_helper import get_visible_questions_for_section_instance
+from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
 
 assess_blueprint = Blueprint("assess", __name__)
 
@@ -130,7 +132,11 @@ def assess_application_all_answers_handler(short_code, application_id):
     grant = get_grant(short_code)
     application = get_application(application_id)
     return render_template(
-        "manage/assess/assess_application_view_all_answers.html", grant=grant, application=application
+        "manage/assess/assess_application_view_all_answers.html",
+        grant=grant,
+        application=application,
+        get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
+        get_visible_questions_for_section_instance=get_visible_questions_for_section_instance,
     )
 
 
@@ -144,6 +150,7 @@ def assess_application_section_hander(short_code, application_id, section_id):
     score_form = ScoreForm(request.values, action="SCORE")
     grant = get_grant(short_code)
     application = get_application(application_id)
+
     section_data = next((x for x in application.data_collection_instance.section_data if str(x.id) == section_id), None)
 
     # this is really hacky - I'm sure wtf forms has a nice way of doing multiple forms per page, go look that up
@@ -189,4 +196,6 @@ def assess_application_section_hander(short_code, application_id, section_id):
         form=form,
         score_form=score_form,
         actions=actions,
+        get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
+        get_visible_questions_for_section_instance=get_visible_questions_for_section_instance,
     )
