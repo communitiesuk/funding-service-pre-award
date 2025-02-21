@@ -424,13 +424,13 @@ fund_round_data_key_mappings = {
     "HSRAVR": {
         "location": None,
         "asset_type": None,
-        "funding_one": None,
+        "funding_one": "MIrLuu",
         "funding_two": None,
     },
     "HSRARP": {
         "location": None,
         "asset_type": None,
-        "funding_one": None,
+        "funding_one": "uJIluf",
         "funding_two": None,
     },
 }
