@@ -1,0 +1,33 @@
+{% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+
+{% extends "manage/platform/grants_base.html" %}
+
+{% block pageTitle %}{% trans %}Update funding allocation{% endtrans %} - {{ grant.name }} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if form.errors %}
+        {{ govukErrorSummary(wtforms_errors(form)) }}
+    {% endif %}
+
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+      {{ form.funding_allocated(params={
+          "label": {
+              "isPageHeading": true,
+              "classes": "govuk-label--l"
+          },
+          "prefix": {
+            "text": "£"
+          },
+        }) }}
+      {{ form.submit }}
+    </form>
+  </div>
+</div>
+{% endblock %}

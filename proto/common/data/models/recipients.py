@@ -25,5 +25,8 @@ class ProtoGrantRecipient(db.Model):
 
     status: Mapped[GrantRecipientStatus] = mapped_column(index=True)
 
+    funding_allocated: Mapped[int] = mapped_column(default=0)
+    funding_paid: Mapped[int] = mapped_column(default=0)
+
     application_id: Mapped[int | None] = mapped_column(ForeignKey("proto_application.id"), unique=True)
     application: Mapped[Optional["ProtoApplication"]] = relationship("ProtoApplication")

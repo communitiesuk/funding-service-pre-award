@@ -8,8 +8,13 @@ from proto.common.data.services.recipients import (
     create_recipient_from_application,
     get_grant_recipient,
     search_recipients,
+    update_grant_recipient,
 )
-from proto.manage.platform.forms.recipients import SetupNewRecipientFlowForm, SetupNewRecipientFromApplicationForm
+from proto.manage.platform.forms.recipients import (
+    SetupNewRecipientFlowForm,
+    SetupNewRecipientFromApplicationForm,
+    UpdateRecipientFundingAllocationForm,
+)
 
 recipients_blueprint = Blueprint("recipients", __name__)
 
@@ -91,5 +96,29 @@ def view_grant_recipient(short_code, recipient_id):
     return render_template(
         "manage/platform/recipients/view-grant-recipient.html",
         recipient=recipient,
+        grant=recipient.application.round.proto_grant,
+    )
+
+
+@recipients_blueprint.route(
+    "/recipients/<short_code>/<uuid:recipient_id>/update-funding-allocation", methods=["GET", "POST"]
+)
+@is_authenticated(as_platform_admin=True)
+def update_grant_recipient_funding_allocation(short_code, recipient_id):
+    recipient = get_grant_recipient(short_code, recipient_id)
+    form = UpdateRecipientFundingAllocationForm(obj=recipient)
+    if form.validate_on_submit():
+        update_grant_recipient(recipient, funding_allocated=form.funding_allocated.data)
+        return redirect(
+            url_for(
+                "proto_manage.platform.recipients.view_grant_recipient",
+                short_code=short_code,
+                recipient_id=recipient_id,
+            )
+        )
+    return render_template(
+        "manage/platform/recipients/update-funding-allocation.html",
+        recipient=recipient,
+        form=form,
         grant=recipient.application.round.proto_grant,
     )

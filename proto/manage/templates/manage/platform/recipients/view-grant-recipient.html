@@ -26,9 +26,9 @@
     <div class="govuk-grid-column-three-quarters">
       {{ govukSummaryList({
           "rows": [
-              { "key": { "text": _("Funding allocated") }, "value": { "text": "£0" }, "actions": {"items": [{"href": "#", "text": "Change"}] } },
-              { "key": { "text": _("Funding paid") }, "value": { "text": "£0" }, "actions": {"items": [{"href": "#", "text": "Make a payment"}] } },
-              { "key": { "text": _("Projects") }, "value": { "html": "Rebuilding the local chapel<br>Carrying hedgehogs across the road" }, "actions": {"items": [{"href": "#", "text": "Manage"}] } },
+              { "key": { "text": _("Funding allocated") }, "value": { "text": '£' ~ recipient.funding_allocated }, "actions": {"items": [{"href": url_for("proto_manage.platform.recipients.update_grant_recipient_funding_allocation", short_code=grant.short_name, recipient_id=recipient.id), "text": "Change", "classes": "govuk-link--no-visited-state"}] } },
+              { "key": { "text": _("Funding paid") }, "value": { "text": "£" ~ recipient.funding_paid }, "actions": {"items": [{"href": "#", "text": "Make a payment", "classes": "govuk-link--no-visited-state"}] } },
+              { "key": { "text": _("Projects") }, "value": { "html": "Rebuilding the local chapel<br>Carrying hedgehogs across the road" }, "actions": {"items": [{"href": "#", "text": "Manage", "classes": "govuk-link--no-visited-state"}] } },
           ]
       })}}
   </div>

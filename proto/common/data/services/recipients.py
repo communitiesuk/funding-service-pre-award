@@ -38,3 +38,15 @@ def get_grant_recipient(short_code: str, recipient_id: uuid.UUID):
         .join(Round.proto_grant)
         .filter(ProtoGrantRecipient.id == recipient_id, Fund.short_name == short_code)
     )
+
+
+def update_grant_recipient(
+    recipient: ProtoGrantRecipient, funding_allocated: int | None = None, funding_paid: int | None = None
+):
+    if funding_allocated is not None:
+        recipient.funding_allocated = funding_allocated
+
+    if funding_paid is not None:
+        recipient.funding_paid = funding_paid
+
+    db.session.commit()
