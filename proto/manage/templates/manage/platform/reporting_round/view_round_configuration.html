@@ -15,6 +15,7 @@
       Configuration
     </h1>
 
+    {% if round.preview %}
     {% if round.data_collection_definition.sections|length == 0 %}
       {% set insetText %}
         <p>
@@ -28,6 +29,7 @@
         {{ form.csrf_token }}
         {{ form.submit }}
       </form>
+    {% endif %}
     {% endif %}
 
     {% set adminEditHref = url_for('protoreportinground.edit_view', id=round.id, url=url_for('proto_manage.platform.reporting_rounds.view_reporting_round_configuration', grant_code=grant.short_name, round_ext_id=round.external_id)) %}

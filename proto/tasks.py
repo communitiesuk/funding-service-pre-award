@@ -480,21 +480,21 @@ def insert_question_bank_data():
     for fund in funds:
         db.session.add(
             ProtoReportingRound(
-                preview=False,
+                preview=True,
                 reporting_period_starts=datetime(2024, 1, 1),
-                reporting_period_ends=datetime(2024, 12, 31),
-                submission_period_starts=datetime(2025, 1, 1),
-                submission_period_ends=datetime(2025, 1, 31),
+                reporting_period_ends=datetime(2024, 6, 30),
+                submission_period_starts=datetime(2024, 7, 1),
+                submission_period_ends=datetime(2024, 9, 30),
                 grant_id=fund.id,
             )
         )
         db.session.add(
             ProtoReportingRound(
-                preview=False,
-                reporting_period_starts=datetime(2025, 1, 1),
+                preview=True,
+                reporting_period_starts=datetime(2024, 7, 1),
                 reporting_period_ends=datetime(2025, 12, 31),
-                submission_period_starts=datetime(2026, 1, 1),
-                submission_period_ends=datetime(2026, 1, 31),
+                submission_period_starts=datetime(2025, 1, 1),
+                submission_period_ends=datetime(2025, 3, 31),
                 grant_id=fund.id,
             )
         )

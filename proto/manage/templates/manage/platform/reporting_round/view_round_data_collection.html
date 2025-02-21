@@ -32,7 +32,7 @@
       <a href="{{ url_for('proto_manage.platform.reporting_rounds.choose_from_question_bank', grant_code=grant.short_name, round_ext_id=round.external_id) }}" class="govuk-button">Add questions from the bank</a>
     {% else %}
       {% if not round.preview %}
-        {{ govukInsetText({"text": "This can no longer be edited because the round is not in draft mode."}) }}
+          {{ govukInsetText({"text": "This can no longer be edited because the round is not in draft mode."}) }}
          {{ previewApplicationHtml }}
       {% else %}
          {{ previewApplicationHtml }}
