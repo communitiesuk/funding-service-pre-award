@@ -139,7 +139,7 @@ def insert_question_bank_data():
         ),
         "project-size-small": TemplateQuestion(
             slug="project-size-small",
-            type=QuestionType.TEXT_INPUT,
+            type=QuestionType.NUMBER,
             title="How many cups of tea do you expect to get through in a day?",
             hint=None,
             order=4,
@@ -159,7 +159,7 @@ def insert_question_bank_data():
         ),
         "project-money": TemplateQuestion(
             slug="project-money",
-            type=QuestionType.TEXTAREA,
+            type=QuestionType.NUMBER,
             title="How much money should we give you?",
             hint=None,
             order=6,
@@ -169,7 +169,7 @@ def insert_question_bank_data():
         ),
         "monitoring-project-money": TemplateQuestion(
             slug="monitoring-project-money",
-            type=QuestionType.TEXTAREA,
+            type=QuestionType.NUMBER,
             title="How much of the ((application.project_information.project_money)) allocated has been spent so far?",
             hint=None,
             order=1,
@@ -251,7 +251,7 @@ def insert_question_bank_data():
         ),
         "organisation-annual-turnover": TemplateQuestion(
             slug="organisation-annual-turnover",
-            type=QuestionType.TEXT_INPUT,
+            type=QuestionType.NUMBER,
             title="What is your organisation's annual turnover?",
             hint="To the nearest £10k",
             order=7,
