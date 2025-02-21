@@ -9,6 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from db import db
 
 if TYPE_CHECKING:
+    from proto.common.data.models import Fund
     from proto.common.data.models.applications import ProtoApplication
 
 
@@ -27,6 +28,9 @@ class ProtoGrantRecipient(db.Model):
 
     funding_allocated: Mapped[int] = mapped_column(default=0)
     funding_paid: Mapped[int] = mapped_column(default=0)
+
+    grant_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("fund.id"))
+    grant: Mapped["Fund"] = relationship("Fund")
 
     application_id: Mapped[int | None] = mapped_column(ForeignKey("proto_application.id"), unique=True)
     application: Mapped[Optional["ProtoApplication"]] = relationship("ProtoApplication")

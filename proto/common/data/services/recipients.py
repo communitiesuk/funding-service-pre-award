@@ -33,8 +33,24 @@ def get_grant_recipients_for_account(account_id):
     return recipients
 
 
+def get_grant_recipient_for_account(account_id, short_code: str):
+    recipient = db.session.scalar(
+        select(ProtoGrantRecipient)
+        .join(ProtoGrantRecipient.application)
+        .join(ProtoApplication.round)
+        .join(Round.proto_grant)
+        .filter(
+            ProtoApplication.account_id == account_id,
+            Fund.short_name == short_code,
+        )
+    )
+    return recipient
+
+
 def create_recipient_from_application(application: ProtoApplication):
-    recipient = ProtoGrantRecipient(status=GrantRecipientStatus.ACTIVE, application=application)
+    recipient = ProtoGrantRecipient(
+        status=GrantRecipientStatus.ACTIVE, application=application, grant_id=application.round.fund_id
+    )
     db.session.add(recipient)
 
     db.session.commit()

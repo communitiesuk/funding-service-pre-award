@@ -1,0 +1,36 @@
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+
+{% extends "apply/base.jinja.html" %}
+
+{% set grant = grant_recipient.application.round.proto_grant %}
+
+{% block pageTitle %}{% trans grant_name=grant.name %}{{ grant_name }}{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{% trans grant_name=grant.name %}{{ grant_name }}{% endtrans %}</h1>
+
+        <ul class="govuk-list">
+        {% for reporting_round in grant_recipient.grant.reporting_rounds %}
+          <li class="govuk-!-margin-bottom-8">
+              {{ govukSummaryList({
+                "card": {
+                  "title": {"text": "Due by " ~ reporting_round.submission_period_ends | dateformat },
+                  "actions": {
+                    "items": [
+                      {"href": url_for('proto_report.view_grant', short_name=grant.short_name), "text": "Report"},
+                    ]
+                  },
+                },
+                "rows": [
+                  { "key": { "text": _("Reporting period") }, "value": { "text": reporting_round.reporting_period_starts | dateformat ~ ' - ' ~ reporting_round.reporting_period_ends | dateformat} },
+                  { "key": { "text": _("Status") }, "value": { "text": "Overdue" } }
+                ]
+              })}}
+          </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

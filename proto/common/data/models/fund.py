@@ -59,7 +59,9 @@ class Fund(db.Model):
 
     description_json = Column("description_json", JSON(none_as_null=True), nullable=False, unique=False)
     rounds: Mapped[List["Round"]] = relationship("Round")
-    reporting_rounds: Mapped[List["ProtoReportingRound"]] = relationship("ProtoReportingRound")
+    reporting_rounds: Mapped[List["ProtoReportingRound"]] = relationship(
+        "ProtoReportingRound", order_by="desc(ProtoReportingRound.submission_period_ends)"
+    )
     welsh_available = Column("welsh_available", Boolean, default=False, nullable=False)
     owner_organisation_name = Column("owner_organisation_name", db.String(), nullable=False, unique=False)
     owner_organisation_shortname = Column("owner_organisation_shortname", db.String(), nullable=False, unique=False)

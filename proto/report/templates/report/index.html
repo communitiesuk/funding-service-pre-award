@@ -14,7 +14,7 @@
         {% endset %}
         <p class="govuk-body govuk-!-margin-bottom-6">
           {# This should all be scoped to the org through permissions, but ignoring this for now still #}
-          {% trans number_of_grants=(grant_recipients | length), email=email %}
+          {% trans number_of_grants=(grant_recipients | length) %}
             Bolton Council is receiving funding through {{ number_of_grants }} grant.
           {% pluralize %}
             Bolton Council is receiving funding through {{ number_of_grants }} grants.
@@ -27,18 +27,17 @@
           <li class="govuk-!-margin-bottom-8">
               {{ govukSummaryList({
                 "card": {
-                  "title": {"html": grant.name, "href": "#"},
+                  "title": {"text": grant.name },
                   "actions": {
                     "items": [
-                      {"href": "#", "text": "Reports"},
+                      {"href": url_for('proto_report.view_grant', short_name=grant.short_name), "text": "Reports"},
                     ]
                   },
                 },
                 "rows": [
                   { "key": { "text": _("Funding allocated") }, "value": { "text": '£' ~ grant_recipient.funding_allocated } },
                   { "key": { "text": _("Funding paid") }, "value": { "text": '£' ~ grant_recipient.funding_paid } },
-                  { "key": { "text": _("Reporting period") }, "value": { "text": grant.reporting_rounds[0].reporting_period_starts | dateformat ~ ' - ' ~ grant.reporting_rounds[0].reporting_period_ends | dateformat} },
-                  { "key": { "text": _("Report due by") }, "value": { "text": grant.reporting_rounds[0].submission_period_ends | dateformat } }
+                  { "key": { "text": _("Monitoring reports") }, "value": { "text": "1 open, 1 overdue" } },
                 ]
               })}}
           </li>
