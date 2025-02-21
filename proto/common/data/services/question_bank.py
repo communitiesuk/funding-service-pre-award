@@ -133,7 +133,10 @@ def add_template_sections_to_data_collection_definition(round, template_section_
                     else _get_question_from_different_section(section, template_condition.depends_on_question)
                 )
                 condition = ProtoDataCollectionQuestionCondition(
-                    question=question, depends_on_question=depends_on_question, criteria=template_condition.criteria
+                    question=question,
+                    depends_on_question=depends_on_question,
+                    criteria=template_condition.criteria,
+                    expression=template_condition.expression,
                 )
                 question.conditions.append(condition)
 

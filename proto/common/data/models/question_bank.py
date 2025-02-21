@@ -127,3 +127,4 @@ class TemplateQuestionCondition(db.Model):
     # )
 
     criteria: Mapped[dict] = mapped_column(nullable=False, default=dict)
+    expression: Mapped[str]

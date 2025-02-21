@@ -7,6 +7,7 @@ from proto.common.data.models.data_collection import (
     ProtoDataCollectionInstanceSectionData,
     ProtoDataCollectionQuestionCondition,
 )
+from proto.form_runner.expressions import build_context_evaluator
 from proto.form_runner.helpers import (
     get_answer_value_for_question_from_section_data,
 )
@@ -53,22 +54,26 @@ def evaluate_condition(
     )
     if not depends_on_answer_text:
         return False
-    operator = condition.criteria["operator"]
-    value_to_compare = condition.criteria["value"]
 
-    match operator:
-        case "EQUALS":
-            return value_to_compare == depends_on_answer_text
-        case "GREATERTHAN":
-            return int(value_to_compare) < int(depends_on_answer_text)
-        case "GREATERTHANEQUALS":
-            return int(value_to_compare) <= int(depends_on_answer_text)
-        case "LESSTHAN":
-            return int(value_to_compare) > int(depends_on_answer_text)
-        case "LESSTHANEQUALS":
-            return int(value_to_compare) >= int(depends_on_answer_text)
-        case _:
-            return False
+    context_evaluator = build_context_evaluator(answer=depends_on_answer_text)
+    return bool(context_evaluator(condition.expression))
+
+    # operator = condition.criteria["operator"]
+    # value_to_compare = condition.criteria["value"]
+    #
+    # match operator:
+    #     case "EQUALS":
+    #         return value_to_compare == depends_on_answer_text
+    #     case "GREATERTHAN":
+    #         return int(value_to_compare) < int(depends_on_answer_text)
+    #     case "GREATERTHANEQUALS":
+    #         return int(value_to_compare) <= int(depends_on_answer_text)
+    #     case "LESSTHAN":
+    #         return int(value_to_compare) > int(depends_on_answer_text)
+    #     case "LESSTHANEQUALS":
+    #         return int(value_to_compare) >= int(depends_on_answer_text)
+    #     case _:
+    #         return False
 
 
 def get_next_question_for_data_collection_instance(

@@ -122,6 +122,7 @@ class ProtoDataCollectionQuestionCondition(db.Model):
     )
 
     criteria: Mapped[dict] = mapped_column(nullable=False, default=dict)
+    expression: Mapped[str]
 
 
 class ProtoDataCollectionInstance(db.Model):

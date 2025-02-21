@@ -363,6 +363,7 @@ def insert_question_bank_data():
                 "value_type": "QUESTION_VALUE",
                 "value": "local-authority",
             },
+            expression='answer == "local-authority"',
         ),
         TemplateQuestionCondition(
             question_id=template_questions_to_create["company-registration-number"].id,
@@ -372,6 +373,7 @@ def insert_question_bank_data():
                 "value_type": "QUESTION_VALUE",
                 "value": "limited-company",
             },
+            expression='answer == "limited-company"',
         ),
         TemplateQuestionCondition(
             question_id=template_questions_to_create["company-registration-number"].id,
@@ -381,6 +383,7 @@ def insert_question_bank_data():
                 "value_type": "QUESTION_VALUE",
                 "value": "charity",
             },
+            expression='answer == "charity"',
         ),
         TemplateQuestionCondition(
             question_id=template_questions_to_create["organisation-type-other"].id,
@@ -390,6 +393,7 @@ def insert_question_bank_data():
                 "value_type": "QUESTION_VALUE",
                 "value": "other",
             },
+            expression='answer == "other"',
         ),
         TemplateQuestionCondition(
             question_id=template_questions_to_create["project-size-big"].id,
@@ -399,6 +403,7 @@ def insert_question_bank_data():
                 "value_type": "QUESTION_VALUE",
                 "value": "20",
             },
+            expression="int(answer) >= 20",
         ),
         TemplateQuestionCondition(
             question_id=template_questions_to_create["project-size-small"].id,
@@ -408,6 +413,7 @@ def insert_question_bank_data():
                 "value_type": "QUESTION_VALUE",
                 "value": "20",
             },
+            expression="int(answer) < 20",
         ),
         TemplateQuestionCondition(
             question_id=template_questions_to_create["organisation-annual-turnover"].id,
@@ -417,6 +423,7 @@ def insert_question_bank_data():
                 "value_type": "QUESTION_VALUE",
                 "value": "30",
             },
+            expression="int(answer) >= 30",
         ),
     ]
 
