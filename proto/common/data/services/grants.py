@@ -106,7 +106,8 @@ def update_grant(grant: Fund, status: FundStatus | None = None, prospectus_link:
             db.session.execute(text("truncate table proto_score"))
             db.session.execute(
                 text(
-                    "delete from proto_application using round, fund where proto_application.round_id = round.id and round.fund_id = fund.id and fund.id = :fund_id",
+                    "delete from proto_application using round, fund where "
+                    "proto_application.round_id = round.id and round.fund_id = fund.id and fund.id = :fund_id",
                 ).bindparams(fund_id=grant.id)
             )
 
