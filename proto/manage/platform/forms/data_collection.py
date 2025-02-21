@@ -53,6 +53,7 @@ human_readable = {
     QuestionType.TEXT_INPUT: "Single line of text",
     QuestionType.TEXTAREA: "More than a single line of text",
     QuestionType.RADIOS: "Selection from a list of options",
+    QuestionType.NUMBER: "Number",
 }
 
 

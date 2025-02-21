@@ -5,8 +5,9 @@ from flask_wtf import FlaskForm
 from govuk_frontend_wtf.wtforms_widgets import GovRadioInput, GovSubmitInput, GovTextArea, GovTextInput
 from markupsafe import Markup
 from wtforms.fields.choices import RadioField
+from wtforms.fields.numeric import IntegerField
 from wtforms.fields.simple import StringField, SubmitField
-from wtforms.validators import DataRequired, InputRequired, ValidationError
+from wtforms.validators import InputRequired, ValidationError
 
 from proto.common.data.models import ProtoApplication, ProtoDataCollectionDefinitionQuestion
 from proto.common.data.models.question_bank import QuestionType
@@ -26,12 +27,19 @@ def build_validators(question: ProtoDataCollectionDefinitionQuestion, applicatio
     validators = []
 
     # if question.required:
-    validators.append(DataRequired())
+    validators.append(InputRequired())
 
     for validation in question.validations:
         # doesn't think about interpolating answers into the validation message but that could very neatly
         # follow the `build_context_injector` methodology below
         def custom_validator(validation, form, field):
+            # note field.data won't be populated if the data was erroneous (a string for
+            # a number field) it should know what to do with that
+            # assuming each of the expressions needs the data to be well formed and
+            # coerced lets skip for now
+            if field.process_errors:
+                return
+
             if validation.depends_on_question:
                 section = next(
                     x
@@ -85,6 +93,12 @@ def build_question_form(
                 choices=[(choice["value"], choice["label"]) for choice in question.data_source],
                 widget=GovRadioInput(),
                 validators=validators,
+            )
+        case QuestionType.NUMBER:
+            # keep it simple and whole numbers for now, there is a decimal field but we'll
+            # see what the differences are
+            field = IntegerField(
+                label=question_text, description=question_hint, widget=GovTextInput(), validators=validators
             )
         case _:
             raise Exception("Unable to generate dynamic form for question type {_}")

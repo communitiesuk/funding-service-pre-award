@@ -117,7 +117,7 @@ def insert_question_bank_data():
         ),
         "project-size": TemplateQuestion(
             slug="project-size",
-            type=QuestionType.TEXT_INPUT,
+            type=QuestionType.NUMBER,
             title=(
                 "How many people will work on ((this_collection.project_information.project_name or 'this project'))?"
             ),
