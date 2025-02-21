@@ -11,7 +11,7 @@
             {% elif sub_criteria.status == 'CHANGE_REQUESTED' %}
                 <span class="govuk-tag--orange">{{ sub_criteria.status|all_caps_to_human }}</span>
             {% elif sub_criteria.status == 'CHANGE_RECEIVED' %}
-                <span class="govuk-tag--yellow">{{ sub_criteria.status|all_caps_to_human }}</span>
+                <span class="govuk-tag--yellow">Review changes</span>
             {% else %}
                 <span class="govuk-tag govuk-tag--yellow">{{ sub_criteria.status|all_caps_to_human }}</span>
             {% endif %}
