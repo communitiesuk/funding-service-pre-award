@@ -92,6 +92,10 @@ class ProtoDataCollectionDefinitionQuestion(db.Model):
     conditions: Mapped[list["ProtoDataCollectionQuestionCondition"]] = relationship(
         primaryjoin="ProtoDataCollectionDefinitionQuestion.id==ProtoDataCollectionQuestionCondition.question_id",
     )
+    validations: Mapped[list["ProtoDataCollectionQuestionValidation"]] = relationship(
+        primaryjoin="ProtoDataCollectionDefinitionQuestion.id==ProtoDataCollectionQuestionValidation.question_id"
+    )
+
     dependent_conditions: Mapped[list["ProtoDataCollectionQuestionCondition"]] = relationship(
         primaryjoin="ProtoDataCollectionDefinitionQuestion.id==ProtoDataCollectionQuestionCondition.depends_on_question_id",
     )
@@ -123,6 +127,37 @@ class ProtoDataCollectionQuestionCondition(db.Model):
 
     criteria: Mapped[dict] = mapped_column(nullable=False, default=dict)
     expression: Mapped[str]
+
+
+# some validations will be a core part of question metadata (i.e is required)
+# some validations will come along with the question type? (i.e is a valid date)
+# additional validations will be added here
+class ProtoDataCollectionQuestionValidation(db.Model):
+    __table_args__ = ()
+    id: Mapped[pk_int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
+
+    question_id: Mapped[int] = mapped_column(db.ForeignKey(ProtoDataCollectionDefinitionQuestion.id))
+    question: Mapped["ProtoDataCollectionDefinitionQuestion"] = relationship(
+        "ProtoDataCollectionDefinitionQuestion", back_populates="validations", foreign_keys=[question_id]
+    )
+
+    # these are optional, if they're not defined your answer context is your own, if they are you have access to
+    # both your answer and the answer you reference - we _very_ likely want to be able to validate across
+    # multiple question contexts
+    # someone can think this through one day
+    depends_on_question_id: Mapped[int] = mapped_column(
+        db.ForeignKey(ProtoDataCollectionDefinitionQuestion.id), nullable=True
+    )
+    depends_on_question: Mapped["ProtoDataCollectionDefinitionQuestion"] = relationship(
+        "ProtoDataCollectionDefinitionQuestion",
+        foreign_keys=[depends_on_question_id],
+    )
+
+    # validations stacked in db order - they probably want an order of precednece similar to questions and sections
+    expression: Mapped[str]
+    message: Mapped[str]
 
 
 class ProtoDataCollectionInstance(db.Model):
