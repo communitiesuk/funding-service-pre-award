@@ -6,7 +6,7 @@ from typing import Any, Callable
 
 import simpleeval
 
-from proto.common.data.models import ProtoApplication, ProtoDataCollectionInstance
+from proto.common.data.models import Fund, ProtoApplication, ProtoDataCollectionInstance
 from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
 
 
@@ -26,6 +26,7 @@ def build_context(
     this_collection: ProtoDataCollectionInstance | None = None,
     application: ProtoApplication | None = None,
     answer: Any | None = None,
+    grant: Fund | None = None,
 ):
     # It would be nice if "this collection"s data was somehow surfaced at the top-level, ie not namespaced, but
     # would need to give due consideration to namespace collisions. So I'm skipping that for now by having everything
@@ -42,6 +43,9 @@ def build_context(
     if application:
         context["application"] = serialize_collection_data(application.data_collection_instance)
 
+    if grant := (grant or (application and application.round.proto_grant)):
+        context["grant"] = grant
+
     if answer:
         context["answer"] = answer
 
@@ -51,8 +55,9 @@ def build_context(
 def build_context_injector(
     this_collection: ProtoDataCollectionInstance | None = None,
     application: ProtoApplication | None = None,
+    grant: Fund | None = None,
 ) -> Callable[[str], str]:
-    context = build_context(this_collection=this_collection, application=application)
+    context = build_context(this_collection=this_collection, application=application, grant=grant)
     return functools.partial(interpolate, context=context)
 
 

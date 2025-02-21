@@ -236,7 +236,7 @@ def insert_question_bank_data():
             slug="risk-title",
             type=QuestionType.TEXT_INPUT,
             title="What is the risk to your project?",
-            hint="Summarise the risk in a single sentence",
+            hint="Summarise the risk to delivering good value for money for ((grant.name_json.en)) in a single sentence",  # noqa
             order=1,
             data_source=None,
             data_standard_id=data_standards_to_create["risk.schema.json#properties/risk_title"].id,
@@ -250,7 +250,7 @@ def insert_question_bank_data():
             You should cover:
             <ul class="govuk-list govuk-list--bullet govuk-hint">
             <li>What could go wrong?</li>
-            <li>What could cause things to go wrong></li>
+            <li>What could cause things to go wrong?</li>
             <li>What would the outcome be if it did go wrong?</li>
             </ul>
             </p>""",

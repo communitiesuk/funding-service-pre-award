@@ -22,7 +22,9 @@ class DynamicQuestionForm(FlaskForm):
 def build_question_form(
     application: "ProtoApplication", question: ProtoDataCollectionDefinitionQuestion
 ) -> DynamicQuestionForm:
-    context_injector = build_context_injector(this_collection=application.data_collection_instance)
+    context_injector = build_context_injector(
+        this_collection=application.data_collection_instance, application=application
+    )
     question_text = context_injector(question.title)
     question_hint = Markup(context_injector(question.hint)) if question.hint else ""
 
