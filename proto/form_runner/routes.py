@@ -15,6 +15,7 @@ from proto.common.data.services.applications import (
     upsert_question_data,
 )
 from proto.common.data.services.question_bank import get_application_question
+from proto.form_runner.expressions import build_context_injector
 from proto.form_runner.form_route_helper import (
     get_next_question_for_data_collection_instance,
     get_visible_questions_for_section_instance,
@@ -141,6 +142,7 @@ def check_your_answers(application_external_id, section_slug):
     account = {"email": g.account.email}
     application = get_application(external_id=application_external_id)
     section_data = get_application_section_data(application, section_slug)
+
     form = MarkAsCompleteForm(data={"complete": "yes" if section_data and section_data.completed else None})
     if form.validate_on_submit():
         if form.complete.data is True:
@@ -155,6 +157,7 @@ def check_your_answers(application_external_id, section_slug):
         section=section_data.section,
         section_data=section_data,
         QuestionType=QuestionType,
+        context_injector=build_context_injector(this_collection=application.data_collection_instance),
         get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
         form=form,
         account=account,

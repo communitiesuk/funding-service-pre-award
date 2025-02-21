@@ -60,6 +60,7 @@ dependencies = [
     "pydantic>=2.10.4",
     "flask-admin==2.0.0a3",
     "govuk-flask-admin==0.1.1",
+    "simpleeval>=1.0.3",
 ]
 
 [tool.djlint]

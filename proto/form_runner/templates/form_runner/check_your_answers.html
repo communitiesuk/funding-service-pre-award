@@ -73,7 +73,7 @@
       {% endset %}
       {% set __ = rowData.append(
           {
-            "key": { "text": question.title },
+            "key": { "text": context_injector(question.title) },
             "value": { "html": valueHtml },
             "actions": {
               "items": [

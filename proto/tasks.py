@@ -110,7 +110,9 @@ def insert_question_bank_data():
         "project-size": TemplateQuestion(
             slug="project-size",
             type=QuestionType.TEXT_INPUT,
-            title="How many people will work on the project?",
+            title=(
+                "How many people will work on ((this_collection.project_information.project_name or 'this project'))?"
+            ),
             hint="Can be to the nearest 10",
             order=2,
             data_source=None,
@@ -212,7 +214,7 @@ def insert_question_bank_data():
         "organisation-owner": TemplateQuestion(
             slug="organisation-owner",
             type=QuestionType.TEXT_INPUT,
-            title="Who is your organisation's owner?",
+            title="Who is your ((this_collection.organisation_information.organisation_kind or 'organisation'))'s owner?",  # noqa
             hint=None,
             order=6,
             data_source=None,

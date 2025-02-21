@@ -9,6 +9,7 @@ from wtforms.validators import DataRequired, InputRequired
 from proto.common.data.models import ProtoApplication, ProtoDataCollectionDefinitionQuestion
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.services.applications import get_current_answer_to_question
+from proto.form_runner.expressions import build_context_injector
 from proto.form_runner.helpers import get_answer_value_for_question
 
 
@@ -21,25 +22,29 @@ class DynamicQuestionForm(FlaskForm):
 def build_question_form(
     application: "ProtoApplication", question: ProtoDataCollectionDefinitionQuestion
 ) -> DynamicQuestionForm:
+    context_injector = build_context_injector(this_collection=application.data_collection_instance)
+    question_text = context_injector(question.title)
+    question_hint = Markup(context_injector(question.hint)) if question.hint else ""
+
     match question.type:
         case QuestionType.TEXT_INPUT:
             field = StringField(
-                label=question.title,
-                description=Markup(question.hint) if question.hint else "",
+                label=question_text,
+                description=question_hint,
                 widget=GovTextInput(),
                 validators=[DataRequired()],
             )
         case QuestionType.TEXTAREA:
             field = StringField(
-                label=question.title,
-                description=Markup(question.hint) if question.hint else "",
+                label=question_text,
+                description=question_hint,
                 widget=GovTextArea(),
                 validators=[DataRequired()],
             )
         case QuestionType.RADIOS:
             field = RadioField(
-                label=question.title,
-                description=Markup(question.hint) if question.hint else "",
+                label=question_text,
+                description=question_hint,
                 choices=[(choice["value"], choice["label"]) for choice in question.data_source],
                 widget=GovRadioInput(),
                 validators=[DataRequired()],
