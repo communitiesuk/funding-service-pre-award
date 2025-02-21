@@ -27,6 +27,7 @@ http:
 
 # Configuration for your containers and service.
 image:
+  location: ghcr.io/communitiesuk/funding-service-pre-award:76cc39d16fcb3829e25b0a99fc664d08e36289ed
   # Port exposed through your container to route traffic to it.
   port: 8080
 
