@@ -8,7 +8,11 @@ from proto.common.data.models import (
     TemplateQuestion,
     TemplateSection,
 )
-from proto.common.data.models.data_collection import ProtoDataCollectionDefinition, ProtoDataCollectionQuestionCondition
+from proto.common.data.models.data_collection import (
+    ProtoDataCollectionDefinition,
+    ProtoDataCollectionQuestionCondition,
+    ProtoDataCollectionQuestionValidation,
+)
 from proto.common.data.models.question_bank import TemplateType
 from proto.common.helpers import make_url_slug
 
@@ -119,6 +123,23 @@ def add_template_sections_to_data_collection_definition(round, template_section_
         # now that new questions all exist
 
         for template_question in template_section.template_questions:
+            for template_validation in template_question.validations:
+                question = next(
+                    q for q in section.questions if q.template_question_id == template_validation.question.id
+                )
+                depends_on_question = (
+                    _get_question_from_different_section(section, template_validation.depends_on_question)
+                    if template_validation.depends_on_question
+                    else None
+                )
+                validation = ProtoDataCollectionQuestionValidation(
+                    question=question,
+                    depends_on_question=depends_on_question,
+                    expression=template_validation.expression,
+                    message=template_validation.message,
+                )
+                question.validations.append(validation)
+
             for template_condition in template_question.conditions:
                 question = next(
                     q for q in section.questions if q.template_question_id == template_condition.question.id

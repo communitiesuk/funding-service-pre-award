@@ -354,6 +354,8 @@ def insert_question_bank_data():
         db.session.flush()
     db.session.commit()
 
+    validations_to_create = []
+
     conditions_to_create = [
         TemplateQuestionCondition(
             question_id=template_questions_to_create["local-authority-name"].id,
@@ -430,6 +432,12 @@ def insert_question_bank_data():
     db.session.execute(text("delete from template_question_condition"))
     for c_instance in conditions_to_create:
         db.session.add(c_instance)
+        db.session.flush()
+    db.session.commit()
+
+    db.session.execute(text("delete from template_validation"))
+    for validation_instance in validations_to_create:
+        db.session.add(validation_instance)
         db.session.flush()
     db.session.commit()
 
