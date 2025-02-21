@@ -90,6 +90,10 @@ class TemplateQuestion(db.Model):
     conditions: Mapped[list["TemplateQuestionCondition"]] = relationship(
         primaryjoin="TemplateQuestion.id==TemplateQuestionCondition.question_id",
     )
+    validations: Mapped[list["TemplateValidation"]] = relationship(
+        primaryjoin="TemplateQuestion.id==TemplateValidation.question_id"
+    )
+
     dependent_conditions: Mapped[list["TemplateQuestionCondition"]] = relationship(
         primaryjoin="TemplateQuestion.id==TemplateQuestionCondition.depends_on_question_id",
     )
@@ -128,3 +132,25 @@ class TemplateQuestionCondition(db.Model):
 
     criteria: Mapped[dict] = mapped_column(nullable=False, default=dict)
     expression: Mapped[str]
+
+
+class TemplateValidation(db.Model):
+    __table_args__ = ()
+    id: Mapped[pk_int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
+
+    question_id: Mapped[int] = mapped_column(db.ForeignKey(TemplateQuestion.id))
+    question: Mapped["TemplateQuestion"] = relationship(
+        "TemplateQuestion", back_populates="validations", foreign_keys=[question_id]
+    )
+
+    depends_on_question_id: Mapped[int] = mapped_column(db.ForeignKey(TemplateQuestion.id), nullable=True)
+    depends_on_question: Mapped["TemplateQuestion"] = relationship(
+        "TemplateQuestion",
+        foreign_keys=[depends_on_question_id],
+    )
+
+    # validations stacked in db order - they probably want an order of precednece similar to questions and sections
+    expression: Mapped[str]
+    message: Mapped[str]

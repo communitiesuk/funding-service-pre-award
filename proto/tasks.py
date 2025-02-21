@@ -13,6 +13,7 @@ from proto.common.data.models.question_bank import (
     TemplateQuestion,
     TemplateQuestionCondition,
     TemplateType,
+    TemplateValidation,
 )
 
 
@@ -381,6 +382,19 @@ def insert_question_bank_data():
         db.session.flush()
     db.session.commit()
 
+    validations_to_create = [
+        TemplateValidation(
+            question_id=template_questions_to_create["project-size"].id,
+            expression="int(answer) <= 30",
+            message="The number of people working must be 30 or less",
+        ),
+        TemplateValidation(
+            question_id=template_questions_to_create["project-size"].id,
+            expression="int(answer) >= 1",
+            message="The number of people working must be 1 or more",
+        ),
+    ]
+
     conditions_to_create = [
         TemplateQuestionCondition(
             question_id=template_questions_to_create["local-authority-name"].id,
@@ -485,6 +499,12 @@ def insert_question_bank_data():
             )
         )
         db.session.flush()
+
+    db.session.execute(text("delete from template_validation"))
+    for validation_instance in validations_to_create:
+        db.session.add(validation_instance)
+        db.session.flush()
+    db.session.commit()
 
     db.session.commit()
 
