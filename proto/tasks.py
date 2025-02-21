@@ -1,10 +1,11 @@
 import os
 from contextlib import contextmanager
+from datetime import datetime
 
 from invoke import task
-from sqlalchemy import text
+from sqlalchemy import func, select, text
 
-from proto.common.data.models import TemplateSection
+from proto.common.data.models import Fund, ProtoReportingRound, TemplateSection
 from proto.common.data.models.data_collection import ConditionCombination
 from proto.common.data.models.question_bank import (
     DataStandard,
@@ -84,6 +85,12 @@ def insert_question_bank_data():
             order=1,
             type=TemplateType.REPORTING,
         ),
+        "monitoring-project-information": TemplateSection(
+            slug="monitoring-project-information",
+            title="Project Information",
+            order=2,
+            type=TemplateType.REPORTING,
+        ),
     }
     for ts_slug, ts_instance in template_sections_to_create.items():
         ts_id = db.session.execute(
@@ -148,6 +155,26 @@ def insert_question_bank_data():
             data_source=None,
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
+        ),
+        "project-money": TemplateQuestion(
+            slug="project-money",
+            type=QuestionType.TEXTAREA,
+            title="How much money should we give you?",
+            hint=None,
+            order=6,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["project-information"].id,
+        ),
+        "monitoring-project-money": TemplateQuestion(
+            slug="monitoring-project-money",
+            type=QuestionType.TEXTAREA,
+            title="How much of the ((application.project_information.project_money)) allocated has been spent so far?",
+            hint=None,
+            order=1,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["monitoring-project-information"].id,
         ),
         "organisation-name": TemplateQuestion(
             slug="organisation-name",
@@ -431,7 +458,33 @@ def insert_question_bank_data():
     for c_instance in conditions_to_create:
         db.session.add(c_instance)
         db.session.flush()
-    db.session.commit()
+
+    # And do some other stuff to make my life easier sorry steven+sarah+marc+gideon+everyone else 🙇‍♂️
+    funds = db.session.scalars(
+        select(Fund).outerjoin(ProtoReportingRound).group_by(Fund.id).having(func.count(ProtoReportingRound.id) == 0)
+    ).all()
+    for fund in funds:
+        db.session.add(
+            ProtoReportingRound(
+                preview=False,
+                reporting_period_starts=datetime(2024, 1, 1),
+                reporting_period_ends=datetime(2024, 1, 31),
+                submission_period_starts=datetime(2025, 1, 1),
+                submission_period_ends=datetime(2025, 1, 31),
+                grant_id=fund.id,
+            )
+        )
+        db.session.add(
+            ProtoReportingRound(
+                preview=False,
+                reporting_period_starts=datetime(2025, 1, 1),
+                reporting_period_ends=datetime(2025, 1, 31),
+                submission_period_starts=datetime(2026, 1, 1),
+                submission_period_ends=datetime(2026, 1, 31),
+                grant_id=fund.id,
+            )
+        )
+        db.session.flush()
 
     db.session.commit()
 
