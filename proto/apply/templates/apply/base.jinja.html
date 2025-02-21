@@ -30,12 +30,11 @@
     ] %}
     {% if g.account.email %}
       {% set __ = navigationItems.append({ "href": url_for('proto_apply.application.all_user_application_list_handler'), "text": _("Applications"), "active": active_navigation_tab == "your_grants" }) %}
+      {% set __ = navigationItems.append({ "href": url_for('proto_report.report_index'), "text": _("Reporting"), "active": active_navigation_tab == "your_reporting" }) %}
+      {% set __ = navigationItems.append({ "href": "#", "text": _("Your organisation"), "active": active_navigation_tab == "your_organisation" }) %}
     {% endif %}
     {% if g.account.is_platform_admin %}
       {% set __ = navigationItems.append({"href": url_for('proto_manage.platform.grants.index'), "text": "Grant management", "active": false}) %}
-    {% elif g.account.email %}
-      {% set __ = navigationItems.append({ "href": "#", "text": _("Reporting"), "active": active_navigation_tab == "your_reporting" }) %}
-      {% set __ = navigationItems.append({ "href": "#", "text": _("Your organisation"), "active": active_navigation_tab == "your_organisation" }) %}
     {% endif %}
     {{ govukServiceNavigation({
       "navigationClasses": "app-service-navigation--fill" if g.account.is_platform_admin else "",

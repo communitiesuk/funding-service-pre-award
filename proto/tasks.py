@@ -482,7 +482,7 @@ def insert_question_bank_data():
             ProtoReportingRound(
                 preview=False,
                 reporting_period_starts=datetime(2024, 1, 1),
-                reporting_period_ends=datetime(2024, 1, 31),
+                reporting_period_ends=datetime(2024, 12, 31),
                 submission_period_starts=datetime(2025, 1, 1),
                 submission_period_ends=datetime(2025, 1, 31),
                 grant_id=fund.id,
@@ -492,7 +492,7 @@ def insert_question_bank_data():
             ProtoReportingRound(
                 preview=False,
                 reporting_period_starts=datetime(2025, 1, 1),
-                reporting_period_ends=datetime(2025, 1, 31),
+                reporting_period_ends=datetime(2025, 12, 31),
                 submission_period_starts=datetime(2026, 1, 1),
                 submission_period_ends=datetime(2026, 1, 31),
                 grant_id=fund.id,

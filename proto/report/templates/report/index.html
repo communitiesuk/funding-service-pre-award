@@ -1,9 +1,49 @@
-{% extends "report/base.html" %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+
+{% extends "apply/base.jinja.html" %}
+
+{% block pageTitle %}{% trans %}Your awarded grants{% endtrans %} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Grants awarded</h1>
-  </div>
-  </div>
-{% endblock content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{% trans %}Your awarded grants{% endtrans %}</h1>
+
+        {% set email %}
+        <strong class="govuk-!-font-weight-bold">{{ account.email }}</strong>
+        {% endset %}
+        <p class="govuk-body govuk-!-margin-bottom-6">
+          {# This should all be scoped to the org through permissions, but ignoring this for now still #}
+          {% trans number_of_grants=(grant_recipients | length), email=email %}
+            Bolton Council is receiving funding through {{ number_of_grants }} grant.
+          {% pluralize %}
+            Bolton Council is receiving funding through {{ number_of_grants }} grants.
+          {% endtrans %}
+        </p>
+
+        <ul class="govuk-list">
+        {% for grant_recipient in grant_recipients %}
+          {% set grant = grant_recipient.application.round.proto_grant %}
+          <li class="govuk-!-margin-bottom-8">
+              {{ govukSummaryList({
+                "card": {
+                  "title": {"html": grant.name, "href": "#"},
+                  "actions": {
+                    "items": [
+                      {"href": "#", "text": "Reports"},
+                    ]
+                  },
+                },
+                "rows": [
+                  { "key": { "text": _("Funding allocated") }, "value": { "text": '£' ~ grant_recipient.funding_allocated } },
+                  { "key": { "text": _("Funding paid") }, "value": { "text": '£' ~ grant_recipient.funding_paid } },
+                  { "key": { "text": _("Reporting period") }, "value": { "text": grant.reporting_rounds[0].reporting_period_starts | dateformat ~ ' - ' ~ grant.reporting_rounds[0].reporting_period_ends | dateformat} },
+                  { "key": { "text": _("Report due by") }, "value": { "text": grant.reporting_rounds[0].submission_period_ends | dateformat } }
+                ]
+              })}}
+          </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
