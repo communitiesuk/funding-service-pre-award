@@ -24,8 +24,8 @@
         <span class="govuk-!-font-weight-bold">Rounds:</span> {% for status, items in grant.rounds | groupby('status') %}{{ items|length }} {{ status }}{% if not loop.last %}, {% endif %}{% endfor %}
       </p>
       {% endif %}
-      <p class="govuk-body govuk-!-margin-bottom-1"><span class="govuk-!-font-weight-bold">Applications:</span> 0</p>
-      <p class="govuk-body"><span class="govuk-!-font-weight-bold">Recipients in monitoring:</span> 0</p>
+      <p class="govuk-body govuk-!-margin-bottom-1"><span class="govuk-!-font-weight-bold">Applications:</span> {{ grant.applications | length }}</p>
+      <p class="govuk-body"><span class="govuk-!-font-weight-bold">Recipients:</span> {{ grant.recipients | length }}</p>
 
       {% if not loop.last %}
         <hr class="govuk-section-break--m" />

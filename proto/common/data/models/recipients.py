@@ -30,7 +30,7 @@ class ProtoGrantRecipient(db.Model):
     funding_paid: Mapped[int] = mapped_column(default=0)
 
     grant_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("fund.id"))
-    grant: Mapped["Fund"] = relationship("Fund")
+    grant: Mapped["Fund"] = relationship("Fund", back_populates="recipients")
 
     application_id: Mapped[int | None] = mapped_column(ForeignKey("proto_application.id"), unique=True)
     application: Mapped[Optional["ProtoApplication"]] = relationship("ProtoApplication")

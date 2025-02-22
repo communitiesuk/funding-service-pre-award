@@ -27,15 +27,21 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
-        <div class="fs-align-status-tag">
+        {% if grant.is_draft %}
+        <div class="fs-align-status-tag govuk-!-margin-bottom-5">
             <h1 class="govuk-heading-l govuk-!-margin-bottom-0">
                 {% trans %}Applications for funding{% endtrans %}
             </h1>
-            {{ govukTag ({
-                "text": _("Test"),
-                "classes": "govuk-tag--grey govuk-!-margin-top-1"
-            }) }}
+              {{ govukTag ({
+                  "text": _("Test"),
+                  "classes": "govuk-tag--grey govuk-!-margin-top-1"
+              }) }}
         </div>
+        {% else %}
+          <h1 class="govuk-heading-l">
+              {% trans %}Applications for funding{% endtrans %}
+          </h1>
+        {% endif %}
 
 
         {# just a little thing but presume we should do our best to check against actual enum values - this feels dumb #}

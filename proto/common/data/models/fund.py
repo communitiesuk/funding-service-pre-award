@@ -1,6 +1,6 @@
 import uuid
 from enum import Enum
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import Field
@@ -13,6 +13,9 @@ from sqlalchemy.types import Enum as SQLAEnum
 from db import db
 from proto.common.data.models.reporting_round import ProtoReportingRound
 from proto.common.data.models.round import Round
+
+if TYPE_CHECKING:
+    from proto.common.data.models import ProtoApplication, ProtoGrantRecipient
 
 
 # ideally I'd like id internal int, external_id optionally human readbale
@@ -92,6 +95,19 @@ class Fund(db.Model):
     proto_prospectus_link = Column("proto_prospectus_link", db.String(), nullable=True)
 
     proto_apply_action_description = Column("proto_apply_action_description", db.String(), nullable=True)
+
+    recipients: Mapped[list["ProtoGrantRecipient"]] = relationship(
+        "ProtoGrantRecipient",
+        lazy="selectin",
+        back_populates="grant",
+    )
+    applications: Mapped[list["ProtoApplication"]] = relationship(
+        "ProtoApplication",
+        secondary="round",
+        primaryjoin="Fund.id == Round.fund_id",
+        secondaryjoin="Round.id == ProtoApplication.round_id",
+        lazy="selectin",
+    )
 
     def __repr__(self):
         return f"<Fund {self.short_name} - {self.name_json['en']}>"
