@@ -3,7 +3,7 @@
 
 {% extends "apply/base.jinja.html" %}
 
-{% block pageTitle %}{% trans %}Application{% endtrans %} {{ application.code }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+{% block pageTitle %}{% trans %}Monitoring and evaluation{% endtrans %} {{ report.code }} - {% trans %}Report funding progress{% endtrans %}{% endblock %}
 
 {% block beforeContent %}
 {{ super() }}
@@ -11,12 +11,12 @@
     <div class="proto-phase govuk-!-padding-top-1 govuk-!-padding-bottom-1">
         <p class="govuk-phase-banner__content">
             {% set email %}<strong class="govuk-!-font-weight-bold">{{ account.email }}</strong>{% endset %}
-            <span class="govuk-phase-banner__text">{% trans email=email %}You are applying as {{ email }}{% endtrans %}</span>
+            <span class="govuk-phase-banner__text">{% trans email=email %}You are reporting as {{ email }}{% endtrans %}</span>
         </p>
     </div>
 </div>
 
-{% if application.fake or (application.round and application.round.is_draft) %}
+{% if report.fake or (report.reporting_round and report.reporting_round.is_draft) %}
 <style nonce="{{ csp_nonce() }}">
     {# reset a few nav things that don't play nicely with this #}
     .govuk-service-navigation__item, .govuk-service-navigation__service-name {
@@ -28,7 +28,7 @@
 </style>
  <div class="test-data-banner govuk-body govuk-!-margin-bottom-2">
     <div class="test-data-tag">
-        <strong>Preview application</strong>
+        <strong>Preview report</strong>
     </div>
 </div>
 {% endif %}

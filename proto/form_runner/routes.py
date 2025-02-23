@@ -10,11 +10,13 @@ from proto.common.data.models import (
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.services.applications import (
     get_application,
-    get_application_section_data,
-    set_application_section_complete,
     upsert_question_data,
 )
-from proto.common.data.services.question_bank import get_application_question
+from proto.common.data.services.data_collection import (
+    get_data_collection_instance_section_data,
+    set_data_collection_instance_section_complete,
+)
+from proto.common.data.services.question_bank import get_data_collection_question
 from proto.form_runner.expressions import build_context_injector
 from proto.form_runner.form_route_helper import (
     get_next_question_for_data_collection_instance,
@@ -106,8 +108,17 @@ def _back_link_for_question(question, application_external_id, from_check_your_a
 def ask_application_question(application_external_id, section_slug, question_slug):
     account = {"email": g.account.email}
     application = get_application(application_external_id)
-    question = get_application_question(application.round.data_collection_definition_id, section_slug, question_slug)
-    form = build_question_form(application, question)
+    context_injector = build_context_injector(
+        grant=application.round.proto_grant,
+        this_collection=application.data_collection_instance,
+        application=application,
+        recipient=None,
+        reports=None,
+    )
+    question = get_data_collection_question(
+        application.round.data_collection_definition_id, section_slug, question_slug
+    )
+    form = build_question_form(application.data_collection_instance, question, context_injector)
     from_check_your_answers = request.args.get("from_cya", "False") == "True"
 
     if form.validate_on_submit():
@@ -163,12 +174,12 @@ def check_your_answers(application_external_id, section_slug):
     # these are workaronds for having the navigation show or not and aren't really used - this should be more generic
     account = {"email": g.account.email}
     application = get_application(external_id=application_external_id)
-    section_data = get_application_section_data(application, section_slug)
+    section_data = get_data_collection_instance_section_data(application.data_collection_instance, section_slug)
 
     form = MarkAsCompleteForm(data={"complete": "yes" if section_data and section_data.completed else None})
     if form.validate_on_submit():
         if form.complete.data is True:
-            set_application_section_complete(section_data)
+            set_data_collection_instance_section_complete(section_data)
 
         return redirect(
             url_for("proto_apply.application.application_tasklist", application_external_id=application_external_id)
@@ -179,7 +190,9 @@ def check_your_answers(application_external_id, section_slug):
         section=section_data.section,
         section_data=section_data,
         QuestionType=QuestionType,
-        context_injector=build_context_injector(this_collection=application.data_collection_instance),
+        context_injector=build_context_injector(
+            grant=application.round.proto_grant, this_collection=application.data_collection_instance
+        ),
         get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
         form=form,
         account=account,

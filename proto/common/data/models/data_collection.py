@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from sqlalchemy import CheckConstraint, ForeignKey, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -7,6 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from db import db
 from proto.common.data.models import (
     DataStandard,
+    ProtoApplication,
     ProtoReportingRound,
     Round,
     TemplateQuestion,
@@ -16,6 +17,9 @@ from proto.common.data.models import (
 from proto.common.data.models.proto_score import ProtoScore
 from proto.common.data.models.question_bank import ConditionCombination, QuestionType
 from proto.common.data.models.types import pk_int
+
+if TYPE_CHECKING:
+    from proto.common.data.models import ProtoReport
 
 
 class ProtoDataCollectionDefinition(db.Model):
@@ -164,6 +168,11 @@ class ProtoDataCollectionInstance(db.Model):
     id: Mapped[pk_int] = mapped_column(primary_key=True)
     created_at: Mapped[datetime] = mapped_column(default=func.now())
     updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
+
+    application: Mapped[ProtoApplication | None] = relationship(
+        ProtoApplication, back_populates="data_collection_instance"
+    )
+    report: Mapped[Optional["ProtoReport"]] = relationship("ProtoReport", back_populates="data_collection_instance")
 
     section_data: Mapped[list["ProtoDataCollectionInstanceSectionData"]] = relationship(
         "ProtoDataCollectionInstanceSectionData", passive_deletes=True, back_populates="instance"

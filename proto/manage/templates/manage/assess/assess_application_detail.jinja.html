@@ -94,7 +94,7 @@
         <ol class="timeline govuk-!-margin-top-6">
             <li class="timeline__event">
                 <p class="timeline__event-title govuk-body">{% trans section_link=link %}Application submitted{% endtrans %}</span>
-                <p class="govuk-body govuk-!-margin-bottom-0">{% trans name=application.account.email %}{{ name }} on{% endtrans %} <time>{{ application.updated_by_applicant_at | dateformat }}</time></span>
+                <p class="govuk-body govuk-!-margin-bottom-0">{% trans name=application.submitted_by.email %}{{ name }} on{% endtrans %} <time>{{ application.updated_by_applicant_at | dateformat }}</time></span>
             </li>
 
             {% for comment in comments %}

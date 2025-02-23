@@ -91,8 +91,9 @@ def application_submit_handler(application_external_id):
     application = get_application(external_id=application_external_id)
 
     if application.can_be_submitted:
-        submit_application(application)
+        submit_application(application, g.account)
         flash("APPLICATION_SUBMITTED")
+
     return redirect(
         url_for("proto_apply.application.application_list_handler", short_code=application.round.proto_grant.short_name)
     )

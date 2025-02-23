@@ -6,7 +6,13 @@ from typing import Any, Callable
 
 import simpleeval
 
-from proto.common.data.models import Fund, ProtoApplication, ProtoDataCollectionInstance
+from proto.common.data.models import (
+    Fund,
+    ProtoApplication,
+    ProtoDataCollectionInstance,
+    ProtoGrantRecipient,
+    ProtoReport,
+)
 from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
 
 
@@ -23,10 +29,12 @@ def serialize_collection_data(collection: ProtoDataCollectionInstance) -> dict[s
 
 
 def build_context(
+    grant: Fund | None = None,
     this_collection: ProtoDataCollectionInstance | None = None,
     application: ProtoApplication | None = None,
+    recipient: ProtoGrantRecipient | None = None,
+    reports: list[ProtoReport] | None = None,
     answer: Any | None = None,
-    grant: Fund | None = None,
 ):
     # It would be nice if "this collection"s data was somehow surfaced at the top-level, ie not namespaced, but
     # would need to give due consideration to namespace collisions. So I'm skipping that for now by having everything
@@ -37,14 +45,20 @@ def build_context(
     # - Then references to related objects, eg if we're doing monitoring, then the application, grant recipient, etc
     context = {}
 
+    if grant:
+        context["grant"] = grant
+
     if this_collection:
         context["this_collection"] = serialize_collection_data(this_collection)
 
     if application:
         context["application"] = serialize_collection_data(application.data_collection_instance)
 
-    if grant := (grant or (application and application.round.proto_grant)):
-        context["grant"] = grant
+    if recipient:
+        context["recipient"] = recipient
+
+    if reports:
+        context["reports"] = [serialize_collection_data(report.data_collection_instance) for report in reports]
 
     if answer:
         context["answer"] = answer
@@ -53,18 +67,34 @@ def build_context(
 
 
 def build_context_injector(
+    grant: Fund | None = None,
     this_collection: ProtoDataCollectionInstance | None = None,
     application: ProtoApplication | None = None,
-    grant: Fund | None = None,
+    recipient: ProtoGrantRecipient | None = None,
+    reports: list[ProtoReport] | None = None,
 ) -> Callable[[str], str]:
-    context = build_context(this_collection=this_collection, application=application, grant=grant)
+    context = build_context(
+        grant=grant, this_collection=this_collection, application=application, recipient=recipient, reports=reports
+    )
     return functools.partial(interpolate, context=context)
 
 
 def build_context_evaluator(
+    grant: Fund | None = None,
+    this_collection: ProtoDataCollectionInstance | None = None,
+    application: ProtoApplication | None = None,
+    recipient: ProtoGrantRecipient | None = None,
+    reports: list[ProtoReport] | None = None,
     answer: Any | None = None,
 ) -> Callable[[str], int | bool]:
-    context = build_context(answer=answer)
+    context = build_context(
+        grant=grant,
+        this_collection=this_collection,
+        application=application,
+        recipient=recipient,
+        reports=reports,
+        answer=answer,
+    )
     return functools.partial(evaluate, context=context)
 
 
@@ -96,7 +126,7 @@ def _restricted_evaluator(context):
 def interpolate(text: str, context: dict) -> str:
     evaluator = _restricted_evaluator(context)
 
-    return re.sub(r"\(\((.*?)\)\)", lambda m: evaluator.eval(m.group(1)), text)
+    return re.sub(r"\(\((.*?)\)\)", lambda m: str(evaluator.eval(m.group(1))), text)
 
 
 def evaluate(text: str, context: dict) -> int | bool:

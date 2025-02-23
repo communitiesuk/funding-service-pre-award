@@ -55,7 +55,7 @@ def create_application(preview: bool, round_id: int, organisation_id: uuid.UUID)
     return application
 
 
-def get_application(external_id: uuid.UUID):
+def get_application(external_id: uuid.UUID) -> ProtoApplication:
     return db.session.scalars(select(ProtoApplication).filter(ProtoApplication.external_id == external_id)).one()
 
 
@@ -112,12 +112,12 @@ def _build_answer_dict(question: "ProtoDataCollectionDefinitionQuestion", answer
 
 
 def get_current_answer_to_question(
-    application: ProtoApplication, question: "ProtoDataCollectionDefinitionQuestion"
+    data_collection_instance: ProtoDataCollectionInstance, question: "ProtoDataCollectionDefinitionQuestion"
 ) -> str | dict:
     # str(question.id) because JSON keys must be strings, but our question PK col is an int
     return db.session.scalar(
         select(ProtoDataCollectionInstanceSectionData.data[str(question.id)]["answer"]).filter(
-            ProtoDataCollectionInstanceSectionData.instance_id == application.data_collection_instance_id,
+            ProtoDataCollectionInstanceSectionData.instance == data_collection_instance,
             ProtoDataCollectionInstanceSectionData.section_id == question.section_id,
         )
     )
@@ -148,25 +148,9 @@ def upsert_question_data(application: ProtoApplication, question: "ProtoDataColl
     db.session.commit()
 
 
-def get_application_section_data(application, section_slug):
-    return db.session.scalar(
-        select(ProtoDataCollectionInstanceSectionData)
-        .join(ProtoDataCollectionDefinitionSection)
-        .filter(
-            ProtoDataCollectionInstanceSectionData.instance_id == application.data_collection_instance_id,
-            ProtoDataCollectionDefinitionSection.slug == section_slug,
-        )
-    )
-
-
-def set_application_section_complete(section_data: ProtoDataCollectionInstanceSectionData):
-    section_data.completed = True
-    db.session.add(section_data)
-    db.session.commit()
-
-
-def submit_application(application: ProtoApplication):
+def submit_application(application: ProtoApplication, submitter: Account):
     application.submitted = True
+    application.submitted_by = submitter
     db.session.add(application)
     db.session.commit()
 

@@ -5,11 +5,14 @@ from flask_wtf import FlaskForm
 from govuk_frontend_wtf.wtforms_widgets import GovRadioInput, GovSubmitInput, GovTextArea, GovTextInput
 from markupsafe import Markup
 from wtforms.fields.choices import RadioField
-from wtforms.fields.numeric import IntegerField
+from wtforms.fields.numeric import FloatField, IntegerField
 from wtforms.fields.simple import StringField, SubmitField
 from wtforms.validators import InputRequired, ValidationError
 
-from proto.common.data.models import ProtoApplication, ProtoDataCollectionDefinitionQuestion
+from proto.common.data.models import (
+    ProtoDataCollectionDefinitionQuestion,
+    ProtoDataCollectionInstance,
+)
 from proto.common.data.models.question_bank import QuestionType
 from proto.common.data.services.applications import get_current_answer_to_question
 from proto.form_runner.expressions import build_context_evaluator, build_context_injector
@@ -23,7 +26,9 @@ class DynamicQuestionForm(FlaskForm):
 
 
 # this will take the question type to add default type validators like is valid date
-def build_validators(question: ProtoDataCollectionDefinitionQuestion, application: "ProtoApplication"):
+def build_validators(
+    question: ProtoDataCollectionDefinitionQuestion, data_collection_instance: "ProtoDataCollectionInstance"
+):
     validators = []
 
     # if question.required:
@@ -43,7 +48,7 @@ def build_validators(question: ProtoDataCollectionDefinitionQuestion, applicatio
             if validation.depends_on_question:
                 section = next(
                     x
-                    for x in application.data_collection_instance.section_data
+                    for x in data_collection_instance.section_data
                     if x.section.id == validation.depends_on_question.section.id
                 )
                 answer = get_answer_value_for_question(
@@ -56,23 +61,45 @@ def build_validators(question: ProtoDataCollectionDefinitionQuestion, applicatio
                 # it can be evaulated - we don't think about that too early on
                 answer = field.data
 
-            context_evaluator = build_context_evaluator(answer=answer)
+            shared_context_lol_handoff_to_lib = dict(
+                grant=(
+                    data_collection_instance.application.round.proto_grant
+                    if data_collection_instance.application
+                    else data_collection_instance.report.recipient.grant
+                    if data_collection_instance.report
+                    else None
+                ),
+                this_collection=data_collection_instance,
+                application=(
+                    data_collection_instance.application
+                    if data_collection_instance.application
+                    else data_collection_instance.report.recipient.application
+                    if data_collection_instance.report
+                    else None
+                ),
+                recipient=(data_collection_instance.report.recipient if data_collection_instance.report else None),
+                reports=(
+                    data_collection_instance.report.recipient.reports if data_collection_instance.report else None
+                ),
+            )
+
+            context_evaluator = build_context_evaluator(**shared_context_lol_handoff_to_lib, answer=answer)
+            context_injector = build_context_injector(**shared_context_lol_handoff_to_lib)
             if not context_evaluator(validation.expression):
-                raise ValidationError(validation.message)
+                raise ValidationError(context_injector(validation.message))
 
         validators.append(partial(custom_validator, validation))
     return validators
 
 
 def build_question_form(
-    application: "ProtoApplication", question: ProtoDataCollectionDefinitionQuestion
+    data_collection_instance: ProtoDataCollectionInstance,
+    question: ProtoDataCollectionDefinitionQuestion,
+    context_injector,
 ) -> DynamicQuestionForm:
-    context_injector = build_context_injector(
-        this_collection=application.data_collection_instance, application=application
-    )
     question_text = context_injector(question.title)
     question_hint = Markup(context_injector(question.hint)) if question.hint else ""
-    validators = build_validators(question, application)
+    validators = build_validators(question, data_collection_instance)
 
     match question.type:
         case QuestionType.TEXT_INPUT:
@@ -100,6 +127,10 @@ def build_question_form(
             field = IntegerField(
                 label=question_text, description=question_hint, widget=GovTextInput(), validators=validators
             )
+        case QuestionType.PRICE_WITH_PENNIES:
+            field = FloatField(
+                label=question_text, description=question_hint, widget=GovTextInput(), validators=validators
+            )
         case _:
             raise Exception("Unable to generate dynamic form for question type {_}")
 
@@ -108,7 +139,9 @@ def build_question_form(
     # Populate form with existing answer (if any) from the DB
     form = DynamicQuestionForm(
         data={
-            "question": get_answer_value_for_question(question, get_current_answer_to_question(application, question))
+            "question": get_answer_value_for_question(
+                question, get_current_answer_to_question(data_collection_instance, question)
+            )
         }
     )
 

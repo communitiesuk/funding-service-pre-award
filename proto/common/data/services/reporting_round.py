@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
 from db import db
-from proto.common.data.models import Fund, ProtoReport, ProtoReportingRound, Round
+from proto.common.data.models import Fund, ProtoReport, ProtoReportingRound
 from proto.common.data.models.fund import FundStatus
 
 
@@ -34,19 +34,23 @@ def update_reporting_round(round: ProtoReport, preview: bool | None = None):
     db.session.commit()
 
 
-def get_open_reporting_rounds():
+def get_open_reporting_rounds() -> list[ProtoReportingRound]:
     return (
         db.session.scalars(
-            select(Round)
-            .options(joinedload(Round.grant))
+            select(ProtoReportingRound)
+            .options(joinedload(ProtoReportingRound.grant))
             .filter(
                 Fund.proto_status == FundStatus.LIVE,
-                Round.preview.is_(False),
+                ProtoReportingRound.preview.is_(False),
                 # probably want some way of having rounds that are always open especially for uncompeted grants
-                Round.start_date <= date.today(),
-                Round.end_date >= date.today(),
+                ProtoReportingRound.submission_period_starts <= date.today(),
+                ProtoReportingRound.submission_period_ends >= date.today(),
             )
         )
         .unique()
         .all()
     )
+
+
+def get_reporting_round(reporting_round_id) -> ProtoReportingRound:
+    return db.session.scalar(select(ProtoReportingRound).where(ProtoReportingRound.id == reporting_round_id))

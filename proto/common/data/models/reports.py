@@ -10,7 +10,7 @@ from db import db
 from proto.common.data.models.types import pk_int
 
 if TYPE_CHECKING:
-    from proto.common.data.models import Organisation, Round
+    from proto.common.data.models import Organisation, ProtoGrantRecipient, ProtoReportingRound
     from proto.common.data.models.data_collection import ProtoDataCollectionInstance
 
 
@@ -35,19 +35,33 @@ class ProtoReport(db.Model):
     code: Mapped[str]
     fake: Mapped[bool]  # hack: true if this is a 'previewed' application (grant admin feature)
 
-    round_id: Mapped[int] = mapped_column(ForeignKey("round.id"))
-    round: Mapped["Round"] = relationship("Round")
+    reporting_round_id: Mapped[pk_int] = mapped_column(ForeignKey("proto_reporting_round.id"))
+    reporting_round: Mapped["ProtoReportingRound"] = relationship("ProtoReportingRound")
+
     organisation_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("organisation.id"))
     organisation: Mapped["Organisation"] = relationship("Organisation")
 
-    data_collection_id: Mapped[pk_int] = mapped_column(ForeignKey("proto_data_collection_instance.id"))
-    data_collection: Mapped["ProtoDataCollectionInstance"] = relationship("ProtoDataCollectionInstance", lazy="select")
+    recipient: Mapped["ProtoGrantRecipient"] = relationship(
+        "ProtoGrantRecipient",
+        primaryjoin="""and_(
+            ProtoReport.reporting_round_id == ProtoReportingRound.id,
+            ProtoReportingRound.grant_id == ProtoGrantRecipient.grant_id,
+            ProtoReport.organisation_id == ProtoGrantRecipient.organisation_id,
+        )""",
+        foreign_keys="[ProtoGrantRecipient.grant_id, ProtoGrantRecipient.organisation_id]",
+        viewonly=True,
+    )
+
+    data_collection_instance_id: Mapped[pk_int] = mapped_column(ForeignKey("proto_data_collection_instance.id"))
+    data_collection_instance: Mapped["ProtoDataCollectionInstance"] = relationship(
+        "ProtoDataCollectionInstance", lazy="select"
+    )
 
     updated_by_reporter_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     @property
     def status(self):
-        if len(self.data_collection.section_data) == 0:
+        if len(self.data_collection_instance.section_data) == 0:
             return ReportSectionStatus.NOT_STARTED
 
         # TODO: WIP
@@ -56,9 +70,9 @@ class ProtoReport(db.Model):
 
     @property
     def can_be_submitted(self):
-        return len(self.data_collection.section_data) == len(self.round.data_collection_definition.sections) and all(
-            sd.completed for sd in self.data_collection.section_data
-        )
+        return len(self.data_collection_instance.section_data) == len(
+            self.round.data_collection_definition.sections
+        ) and all(sd.completed for sd in self.data_collection_instance.section_data)
 
     @property
     def not_started(self):
@@ -73,7 +87,9 @@ class ProtoReport(db.Model):
         return self.status == ReportSectionStatus.COMPLETED
 
     def status_for_section(self, section_id) -> ReportSectionStatus:
-        section_data = next(filter(lambda sec: sec.section_id == section_id, self.data_collection.section_data), None)
+        section_data = next(
+            filter(lambda sec: sec.section_id == section_id, self.data_collection_instance.section_data), None
+        )
         if section_data is None:
             return ReportSectionStatus.NOT_STARTED
         elif section_data.completed is False:
