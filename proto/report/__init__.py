@@ -129,8 +129,17 @@ def report_index():
 @is_authenticated
 def view_grant(short_name):
     grant_recipient = get_grant_recipient_for_organisation(g.account.organisation_id, short_name)
+
+    # M&E reports are fundamentally different from applications. With an application, you click the 'apply' button
+    # and that's you actively starting the process. Clicking that button will create the application in the DB and
+    # create the data collection instance.
+    # With M&E reports, the platform has to show you that a report is expected to be completed without any specific
+    # action from a grant recipient. Without some sort of background job to automatically create the report for each
+    # recipient in the DB, and associated data collection instances, we can't safely assume that these records will
+    # exist. So here, we create the report and data collection instance when users visit these pages.
     grant_reports = get_or_create_monitoring_reports_for_grant_recipient(grant_recipient)
     mapped_grant_reports = {report.reporting_round_id: report for report in grant_reports}
+
     return render_template(
         "report/view-grant.html",
         grant_recipient=grant_recipient,
@@ -142,7 +151,6 @@ def view_grant(short_name):
 @report_blueprint.get("/report/<short_name>/<int:reporting_round_id>")
 @is_authenticated
 def tasklist(short_name, reporting_round_id):
-    # reporting_round = get_reporting_round(reporting_round_id)
     grant_recipient = get_grant_recipient_for_organisation(g.account.organisation_id, short_name)
 
     grant_reports = get_or_create_monitoring_reports_for_grant_recipient(grant_recipient)

@@ -153,8 +153,8 @@ def insert_question_bank_data():
             hint="More than £5 per cup of tea is excessive.",
             order=3,
             data_source=[
-                {"value": "good-boy", "label": "All of my costs are legitimate and strictly tea-related."},
-                {"value": "bad-boy", "label": "I am trying to commit fraud."},
+                {"value": "good-boy", "label": "All of my costs are legitimate and strictly tea-related"},
+                {"value": "bad-boy", "label": "I am trying to commit fraud"},
             ],
             data_standard_id=None,
             template_section_id=template_sections_to_create["tea-licensing"].id,
@@ -494,8 +494,8 @@ def insert_question_bank_data():
         ),
         TemplateValidation(
             question_id=template_questions_to_create["price-per-cup"].id,
-            expression="0 < answer < 10",
-            message="We will only fund tea that can be served for under £10 a cup",
+            expression="0 < answer <= 10",
+            message="We will only fund tea that can be served for £10 a cup or cheaper",
         ),
         TemplateValidation(
             question_id=template_questions_to_create["embezzling-is-bad"].id,
@@ -504,12 +504,12 @@ def insert_question_bank_data():
         ),
         TemplateValidation(
             question_id=template_questions_to_create["cups-served-r1"].id,
-            expression="answer < application.tea_licensing.cups_of_tea",
+            expression="answer <= application.tea_licensing.cups_of_tea",
             message="Your license only allows you to serve ((application.tea_licensing.cups_of_tea)) cups of tea",
         ),
         TemplateValidation(
             question_id=template_questions_to_create["tea-money-spent-r1"].id,
-            expression="answer < (application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)",
+            expression="answer <= (application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)",
             message=(
                 "You only applied for "
                 "£((application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)) in funding, "
@@ -536,10 +536,7 @@ def insert_question_bank_data():
         ),
         TemplateValidation(
             question_id=template_questions_to_create["tea-money-spent-r2"].id,
-            expression=(
-                "(answer + reports[0].tea_statistics_r1.tea_money_spent) "
-                "<= (application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)"
-            ),
+            expression=("answer <= (application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)"),
             message=(
                 "You only applied for "
                 "£((application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)) in funding, "
