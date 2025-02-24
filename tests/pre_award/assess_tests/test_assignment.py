@@ -6,8 +6,6 @@ import pytest
 from bs4 import BeautifulSoup
 from flask import url_for
 
-from pre_award.application_store.db.models.application.applications import Applications
-from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from tests.pre_award.assess_tests.api_data.test_data import fund_specific_claim_map, resolved_app_id, stopped_app_id
 from tests.pre_award.assess_tests.conftest import create_valid_token
 
@@ -894,95 +892,64 @@ def test_assignment_overview_cancel_messages(
     assert "This is the new message" not in str(response.data)
 
 
-@pytest.mark.mock_parameters(
-    {
-        "fund_short_name": "COF",
-        "round_short_name": "TR",
-        "expected_search_params": "",
-    }
-)
 def test_handle_application_post_request(
-    app,
-    db,
-    request,
     assess_test_client,
-    mock_get_tasklist_state_for_banner,
     mock_get_funds,
     mock_get_round,
     mock_get_fund,
-    mock_get_users_for_fund,
     patch_resolve_redirect,
 ):
     application_id = uuid.uuid4()
-    application = Applications(
-        id=application_id,
-        account_id="test_account_id",
-        fund_id="test_fund_id",
-        round_id="test_round_id",
-        key="test_key",
-        language="en",
-        reference="test_reference",
-        project_name="test_project_name",
-        status="NOT_STARTED",
-    )
-    db.session.add(application)
-    db.session.commit()
 
-    assessment_record = AssessmentRecord(
-        application_id=application_id,
-        short_id="test_short_id",
-        type_of_application="test_type",
-        project_name="test_project_name",
-        funding_amount_requested=1000.0,
-        round_id=uuid.uuid4(),
-        fund_id=uuid.uuid4(),
-        language="en",
-        workflow_status="IN_PROGRESS",
-        asset_type="test_asset_type",
-        jsonb_blob={},
-    )
-    db.session.add(assessment_record)
-    db.session.commit()
+    with (
+        mock.patch("pre_award.assess.assessments.routes.update_ar_status_to_completed") as mock_update,
+        mock.patch("pre_award.assess.authentication.validation.get_value_from_request", return_value=application_id),
+        mock.patch(
+            "pre_award.assess.authentication.validation.get_application_metadata",
+            return_value={"fund_id": "test_fund_id", "round_id": "test_round_id"},
+        ),
+        mock.patch(
+            "pre_award.assess.authentication.validation.get_fund", return_value=mock.Mock(short_name="test_fund")
+        ),
+        mock.patch(
+            "pre_award.assess.authentication.validation.determine_round_status",
+            return_value=mock.Mock(has_assessment_opened=True),
+        ),
+        mock.patch("pre_award.assess.authentication.validation.has_access_to_fund", return_value=True),
+        mock.patch("pre_award.assess.authentication.validation._get_roles_by_fund_short_name", return_value=[]),
+        mock.patch("pre_award.assess.authentication.validation.login_required", lambda func, roles_required: func),
+        mock.patch("pre_award.assess.authentication.validation.has_devolved_authority_validation", return_value=False),
+        mock.patch("pre_award.assess.authentication.validation.AssessmentAccessController", return_value=mock.Mock()),
+    ):
+        form_data = {
+            "field1": "value1",
+            "action": "save_comment",
+        }
+        assess_test_client.post(
+            url_for(
+                "assessment_bp.application",
+                application_id=application_id,
+            ),
+            data=form_data,
+            follow_redirects=True,
+        )
+        # action "save_comment" should not trigger the update_ar_status_to_completed function
+        mock_update.assert_not_called()
 
-    with app.app_context():
-        with (
-            mock.patch("pre_award.assess.assessments.routes.update_ar_status_to_completed") as mock_update,
-            mock.patch("pre_award.assess.assessments.routes.get_scoring_class") as mock_get_scoring,
-            mock.patch("pre_award.assess.assessments.routes.all_status_completed") as mock_all_status_completed,
-        ):
-            mock_get_scoring.return_value = lambda: mock.Mock()
-            mock_all_status_completed.return_value = True
+        mock_update.reset_mock()
 
-            form_data = {
-                "field1": "value1",
-                "action": "save_comment",
-            }
-            headers = {
-                "Content-Type": "application/x-www-form-urlencoded",
-            }
+        form_data = {
+            "field1": "value1",
+            "action": "test_action",
+        }
+        assess_test_client.post(
+            url_for(
+                "assessment_bp.application",
+                application_id=application_id,
+            ),
+            data=form_data,
+            follow_redirects=True,
+        )
 
-            assess_test_client.post(
-                url_for("assessment_bp.application", application_id=application_id),
-                data=form_data,
-                headers=headers,
-                follow_redirects=True,
-            )
-            mock_update.assert_not_called()
-            assessment_record = db.session.query(AssessmentRecord).filter_by(application_id=application_id).one()
-            assert assessment_record.workflow_status.name == "IN_PROGRESS"
-
-            mock_update.reset_mock()
-
-            form_data = {
-                "field1": "value1",
-                "action": "test_action",
-            }
-            assess_test_client.post(
-                url_for("assessment_bp.application", application_id=application_id),
-                data=form_data,
-                headers=headers,
-                follow_redirects=True,
-            )
-            # mock_update.assert_called_once_with(str(application_id))
-            # assessment_record = db.session.query(AssessmentRecord).filter_by(application_id=application_id).one()
-            # assert assessment_record.workflow_status.name == "COMPLETED"
+        # action "test_action" should trigger the update_ar_status_to_completed function
+        mock_update.assert_called_once_with(str(application_id))
