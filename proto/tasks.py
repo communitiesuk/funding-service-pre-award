@@ -162,7 +162,7 @@ def insert_question_bank_data():
         "cups-served-r1": TemplateQuestion(
             slug="cups-served",
             type=QuestionType.NUMBER,
-            title="How many cups of tea did you serve this reporting round (todo: add dynamic dates)?",
+            title="How many cups of tea did you serve between ((reporting_round.reporting_period_starts)) and ((reporting_period.reporting_period_ends))?",  # noqa
             hint=None,
             order=1,
             data_source=None,
@@ -182,7 +182,7 @@ def insert_question_bank_data():
         "cups-served-r2": TemplateQuestion(
             slug="cups-served",
             type=QuestionType.NUMBER,
-            title="How many cups of tea did you serve this reporting round (todo: add dynamic dates)?",
+            title="How many cups of tea did you serve between ((reporting_round.reporting_period_starts)) and ((reporting_period.reporting_period_ends))?",  # noqa
             hint=None,
             order=1,
             data_source=None,

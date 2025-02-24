@@ -1,4 +1,5 @@
 import ast
+import datetime
 import functools
 import re
 from collections import defaultdict
@@ -59,15 +60,19 @@ def build_context(
         else None
     )
     if application:
+        context["application_round"] = application.round
         context["application"] = serialize_collection_data(application.data_collection_instance)
 
     recipient = this_collection.report.recipient if this_collection.report else None
     if recipient:
         context["recipient"] = recipient
 
-    reports = this_collection.report.recipient.reports if this_collection.report else None
-    if reports:
-        context["reports"] = [serialize_collection_data(report.data_collection_instance) for report in reports]
+    if this_collection.report:
+        context["reporting_round"] = this_collection.report.reporting_round
+        context["reports"] = [
+            serialize_collection_data(report.data_collection_instance)
+            for report in this_collection.report.recipient.reports
+        ]
 
     if answer:
         context["answer"] = answer
@@ -115,10 +120,17 @@ def _restricted_evaluator(context):
     return evaluator
 
 
+def _nicely_format(val):
+    if isinstance(val, datetime.datetime):
+        return val.strftime("%A %-d %B %Y")
+
+    return str(val)
+
+
 def interpolate(text: str, context: dict) -> str:
     evaluator = _restricted_evaluator(context)
 
-    return re.sub(r"\(\((.*?)\)\)", lambda m: str(evaluator.eval(m.group(1))), text)
+    return re.sub(r"\(\((.*?)\)\)", lambda m: _nicely_format(evaluator.eval(m.group(1))), text)
 
 
 def evaluate(text: str, context: dict) -> int | bool:
