@@ -32,6 +32,11 @@ def claim_magic_link(magic_link: MagicLink):
 
     domain = magic_link.email.split("@")[1]  # shortcut
     org = db.session.scalar(select(Organisation).where(Organisation.domain == domain))
+    if not org:
+        org_name = domain.split(".")[0].title() + " Council"
+        org = Organisation(name=org_name, domain=domain)
+        db.session.add(org)
+        db.session.flush()
 
     # postgres specific statement - there is as of quite recently an ORM way of doing this but it looked
     # like work and probably needs a newer lib

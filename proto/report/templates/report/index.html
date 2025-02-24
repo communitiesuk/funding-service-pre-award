@@ -14,10 +14,10 @@
         {% endset %}
         <p class="govuk-body govuk-!-margin-bottom-6">
           {# This should all be scoped to the org through permissions, but ignoring this for now still #}
-          {% trans number_of_grants=(grant_recipients | length) %}
-            {{ organisation.name }} is receiving funding through {{ number_of_grants }} grant.
+          {% trans number_of_grants=(grant_recipients | length), org_name=organisation.name %}
+            {{ org_name }} is receiving funding through {{ number_of_grants }} grant.
           {% pluralize %}
-            {{ organisation.name }} is receiving funding through {{ number_of_grants }} grants.
+            {{ org_name }} is receiving funding through {{ number_of_grants }} grants.
           {% endtrans %}
         </p>
 
