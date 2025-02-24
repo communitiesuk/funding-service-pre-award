@@ -1530,9 +1530,8 @@ def download_multiple_files(files, folder_name):
 
 def handle_application_post_request(application_id):
     action = request.form.get("action", None)
-    if request.method == "POST":
-        if action != "save_comment":
-            update_ar_status_to_completed(application_id)
+    if request.method == "POST" and action != "save_comment":
+        update_ar_status_to_completed(application_id)
 
 
 @assessment_bp.route("/application/<application_id>", methods=["GET", "POST"])
