@@ -175,7 +175,7 @@
         ) }}
         {% endif %}
 
-        {% if is_uncompeted_flow(fund) and assessment_status == "Change received" %}
+        {% if is_uncompeted_flow(fund) and assessment_status == "Review changes" %}
             {{ assessment_change_received() }}
         {% endif %}
 

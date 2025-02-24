@@ -168,7 +168,7 @@ def test_determine_display_status_for_change_requests():
             Flags=None,
             is_qa_complete=False,
         )
-        == "Change received"
+        == "Review changes"
     )
     assert (
         determine_display_status(
@@ -184,7 +184,7 @@ def test_determine_display_status_for_change_requests():
             Flags=RESOLVED_CHANGE_REQUEST,
             is_qa_complete=False,
         )
-        == "Change received"
+        == "Review changes"
     )
 
 
