@@ -23,6 +23,7 @@ def report_index():
     return render_template(
         "report/index.html",
         grant_recipients=grant_recipients,
+        organisation=g.account.organisation,
         account=g.account,
     )
 

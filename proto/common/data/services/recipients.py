@@ -49,7 +49,10 @@ def get_grant_recipient_for_organisation(organisation_id, short_code: str):
 
 def create_recipient_from_application(application: ProtoApplication):
     recipient = ProtoGrantRecipient(
-        status=GrantRecipientStatus.ACTIVE, application=application, grant_id=application.round.fund_id
+        status=GrantRecipientStatus.ACTIVE,
+        application=application,
+        grant_id=application.round.fund_id,
+        organisation_id=application.organisation_id,
     )
     db.session.add(recipient)
 

@@ -15,9 +15,9 @@
         <p class="govuk-body govuk-!-margin-bottom-6">
           {# This should all be scoped to the org through permissions, but ignoring this for now still #}
           {% trans number_of_grants=(grant_recipients | length) %}
-            Bolton Council is receiving funding through {{ number_of_grants }} grant.
+            {{ organisation.name }} is receiving funding through {{ number_of_grants }} grant.
           {% pluralize %}
-            Bolton Council is receiving funding through {{ number_of_grants }} grants.
+            {{ organisation.name }} is receiving funding through {{ number_of_grants }} grants.
           {% endtrans %}
         </p>
 

@@ -99,7 +99,7 @@
             {% set rows = [] %}
             {% for recipient in recipients %}
                 {% set referenceLink %}
-                <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.recipients.view_grant_recipient', short_code=grant.short_name, recipient_id=recipient.id) }}">Bolton Council</a>
+                <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.recipients.view_grant_recipient', short_code=grant.short_name, recipient_id=recipient.id) }}">{{ recipient.organisation.name }}</a>
                 {% endset %}
                 {% set rows = rows.append([
                     { "html": referenceLink },

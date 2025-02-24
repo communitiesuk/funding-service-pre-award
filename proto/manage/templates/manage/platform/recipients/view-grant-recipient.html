@@ -11,7 +11,7 @@
     "items": [
     { "text": grant.proto_name, "href": url_for("proto_manage.platform.grants.view_grant_overview", grant_code=grant.short_name) },
     { "text": "Recipients", "href": url_for('proto_manage.platform.recipients.index') },
-    { "text": "Bolton Council", "href": "#" }
+    { "text": recipient.organisation.name, "href": "#" }
     ]
 })}}
 {% endblock %}
@@ -19,7 +19,7 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Bolton Council</h1>
+    <h1 class="govuk-heading-l">{{ recipient.organisation.name }}</h1>
   </div>
 </div>
 <div class="govuk-grid-row">

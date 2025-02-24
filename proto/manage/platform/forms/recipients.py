@@ -32,7 +32,7 @@ class SetupNewRecipientFromApplicationForm(FlaskForm):
         super().__init__(*args, **kwargs)
 
         self.application.choices = [
-            (application.external_id, f"Bolton Council (Application reference: {application.code})")
+            (application.external_id, f"{application.organisation.name} (Application reference: {application.code})")
             for application in applications
         ]
 
