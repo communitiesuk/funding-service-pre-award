@@ -61,7 +61,7 @@
       {% set answer = get_answer_text_for_question_from_section_data(question, section_data) %}
 
       {% set valueHtml %}
-        {% if answer %}
+        {% if answer is not none %}
           <span>{{ answer }}</span>
         {% else %}
           <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_report.ask_question', report_id=report.id, section_slug=section.slug, question_slug=question.slug, from_cya='True') }}">

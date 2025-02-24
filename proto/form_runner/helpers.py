@@ -17,7 +17,7 @@ def get_answer_value_for_question_from_section_data(
 
 
 def get_answer_text_for_question(question: ProtoDataCollectionDefinitionQuestion, answer_data):
-    if not answer_data:
+    if answer_data is None:
         return None
 
     if question.type == QuestionType.RADIOS:
@@ -27,7 +27,7 @@ def get_answer_text_for_question(question: ProtoDataCollectionDefinitionQuestion
 
 
 def get_answer_value_for_question(question: ProtoDataCollectionDefinitionQuestion, answer_data):
-    if not answer_data:
+    if answer_data is None:
         return None
 
     if question.type == QuestionType.RADIOS:

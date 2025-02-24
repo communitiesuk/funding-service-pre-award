@@ -74,7 +74,7 @@ def build_context(
             for report in this_collection.report.recipient.reports
         ]
 
-    if answer:
+    if answer is not None:
         context["answer"] = answer
 
     return context
@@ -82,8 +82,9 @@ def build_context(
 
 def build_context_injector(
     this_collection: ProtoDataCollectionInstance | None = None,
+    answer: Any | None = None,
 ) -> Callable[[str], str]:
-    context = build_context(this_collection=this_collection)
+    context = build_context(this_collection=this_collection, answer=answer)
     return functools.partial(interpolate, context=context)
 
 
