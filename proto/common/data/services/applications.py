@@ -28,13 +28,13 @@ def _generate_application_code():
     return "".join(random.choices(string.ascii_uppercase, k=6))
 
 
-def create_application(preview: bool, round_id: int, account_id: str):
+def create_application(preview: bool, round_id: int, organisation_id: uuid.UUID):
     if preview:
         db.session.execute(
             delete(ProtoApplication).filter(
                 ProtoApplication.fake.is_(True),
                 ProtoApplication.round_id == round_id,
-                ProtoApplication.account_id == account_id,
+                ProtoApplication.organisation_id == organisation_id,
             )
         )
 
@@ -42,7 +42,7 @@ def create_application(preview: bool, round_id: int, account_id: str):
         code=_generate_application_code(),
         fake=preview,
         round_id=round_id,
-        account_id=account_id,
+        organisation_id=organisation_id,
         data_collection_instance=ProtoDataCollectionInstance(),
         # this should be based on if the _round_ is "preview" - the round can only
         # not be "preview" if the grant is "live"
@@ -59,13 +59,15 @@ def get_application(external_id: uuid.UUID):
     return db.session.scalars(select(ProtoApplication).filter(ProtoApplication.external_id == external_id)).one()
 
 
-def get_applications(account_id, short_code):
+def get_applications(organisation_id, short_code):
     applications = db.session.scalars(
         select(ProtoApplication)
         .join(Round)
         .join(Fund)
         .filter(
-            ProtoApplication.account_id == account_id, Fund.short_name == short_code, ProtoApplication.fake.is_(False)
+            ProtoApplication.organisation_id == organisation_id,
+            Fund.short_name == short_code,
+            ProtoApplication.fake.is_(False),
         )
     ).all()
     return applications
@@ -84,14 +86,14 @@ def search_applications(short_code):
     return applications
 
 
-def get_application_grants(account_id):
+def get_application_grants(organisation_id):
     grants = (
         db.session.scalars(
             select(Fund)
             .options(joinedload(Fund.rounds))
             .join(Round)
             .join(ProtoApplication)
-            .filter(ProtoApplication.account_id == account_id)
+            .filter(ProtoApplication.organisation_id == organisation_id)
         )
         .unique()
         .all()

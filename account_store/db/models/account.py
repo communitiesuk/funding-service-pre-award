@@ -1,12 +1,16 @@
 import uuid  # noqa
-from typing import Mapping
+from typing import Mapping, TYPE_CHECKING
 
 from flask import current_app
 from fsd_utils.authentication.utils import get_highest_role_map
-from sqlalchemy import Boolean, DateTime, func
+from sqlalchemy import Boolean, DateTime, func, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import db
+
+if TYPE_CHECKING:
+    from proto.common.data.models import Organisation
 
 
 class Account(db.Model):
@@ -25,6 +29,10 @@ class Account(db.Model):
 
     proto_created_date = db.Column("proto_created_date", DateTime(), server_default=func.now())
     proto_updated_date = db.Column("proto_updated_date", DateTime(), server_default=func.now(), onupdate=func.now())
+
+    # proto: out-scoping a user being in multiple orgs
+    organisation_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("organisation.id"))
+    organisation: Mapped["Organisation"] = relationship("Organisation")
 
     @property
     def highest_role_map(self) -> Mapping[str, str]:

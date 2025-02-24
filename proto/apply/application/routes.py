@@ -22,7 +22,7 @@ def _grants_service_nav():
 @application_blueprint.get("/grant/<short_code>/apply")
 @is_authenticated
 def application_list_handler(short_code):
-    applications = get_applications(account_id=g.account.id, short_code=short_code)
+    applications = get_applications(organisation_id=g.account.organisation_id, short_code=short_code)
 
     active_round, grant = get_active_round(short_code)
 
@@ -46,7 +46,7 @@ def application_new_handler(short_code):
     if not active_round:
         raise Exception("Cannot start an application with no active application round")
 
-    application = create_application(preview=False, round_id=active_round.id, account_id=g.account.id)
+    application = create_application(preview=False, round_id=active_round.id, organisation_id=g.account.organisation_id)
     return redirect(
         url_for("proto_apply.application.application_tasklist", application_external_id=application.external_id)
     )
@@ -68,7 +68,7 @@ def view_all_questions(grant_code, round_code):
 @application_blueprint.get("/applications")
 @is_authenticated
 def all_user_application_list_handler():
-    grants = get_application_grants(g.account.id)
+    grants = get_application_grants(g.account.organisation_id)
     return render_template(
         "apply/application/all_applications_grant_list.jinja.html",
         grants=grants,

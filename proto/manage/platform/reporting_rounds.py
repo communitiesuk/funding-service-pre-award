@@ -82,7 +82,8 @@ def view_reporting_round_overview(grant_code, round_ext_id):
 def view_reporting_round_data_collection(grant_code, round_ext_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     form = PreviewReportForm(
-        submit_label="Preview report", data={"round_id": reporting_round.id, "account_id": g.account.id}
+        submit_label="Preview report",
+        data={"round_id": reporting_round.id, "organisation_id": g.account.organisation_id},
     )
     return render_template(
         "manage/platform/reporting_round/view_round_data_collection.html",

@@ -11,7 +11,7 @@
 <form method="post" action="{{ url_for('proto_manage.platform.reporting_rounds.preview_report', grant_code=grant.short_name, round_ext_id=round.external_id) }}" novalidate>
   {{ form.csrf_token }}
   {{ form.round_id }}
-  {{ form.account_id }}
+  {{ form.organisation_id }}
   {{ form.preview }}
   {{ form.submit }}
 </form>

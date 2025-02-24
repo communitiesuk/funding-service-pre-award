@@ -1,4 +1,5 @@
 import enum
+import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -9,8 +10,7 @@ from db import db
 from proto.common.data.models.types import pk_int
 
 if TYPE_CHECKING:
-    from account_store.db.models import Account
-    from proto.common.data.models import Round
+    from proto.common.data.models import Organisation, Round
     from proto.common.data.models.data_collection import ProtoDataCollectionInstance
 
 
@@ -37,8 +37,8 @@ class ProtoReport(db.Model):
 
     round_id: Mapped[int] = mapped_column(ForeignKey("round.id"))
     round: Mapped["Round"] = relationship("Round")
-    account_id: Mapped[str] = mapped_column(ForeignKey("account.id"))
-    account: Mapped["Account"] = relationship("Account")
+    organisation_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("organisation.id"))
+    organisation: Mapped["Organisation"] = relationship("Organisation")
 
     data_collection_id: Mapped[pk_int] = mapped_column(ForeignKey("proto_data_collection_instance.id"))
     data_collection: Mapped["ProtoDataCollectionInstance"] = relationship("ProtoDataCollectionInstance", lazy="select")

@@ -18,7 +18,7 @@ class MakeRoundLiveForm(FlaskForm):
 
 class PreviewApplicationForm(FlaskForm):
     round_id = StringField(None, widget=HiddenInput(), validators=[DataRequired()])
-    account_id = StringField(None, widget=HiddenInput(), validators=[DataRequired()])
+    organisation_id = StringField(None, widget=HiddenInput(), validators=[DataRequired()])
     submit = SubmitField(None, widget=GovSubmitInput(), validators=[DataRequired()])
 
     def __init__(self, *args, submit_label: str | None = None, **kwargs):

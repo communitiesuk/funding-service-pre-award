@@ -7,6 +7,7 @@ from sqlalchemy.dialects.postgresql import insert as postgres_insert
 # move this to proto when cherry picking the commit that did that on the other branch
 from account_store.db.models.account import Account
 from db import db
+from proto.common.data.models import Organisation
 from proto.common.data.models.magic_link import MagicLink
 
 
@@ -29,11 +30,14 @@ def get_magic_link_by_id(id):
 def claim_magic_link(magic_link: MagicLink):
     magic_link.used = True
 
+    domain = magic_link.email.split("@")[1]  # shortcut
+    org = db.session.scalar(select(Organisation).where(Organisation.domain == domain))
+
     # postgres specific statement - there is as of quite recently an ORM way of doing this but it looked
     # like work and probably needs a newer lib
     stmt = (
         postgres_insert(Account)
-        .values(email=magic_link.email, is_magic_link=True)
+        .values(email=magic_link.email, is_magic_link=True, organisation_id=org.id)
         .on_conflict_do_nothing()
         .returning(Account.id, Account.email)
     )

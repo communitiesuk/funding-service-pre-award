@@ -4,11 +4,12 @@ from uuid import uuid4
 
 from colored import attr, fg, stylize
 from invoke import task
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 from account_store.db.models.account import Account
 from account_store.db.models.role import Role  # noqa:E402
 from app import create_app
+from proto.common.data.models import Organisation
 
 ECHO_STYLE = fg("blue") + attr("bold")
 DB_NAME = "fsd_account_store_dev"
@@ -34,6 +35,15 @@ def bootstrap_dev_db(c, database_host="localhost"):
 def seed_local_account_store_impl():
     from db import db
 
+    example_org = Organisation(name="Example Org", domain="example.com")
+    org_id = db.session.scalar(text("select id from organisation where name = :name"), {"name": example_org.name})
+    if not org_id:
+        db.session.add(example_org)
+    else:
+        example_org.id = org_id
+        db.session.merge(example_org)
+    db.session.flush()
+
     accounts_to_seed = [
         {
             "email": "lead_assessor@example.com",
@@ -46,18 +56,24 @@ def seed_local_account_store_impl():
                 "FFW_ASSESSOR",
                 "FFW_COMMENTER",
             ],
+            "organisation_id": example_org.id,
         },
         {
             "email": "dev@example.com",
             "account_id": "00000000-0000-0000-0000-000000000000",
             "roles": [],
+            "organisation_id": example_org.id,
         },
     ]  # seed this in the db so it exists in account_store
     for account_to_create in accounts_to_seed:
         account_from_db = db.session.query(Account).where(Account.email == account_to_create["email"]).one_or_none()
         if not account_from_db:
             # Create account
-            account = Account(id=account_to_create["account_id"], email=account_to_create["email"])
+            account = Account(
+                id=account_to_create["account_id"],
+                email=account_to_create["email"],
+                organisation_id=account_to_create["organisation_id"],
+            )
             db.session.add(account)
             db.session.commit()
             print(f"Created account for {account_to_create['email']}")

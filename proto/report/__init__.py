@@ -2,7 +2,10 @@ from flask import g, render_template
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
-from proto.common.data.services.recipients import get_grant_recipient_for_account, get_grant_recipients_for_account
+from proto.common.data.services.recipients import (
+    get_grant_recipient_for_organisation,
+    get_grant_recipients_for_organisation,
+)
 
 report_blueprint = Blueprint("proto_report", __name__)
 
@@ -16,7 +19,7 @@ def _grants_service_nav():
 @report_blueprint.get("/report/")
 @is_authenticated
 def report_index():
-    grant_recipients = get_grant_recipients_for_account(g.account.id)
+    grant_recipients = get_grant_recipients_for_organisation(g.account.organisation_id)
     return render_template(
         "report/index.html",
         grant_recipients=grant_recipients,
@@ -27,7 +30,7 @@ def report_index():
 @report_blueprint.get("/report/<short_name>")
 @is_authenticated
 def view_grant(short_name):
-    grant_recipient = get_grant_recipient_for_account(g.account.id, short_name)
+    grant_recipient = get_grant_recipient_for_organisation(g.account.organisation_id, short_name)
     return render_template(
         "report/view-grant.html",
         grant_recipient=grant_recipient,

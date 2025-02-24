@@ -22,25 +22,25 @@ def search_recipients(short_code):
     return recipients
 
 
-def get_grant_recipients_for_account(account_id):
+def get_grant_recipients_for_organisation(organisation_id):
     recipients = db.session.scalars(
         select(ProtoGrantRecipient)
         .join(ProtoGrantRecipient.application)
         .filter(
-            ProtoApplication.account_id == account_id,
+            ProtoApplication.organisation_id == organisation_id,
         )
     ).all()
     return recipients
 
 
-def get_grant_recipient_for_account(account_id, short_code: str):
+def get_grant_recipient_for_organisation(organisation_id, short_code: str):
     recipient = db.session.scalar(
         select(ProtoGrantRecipient)
         .join(ProtoGrantRecipient.application)
         .join(ProtoApplication.round)
         .join(Round.proto_grant)
         .filter(
-            ProtoApplication.account_id == account_id,
+            ProtoApplication.organisation_id == organisation_id,
             Fund.short_name == short_code,
         )
     )

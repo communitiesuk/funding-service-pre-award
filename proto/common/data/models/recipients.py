@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from db import db
 
 if TYPE_CHECKING:
-    from proto.common.data.models import Fund
+    from proto.common.data.models import Fund, Organisation
     from proto.common.data.models.applications import ProtoApplication
 
 
@@ -34,3 +34,6 @@ class ProtoGrantRecipient(db.Model):
 
     application_id: Mapped[int | None] = mapped_column(ForeignKey("proto_application.id"), unique=True)
     application: Mapped[Optional["ProtoApplication"]] = relationship("ProtoApplication")
+
+    organisation_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("organisation.id"))
+    organisation: Mapped["Organisation"] = relationship("Organisation")

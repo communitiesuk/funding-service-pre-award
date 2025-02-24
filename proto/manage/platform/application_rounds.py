@@ -45,7 +45,7 @@ def view_round_overview(grant_code, round_code):
 def view_round_data_collection(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
     form = PreviewApplicationForm(
-        submit_label="Preview application", data={"round_id": round.id, "account_id": g.account.id}
+        submit_label="Preview application", data={"round_id": round.id, "organisation_id": g.account.organisation_id}
     )
     return render_template(
         "manage/platform/application_round/view_round_data_collection.html",
@@ -170,7 +170,9 @@ def create_question_view(grant_code, round_code, section_id):
 def preview_application(grant_code, round_code):
     form = PreviewApplicationForm(submit_label=None)
     if form.validate_on_submit():
-        application = create_application(preview=True, round_id=form.round_id.data, account_id=form.account_id.data)
+        application = create_application(
+            preview=True, round_id=form.round_id.data, organisation_id=form.organisation_id.data
+        )
         return redirect(
             url_for("proto_apply.application.application_tasklist", application_external_id=application.external_id)
         )
