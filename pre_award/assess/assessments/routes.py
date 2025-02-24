@@ -1528,6 +1528,12 @@ def download_multiple_files(files, folder_name):
     )
 
 
+def handle_application_post_request(application_id):
+    action = request.form.get("action", None)
+    if request.method == "POST" and action != "save_comment":
+        update_ar_status_to_completed(application_id)
+
+
 @assessment_bp.route("/application/<application_id>", methods=["GET", "POST"])
 @check_access_application_id
 def application(application_id):
@@ -1539,8 +1545,7 @@ def application(application_id):
     :return:
     """
 
-    if request.method == "POST":
-        update_ar_status_to_completed(application_id)
+    handle_application_post_request(application_id)
 
     state = get_state_for_tasklist_banner(application_id)
 
