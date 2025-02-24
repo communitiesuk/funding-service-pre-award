@@ -104,8 +104,8 @@
                 {% set rows = rows.append([
                     { "html": referenceLink },
                     { "text": recipient.status.value },
-                    { "html": "£0" },
-                    { "html": "£0" },
+                    { "html": "£" ~ recipient.funding_allocated },
+                    { "html": "£" ~ recipient.funding_paid },
                     { "text": 'N/A' }
                 ]) %}
             {% endfor %}
