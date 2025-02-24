@@ -1,4 +1,5 @@
 import re
+import uuid
 from unittest import mock
 
 import pytest
@@ -889,3 +890,66 @@ def test_assignment_overview_cancel_messages(
 
     assert "This is the original message" in str(response.data)
     assert "This is the new message" not in str(response.data)
+
+
+def test_handle_application_post_request(
+    assess_test_client,
+    mock_get_funds,
+    mock_get_round,
+    mock_get_fund,
+    patch_resolve_redirect,
+):
+    application_id = uuid.uuid4()
+
+    with (
+        mock.patch("pre_award.assess.assessments.routes.update_ar_status_to_completed") as mock_update,
+        mock.patch("pre_award.assess.authentication.validation.get_value_from_request", return_value=application_id),
+        mock.patch(
+            "pre_award.assess.authentication.validation.get_application_metadata",
+            return_value={"fund_id": "test_fund_id", "round_id": "test_round_id"},
+        ),
+        mock.patch(
+            "pre_award.assess.authentication.validation.get_fund", return_value=mock.Mock(short_name="test_fund")
+        ),
+        mock.patch(
+            "pre_award.assess.authentication.validation.determine_round_status",
+            return_value=mock.Mock(has_assessment_opened=True),
+        ),
+        mock.patch("pre_award.assess.authentication.validation.has_access_to_fund", return_value=True),
+        mock.patch("pre_award.assess.authentication.validation._get_roles_by_fund_short_name", return_value=[]),
+        mock.patch("pre_award.assess.authentication.validation.login_required", lambda func, roles_required: func),
+        mock.patch("pre_award.assess.authentication.validation.has_devolved_authority_validation", return_value=False),
+        mock.patch("pre_award.assess.authentication.validation.AssessmentAccessController", return_value=mock.Mock()),
+    ):
+        form_data = {
+            "field1": "value1",
+            "action": "save_comment",
+        }
+        assess_test_client.post(
+            url_for(
+                "assessment_bp.application",
+                application_id=application_id,
+            ),
+            data=form_data,
+            follow_redirects=True,
+        )
+        # action "save_comment" should not trigger the update_ar_status_to_completed function
+        mock_update.assert_not_called()
+
+        mock_update.reset_mock()
+
+        form_data = {
+            "field1": "value1",
+            "action": "test_action",
+        }
+        assess_test_client.post(
+            url_for(
+                "assessment_bp.application",
+                application_id=application_id,
+            ),
+            data=form_data,
+            follow_redirects=True,
+        )
+
+        # action "test_action" should trigger the update_ar_status_to_completed function
+        mock_update.assert_called_once_with(str(application_id))

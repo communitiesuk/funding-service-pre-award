@@ -424,13 +424,13 @@ fund_round_data_key_mappings = {
     "HSRAVR": {
         "location": None,
         "asset_type": None,
-        "funding_one": None,
+        "funding_one": "MIrLuu",
         "funding_two": None,
     },
     "HSRARP": {
         "location": None,
         "asset_type": None,
-        "funding_one": None,
+        "funding_one": "uJIluf",
         "funding_two": None,
     },
 }
@@ -1814,6 +1814,242 @@ applicant_info_mapping = {
             },
         },
         "OUTPUT_TRACKER": {},
+    },
+    f"{HSRA_FUND_ID}:{HSRA_ROUND_VR_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "qbBtUh": {
+                    "en": {
+                        "title": "Application name",
+                        "field_type": "textField",
+                    }
+                },
+                "WLddBt": {
+                    "en": {
+                        "title": "Local authority name",
+                        "field_type": "textField",
+                    }
+                },
+                "MIrLuu": {
+                    "en": {
+                        "title": "How much funding are you applying for?",
+                        "field_type": "numberField",
+                    }
+                },
+                "okHmBB": {
+                    "en": {
+                        "title": "Full name of the Section 151 officer",
+                        "field_type": "numberField",
+                    }
+                },
+                "bQOXTi": {
+                    "en": {
+                        "title": "Email address of the Section 151 officer",
+                        "field_type": "emailAddressField",
+                    }
+                },
+                "phaosT": {
+                    "en": {
+                        "title": "Telephone number of the Section 151 officer",
+                        "field_type": "numberField",
+                    }
+                },
+                "OkKkMd": {
+                    "en": {
+                        "title": "Full name of the lead contact",
+                        "field_type": "textField",
+                    }
+                },
+                "Lwkcam": {
+                    "en": {
+                        "title": "Job title of the lead contact",
+                        "field_type": "textField",
+                    }
+                },
+                "XfiUqN": {
+                    "en": {
+                        "title": "Email address of the lead contact",
+                        "field_type": "emailAddressField",
+                    }
+                },
+                "DlZjvr": {
+                    "en": {
+                        "title": "Telephone number of the lead contact",
+                        "field_type": "textField",
+                    }
+                },
+                "frDgtU": {
+                    "en": {
+                        "title": "Town or city for designated area",
+                        "field_type": "textField",
+                    }
+                },
+                "YMqcPf": {
+                    "en": {
+                        "title": "Tell us more about the designated area",
+                        "field_type": "textField",
+                    }
+                },
+                "yvpmIv": {
+                    "en": {
+                        "title": "When do you expect the vacancy register to be completed?",
+                        "field_type": "textField",
+                    }
+                },
+                "KFjxBs": {
+                    "en": {
+                        "title": "When do you expect the post-payment assurance form to be submitted?",
+                        "field_type": "textField",
+                    }
+                },
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "MIrLuu": {
+                    "en": {
+                        "title": "Requested funding",
+                        "field_type": "numberField",
+                    }
+                },
+            }
+        },
+    },
+    f"{HSRA_FUND_ID}:{HSRA_ROUND_RP_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "qbBtUh": {
+                    "en": {
+                        "title": "Application name",
+                        "field_type": "textField",
+                    }
+                },
+                "WLddBt": {
+                    "en": {
+                        "title": "Local authority name",
+                        "field_type": "textField",
+                    }
+                },
+                "uJIluf": {
+                    "en": {
+                        "title": "How much funding are you applying for?",
+                        "field_type": "numberField",
+                    }
+                },
+                "okHmBB": {
+                    "en": {
+                        "title": "Full name of the Section 151 officer",
+                        "field_type": "numberField",
+                    }
+                },
+                "bQOXTi": {
+                    "en": {
+                        "title": "Email address of the Section 151 officer",
+                        "field_type": "emailAddressField",
+                    }
+                },
+                "phaosT": {
+                    "en": {
+                        "title": "Telephone number of the Section 151 officer",
+                        "field_type": "numberField",
+                    }
+                },
+                "OkKkMd": {
+                    "en": {
+                        "title": "Full name of the lead contact",
+                        "field_type": "textField",
+                    }
+                },
+                "Lwkcam": {
+                    "en": {
+                        "title": "Job title of the lead contact",
+                        "field_type": "textField",
+                    }
+                },
+                "XfiUqN": {
+                    "en": {
+                        "title": "Email address of the lead contact",
+                        "field_type": "emailAddressField",
+                    }
+                },
+                "DlZjvr": {
+                    "en": {
+                        "title": "Telephone number of the lead contact",
+                        "field_type": "textField",
+                    }
+                },
+                "dwLpZU": {
+                    "en": {
+                        "title": "Vacant property address",
+                        "field_type": "ukAddressField",
+                    }
+                },
+                "rFpLZQ": {
+                    "en": {
+                        "title": "Total commercial floorspace of the property",
+                        "field_type": "numberField",
+                    }
+                },
+                "frDgtU": {
+                    "en": {
+                        "title": "Location of the designated area",
+                        "field_type": "textField",
+                    }
+                },
+                "TzGISC": {
+                    "en": {
+                        "title": "Details of the designated area",
+                        "field_type": "textField",
+                    }
+                },
+                "kkBYPW": {
+                    "en": {
+                        "title": "Auction date",
+                        "field_type": "textField",
+                    }
+                },
+                "pTZLiJ": {
+                    "en": {
+                        "title": "When do you expect to submit your claim?",
+                        "field_type": "textField",
+                    }
+                },
+                "ihfalZ": {
+                    "en": {
+                        "title": "When do you expect the tenant to sign the tenancy agreement?",
+                        "field_type": "textField",
+                    }
+                },
+                "gLzqSP": {
+                    "en": {
+                        "title": "When do you expect to finish the refurbishment works?",
+                        "field_type": "textField",
+                    }
+                },
+                "HeqfVH": {
+                    "en": {
+                        "title": "When do you expect the tenant to move in?",
+                        "field_type": "textField",
+                    }
+                },
+                "LFwJND": {
+                    "en": {
+                        "title": "Why are your costs higher than the guided price?",
+                        "field_type": "textField",
+                    }
+                },
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "uJIluf": {
+                    "en": {
+                        "title": "Requested funding",
+                        "field_type": "numberField",
+                    }
+                },
+            }
+        },
     },
 }
 
