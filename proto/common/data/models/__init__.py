@@ -30,3 +30,4 @@ from proto.common.data.models.data_collection import (  # noqa
 )
 from proto.common.data.models.reports import ProtoReport as ProtoReport  # noqa
 from proto.common.data.models.recipients import ProtoGrantRecipient as ProtoGrantRecipient  # noqa
+from proto.common.data.models.organisation import Organisation as Organisation  # noqa

@@ -5,7 +5,7 @@ from datetime import datetime
 from invoke import task
 from sqlalchemy import func, select, text
 
-from proto.common.data.models import Fund, ProtoReportingRound, TemplateSection
+from proto.common.data.models import Fund, Organisation, ProtoReportingRound, TemplateSection
 from proto.common.data.models.data_collection import ConditionCombination
 from proto.common.data.models.question_bank import (
     DataStandard,
@@ -505,6 +505,19 @@ def insert_question_bank_data():
         db.session.add(validation_instance)
         db.session.flush()
     db.session.commit()
+
+    organisations_to_create = [
+        Organisation(name="MHCLG", domain="communities.gov.uk"),
+        Organisation(name="Bolton Council", domain="bolton.gov.uk"),
+    ]
+    for org_instance in organisations_to_create:
+        org_id = db.session.scalar(text("select id from organisation where name = :name"), {"name": org_instance.name})
+        if not org_id:
+            db.session.add(org_instance)
+        else:
+            org_instance.id = org_id
+            db.session.merge(org_instance)
+        db.session.flush()
 
     db.session.commit()
 
