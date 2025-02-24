@@ -132,30 +132,30 @@ wheels = [
 
 [[package]]
 name = "boto3"
-version = "1.36.21"
+version = "1.36.25"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "botocore" },
     { name = "jmespath" },
     { name = "s3transfer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/af/cb/745ca9a661be42f3dc0c5b6ea4d3182d9dd5dfd4204aad4910af20775a26/boto3-1.36.21.tar.gz", hash = "sha256:41eb2b73eb612d300e629e3328b83f1ffea0fc6633e75c241a72a76746c1db26", size = 110999 }
+sdist = { url = "https://files.pythonhosted.org/packages/0d/4d/1ea0720c173814f2055bf9ac6937a74b559169fa66602be7f37e809dda1e/boto3-1.36.25.tar.gz", hash = "sha256:a057c19adffb48737c192bdb10f9d85e0d9dcecd21327f51520c15db9022a835", size = 111018 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/39/99/7f5c7a16e205e19089e7f0d8716e9d1a5207bf4736f82a7d0c602bd0a40c/boto3-1.36.21-py3-none-any.whl", hash = "sha256:f94faa7cf932d781f474d87f8b4c14a033af95ac1460136b40d75e7a30086ef0", size = 139179 },
+    { url = "https://files.pythonhosted.org/packages/36/0d/cc521e7b0ffe37b099f9183ced90e8f93e75910611c8b9b10968a30a2715/boto3-1.36.25-py3-none-any.whl", hash = "sha256:41fb90a516995946563ec91b9d891e2516c58617e9556d5e86dfa62da3fdebe6", size = 139181 },
 ]
 
 [[package]]
 name = "botocore"
-version = "1.36.21"
+version = "1.36.25"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jmespath" },
     { name = "python-dateutil" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/69/9f/17b7610f2bfc5ccba6d2395f1cc856dd3e7e50f0088fc22949e56ae9f569/botocore-1.36.21.tar.gz", hash = "sha256:da746240e2ad64fd4997f7f3664a0a8e303d18075fc1d473727cb6375080ea16", size = 13523380 }
+sdist = { url = "https://files.pythonhosted.org/packages/17/e7/3d93e2b5be18486a9c14fc3fda1597c5f3835a9766eb7f2ba9f144fca73f/botocore-1.36.25.tar.gz", hash = "sha256:3b0a857d2621c336fb82a36cb6da4b6e062d346451ac46d110b074e5e5fd7cfc", size = 13573787 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7b/b4/8f1dc71437d12a61ca1daac534bc32fa6ccf207011eab7465d8c8a46dc06/botocore-1.36.21-py3-none-any.whl", hash = "sha256:24a7052e792639dc2726001bd474cd0aaa959c1e18ddd92c17f3adc6efa1b132", size = 13352864 },
+    { url = "https://files.pythonhosted.org/packages/b5/e9/107e5ab6b0b02c3d766a850238741c02723ae249dcfe76c72b9c76d7b67b/botocore-1.36.25-py3-none-any.whl", hash = "sha256:04c8ff03531e8d92baa8c98d1850bdf01668a805467f4222b65e5325f94aa8af", size = 13360625 },
 ]
 
 [[package]]
@@ -882,7 +882,7 @@ requires-dist = [
     { name = "alembic-utils", specifier = "==0.8.6" },
     { name = "babel", specifier = "==2.17.0" },
     { name = "beautifulsoup4", specifier = "==4.13.3" },
-    { name = "boto3", specifier = "==1.36.21" },
+    { name = "boto3", specifier = "==1.36.25" },
     { name = "colored", specifier = "==2.3.0" },
     { name = "cssmin", specifier = "==0.2.0" },
     { name = "dataclass-dict-convert", specifier = "==1.7.4" },
@@ -942,7 +942,7 @@ dev = [
     { name = "freezegun", specifier = "==1.5.1" },
     { name = "invoke", specifier = "==2.2.0" },
     { name = "json2html", specifier = "==1.3.0" },
-    { name = "moto", extras = ["s3", "sqs"], specifier = "==5.0.28" },
+    { name = "moto", extras = ["s3"], specifier = "==5.0.28" },
     { name = "mypy", specifier = "==1.15.0" },
     { name = "pre-commit", specifier = "==4.1.0" },
     { name = "pytest", specifier = "==8.3.4" },

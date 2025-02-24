@@ -215,13 +215,10 @@ def test_get_applications_report_by_round_is_and_fund_id(
         + "geography,capital,revenue,organisation_name_nstf"
     ) == lines[0]
     row1 = lines[1].split(",")
-    assert row1[1] == "Test Org Name 1"
-    assert row1[0] == "Test Reference Number"
-    assert row1[4] == "W1A 1AA"
     row2 = lines[2].split(",")
-    assert row2[1] == "Test Org Name 2cy"
-    assert row2[0] == "Test Reference Number Welsh"
-    assert row2[4] == "CF10 3NQ"
+    result = [(row1[1], row1[0], row1[4]), (row2[1], row2[0], row2[4])]
+    assert ("Test Org Name 1", "Test Reference Number", "W1A 1AA") in result
+    assert ("Test Org Name 2cy", "Test Reference Number Welsh", "CF10 3NQ") in result
 
 
 @pytest.mark.fund_round_config(

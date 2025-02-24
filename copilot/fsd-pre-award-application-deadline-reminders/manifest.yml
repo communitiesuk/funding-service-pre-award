@@ -1,59 +1,32 @@
-# The manifest for the "fsd-pre-award" service.
-# Read the full specification for the "Backend Service" type at:
-#  https://aws.github.io/copilot-cli/docs/manifest/backend-service/
+name: fsd-pre-award-application-deadline-reminders
+type: Scheduled Job
 
-# Your service name will be used in naming your resources like log groups, ECS services, etc.
-name: fsd-pre-award
-type: Load Balanced Web Service
+on:
+  schedule: "cron(30 9 * * ? *)"
+retries: 0
+timeout: 10m
 
-# Distribute traffic to your service.
-http:
-  # Requests to this path will be forwarded to your service.
-  # To match all requests you can use the "/" path.
-  path: "/"
-  # You can specify a custom health check path. The default is "/".
-  healthcheck:
-    path: "/healthcheck"
-    healthy_threshold: 2
-    interval: 6s
-    timeout: 5s
-    grace_period: 20s
+# We inject `image.location` in our deployment pipeline
+image: {}
+entrypoint: launcher
+command: invoke apply.send-application-deadline-reminders
 
-  alias:
-    - frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
-    - assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
-    - authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
-# Your service is reachable at "http://fsd-pre-award.${COPILOT_SERVICE_DISCOVERY_ENDPOINT}:8080" but is not public.
-
-# Configuration for your containers and service.
-image:
-  # Port exposed through your container to route traffic to it.
-  port: 8080
-
-cpu: 2048 # Number of CPU units for the task.
-memory: 4096 # Amount of memory in MiB used by the task.
-platform: linux/x86_64 # See https://aws.github.io/copilot-cli/docs/manifest/backend-service/#platform
-count: 2 # Number of tasks that should be running in your service.
-exec: true # Enable running commands in your container.
+cpu: 256
+memory: 512
+platform: linux/x86_64
 
 network:
-  connect: true # Enable Service Connect for intra-environment traffic between services.
   vpc:
     security_groups:
       - from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-fsdpreawardstoresclusterSecurityGroup
 
-# storage:
-# readonly_fs: true       # Limit to read-only access to mounted root filesystems.
-
-# Optional fields for more advanced use-cases.
-# Pass environment variables as key value pairs.
 variables:
   FLASK_ENV: ${COPILOT_ENVIRONMENT_NAME}
   SENTRY_DSN: "https://80c7f65b54f0eff535777a66b375adf0@o1432034.ingest.us.sentry.io/4508324370317312"
   AWS_BUCKET_NAME:
     from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-FormUploadsBucket
   ASSESSMENT_FRONTEND_HOST: "https://assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
-  SENTRY_TRACES_SAMPLE_RATE: 0.5
+  SENTRY_TRACES_SAMPLE_RATE: 1.0
   API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local"
 
   ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: false
@@ -61,6 +34,7 @@ variables:
   APPLY_HOST: "frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   ASSESS_HOST: "assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   AUTH_HOST: "authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
+  COOKIE_DOMAIN: ".test.levellingup.gov.uk"
   FORM_DESIGNER_HOST: "https://form-designer.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   FORMS_SERVICE_PUBLIC_HOST: "https://forms.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
@@ -89,101 +63,8 @@ secrets:
   RSA256_PRIVATE_KEY_BASE64: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/RSA256_PRIVATE_KEY_BASE64
   GOV_NOTIFY_API_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/GOV_NOTIFY_API_KEY
 
-
-# You can override any of the values defined above by environment.
 environments:
-  dev:
-    variables:
-      ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
-      COOKIE_DOMAIN: ".dev.access-funding.test.levellingup.gov.uk"
-    count:
-      spot: 2
-    sidecars:
-      nginx:
-        port: 8087
-        image:
-          location: xscys/nginx-sidecar-basic-auth
-        variables:
-          FORWARD_PORT: 8080
-          CLIENT_MAX_BODY_SIZE: 10m
-        secrets:
-          BASIC_AUTH_USERNAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_USERNAME
-          BASIC_AUTH_PASSWORD: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_PASSWORD
-    http:
-      target_container: nginx
-      healthcheck:
-        path: /healthcheck
-        port: 8080
-  test:
-    variables:
-      ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
-      COOKIE_DOMAIN: ".test.access-funding.test.levellingup.gov.uk"
-    count:
-      spot: 2
-    sidecars:
-      nginx:
-        port: 8087
-        image:
-          location: xscys/nginx-sidecar-basic-auth
-        variables:
-          FORWARD_PORT: 8080
-          CLIENT_MAX_BODY_SIZE: 10m
-        secrets:
-          BASIC_AUTH_USERNAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_USERNAME
-          BASIC_AUTH_PASSWORD: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_PASSWORD
-    http:
-      target_container: nginx
-      healthcheck:
-        path: /healthcheck
-        port: 8080
-  uat:
-    variables:
-      ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
-      COOKIE_DOMAIN: ".uat.access-funding.test.levellingup.gov.uk"
-    count:
-      range: 2-4
-      cooldown:
-        in: 60s
-        out: 30s
-      cpu_percentage:
-        value: 70
-      memory_percentage:
-        value: 80
-      requests: 30
-      response_time: 2s
-    sidecars:
-      nginx:
-        port: 8087
-        image:
-          location: xscys/nginx-sidecar-basic-auth
-        variables:
-          FORWARD_PORT: 8080
-          CLIENT_MAX_BODY_SIZE: 10m
-        secrets:
-          BASIC_AUTH_USERNAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_USERNAME
-          BASIC_AUTH_PASSWORD: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_PASSWORD
-    http:
-      target_container: nginx
-      healthcheck:
-        path: /healthcheck
-        port: 8080
   prod:
-    http:
-      alias:
-        - "frontend.access-funding.levellingup.gov.uk"
-        - "assessment.access-funding.levellingup.gov.uk"
-        - "authenticator.access-funding.levellingup.gov.uk"
-      hosted_zone: Z0686469NF3ZJTU9I02M
-    count:
-      range: 2-4
-      cooldown:
-        in: 60s
-        out: 30s
-      cpu_percentage:
-        value: 70
-      memory_percentage:
-        value: 80
-      requests: 30
     variables:
       FLASK_ENV: production
       ASSESSMENT_FRONTEND_HOST: "https://assessment.access-funding.levellingup.gov.uk"

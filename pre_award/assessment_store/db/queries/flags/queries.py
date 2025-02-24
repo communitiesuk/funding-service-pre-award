@@ -1,6 +1,6 @@
 from typing import Dict
 
-from sqlalchemy import select
+from sqlalchemy import desc, func, select
 from sqlalchemy.orm import contains_eager
 
 from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
@@ -14,12 +14,44 @@ def get_flags_for_application(application_id):
     return results
 
 
-def get_change_requests_for_application(application_id):
+def get_change_requests_for_application(application_id, only_raised=False, sort_by_update=False, sort_by_raised=False):
+    """
+    Retrieves change requests for a specific application.
+
+    Args:
+        application_id (UUID or str): The unique identifier of the application.
+        only_raised (bool, optional): If True, filters the results to include only change requests
+                                      with a status of 'RAISED'
+        sort_by_update (bool, optional): If True, sorts the change requests in descending order
+                                          based on the latest update date.
+        sort_by_raised (bool, optional): TODO: If True, sorts the change requests in descending order
+                                          based on when they were raised (created).
+
+    Returns:
+        list: A list of AssessmentFlag representing the change requests for the application.
+    """
     stmt = select(AssessmentFlag).where(
         AssessmentFlag.application_id == application_id, AssessmentFlag.is_change_request.is_(True)
     )
+    if only_raised:
+        stmt = stmt.where(AssessmentFlag.latest_status == FlagStatus.RAISED)
+    if sort_by_update:
+        # Order change requests according to their latest update
+        stmt = stmt.join(FlagUpdate).group_by(AssessmentFlag.id).order_by(desc(func.max(FlagUpdate.date_created)))
+    elif sort_by_raised:
+        pass
+
     results = db.session.scalars(stmt).all()
     return results
+
+
+def is_first_change_request_for_date(application_id, date):
+    change_requests = get_change_requests_for_application(
+        application_id=application_id, only_raised=True, sort_by_update=True
+    )
+    return not change_requests or all(
+        date > flag_update.date_created.date() for flag_update in change_requests[0].updates
+    )
 
 
 def get_flag_by_id(flag_id):

@@ -175,7 +175,7 @@
         ) }}
         {% endif %}
 
-        {% if toggle_dict.get("UNCOMPETED_WORKFLOW") and fund.funding_type == 'UNCOMPETED' and assessment_status == "Change received" %}
+        {% if toggle_dict.get("UNCOMPETED_WORKFLOW") and fund.funding_type == 'UNCOMPETED' and assessment_status == "Review changes" %}
             {{ assessment_change_received() }}
         {% endif %}
 
