@@ -169,13 +169,7 @@ def tasklist(short_name, reporting_round_id):
 def ask_question(report_id, section_slug, question_slug):
     account = {"email": g.account.email}
     report = get_report(report_id)
-    context_injector = build_context_injector(
-        grant=report.reporting_round.grant,
-        this_collection=report.data_collection_instance,
-        application=report.recipient.application,
-        recipient=report.recipient,
-        reports=report.recipient.reports,
-    )
+    context_injector = build_context_injector(this_collection=report.data_collection_instance)
     question = get_data_collection_question(
         report.reporting_round.data_collection_definition_id, section_slug, question_slug
     )
@@ -253,12 +247,7 @@ def check_your_answers(report_id, section_slug):
         section=section_data.section,
         section_data=section_data,
         QuestionType=QuestionType,
-        context_injector=build_context_injector(
-            grant=report.recipient.grant,
-            this_collection=report.data_collection_instance,
-            application=report.recipient.application,
-            reports=report.recipient.reports,
-        ),
+        context_injector=build_context_injector(this_collection=report.data_collection_instance),
         get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
         form=form,
         account=account,

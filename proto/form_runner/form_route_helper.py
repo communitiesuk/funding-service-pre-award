@@ -56,26 +56,7 @@ def evaluate_condition(
     if not depends_on_answer_text:
         return False
 
-    context_evaluator = build_context_evaluator(
-        grant=(
-            section_data.instance.application.round.proto_grant
-            if section_data.instance.application
-            else section_data.instance.report.recipient.grant
-            if section_data.instance.report
-            else None
-        ),
-        this_collection=section_data.instance,
-        application=(
-            section_data.instance.application
-            if section_data.instance.application
-            else section_data.instance.report.recipient.application
-            if section_data.instance.report
-            else None
-        ),
-        recipient=(section_data.instance.report.recipient if section_data.instance.report else None),
-        reports=(section_data.instance.report.recipient.reports if section_data.instance.report else None),
-        answer=depends_on_answer_text,
-    )
+    context_evaluator = build_context_evaluator(this_collection=section_data.instance, answer=depends_on_answer_text)
     return bool(context_evaluator(condition.expression))
 
     # operator = condition.criteria["operator"]

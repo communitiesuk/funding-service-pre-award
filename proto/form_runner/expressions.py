@@ -7,11 +7,7 @@ from typing import Any, Callable
 import simpleeval
 
 from proto.common.data.models import (
-    Fund,
-    ProtoApplication,
     ProtoDataCollectionInstance,
-    ProtoGrantRecipient,
-    ProtoReport,
 )
 from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
 
@@ -29,11 +25,7 @@ def serialize_collection_data(collection: ProtoDataCollectionInstance) -> dict[s
 
 
 def build_context(
-    grant: Fund | None = None,
     this_collection: ProtoDataCollectionInstance | None = None,
-    application: ProtoApplication | None = None,
-    recipient: ProtoGrantRecipient | None = None,
-    reports: list[ProtoReport] | None = None,
     answer: Any | None = None,
 ):
     # It would be nice if "this collection"s data was somehow surfaced at the top-level, ie not namespaced, but
@@ -45,18 +37,35 @@ def build_context(
     # - Then references to related objects, eg if we're doing monitoring, then the application, grant recipient, etc
     context = {}
 
+    # Retrieve all of the related objects to inject as context, based on the data collection
+    grant = (
+        this_collection.application.round.proto_grant
+        if this_collection.application
+        else this_collection.report.recipient.grant
+        if this_collection.report
+        else None
+    )
     if grant:
         context["grant"] = grant
 
     if this_collection:
         context["this_collection"] = serialize_collection_data(this_collection)
 
+    application = (
+        this_collection.application
+        if this_collection.application
+        else this_collection.report.recipient.application
+        if this_collection.report
+        else None
+    )
     if application:
         context["application"] = serialize_collection_data(application.data_collection_instance)
 
+    recipient = this_collection.report.recipient if this_collection.report else None
     if recipient:
         context["recipient"] = recipient
 
+    reports = this_collection.report.recipient.reports if this_collection.report else None
     if reports:
         context["reports"] = [serialize_collection_data(report.data_collection_instance) for report in reports]
 
@@ -67,34 +76,17 @@ def build_context(
 
 
 def build_context_injector(
-    grant: Fund | None = None,
     this_collection: ProtoDataCollectionInstance | None = None,
-    application: ProtoApplication | None = None,
-    recipient: ProtoGrantRecipient | None = None,
-    reports: list[ProtoReport] | None = None,
 ) -> Callable[[str], str]:
-    context = build_context(
-        grant=grant, this_collection=this_collection, application=application, recipient=recipient, reports=reports
-    )
+    context = build_context(this_collection=this_collection)
     return functools.partial(interpolate, context=context)
 
 
 def build_context_evaluator(
-    grant: Fund | None = None,
     this_collection: ProtoDataCollectionInstance | None = None,
-    application: ProtoApplication | None = None,
-    recipient: ProtoGrantRecipient | None = None,
-    reports: list[ProtoReport] | None = None,
     answer: Any | None = None,
 ) -> Callable[[str], int | bool]:
-    context = build_context(
-        grant=grant,
-        this_collection=this_collection,
-        application=application,
-        recipient=recipient,
-        reports=reports,
-        answer=answer,
-    )
+    context = build_context(this_collection=this_collection, answer=answer)
     return functools.partial(evaluate, context=context)
 
 

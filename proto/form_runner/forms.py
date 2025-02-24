@@ -61,30 +61,8 @@ def build_validators(
                 # it can be evaulated - we don't think about that too early on
                 answer = field.data
 
-            shared_context_lol_handoff_to_lib = dict(
-                grant=(
-                    data_collection_instance.application.round.proto_grant
-                    if data_collection_instance.application
-                    else data_collection_instance.report.recipient.grant
-                    if data_collection_instance.report
-                    else None
-                ),
-                this_collection=data_collection_instance,
-                application=(
-                    data_collection_instance.application
-                    if data_collection_instance.application
-                    else data_collection_instance.report.recipient.application
-                    if data_collection_instance.report
-                    else None
-                ),
-                recipient=(data_collection_instance.report.recipient if data_collection_instance.report else None),
-                reports=(
-                    data_collection_instance.report.recipient.reports if data_collection_instance.report else None
-                ),
-            )
-
-            context_evaluator = build_context_evaluator(**shared_context_lol_handoff_to_lib, answer=answer)
-            context_injector = build_context_injector(**shared_context_lol_handoff_to_lib)
+            context_evaluator = build_context_evaluator(this_collection=data_collection_instance, answer=answer)
+            context_injector = build_context_injector(this_collection=data_collection_instance)
             if not context_evaluator(validation.expression):
                 raise ValidationError(context_injector(validation.message))
 

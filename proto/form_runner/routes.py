@@ -108,13 +108,7 @@ def _back_link_for_question(question, application_external_id, from_check_your_a
 def ask_application_question(application_external_id, section_slug, question_slug):
     account = {"email": g.account.email}
     application = get_application(application_external_id)
-    context_injector = build_context_injector(
-        grant=application.round.proto_grant,
-        this_collection=application.data_collection_instance,
-        application=application,
-        recipient=None,
-        reports=None,
-    )
+    context_injector = build_context_injector(this_collection=application.data_collection_instance)
     question = get_data_collection_question(
         application.round.data_collection_definition_id, section_slug, question_slug
     )
@@ -190,9 +184,7 @@ def check_your_answers(application_external_id, section_slug):
         section=section_data.section,
         section_data=section_data,
         QuestionType=QuestionType,
-        context_injector=build_context_injector(
-            grant=application.round.proto_grant, this_collection=application.data_collection_instance
-        ),
+        context_injector=build_context_injector(this_collection=application.data_collection_instance),
         get_answer_text_for_question_from_section_data=get_answer_text_for_question_from_section_data,
         form=form,
         account=account,
