@@ -162,8 +162,8 @@ def insert_question_bank_data():
         "cups-served-r1": TemplateQuestion(
             slug="cups-served",
             type=QuestionType.NUMBER,
-            title="How many cups of tea did you serve between ((reporting_round.reporting_period_starts)) and ((reporting_period.reporting_period_ends))?",  # noqa
-            hint=None,
+            title="How many cups of tea did you serve between ((reporting_round.reporting_period_starts)) and ((reporting_round.reporting_period_ends))?",  # noqa
+            hint="You applied for funding to serve a total of ((application.tea_licensing.cups_of_tea)) cups of tea.",
             order=1,
             data_source=None,
             data_standard_id=None,
@@ -173,7 +173,7 @@ def insert_question_bank_data():
             slug="tea-money-spent",
             type=QuestionType.PRICE_WITH_PENNIES,
             title="How much did it cost you?",
-            hint="We will pay you this much money.",
+            hint="We will pay you this much money. You applied for £(( int(application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup) )) in funding, and have been allocated £((recipient.funding_allocated)).",  # noqa
             order=2,
             data_source=None,
             data_standard_id=None,
@@ -182,8 +182,8 @@ def insert_question_bank_data():
         "cups-served-r2": TemplateQuestion(
             slug="cups-served",
             type=QuestionType.NUMBER,
-            title="How many cups of tea did you serve between ((reporting_round.reporting_period_starts)) and ((reporting_period.reporting_period_ends))?",  # noqa
-            hint=None,
+            title="How many cups of tea did you serve between ((reporting_round.reporting_period_starts)) and ((reporting_round.reporting_period_ends))?",  # noqa
+            hint="You applied for funding to serve a total of ((application.tea_licensing.cups_of_tea)) cups of tea. You have received funding for ((reports[0].tea_statistics_r1.cups_served)) so far.",  # noqa
             order=1,
             data_source=None,
             data_standard_id=None,
@@ -193,7 +193,7 @@ def insert_question_bank_data():
             slug="tea-money-spent",
             type=QuestionType.PRICE_WITH_PENNIES,
             title="How much did it cost you?",
-            hint="We will pay you this much money.",
+            hint="We will pay you this much money. You applied for £(( int(application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup) )) in funding, and have been allocated £((recipient.funding_allocated)).",  # noqa
             order=2,
             data_source=None,
             data_standard_id=None,
@@ -559,7 +559,7 @@ def insert_question_bank_data():
     conditions_to_create = [
         TemplateQuestionCondition(
             question_id=template_questions_to_create["embezzling-is-bad"].id,
-            depends_on_question_id=template_questions_to_create["price-per-cup"].id,  # actually depends on 2 Q's 🫠
+            depends_on_question_id=template_questions_to_create["price-per-cup"].id,
             criteria={},
             expression="this_collection.tea_licensing.price_per_cup >= 5",
         ),
