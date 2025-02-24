@@ -2,8 +2,11 @@
 # General config
 # ruff: noqa
 from dataclasses import dataclass
+from uuid import uuid4
 
 from pre_award.assess.services.models.flag import FlagType
+from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
 
 test_fund_id = "test-fund"
 test_round_id = "test-round"
@@ -112,6 +115,26 @@ fund_specific_claim_map = {
             "roles": ["HSRA_COMMENTER"],
         },
     },
+    "UF": {
+        "LEAD_ASSESSOR": {
+            "accountId": "uf-lead-assessor",
+            "email": "uf-lead-assessor@test.com",
+            "fullName": "Lead Test User",
+            "roles": ["UF_LEAD_ASSESSOR", "UF_ASSESSOR", "UF_COMMENTER"],
+        },
+        "ASSESSOR": {
+            "accountId": "uf-assessor",
+            "email": "uf-assessor@test.com",
+            "fullName": "Assessor Test User",
+            "roles": ["UF_ASSESSOR", "UF_COMMENTER"],
+        },
+        "COMMENTER": {
+            "accountId": "uf-commenter",
+            "email": "uf-commenter@test.com",
+            "fullName": "Commenter Test User",
+            "roles": ["UF_COMMENTER"],
+        },
+    },
 }
 
 all_fund_user_ids = [user_info["accountId"] for fund in fund_specific_claim_map.values() for user_info in fund.values()]
@@ -212,6 +235,18 @@ resolved_app = {
             ],
         },
     ],
+    "assessment_flags": [
+        AssessmentFlag(
+            application_id=uuid4(),
+            id=uuid4(),
+            latest_status=FlagStatus.RAISED,
+            latest_allocation="TEAM_23",
+            sections_to_flag=[],
+            updates=[],
+            field_ids=[],
+            is_change_request=True,
+        )
+    ],
     "tag_associations": [
         {
             "associated": True,
@@ -256,6 +291,75 @@ uncompeted_app = {
     "is_qa_complete": False,
     "criteria_sub_criteria_name": "test_uncomp_sub_criteria",
     "criteria_sub_criteria_id": "test_uncomp_sub_criteria_id",
+    "flags": [
+        {
+            "id": "f5f6f21f-de43-4bce-9e33-ea39403653c6",
+            "latest_status": FlagType.RESOLVED.value,
+            "latest_allocation": "uf_test_team",
+            "application_id": uncompeted_app_id,
+            "sections_to_flag": ["UF Test section"],
+            "field_ids": [],
+            "is_change_request": False,
+            "updates": [
+                {
+                    "id": "a9b8e6a0-858b-4cdc-8117-30c661c2416b",
+                    "user_id": test_user_id_lead_assessor,
+                    "date_created": "2024-02-20 12:00:00",
+                    "justification": "UF Test",
+                    "status": FlagType.RAISED.value,
+                    "allocation": None,
+                },
+                {
+                    "id": "a9b8e6a0-858b-4cdc-8117-30c661c2416b",
+                    "user_id": test_user_id_lead_assessor,
+                    "date_created": "2024-02-20 12:00:00",
+                    "justification": "UF Test",
+                    "status": FlagType.RESOLVED.value,
+                    "allocation": None,
+                },
+            ],
+        },
+    ],
+    "assessment_flags": [
+        AssessmentFlag(
+            application_id=uuid4(),
+            id=uuid4(),
+            latest_status=FlagStatus.RAISED,
+            latest_allocation="TEAM_34",
+            sections_to_flag=[],
+            updates=[],
+            field_ids=[],
+            is_change_request=True,
+        )
+    ],
+    "tag_associations": [
+        {
+            "associated": True,
+            "id": "0a1ca013-481f-476b-a771-1b2ccd823cde",
+            "user_id": test_user_id_lead_assessor,
+            "tag": {
+                "active": True,
+                "creator_user_id": test_user_id_lead_assessor,
+                "id": "efa474df-5e0d-4d5c-a286-7e058da61c15",
+                "value": "Tag one red",
+                "tag_type": {
+                    "id": "4d4eb086-1404-4f82-9955-19e05fa18ce5",
+                    "purpose": "NEGATIVE",
+                },
+            },
+        }
+    ],
+    "user_associations": [],
+    "theme_id": "test_theme_id",
+    "theme_name": "test_theme_name",
+    "mock_field": {
+        "answer": "Yes",
+        "field_id": "JCACTy",
+        "field_type": "yesNoField",
+        "form_name": "community-engagement",
+        "presentation_type": "text",
+        "question": "Have you done any fundraising in the community?",
+    },
 }
 
 stopped_app_id = "stopped_app"
@@ -399,6 +503,12 @@ mock_api_results = {
         # "assessment_start": None,
         # "assessment_deadline": "2124-01-01 12:00:00",
         # "deadline": "2024-01-01 12:00:00"
+    },
+    "fund_store/funds/UNCOMPETED_FUND": {
+        "id": "UNCOMPETED_FUND",
+        "name": "Funding Service Design Unit Test Uncompeted Fund",
+        "short_name": "UF",
+        "description": "unit testing uncompeted fund",
         "funding_type": "UNCOMPETED",
     },
     "fund_store/funds/NSTF": {
@@ -687,7 +797,7 @@ mock_api_results = {
         "project_name": uncompeted_app["project_name"],
         "short_id": uncompeted_app["short_id"],
         "workflow_status": uncompeted_app["workflow_status"],
-        "fund_id": test_fund_id,
+        "fund_id": "UNCOMPETED_FUND",
         "round_id": test_round_id,
         "qa_complete": uncompeted_app["qa_complete"],
     },
@@ -759,6 +869,9 @@ mock_api_results = {
     "assessment_store/flag_data?flag_id=flagged_qa_completed_app": flagged_qa_completed_app["flags"][-1],
     "assessment_store/flags?application_id=flagged_app": flagged_app["flags"],
     "assessment_store/flags?application_id=resolved_app": resolved_app["flags"],
+    "assessment_store/assessment_flags?application_id=resolved_app": resolved_app["assessment_flags"],
+    "assessment_store/assessment_flags?application_id=uncompeted_app": uncompeted_app["assessment_flags"],
+    "assessment_store/flags?application_id=uncompeted_app": uncompeted_app["flags"],
     "assessment_store/flags?application_id=stopped_app": stopped_app["flags"],
     "assessment_store/flags?application_id=flagged_qa_completed_app": flagged_qa_completed_app["flags"],
     "assessment_store/qa_complete/flagged_app": {},
@@ -802,7 +915,27 @@ mock_api_results = {
             }
         ],
     },
+    f"assessment_store/sub_criteria_overview/{uncompeted_app_id}/{uncompeted_app['criteria_sub_criteria_id']}": {
+        "id": uncompeted_app["criteria_sub_criteria_id"],
+        "name": uncompeted_app["criteria_sub_criteria_name"],
+        "is_scored": True,
+        "fund_id": "UNCOMPETED_FUND",
+        "funding_amount_requested": test_funding_requested,
+        "project_name": uncompeted_app["project_name"],
+        "short_id": uncompeted_app["short_id"],
+        "workflow_status": uncompeted_app["workflow_status"],
+        "themes": [
+            {
+                "answers": [uncompeted_app["mock_field"]],
+                "id": uncompeted_app["theme_id"],
+                "name": uncompeted_app["theme_name"],
+            }
+        ],
+    },
     f"assessment_store/sub_criteria_themes/{resolved_app_id}/{resolved_app['theme_id']}": [resolved_app["mock_field"]],
+    f"assessment_store/sub_criteria_themes/{uncompeted_app_id}/{uncompeted_app['theme_id']}": [
+        uncompeted_app["mock_field"]
+    ],
     "assessment_store/comment?": [
         {
             "id": "test_id_1",

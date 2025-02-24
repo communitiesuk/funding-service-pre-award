@@ -17,9 +17,7 @@ from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round im
 )
 from pre_award.assessment_store.db.models import AssessmentRound
 from pre_award.assessment_store.db.models.assessment_record import AssessmentRecord
-from pre_award.assessment_store.db.models.assessment_record.allocation_association import (
-    AllocationAssociation,
-)
+from pre_award.assessment_store.db.models.assessment_record.allocation_association import AllocationAssociation
 from pre_award.assessment_store.db.models.assessment_record.tag_association import TagAssociation
 from pre_award.assessment_store.db.models.comment import Comment, CommentsUpdate
 from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
@@ -161,6 +159,7 @@ def seed_application_records(request, db):
                 user_id=f["user_id"],
                 status=f["status"],
                 allocation=f["allocation"],
+                date_created=f["date_created"],
             )
             assessment_flag = AssessmentFlag(
                 application_id=app_id,
@@ -169,7 +168,7 @@ def seed_application_records(request, db):
                 latest_status=f["status"],
                 updates=[flag_update],
                 field_ids=[],
-                is_change_request=False,
+                is_change_request=f["is_change_request"],
             )
             db.session.add(assessment_flag)
         for t in app_tags:
