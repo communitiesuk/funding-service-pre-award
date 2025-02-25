@@ -265,6 +265,10 @@
             e.preventDefault();
             applySuggestion(currentItems[selectedIndex], currentContext, inputEl, currentMode);
           }
+        } else if (e.key === "Escape") {
+          // If a suggestion is highlighted, apply it.
+          e.preventDefault();
+          menu.style.display = "none";
         }
       });
 
