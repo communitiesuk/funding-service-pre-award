@@ -177,7 +177,7 @@ def build_autocomplete_context(
                 )
 
     if answer is not None:
-        autocomplete_context.append({"value": "answer", "label": "answer: The user's answer to this question"})
+        autocomplete_context.append({"value": "answer", "label": "The answer provided for this question"})
 
     return autocomplete_context
 
