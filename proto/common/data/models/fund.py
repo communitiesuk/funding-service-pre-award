@@ -108,6 +108,14 @@ class Fund(db.Model):
         secondaryjoin="Round.id == ProtoApplication.round_id",
         lazy="selectin",
     )
+    application_rounds: Mapped[list["Round"]] = relationship(
+        "Round",
+        back_populates="proto_grant",
+    )
+    reporting_rounds: Mapped[list["ProtoReportingRound"]] = relationship(
+        "ProtoReportingRound",
+        back_populates="grant",
+    )
 
     def __repr__(self):
         return f"<Fund {self.short_name} - {self.name_json['en']}>"

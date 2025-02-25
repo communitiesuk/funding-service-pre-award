@@ -21,8 +21,8 @@
       {{ form.order }}
 
       {{ form.type }}
-      {{ form.title }}
-      {{ form.hint }}
+      {{ form.title(params={"attributes": {"data-mhclg-module": "autocomplete"} }) }}
+      {{ form.hint(params={"attributes": {"data-mhclg-module": "autocomplete"} }) }}
 
       {{ form.mandatory(params={"items": [{}, {"hint": {"text": "We’ll add ‘(optional)’ to the end of the question text."} }]}) }}  {# gross hack #}
 
@@ -38,4 +38,11 @@
     </form>
   </div>
 </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+
+  {% from 'common/partials/autocomplete.html' import initialiseAutocomplete %}
+  {{ initialiseAutocomplete(autocomplete_context) }}
 {% endblock %}

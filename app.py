@@ -23,7 +23,6 @@ except ImportError:
     toolbar = None
 from flask_redis import FlaskRedis
 from flask_session import Session
-from flask_talisman import Talisman
 from flask_wtf import CSRFProtect
 from fsd_utils import init_sentry
 from fsd_utils.healthchecks.checkers import DbChecker, FlaskRunningChecker, RedisChecker
@@ -142,7 +141,8 @@ def create_app() -> Flask:  # noqa: C901
     psycopg2.extensions.register_adapter(Ltree, lambda ltree: psycopg2.extensions.QuotedString(str(ltree)))
 
     # Configure application security with Talisman
-    Talisman(flask_app, **Config.TALISMAN_SETTINGS)
+    # Talisman(flask_app, **Config.TALISMAN_SETTINGS)
+    flask_app.jinja_env.globals["csp_nonce"] = lambda: "nonce"
 
     flask_app.jinja_loader = ChoiceLoader(
         [

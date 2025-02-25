@@ -7,8 +7,14 @@ from typing import Any, Callable
 
 import simpleeval
 
+from db import db
 from proto.common.data.models import (
+    Fund,
+    ProtoDataCollectionDefinition,
     ProtoDataCollectionInstance,
+    ProtoGrantRecipient,
+    ProtoReportingRound,
+    Round,
 )
 from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
 
@@ -41,9 +47,9 @@ def build_context(
     # Retrieve all of the related objects to inject as context, based on the data collection
     grant = (
         this_collection.application.round.proto_grant
-        if this_collection.application
+        if this_collection and this_collection.application
         else this_collection.report.recipient.grant
-        if this_collection.report
+        if this_collection and this_collection.report
         else None
     )
     if grant:
@@ -54,20 +60,20 @@ def build_context(
 
     application = (
         this_collection.application
-        if this_collection.application
+        if this_collection and this_collection.application
         else this_collection.report.recipient.application
-        if this_collection.report
+        if this_collection and this_collection.report
         else None
     )
     if application:
         context["application_round"] = application.round
         context["application"] = serialize_collection_data(application.data_collection_instance)
 
-    recipient = this_collection.report.recipient if this_collection.report else None
+    recipient = this_collection.report.recipient if this_collection and this_collection.report else None
     if recipient:
         context["recipient"] = recipient
 
-    if this_collection.report:
+    if this_collection and this_collection.report:
         context["reporting_round"] = this_collection.report.reporting_round
         context["reports"] = [
             serialize_collection_data(report.data_collection_instance)
@@ -78,6 +84,102 @@ def build_context(
         context["answer"] = answer
 
     return context
+
+
+def _autocomplete_context_for_collection_definition_data(definition: ProtoDataCollectionDefinition, prefix=""):
+    data = []
+
+    if not definition:
+        return data
+
+    if definition.sections:
+        for section in definition.sections:
+            if not section.questions:
+                continue
+
+            data.append(
+                {
+                    "value": prefix + section.slug.replace("-", "_") + ".",
+                    "label": f"Questions for section '{section.title}'",
+                }
+            )
+
+            for question in section.questions:
+                data.append(
+                    {
+                        "value": prefix + section.slug.replace("-", "_") + "." + question.slug.replace("-", "_"),
+                        "label": question.title,
+                    }
+                )
+
+    return data
+
+
+def _autocomplete_context_for_db_model(model: db.Model, prefix: str):
+    data = []
+
+    for col in model.__table__.columns.keys():
+        data.append({"value": prefix + col, "label": prefix + col})
+
+    return data
+
+
+def build_autocomplete_context(
+    grant: Fund, this_definition: ProtoDataCollectionDefinition | None = None, answer: Any | None = None
+):
+    # All of this logic is very hacky so #donttrustme
+    autocomplete_context = []
+
+    # grant
+    autocomplete_context.append({"value": "grant.", "label": "Information from the grant"})
+    autocomplete_context.extend(_autocomplete_context_for_db_model(grant, prefix="grant."))
+
+    # this_collection
+    autocomplete_context.append({"value": "this_collection.", "label": "Information from this data collection"})
+    autocomplete_context.extend(
+        _autocomplete_context_for_collection_definition_data(this_definition, prefix="this_collection.")
+    )
+
+    # application_round
+    autocomplete_context.append({"value": "application_round.", "label": "Information from the application round"})
+    autocomplete_context.extend(_autocomplete_context_for_db_model(Round(), prefix="application_round."))
+
+    if this_definition not in [ar.data_collection_definition for ar in grant.application_rounds]:
+        # application - skipping a lot of edge cases and considerations here
+        autocomplete_context.append({"value": "application.", "label": "Information from the grant application"})
+        autocomplete_context.extend(
+            _autocomplete_context_for_collection_definition_data(
+                grant.application_rounds[0].data_collection_definition, prefix="application."
+            )
+        )
+
+    if this_definition in [rr.data_collection_definition for rr in grant.reporting_rounds]:
+        # grant recipient profile
+        autocomplete_context.append({"value": "recipient.", "label": "Information from the recipient profile"})
+        autocomplete_context.extend(_autocomplete_context_for_db_model(ProtoGrantRecipient(), prefix="recipient."))
+
+        # reporting_round
+        autocomplete_context.append({"value": "reporting_round.", "label": "Information from the reporting round"})
+        autocomplete_context.extend(
+            _autocomplete_context_for_db_model(ProtoReportingRound(), prefix="reporting_round.")
+        )
+
+        # reports
+        for i, reporting_round in enumerate(grant.reporting_rounds, start=1):
+            if this_definition is not reporting_round.data_collection_definition:
+                autocomplete_context.append(
+                    {"value": f"reports[{i}].", "label": f"Information from monitoring report #{i}"}
+                )
+                autocomplete_context.extend(
+                    _autocomplete_context_for_collection_definition_data(
+                        reporting_round.data_collection_definition, prefix=f"reports[{i}]."
+                    )
+                )
+
+    if answer is not None:
+        autocomplete_context.append({"value": "answer", "label": "answer: The user's answer to this question"})
+
+    return autocomplete_context
 
 
 def build_context_injector(

@@ -13,6 +13,7 @@ from proto.common.data.services.question_bank import (
     get_template_sections_and_questions,
 )
 from proto.common.data.services.round import update_round
+from proto.form_runner.expressions import build_autocomplete_context
 from proto.manage.platform.forms.application_round import (
     MakeRoundLiveForm,
     PreviewApplicationForm,
@@ -152,6 +153,8 @@ def create_question_view(grant_code, round_code, section_id):
                 "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
             )
         )
+
+    autocomplete_context = build_autocomplete_context(grant, round.data_collection_definition, answer="hello")
     return render_template(
         "manage/platform/create_question.html",
         grant=grant,
@@ -162,6 +165,7 @@ def create_question_view(grant_code, round_code, section_id):
         back_link=url_for(
             "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
         ),
+        autocomplete_context=autocomplete_context,
     )
 
 

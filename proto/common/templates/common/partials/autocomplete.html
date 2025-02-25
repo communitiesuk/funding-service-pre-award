@@ -1,0 +1,292 @@
+{% macro initialiseAutocomplete(suggestions) %}
+{#
+  WARNING: Thrown together through LLM back and forth. For prototyping purposes only.
+  WARNING: Re-write from scratch to build properly, with good testing and sensibly structured.
+#}
+
+<style nonce="{{ csp_nonce() }}">
+  /* Basic styles for the autocomplete menu */
+  .autocomplete-menu {
+    position: absolute;
+    list-style: none;
+    padding: 5px;
+    margin: 0;
+    border: 1px solid #ccc;
+    background: #fff;
+    display: none;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+  .autocomplete-menu li {
+    padding: 2px 5px;
+    cursor: pointer;
+  }
+  .autocomplete-menu li:hover,
+  .autocomplete-menu li.selected {
+    background-color: #f0f0f0;
+  }
+</style>
+
+<script nonce="{{ csp_nonce() }}">
+  (function() {
+    // List of autocomplete suggestions as objects with `value` and `label`
+    const suggestions = {{ suggestions | tojson }};
+
+    // Create and style the autocomplete menu element (shared for all attached inputs)
+    const menu = document.createElement("ul");
+    menu.className = "autocomplete-menu";
+    document.body.appendChild(menu);
+
+    // Position the menu below the input element (for simplicity)
+    function positionMenu(inputEl) {
+      const rect = inputEl.getBoundingClientRect();
+      menu.style.left = rect.left + "px";
+      menu.style.top = rect.bottom + window.scrollY + "px";
+      menu.style.width = rect.width + "px";
+    }
+
+    // Determine if the cursor is within a (( )) context.
+    // Returns an object with the index of "((" and the content between "((" and the cursor.
+    function getCurrentContext(text, cursorPos) {
+      const openIndex = text.lastIndexOf("((", cursorPos);
+      if (openIndex === -1) return null;
+      const closeIndex = text.indexOf("))", openIndex);
+      if (closeIndex !== -1 && closeIndex < cursorPos) return null;
+      return {
+        openIndex: openIndex,
+        content: text.slice(openIndex + 2, cursorPos)
+      };
+    }
+
+    function getAutocompleteWord(contextContent) {
+      // Check if the cursor is in label mode triggered by a dollar sign '$'.
+      const lastDollar = contextContent.lastIndexOf('$');
+      if (lastDollar !== -1) {
+        return { query: contextContent.slice(lastDollar + 1), mode: "label" };
+      }
+      // Otherwise, fall back to using the last space-separated token with mode "value".
+      const parts = contextContent.split(/\s+/);
+      return { query: parts[parts.length - 1], mode: "value" };
+    }
+
+    // Fuzzy matching: escape regex, build pattern, and test against value or label.
+    function fuzzyMatch(item, queryData) {
+      const query = queryData.query;
+      const mode = queryData.mode;
+      const queryDotCount = (query.match(/\./g) || []).length;
+      const itemValue = item.value;
+      const itemDotCount = (itemValue.match(/\./g) || []).length;
+
+      if (mode === 'value') {
+          // Exclude the item if it's an exact match ending with a dot.
+          if (itemValue.endsWith('.') && itemValue === query) {
+              return false;
+          }
+
+          // For dot-separated paths:
+          // Accept if the item's value has exactly the same number of dots as the query,
+          // OR if it has one more dot and that extra dot is the last character.
+          const dotCondition =
+              itemDotCount === queryDotCount ||
+              (itemDotCount === queryDotCount + 1 && itemValue.endsWith('.'));
+
+          // Primary condition: the value must satisfy the dot condition and fuzzy-match the query.
+          if (dotCondition && itemValue.toLowerCase().startsWith(query.toLowerCase())) {
+              return true;
+          }
+      } else {
+          // Helper for fuzzy matching using a regex that allows any characters between query characters.
+          function fuzzyRegexMatch(text, patternQuery) {
+              const escaped = patternQuery.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+              const pattern = escaped.split('').join('.*');
+              const regex = new RegExp(pattern, 'i');
+              return regex.test(text);
+          }
+
+          // Fallback: if the label is different from the value and the label fuzzy-matches the query.
+          if (item.label !== itemValue && fuzzyRegexMatch(item.label, query)) {
+              return true;
+          }
+      }
+
+      return false;
+    }
+
+    // Highlight matching letters in the suggestion's label by wrapping them in <b> tags.
+    // This function finds the first sequential match of each character in `query` inside `text`.
+    function highlightMatch(text, query) {
+      let lowerText = text.toLowerCase();
+      let lowerQuery = query.toLowerCase();
+      let matchIndices = [];
+      let startIndex = 0;
+      // For each character in the query, find its first occurrence in text after the last match.
+      for (let i = 0; i < lowerQuery.length; i++) {
+        const ch = lowerQuery[i];
+        const idx = lowerText.indexOf(ch, startIndex);
+        if (idx === -1) break;
+        matchIndices.push(idx);
+        startIndex = idx + 1;
+      }
+      // Build the highlighted string.
+      let result = "";
+      for (let i = 0; i < text.length; i++) {
+        if (matchIndices.includes(i)) {
+          result += "<b>" + text[i] + "</b>";
+        } else {
+          result += text[i];
+        }
+      }
+      return result;
+    }
+
+    // Function to apply a suggestion: replace the current word in the context.
+    function applySuggestion(item, context, inputEl, mode) {
+      const text = inputEl.value;
+      // Everything before the context start (including the "((")
+      const before = text.slice(0, context.openIndex + 2);
+      // Everything after the cursor remains unchanged.
+      const after = text.slice(inputEl.selectionStart);
+      let newContextContent;
+      if (mode === "label") {
+        // In label mode, remove everything from the '$' that starts label mode onward,
+        // then append the suggestion's value.
+        const dollarIndex = context.content.lastIndexOf('$');
+        newContextContent = context.content.slice(0, dollarIndex) + item.value;
+      } else {
+        // In value mode, replace the last space-separated token with the suggestion's value.
+        const words = context.content.split(/\s+/);
+        words[words.length - 1] = item.value;
+        newContextContent = words.join(" ");
+      }
+      inputEl.value = before + newContextContent + after;
+      inputEl.focus();
+      if (item.value.endsWith(".")) {
+        // Keep the menu open by triggering an input event.
+        inputEl.dispatchEvent(new Event("input"));
+      } else {
+        menu.style.display = "none";
+      }
+    }
+
+    // Attach the autocomplete functionality to a given input or textarea.
+    function attachAutocomplete(inputEl) {
+      // Variables for keyboard navigation
+      let currentItems = [];
+      let selectedIndex = -1;
+      let currentContext = null;
+      let currentQuery = '';
+      let currentMode = 'value';
+
+      // Update the autocomplete menu with filtered suggestions and set default selection.
+      function updateMenu(filtered, context, query) {
+        if (filtered.length === 0) {
+          menu.style.display = "none";
+          currentItems = [];
+          selectedIndex = -1;
+          return;
+        }
+        currentItems = filtered;
+        menu.innerHTML = "";
+        filtered.forEach((item, index) => {
+          const li = document.createElement("li");
+          // Highlight matching letters in the label.
+          li.innerHTML = highlightMatch(item.label, query);
+          li.addEventListener("mousedown", function(e) {
+            e.preventDefault(); // Prevent input from losing focus
+            applySuggestion(item, context, inputEl, currentMode);
+          });
+          menu.appendChild(li);
+        });
+        // Highlight the first item by default.
+        selectedIndex = 0;
+        updateSelection();
+        menu.style.display = "block";
+        positionMenu(inputEl);
+      }
+
+      // Update the visual selection on the menu based on selectedIndex.
+      function updateSelection() {
+        Array.from(menu.children).forEach((li, index) => {
+          if (index === selectedIndex) {
+            li.classList.add("selected");
+            li.scrollIntoView({ block: "nearest" });
+          } else {
+            li.classList.remove("selected");
+          }
+        });
+      }
+
+      // Listen for input events.
+      inputEl.addEventListener("input", function() {
+        const cursorPos = inputEl.selectionStart;
+        const text = inputEl.value;
+        currentContext = getCurrentContext(text, cursorPos);
+        if (!currentContext) {
+          menu.style.display = "none";
+          return;
+        }
+        const result = getAutocompleteWord(currentContext.content);
+        if (!result) {
+          menu.style.display = "none";
+          return;
+        }
+        currentQuery = result.query;
+        currentMode = result.mode;
+        // Filter suggestions using fuzzy matching.
+        const filtered = suggestions.filter(item => {
+            if (currentQuery === item.value && item.value.endsWith(".")) {
+              return false;
+            }
+            return fuzzyMatch(item, result);
+        });
+        updateMenu(filtered, currentContext, currentQuery);
+      });
+
+      // Listen for keyboard events for navigation.
+      inputEl.addEventListener("keydown", function(e) {
+        if (menu.style.display === "none") return;
+
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          if (currentItems.length === 0) return;
+          selectedIndex = (selectedIndex + 1) % currentItems.length;
+          updateSelection();
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          if (currentItems.length === 0) return;
+          selectedIndex = (selectedIndex - 1 + currentItems.length) % currentItems.length;
+          updateSelection();
+        } else if (e.key === "Enter") {
+          // If a suggestion is highlighted, apply it.
+          if (selectedIndex > -1 && currentItems[selectedIndex] && currentContext) {
+            e.preventDefault();
+            applySuggestion(currentItems[selectedIndex], currentContext, inputEl, currentMode);
+          }
+        }
+      });
+
+      // Hide the menu when clicking outside of the input or menu.
+      document.addEventListener("click", function(e) {
+        if (e.target !== inputEl && !menu.contains(e.target)) {
+          menu.style.display = "none";
+        }
+      });
+    }
+
+    // Expose the function globally so you can attach it to your input element.
+    window.attachAutocomplete = attachAutocomplete;
+  })();
+
+  // Automatically initialize autocomplete on elements with data-mhclg-module="autocomplete"
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('[data-mhclg-module="autocomplete"]').forEach(function(inputEl) {
+      attachAutocomplete(inputEl);
+    });
+  });
+
+  // Attach the autocomplete functionality to our textarea.
+  {#attachAutocomplete(document.getElementById("{{ form.title.id }}"));#}
+  {#attachAutocomplete(document.getElementById("{{ form.hint.id }}"));#}
+</script>
+{% endmacro %}

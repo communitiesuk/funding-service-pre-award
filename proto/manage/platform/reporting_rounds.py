@@ -13,6 +13,7 @@ from proto.common.data.services.question_bank import (
     get_template_sections_and_questions,
 )
 from proto.common.data.services.reporting_round import create_reporting_round, update_reporting_round
+from proto.form_runner.expressions import build_autocomplete_context
 from proto.manage.platform.forms.data_collection import ChooseTemplateSectionsForm, NewQuestionForm, NewSectionForm
 from proto.manage.platform.forms.reporting_round import (
     CreateReportingRoundForm,
@@ -210,12 +211,14 @@ def create_question_view(grant_code, round_ext_id, section_id, question_id=None)
                 round_ext_id=round_ext_id,
             )
         )
+    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition, answer="hello")
     return render_template(
         "manage/platform/create_question.html",
         grant=grant,
         reporting_round=reporting_round,
         section=section,
         form=form,
+        autocomplete_context=autocomplete_context,
         active_sub_navigation_tab="monitoring",
     )
 
