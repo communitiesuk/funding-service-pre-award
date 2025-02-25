@@ -1,16 +1,17 @@
 import enum
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from account_store.db.models import Account
 from db import db
 from proto.common.data.models.types import pk_int
 
 if TYPE_CHECKING:
-    from proto.common.data.models import Organisation, Round
+    from proto.common.data.models import Organisation, ProtoGrantRecipient, Round
     from proto.common.data.models.data_collection import ProtoDataCollectionInstance
 
 
@@ -55,11 +56,17 @@ class ProtoApplication(db.Model):
     )
 
     submitted: Mapped[bool] = mapped_column(default=False)
+    submitted_by_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("account.id"))
+    submitted_by: Mapped[Account | None] = relationship("Account")
 
     # struggling to call this anything other than status
     test_live_status: Mapped[TestLiveStatus]
 
     updated_by_applicant_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+    recipient: Mapped[Optional["ProtoGrantRecipient"]] = relationship(
+        "ProtoGrantRecipient", back_populates="application"
+    )
 
     @property
     def status(self):

@@ -4,7 +4,7 @@
 
 {% extends "apply/base.jinja.html" %}
 
-{% block pageTitle %}{% trans %}Application{% endtrans %} {{ application.code }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+{% block pageTitle %}{% trans %}Monitoring and evaluation{% endtrans %} {{ report.code }} - {% trans %}Report funding progress{% endtrans %}{% endblock %}
 
 {% block beforeContent %}
 {{ super() }}
@@ -12,12 +12,12 @@
     <div class="proto-phase govuk-!-padding-top-1 govuk-!-padding-bottom-1">
         <p class="govuk-phase-banner__content">
             {% set email %}<strong class="govuk-!-font-weight-bold">{{ account.email }}</strong>{% endset %}
-            <span class="govuk-phase-banner__text">{% trans email=email %}You are applying as {{ email }}{% endtrans %}</span>
+            <span class="govuk-phase-banner__text">{% trans email=email %}You are reporting as {{ email }}{% endtrans %}</span>
         </p>
     </div>
 </div>
 
-{% if application.fake or (application.round and application.round.is_draft) %}
+{% if report.fake or (report.reporting_round and report.reporting_round.is_draft) %}
 <style nonce="{{ csp_nonce() }}">
     {# reset a few nav things that don't play nicely with this #}
     .govuk-service-navigation__item, .govuk-service-navigation__service-name {
@@ -29,14 +29,14 @@
 </style>
  <div class="test-data-banner govuk-body govuk-!-margin-bottom-2">
     <div class="test-data-tag">
-        <strong>Preview application</strong>
+        <strong>Preview report</strong>
     </div>
 </div>
 {% endif %}
 
 {{ govukBackLink({
-  "text": "Go back to application overview",
-  "href": url_for("proto_apply.application.application_tasklist", application_external_id=application.external_id)
+  "text": "Go back to report overview",
+  "href": url_for("proto_report.tasklist", short_name=report.reporting_round.grant.short_name, reporting_round_id=report.reporting_round.id)
 }) }}
 {% endblock %}
 
@@ -49,7 +49,7 @@
 
     <span class="govuk-caption-l">{{ section.title }}</span>
     <h1 class="govuk-heading-l">
-      {% if not application.is_submitted %}
+      {% if not report.is_submitted %}
         {% trans %}Check your answers{% endtrans %}
       {% else %}
         {% trans %}Your answers{% endtrans %}
@@ -64,7 +64,7 @@
         {% if answer is not none %}
           <span>{{ answer }}</span>
         {% else %}
-          <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_form_runner.ask_application_question', application_external_id=application.external_id, section_slug=section.slug, question_slug=question.slug, from_cya='True') }}">
+          <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_report.ask_question', report_id=report.id, section_slug=section.slug, question_slug=question.slug, from_cya='True') }}">
             {# this should use the question "name" which I should add to record alongside it #}
             {# i.e project name - What is your project name? #}
             {% trans %}Enter answer{% endtrans %}
@@ -77,9 +77,9 @@
             "value": { "html": valueHtml },
             "actions": {
               "items": [
-                { "href": url_for('proto_form_runner.ask_application_question', application_external_id=application.external_id, section_slug=section.slug, question_slug=question.slug, from_cya='True'), "text": "Change", "visuallyHiddenText": question.title, "classes": "govuk-link--no-visited-state" }
+                { "href": url_for('proto_report.ask_question', report_id=report.id, section_slug=section.slug, question_slug=question.slug, from_cya='True'), "text": "Change", "visuallyHiddenText": question.title, "classes": "govuk-link--no-visited-state" }
               ] if answer
-            } if not application.is_submitted
+            } if not report.is_submitted
           }
         ) %}
     {% endfor %}
@@ -89,7 +89,7 @@
       })
     }}
 
-    {% if not application.is_submitted %}
+    {% if not report.is_submitted %}
     <form method="post" novalidate>
       {{ form.csrf_token }}
       {{ form.complete(params={"classes": "govuk-radios--inline"}) }}

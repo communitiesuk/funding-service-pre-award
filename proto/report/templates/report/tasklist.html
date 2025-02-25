@@ -1,0 +1,145 @@
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+{% from "govuk_frontend_jinja/components/inset-text/macro.html" import govukInsetText %}
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% from "govuk_frontend_jinja/components/back-link/macro.html" import govukBackLink %}
+{% from "govuk_frontend_jinja/components/task-list/macro.html" import govukTaskList %}
+
+{% from "form_runner/application_status.html" import applicationStatus %}
+
+{% extends "apply/base.jinja.html" %}
+
+{# decision to make this apply specific for now, the tech is still in a form runner folder though so the tasklist could be generalised #}
+{% block pageTitle %}{% trans %}Application{% endtrans %} {{ report.code }} - {% trans %}Apply for funding{% endtrans %}{% endblock %}
+
+{% block beforeContent %}
+{{ super() }}
+<div class="govuk-phase-banner">
+    <div class="proto-phase govuk-!-padding-top-1 govuk-!-padding-bottom-1">
+        <p class="govuk-phase-banner__content">
+            {% set email %}<strong class="govuk-!-font-weight-bold">{{ account.email if account }}</strong>{% endset %}
+            <span class="govuk-phase-banner__text">{% trans email=g.account.email %}You are reporting as {{ email }}{% endtrans %}</span>
+        </p>
+    </div>
+</div>
+
+{% if report.fake or (report.reporting_round and report.reporting_round.is_draft) %}
+<style nonce="{{ csp_nonce() }}">
+    {# reset a few nav things that don't play nicely with this #}
+    .govuk-service-navigation__item, .govuk-service-navigation__service-name {
+        border: 0;
+    }
+    .govuk-service-navigation__item--active {
+        font-weight: bold;
+    }
+</style>
+ <div class="test-data-banner govuk-body govuk-!-margin-bottom-2">
+    <div class="test-data-tag">
+        <strong>Preview report</strong>
+    </div>
+</div>
+{% endif %}
+
+
+{# I've ommited the back link because you can click "Your grants" at the top - could try this out with users #}
+{# I've added it back in because I've got no backbone #}
+{{ govukBackLink({
+      "text": _("Back"),
+      "href": url_for('proto_report.view_grant', short_name=report.reporting_round.grant.short_name)
+    }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">{{ report.reporting_round.grant.name }}</span>
+
+      {% trans starts=report.reporting_round.reporting_period_starts | dateformat, ends=report.reporting_round.reporting_period_ends | dateformat %}Monitoring report for {{ starts }} to {{ ends }}{% endtrans %}
+    </h1>
+
+    {# should come from grant config if it has be defined, otherwise would not be shown? #}
+    {{ govukDetails({
+      "summaryText": _("Help with filling out your report"),
+      "text": ""
+    }) }}
+
+    {# make this a macro - update it to use the latest thinking on statuses #}
+    {# ideally this would be a dictionary mapping statuses to styles and human readable text and thats it #}
+    {% set statusTag = applicationStatus(report) %}
+
+    {# rename code to proto reference #}
+    {{ govukSummaryList({
+      "rows": [
+        { "key": { "text": _("Reference") }, "value": { "text": report.code } },
+        { "key": { "text": _("Status") }, "value": { "html": statusTag } },
+        { "key": { "text": _("Submission deadline") }, "value": { "text": report.reporting_round.submission_period_ends | dateformat } },
+      ]
+    }) }}
+
+    {% for section in report.reporting_round.data_collection_definition.sections %}
+      <h2 class="govuk-heading-m">{% trans %}Section{% endtrans %} {{ loop.index }}</h2>
+      {# here we'd be looping through potential sub-sections but we'll add that next #}
+
+      {% set items = [] %}
+      {# I think I'd prefer this routing done when accessing the first page but this works well for now #}
+      {% if report.section_not_started(section.id) %}
+        {% set status = {
+          "tag": {
+            "text": _("Not started"),
+            "classes": "govuk-tag--grey"
+          }
+        } %}
+        {% set href=url_for('proto_report.ask_question', report_id=report.id, section_slug=section.slug, question_slug=section.questions[0].slug) %}
+      {% elif report.section_in_progress(section.id) %}
+        {% set status = {
+          "tag": {
+            "text": _("In progress"),
+            "classes": "govuk-tag--blue"
+          }
+        } %}
+        {% set href=url_for('proto_report.check_your_answers', report_id=report.id, section_slug=section.slug) %}
+      {% elif report.section_completed(section.id) %}
+        {% set status = {
+          "tag": {
+            "text": _("Completed"),
+            "classes": "govuk-tag--green"
+          }
+        } %}
+        {% set href=url_for('proto_report.check_your_answers', report_id=report.id, section_slug=section.slug) %}
+      {% endif %}
+      {% set items = [{
+        "title": { "text": section.title },
+        "href": href,
+        "status": status
+      }] %}
+      {{ govukTaskList({
+        "idPrefix": "section-" + (loop.index | string),
+        "items": items
+      }) }}
+    {% endfor %}
+
+
+    {% if not report.is_submitted %}
+      {% if report.fake %}
+        {% set canBeSubmitted = report.can_be_submitted %}
+        <a class="govuk-button govuk-!-margin-top-5" href="{{ url_for('proto_report.view_grant', short_name=report.reporting_round.grant.short_name) }}" {% if not canBeSubmitted %}disabled{% endif %}>Submit report</a>
+        {% if not canBeSubmitted %}
+          <p class="govuk-body">{% trans %}You cannot submit your report until you have completed all of the sections.{% endtrans %}</p>
+        {% endif %}
+      {% else %}
+        <form method="POST">
+          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+          {# if its fake report this will be a link back to wherever we want, otherwise it will act as a submit button for the form #}
+          {{ govukButton({
+            "text": _("Submit report"),
+            "classes": "govuk-!-margin-top-5",
+            "disabled": not report.can_be_submitted,
+          }) }}
+        </form>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

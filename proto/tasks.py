@@ -79,6 +79,12 @@ def insert_question_bank_data():
             order=3,
             type=TemplateType.APPLICATION,
         ),
+        "tea-licensing": TemplateSection(
+            slug="tea-licensing",
+            title="Tea licensing",
+            order=0,
+            type=TemplateType.APPLICATION,
+        ),
         # Hack - possibly would de-dupe this if we were doing it for real
         "monitoring-risk-information": TemplateSection(
             slug="monitoring-risk-information",  # hack - maybe should be unique on slug+type
@@ -90,6 +96,18 @@ def insert_question_bank_data():
             slug="monitoring-project-information",
             title="Project Information",
             order=2,
+            type=TemplateType.REPORTING,
+        ),
+        "tea-statistics-r1": TemplateSection(
+            slug="tea-statistics-r1",
+            title="Tea statistics (R1)",
+            order=-100,
+            type=TemplateType.REPORTING,
+        ),
+        "tea-statistics-r2": TemplateSection(
+            slug="tea-statistics-r2",
+            title="Tea statistics (R2)",
+            order=-99,
             type=TemplateType.REPORTING,
         ),
     }
@@ -105,6 +123,82 @@ def insert_question_bank_data():
         db.session.flush()
 
     template_questions_to_create = {
+        "cups-of-tea": TemplateQuestion(
+            slug="cups-of-tea",
+            type=QuestionType.NUMBER,
+            title="How many cups of tea are you able to serve?",
+            hint=(
+                "We will issue a licence for you to serve this many cups of tea. "
+                "You will not be allowed to serve any than this."
+            ),
+            order=1,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["tea-licensing"].id,
+        ),
+        "price-per-cup": TemplateQuestion(
+            slug="price-per-cup",
+            type=QuestionType.PRICE_WITH_PENNIES,
+            title="How much does it cost you to serve a cup of tea?",
+            hint=None,
+            order=2,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["tea-licensing"].id,
+        ),
+        "embezzling-is-bad": TemplateQuestion(
+            slug="embezzling-is-bad",
+            type=QuestionType.RADIOS,
+            title="Confirm you aren't trying to embezzle taxpayer money.",
+            hint="More than £5 per cup of tea is excessive.",
+            order=3,
+            data_source=[
+                {"value": "good-boy", "label": "All of my costs are legitimate and strictly tea-related"},
+                {"value": "bad-boy", "label": "I am trying to commit fraud"},
+            ],
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["tea-licensing"].id,
+        ),
+        "cups-served-r1": TemplateQuestion(
+            slug="cups-served",
+            type=QuestionType.NUMBER,
+            title="How many cups of tea did you serve between ((reporting_round.reporting_period_starts)) and ((reporting_round.reporting_period_ends))?",  # noqa
+            hint="You applied for funding to serve a total of ((application.tea_licensing.cups_of_tea)) cups of tea.",
+            order=1,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["tea-statistics-r1"].id,
+        ),
+        "tea-money-spent-r1": TemplateQuestion(
+            slug="tea-money-spent",
+            type=QuestionType.PRICE_WITH_PENNIES,
+            title="How much did it cost you?",
+            hint="We will pay you this much money. You applied for £(( int(application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup) )) in funding, and have been allocated £((recipient.funding_allocated)).",  # noqa
+            order=2,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["tea-statistics-r1"].id,
+        ),
+        "cups-served-r2": TemplateQuestion(
+            slug="cups-served",
+            type=QuestionType.NUMBER,
+            title="How many cups of tea did you serve between ((reporting_round.reporting_period_starts)) and ((reporting_round.reporting_period_ends))?",  # noqa
+            hint="You applied for funding to serve a total of ((application.tea_licensing.cups_of_tea)) cups of tea. You have received funding for ((reports[0].tea_statistics_r1.cups_served)) so far.",  # noqa
+            order=1,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["tea-statistics-r2"].id,
+        ),
+        "tea-money-spent-r2": TemplateQuestion(
+            slug="tea-money-spent",
+            type=QuestionType.PRICE_WITH_PENNIES,
+            title="How much did it cost you?",
+            hint="We will pay you this much money. You applied for £(( int(application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup) )) in funding, and have been allocated £((recipient.funding_allocated)).",  # noqa
+            order=2,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["tea-statistics-r2"].id,
+        ),
         "project-name": TemplateQuestion(
             slug="project-name",
             type=QuestionType.TEXT_INPUT,
@@ -170,7 +264,7 @@ def insert_question_bank_data():
         "monitoring-project-money": TemplateQuestion(
             slug="monitoring-project-money",
             type=QuestionType.NUMBER,
-            title="How much of the ((application.project_information.project_money)) allocated has been spent so far?",
+            title="How much of the £((recipient.funding_allocated)) you've been given has been spent so far?",
             hint=None,
             order=1,
             data_source=None,
@@ -393,9 +487,82 @@ def insert_question_bank_data():
             expression="int(answer) >= 1",
             message="The number of people working must be 1 or more",
         ),
+        TemplateValidation(
+            question_id=template_questions_to_create["cups-of-tea"].id,
+            expression="0 < answer <= 1000",
+            message="Tea licences are only available for 0-1000 cups of tea",
+        ),
+        TemplateValidation(
+            question_id=template_questions_to_create["price-per-cup"].id,
+            expression="0 < answer <= 10",
+            message="We will only fund tea that can be served for £10 a cup or cheaper",
+        ),
+        TemplateValidation(
+            question_id=template_questions_to_create["embezzling-is-bad"].id,
+            expression="answer == 'good-boy'",
+            message="Try again",
+        ),
+        TemplateValidation(
+            question_id=template_questions_to_create["cups-served-r1"].id,
+            expression="answer <= application.tea_licensing.cups_of_tea",
+            message="Your license only allows you to serve ((application.tea_licensing.cups_of_tea)) cups of tea",
+        ),
+        TemplateValidation(
+            question_id=template_questions_to_create["tea-money-spent-r1"].id,
+            expression="answer <= (application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)",
+            message=(
+                "You only applied for "
+                "£((application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)) in funding, "
+                "based on ((application.tea_licensing.cups_of_tea)) cups of tea "
+                "at £((application.tea_licensing.price_per_cup)) per cup."
+            ),
+        ),
+        TemplateValidation(
+            question_id=template_questions_to_create["tea-money-spent-r1"].id,
+            expression="answer <= (recipient.funding_allocated)",
+            message=(
+                "The funding team allocated you £((recipient.funding_allocated)). You will need to speak "
+                "to them if this is incorrect."
+            ),
+        ),
+        TemplateValidation(
+            question_id=template_questions_to_create["cups-served-r2"].id,
+            expression="(answer + reports[0].tea_statistics_r1.cups_served) <= application.tea_licensing.cups_of_tea",
+            message=(
+                "Your license only allows you to serve ((application.tea_licensing.cups_of_tea)) cups of tea. "
+                "You served ((reports[0].tea_statistics_r1.cups_served)) cups last period, so can only report "
+                "up to ((application.tea_licensing.cups_of_tea - reports[0].tea_statistics_r1.cups_served)) more."
+            ),
+        ),
+        TemplateValidation(
+            question_id=template_questions_to_create["tea-money-spent-r2"].id,
+            expression=("answer <= (application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)"),
+            message=(
+                "You only applied for "
+                "£((application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup)) in funding, "
+                "based on ((application.tea_licensing.cups_of_tea)) cups of tea "
+                "at £((application.tea_licensing.price_per_cup)) per cup."
+            ),
+        ),
+        TemplateValidation(
+            question_id=template_questions_to_create["tea-money-spent-r2"].id,
+            expression="(answer + reports[0].tea_statistics_r1.tea_money_spent) <= (recipient.funding_allocated)",
+            message=(
+                "The funding team allocated you £((recipient.funding_allocated)). "
+                "You claimed £((reports[0].tea_statistics_r1.tea_money_spent)) in your last reporting period. "
+                "You can only claim another £((recipient.funding_allocated - reports[0].tea_statistics_r1.tea_money_spent)). "  # noqa
+                "You will need to speak to the fund team if this is incorrect."
+            ),
+        ),
     ]
 
     conditions_to_create = [
+        TemplateQuestionCondition(
+            question_id=template_questions_to_create["embezzling-is-bad"].id,
+            depends_on_question_id=template_questions_to_create["price-per-cup"].id,
+            criteria={},
+            expression="this_collection.tea_licensing.price_per_cup >= 5",
+        ),
         TemplateQuestionCondition(
             question_id=template_questions_to_create["local-authority-name"].id,
             depends_on_question_id=template_questions_to_create["organisation-kind"].id,

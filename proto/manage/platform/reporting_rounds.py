@@ -1,5 +1,3 @@
-import datetime
-
 from flask import g, redirect, render_template, url_for
 
 from common.blueprints import Blueprint
@@ -39,10 +37,10 @@ def create_reporting_round_view(grant_code):
         try:
             reporting_round = create_reporting_round(
                 grant_id=grant.id,
-                reporting_period_starts=datetime.date(2025, 1, 1),
-                reporting_period_ends=datetime.date(2025, 12, 31),
-                submission_period_starts=datetime.date(2025, 1, 1),
-                submission_period_ends=datetime.date(2025, 2, 28),
+                reporting_period_starts=form.reporting_period_starts.data,
+                reporting_period_ends=form.reporting_period_ends.data,
+                submission_period_starts=form.submission_period_starts.data,
+                submission_period_ends=form.submission_period_ends.data,
             )
         except DataValidationError as e:
             attach_validation_error_to_form(form, e)
@@ -103,7 +101,7 @@ def view_reporting_round_configuration(grant_code, round_ext_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     form = PublishReportingRoundForm()
     if form.validate_on_submit():
-        update_reporting_round(reporting_round, draft=False)
+        update_reporting_round(reporting_round, preview=False)
         return redirect(
             url_for(
                 "proto_manage.platform.reporting_rounds.view_reporting_round_overview",

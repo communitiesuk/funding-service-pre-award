@@ -9,8 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from db import db
 
 if TYPE_CHECKING:
-    from proto.common.data.models import Fund, Organisation
-    from proto.common.data.models.applications import ProtoApplication
+    from proto.common.data.models import Fund, Organisation, ProtoApplication, ProtoReport
 
 
 class GrantRecipientStatus(str, enum.Enum):
@@ -33,7 +32,19 @@ class ProtoGrantRecipient(db.Model):
     grant: Mapped["Fund"] = relationship("Fund", back_populates="recipients")
 
     application_id: Mapped[int | None] = mapped_column(ForeignKey("proto_application.id"), unique=True)
-    application: Mapped[Optional["ProtoApplication"]] = relationship("ProtoApplication")
+    application: Mapped[Optional["ProtoApplication"]] = relationship("ProtoApplication", back_populates="recipient")
 
     organisation_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("organisation.id"))
     organisation: Mapped["Organisation"] = relationship("Organisation")
+
+    reports: Mapped[list["ProtoReport"]] = relationship(
+        "ProtoReport",
+        primaryjoin="""and_(
+            ProtoGrantRecipient.organisation_id == ProtoReport.organisation_id,
+            ProtoGrantRecipient.grant_id == ProtoReportingRound.grant_id,
+            ProtoReportingRound.id == ProtoReport.reporting_round_id,
+        )""",
+        foreign_keys="[ProtoReport.organisation_id, ProtoReport.reporting_round_id]",
+        order_by="asc(ProtoReportingRound.reporting_period_starts)",
+        viewonly=True,
+    )

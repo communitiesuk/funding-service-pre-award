@@ -58,6 +58,7 @@ class QuestionType(str, enum.Enum):
     TEXTAREA = "text area"
     RADIOS = "radio"
     NUMBER = "number"
+    PRICE_WITH_PENNIES = "price with pennies"
 
 
 class ConditionCombination(str, enum.Enum):

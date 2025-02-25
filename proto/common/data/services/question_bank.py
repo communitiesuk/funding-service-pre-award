@@ -164,7 +164,7 @@ def add_template_sections_to_data_collection_definition(round, template_section_
     db.session.commit()
 
 
-def get_application_question(data_collection_definition_id, section_slug, question_slug):
+def get_data_collection_question(data_collection_definition_id, section_slug, question_slug):
     return db.session.scalar(
         select(ProtoDataCollectionDefinitionQuestion)
         .join(ProtoDataCollectionDefinitionSection)

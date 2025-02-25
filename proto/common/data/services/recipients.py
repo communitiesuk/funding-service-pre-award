@@ -33,7 +33,7 @@ def get_grant_recipients_for_organisation(organisation_id):
     return recipients
 
 
-def get_grant_recipient_for_organisation(organisation_id, short_code: str):
+def get_grant_recipient_for_organisation(organisation_id, short_code: str) -> ProtoGrantRecipient:
     recipient = db.session.scalar(
         select(ProtoGrantRecipient)
         .join(ProtoGrantRecipient.application)

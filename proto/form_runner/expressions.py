@@ -1,4 +1,5 @@
 import ast
+import datetime
 import functools
 import re
 from collections import defaultdict
@@ -6,7 +7,9 @@ from typing import Any, Callable
 
 import simpleeval
 
-from proto.common.data.models import Fund, ProtoApplication, ProtoDataCollectionInstance
+from proto.common.data.models import (
+    ProtoDataCollectionInstance,
+)
 from proto.form_runner.helpers import get_answer_text_for_question_from_section_data
 
 
@@ -24,9 +27,7 @@ def serialize_collection_data(collection: ProtoDataCollectionInstance) -> dict[s
 
 def build_context(
     this_collection: ProtoDataCollectionInstance | None = None,
-    application: ProtoApplication | None = None,
     answer: Any | None = None,
-    grant: Fund | None = None,
 ):
     # It would be nice if "this collection"s data was somehow surfaced at the top-level, ie not namespaced, but
     # would need to give due consideration to namespace collisions. So I'm skipping that for now by having everything
@@ -37,16 +38,43 @@ def build_context(
     # - Then references to related objects, eg if we're doing monitoring, then the application, grant recipient, etc
     context = {}
 
+    # Retrieve all of the related objects to inject as context, based on the data collection
+    grant = (
+        this_collection.application.round.proto_grant
+        if this_collection.application
+        else this_collection.report.recipient.grant
+        if this_collection.report
+        else None
+    )
+    if grant:
+        context["grant"] = grant
+
     if this_collection:
         context["this_collection"] = serialize_collection_data(this_collection)
 
+    application = (
+        this_collection.application
+        if this_collection.application
+        else this_collection.report.recipient.application
+        if this_collection.report
+        else None
+    )
     if application:
+        context["application_round"] = application.round
         context["application"] = serialize_collection_data(application.data_collection_instance)
 
-    if grant := (grant or (application and application.round.proto_grant)):
-        context["grant"] = grant
+    recipient = this_collection.report.recipient if this_collection.report else None
+    if recipient:
+        context["recipient"] = recipient
 
-    if answer:
+    if this_collection.report:
+        context["reporting_round"] = this_collection.report.reporting_round
+        context["reports"] = [
+            serialize_collection_data(report.data_collection_instance)
+            for report in this_collection.report.recipient.reports
+        ]
+
+    if answer is not None:
         context["answer"] = answer
 
     return context
@@ -54,17 +82,17 @@ def build_context(
 
 def build_context_injector(
     this_collection: ProtoDataCollectionInstance | None = None,
-    application: ProtoApplication | None = None,
-    grant: Fund | None = None,
+    answer: Any | None = None,
 ) -> Callable[[str], str]:
-    context = build_context(this_collection=this_collection, application=application, grant=grant)
+    context = build_context(this_collection=this_collection, answer=answer)
     return functools.partial(interpolate, context=context)
 
 
 def build_context_evaluator(
+    this_collection: ProtoDataCollectionInstance | None = None,
     answer: Any | None = None,
 ) -> Callable[[str], int | bool]:
-    context = build_context(answer=answer)
+    context = build_context(this_collection=this_collection, answer=answer)
     return functools.partial(evaluate, context=context)
 
 
@@ -93,10 +121,17 @@ def _restricted_evaluator(context):
     return evaluator
 
 
+def _nicely_format(val):
+    if isinstance(val, datetime.datetime):
+        return val.strftime("%A %-d %B %Y")
+
+    return str(val)
+
+
 def interpolate(text: str, context: dict) -> str:
     evaluator = _restricted_evaluator(context)
 
-    return re.sub(r"\(\((.*?)\)\)", lambda m: evaluator.eval(m.group(1)), text)
+    return re.sub(r"\(\((.*?)\)\)", lambda m: _nicely_format(evaluator.eval(m.group(1))), text)
 
 
 def evaluate(text: str, context: dict) -> int | bool:

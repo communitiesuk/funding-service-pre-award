@@ -49,13 +49,14 @@ def evaluate_condition(
     )
     if not section_data:  # If that section hasn't yet been completed
         return False
+
     depends_on_answer_text = get_answer_value_for_question_from_section_data(
         section_data=section_data, question=condition.depends_on_question
     )
-    if not depends_on_answer_text:
+    if depends_on_answer_text is None:
         return False
 
-    context_evaluator = build_context_evaluator(answer=depends_on_answer_text)
+    context_evaluator = build_context_evaluator(this_collection=section_data.instance, answer=depends_on_answer_text)
     return bool(context_evaluator(condition.expression))
 
     # operator = condition.criteria["operator"]
