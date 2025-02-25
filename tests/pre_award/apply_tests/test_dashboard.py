@@ -18,6 +18,7 @@ from pre_award.apply.models.application_summary import ApplicationSummary
 from pre_award.apply.models.fund import Fund
 from pre_award.config import Config
 from tests.pre_award.apply_tests.api_data.test_data import (
+    SUBMITTED_APPLICATION,
     TEST_APPLICATION_SUMMARIES,
     TEST_DISPLAY_DATA,
     TEST_FUNDS_DATA,
@@ -79,6 +80,14 @@ def test_dashboard_route_search_call(
     round_short_name,
     expected_search_params,
 ):
+    mocker.patch(
+        "pre_award.apply.default.application_routes.get_application_data",
+        return_value=SUBMITTED_APPLICATION,
+    )
+    mocker.patch(
+        "pre_award.apply.default.account_routes.get_application_data",
+        return_value=SUBMITTED_APPLICATION,
+    )
     request_mock = mocker.patch("pre_award.apply.default.account_routes.request")
     request_mock.args.get = (
         lambda key, default: fund_short_name if key == "fund" else (round_short_name if key == "round" else default)
@@ -115,6 +124,11 @@ def test_dashboard_template_rendered(
     exp_template_name,
 ):
     mocker.patch(
+        "pre_award.apply.default.account_routes.get_application_data",
+        return_value=SUBMITTED_APPLICATION,
+    )
+
+    mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
     )
@@ -137,6 +151,10 @@ def test_dashboard_eoi_suffix(
 ):
     eoi_data = deepcopy(TEST_DISPLAY_DATA)
     eoi_data["funds"][0]["fund_data"]["funding_type"] = "EOI"
+    mocker.patch(
+        "pre_award.apply.default.account_routes.get_application_data",
+        return_value=SUBMITTED_APPLICATION,
+    )
     mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
@@ -171,6 +189,10 @@ def test_dashboard_language(
     exp_response_language,
 ):
     mocker.patch(
+        "pre_award.apply.default.account_routes.get_application_data",
+        return_value=SUBMITTED_APPLICATION,
+    )
+    mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
     )
@@ -200,6 +222,10 @@ def test_dashboard_language(
 
 
 def test_dashboard_route(apply_test_client, mocker, mock_login):
+    mocker.patch(
+        "pre_award.apply.default.account_routes.get_application_data",
+        return_value=SUBMITTED_APPLICATION,
+    )
     mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
