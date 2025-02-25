@@ -193,7 +193,7 @@
         filtered.forEach((item, index) => {
           const li = document.createElement("li");
           // Highlight matching letters in the label.
-          li.innerHTML = highlightMatch(item.label, query);
+          li.innerHTML = currentMode === 'label' ? highlightMatch(item.label, query) : item.label;
           li.addEventListener("mousedown", function(e) {
             e.preventDefault(); // Prevent input from losing focus
             applySuggestion(item, context, inputEl, currentMode);
