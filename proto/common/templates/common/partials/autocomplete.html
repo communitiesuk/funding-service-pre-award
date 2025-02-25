@@ -162,6 +162,10 @@
         newContextContent = words.join(" ");
       }
       inputEl.value = before + newContextContent + after;
+      // Place the text cursor at the end of the inserted text (i.e. before "after").
+      const newCursorPos = (before + newContextContent).length;
+      inputEl.setSelectionRange(newCursorPos, newCursorPos);
+
       inputEl.focus();
       if (item.value.endsWith(".")) {
         // Keep the menu open by triggering an input event.
