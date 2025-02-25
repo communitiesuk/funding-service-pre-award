@@ -14,13 +14,15 @@
     border: 1px solid #ccc;
     background: #fff;
     display: none;
-    max-height: 150px;
+    max-height: 250px;
     overflow-y: auto;
     z-index: 1000;
   }
   .autocomplete-menu li {
-    padding: 2px 5px;
+    padding: 5px 5px;
+    font-size: 19px;
     cursor: pointer;
+    font-family: GDS Transport,arial,sans-serif;
   }
   .autocomplete-menu li:hover,
   .autocomplete-menu li.selected {
@@ -41,9 +43,9 @@
     // Position the menu below the input element (for simplicity)
     function positionMenu(inputEl) {
       const rect = inputEl.getBoundingClientRect();
-      menu.style.left = rect.left + "px";
+      menu.style.left = (rect.left - 0) + "px";
       menu.style.top = rect.bottom + window.scrollY + "px";
-      menu.style.width = rect.width + "px";
+      menu.style.width = (rect.width - 12) + "px";
     }
 
     // Determine if the cursor is within a (( )) context.
