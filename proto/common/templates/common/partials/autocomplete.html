@@ -315,7 +315,7 @@
         for (let i = 0; i < contextContent.length; i++) {
           const char = contextContent[i];
           // Check if the character is part of a word (alphanumeric or .)
-          if (/[a-zA-Z0-9._]/.test(char)) {
+          if (/[a-zA-Z0-9._\[\]]/.test(char)) {
             // If we have accumulated non-word characters, add them to parts
             if (currentNonWord) {
               parts.push({
