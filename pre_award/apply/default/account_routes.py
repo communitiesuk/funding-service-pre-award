@@ -8,7 +8,6 @@ from pre_award.apply.default.data import (
     determine_round_status,
     get_all_funds,
     get_all_rounds_for_fund,
-    get_application_data,
     search_applications,
 )
 from pre_award.apply.helpers import get_fund, get_fund_and_round, get_ttl_hash
@@ -173,18 +172,6 @@ def dashboard():
 
     show_language_column = determine_show_language_column(applications)
 
-    change_requested = False
-    for application_summary in applications:
-        application_id = application_summary.id
-        application_data = get_application_data(application_id)
-        if application_data.forms:
-            for form in application_data.forms:
-                if form["status"] == "CHANGE_REQUESTED":
-                    change_requested = True
-                    break
-        if change_requested:
-            break
-
     display_data = build_application_data_for_display(applications, fund_short_name, round_short_name)
     current_app.logger.info("Setting up applicant dashboard for: '{%(account_id)s'", dict(account_id=account_id))
     if not welsh_available and template_name == TEMPLATE_SINGLE_FUND:
@@ -194,7 +181,6 @@ def dashboard():
             render_template(
                 template_name,
                 account_id=account_id,
-                change_request=change_requested,
                 display_data=display_data,
                 show_language_column=show_language_column,
                 fund_short_name=fund_short_name,

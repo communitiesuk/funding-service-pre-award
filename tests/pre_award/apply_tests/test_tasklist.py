@@ -67,10 +67,6 @@ def test_tasklist_for_submit_application_route(apply_test_client, mocker, mock_l
         return_value=SUBMITTED_APPLICATION,
     )
     mocker.patch(
-        "pre_award.apply.default.account_routes.get_application_data",
-        return_value=SUBMITTED_APPLICATION,
-    )
-    mocker.patch(
         "pre_award.apply.default.application_routes.determine_round_status",
         return_value=RoundStatus(False, False, True),
     )
