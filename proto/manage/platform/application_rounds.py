@@ -1,4 +1,4 @@
-from flask import g, redirect, render_template, url_for
+from flask import g, redirect, render_template, session, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
@@ -18,7 +18,13 @@ from proto.manage.platform.forms.application_round import (
     MakeRoundLiveForm,
     PreviewApplicationForm,
 )
-from proto.manage.platform.forms.data_collection import ChooseTemplateSectionsForm, NewQuestionForm, NewSectionForm
+from proto.manage.platform.forms.data_collection import (
+    ChooseTemplateSectionsForm,
+    NewQuestionForm,
+    NewQuestionTypeForm,
+    NewSectionForm,
+    human_readable,
+)
 
 rounds_blueprint = Blueprint("rounds", __name__)
 
@@ -48,6 +54,8 @@ def view_round_data_collection(grant_code, round_code):
     form = PreviewApplicationForm(
         submit_label="Preview application", data={"round_id": round.id, "organisation_id": g.account.organisation_id}
     )
+    # have a nicer managed method of setting this up and consistently clearing them out
+    session.pop("new_question_type", None)
     return render_template(
         "manage/platform/application_round/view_round_data_collection.html",
         grant=grant,
@@ -109,7 +117,11 @@ def choose_from_question_bank(grant_code, round_code):
 @is_authenticated(as_platform_admin=True)
 def create_section_view(grant_code, round_code):
     grant, round = get_grant_and_round(grant_code, round_code)
-    form = NewSectionForm(data={"order": max(asec.order for asec in round.data_collection_definition.sections) + 1})
+    form = NewSectionForm(
+        data={
+            "order": max(asec.order for asec in round.data_collection_definition.sections) + 1,
+        }
+    )
 
     if form.validate_on_submit():
         create_section(
@@ -135,13 +147,54 @@ def create_section_view(grant_code, round_code):
 
 
 @rounds_blueprint.route(
+    "/grants/<grant_code>/rounds/<round_code>/sections/<section_id>/create-question/type", methods=["GET", "POST"]
+)
+@is_authenticated(as_platform_admin=True)
+def create_question_type(grant_code, round_code, section_id):
+    grant, round = get_grant_and_round(grant_code, round_code)
+    section = get_section_for_data_collection_definition(round.data_collection_definition, section_id)
+    form = NewQuestionTypeForm(data={"type": session.get("new_question_type")})
+
+    if form.validate_on_submit():
+        session["new_question_type"] = form.data.get("type")
+        return redirect(
+            url_for(
+                "proto_manage.platform.rounds.create_question_view",
+                grant_code=grant_code,
+                round_code=round_code,
+                section_id=section_id,
+            )
+        )
+
+    return render_template(
+        "manage/platform/create_question_add_type.html",
+        grant=grant,
+        round=round,
+        section=section,
+        form=form,
+        active_sub_navigation_tab="funding",
+        back_link=url_for(
+            "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
+        ),
+    )
+
+
+@rounds_blueprint.route(
     "/grants/<grant_code>/rounds/<round_code>/sections/<section_id>/create-question", methods=["GET", "POST"]
 )
 @is_authenticated(as_platform_admin=True)
 def create_question_view(grant_code, round_code, section_id):
     grant, round = get_grant_and_round(grant_code, round_code)
     section = get_section_for_data_collection_definition(round.data_collection_definition, section_id)
-    form = NewQuestionForm(data={"order": (max(q.order for q in section.questions) if section.questions else 0) + 1})
+
+    # should do things if the session isn't appropriately set up for this
+    # stage in the journey but - proto
+    form = NewQuestionForm(
+        data={
+            "order": (max(q.order for q in section.questions) if section.questions else 0) + 1,
+            "type": session.get("new_question_type"),
+        }
+    )
 
     if form.validate_on_submit():
         create_question(
@@ -155,17 +208,29 @@ def create_question_view(grant_code, round_code, section_id):
         )
 
     autocomplete_context = build_autocomplete_context(grant, round.data_collection_definition)
+    back_link = (
+        url_for("proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code)
+        if not session.get("new_question_type")
+        else url_for(
+            "proto_manage.platform.rounds.create_question_type",
+            grant_code=grant_code,
+            round_code=round_code,
+            section_id=section_id,
+        )
+    )
+
     return render_template(
-        "manage/platform/create_question.html",
+        "manage/platform/create_question_add_edit_detail.html",
         grant=grant,
         round=round,
         section=section,
         form=form,
+        # horrible - make this consistent with the
+        # question_type_human_readbale=human_readable
+        question_type_human_readable=human_readable.get(session.get("new_question_type")),
         active_sub_navigation_tab="funding",
-        back_link=url_for(
-            "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
-        ),
         autocomplete_context=autocomplete_context,
+        back_link=back_link,
     )
 
 

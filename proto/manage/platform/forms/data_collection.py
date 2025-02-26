@@ -58,13 +58,17 @@ human_readable = {
 }
 
 
-class NewQuestionForm(FlaskForm):
+class NewQuestionTypeForm(FlaskForm):
     type = RadioField(
         _l("What type of question are you adding?"),
         widget=GovRadioInput(),
         choices=[(ft.value, human_readable.get(ft)) for ft in QuestionType],
         validators=[DataRequired(message=_l("Select a question type"))],
     )
+    submit = SubmitField(_l("Continue"), widget=GovSubmitInput())
+
+
+class NewQuestionForm(FlaskForm):
     title = StringField(
         _l("What is the question?"),
         widget=GovTextInput(),
@@ -85,4 +89,8 @@ class NewQuestionForm(FlaskForm):
     order = IntegerField(
         widget=HiddenInput(),
     )
+    type = StringField(
+        widget=HiddenInput(),
+    )
+
     submit = SubmitField(_l("Add question"), widget=GovSubmitInput())
