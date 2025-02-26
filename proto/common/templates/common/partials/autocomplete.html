@@ -46,7 +46,7 @@
     box-sizing: border-box;
     border: none;
     padding: 5px;
-    overflow: hidden;
+    overflow-y: auto; /* Changed from hidden to auto to match textarea behavior */
     white-space: pre-wrap;
     word-wrap: break-word;
     background: transparent;
@@ -389,6 +389,10 @@
 
       // Ensure scroll position is synchronized
       overlay.scrollTop = inputEl.scrollTop;
+
+      // Ensure overlay dimensions match the input element's current dimensions including padding and border
+      overlay.style.width = `${inputEl.offsetWidth}px`;
+      overlay.style.height = `${inputEl.offsetHeight}px`;
     }
 
     // Wrapper function to set up the highlighting overlay
@@ -429,8 +433,26 @@
       wrapper.appendChild(highlightOverlay);
       wrapper.appendChild(inputEl);
 
-      // Copy dimensions to wrapper
+      // Ensure wrapper dimensions match input
       wrapper.style.width = `${rect.width}px`;
+
+      // Apply initial dimensions to overlay to match the input's full dimensions including padding and border
+      highlightOverlay.style.width = `${inputEl.offsetWidth}px`;
+      highlightOverlay.style.height = `${inputEl.offsetHeight}px`;
+
+      // Create a ResizeObserver to keep the overlay height in sync with input
+      const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          if (entry.target === inputEl) {
+            // Update overlay dimensions to match the full element size (offsetWidth/Height includes padding and border)
+            highlightOverlay.style.width = `${inputEl.offsetWidth}px`;
+            highlightOverlay.style.height = `${inputEl.offsetHeight}px`;
+          }
+        }
+      });
+
+      // Start observing the input element for resize changes
+      resizeObserver.observe(inputEl);
 
       // Synchronize overlay scroll with input
       inputEl.addEventListener('scroll', function() {
