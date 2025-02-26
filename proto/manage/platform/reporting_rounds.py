@@ -164,7 +164,7 @@ def create_section_view(grant_code, round_ext_id):
 
     if form.validate_on_submit():
         create_section(
-            reporting_round_id=reporting_round.id,
+            definition_id=reporting_round.data_collection_definition.id,
             **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}},
         )
         return redirect(
