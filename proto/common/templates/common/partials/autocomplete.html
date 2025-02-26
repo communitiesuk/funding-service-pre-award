@@ -28,6 +28,63 @@
   .autocomplete-menu li.selected {
     background-color: #f0f0f0;
   }
+
+  /* Styles for the highlighting overlay system */
+  .autocomplete-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .highlight-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    box-sizing: border-box;
+    border: none;
+    padding: 5px;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: transparent;
+    z-index: 0;
+    color: black; /* Default text color */
+
+    font-family: "GDS Transport", arial, sans-serif;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-optical-sizing: auto;
+    font-size: 19px;
+    font-size-adjust: none;
+    font-stretch: 100%;
+    font-style: normal;
+    font-variant-alternates: normal;
+    font-variant-caps: normal;
+    font-variant-east-asian: normal;
+    font-variant-emoji: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-position: normal;
+    font-variation-settings: normal;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+
+  }
+
+  .highlight-overlay .highlight-match {
+    background-color: yellow;
+  }
+
+  .autocomplete-input {
+    position: relative;
+    background-color: transparent !important;
+    z-index: 1;
+    color: transparent;
+    caret-color: black; /* Make cursor visible */
+  }
 </style>
 
 <script nonce="{{ csp_nonce() }}">
@@ -59,6 +116,41 @@
         openIndex: openIndex,
         content: text.slice(openIndex + 2, cursorPos)
       };
+    }
+
+    // Helper function to find all (( contexts in text (with optional ))
+    function findAllContexts(text) {
+      const contexts = [];
+      let startIndex = 0;
+
+      while (true) {
+        const openIndex = text.indexOf("((", startIndex);
+        if (openIndex === -1) break;
+
+        const closeIndex = text.indexOf("))", openIndex);
+
+        // If there's no closing )), treat the rest of the text as part of the context
+        if (closeIndex === -1) {
+          contexts.push({
+            openIndex: openIndex,
+            closeIndex: text.length,
+            content: text.slice(openIndex + 2),
+            hasClosing: false
+          });
+          break; // No need to continue searching
+        } else {
+          contexts.push({
+            openIndex: openIndex,
+            closeIndex: closeIndex,
+            content: text.slice(openIndex + 2, closeIndex),
+            hasClosing: true
+          });
+
+          startIndex = closeIndex + 2;
+        }
+      }
+
+      return contexts;
     }
 
     function getAutocompleteWord(contextContent) {
@@ -167,6 +259,8 @@
       inputEl.setSelectionRange(newCursorPos, newCursorPos);
 
       inputEl.focus();
+      updateHighlightOverlay(inputEl); // Update highlighting after applying suggestion
+
       if (item.value.endsWith(".")) {
         // Keep the menu open by triggering an input event.
         inputEl.dispatchEvent(new Event("input"));
@@ -175,8 +269,182 @@
       }
     }
 
+    // Find and highlight words in the input that match suggestion values
+    // ONLY within (( )) contexts
+    function updateHighlightOverlay(inputEl) {
+      // Get the overlay element
+      const wrapper = inputEl.parentElement;
+      const overlay = wrapper.querySelector('.highlight-overlay');
+
+      if (!overlay) return;
+
+      const text = inputEl.value;
+
+      // Find all (( )) contexts in the text
+      const contexts = findAllContexts(text);
+
+      if (contexts.length === 0) {
+        // No contexts to highlight - just use plain text
+        overlay.innerHTML = text;
+        return;
+      }
+
+      // Create a set of all suggestion values for faster lookup
+      const suggestionValues = new Set(suggestions.map(item => item.value));
+
+      // Build the highlighted HTML
+      let highlightedHTML = '';
+      let lastIndex = 0;
+
+      // Process each (( )) context
+      for (const context of contexts) {
+        // Add text before this context
+        highlightedHTML += text.substring(lastIndex, context.openIndex);
+
+        // Add the opening parentheses
+        highlightedHTML += '((';
+
+        // Process the content within parentheses
+        const contextContent = context.content;
+
+        // Split the content into words and non-words
+        const parts = [];
+        let currentWord = '';
+        let currentNonWord = '';
+
+        for (let i = 0; i < contextContent.length; i++) {
+          const char = contextContent[i];
+          // Check if the character is part of a word (alphanumeric or .)
+          if (/[a-zA-Z0-9._]/.test(char)) {
+            // If we have accumulated non-word characters, add them to parts
+            if (currentNonWord) {
+              parts.push({
+                text: currentNonWord,
+                isWord: false
+              });
+              currentNonWord = '';
+            }
+            currentWord += char;
+          } else {
+            // If we have accumulated word characters, add them to parts
+            if (currentWord) {
+              parts.push({
+                text: currentWord,
+                isWord: true
+              });
+              currentWord = '';
+            }
+            currentNonWord += char;
+          }
+        }
+
+        // Add any remaining parts
+        if (currentWord) {
+          parts.push({
+            text: currentWord,
+            isWord: true
+          });
+        }
+        if (currentNonWord) {
+          parts.push({
+            text: currentNonWord,
+            isWord: false
+          });
+        }
+
+        // Build the highlighted content for this context
+        let contextHTML = '';
+
+        parts.forEach(part => {
+          if (part.isWord && suggestionValues.has(part.text) && !part.text.endsWith('.')) {
+            // This word exactly matches a suggestion value - highlight it
+            contextHTML += `<span class="highlight-match">${part.text}</span>`;
+          } else {
+            // No match or non-word - add as plain text
+            contextHTML += part.text;
+          }
+        });
+
+        // Add the highlighted context content
+        highlightedHTML += contextHTML;
+
+        // Add the closing parentheses only if they exist in the original text
+        if (context.hasClosing) {
+          highlightedHTML += '))';
+          // Update lastIndex to after this context including the closing parentheses
+          lastIndex = context.closeIndex + 2;
+        } else {
+          // If there's no closing )), set lastIndex to the end of text
+          lastIndex = text.length;
+        }
+      }
+
+      // Add any remaining text after the last context
+      if (lastIndex < text.length) {
+        highlightedHTML += text.substring(lastIndex);
+      }
+
+      // Update the overlay
+      overlay.innerHTML = highlightedHTML;
+
+      // Ensure scroll position is synchronized
+      overlay.scrollTop = inputEl.scrollTop;
+    }
+
+    // Wrapper function to set up the highlighting overlay
+    function setupHighlightingOverlay(inputEl) {
+      // Create wrapper container
+      const wrapper = document.createElement('div');
+      wrapper.className = 'autocomplete-wrapper';
+
+      // Preserve original attributes
+      const inputAttributes = {};
+      for (let i = 0; i < inputEl.attributes.length; i++) {
+        const attr = inputEl.attributes[i];
+        inputAttributes[attr.name] = attr.value;
+      }
+
+      // Create a copy of the original element's styles
+      const computedStyle = window.getComputedStyle(inputEl);
+      const inputStyle = {};
+      for (let i = 0; i < computedStyle.length; i++) {
+        const prop = computedStyle[i];
+        inputStyle[prop] = computedStyle.getPropertyValue(prop);
+      }
+
+      // Get the original element's dimensions and position
+      const rect = inputEl.getBoundingClientRect();
+
+      // Insert wrapper before inputEl in the DOM
+      inputEl.parentNode.insertBefore(wrapper, inputEl);
+
+      // Create highlight overlay (for all text rendering and highlighting)
+      const highlightOverlay = document.createElement('div');
+      highlightOverlay.className = 'highlight-overlay';
+
+      // Add class to input for styling
+      inputEl.classList.add('autocomplete-input');
+
+      // Move input to the wrapper
+      wrapper.appendChild(highlightOverlay);
+      wrapper.appendChild(inputEl);
+
+      // Copy dimensions to wrapper
+      wrapper.style.width = `${rect.width}px`;
+
+      // Synchronize overlay scroll with input
+      inputEl.addEventListener('scroll', function() {
+        highlightOverlay.scrollTop = inputEl.scrollTop;
+      });
+
+      return wrapper;
+    }
+
     // Attach the autocomplete functionality to a given input or textarea.
     function attachAutocomplete(inputEl) {
+      // Setup the highlighting overlay system
+      setupHighlightingOverlay(inputEl);
+
       // Variables for keyboard navigation
       let currentItems = [];
       let selectedIndex = -1;
@@ -227,6 +495,10 @@
       inputEl.addEventListener("input", function() {
         const cursorPos = inputEl.selectionStart;
         const text = inputEl.value;
+
+        // Update the highlighting overlay
+        updateHighlightOverlay(inputEl);
+
         currentContext = getCurrentContext(text, cursorPos);
         if (!currentContext) {
           menu.style.display = "none";
@@ -282,6 +554,9 @@
           menu.style.display = "none";
         }
       });
+
+      // Initial update of highlighting
+      updateHighlightOverlay(inputEl);
     }
 
     // Expose the function globally so you can attach it to your input element.
