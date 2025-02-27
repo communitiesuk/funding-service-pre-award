@@ -68,14 +68,23 @@ class NewQuestionTypeForm(FlaskForm):
     submit = SubmitField(_l("Continue"), widget=GovSubmitInput())
 
 
+class NewConditionForm(FlaskForm):
+    expression = StringField(
+        _l("Expression"),
+        widget=GovTextInput(),
+        validators=[DataRequired(message=_l("Enter the expression"))],
+    )
+    submit = SubmitField(_l("Add condition"), widget=GovSubmitInput())
+
+
 class NewQuestionForm(FlaskForm):
     title = StringField(
-        _l("What is the question?"),
+        _l("Question text"),
         widget=GovTextInput(),
-        validators=[DataRequired(message=_l("Enter the question"))],
+        validators=[DataRequired(message=_l("Enter the question text"))],
     )
     hint = StringField(
-        _l("What is the hint text for the question?"),
+        _l("Hint text"),
         description="Only provide this if additional information is needed to help answer the question correctly.",
         widget=GovTextArea(),
         validators=[Optional()],

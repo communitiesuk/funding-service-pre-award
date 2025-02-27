@@ -1,0 +1,25 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+
+{% extends "manage/platform/grants_base.html" %}
+
+{% set title = _("Update condition") if is_edit else _("Add condition") %}
+
+{% block pageTitle %}{{ title }} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if form.errors %}
+        {{ govukErrorSummary(wtforms_errors(form)) }}
+    {% endif %}
+
+
+    <span class="govuk-caption-m">{{ question.title }}</span>
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+
+</div>
+{% endblock %}

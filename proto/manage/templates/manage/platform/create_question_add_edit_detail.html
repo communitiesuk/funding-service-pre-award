@@ -3,10 +3,11 @@
 {% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
 {% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
 
 {% extends "manage/platform/grants_base.html" %}
 
-{% block pageTitle %}{% trans %}Add a question{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+{% block pageTitle %}{{ _("Update question") if is_edit else _("Add a question")}} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -15,7 +16,7 @@
         {{ govukErrorSummary(wtforms_errors(form)) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">Add a question</h1>
+    <h1 class="govuk-heading-l">{{ _("Update question") if is_edit else _("Add a question") }}</h1>
 
     <form method="post" novalidate>
 
@@ -54,13 +55,70 @@
 
       <h2 class="govuk-heading-m">Conditions</h2>
       <p class="govuk-body">You can use answers from other questions in your data collection to decide if your user should be asked this question.</p>
-      <p class="govuk-body">{{ govukButton({"text": "Add a check", "href": "#", "classes": "govuk-button--secondary"}) }}</p>
+
+      {% if question and question.conditions %}
+
+      {% set rows = [] %}
+
+      {% for condition in question.conditions %}
+
+        {% set type = "Custom expression" if not (condition.options and condition.options.key) else "" %}
+        {# {% set depends_on = "" %} #}
+
+        {% set rows = rows.append({
+          "key": { "text": type },
+          "value": { "text": condition.expression },
+          "actions": {
+            "items": [
+              { "href": url_for('proto_manage.platform.rounds.edit_condition', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id, condition_id=condition.id), "text": "Manage" }
+            ]
+          }
+        }) %}
+      {% endfor %}
+
+      {{ govukSummaryList({
+        "rows": rows
+      }) }}
+
+      {% endif %}
+
+      {# I think add condition as an action link in the final row of the summary table is clean from elsewhere #}
+      {# do this for now if the table is there or not #}
+      <p class="govuk-body">{{ govukButton({"text": "Add a check", "href": url_for('proto_manage.platform.rounds.create_condition', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id), "classes": "govuk-button--secondary"}) }}</p>
+
 
       <h2 class="govuk-heading-m">Validation</h2>
       <p class="govuk-body">You can add rules to help your users provide answers that are correct and align with data standards.</p>
+
+      {% if question and question.validations %}
+
+      {% set rows = [] %}
+
+      {% for validation in question.validations %}
+
+        {% set type = "Custom expression" if not (validation.options and validation.options.key) else "" %}
+        {# {% set depends_on = "" %} #}
+
+        {% set rows = rows.append({
+          "key": { "text": type },
+          "value": { "text": validation.expression },
+          "actions": {
+            "items": [
+              { "href": "#", "text": "Manage" }
+            ]
+          }
+        }) %}
+      {% endfor %}
+
+      {{ govukSummaryList({
+        "rows": rows
+      }) }}
+
+      {% endif %}
+
       <p class="govuk-body">{{ govukButton({"text": "Add validation", "href": "#", "classes": "govuk-button--secondary"}) }}</p>
 
-      {{ form.submit }}
+      {{ form.submit(params={ "text": _("Update question") if is_edit else _("Add question")  }) }}
     </form>
   </div>
 </div>

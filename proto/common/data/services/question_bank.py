@@ -49,6 +49,15 @@ def create_question(**kwargs):
     db.session.commit()
 
 
+# this would be much cleaner modeled more uniformly as an upsert utility?
+# always take the same params, if an ID is passed it in will replace otherwise create
+def update_question(question: ProtoDataCollectionDefinitionQuestion, **kwargs):
+    kwargs["slug"] = make_url_slug(kwargs["title"])
+    question = ProtoDataCollectionDefinitionQuestion(**kwargs)
+    db.session.add(question)
+    db.session.commit()
+
+
 def create_section(**kwargs):
     kwargs["slug"] = make_url_slug(kwargs["title"])
     section = ProtoDataCollectionDefinitionSection(**kwargs)

@@ -20,6 +20,7 @@ from proto.manage.platform.forms.application_round import (
 )
 from proto.manage.platform.forms.data_collection import (
     ChooseTemplateSectionsForm,
+    NewConditionForm,
     NewQuestionForm,
     NewQuestionTypeForm,
     NewSectionForm,
@@ -176,6 +177,132 @@ def create_question_type(grant_code, round_code, section_id):
         back_link=url_for(
             "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
         ),
+    )
+
+
+# a lot of duplication - the same handler could likely be used for create/ view
+@rounds_blueprint.route(
+    "/grants/<grant_code>/rounds/<round_code>/sections/<section_id>/question/<question_id>", methods=["GET", "POST"]
+)
+@is_authenticated(as_platform_admin=True)
+def edit_question(grant_code, round_code, section_id, question_id):
+    grant, round = get_grant_and_round(grant_code, round_code)
+    section = get_section_for_data_collection_definition(round.data_collection_definition, section_id)
+
+    # int ids shouldn't be in the url
+    question = next(x for x in section.questions if x.id == int(question_id))
+
+    form = NewQuestionForm(
+        # feels a bit gross? this should know how to serialise to this
+        # or just look throuhh and picks keys
+        data={
+            "title": question.title,
+            "hint": question.hint,
+            "order": question.order,
+            "type": question.type,
+            "mandatory": "mandatory",
+        }
+    )
+
+    back_link = url_for(
+        "proto_manage.platform.rounds.view_round_data_collection", grant_code=grant_code, round_code=round_code
+    )
+
+    return render_template(
+        "manage/platform/create_question_add_edit_detail.html",
+        grant=grant,
+        round=round,
+        section=section,
+        form=form,
+        # horrible - make this consistent with the
+        # question_type_human_readbale=human_readable
+        question_type_human_readable=human_readable.get(question.type),
+        active_sub_navigation_tab="funding",
+        back_link=back_link,
+        is_edit=True,
+        question=question,
+    )
+
+
+@rounds_blueprint.route(
+    "/grants/<grant_code>/rounds/<round_code>/sections/<section_id>/question/<question_id>/create-condition",
+    methods=["GET", "POST"],
+)
+@is_authenticated(as_platform_admin=True)
+def create_condition(grant_code, round_code, section_id, question_id):
+    grant, round = get_grant_and_round(grant_code, round_code)
+    section = get_section_for_data_collection_definition(round.data_collection_definition, section_id)
+
+    # int ids shouldn't be in the url
+    question = next(x for x in section.questions if x.id == int(question_id))
+
+    form = NewConditionForm()
+
+    # to not boil the ocean I'll assume you're coming from editing an existing question - we can make this work
+    # with nice symetry between create + update but want something in for now
+    back_link = url_for(
+        "proto_manage.platform.rounds.edit_question",
+        grant_code=grant_code,
+        round_code=round_code,
+        section_id=section_id,
+        question_id=question_id,
+    )
+
+    return render_template(
+        "manage/platform/create_question_add_condition.html",
+        grant=grant,
+        round=round,
+        section=section,
+        form=form,
+        # horrible - make this consistent with the
+        # question_type_human_readbale=human_readable
+        question_type_human_readable=human_readable.get(question.type),
+        active_sub_navigation_tab="funding",
+        back_link=back_link,
+        question=question,
+    )
+
+
+@rounds_blueprint.route(
+    "/grants/<grant_code>/rounds/<round_code>/sections/<section_id>/question/<question_id>/condition/<condition_id>",
+    methods=["GET", "POST"],
+)
+@is_authenticated(as_platform_admin=True)
+def edit_condition(grant_code, round_code, section_id, question_id, condition_id):
+    grant, round = get_grant_and_round(grant_code, round_code)
+    section = get_section_for_data_collection_definition(round.data_collection_definition, section_id)
+
+    # int ids shouldn't be in the url
+    question = next(x for x in section.questions if x.id == int(question_id))
+
+    condition = next(x for x in question.conditions if x.id == int(condition_id))
+
+    form = NewConditionForm()
+
+    # to not boil the ocean I'll assume you're coming from editing an existing question - we can make this work
+    # with nice symetry between create + update but want something in for now
+    back_link = url_for(
+        "proto_manage.platform.rounds.edit_question",
+        grant_code=grant_code,
+        round_code=round_code,
+        section_id=section_id,
+        question_id=question_id,
+    )
+
+    return render_template(
+        "manage/platform/create_question_add_condition.html",
+        grant=grant,
+        round=round,
+        section=section,
+        form=form,
+        # horrible - make this consistent with the
+        # question_type_human_readbale=human_readable
+        question_type_human_readable=human_readable.get(question.type),
+        active_sub_navigation_tab="funding",
+        back_link=back_link,
+        question=question,
+        condition=condition,
+        is_edit=True,
     )
 
 
