@@ -1,5 +1,6 @@
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 {% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
 {% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
 {% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
 
@@ -21,8 +22,26 @@
       {{ form.order }}
 
       {{ form.type }}
-      {{ form.title(params={"attributes": {"data-mhclg-module": "autocomplete"} }) }}
-      {{ form.hint(params={"attributes": {"data-mhclg-module": "autocomplete"} }) }}
+
+      {% set helpWithCustomisation %}
+      {{ govukDetails({
+        "summaryText": "Including contextual information",
+        "html": "
+<p class='govuk-hint'>
+  You can insert information into your questions dynamically based on the context of the data collection or user.
+</p>
+<p class='govuk-hint'>
+  To add dynamic data, type two brackets <code class='lang-md'>((</code> and then use the context menu to select which piece of data to insert.
+  There must be two matching closing brackets <code class='lang-md'>))</code> following the contextual information.
+</p>
+<p class='govuk-hint'>
+  For example:
+<pre class='formatting-example'><code class='lang-md'>How much funding is ((organisation.name)) applying for?</code></pre>
+        "
+      }) }}
+      {% endset %}
+      {{ form.title(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} }) }}
+      {{ form.hint(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} }) }}
 
       {{ form.mandatory(params={"items": [{}, {"hint": {"text": "We’ll add ‘(optional)’ to the end of the question text."} }]}) }}  {# gross hack #}
 

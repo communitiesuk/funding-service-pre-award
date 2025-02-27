@@ -955,3 +955,17 @@
 .app-\!-no-wrap {
     white-space: nowrap;
 }
+
+.formatting-example {
+    background: #f3f2f1;
+    margin: 15px 0 20px;
+    overflow-x: auto;
+    padding: 15px;
+    white-space: pre-wrap;
+}
+
+code.lang-md {
+    background: #f3f2f1;
+    font-family: GDS Transport, arial, sans-serif;
+    font-size: 19px;
+}
