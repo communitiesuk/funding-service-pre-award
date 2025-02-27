@@ -343,7 +343,7 @@ def edit_question_view(grant_code, round_ext_id, section_id, question_id):
 @is_authenticated(as_platform_admin=True)
 def create_condition(grant_code, round_ext_id, section_id, question_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
-    section = get_section_for_data_collection_definition(round.data_collection_definition, section_id)
+    section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
 
     # int ids shouldn't be in the url
     question = next(x for x in section.questions if x.id == int(question_id))
@@ -365,7 +365,7 @@ def create_condition(grant_code, round_ext_id, section_id, question_id):
             )
         )
 
-    autocomplete_context = build_autocomplete_context(grant, round.data_collection_definition, answer=True)
+    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition)
 
     # to not boil the ocean I'll assume you're coming from editing an existing question - we can make this work
     # with nice symetry between create + update but want something in for now
@@ -424,7 +424,7 @@ def edit_condition(grant_code, round_ext_id, section_id, question_id, condition_
             )
         )
 
-    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition, answer=True)
+    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition)
 
     # to not boil the ocean I'll assume you're coming from editing an existing question - we can make this work
     # with nice symetry between create + update but want something in for now
