@@ -63,11 +63,7 @@ def print_scoring_systems():
     else:
         print("\nExisting Scoring Systems:")
         for system in systems:
-            system_name = (
-                system.scoring_system_name.name
-                if hasattr(system.scoring_system_name, "name")
-                else system.scoring_system_name
-            )
+            system_name = system.scoring_system_name.name
             print(
                 f" Name: {system_name} | Range: {system.minimum_score}-{system.maximum_score} | "
                 f"Scoring System ID: {system.id}"
@@ -118,10 +114,7 @@ def final_display(scoring_system_id: str, round_id: str) -> None:
         fund_obj = db.session.query(Fund).filter(Fund.id == round_obj.fund_id).first()
 
     if scoring_system:
-        if hasattr(scoring_system.scoring_system_name, "name"):
-            system_name = scoring_system.scoring_system_name.name
-        else:
-            system_name = scoring_system.scoring_system_name
+        system_name = scoring_system.scoring_system_name.name
     else:
         system_name = "N/A"
     round_short = getattr(round_obj, "short_name", "N/A") if round_obj else "N/A"

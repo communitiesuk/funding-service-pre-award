@@ -5,7 +5,7 @@ Joins allowed.
 """
 
 import uuid
-from typing import Dict, Optional
+from typing import Dict
 
 from flask import current_app as app
 from sqlalchemy import String, cast, select
@@ -218,7 +218,7 @@ def update_scoring_system_for_round_id(round_id: str, scoring_system_id: str) ->
     return AssessmentRoundMetadata().dump(assessment_round)
 
 
-def lookup_scoring_system_id(name: str) -> Optional[str]:
+def lookup_scoring_system_id(name: str) -> str | None:
     """
     Directly look up a scoring system by name (case-insensitive).
     """
@@ -230,16 +230,17 @@ def lookup_scoring_system_id(name: str) -> Optional[str]:
     return str(system.id) if system else None
 
 
-def list_existing_scoring_systems():
+def list_existing_scoring_systems() -> list[ScoringSystem]:
     """Return a list of existing scoring systems."""
     return db.session.query(ScoringSystem).all()
 
 
-def get_scoring_info_by_round(round_id: str) -> ScoringSystem:
+def get_scoring_info_by_round(round_id: str) -> ScoringSystem | None:
     assessment_round = db.session.query(AssessmentRound).filter(AssessmentRound.round_id == round_id).first()
-    if assessment_round:
+    if assessment_round is None:
+        return None
+    else:
         scoring_system = (
             db.session.query(ScoringSystem).filter(ScoringSystem.id == assessment_round.scoring_system_id).first()
         )
         return scoring_system
-    return None
