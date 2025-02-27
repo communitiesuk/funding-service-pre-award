@@ -463,10 +463,48 @@
       return wrapper;
     }
 
+    // Function to handle the auto-closing of parentheses
+    function handleAutoClosingParentheses(inputEl) {
+      // Keep track of the last two characters typed
+      let lastChars = "";
+
+      // Add input event listener to capture typing
+      inputEl.addEventListener("input", function(e) {
+        const cursorPos = inputEl.selectionStart;
+        const text = inputEl.value;
+
+        // Check if we just typed "((" by looking at the current cursor position
+        if (cursorPos >= 2 && text.substring(cursorPos - 2, cursorPos) === "((") {
+          // Only add "))" if we don't already have a closing parenthesis
+          // Check if there's a closing parenthesis ahead
+          const textAfterCursor = text.substring(cursorPos);
+          const hasClosingParentheses = textAfterCursor.indexOf("))") !== -1;
+
+          // Get the text before and after the cursor
+          if (!hasClosingParentheses) {
+            const before = text.substring(0, cursorPos);
+            const after = text.substring(cursorPos);
+
+            // Insert "))" at the cursor position
+            inputEl.value = before + "))" + after;
+
+            // Move the cursor back between the parentheses
+            inputEl.setSelectionRange(cursorPos, cursorPos);
+
+            // Trigger update of highlighting overlay
+            updateHighlightOverlay(inputEl);
+          }
+        }
+      });
+    }
+
     // Attach the autocomplete functionality to a given input or textarea.
     function attachAutocomplete(inputEl) {
       // Setup the highlighting overlay system
       setupHighlightingOverlay(inputEl);
+
+      // Setup auto-closing parentheses
+      handleAutoClosingParentheses(inputEl);
 
       // Variables for keyboard navigation
       let currentItems = [];
