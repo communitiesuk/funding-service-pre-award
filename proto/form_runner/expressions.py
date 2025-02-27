@@ -10,6 +10,7 @@ import simpleeval
 from db import db
 from proto.common.data.models import (
     Fund,
+    Organisation,
     ProtoDataCollectionDefinition,
     ProtoDataCollectionInstance,
     ProtoGrantRecipient,
@@ -118,8 +119,13 @@ def _autocomplete_context_for_collection_definition_data(definition: ProtoDataCo
 def _autocomplete_context_for_db_model(model: db.Model, prefix: str):
     data = []
 
-    for col in model.__table__.columns.keys():
-        data.append({"value": prefix + col, "label": prefix + col})
+    if hasattr(model, "context_fields"):
+        for prop, description in model.context_fields.items():
+            data.append({"value": prefix + prop, "label": description})
+
+    else:
+        for col in model.__table__.columns.keys():
+            data.append({"value": prefix + col, "label": prefix + col})
 
     return data
 
@@ -143,6 +149,12 @@ def build_autocomplete_context(
     # application_round
     autocomplete_context.append({"value": "application_round.", "label": "Information from the application round"})
     autocomplete_context.extend(_autocomplete_context_for_db_model(Round(), prefix="application_round."))
+
+    # organisation
+    autocomplete_context.append(
+        {"value": "organisation.", "label": "Information from the grant recipient's organisation"}
+    )
+    autocomplete_context.extend(_autocomplete_context_for_db_model(Organisation(), prefix="organisation."))
 
     if this_definition not in [ar.data_collection_definition for ar in grant.application_rounds]:
         # application - skipping a lot of edge cases and considerations here

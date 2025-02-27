@@ -48,3 +48,10 @@ class ProtoGrantRecipient(db.Model):
         order_by="asc(ProtoReportingRound.reporting_period_starts)",
         viewonly=True,
     )
+
+    @property
+    def context_fields(self) -> dict[str, str]:
+        return {
+            "funding_allocated": "The amount of money currently allocated to the grant recipient",
+            "funding_paid": "The amount of money paid so far to the grant recipient",
+        }

@@ -166,3 +166,15 @@ class Round(db.Model):
     @property
     def is_draft(self):
         return self.proto_draft is True
+
+    @property
+    def context_fields(self) -> dict[str, str]:
+        return {
+            "title_json.en": "The application round's name",
+            "short_name": "The application round's short code",
+            "opens": "The date that the application round opens",
+            "deadline": "The date that the application round closes",
+            "assessment_start": "The date on which assessment of applications will start",
+            "assessment_deadline": "The date on which assessment of applications will finish",
+            "contact_email": "The contact email for application support",
+        }

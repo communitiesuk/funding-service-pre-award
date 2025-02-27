@@ -17,3 +17,10 @@ class Organisation(db.Model):
 
     # Proto shortcut - would be more flexible in reality
     domain: Mapped[str]
+
+    @property
+    def context_fields(self) -> dict[str, str]:
+        return {
+            "id": "The organisation's ID",
+            "name": "The organisation's name",
+        }

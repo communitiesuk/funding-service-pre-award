@@ -142,3 +142,11 @@ class Fund(db.Model):
     @property
     def name(self):
         return self.proto_name or self.name_json.get("en")
+
+    @property
+    def context_fields(self) -> dict[str, str]:
+        return {
+            "proto_name": "The name of the grant",
+            "ggis_scheme_reference_number": "The grant's GGIS scheme reference number",
+            "short_name": "The grant's short code",
+        }

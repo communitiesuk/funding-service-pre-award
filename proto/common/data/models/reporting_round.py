@@ -80,3 +80,12 @@ class ProtoReportingRound(db.Model):
     @property
     def is_draft(self):
         return self.preview is True
+
+    @property
+    def context_fields(self) -> dict[str, str]:
+        return {
+            "reporting_period_starts": "The first day of the reporting period",
+            "reporting_period_ends": "The last day of the reporting period",
+            "submission_period_starts": "The first day on which grant recipient's can submit their reports",
+            "submission_period_ends": "The last day on which grant recipient's can submit their reports",
+        }
