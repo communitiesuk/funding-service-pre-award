@@ -146,10 +146,10 @@ def insert_question_bank_data():
             data_standard_id=None,
             template_section_id=template_sections_to_create["tea-licensing"].id,
         ),
-        "embezzling-is-bad": TemplateQuestion(
-            slug="embezzling-is-bad",
+        "fraud-is-bad": TemplateQuestion(
+            slug="fraud-is-bad",
             type=QuestionType.RADIOS,
-            title="Confirm you aren't trying to embezzle taxpayer money.",
+            title="Are you trying to defraud the taxpayer?",
             hint="More than £5 per cup of tea is excessive.",
             order=3,
             data_source=[
@@ -498,7 +498,7 @@ def insert_question_bank_data():
             message="We will only fund tea that can be served for £10 a cup or cheaper",
         ),
         TemplateValidation(
-            question_id=template_questions_to_create["embezzling-is-bad"].id,
+            question_id=template_questions_to_create["fraud-is-bad"].id,
             expression="answer == 'good-boy'",
             message="Try again",
         ),
@@ -558,7 +558,7 @@ def insert_question_bank_data():
 
     conditions_to_create = [
         TemplateQuestionCondition(
-            question_id=template_questions_to_create["embezzling-is-bad"].id,
+            question_id=template_questions_to_create["fraud-is-bad"].id,
             depends_on_question_id=template_questions_to_create["price-per-cup"].id,
             criteria={},
             expression="this_collection.tea_licensing.price_per_cup >= 5",
