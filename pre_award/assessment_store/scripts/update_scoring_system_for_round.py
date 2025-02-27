@@ -51,7 +51,7 @@ def print_fund_round_scoringsystem() -> None:
             else:
                 scoring_system_info = "N/A"
             print(
-                f"  [{idx}] | Fund: {fund_name} | Round: {short_name} | "
+                f"  [{idx}] Fund: {fund_name} | Round: {short_name} | "
                 f"Scoring System: {scoring_system_info} | Round ID: {rnd.id}"
             )
 
