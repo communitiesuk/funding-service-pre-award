@@ -62,7 +62,7 @@ class QuestionForm(FlaskForm):
     type = RadioField(
         _l("What type of question are you adding?"),
         widget=GovRadioInput(),
-        choices=[(ft.value, human_readable.get(ft)) for ft in QuestionType],
+        choices=[(ft.value, human_readable.get(ft)) for ft in QuestionType if ft != QuestionType.RADIOS],
         coerce=lambda x: QuestionType(x).value,
         validators=[DataRequired(message=_l("Select a question type"))],
     )
