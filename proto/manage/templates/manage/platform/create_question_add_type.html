@@ -1,0 +1,34 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+
+{% extends "manage/platform/grants_base.html" %}
+
+{% block pageTitle %}{% trans %}Add a question{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if form.errors %}
+        {{ govukErrorSummary(wtforms_errors(form)) }}
+    {% endif %}
+
+    <form method="post" novalidate>
+      {{ form.csrf_token }}
+
+      {{ form.type(params={
+        "fieldset": {
+          "legend": {
+            "text": _("What type of answer do you need to your question?"),
+            "isPageHeading": true,
+            "classes": "govuk-fieldset__legend--l"
+          }
+        }
+      }) }}
+
+      {{ form.submit }}
+    </form>
+  </div>
+</div>
+{% endblock %}

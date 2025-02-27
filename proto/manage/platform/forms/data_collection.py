@@ -58,7 +58,7 @@ human_readable = {
 }
 
 
-class QuestionForm(FlaskForm):
+class NewQuestionTypeForm(FlaskForm):
     type = RadioField(
         _l("What type of question are you adding?"),
         widget=GovRadioInput(),
@@ -66,13 +66,41 @@ class QuestionForm(FlaskForm):
         coerce=lambda x: QuestionType(x).value,
         validators=[DataRequired(message=_l("Select a question type"))],
     )
-    title = StringField(
-        _l("What is the question?"),
+    submit = SubmitField(_l("Continue"), widget=GovSubmitInput())
+
+
+class NewConditionForm(FlaskForm):
+    expression = StringField(
+        _l("Expression"),
+        widget=GovTextArea(),
+        validators=[DataRequired(message=_l("Enter the expression"))],
+    )
+    submit = SubmitField(_l("Add condition"), widget=GovSubmitInput())
+
+
+class NewValidationForm(FlaskForm):
+    expression = StringField(
+        _l("Expression"),
+        widget=GovTextArea(),
+        validators=[DataRequired(message=_l("Enter the expression"))],
+    )
+    message = StringField(
+        _l("Message"),
         widget=GovTextInput(),
-        validators=[DataRequired(message=_l("Enter the question"))],
+        validators=[DataRequired(message=_l("Enter the message"))],
+    )
+
+    submit = SubmitField(_l("Add validation"), widget=GovSubmitInput())
+
+
+class QuestionForm(FlaskForm):
+    title = StringField(
+        _l("Question text"),
+        widget=GovTextInput(),
+        validators=[DataRequired(message=_l("Enter the question text"))],
     )
     hint = StringField(
-        _l("What is the hint text for the question?"),
+        _l("Hint text"),
         description="Only provide this if additional information is needed to help answer the question correctly.",
         widget=GovTextArea(),
         validators=[Optional()],
@@ -86,4 +114,8 @@ class QuestionForm(FlaskForm):
     order = IntegerField(
         widget=HiddenInput(),
     )
+    type = StringField(
+        widget=HiddenInput(),
+    )
+
     submit = SubmitField(_l("Add question"), widget=GovSubmitInput())

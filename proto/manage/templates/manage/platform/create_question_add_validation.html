@@ -1,0 +1,64 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+
+{% extends "manage/platform/grants_base.html" %}
+
+{% set title = _("Update validation") if is_edit else _("Add validation") %}
+
+{% block pageTitle %}{{ title }} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% set helpWithCustomisation %}
+      <div class="govuk-hint">
+        You can add rules to help your users provide answers that are correct and align with data standards.
+      </div>
+      {{ govukDetails({
+        "summaryText": "Including contextual information",
+        "html": "
+<p class='govuk-hint'>
+  You can insert information into your questions dynamically based on the context of the data collection or user.
+</p>
+<p class='govuk-hint'>
+  To add dynamic data, type two brackets <code class='lang-md'>((</code> and then use the context menu to select which piece of data to insert.
+  There must be two matching closing brackets <code class='lang-md'>))</code> following the contextual information.
+</p>
+<p class='govuk-hint'>
+  For example:
+<pre class='formatting-example'><code class='lang-md'>(( answer <= 10000 ))</code></pre>
+        "
+      }) }}
+{% endset %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if form.errors %}
+        {{ govukErrorSummary(wtforms_errors(form)) }}
+    {% endif %}
+
+
+    <span class="govuk-caption-m">{{ question.title }}</span>
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+
+     <form method="post" novalidate>
+
+      {{ form.csrf_token }}
+      {{ form.expression(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} })}}
+      {{ form.message }}
+
+      {{ form.submit(params={ "text": _("Update validation") if is_edit else _("Add validation")  }) }}
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+
+  {% from 'common/partials/autocomplete.html' import initialiseAutocomplete %}
+  {{ initialiseAutocomplete(autocomplete_context) }}
+{% endblock %}
