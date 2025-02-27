@@ -73,6 +73,7 @@ def build_context(
     recipient = this_collection.report.recipient if this_collection and this_collection.report else None
     if recipient:
         context["recipient"] = recipient
+        context["organisation"] = recipient.organisation
 
     if this_collection and this_collection.report:
         context["reporting_round"] = this_collection.report.reporting_round
