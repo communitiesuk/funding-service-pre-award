@@ -42,10 +42,30 @@ def get_section_for_data_collection_definition(data_collection_definition, secti
     ).one()
 
 
+def get_data_collection_definition_question(data_collection_definition, section_id, question_id):
+    return db.session.scalars(
+        select(ProtoDataCollectionDefinitionQuestion)
+        .join(ProtoDataCollectionDefinitionSection)
+        .join(ProtoDataCollectionDefinition)
+        .filter(
+            ProtoDataCollectionDefinitionQuestion.id == question_id,
+            ProtoDataCollectionDefinitionSection.id == section_id,
+            ProtoDataCollectionDefinition.id == data_collection_definition.id,
+        )
+    ).one()
+
+
 def create_question(**kwargs):
     kwargs["slug"] = make_url_slug(kwargs["title"])
     question = ProtoDataCollectionDefinitionQuestion(**kwargs)
     db.session.add(question)
+    db.session.commit()
+
+
+def update_question(question, **kwargs):
+    kwargs["slug"] = make_url_slug(kwargs["title"])
+    for attr, value in kwargs.items():
+        setattr(question, attr, value)
     db.session.commit()
 
 

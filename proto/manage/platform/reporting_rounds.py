@@ -10,12 +10,14 @@ from proto.common.data.services.question_bank import (
     create_question,
     create_section,
     ensure_round_has_data_collection_definition,
+    get_data_collection_definition_question,
     get_section_for_data_collection_definition,
     get_template_sections_and_questions,
+    update_question,
 )
 from proto.common.data.services.reporting_round import create_reporting_round, update_reporting_round
 from proto.form_runner.expressions import build_autocomplete_context
-from proto.manage.platform.forms.data_collection import ChooseTemplateSectionsForm, NewQuestionForm, NewSectionForm
+from proto.manage.platform.forms.data_collection import ChooseTemplateSectionsForm, NewSectionForm, QuestionForm
 from proto.manage.platform.forms.reporting_round import (
     CreateReportingRoundForm,
     PreviewReportForm,
@@ -198,19 +200,52 @@ def create_section_view(grant_code, round_ext_id):
     "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/create-question",
     methods=["GET", "POST"],
 )
-@reporting_rounds_blueprint.route(
-    "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/questions/<question_id>",
-    methods=["GET", "POST"],
-)
 @is_authenticated(as_platform_admin=True)
 def create_question_view(grant_code, round_ext_id, section_id, question_id=None):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
-    form = NewQuestionForm(data={"order": (max(q.order for q in section.questions) if section.questions else 0) + 1})
+    form = QuestionForm(data={"order": (max(q.order for q in section.questions) if section.questions else 0) + 1})
 
     if form.validate_on_submit():
         create_question(
             section_id=section.id,
+            **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token", "mandatory"}},
+        )
+        return redirect(
+            url_for(
+                "proto_manage.platform.reporting_rounds.view_reporting_round_data_collection",
+                grant_code=grant_code,
+                round_ext_id=round_ext_id,
+            )
+        )
+    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition)
+    return render_template(
+        "manage/platform/create_question.html",
+        grant=grant,
+        reporting_round=reporting_round,
+        section=section,
+        form=form,
+        autocomplete_context=autocomplete_context,
+        active_sub_navigation_tab="monitoring",
+    )
+
+
+@reporting_rounds_blueprint.route(
+    "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/edit-question/<question_id>",
+    methods=["GET", "POST"],
+)
+@is_authenticated(as_platform_admin=True)
+def edit_question_view(grant_code, round_ext_id, section_id, question_id):
+    grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
+    question = get_data_collection_definition_question(
+        reporting_round.data_collection_definition, section_id, question_id
+    )
+    section = question.section
+    form = QuestionForm(obj=question, data={"mandatory": "mandatory"})
+
+    if form.validate_on_submit():
+        update_question(
+            question=question,
             **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token", "mandatory"}},
         )
         return redirect(

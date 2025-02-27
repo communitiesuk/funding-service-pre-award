@@ -6,7 +6,7 @@
 
 {% extends "manage/platform/grants_base.html" %}
 
-{% block pageTitle %}{% trans %}Create a new question{% endtrans %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+{% block pageTitle %}{% if question is defined %}{% trans %}Edit question{% endtrans %}{% else %}{% trans %}Create a new question{% endtrans %}{% endif %} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -15,7 +15,7 @@
         {{ govukErrorSummary(wtforms_errors(form)) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">Create a new question</h1>
+    <h1 class="govuk-heading-l">{% if question is defined %}{% trans %}Edit question{% endtrans %}{% else %}{% trans %}Create a new question{% endtrans %}{% endif %}</h1>
 
     <form method="post" novalidate>
       {{ form.csrf_token }}

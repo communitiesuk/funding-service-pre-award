@@ -54,11 +54,11 @@ class TemplateSection(db.Model):
 
 
 class QuestionType(str, enum.Enum):
-    TEXT_INPUT = "text input"
-    TEXTAREA = "text area"
-    RADIOS = "radio"
-    NUMBER = "number"
-    POUNDS_AND_PENCE = "price with pennies"
+    TEXT_INPUT = "TEXT_INPUT"
+    TEXTAREA = "TEXTAREA"
+    RADIOS = "RADIOS"
+    NUMBER = "NUMBER"
+    POUNDS_AND_PENCE = "POUNDS_AND_PENCE"
 
 
 class ConditionCombination(str, enum.Enum):

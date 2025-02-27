@@ -51,7 +51,7 @@
             [
               {"text": ' '},
               {"text": question.title},
-              {"html": ("<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('protodatacollectiondefinitionquestion.edit_view', id=question.id, url=url_for('proto_manage.platform.reporting_rounds.view_reporting_round_data_collection', grant_code=grant.short_name, round_ext_id=round.external_id)) + "'>Edit</a>") if round.preview else ' '}
+              {"html": ("<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('proto_manage.platform.reporting_rounds.edit_question_view', grant_code=grant.short_name, round_ext_id=round.external_id, section_id=section.id, question_id=question.id) + "'>Edit</a>") if round.preview else ' '}
             ]
           ) %}
         {% endfor %}

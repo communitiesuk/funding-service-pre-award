@@ -58,11 +58,12 @@ human_readable = {
 }
 
 
-class NewQuestionForm(FlaskForm):
+class QuestionForm(FlaskForm):
     type = RadioField(
         _l("What type of question are you adding?"),
         widget=GovRadioInput(),
         choices=[(ft.value, human_readable.get(ft)) for ft in QuestionType],
+        coerce=lambda x: QuestionType(x).value,
         validators=[DataRequired(message=_l("Select a question type"))],
     )
     title = StringField(
