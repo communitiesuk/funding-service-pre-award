@@ -105,12 +105,12 @@ class QuestionForm(FlaskForm):
         widget=GovTextArea(),
         validators=[Optional()],
     )
-    mandatory = RadioField(
-        _l("Is this question mandatory or optional?"),
-        widget=GovRadioInput(),
-        choices=[("mandatory", "Mandatory"), ("optional", "Optional")],
-        render_kw={"items": [{}, {"hint": {"text": "We’ll add ‘(optional)’ to the end of the question text."}}]},
-    )
+    # mandatory = RadioField(
+    #     _l("Is this question mandatory or optional?"),
+    #     widget=GovRadioInput(),
+    #     choices=[("mandatory", "Mandatory"), ("optional", "Optional")],
+    #     render_kw={"items": [{}, {"hint": {"text": "We’ll add ‘(optional)’ to the end of the question text."}}]},
+    # )
     order = IntegerField(
         widget=HiddenInput(),
     )

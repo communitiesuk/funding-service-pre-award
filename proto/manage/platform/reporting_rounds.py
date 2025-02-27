@@ -3,17 +3,21 @@ from flask import g, redirect, render_template, session, url_for
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
 from proto.common.data.exceptions import DataValidationError, attach_validation_error_to_form
-from proto.common.data.models.question_bank import TemplateType
+from proto.common.data.models.question_bank import QuestionType, TemplateType
 from proto.common.data.services.grants import get_grant, get_grant_and_reporting_round
 from proto.common.data.services.question_bank import (
     add_template_sections_to_data_collection_definition,
     create_question,
+    create_question_condition,
+    create_question_validation,
     create_section,
     ensure_round_has_data_collection_definition,
     get_data_collection_definition_question,
     get_section_for_data_collection_definition,
     get_template_sections_and_questions,
     update_question,
+    update_question_condition,
+    update_question_validation,
 )
 from proto.common.data.services.recipients import get_grant_recipient_for_organisation
 from proto.common.data.services.reporting_round import create_reporting_round, update_reporting_round
@@ -21,9 +25,12 @@ from proto.common.data.services.reports import get_or_create_monitoring_reports_
 from proto.form_runner.expressions import build_autocomplete_context
 from proto.manage.platform.forms.data_collection import (
     ChooseTemplateSectionsForm,
+    NewConditionForm,
     NewQuestionTypeForm,
     NewSectionForm,
+    NewValidationForm,
     QuestionForm,
+    human_readable,
 )
 from proto.manage.platform.forms.reporting_round import (
     CreateReportingRoundForm,
@@ -271,6 +278,7 @@ def create_question_view(grant_code, round_ext_id, section_id, question_id=None)
         "manage/platform/create_question_add_edit_detail.html",
         grant=grant,
         reporting_round=reporting_round,
+        question_type_human_readable=human_readable.get(QuestionType(session.get("new_question_type"))),
         section=section,
         form=form,
         autocomplete_context=autocomplete_context,
@@ -295,6 +303,7 @@ def edit_question_view(grant_code, round_ext_id, section_id, question_id):
     )
     section = question.section
     form = QuestionForm(obj=question, data={"mandatory": "mandatory"})
+    form.type.data = question.type.value  # hack
 
     if form.validate_on_submit():
         update_question(
@@ -313,6 +322,7 @@ def edit_question_view(grant_code, round_ext_id, section_id, question_id):
         "manage/platform/create_question_add_edit_detail.html",
         grant=grant,
         reporting_round=reporting_round,
+        question_type_human_readable=human_readable.get(question.type),
         section=section,
         question=question,
         form=form,
@@ -323,6 +333,242 @@ def edit_question_view(grant_code, round_ext_id, section_id, question_id):
             round_ext_id=round_ext_id,
         ),
         active_sub_navigation_tab="monitoring",
+    )
+
+
+@reporting_rounds_blueprint.route(
+    "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/question/<question_id>/create-condition",
+    methods=["GET", "POST"],
+)
+@is_authenticated(as_platform_admin=True)
+def create_condition(grant_code, round_ext_id, section_id, question_id):
+    grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
+    section = get_section_for_data_collection_definition(round.data_collection_definition, section_id)
+
+    # int ids shouldn't be in the url
+    question = next(x for x in section.questions if x.id == int(question_id))
+
+    form = NewConditionForm()
+
+    if form.validate_on_submit():
+        create_question_condition(
+            question,
+            **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}},
+        )
+        return redirect(
+            url_for(
+                "proto_manage.platform.reporting_rounds.edit_question_view",
+                grant_code=grant_code,
+                round_ext_id=round_ext_id,
+                section_id=section_id,
+                question_id=question_id,
+            )
+        )
+
+    autocomplete_context = build_autocomplete_context(grant, round.data_collection_definition, answer=True)
+
+    # to not boil the ocean I'll assume you're coming from editing an existing question - we can make this work
+    # with nice symetry between create + update but want something in for now
+    back_link = url_for(
+        "proto_manage.platform.reporting_rounds.edit_question_view",
+        grant_code=grant_code,
+        round_ext_id=round_ext_id,
+        section_id=section_id,
+        question_id=question_id,
+    )
+
+    return render_template(
+        "manage/platform/create_question_add_condition.html",
+        grant=grant,
+        round=round,
+        section=section,
+        form=form,
+        # horrible - make this consistent with the
+        # question_type_human_readbale=human_readable
+        question_type_human_readable=human_readable.get(question.type),
+        active_sub_navigation_tab="funding",
+        back_link=back_link,
+        question=question,
+        autocomplete_context=autocomplete_context,
+    )
+
+
+@reporting_rounds_blueprint.route(
+    "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/question/<question_id>/condition/<condition_id>",
+    methods=["GET", "POST"],
+)
+@is_authenticated(as_platform_admin=True)
+def edit_condition(grant_code, round_ext_id, section_id, question_id, condition_id):
+    grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
+    section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
+
+    # int ids shouldn't be in the url
+    question = next(x for x in section.questions if x.id == int(question_id))
+
+    condition = next(x for x in question.conditions if x.id == int(condition_id))
+
+    form = NewConditionForm(obj=condition)
+
+    if form.validate_on_submit():
+        update_question_condition(
+            condition,
+            **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}},
+        )
+        return redirect(
+            url_for(
+                "proto_manage.platform.reporting_rounds.edit_question_view",
+                grant_code=grant_code,
+                round_ext_id=round_ext_id,
+                section_id=section_id,
+                question_id=question_id,
+            )
+        )
+
+    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition, answer=True)
+
+    # to not boil the ocean I'll assume you're coming from editing an existing question - we can make this work
+    # with nice symetry between create + update but want something in for now
+    back_link = url_for(
+        "proto_manage.platform.reporting_rounds.edit_question_view",
+        grant_code=grant_code,
+        round_ext_id=round_ext_id,
+        section_id=section_id,
+        question_id=question_id,
+    )
+
+    return render_template(
+        "manage/platform/create_question_add_condition.html",
+        grant=grant,
+        reporting_round=reporting_round,
+        section=section,
+        form=form,
+        # horrible - make this consistent with the
+        # question_type_human_readbale=human_readable
+        question_type_human_readable=human_readable.get(question.type),
+        active_sub_navigation_tab="funding",
+        back_link=back_link,
+        question=question,
+        condition=condition,
+        is_edit=True,
+        autocomplete_context=autocomplete_context,
+    )
+
+
+@reporting_rounds_blueprint.route(
+    "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/question/<question_id>/create-validation",
+    methods=["GET", "POST"],
+)
+@is_authenticated(as_platform_admin=True)
+def create_validation(grant_code, round_ext_id, section_id, question_id):
+    grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
+    section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
+
+    # int ids shouldn't be in the url
+    question = next(x for x in section.questions if x.id == int(question_id))
+
+    form = NewValidationForm()
+
+    if form.validate_on_submit():
+        create_question_validation(
+            question,
+            **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}},
+        )
+        return redirect(
+            url_for(
+                "proto_manage.platform.reporting_rounds.edit_question_view",
+                grant_code=grant_code,
+                round_ext_id=round_ext_id,
+                section_id=section_id,
+                question_id=question_id,
+            )
+        )
+
+    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition, answer=True)
+
+    # to not boil the ocean I'll assume you're coming from editing an existing question - we can make this work
+    # with nice symetry between create + update but want something in for now
+    back_link = url_for(
+        "proto_manage.platform.reporting_rounds.edit_question_view",
+        grant_code=grant_code,
+        round_ext_id=round_ext_id,
+        section_id=section_id,
+        question_id=question_id,
+    )
+
+    return render_template(
+        "manage/platform/create_question_add_validation.html",
+        grant=grant,
+        reporting_round=reporting_round,
+        section=section,
+        form=form,
+        # horrible - make this consistent with the
+        # question_type_human_readbale=human_readable
+        question_type_human_readable=human_readable.get(question.type),
+        active_sub_navigation_tab="funding",
+        back_link=back_link,
+        question=question,
+        autocomplete_context=autocomplete_context,
+    )
+
+
+@reporting_rounds_blueprint.route(
+    "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/question/<question_id>/validation/<validation_id>",  # noqa
+    methods=["GET", "POST"],
+)
+@is_authenticated(as_platform_admin=True)
+def edit_validation(grant_code, round_ext_id, section_id, question_id, validation_id):
+    grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
+    section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
+
+    # int ids shouldn't be in the url
+    question = next(x for x in section.questions if x.id == int(question_id))
+
+    validation = next(x for x in question.validations if x.id == int(validation_id))
+
+    form = NewValidationForm(obj=validation)
+
+    if form.validate_on_submit():
+        update_question_validation(
+            validation,
+            **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}},
+        )
+        return redirect(
+            url_for(
+                "proto_manage.platform.reporting_rounds.edit_question_view",
+                grant_code=grant_code,
+                round_ext_id=round_ext_id,
+                section_id=section_id,
+                question_id=question_id,
+            )
+        )
+
+    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition, answer=True)
+
+    # to not boil the ocean I'll assume you're coming from editing an existing question - we can make this work
+    # with nice symetry between create + update but want something in for now
+    back_link = url_for(
+        "proto_manage.platform.reporting_rounds.edit_question_view",
+        grant_code=grant_code,
+        round_ext_id=round_ext_id,
+        section_id=section_id,
+        question_id=question_id,
+    )
+
+    return render_template(
+        "manage/platform/create_question_add_validation.html",
+        grant=grant,
+        reporting_round=reporting_round,
+        section=section,
+        form=form,
+        # horrible - make this consistent with the
+        # question_type_human_readbale=human_readable
+        question_type_human_readable=human_readable.get(question.type),
+        active_sub_navigation_tab="funding",
+        back_link=back_link,
+        question=question,
+        validation=validation,
+        is_edit=True,
+        autocomplete_context=autocomplete_context,
     )
 
 

@@ -19,6 +19,12 @@
     <h1 class="govuk-heading-l">{{ _("Update question") if is_edit else _("Add a question") }}</h1>
 
     <form method="post" novalidate>
+      <div class="govuk-form-group">
+        <h2 class="govuk-label-wrapper">
+          <label class="govuk-label">Question type</label>
+        </h2>
+        <p class="govuk-body">{{ question_type_human_readable }}</p>
+      </div>
 
       {{ form.csrf_token }}
       {{ form.order }}
@@ -45,7 +51,7 @@
       {{ form.title(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} }) }}
       {{ form.hint(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} }) }}
 
-      {{ form.mandatory(params={"items": [{}, {"hint": {"text": "We’ll add ‘(optional)’ to the end of the question text."} }]}) }}  {# gross hack #}
+{#      {{ form.mandatory(params={"items": [{}, {"hint": {"text": "We’ll add ‘(optional)’ to the end of the question text."} }]}) }}  {# gross hack #}
 
       {% if question %}
       <h2 class="govuk-heading-m">Conditions</h2>
@@ -79,7 +85,7 @@
 
       {# I think add condition as an action link in the final row of the summary table is clean from elsewhere #}
       {# do this for now if the table is there or not #}
-      <p class="govuk-body">{{ govukButton({"text": "Add a check", "href": url_for('proto_manage.platform.rounds.create_condition', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id), "classes": "govuk-button--secondary"}) }}</p>
+      <p class="govuk-body">{{ govukButton({"text": "Add a check", "href": url_for('proto_manage.platform.rounds.create_condition', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id) if round is defined else url_for('proto_manage.platform.reporting_rounds.create_condition', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id), "classes": "govuk-button--secondary"}) }}</p>
 
 
       <h2 class="govuk-heading-m">Validation</h2>
@@ -100,6 +106,8 @@
           "actions": {
             "items": [
               { "href": url_for('proto_manage.platform.rounds.edit_validation', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id, validation_id=validation.id), "text": "Manage" }
+              if round is defined else
+              { "href": url_for('proto_manage.platform.reporting_rounds.edit_validation', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id, validation_id=validation.id), "text": "Manage" }
             ]
           }
         }) %}
@@ -111,7 +119,7 @@
 
       {% endif %}
 
-      <p class="govuk-body">{{ govukButton({"text": "Add validation", "href": url_for('proto_manage.platform.rounds.create_validation', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id), "classes": "govuk-button--secondary"}) }}</p>
+      <p class="govuk-body">{{ govukButton({"text": "Add validation", "href": url_for('proto_manage.platform.rounds.create_validation', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id) if round is defined else url_for('proto_manage.platform.reporting_rounds.create_validation', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id), "classes": "govuk-button--secondary"}) }}</p>
       {% endif %}
       {{ form.submit(params={ "text": _("Update question") if is_edit else _("Add question")  }) }}
     </form>
