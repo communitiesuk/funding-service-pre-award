@@ -60,7 +60,7 @@
           {% set __ = questionRows.append(
             [
               {"text": ' '},
-              {"html": '<a class="govuk-link govuk-link--no-visited-state" href="' ~ url_for('proto_manage.platform.rounds.create_question_view', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id) ~ '">Add another question</a>'},
+              {"html": '<a class="govuk-link govuk-link--no-visited-state" href="' ~ url_for('proto_manage.platform.rounds.create_question_view', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id) ~ '">Add a' ~ ('nother' if section.questions | length) ~ ' question</a>'},
               {"text": ' '}
             ]
           ) %}
