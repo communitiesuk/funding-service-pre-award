@@ -154,7 +154,7 @@ def create_question_view(grant_code, round_code, section_id):
             )
         )
 
-    autocomplete_context = build_autocomplete_context(grant, round.data_collection_definition, answer="hello")
+    autocomplete_context = build_autocomplete_context(grant, round.data_collection_definition)
     return render_template(
         "manage/platform/create_question.html",
         grant=grant,

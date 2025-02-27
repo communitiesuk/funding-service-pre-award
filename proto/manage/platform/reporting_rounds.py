@@ -211,7 +211,7 @@ def create_question_view(grant_code, round_ext_id, section_id, question_id=None)
                 round_ext_id=round_ext_id,
             )
         )
-    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition, answer="hello")
+    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition)
     return render_template(
         "manage/platform/create_question.html",
         grant=grant,
