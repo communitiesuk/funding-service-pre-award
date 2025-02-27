@@ -15,7 +15,7 @@ from sqlalchemy.orm import joinedload, load_only, noload
 from sqlalchemy.sql.expression import Select
 
 from pre_award.application_store.db.exceptions import ApplicationError, SubmitError
-from pre_award.application_store.db.models import Applications
+from pre_award.application_store.db.models import Applications, Forms
 from pre_award.application_store.db.models.application.enums import Status as ApplicationStatus
 from pre_award.application_store.db.models.forms.enums import Status as FormStatus
 from pre_award.application_store.db.schemas import ApplicationSchema
@@ -457,3 +457,15 @@ def mark_application_with_requested_changes(application_id: str, field_ids: list
         application.status = ApplicationStatus.IN_PROGRESS
 
     db.session.commit()
+
+
+def check_change_requested_for_applications(applications):
+    application_ids = [application.id for application in applications]
+
+    change_requested = (
+        db.session.query(Forms.application_id)
+        .filter(Forms.application_id.in_(application_ids), Forms.status == FormStatus.CHANGE_REQUESTED)
+        .first()
+    )
+
+    return change_requested is not None

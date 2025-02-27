@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytest
+from bs4 import BeautifulSoup
 
 from tests.pre_award.apply_tests.api_data.test_data import TEST_APPLICATION_SUMMARIES
 
@@ -45,6 +46,10 @@ def test_changes_requested_notification(apply_test_client, mocker, templates_ren
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
     )
+    mocker.patch(
+        "pre_award.apply.default.account_routes.check_change_requested_for_applications",
+        return_value=True,
+    )
     apply_test_client.application.jinja_env.globals["get_service_title"] = lambda: "Test Service Title"
     apply_test_client.application.jinja_env.globals["toggle_dict"] = {"MULTIFUND_DASHBOARD": False}
 
@@ -56,8 +61,11 @@ def test_changes_requested_notification(apply_test_client, mocker, templates_ren
 
     rendered_html = template.render(
         display_data=display_data,
+        change_request=True,
     )
-    assert "The assessor has requested changes to your application." in rendered_html
+    soup = BeautifulSoup(rendered_html, "html.parser")
+
+    assert "The assessor has requested changes to your application." in soup.prettify()
 
 
 @pytest.mark.usefixtures("mock_login", "mock_get_fund_round")
@@ -65,6 +73,10 @@ def test_no_changes_requested_notification(apply_test_client, mocker, templates_
     mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
+    )
+    mocker.patch(
+        "pre_award.apply.default.account_routes.check_change_requested_for_applications",
+        return_value=False,
     )
     apply_test_client.application.jinja_env.globals["get_service_title"] = lambda: "Test Service Title"
     apply_test_client.application.jinja_env.globals["toggle_dict"] = {"MULTIFUND_DASHBOARD": False}
@@ -78,5 +90,9 @@ def test_no_changes_requested_notification(apply_test_client, mocker, templates_
     template, context = templates_rendered[0]
     assert template.name == "apply/dashboard_single_fund.html"
 
-    rendered_html = template.render(display_data=display_data)
-    assert "Please review updates from the Assessor" not in rendered_html
+    rendered_html = template.render(
+        display_data=display_data,
+        change_request=False,
+    )
+    soup = BeautifulSoup(rendered_html, "html.parser")
+    assert "The assessor has requested changes to your application." not in soup.prettify()

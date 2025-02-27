@@ -27,6 +27,7 @@ from pre_award.application_store.db.models import Applications, Forms
 from pre_award.application_store.db.models.application.enums import Status as ApplicationStatus
 from pre_award.application_store.db.models.forms.enums import Status as FormStatus
 from pre_award.application_store.db.queries.application import (
+    check_change_requested_for_applications,
     create_application,
     create_qa_base64file,
     mark_application_with_requested_changes,
@@ -706,3 +707,21 @@ def test_mark_application_with_requested_changes_updates_forms_and_application(
         assert updated_application.status == ApplicationStatus.IN_PROGRESS
     else:
         assert updated_application.status == ApplicationStatus.COMPLETED
+
+
+def test_check_change_requested_for_applications_no_change_requested(application_with_forms, db):
+    applications = [application_with_forms]
+
+    result = check_change_requested_for_applications(applications)
+    assert result is False
+
+
+def test_check_change_requested_for_applications(application_with_forms, db):
+    applications = [application_with_forms]
+
+    change_requested_form = application_with_forms.forms[0]
+    change_requested_form.status = FormStatus.CHANGE_REQUESTED
+    db.session.commit()
+
+    result = check_change_requested_for_applications(applications)
+    assert result is True

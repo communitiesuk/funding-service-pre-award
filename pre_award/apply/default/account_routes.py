@@ -3,6 +3,7 @@ from flask import current_app, g, make_response, redirect, render_template, requ
 from flask_babel import force_locale
 from fsd_utils.authentication.decorators import login_required
 
+from pre_award.application_store.db.queries.application import check_change_requested_for_applications
 from pre_award.apply.default.data import (
     RoundStatus,
     determine_round_status,
@@ -171,7 +172,7 @@ def dashboard():
     applications = search_applications(search_params=search_params, as_dict=False)
 
     show_language_column = determine_show_language_column(applications)
-
+    change_requested = check_change_requested_for_applications(applications)
     display_data = build_application_data_for_display(applications, fund_short_name, round_short_name)
     current_app.logger.info("Setting up applicant dashboard for: '{%(account_id)s'", dict(account_id=account_id))
     if not welsh_available and template_name == TEMPLATE_SINGLE_FUND:
@@ -181,6 +182,7 @@ def dashboard():
             render_template(
                 template_name,
                 account_id=account_id,
+                change_request=change_requested,
                 display_data=display_data,
                 show_language_column=show_language_column,
                 fund_short_name=fund_short_name,
