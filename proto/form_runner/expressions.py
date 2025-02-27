@@ -158,13 +158,13 @@ def build_autocomplete_context(
     autocomplete_context.extend(_autocomplete_context_for_db_model(Organisation(), prefix="organisation."))
 
     if this_definition not in [ar.data_collection_definition for ar in grant.application_rounds]:
-        # application - skipping a lot of edge cases and considerations here
-        autocomplete_context.append({"value": "application.", "label": "Information from the grant application"})
-        autocomplete_context.extend(
-            _autocomplete_context_for_collection_definition_data(
-                grant.application_rounds[0].data_collection_definition, prefix="application."
-            )
+        context_for_application = _autocomplete_context_for_collection_definition_data(
+            grant.application_rounds[0].data_collection_definition, prefix="application."
         )
+        if context_for_application:
+            # application - skipping a lot of edge cases and considerations here
+            autocomplete_context.append({"value": "application.", "label": "Information from the grant application"})
+            autocomplete_context.extend(context_for_application)
 
     if this_definition in [rr.data_collection_definition for rr in grant.reporting_rounds]:
         # grant recipient profile
@@ -180,14 +180,14 @@ def build_autocomplete_context(
         # reports
         for i, reporting_round in enumerate(grant.reporting_rounds, start=1):
             if this_definition is not reporting_round.data_collection_definition:
-                autocomplete_context.append(
-                    {"value": f"reports[{i}].", "label": f"Information from monitoring report #{i}"}
+                context_for_reporting_round = _autocomplete_context_for_collection_definition_data(
+                    reporting_round.data_collection_definition, prefix=f"reports[{i}]."
                 )
-                autocomplete_context.extend(
-                    _autocomplete_context_for_collection_definition_data(
-                        reporting_round.data_collection_definition, prefix=f"reports[{i}]."
+                if context_for_reporting_round:
+                    autocomplete_context.append(
+                        {"value": f"reports[{i}].", "label": f"Information from monitoring report #{i}"}
                     )
-                )
+                    autocomplete_context.extend(context_for_reporting_round)
 
     if answer is not None:
         autocomplete_context.append({"value": "answer", "label": "The answer provided for this question"})
