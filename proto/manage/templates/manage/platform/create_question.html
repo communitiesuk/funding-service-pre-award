@@ -45,6 +45,7 @@
 
       {{ form.mandatory(params={"items": [{}, {"hint": {"text": "We’ll add ‘(optional)’ to the end of the question text."} }]}) }}  {# gross hack #}
 
+      {% if question is defined %}
       <h2 class="govuk-heading-m">Conditions</h2>
       <p class="govuk-body">You can use answers from other questions in your data collection to decide if your user should be asked this question.</p>
       <p class="govuk-body">{{ govukButton({"text": "Add a check", "href": "#", "classes": "govuk-button--secondary"}) }}</p>
@@ -52,6 +53,7 @@
       <h2 class="govuk-heading-m">Validation</h2>
       <p class="govuk-body">You can add rules to help your users provide answers that are correct and align with data standards.</p>
       <p class="govuk-body">{{ govukButton({"text": "Add validation", "href": "#", "classes": "govuk-button--secondary"}) }}</p>
+      {% endif %}
 
       {{ form.submit }}
     </form>
