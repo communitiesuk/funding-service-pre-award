@@ -39,20 +39,36 @@
             "justMyCode": true
         },
         {
-        "name": "Run Tests: Current Function (debug)",
-        "type": "debugpy",
-        "request": "launch",
-        "module": "pytest",
-        "console": "integratedTerminal",
-        "cwd": "${workspaceFolder}",
-        "envFile": "${workspaceFolder}/.env.development",
-        "args": [
-            "-c",
-            "pytest.ini",
-            "-k",
-            "test_change_received_notification_banner" // test to debug, modify this accordingly
-        ],
-        "justMyCode": false
-        }
+            "name": "Run Tests: Current Function (debug)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "envFile": "${workspaceFolder}/.env.development",
+            "args": [
+                "-c",
+                "pytest.ini",
+                "-k",
+                "test_change_received_notification_banner" // test to debug, modify this accordingly
+            ],
+            "justMyCode": false
+        },
+        {
+            "name": "Script: Change scoring system of round",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/pre_award/assessment_store/scripts/update_scoring_system_for_round.py",
+            "console": "integratedTerminal",
+            "host": "localhost",
+            "port": 9091,
+            "cwd": "${workspaceFolder}",
+            "envFile": "${workspaceFolder}/.env.development",
+            "env": {
+                "PYTHONPATH":"${workspaceFolder}",
+            },
+            "justMyCode": false,
+            "args": []
+        },
     ]
 }

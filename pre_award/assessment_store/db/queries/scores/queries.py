@@ -8,7 +8,7 @@ import uuid
 from typing import Dict
 
 from flask import current_app as app
-from sqlalchemy import select
+from sqlalchemy import String, cast, select
 from sqlalchemy.orm.exc import NoResultFound
 
 from pre_award.assessment_store.db.models import AssessmentRecord
@@ -18,9 +18,7 @@ from pre_award.assessment_store.db.queries.assessment_records.queries import (
     check_all_change_requests_accepted,
     update_application_status,
 )
-from pre_award.assessment_store.db.queries.flags.queries import (
-    resolve_open_change_requests_for_sub_criteria,
-)
+from pre_award.assessment_store.db.queries.flags.queries import resolve_open_change_requests_for_sub_criteria
 from pre_award.assessment_store.db.schemas import AssessmentRoundMetadata, ScoreMetadata, ScoringSystemMetadata
 from pre_award.db import db
 
@@ -201,3 +199,48 @@ def approve_sub_criteria(application_id, sub_criteria_id, user_id, message):
 
     if check_all_change_requests_accepted(application_id=application_id):
         update_application_status(application_id=application_id, status=ApplicationStatus.IN_PROGRESS)
+
+
+def update_scoring_system_for_round_id(round_id: str, scoring_system_id: str) -> dict:
+    """
+    Update (or insert) the scoring system for a given round.
+    Returns the serialized AssessmentRound record.
+    """
+    assessment_round = db.session.query(AssessmentRound).filter(AssessmentRound.round_id == round_id).one_or_none()
+
+    if assessment_round is None:
+        assessment_round = AssessmentRound(round_id=round_id, scoring_system_id=scoring_system_id)
+        db.session.add(assessment_round)
+    else:
+        assessment_round.scoring_system_id = scoring_system_id
+
+    db.session.commit()
+    return AssessmentRoundMetadata().dump(assessment_round)
+
+
+def lookup_scoring_system_id(name: str) -> str | None:
+    """
+    Directly look up a scoring system by name (case-insensitive).
+    """
+    system = (
+        db.session.query(ScoringSystem)
+        .filter(cast(ScoringSystem.scoring_system_name, String).ilike(name))
+        .one_or_none()
+    )
+    return str(system.id) if system else None
+
+
+def list_existing_scoring_systems() -> list[ScoringSystem]:
+    """Return a list of existing scoring systems."""
+    return db.session.query(ScoringSystem).all()
+
+
+def get_scoring_info_by_round(round_id: str) -> ScoringSystem | None:
+    assessment_round = db.session.query(AssessmentRound).filter(AssessmentRound.round_id == round_id).first()
+    if assessment_round is None:
+        return None
+    else:
+        scoring_system = (
+            db.session.query(ScoringSystem).filter(ScoringSystem.id == assessment_round.scoring_system_id).first()
+        )
+        return scoring_system
