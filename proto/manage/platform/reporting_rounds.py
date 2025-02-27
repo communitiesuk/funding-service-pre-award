@@ -229,6 +229,11 @@ def create_question_view(grant_code, round_ext_id, section_id, question_id=None)
         section=section,
         form=form,
         autocomplete_context=autocomplete_context,
+        back_link=url_for(
+            "proto_manage.platform.reporting_rounds.view_reporting_round_data_collection",
+            grant_code=grant_code,
+            round_ext_id=round_ext_id,
+        ),
         active_sub_navigation_tab="monitoring",
     )
 
@@ -264,8 +269,14 @@ def edit_question_view(grant_code, round_ext_id, section_id, question_id):
         grant=grant,
         reporting_round=reporting_round,
         section=section,
+        question=question,
         form=form,
         autocomplete_context=autocomplete_context,
+        back_link=url_for(
+            "proto_manage.platform.reporting_rounds.view_reporting_round_data_collection",
+            grant_code=grant_code,
+            round_ext_id=round_ext_id,
+        ),
         active_sub_navigation_tab="monitoring",
     )
 
