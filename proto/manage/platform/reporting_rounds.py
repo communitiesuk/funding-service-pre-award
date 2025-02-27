@@ -9,6 +9,7 @@ from proto.common.data.services.question_bank import (
     add_template_sections_to_data_collection_definition,
     create_question,
     create_section,
+    ensure_round_has_data_collection_definition,
     get_section_for_data_collection_definition,
     get_template_sections_and_questions,
 )
@@ -160,10 +161,18 @@ def choose_from_question_bank(grant_code, round_ext_id):
 def create_section_view(grant_code, round_ext_id):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     form = NewSectionForm(
-        data={"order": max(asec.order for asec in reporting_round.data_collection_definition.sections) + 1}
+        data={
+            "order": (
+                max(asec.order for asec in reporting_round.data_collection_definition.sections)
+                if reporting_round.data_collection_definition
+                else 0
+            )
+            + 1
+        }
     )
 
     if form.validate_on_submit():
+        ensure_round_has_data_collection_definition(reporting_round)
         create_section(
             definition_id=reporting_round.data_collection_definition.id,
             **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}},

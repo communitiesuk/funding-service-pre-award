@@ -30,6 +30,7 @@
       <p class="govuk-body">No questions have been set up for this round yet.</p>
 
       <a href="{{ url_for('proto_manage.platform.rounds.choose_from_question_bank', grant_code=grant.short_name, round_code=round.short_name) }}" class="govuk-button">Add questions from the bank</a>
+      {{ govukButton({"text": "Add a new section", "href": url_for('proto_manage.platform.rounds.create_section_view', grant_code=grant.short_name, round_code=round.short_name), "classes": "govuk-button govuk-button--secondary govuk-!-margin-left-2"}) }}
     {% else %}
       {% if not round.proto_draft %}
         {{ govukInsetText({"text": "This can no longer be edited because the round is not in draft mode."}) }}
@@ -37,8 +38,8 @@
       {% else %}
          {{ previewApplicationHtml }}
         <div class="govuk-button-group">
-          {{ govukButton({"text": "Add a new section", "href": url_for('proto_manage.platform.rounds.create_section_view', grant_code=grant.short_name, round_code=round.short_name), "classes": "govuk-button govuk-button--secondary"}) }}
           {{ govukButton({"text": "Add more questions from the bank", "href": url_for('proto_manage.platform.rounds.choose_from_question_bank', grant_code=grant.short_name, round_code=round.short_name), "classes": "govuk-button govuk-button--secondary"}) }}
+          {{ govukButton({"text": "Add a new section", "href": url_for('proto_manage.platform.rounds.create_section_view', grant_code=grant.short_name, round_code=round.short_name), "classes": "govuk-button govuk-button--secondary govuk-!-margin-left-2"}) }}
         </div>
       {% endif %}
 

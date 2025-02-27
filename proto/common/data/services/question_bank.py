@@ -56,6 +56,13 @@ def create_section(**kwargs):
     db.session.commit()
 
 
+def ensure_round_has_data_collection_definition(round):
+    if not round.data_collection_definition:
+        round.data_collection_definition = ProtoDataCollectionDefinition()
+        db.session.add(round.data_collection_definition)
+        db.session.flush()
+
+
 def add_template_sections_to_data_collection_definition(round, template_section_ids):
     # fixme: last minute hack fix
     if isinstance(round, Round):
@@ -73,10 +80,7 @@ def add_template_sections_to_data_collection_definition(round, template_section_
         .all()
     )
 
-    if not round.data_collection_definition:
-        round.data_collection_definition = ProtoDataCollectionDefinition()
-        db.session.add(round.data_collection_definition)
-        db.session.flush()
+    ensure_round_has_data_collection_definition(round)
 
     sections = []
     for template_section in template_sections:
