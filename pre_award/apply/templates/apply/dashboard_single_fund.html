@@ -26,22 +26,17 @@ Your applications
     {{ migration_banner() }}
 {% endif %}
     <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
-
-    {% for fund in display_data["funds"] %}
-        {% for round in fund["rounds"] %}
-            {% if "CHANGE_REQUESTED" in round["applications"]|map(attribute="status") %}
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        {{
-                            govukNotificationBanner({
-                                "text": "The assessor has requested changes to your application. Select 'Continue application' to make changes."
-                            })
-                        }}
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
+      {% if change_request %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                {{
+                    govukNotificationBanner({
+                        "text": "The assessor has requested changes to your application. Select 'Continue application' to make changes."
+                    })
+                }}
+            </div>
+        </div>
+      {% endif %}
 
     <p class="govuk-body">
         {% set application_count=display_data["total_applications_to_display"] %}

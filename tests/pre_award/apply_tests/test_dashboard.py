@@ -79,6 +79,10 @@ def test_dashboard_route_search_call(
     round_short_name,
     expected_search_params,
 ):
+    mocker.patch(
+        "pre_award.apply.default.account_routes.check_change_requested_for_applications",
+        return_value=True,
+    )
     request_mock = mocker.patch("pre_award.apply.default.account_routes.request")
     request_mock.args.get = (
         lambda key, default: fund_short_name if key == "fund" else (round_short_name if key == "round" else default)
@@ -115,6 +119,10 @@ def test_dashboard_template_rendered(
     exp_template_name,
 ):
     mocker.patch(
+        "pre_award.apply.default.account_routes.check_change_requested_for_applications",
+        return_value=True,
+    )
+    mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
     )
@@ -137,6 +145,10 @@ def test_dashboard_eoi_suffix(
 ):
     eoi_data = deepcopy(TEST_DISPLAY_DATA)
     eoi_data["funds"][0]["fund_data"]["funding_type"] = "EOI"
+    mocker.patch(
+        "pre_award.apply.default.account_routes.check_change_requested_for_applications",
+        return_value=True,
+    )
     mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
@@ -171,6 +183,10 @@ def test_dashboard_language(
     exp_response_language,
 ):
     mocker.patch(
+        "pre_award.apply.default.account_routes.check_change_requested_for_applications",
+        return_value=True,
+    )
+    mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
     )
@@ -200,6 +216,10 @@ def test_dashboard_language(
 
 
 def test_dashboard_route(apply_test_client, mocker, mock_login):
+    mocker.patch(
+        "pre_award.apply.default.account_routes.check_change_requested_for_applications",
+        return_value=True,
+    )
     mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=TEST_APPLICATION_SUMMARIES,
@@ -258,6 +278,10 @@ def test_dashboard_route_no_applications(apply_test_client, mocker, mock_login):
     mocker.patch(
         "pre_award.apply.default.account_routes.search_applications",
         return_value=[],
+    )
+    mocker.patch(
+        "pre_award.apply.default.account_routes.check_change_requested_for_applications",
+        return_value=False,
     )
 
     response = apply_test_client.get("/account", follow_redirects=True)
