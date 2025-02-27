@@ -24,9 +24,8 @@
     cursor: pointer;
     font-family: GDS Transport,arial,sans-serif;
   }
-  .autocomplete-menu li:hover,
   .autocomplete-menu li.selected {
-    background-color: #f0f0f0;
+    background-color: SelectedItem;
   }
 
   /* Styles for the highlighting overlay system */
@@ -527,6 +526,13 @@
           const li = document.createElement("li");
           // Highlight matching letters in the label.
           li.innerHTML = currentMode === 'label' ? highlightMatch(item.label, query) : item.label;
+
+          // Add mouseenter event to update selection when hovering
+          li.addEventListener("mouseenter", function(e) {
+            selectedIndex = index;
+            updateSelection();
+          });
+
           li.addEventListener("mousedown", function(e) {
             e.preventDefault(); // Prevent input from losing focus
             applySuggestion(item, context, inputEl, currentMode);

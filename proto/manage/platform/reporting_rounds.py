@@ -15,7 +15,9 @@ from proto.common.data.services.question_bank import (
     get_template_sections_and_questions,
     update_question,
 )
+from proto.common.data.services.recipients import get_grant_recipient_for_organisation
 from proto.common.data.services.reporting_round import create_reporting_round, update_reporting_round
+from proto.common.data.services.reports import get_or_create_monitoring_reports_for_grant_recipient
 from proto.form_runner.expressions import build_autocomplete_context
 from proto.manage.platform.forms.data_collection import (
     ChooseTemplateSectionsForm,
@@ -272,6 +274,11 @@ def create_question_view(grant_code, round_ext_id, section_id, question_id=None)
         section=section,
         form=form,
         autocomplete_context=autocomplete_context,
+        back_link=url_for(
+            "proto_manage.platform.reporting_rounds.view_reporting_round_data_collection",
+            grant_code=grant_code,
+            round_ext_id=round_ext_id,
+        ),
         active_sub_navigation_tab="monitoring",
     )
 
@@ -307,8 +314,14 @@ def edit_question_view(grant_code, round_ext_id, section_id, question_id):
         grant=grant,
         reporting_round=reporting_round,
         section=section,
+        question=question,
         form=form,
         autocomplete_context=autocomplete_context,
+        back_link=url_for(
+            "proto_manage.platform.reporting_rounds.view_reporting_round_data_collection",
+            grant_code=grant_code,
+            round_ext_id=round_ext_id,
+        ),
         active_sub_navigation_tab="monitoring",
     )
 
@@ -316,13 +329,14 @@ def edit_question_view(grant_code, round_ext_id, section_id, question_id):
 @reporting_rounds_blueprint.post("/grants/<grant_code>/reporting-rounds/<round_ext_id>/preview-report")
 @is_authenticated(as_platform_admin=True)
 def preview_report(grant_code, round_ext_id):
-    # form = PreviewApplicationForm(submit_label=None)
-    # if form.validate_on_submit():
-    #     application = create_application(
-    #         preview=True, reporting_round_id=form.reporting_round_id.data, account_id=form.account_id.data
-    #     )
-    #     return redirect(url_for("proto_apply.application.application_tasklist",
-    #     application_external_id=application.external_id))
-    #
-    # raise Exception(f"Failed to start application: {form.data}")
-    return "hi"
+    grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
+    form = PreviewReportForm(submit_label=None)
+    if form.validate_on_submit():
+        get_or_create_monitoring_reports_for_grant_recipient(
+            get_grant_recipient_for_organisation(g.account.organisation_id, grant.short_name)
+        )
+        return redirect(
+            url_for("proto_report.tasklist", short_name=grant.short_name, reporting_round_id=reporting_round.id)
+        )
+
+    raise Exception(f"Failed to start report: {form.data}")
