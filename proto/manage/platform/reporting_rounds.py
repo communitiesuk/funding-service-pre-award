@@ -1,4 +1,4 @@
-from flask import g, redirect, render_template, url_for
+from flask import g, redirect, render_template, session, url_for
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
@@ -17,7 +17,12 @@ from proto.common.data.services.question_bank import (
 )
 from proto.common.data.services.reporting_round import create_reporting_round, update_reporting_round
 from proto.form_runner.expressions import build_autocomplete_context
-from proto.manage.platform.forms.data_collection import ChooseTemplateSectionsForm, NewSectionForm, QuestionForm
+from proto.manage.platform.forms.data_collection import (
+    ChooseTemplateSectionsForm,
+    NewQuestionTypeForm,
+    NewSectionForm,
+    QuestionForm,
+)
 from proto.manage.platform.forms.reporting_round import (
     CreateReportingRoundForm,
     PreviewReportForm,
@@ -197,6 +202,42 @@ def create_section_view(grant_code, round_ext_id):
 
 
 @reporting_rounds_blueprint.route(
+    "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/create-question/type",
+    methods=["GET", "POST"],
+)
+@is_authenticated(as_platform_admin=True)
+def create_question_type(grant_code, round_ext_id, section_id):
+    grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
+    section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
+    form = NewQuestionTypeForm(data={"type": session.get("new_question_type")})
+
+    if form.validate_on_submit():
+        session["new_question_type"] = form.data.get("type")
+        return redirect(
+            url_for(
+                "proto_manage.platform.reporting_rounds.create_question_view",
+                grant_code=grant_code,
+                round_ext_id=round_ext_id,
+                section_id=section_id,
+            )
+        )
+
+    return render_template(
+        "manage/platform/create_question_add_type.html",
+        grant=grant,
+        round=round,
+        section=section,
+        form=form,
+        active_sub_navigation_tab="funding",
+        back_link=url_for(
+            "proto_manage.platform.reporting_rounds.view_reporting_round_data_collection",
+            grant_code=grant_code,
+            round_ext_id=round_ext_id,
+        ),
+    )
+
+
+@reporting_rounds_blueprint.route(
     "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/create-question",
     methods=["GET", "POST"],
 )
@@ -204,7 +245,12 @@ def create_section_view(grant_code, round_ext_id):
 def create_question_view(grant_code, round_ext_id, section_id, question_id=None):
     grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
     section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
-    form = QuestionForm(data={"order": (max(q.order for q in section.questions) if section.questions else 0) + 1})
+    form = QuestionForm(
+        data={
+            "order": (max(q.order for q in section.questions) if section.questions else 0) + 1,
+            "type": session.get("new_question_type"),
+        }
+    )
 
     if form.validate_on_submit():
         create_question(
@@ -220,7 +266,7 @@ def create_question_view(grant_code, round_ext_id, section_id, question_id=None)
         )
     autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition)
     return render_template(
-        "manage/platform/create_question.html",
+        "manage/platform/create_question_add_edit_detail.html",
         grant=grant,
         reporting_round=reporting_round,
         section=section,
@@ -257,7 +303,7 @@ def edit_question_view(grant_code, round_ext_id, section_id, question_id):
         )
     autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition)
     return render_template(
-        "manage/platform/create_question.html",
+        "manage/platform/create_question_add_edit_detail.html",
         grant=grant,
         reporting_round=reporting_round,
         section=section,
