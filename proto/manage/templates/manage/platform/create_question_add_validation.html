@@ -7,13 +7,13 @@
 
 {% extends "manage/platform/grants_base.html" %}
 
-{% set title = _("Update condition") if is_edit else _("Add condition") %}
+{% set title = _("Update validation") if is_edit else _("Add validation") %}
 
 {% block pageTitle %}{{ title }} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
 
 {% set helpWithCustomisation %}
       <div class="govuk-hint">
-        You can use answers from other questions in your data collection to decide if your user should be asked this question.
+        You can add rules to help your users provide answers that are correct and align with data standards.
       </div>
       {{ govukDetails({
         "summaryText": "Including contextual information",
@@ -27,7 +27,7 @@
 </p>
 <p class='govuk-hint'>
   For example:
-<pre class='formatting-example'><code class='lang-md'>(( grant.funding_amount <= 10000 ))</code></pre>
+<pre class='formatting-example'><code class='lang-md'>(( answer <= 10000 ))</code></pre>
         "
       }) }}
 {% endset %}
@@ -47,8 +47,9 @@
 
       {{ form.csrf_token }}
       {{ form.expression(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} })}}
+      {{ form.message }}
 
-      {{ form.submit(params={ "text": _("Update condition") if is_edit else _("Add condition")  }) }}
+      {{ form.submit(params={ "text": _("Update validation") if is_edit else _("Add validation")  }) }}
     </form>
   </div>
 

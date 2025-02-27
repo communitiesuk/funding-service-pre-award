@@ -53,6 +53,7 @@
 
       {{ form.mandatory(params={"items": [{}, {"hint": {"text": "We’ll add ‘(optional)’ to the end of the question text."} }]}) }}  {# gross hack #}
 
+      {% if question %}
       <h2 class="govuk-heading-m">Conditions</h2>
       <p class="govuk-body">You can use answers from other questions in your data collection to decide if your user should be asked this question.</p>
 
@@ -104,7 +105,7 @@
           "value": { "text": validation.expression },
           "actions": {
             "items": [
-              { "href": "#", "text": "Manage" }
+              { "href": url_for('proto_manage.platform.rounds.edit_validation', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id, validation_id=validation.id), "text": "Manage" }
             ]
           }
         }) %}
@@ -116,8 +117,8 @@
 
       {% endif %}
 
-      <p class="govuk-body">{{ govukButton({"text": "Add validation", "href": "#", "classes": "govuk-button--secondary"}) }}</p>
-
+      <p class="govuk-body">{{ govukButton({"text": "Add validation", "href": url_for('proto_manage.platform.rounds.create_validation', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id), "classes": "govuk-button--secondary"}) }}</p>
+      {% endif %}
       {{ form.submit(params={ "text": _("Update question") if is_edit else _("Add question")  }) }}
     </form>
   </div>

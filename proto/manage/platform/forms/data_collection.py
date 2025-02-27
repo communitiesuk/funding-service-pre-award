@@ -71,10 +71,25 @@ class NewQuestionTypeForm(FlaskForm):
 class NewConditionForm(FlaskForm):
     expression = StringField(
         _l("Expression"),
-        widget=GovTextInput(),
+        widget=GovTextArea(),
         validators=[DataRequired(message=_l("Enter the expression"))],
     )
     submit = SubmitField(_l("Add condition"), widget=GovSubmitInput())
+
+
+class NewValidationForm(FlaskForm):
+    expression = StringField(
+        _l("Expression"),
+        widget=GovTextArea(),
+        validators=[DataRequired(message=_l("Enter the expression"))],
+    )
+    message = StringField(
+        _l("Message"),
+        widget=GovTextInput(),
+        validators=[DataRequired(message=_l("Enter the message"))],
+    )
+
+    submit = SubmitField(_l("Add validation"), widget=GovSubmitInput())
 
 
 class NewQuestionForm(FlaskForm):

@@ -49,12 +49,36 @@ def create_question(**kwargs):
     db.session.commit()
 
 
+def create_question_condition(question: ProtoDataCollectionDefinitionQuestion, **kwargs):
+    condition = ProtoDataCollectionQuestionCondition(**kwargs)
+    question.conditions.append(condition)
+    db.session.commit()
+
+
+def update_question_condition(condition: ProtoDataCollectionQuestionCondition, **kwargs):
+    for attr, value in kwargs.items():
+        setattr(condition, attr, value)
+    db.session.commit()
+
+
+def create_question_validation(question: ProtoDataCollectionDefinitionQuestion, **kwargs):
+    validation = ProtoDataCollectionQuestionValidation(**kwargs)
+    question.validations.append(validation)
+    db.session.commit()
+
+
+def update_question_validation(validation: ProtoDataCollectionQuestionValidation, **kwargs):
+    for attr, value in kwargs.items():
+        setattr(validation, attr, value)
+    db.session.commit()
+
+
 # this would be much cleaner modeled more uniformly as an upsert utility?
 # always take the same params, if an ID is passed it in will replace otherwise create
 def update_question(question: ProtoDataCollectionDefinitionQuestion, **kwargs):
     kwargs["slug"] = make_url_slug(kwargs["title"])
-    question = ProtoDataCollectionDefinitionQuestion(**kwargs)
-    db.session.add(question)
+    for attr, value in kwargs.items():
+        setattr(question, attr, value)
     db.session.commit()
 
 
