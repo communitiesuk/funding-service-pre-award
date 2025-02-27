@@ -13,22 +13,25 @@
 
 {% set helpWithCustomisation %}
       <div class="govuk-hint">
-        You can add rules to help your users provide answers that are correct and align with data standards.
+        Describe the rule that determines whether the user's answer is valid or not. You can use this to make sure their answer is correct and aligns with data standards.
       </div>
       {{ govukDetails({
         "summaryText": "Including contextual information",
         "html": "
 <p class='govuk-hint'>
-  You can insert information into your questions dynamically based on the context of the data collection or user.
+  A rule is a simple mathematical expression. You can check the answer the user has provided, or other contextual information if you need complex validation.
 </p>
 <p class='govuk-hint'>
-  To add dynamic data, type two brackets <code class='lang-md'>((</code> and then use the context menu to select which piece of data to insert.
+  To include dynamic data, type two brackets <code class='lang-md'>((</code> and then use the context menu to select which piece of data to insert.
   There must be two matching closing brackets <code class='lang-md'>))</code> following the contextual information.
 </p>
 <p class='govuk-hint'>
-  For example:
+  Your expression can include mathematical symbols, such as those for addition +, subtraction -, multiplication *, and division /.
+</p>
+<p class='govuk-hint'>
+  Some examples might be:
 <pre class='formatting-example'><code class='lang-md'>(( answer <= 10000 ))</code></pre>
-        "
+<pre class='formatting-example'><code class='lang-md'>(( answer * 5 == 100 ))</code></pre>"
       }) }}
 {% endset %}
 
@@ -47,7 +50,7 @@
 
       {{ form.csrf_token }}
       {{ form.expression(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} })}}
-      {{ form.message }}
+      {{ form.message(params={"hint": {"text": "This is what the user will see if the expression above is broken based on the answer they provide."} }) }}
 
       {{ form.submit(params={ "text": _("Update validation") if is_edit else _("Add validation")  }) }}
     </form>

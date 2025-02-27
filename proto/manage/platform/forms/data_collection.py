@@ -80,13 +80,13 @@ class NewConditionForm(FlaskForm):
 
 class NewValidationForm(FlaskForm):
     expression = StringField(
-        _l("Expression"),
+        _l("Rule"),
         widget=GovTextArea(),
-        validators=[DataRequired(message=_l("Enter the expression"))],
+        validators=[DataRequired(message=_l("Enter the validation rule"))],
     )
     message = StringField(
         _l("Message"),
-        widget=GovTextInput(),
+        widget=GovTextArea(),
         validators=[DataRequired(message=_l("Enter the message"))],
     )
 
@@ -96,7 +96,7 @@ class NewValidationForm(FlaskForm):
 class QuestionForm(FlaskForm):
     title = StringField(
         _l("Question text"),
-        widget=GovTextInput(),
+        widget=GovTextArea(),
         validators=[DataRequired(message=_l("Enter the question text"))],
     )
     hint = StringField(
