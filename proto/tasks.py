@@ -138,7 +138,7 @@ def insert_question_bank_data():
         ),
         "price-per-cup": TemplateQuestion(
             slug="price-per-cup",
-            type=QuestionType.PRICE_WITH_PENNIES,
+            type=QuestionType.POUNDS_AND_PENCE,
             title="How much does it cost you to serve a cup of tea?",
             hint=None,
             order=2,
@@ -171,7 +171,7 @@ def insert_question_bank_data():
         ),
         "tea-money-spent-r1": TemplateQuestion(
             slug="tea-money-spent",
-            type=QuestionType.PRICE_WITH_PENNIES,
+            type=QuestionType.POUNDS_AND_PENCE,
             title="How much did it cost you?",
             hint="We will pay you this much money. You applied for £(( int(application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup) )) in funding, and have been allocated £((recipient.funding_allocated)).",  # noqa
             order=2,
@@ -191,7 +191,7 @@ def insert_question_bank_data():
         ),
         "tea-money-spent-r2": TemplateQuestion(
             slug="tea-money-spent",
-            type=QuestionType.PRICE_WITH_PENNIES,
+            type=QuestionType.POUNDS_AND_PENCE,
             title="How much did it cost you?",
             hint="We will pay you this much money. You applied for £(( int(application.tea_licensing.cups_of_tea * application.tea_licensing.price_per_cup) )) in funding, and have been allocated £((recipient.funding_allocated)).",  # noqa
             order=2,

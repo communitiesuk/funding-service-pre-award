@@ -63,7 +63,7 @@
         {{ form.question(params={"fieldset": {"legend": {"isPageHeading": true, "classes": "govuk-fieldset__legend--l", "text": form.question.label.text} } }) }}
       {% elif question.type == QuestionType.NUMBER %}
         {{ form.question(params={"label": {"isPageHeading": true, "classes": "govuk-label--l"}, "inputmode": "numeric", "spellcheck": false }) }}
-      {% elif question.type == QuestionType.PRICE_WITH_PENNIES %}
+      {% elif question.type == QuestionType.POUNDS_AND_PENCE %}
         {{ form.question(params={"label": {"isPageHeading": true, "classes": "govuk-label--l"}, "inputmode": "numeric", "spellcheck": false, "prefix": {"text": "£" } }) }}
       {% endif %}
 

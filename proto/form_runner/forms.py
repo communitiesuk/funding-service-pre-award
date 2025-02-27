@@ -105,7 +105,7 @@ def build_question_form(
             field = IntegerField(
                 label=question_text, description=question_hint, widget=GovTextInput(), validators=validators
             )
-        case QuestionType.PRICE_WITH_PENNIES:
+        case QuestionType.POUNDS_AND_PENCE:
             field = FloatField(
                 label=question_text, description=question_hint, widget=GovTextInput(), validators=validators
             )
