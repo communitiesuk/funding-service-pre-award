@@ -1,4 +1,5 @@
 from flask import g, redirect, render_template, url_for
+from flask_babel import lazy_gettext as _l
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
@@ -191,7 +192,7 @@ def edit_question_view(grant_code, round_code, section_id, question_id):
     grant, round = get_grant_and_round(grant_code, round_code)
     question = get_data_collection_definition_question(round.data_collection_definition, section_id, question_id)
     section = question.section
-    form = QuestionForm(obj=question, data={"mandatory": "mandatory"})
+    form = QuestionForm(obj=question, data={"mandatory": "mandatory"}, submit_label=_l("Save question"))
 
     if form.validate_on_submit():
         update_question(
