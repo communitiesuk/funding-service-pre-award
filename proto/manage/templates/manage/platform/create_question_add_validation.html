@@ -13,13 +13,13 @@
 
 {% set helpWithCustomisation %}
       <div class="govuk-hint">
-        Describe the rule that determines whether the user's answer is valid or not. You can use this to make sure their answer is correct and aligns with data standards.
+        This determines whether the user's answer is valid or not. You can use this to make sure their answer is correct and aligns with data standards. If the rule evaluates as correct, the user's answer will be accepted.
       </div>
       {{ govukDetails({
         "summaryText": "How to write validation rules",
         "html": "
 <p class='govuk-hint'>
-  Validation rules are statements that decide whether a user's answer should be allowed or rejected. If the validation rule evaluates as 'correct', the user's answer will be accepted.
+  Validation rules are statements that decide whether a user's answer should be accepted or rejected.
 </p>
 <p class='govuk-hint'>
   You can check the answer the user has submitted for this question, as well other data relevant to the user's context, such as their organisation or recipient profile.
@@ -58,7 +58,7 @@
 
       {{ form.csrf_token }}
       {{ form.expression(params={"attributes": {"data-mhclg-module": "autocomplete", "spellcheck": false}, "hint": {"html": helpWithCustomisation} })}}
-      {{ form.message(params={"hint": {"text": "This is what the user will see if the expression above is broken based on the answer they provide."} }) }}
+      {{ form.message(params={"hint": {"text": "If the rule is broken, this will be shown to the user and they will have to change their answer."} }) }}
 
       {{ form.submit(params={ "text": _("Update validation") if is_edit else _("Add validation")  }) }}
     </form>
