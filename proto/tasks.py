@@ -126,10 +126,10 @@ def insert_question_bank_data():
         "cups-of-tea": TemplateQuestion(
             slug="cups-of-tea",
             type=QuestionType.NUMBER,
-            title="How many cups of tea are you able to serve?",
+            title="How many cups of tea would you like funding for?",
             hint=(
-                "We will issue a licence for you to serve this many cups of tea. "
-                "You will not be allowed to serve any than this."
+                "We will give you permissions to serve this many cups of tea. "
+                "You will not be allowed to serve more than this."
             ),
             order=1,
             data_source=None,

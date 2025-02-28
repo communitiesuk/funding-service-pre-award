@@ -133,7 +133,7 @@
 
         {% set rows = [
             (_("Monitoring rounds"), _("No open rounds") if not grant.reporting_rounds else _("Preview round open"), _("Manage"), url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name)),
-            (_("Monitoring information"), "No monitoring questions", _("Manage"), "#"),
+            (_("Monitoring information"), "No monitoring questions", _("Manage"), url_for('proto_manage.platform.grants.view_grant_reporting_rounds', grant_code=grant.short_name)),
         ] %}
 
         {{ grantSummaryList(rows) }}

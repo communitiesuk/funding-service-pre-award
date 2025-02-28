@@ -44,10 +44,17 @@
 
 {# I've ommited the back link because you can click "Your grants" at the top - could try this out with users #}
 {# I've added it back in because I've got no backbone #}
+{% if report.fake %}
+{{ govukBackLink({
+      "text": _("Back to data collection configuration"),
+      "href": url_for('proto_manage.platform.reporting_rounds.view_reporting_round_data_collection', grant_code=report.reporting_round.grant.short_name, round_ext_id=report.reporting_round.external_id)
+    }) }}
+{% else %}
 {{ govukBackLink({
       "text": _("Back"),
       "href": url_for('proto_report.view_grant', short_name=report.reporting_round.grant.short_name)
     }) }}
+{% endif %}
 {% endblock %}
 
 {% block content %}

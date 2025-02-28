@@ -157,7 +157,9 @@ def build_autocomplete_context(
     )
     autocomplete_context.extend(_autocomplete_context_for_db_model(Organisation(), prefix="organisation."))
 
-    if this_definition not in [ar.data_collection_definition for ar in grant.application_rounds]:
+    if grant.application_rounds and this_definition not in [
+        ar.data_collection_definition for ar in grant.application_rounds
+    ]:
         context_for_application = _autocomplete_context_for_collection_definition_data(
             grant.application_rounds[0].data_collection_definition, prefix="application."
         )

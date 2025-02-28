@@ -12,10 +12,22 @@ from wtforms.widgets.core import HiddenInput
 
 
 class CreateReportingRoundForm(FlaskForm):
-    reporting_period_starts = DateField(_l("Reporting period starts"), format="%d %m %Y", widget=GovDateInput())
-    reporting_period_ends = DateField(_l("Reporting period ends"), format="%d %m %Y", widget=GovDateInput())
-    submission_period_starts = DateField(_l("Submission period starts"), format="%d %m %Y", widget=GovDateInput())
-    submission_period_ends = DateField(_l("Submission period ends"), format="%d %m %Y", widget=GovDateInput())
+    reporting_period_starts = DateField(
+        _l("What is the first day of the reporting period?"), format="%d %m %Y", widget=GovDateInput()
+    )
+    reporting_period_ends = DateField(
+        _l("What is the last day of the reporting period?"), format="%d %m %Y", widget=GovDateInput()
+    )
+    submission_period_starts = DateField(
+        _l("What is the first day grant recipients should be able to submit their reports?"),
+        format="%d %m %Y",
+        widget=GovDateInput(),
+    )
+    submission_period_ends = DateField(
+        _l("What is the last day grant recipients should be able to submit their reports?"),
+        format="%d %m %Y",
+        widget=GovDateInput(),
+    )
 
     submit = SubmitField(_l("Create reporting round"), widget=GovSubmitInput())
 
