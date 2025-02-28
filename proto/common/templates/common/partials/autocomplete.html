@@ -110,8 +110,13 @@
     function getCurrentContext(text, cursorPos) {
       const openIndex = text.lastIndexOf("((", cursorPos);
       if (openIndex === -1) return null;
+
+      // Check if the cursor is actually after the "((" instead of before it
+      if (openIndex + 2 > cursorPos) return null;
+
       const closeIndex = text.indexOf("))", openIndex);
       if (closeIndex !== -1 && closeIndex < cursorPos) return null;
+
       return {
         openIndex: openIndex,
         content: text.slice(openIndex + 2, cursorPos)
