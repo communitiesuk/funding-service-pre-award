@@ -142,7 +142,7 @@ def build_autocomplete_context(
     autocomplete_context = []
 
     # grant
-    autocomplete_context.append({"value": "grant.", "label": "Information from the grant"})
+    autocomplete_context.append({"value": "grant.", "label": "Metadata about the grant"})
     autocomplete_context.extend(_autocomplete_context_for_db_model(grant, prefix="grant."))
 
     # this_collection
@@ -152,12 +152,12 @@ def build_autocomplete_context(
     )
 
     # application_round
-    autocomplete_context.append({"value": "application_round.", "label": "Information from the application round"})
+    autocomplete_context.append({"value": "application_round.", "label": "Metadata about the application round"})
     autocomplete_context.extend(_autocomplete_context_for_db_model(Round(), prefix="application_round."))
 
     # organisation
     autocomplete_context.append(
-        {"value": "organisation.", "label": "Information from the grant recipient's organisation"}
+        {"value": "organisation.", "label": "Metadata about the grant recipient's organisation"}
     )
     autocomplete_context.extend(_autocomplete_context_for_db_model(Organisation(), prefix="organisation."))
 
@@ -169,16 +169,18 @@ def build_autocomplete_context(
         )
         if context_for_application:
             # application - skipping a lot of edge cases and considerations here
-            autocomplete_context.append({"value": "application.", "label": "Information from the grant application"})
+            autocomplete_context.append(
+                {"value": "application.", "label": "Information from the original grant application"}
+            )
             autocomplete_context.extend(context_for_application)
 
     if this_definition in [rr.data_collection_definition for rr in grant.reporting_rounds]:
         # grant recipient profile
-        autocomplete_context.append({"value": "recipient.", "label": "Information from the recipient profile"})
+        autocomplete_context.append({"value": "recipient.", "label": "Metadata about the grant recipient"})
         autocomplete_context.extend(_autocomplete_context_for_db_model(ProtoGrantRecipient(), prefix="recipient."))
 
         # reporting_round
-        autocomplete_context.append({"value": "reporting_round.", "label": "Information from the reporting round"})
+        autocomplete_context.append({"value": "reporting_round.", "label": "Metadata about the reporting round"})
         autocomplete_context.extend(
             _autocomplete_context_for_db_model(ProtoReportingRound(), prefix="reporting_round.")
         )
