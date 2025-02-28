@@ -1,3 +1,5 @@
+import simpleeval
+
 from proto.common.data.models import (
     ProtoDataCollectionDefinitionQuestion,
     ProtoDataCollectionDefinitionSection,
@@ -8,7 +10,6 @@ from proto.common.data.models.data_collection import (
     ProtoDataCollectionQuestionCondition,
 )
 from proto.form_runner.expressions import build_context_evaluator
-from proto.form_runner.helpers import get_answer_value_for_question_from_section_data
 
 
 def get_visible_questions_for_section_instance(
@@ -42,20 +43,16 @@ def get_visible_questions_for_section_instance(
 def evaluate_condition(
     all_section_data: list[ProtoDataCollectionInstanceSectionData], condition: ProtoDataCollectionQuestionCondition
 ) -> bool:
-    if condition.depends_on_question:
-        section_data = next(
-            (sd for sd in all_section_data if sd.section_id == condition.depends_on_question.section_id), None
-        )
-        if not section_data:  # If that section hasn't yet been completed
-            return False
-
-        depends_on_answer_text = get_answer_value_for_question_from_section_data(
-            section_data=section_data, question=condition.depends_on_question
-        )
-        if depends_on_answer_text is None:
-            return False
     context_evaluator = build_context_evaluator(this_collection=all_section_data[0].instance, answer=None)
-    return bool(context_evaluator(condition.expression))
+    try:
+        return bool(context_evaluator(condition.expression))
+    except (simpleeval.InvalidExpression, TypeError):
+        # Simple (hacky) workaround for evaluation conditions (in order to build the list of questions that a user
+        # should be asked), where some variables in the expression may not exist because data hasn't been provided
+        # yet.
+        # If we try to evaluate eg `application.section.question2 > 0` without having data for that question, this
+        # would blow up.
+        return False
 
 
 def get_next_question_for_data_collection_instance(
