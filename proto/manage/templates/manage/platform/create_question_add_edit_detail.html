@@ -71,7 +71,7 @@
           "value": { "text": condition.expression },
           "actions": {
             "items": [
-              { "href": url_for('proto_manage.platform.rounds.edit_condition', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id, condition_id=condition.id) if round is defined else url_for('proto_manage.platform.reporting_rounds.create_condition', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id), "text": "Manage" }
+              { "href": url_for('proto_manage.platform.rounds.edit_condition', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id, condition_id=condition.id) if round is defined else url_for('proto_manage.platform.reporting_rounds.edit_condition', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id, condition_id=condition.id), "text": "Manage" }
             ]
           }
         }) %}
