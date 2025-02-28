@@ -50,8 +50,7 @@
           {% set __ = questionRows.append(
             [
               {"text": ' '},
-              {"text": question.title},
-              {"html": ("<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('proto_manage.platform.rounds.edit_question', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id) + "'>Edit</a>") if round.proto_draft else ' '}
+              {"html": ("<a class='govuk-link govuk-link--no-visited-state' href='" + url_for('proto_manage.platform.rounds.edit_question', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id) + "'>" ~ question.title ~ "</a>") if round.proto_draft else question.title},
             ]
           ) %}
         {% endfor %}
