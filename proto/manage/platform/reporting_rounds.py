@@ -102,6 +102,7 @@ def view_reporting_round_data_collection(grant_code, round_ext_id):
         submit_label="Preview report",
         data={"round_id": reporting_round.id, "organisation_id": g.account.organisation_id},
     )
+    session.pop("new_question_type", None)
     return render_template(
         "manage/platform/reporting_round/view_round_data_collection.html",
         grant=grant,
