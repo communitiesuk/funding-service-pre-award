@@ -32,6 +32,10 @@ def serialize_collection_data(collection: ProtoDataCollectionInstance) -> dict[s
     return data
 
 
+def deal_with_single_equals(expression):
+    return re.sub(r"\b=[^=]", " == ", expression)
+
+
 def build_context(
     this_collection: ProtoDataCollectionInstance | None = None,
     answer: Any | None = None,

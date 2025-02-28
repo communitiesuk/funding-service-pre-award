@@ -1,4 +1,5 @@
 from flask import g, redirect, render_template, session, url_for
+from flask_babel import lazy_gettext as _l
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
@@ -205,7 +206,7 @@ def edit_question(grant_code, round_code, section_id, question_id):
     # int ids shouldn't be in the url
     question = next(x for x in section.questions if x.id == int(question_id))
 
-    form = QuestionForm(obj=question, data={"mandatory": "mandatory"})
+    form = QuestionForm(obj=question, data={"mandatory": "mandatory"}, submit_label=_l("Update question"))
 
     if form.validate_on_submit():
         update_question(

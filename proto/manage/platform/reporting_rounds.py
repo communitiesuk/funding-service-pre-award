@@ -1,4 +1,5 @@
 from flask import g, redirect, render_template, session, url_for
+from flask_babel import lazy_gettext as _l
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
@@ -302,7 +303,7 @@ def edit_question_view(grant_code, round_ext_id, section_id, question_id):
         reporting_round.data_collection_definition, section_id, question_id
     )
     section = question.section
-    form = QuestionForm(obj=question, data={"mandatory": "mandatory"})
+    form = QuestionForm(obj=question, data={"mandatory": "mandatory"}, submit_label=_l("Update question"))
     form.type.data = question.type.value  # hack
 
     if form.validate_on_submit():

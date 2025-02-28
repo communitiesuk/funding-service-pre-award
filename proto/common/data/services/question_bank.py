@@ -15,6 +15,7 @@ from proto.common.data.models.data_collection import (
 )
 from proto.common.data.models.question_bank import TemplateType
 from proto.common.helpers import make_url_slug
+from proto.form_runner.expressions import deal_with_single_equals
 
 
 def get_template_sections_and_questions(template_type: TemplateType):
@@ -64,6 +65,8 @@ def create_question(**kwargs):
 
 def create_question_condition(question: ProtoDataCollectionDefinitionQuestion, **kwargs):
     condition = ProtoDataCollectionQuestionCondition(**kwargs)
+    if condition.expression:
+        condition.expression = deal_with_single_equals(condition.expression)
     question.conditions.append(condition)
     db.session.commit()
 
@@ -71,11 +74,15 @@ def create_question_condition(question: ProtoDataCollectionDefinitionQuestion, *
 def update_question_condition(condition: ProtoDataCollectionQuestionCondition, **kwargs):
     for attr, value in kwargs.items():
         setattr(condition, attr, value)
+    if condition.expression:
+        condition.expression = deal_with_single_equals(condition.expression)
     db.session.commit()
 
 
 def create_question_validation(question: ProtoDataCollectionDefinitionQuestion, **kwargs):
     validation = ProtoDataCollectionQuestionValidation(**kwargs)
+    if validation.expression:
+        validation.expression = deal_with_single_equals(validation.expression)
     question.validations.append(validation)
     db.session.commit()
 
@@ -83,6 +90,8 @@ def create_question_validation(question: ProtoDataCollectionDefinitionQuestion, 
 def update_question_validation(validation: ProtoDataCollectionQuestionValidation, **kwargs):
     for attr, value in kwargs.items():
         setattr(validation, attr, value)
+    if validation.expression:
+        validation.expression = deal_with_single_equals(validation.expression)
     db.session.commit()
 
 

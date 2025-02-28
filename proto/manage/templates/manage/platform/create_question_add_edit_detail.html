@@ -48,8 +48,8 @@
         "
       }) }}
       {% endset %}
-      {{ form.title(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} }) }}
-      {{ form.hint(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} }) }}
+      {{ form.title(params={"attributes": {"data-mhclg-module": "autocomplete", "spellcheck": false}, "hint": {"html": helpWithCustomisation} }) }}
+      {{ form.hint(params={"attributes": {"data-mhclg-module": "autocomplete", "spellcheck": false}, "hint": {"html": helpWithCustomisation} }) }}
 
 {#      {{ form.mandatory(params={"items": [{}, {"hint": {"text": "We’ll add ‘(optional)’ to the end of the question text."} }]}) }}  {# gross hack #}
 
@@ -71,7 +71,7 @@
           "value": { "text": condition.expression },
           "actions": {
             "items": [
-              { "href": url_for('proto_manage.platform.rounds.edit_condition', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id, condition_id=condition.id), "text": "Manage" }
+              { "href": url_for('proto_manage.platform.rounds.edit_condition', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id, condition_id=condition.id) if round is defined else url_for('proto_manage.platform.reporting_rounds.create_condition', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id), "text": "Manage" }
             ]
           }
         }) %}
@@ -120,8 +120,13 @@
       {% endif %}
 
       <p class="govuk-body">{{ govukButton({"text": "Add validation", "href": url_for('proto_manage.platform.rounds.create_validation', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id) if round is defined else url_for('proto_manage.platform.reporting_rounds.create_validation', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id), "classes": "govuk-button--secondary"}) }}</p>
+      {% else %}
+        <h2 class="govuk-heading-m">Conditions and validation</h2>
+        <p class="govuk-body">
+          You can create conditional rules and validation checks after creating the question.
+        </p>
       {% endif %}
-      {{ form.submit(params={ "text": _("Update question") if is_edit else _("Add question")  }) }}
+      {{ form.submit() }}
     </form>
   </div>
 </div>

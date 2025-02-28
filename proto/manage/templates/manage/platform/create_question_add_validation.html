@@ -16,22 +16,30 @@
         Describe the rule that determines whether the user's answer is valid or not. You can use this to make sure their answer is correct and aligns with data standards.
       </div>
       {{ govukDetails({
-        "summaryText": "Including contextual information",
+        "summaryText": "How to write validation rules",
         "html": "
 <p class='govuk-hint'>
-  A rule is a simple mathematical expression. You can check the answer the user has provided, or other contextual information if you need complex validation.
+  Validation rules are statements that decide whether a user's answer should be allowed or rejected. If the validation rule evaluates as 'correct', the user's answer will be accepted.
 </p>
 <p class='govuk-hint'>
-  To include dynamic data, type two brackets <code class='lang-md'>((</code> and then use the context menu to select which piece of data to insert.
+  You can check the answer the user has submitted for this question, as well other data relevant to the user's context, such as their organisation or recipient profile.
+  To include this data, type two brackets <code class='lang-md'>((</code> and then use the context menu to select which piece of data to insert.
   There must be two matching closing brackets <code class='lang-md'>))</code> following the contextual information.
 </p>
 <p class='govuk-hint'>
-  Your expression can include mathematical symbols, such as those for addition +, subtraction -, multiplication *, and division /.
+  The rule can contain operations such as:
+  <ul class='govuk-list govuk-list--bullet govuk-hint'>
+    <li>addition: +</li>
+    <li>subtraction: -</li>
+    <li>multiplication: *</li>
+    <li>division: /</li>
+  </ul>
 </p>
 <p class='govuk-hint'>
-  Some examples might be:
-<pre class='formatting-example'><code class='lang-md'>(( answer <= 10000 ))</code></pre>
-<pre class='formatting-example'><code class='lang-md'>(( answer * 5 == 100 ))</code></pre>"
+  Some examples of validation rules are:
+<pre class='formatting-example'><code class='lang-md'>(( answer )) > 10000 </code></pre>
+<pre class='formatting-example'><code class='lang-md'>(( answer )) * 5 == 100</code></pre>
+<pre class='formatting-example'><code class='lang-md'>(( answer )) <= (( application.project_information.funding_requested ))</code></pre>"
       }) }}
 {% endset %}
 
@@ -49,7 +57,7 @@
      <form method="post" novalidate>
 
       {{ form.csrf_token }}
-      {{ form.expression(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} })}}
+      {{ form.expression(params={"attributes": {"data-mhclg-module": "autocomplete", "spellcheck": false}, "hint": {"html": helpWithCustomisation} })}}
       {{ form.message(params={"hint": {"text": "This is what the user will see if the expression above is broken based on the answer they provide."} }) }}
 
       {{ form.submit(params={ "text": _("Update validation") if is_edit else _("Add validation")  }) }}

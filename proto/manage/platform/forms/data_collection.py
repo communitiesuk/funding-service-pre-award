@@ -118,4 +118,8 @@ class QuestionForm(FlaskForm):
         widget=HiddenInput(),
     )
 
-    submit = SubmitField(_l("Add question"), widget=GovSubmitInput())
+    submit = SubmitField(None, widget=GovSubmitInput())
+
+    def __init__(self, *args, submit_label: str | None = _l("Add question"), **kwargs):
+        super().__init__(*args, **kwargs)
+        self.submit.label.text = submit_label

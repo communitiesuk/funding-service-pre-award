@@ -16,19 +16,30 @@
         You can use answers from other questions in your data collection to decide if your user should be asked this question.
       </div>
       {{ govukDetails({
-        "summaryText": "Including contextual information",
+        "summaryText": "How to write conditional rules",
         "html": "
 <p class='govuk-hint'>
-  You can insert information into your questions dynamically based on the context of the data collection or user.
+  Conditional rules are statements that decide whether a user should see this question. If all rules evaluate as 'correct', this question will be shown.
 </p>
 <p class='govuk-hint'>
-  To add dynamic data, type two brackets <code class='lang-md'>((</code> and then use the context menu to select which piece of data to insert.
+  You can check any data the user has submitted in other questions, as well other data relevant to the user's context, such as their organisation or recipient profile.
+  To include this data, type two brackets <code class='lang-md'>((</code> and then use the context menu to select which piece of data to insert.
   There must be two matching closing brackets <code class='lang-md'>))</code> following the contextual information.
 </p>
 <p class='govuk-hint'>
-  For example:
-<pre class='formatting-example'><code class='lang-md'>(( grant.funding_amount <= 10000 ))</code></pre>
-        "
+  The rule can contain operations such as:
+  <ul class='govuk-list govuk-list--bullet govuk-hint'>
+    <li>addition: +</li>
+    <li>subtraction: -</li>
+    <li>multiplication: *</li>
+    <li>division: /</li>
+  </ul>
+</p>
+<p class='govuk-hint'>
+  Some examples of conditional rules are:
+<pre class='formatting-example'><code class='lang-md'>(( this_collection.organisation_information.organisation_type )) == \"local_authority\"</code></pre>
+<pre class='formatting-example'><code class='lang-md'>(( application.project_information.estimated_team_size )) >= (( this_collection.project_information.actual_time_size ))</code></pre>
+<pre class='formatting-example'><code class='lang-md'>(( application.project_information.funding_requested )) > 10000</code></pre>"
       }) }}
 {% endset %}
 
@@ -46,7 +57,7 @@
      <form method="post" novalidate>
 
       {{ form.csrf_token }}
-      {{ form.expression(params={"attributes": {"data-mhclg-module": "autocomplete"}, "hint": {"html": helpWithCustomisation} })}}
+      {{ form.expression(params={"attributes": {"data-mhclg-module": "autocomplete", "spellcheck": false}, "hint": {"html": helpWithCustomisation} })}}
 
       {{ form.submit(params={ "text": _("Update condition") if is_edit else _("Add condition")  }) }}
     </form>
