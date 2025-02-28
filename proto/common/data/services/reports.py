@@ -2,7 +2,7 @@ import random
 import string
 import uuid
 
-from sqlalchemy import select
+from sqlalchemy import delete, select
 
 from db import db
 from proto.common.data.models import (
@@ -18,7 +18,14 @@ def _generate_report_code():
     return "".join(random.choices(string.ascii_uppercase, k=6))
 
 
-def get_or_create_monitoring_reports_for_grant_recipient(grant_recipient: ProtoGrantRecipient) -> list[ProtoReport]:
+def get_or_create_monitoring_reports_for_grant_recipient(
+    grant_recipient: ProtoGrantRecipient, preview: bool = False
+) -> list[ProtoReport]:
+    if preview:
+        db.session.execute(
+            delete(ProtoReport).filter(ProtoReport.fake.is_(True), ProtoReport.recipient == grant_recipient)
+        )
+
     def _get_reports() -> list[ProtoReport]:
         return (
             db.session.scalars(

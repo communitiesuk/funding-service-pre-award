@@ -581,7 +581,7 @@ def preview_report(grant_code, round_ext_id):
     form = PreviewReportForm(submit_label=None)
     if form.validate_on_submit():
         get_or_create_monitoring_reports_for_grant_recipient(
-            get_grant_recipient_for_organisation(g.account.organisation_id, grant.short_name)
+            get_grant_recipient_for_organisation(g.account.organisation_id, grant.short_name), preview=True
         )
         return redirect(
             url_for("proto_report.tasklist", short_name=grant.short_name, reporting_round_id=reporting_round.id)

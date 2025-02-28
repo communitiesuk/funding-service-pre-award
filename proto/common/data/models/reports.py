@@ -71,7 +71,7 @@ class ProtoReport(db.Model):
     @property
     def can_be_submitted(self):
         return len(self.data_collection_instance.section_data) == len(
-            self.round.data_collection_definition.sections
+            self.reporting_round.data_collection_definition.sections
         ) and all(sd.completed for sd in self.data_collection_instance.section_data)
 
     @property
