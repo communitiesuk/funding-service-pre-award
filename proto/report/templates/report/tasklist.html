@@ -131,7 +131,9 @@
     {% if not report.is_submitted %}
       {% if report.fake %}
         {% set canBeSubmitted = report.can_be_submitted %}
-        <a class="govuk-button govuk-!-margin-top-5" href="{{ url_for('proto_report.view_grant', short_name=report.reporting_round.grant.short_name) }}" {% if not canBeSubmitted %}disabled{% endif %}>Submit report</a>
+
+
+        <a class="govuk-button govuk-!-margin-top-5" href="{{ url_for('proto_manage.platform.reporting_rounds.view_reporting_round_data_collection', grant_code=report.reporting_round.grant.short_name, round_ext_id=report.reporting_round.external_id) }}" {% if not canBeSubmitted %}disabled{% endif %}>Submit report</a>
         {% if not canBeSubmitted %}
           <p class="govuk-body">{% trans %}You cannot submit your report until you have completed all of the sections.{% endtrans %}</p>
         {% endif %}
