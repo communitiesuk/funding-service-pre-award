@@ -126,7 +126,8 @@ environments:
         - assess.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk
         - apply.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk
       additional_rules:
-        - alias:
+        - path: /
+          alias:
             - apply.access-funding.dev.communities.gov.uk
             - frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
             - authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
