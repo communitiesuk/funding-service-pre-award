@@ -129,7 +129,7 @@ environments:
         - path: /
           target_container: nginx
           alias:
-            - apply.access-funding.dev.communities.gov.uk
+            - assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
             - frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
             - authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
           healthcheck:
