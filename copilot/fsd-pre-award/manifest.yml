@@ -95,7 +95,7 @@ environments:
   dev:
     variables:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
-      COOKIE_DOMAIN: ".access-funding.dev.communities.gov.uk"
+      COOKIE_DOMAIN: ".access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
       ASSESS_HOST: "assess.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
       ASSESSMENT_FRONTEND_HOST: "https://assess.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
       APPLICANT_FRONTEND_HOST: "https://apply.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
