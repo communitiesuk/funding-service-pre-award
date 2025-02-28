@@ -127,11 +127,14 @@ environments:
         - apply.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk
       additional_rules:
         - path: /
+          target_container: nginx
           alias:
             - apply.access-funding.dev.communities.gov.uk
             - frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
             - authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
-      allowed_source_ips: []
+          healthcheck:
+            path: /healthcheck
+            port: 8080
       target_container: nginx
       healthcheck:
         path: /healthcheck
