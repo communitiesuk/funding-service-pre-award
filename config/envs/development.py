@@ -64,7 +64,7 @@ class DevelopmentConfig(Config):
     AUTO_REDIRECT_LOGIN = True
     DISABLE_NOTIFICATION_SERVICE = False  # Toggle on if you have no notify api key.
 
-    SESSION_COOKIE_DOMAIN = getenv("SESSION_COOKIE_DOMAIN", "funding.communities.gov.localhost")
+    SESSION_COOKIE_DOMAIN = getenv("SESSION_COOKIE_DOMAIN", "funding.twotowers.tech")
 
     # RSA 256 KEYS
     if not hasattr(DefaultConfig, "RSA256_PUBLIC_KEY"):

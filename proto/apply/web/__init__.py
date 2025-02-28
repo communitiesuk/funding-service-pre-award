@@ -94,7 +94,7 @@ def magic_links_return_handler(token):
     session["magic_links_account_id"] = account.id
     session["magic_links_origin_path"] = origin_path
 
-    return redirect(urljoin(Config.APPLICANT_FRONTEND_HOST, magic_link.path))
+    return redirect(magic_link.path)
 
 
 @web_blueprint.get("/auth/sign_out")
