@@ -26,7 +26,7 @@ class DefaultConfig(object):
     FLASK_ROOT = str(Path(__file__).parent.parent.parent.parent)
 
     # Logging
-    FSD_LOG_LEVEL = logging.WARNING
+    FSD_LOG_LEVEL = logging.INFO
 
     # Database
     SQLALCHEMY_DATABASE_URI = environ.get(
