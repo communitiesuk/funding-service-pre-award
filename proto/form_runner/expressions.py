@@ -198,8 +198,8 @@ def build_autocomplete_context(
         autocomplete_context.append({"value": "answer", "label": "The answer provided for this question"})
 
     # this shouldn't always be applied and should be nested but just doing this for now
-    autocomplete_context.append({"value": "Minimum value", "label": "The minimum validation amount"})
-    autocomplete_context.append({"value": "Maximum value", "label": "The maximum validation amount"})
+    autocomplete_context.append({"value": "min", "label": "The minimum validation amount"})
+    autocomplete_context.append({"value": "max", "label": "The maximum validation amount"})
     autocomplete_context.append({"value": "value", "label": "The validation amount"})
     return autocomplete_context
 

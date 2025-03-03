@@ -1,10 +1,11 @@
 from flask import g, redirect, render_template, session, url_for
 from flask_babel import lazy_gettext as _l
+from wtforms.validators import InputRequired
 
 from common.blueprints import Blueprint
 from proto.common.auth import is_authenticated
 from proto.common.data.exceptions import DataValidationError, attach_validation_error_to_form
-from proto.common.data.models.question_bank import QuestionType, TemplateType
+from proto.common.data.models.question_bank import QuestionType, TemplateType, ValidationType
 from proto.common.data.services.grants import get_grant, get_grant_and_reporting_round
 from proto.common.data.services.question_bank import (
     add_template_sections_to_data_collection_definition,
@@ -31,6 +32,7 @@ from proto.manage.platform.forms.data_collection import (
     NewSectionForm,
     NewValidationForm,
     QuestionForm,
+    SimpleNumberValidationForm,
     human_readable,
 )
 from proto.manage.platform.forms.reporting_round import (
@@ -382,7 +384,7 @@ def create_condition(grant_code, round_ext_id, section_id, question_id):
     return render_template(
         "manage/platform/create_question_add_condition.html",
         grant=grant,
-        round=round,
+        reporting_round=reporting_round,
         section=section,
         form=form,
         # horrible - make this consistent with the
@@ -452,6 +454,72 @@ def edit_condition(grant_code, round_ext_id, section_id, question_id, condition_
         question=question,
         condition=condition,
         is_edit=True,
+        autocomplete_context=autocomplete_context,
+    )
+
+
+@reporting_rounds_blueprint.route(
+    "/grants/<grant_code>/reporting-rounds/<round_ext_id>/sections/<section_id>/question/<question_id>/create-simple-validation",
+    methods=["GET", "POST"],
+)
+@is_authenticated(as_platform_admin=True)
+def create_simple_validation(grant_code, round_ext_id, section_id, question_id):
+    grant, reporting_round = get_grant_and_reporting_round(grant_code, round_ext_id)
+    section = get_section_for_data_collection_definition(reporting_round.data_collection_definition, section_id)
+
+    # int ids shouldn't be in the url
+    question = next(x for x in section.questions if x.id == int(question_id))
+
+    form = SimpleNumberValidationForm()
+
+    # use enums
+    match form.type.data:
+        case ValidationType.GREATER_THAN:
+            form.min.validators = [InputRequired()]
+        case ValidationType.LESS_THAN:
+            form.max.validators = [InputRequired()]
+        case ValidationType.EQUAL_TO:
+            form.value.validators = [InputRequired()]
+
+    if form.validate_on_submit():
+        create_question_validation(
+            question,
+            **{k: v for k, v in form.data.items() if k not in {"submit", "csrf_token"}},
+        )
+        return redirect(
+            url_for(
+                "proto_manage.platform.reporting_rounds.edit_question_view",
+                grant_code=grant_code,
+                round_ext_id=round_ext_id,
+                section_id=section_id,
+                question_id=question_id,
+            )
+        )
+
+    autocomplete_context = build_autocomplete_context(grant, reporting_round.data_collection_definition, answer=True)
+
+    # to not boil the ocean I'll assume you're coming from editing an existing question - we can make this work
+    # with nice symetry between create + update but want something in for now
+    back_link = url_for(
+        "proto_manage.platform.reporting_rounds.edit_question_view",
+        grant_code=grant_code,
+        round_ext_id=round_ext_id,
+        section_id=section_id,
+        question_id=question_id,
+    )
+
+    return render_template(
+        "manage/platform/create_question_add_simple_validation.html",
+        grant=grant,
+        reporting_round=reporting_round,
+        section=section,
+        form=form,
+        # horrible - make this consistent with the
+        # question_type_human_readbale=human_readable
+        question_type_human_readable=human_readable.get(question.type),
+        active_sub_navigation_tab="funding",
+        back_link=back_link,
+        question=question,
         autocomplete_context=autocomplete_context,
     )
 

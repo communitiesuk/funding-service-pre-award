@@ -121,8 +121,9 @@
 
       {% endif %}
       {# only added it for numbers for now, this will be removed when its uniform #}
-      {% set add_validation_handler = 'proto_manage.platform.rounds.create_simple_validation' if question.type == 'NUMBER' else 'proto_manage.platform.rounds.create_validation' %}
-      <p class="govuk-body">{{ govukButton({"text": "Add validation", "href": url_for(add_validation_handler, grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id) if round is defined else url_for('proto_manage.platform.reporting_rounds.create_validation', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id), "classes": "govuk-button--secondary"}) }}</p>
+      {% set add_application_validation_handler = 'proto_manage.platform.rounds.create_simple_validation' if question.type == 'NUMBER' else 'proto_manage.platform.rounds.create_validation' %}
+      {% set add_reporting_validation_handler = 'proto_manage.platform.reporting_rounds.create_simple_validation' if question.type == 'NUMBER' else 'proto_manage.platform.reporting_rounds.create_validation' %}
+      <p class="govuk-body">{{ govukButton({"text": "Add validation", "href": url_for(add_application_validation_handler, grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id) if round is defined else url_for(add_reporting_validation_handler, grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id), "classes": "govuk-button--secondary"}) }}</p>
       {% else %}
         <h2 class="govuk-heading-m">Conditions and validation</h2>
         <p class="govuk-body">
