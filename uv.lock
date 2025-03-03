@@ -926,7 +926,7 @@ requires-dist = [
     { name = "sqlalchemy", extras = ["mypy"], specifier = "==2.0.38" },
     { name = "sqlalchemy-json", specifier = "==0.7.0" },
     { name = "sqlalchemy-utils", specifier = "==0.41.2" },
-    { name = "xhtml2pdf", specifier = "==0.2.16" },
+    { name = "xhtml2pdf", specifier = "==0.2.17" },
 ]
 
 [package.metadata.requires-dev]
@@ -2611,7 +2611,7 @@ wheels = [
 
 [[package]]
 name = "xhtml2pdf"
-version = "0.2.16"
+version = "0.2.17"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "arabic-reshaper" },
@@ -2624,9 +2624,9 @@ dependencies = [
     { name = "reportlab" },
     { name = "svglib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/df/eb/912e9c40faca75e8cbe9c39a8aa839f588a2f60c28806c79968d5419bc35/xhtml2pdf-0.2.16.tar.gz", hash = "sha256:7391adac12afb086561667cdc8d6ef0ac4afe5097bd97383622d42b6343dee71", size = 138833 }
+sdist = { url = "https://files.pythonhosted.org/packages/da/9a/3b29831d8617ecbcf0b0aaa2b3e1b24f3fd1bbd204678ae86e9fee2f4239/xhtml2pdf-0.2.17.tar.gz", hash = "sha256:09ddbc31aa0e38a16f2f3cb73be89af5f7c968c17a564afdd685d280e39c526d", size = 139727 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/20/37/d9be93dbfee057b141cb69f5cad2029ba76e3645cdfffd6d5a3044a838a2/xhtml2pdf-0.2.16-py3-none-any.whl", hash = "sha256:b37040127627aee42f76f25ebbd5798308ffc93edaf4850a4d3dd894160ebb53", size = 125039 },
+    { url = "https://files.pythonhosted.org/packages/93/ca/d53764f0534ff857239595f090f4cb83b599d226cc326c7de5eb3d802715/xhtml2pdf-0.2.17-py3-none-any.whl", hash = "sha256:61a7ecac829fed518f7dbcb916e9d56bea6e521e02e54644b3d0ca33f0658315", size = 125349 },
 ]
 
 [[package]]
