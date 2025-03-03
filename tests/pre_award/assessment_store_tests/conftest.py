@@ -314,15 +314,3 @@ def flask_test_client():
     app.test_client_class = _FlaskClientWithHost
     with app.test_client() as test_client:
         yield test_client
-
-
-@pytest.fixture(scope="function")
-def mock_tasklist_function_calls(mocker):
-    mocker.patch(
-        "pre_award.apply.default.application_routes.get_change_request_field_ids",
-        return_value=["test_field_id"],
-    )
-    mocker.patch(
-        "pre_award.apply.default.application_routes.get_form_names_with_change_request",
-        return_value=["test_form_name"],
-    )
