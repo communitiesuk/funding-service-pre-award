@@ -41,6 +41,8 @@ from pre_award.apply.helpers import (
     get_token_to_return_to_application,
 )
 from pre_award.apply.models.statuses import get_formatted
+from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
+from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus
 from pre_award.assessment_store.db.queries.flags.queries import prepare_change_requests_metadata
 from pre_award.common.blueprints import Blueprint
 from pre_award.common.locale_selector.set_lang import LanguageSelector
@@ -314,6 +316,9 @@ def tasklist(application_id):
             ),
         )
 
+    change_request_field_ids = get_change_request_field_ids(application_id)
+    form_names_with_change_request = get_form_names_with_change_request(application_id, change_request_field_ids)
+
     with force_locale(application.language):
         response = make_response()
         if request.cookies.get("language") != application.language:
@@ -332,6 +337,7 @@ def tasklist(application_id):
             submission_deadline=round_data.deadline,
             is_expression_of_interest=round_data.is_expression_of_interest,
             is_past_submission_deadline=current_datetime_after_given_iso_string(round_data.deadline),  # noqa:E501
+            form_names_with_change_request=form_names_with_change_request,
             dashboard_url=url_for(
                 "account_routes.dashboard",
                 fund=fund_data.short_name,
@@ -348,6 +354,30 @@ def tasklist(application_id):
         response.set_data(response_content)
 
         return response
+
+
+def get_change_request_field_ids(application_id):
+    assessment_flags = AssessmentFlag.query.filter_by(
+        application_id=application_id, is_change_request=True, latest_status=FlagStatus.RAISED
+    ).all()
+
+    field_ids_lists = [flag.field_ids for flag in assessment_flags]
+    field_ids = [field_id for sublist in field_ids_lists for field_id in sublist]
+
+    return field_ids
+
+
+def get_form_names_with_change_request(application_id, field_ids):
+    form_names = []
+    application = get_application_data(application_id)
+
+    for form in application.forms:
+        for question in form["questions"]:
+            for field in question["fields"]:
+                if field["key"] in field_ids:
+                    form_names.append(form["name"])
+
+    return form_names
 
 
 @application_bp.route("/continue_application/<application_id>", methods=["GET"])

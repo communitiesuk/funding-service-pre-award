@@ -24,7 +24,7 @@
   </span>
 {% endmacro %}
 
-{% macro tasklist_section(section, application_meta_data, application_status, index, existing_feedback_map) %}
+{% macro tasklist_section(section, application_meta_data, application_status, index, existing_feedback_map, form_names_with_change_request) %}
 <li>
     <h2 class="app-task-list__section">
       {{ section["section_title"] }}
@@ -37,12 +37,18 @@
       {% for form in section["forms"] %}
       <li class="app-task-list__item task-list__new-design">
         <span class="app-task-list__task-name">
-          {% if application_meta_data.is_resubmission and form["state"]["status"] != application_meta_data["change_requested_status"] %}
-            <span class="gov-body">{{ form["form_title"] }}</span>
+          {% if not application_meta_data.is_resubmission %}
+              <a class="govuk-body govuk-link govuk-link--no-visited-state" href='{{ url_for("application_routes.continue_application", application_id=application_meta_data["application_id"], form_name=form["form_name"]) }}'>
+                {{ form["form_title"] }}
+              </a>
           {% else %}
-            <a class="govuk-body govuk-link govuk-link--no-visited-state" href='{{ url_for("application_routes.continue_application", application_id=application_meta_data["application_id"], form_name=form["form_name"]) }}'>
-              {{ form["form_title"] }}
-            </a>
+              {% if form["form_name"] in form_names_with_change_request %}
+                  <a class="govuk-body govuk-link govuk-link--no-visited-state" href='{{ url_for("application_routes.continue_application", application_id=application_meta_data["application_id"], form_name=form["form_name"]) }}'>
+                    {{ form["form_title"] }}
+                  </a>
+              {% else %}
+                  <span class="gov-body">{{ form["form_title"] }}</span>
+              {% endif %}
           {% endif %}
         </span>
         {{ derive_status_tag(form["state"]["status"], application_meta_data, application_status) }}

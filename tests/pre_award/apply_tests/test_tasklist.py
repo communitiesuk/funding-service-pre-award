@@ -39,7 +39,7 @@ def mock_applications(mocker):
     )
 
 
-def test_tasklist_route(apply_test_client, mocker, mock_login, mock_applications):
+def test_tasklist_route(apply_test_client, mocker, mock_login, mock_applications, mock_tasklist_function_calls):
     mocker.patch(
         "pre_award.apply.default.application_routes.get_application_data",
         return_value=TEST_APPLICATION_EN,
@@ -95,7 +95,9 @@ def test_tasklist_for_submit_application_route(apply_test_client, mocker, mock_l
     )
 
 
-def test_language_cookie_update_welsh_to_english(apply_test_client, mocker, mock_login, mock_applications):
+def test_language_cookie_update_welsh_to_english(
+    apply_test_client, mocker, mock_login, mock_applications, mock_tasklist_function_calls
+):
     # set language cookie to welsh
     apply_test_client.set_cookie(domain="/", key="language", value="cy")
 
@@ -112,7 +114,9 @@ def test_language_cookie_update_welsh_to_english(apply_test_client, mocker, mock
     assert soup.find("span", class_="app-service-name").text == "Apply for fund for testing"
 
 
-def test_language_cookie_update_english_to_welsh(apply_test_client, mocker, mock_login, mock_applications):
+def test_language_cookie_update_english_to_welsh(
+    apply_test_client, mocker, mock_login, mock_applications, mock_tasklist_function_calls
+):
     # set language cookie to english
     apply_test_client.set_cookie(domain="/", key="language", value="en")
 
