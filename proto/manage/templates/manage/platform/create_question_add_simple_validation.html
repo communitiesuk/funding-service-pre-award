@@ -24,7 +24,10 @@
     <span class="govuk-caption-m">{{ question.title }}</span>
     <h1 class="govuk-heading-l">{{ title }}</h1>
     <p class="govuk-body">Add simple rules to help your users provide a correct number.</p>
-    <p class="govuk-body">You can also add rules using values and calculations from other answers by <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.reporting_rounds.create_validation', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id) }}">adding a custom validation</a>.</p>
+
+    {% set custom_validation_url = url_for('proto_manage.platform.rounds.create_validation', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id) if round else url_for('proto_manage.platform.reporting_rounds.create_validation', grant_code=grant.short_name, round_ext_id=reporting_round.external_id, section_id=section.id, question_id=question.id) %}
+
+    <p class="govuk-body">You can also add rules using values and calculations from other answers by <a class="govuk-link govuk-link--no-visited-state" href="{{ custom_validation_url }}">adding a custom validation</a>.</p>
 
     <form method="post" novalidate class="govuk-!-margin-top-6">
 
