@@ -36,10 +36,7 @@ def deal_with_single_equals(expression):
     return re.sub(r"\b=[^=]", " == ", expression)
 
 
-def build_context(
-    this_collection: ProtoDataCollectionInstance | None = None,
-    answer: Any | None = None,
-):
+def build_context(this_collection: ProtoDataCollectionInstance | None = None, answer: Any | None = None):
     # It would be nice if "this collection"s data was somehow surfaced at the top-level, ie not namespaced, but
     # would need to give due consideration to namespace collisions. So I'm skipping that for now by having everything
     # namespaced.
@@ -200,22 +197,31 @@ def build_autocomplete_context(
     if answer is not None:
         autocomplete_context.append({"value": "answer", "label": "The answer provided for this question"})
 
+    # this shouldn't always be applied and should be nested but just doing this for now
+    autocomplete_context.append({"value": "Minimum value", "label": "The minimum validation amount"})
+    autocomplete_context.append({"value": "Maximum value", "label": "The maximum validation amount"})
+    autocomplete_context.append({"value": "value", "label": "The validation amount"})
     return autocomplete_context
 
 
 def build_context_injector(
     this_collection: ProtoDataCollectionInstance | None = None,
     answer: Any | None = None,
+    additional_context: dict = {},  # noqa
 ) -> Callable[[str], str]:
-    context = build_context(this_collection=this_collection, answer=answer)
+    context = {**build_context(this_collection=this_collection, answer=answer), **additional_context}
     return functools.partial(interpolate, context=context)
 
 
 def build_context_evaluator(
     this_collection: ProtoDataCollectionInstance | None = None,
     answer: Any | None = None,
+    # smashing a nice clean abstraction, sorry - this could theoretically be built from the
+    # data collection instance if you knew what question was relevant, maybe thats
+    # how `answer` should be modelled too
+    additional_context: dict = {},  # noqa
 ) -> Callable[[str], int | bool]:
-    context = build_context(this_collection=this_collection, answer=answer)
+    context = {**build_context(this_collection=this_collection, answer=answer), **additional_context}
     return functools.partial(evaluate, context=context)
 
 

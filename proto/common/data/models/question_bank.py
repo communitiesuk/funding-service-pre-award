@@ -61,6 +61,12 @@ class QuestionType(str, enum.Enum):
     POUNDS_AND_PENCE = "POUNDS_AND_PENCE"
 
 
+class ValidationType(str, enum.Enum):
+    GREATER_THAN = "Greater than"
+    LESS_THAN = "Less than"
+    EQUAL_TO = "Equal to"
+
+
 class ConditionCombination(str, enum.Enum):
     AND = "and"  # All conditions that apply to this question must evaluate to 'True' in order to show it
     OR = "or"  # Any single condition that applies to this question must evaluate to 'True' in order to show it
@@ -156,3 +162,5 @@ class TemplateValidation(db.Model):
     # validations stacked in db order - they probably want an order of precednece similar to questions and sections
     expression: Mapped[str]
     message: Mapped[str]
+
+    options: Mapped[dict] = mapped_column(nullable=False, default=dict)

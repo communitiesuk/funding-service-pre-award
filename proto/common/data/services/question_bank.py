@@ -13,7 +13,7 @@ from proto.common.data.models.data_collection import (
     ProtoDataCollectionQuestionCondition,
     ProtoDataCollectionQuestionValidation,
 )
-from proto.common.data.models.question_bank import TemplateType
+from proto.common.data.models.question_bank import TemplateType, ValidationType
 from proto.common.helpers import make_url_slug
 from proto.form_runner.expressions import deal_with_single_equals
 
@@ -80,7 +80,25 @@ def update_question_condition(condition: ProtoDataCollectionQuestionCondition, *
 
 
 def create_question_validation(question: ProtoDataCollectionDefinitionQuestion, **kwargs):
-    validation = ProtoDataCollectionQuestionValidation(**kwargs)
+    # pass in two separate args don't filter here
+    validation = ProtoDataCollectionQuestionValidation(
+        **{k: v for k, v in kwargs.items() if k not in {"type", "min", "max", "value"}}
+    )
+
+    # this is a managed validation
+    match kwargs.get("type"):
+        case ValidationType.GREATER_THAN:
+            validation.expression = "((answer)) >= ((min))"
+
+            # any management of JSONB feels like it should use pydantic to keep it uniform and well typed
+            validation.options = {"key": ValidationType.GREATER_THAN, "min": kwargs["min"]}
+        case ValidationType.LESS_THAN:
+            validation.expression = "((answer)) <= ((max))"
+            validation.options = {"key": ValidationType.LESS_THAN, "min": kwargs["max"]}
+        case ValidationType.EQUAL_TO:
+            validation.expression = "((answer)) == ((value))"
+            validation.options = {"key": ValidationType.LESS_THAN, "value": kwargs["value"]}
+
     if validation.expression:
         validation.expression = deal_with_single_equals(validation.expression)
     question.validations.append(validation)
@@ -196,6 +214,7 @@ def add_template_sections_to_data_collection_definition(round, template_section_
                     depends_on_question=depends_on_question,
                     expression=template_validation.expression,
                     message=template_validation.message,
+                    options=template_validation.options,
                 )
                 question.validations.append(validation)
 

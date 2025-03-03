@@ -1,0 +1,91 @@
+{% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/components/table/macro.html" import govukTable %}
+{% from "govuk_frontend_jinja/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList %}
+{% from "govuk_frontend_jinja/components/details/macro.html" import govukDetails %}
+{% from "govuk_frontend_jinja/components/input/macro.html" import govukInput %}
+{% from "govuk_frontend_jinja/components/checkboxes/macro.html" import govukCheckboxes %}
+
+{% extends "manage/platform/grants_base.html" %}
+
+{% set title = _("Update validation") if is_edit else _("Add validation") %}
+
+{% block pageTitle %}{{ title }} - {% trans %}One Funding Service{% endtrans %}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if form.errors %}
+        {{ govukErrorSummary(wtforms_errors(form)) }}
+    {% endif %}
+
+
+    <span class="govuk-caption-m">{{ question.title }}</span>
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    <p class="govuk-body">Add simple rules to help your users provide a correct number.</p>
+    <p class="govuk-body">You can also add rules using values and calculations from other answers by <a class="govuk-link govuk-link--no-visited-state" href="{{ url_for('proto_manage.platform.rounds.create_validation', grant_code=grant.short_name, round_code=round.short_name, section_id=section.id, question_id=question.id) }}">adding a custom validation</a>.</p>
+
+    <form method="post" novalidate class="govuk-!-margin-top-6">
+
+      {{ form.csrf_token }}
+
+      {% set greaterThanHtml %}
+        {{ form.min }}
+
+        {# a checkbox for inclusive or not, undecided on default behaviour #}
+        {# {{ form.inclusive }} #}
+      {% endset %}
+
+      {% set lessThanHtml %}
+        {{ form.max }}
+      {% endset %}
+
+      {% set equalToHtml %}
+        {{ form.value }}
+      {% endset %}
+
+      {# add a tiny snippet of js that updates the message with default values when the types are selected #}
+      {{ form.type(params={
+        "items": [
+          {
+            "conditional": {
+              "html": greaterThanHtml
+            }
+          },
+          {
+            "conditional": {
+              "html": lessThanHtml
+            }
+          },
+          {
+            "conditional": {
+              "html": equalToHtml
+            }
+          }
+        ]
+      }) }}
+
+      {{ form.message(params={
+        "attributes": {
+          "data-mhclg-module": "autocomplete",
+          "spellcheck": false
+        },
+        "hint": {
+          "text": "The error message shown to your user if the answer is not valid. Describe what has happened and tell them how to fix it."
+        }
+      }) }}
+
+      {{ form.submit(params={ "text": _("Update validation") if is_edit else _("Add validation")  }) }}
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+
+  {% from 'common/partials/autocomplete.html' import initialiseAutocomplete %}
+  {{ initialiseAutocomplete(autocomplete_context) }}
+{% endblock %}

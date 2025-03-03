@@ -61,8 +61,12 @@ def build_validators(
                 # it can be evaulated - we don't think about that too early on
                 answer = field.data
 
-            context_evaluator = build_context_evaluator(this_collection=data_collection_instance, answer=answer)
-            context_injector = build_context_injector(this_collection=data_collection_instance, answer=answer)
+            context_evaluator = build_context_evaluator(
+                this_collection=data_collection_instance, answer=answer, additional_context=validation.options
+            )
+            context_injector = build_context_injector(
+                this_collection=data_collection_instance, answer=answer, additional_context=validation.options
+            )
             if not context_evaluator(validation.expression):
                 raise ValidationError(context_injector(validation.message))
 

@@ -12,7 +12,7 @@ from wtforms.validators import DataRequired, Optional
 from wtforms.widgets import HiddenInput
 
 from proto.common.data.models import TemplateSection
-from proto.common.data.models.question_bank import QuestionType
+from proto.common.data.models.question_bank import QuestionType, ValidationType
 
 
 class ChooseTemplateSectionsForm(FlaskForm):
@@ -76,6 +76,24 @@ class NewConditionForm(FlaskForm):
         validators=[DataRequired(message=_l("Enter the expression"))],
     )
     submit = SubmitField(_l("Add condition"), widget=GovSubmitInput())
+
+
+class SimpleNumberValidationForm(FlaskForm):
+    type = RadioField(
+        _l("The number should be:"),
+        widget=GovRadioInput(),
+        choices=[x.value for x in ValidationType],
+        validators=[DataRequired(message=_l("Select which property should be valid"))],
+    )
+    min = IntegerField(_l("Minumum value"), widget=GovTextInput(), validators=[Optional()])
+    max = IntegerField(_l("Maximum value"), widget=GovTextInput(), validators=[Optional()])
+    value = IntegerField(_l("Value"), widget=GovTextInput(), validators=[Optional()])
+    message = StringField(
+        _l("Message"),
+        widget=GovTextArea(),
+        validators=[DataRequired(message=_l("Enter the message"))],
+    )
+    submit = SubmitField(_l("Add validation"), widget=GovSubmitInput())
 
 
 class NewValidationForm(FlaskForm):

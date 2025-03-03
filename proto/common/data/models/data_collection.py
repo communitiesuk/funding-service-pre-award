@@ -163,6 +163,8 @@ class ProtoDataCollectionQuestionValidation(db.Model):
     expression: Mapped[str]
     message: Mapped[str]
 
+    options: Mapped[dict] = mapped_column(nullable=False, default=dict)
+
 
 class ProtoDataCollectionInstance(db.Model):
     id: Mapped[pk_int] = mapped_column(primary_key=True)
