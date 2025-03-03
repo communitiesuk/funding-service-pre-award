@@ -1584,6 +1584,67 @@ class TestRoutes:
         assert b"Your request for changes has been sent" in response.data
         assert b"Back to application" in response.data
 
+    @pytest.mark.application_id("resolved_app")
+    @pytest.mark.sub_criteria_id("test_sub_criteria_id")
+    def test_submit_change_request(
+        self,
+        assess_test_client,
+        request,
+        mocker,
+        mock_get_sub_criteria,
+        mock_get_sub_criteria_theme,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_assessor_tasklist_state,
+    ):
+        application_id = request.node.get_closest_marker("application_id").args[0]
+        sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
+
+        token = create_valid_token(test_lead_assessor_claims)
+        assess_test_client.set_cookie("fsd_user_token", token)
+
+        response = assess_test_client.get(
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/theme_id/test_theme_id/request_change"
+        )
+        assert 200 == response.status_code
+        assert b"Reasons for requesting change" in response.data
+
+        mock_submit_response = {
+            "application_id": application_id,
+            "flag_type": "RAISED",
+            "field_ids": ["JCACTy"],
+            "section": [sub_criteria_id],
+            "is_change_request": True,
+        }
+
+        submit_mock = mocker.patch(
+            "pre_award.assess.assessments.routes.submit_change_request", return_value=mock_submit_response
+        )
+        mocker.patch("pre_award.assess.assessments.routes.is_first_change_request_for_date", return_value=True)
+        mocker.patch("pre_award.assess.assessments.routes.update_assessment_record_status")
+        mocker.patch("pre_award.assess.assessments.routes.notify_applicant_changes_requested")
+        mocker.patch("pre_award.assess.assessments.routes.mark_application_with_requested_changes")
+        post_data = {"field_ids": ["JCACTy"], "reason_JCACTy": "testing"}
+
+        response = assess_test_client.post(
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/theme_id/test_theme_id/request_change",
+            data=post_data,
+            follow_redirects=True,
+        )
+        submit_mock.assert_called_once_with(
+            application_id=application_id,
+            flag_type="RAISED",
+            user_id="lead",
+            justification="testing",
+            field_ids=["JCACTy"],
+            section=[sub_criteria_id],
+            is_change_request=True,
+        )
+        assert 200 == response.status_code
+        assert b"Your request for changes has been sent" in response.data
+
 
 @pytest.mark.parametrize(
     "file_extension, content_type",

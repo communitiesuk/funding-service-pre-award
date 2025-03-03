@@ -128,6 +128,7 @@ from pre_award.assess.shared.filters import utc_to_bst
 from pre_award.assess.shared.helpers import (
     determine_assessment_status,
     determine_flag_status,
+    filter_questions,
     fund_matches_filters,
     get_ttl_hash,
     is_flaggable,
@@ -1359,9 +1360,10 @@ def request_changes(application_id, sub_criteria_id, theme_id):
     field_ids = [question["field_id"] for question in filtered_questions]
     form = build_request_changes_form(field_ids)
     if request.method == "POST" and form.validate_on_submit():
+        selected_field = form.field_ids.data
         today_date = datetime.now(tz=timezone.utc).date()
         send_notification = is_first_change_request_for_date(application_id=application_id, date=today_date)
-        justification_data = {field_id: getattr(form, f"reason_{field_id}").data for field_id in field_ids}
+        justification_data = {field_id: getattr(form, f"reason_{field_id}").data for field_id in selected_field}
         for field_id, justification in justification_data.items():
             if not justification.strip():
                 continue
@@ -1913,7 +1915,3 @@ def success_page(application_id, sub_criteria_id, theme_id):
         sub_criteria=sub_criteria,
         assessment_status=assessment_status,
     )
-
-
-def filter_questions(theme_questions):
-    return [question for question in theme_questions if "answer" in question and question["answer"] is not None]
