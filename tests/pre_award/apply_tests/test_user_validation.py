@@ -68,7 +68,7 @@ class TestUserValidation:
         assert "Sorry, there is a problem with the service" in soup.find("h1")
         assert any("Try again later." in p for p in soup.find_all("p", class_="govuk-body"))
 
-    def test_tasklist_correct_user(self, apply_test_client, mocker, mock_login):
+    def test_tasklist_correct_user(self, apply_test_client, mocker, mock_login, mock_tasklist_function_calls):
         mocker.patch(
             "pre_award.apply.default.application_routes.get_application_data",
             return_value=TEST_APPLICATIONS[0],

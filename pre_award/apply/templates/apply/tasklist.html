@@ -159,7 +159,7 @@
 
         <ol class="app-task-list">
             {% for section in sections %}
-            {{ tasklist_section(section, application_meta_data, application_status, loop.index, existing_feedback_map)
+            {{ tasklist_section(section, application_meta_data, application_status, loop.index, existing_feedback_map, form_names_with_change_request)
           }}
             {% endfor %}
             {% if feedback_survey_data %}

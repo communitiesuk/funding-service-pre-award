@@ -111,3 +111,15 @@ def mock_get_fund_round(mocker):
         "pre_award.apply.default.application_routes.get_fund_and_round",
         return_value=(Fund.from_dict(TEST_FUNDS_DATA[0]), TEST_ROUNDS_DATA[0]),
     )
+
+
+@pytest.fixture(scope="function")
+def mock_tasklist_function_calls(mocker):
+    mocker.patch(
+        "pre_award.apply.default.application_routes.get_change_request_field_ids",
+        return_value=["test_field_id"],
+    )
+    mocker.patch(
+        "pre_award.apply.default.application_routes.get_form_names_with_change_request",
+        return_value=["test_form_name"],
+    )

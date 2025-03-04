@@ -9,11 +9,12 @@ from pre_award.assessment_store.db.queries.assessment_records.queries import (
     get_user_application_associations,
     update_user_application_association,
 )
+from tests.pre_award.apply_tests.conftest import mock_tasklist_function_calls  # noqa
 from tests.pre_award.assessment_store_tests.conftest import test_input_data
 
 
 @pytest.mark.apps_to_insert([{**test_input_data[0]}])
-def test_get_users_for_application(db, seed_application_records):
+def test_get_users_for_application(db, seed_application_records, mock_tasklist_function_calls):  # noqa: F811
     user_id_1 = str(uuid.uuid4())
     user_id_2 = str(uuid.uuid4())
     assigner_id = str(uuid.uuid4())
