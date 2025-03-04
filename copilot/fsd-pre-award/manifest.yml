@@ -216,6 +216,7 @@ environments:
       COOKIE_DOMAIN: ".access-funding.levellingup.gov.uk"
       APPLY_HOST: "frontend.access-funding.levellingup.gov.uk"
       ASSESS_HOST: "assessment.access-funding.levellingup.gov.uk"
+      AUTHENTICATOR_HOST: "https://authenticator.access-funding.levellingup.gov.uk"
       AUTH_HOST: "authenticator.access-funding.levellingup.gov.uk"
       API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local:8080"
       APPLICANT_FRONTEND_HOST: "https://frontend.access-funding.levellingup.gov.uk" # TODO: remove me when all frontends combined
