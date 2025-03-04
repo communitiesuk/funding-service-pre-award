@@ -183,14 +183,14 @@ def build_autocomplete_context(
         )
 
         # reports
-        for i, reporting_round in enumerate(grant.reporting_rounds, start=1):
+        for i, reporting_round in enumerate(grant.reporting_rounds):
             if this_definition is not reporting_round.data_collection_definition:
                 context_for_reporting_round = _autocomplete_context_for_collection_definition_data(
                     reporting_round.data_collection_definition, prefix=f"reports[{i}]."
                 )
                 if context_for_reporting_round:
                     autocomplete_context.append(
-                        {"value": f"reports[{i}].", "label": f"Information from monitoring report #{i}"}
+                        {"value": f"reports[{i}].", "label": f"Information from monitoring report #{i + 1}"}
                     )
                     autocomplete_context.extend(context_for_reporting_round)
 
