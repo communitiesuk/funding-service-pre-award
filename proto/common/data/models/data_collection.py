@@ -84,6 +84,11 @@ class ProtoDataCollectionDefinitionQuestion(db.Model):
     order: Mapped[int]
     data_source: Mapped[t_data_source]
 
+    # question list types will either be able to define their own more ad-hoc data (like "Yes", "No")
+    # or reference something managed by the platform or the grant team
+    reference_data_source_id: Mapped[pk_int] = mapped_column(db.ForeignKey("data_store.id"), nullable=True)
+    reference_data_source: Mapped["DataStore"] = relationship("DataStore")
+
     section_id: Mapped[int] = mapped_column(db.ForeignKey(ProtoDataCollectionDefinitionSection.id))
     section: Mapped[ProtoDataCollectionDefinitionSection] = relationship(
         ProtoDataCollectionDefinitionSection, back_populates="questions"
@@ -202,3 +207,33 @@ class ProtoDataCollectionInstanceSectionData(db.Model):
     # I'm fairly confident backref is deprecated and should be more formally defined with `back_populates` but
     # this loads and I said i'd push in 15 minutes
     scores: Mapped[List["ProtoScore"]] = relationship("ProtoScore", backref="proto_score")
+
+
+# for now assuming a simple key: value pair of id: human readable label
+class DataStore(db.Model):
+    __table_args__ = ()
+
+    id: Mapped[pk_int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+
+    version: Mapped[int] = mapped_column(default=1)
+
+    data: Mapped[list["DataStoreEntry"]] = relationship("DataStoreEntry", back_populates="data_store")
+
+    created_at: Mapped[datetime] = mapped_column(default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
+
+
+class DataStoreEntry(db.Model):
+    __table_args__ = ()
+
+    id: Mapped[pk_int] = mapped_column(primary_key=True)
+
+    data_store_id: Mapped[pk_int] = mapped_column(db.ForeignKey("data_store.id"))
+    data_store: Mapped["DataStore"] = relationship("DataStore", back_populates="data")
+
+    value: Mapped[str]
+    label: Mapped[str]
+
+    created_at: Mapped[datetime] = mapped_column(default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())
