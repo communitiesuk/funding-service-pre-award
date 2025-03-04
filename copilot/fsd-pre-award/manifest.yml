@@ -142,7 +142,18 @@ environments:
   test:
     variables:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
-      COOKIE_DOMAIN: ".test.access-funding.test.levellingup.gov.uk"
+      COOKIE_DOMAIN: ".access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      ASSESS_HOST: "assess.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      ASSESSMENT_FRONTEND_HOST: "https://assess.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      APPLICANT_FRONTEND_HOST: "https://apply.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      APPLY_HOST: "apply.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      AUTH_HOST: "account.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      AUTHENTICATOR_HOST: "https://account.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      FORM_DESIGNER_HOST: "https://form-designer.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      FORMS_SERVICE_PUBLIC_HOST: "https://application-questions.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      POST_AWARD_FRONTEND_HOST: "https://find-monitoring-data.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+      POST_AWARD_SUBMIT_HOST: "https://submit-monitoring-data.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
     count:
       spot: 2
     sidecars:
@@ -157,10 +168,25 @@ environments:
           BASIC_AUTH_USERNAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_USERNAME
           BASIC_AUTH_PASSWORD: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/BASIC_AUTH_PASSWORD
     http:
+      alias:
+        - account.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk
+        - assess.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk
+        - apply.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk
+      additional_rules:
+        - path: /
+          target_container: nginx
+          alias:
+            - assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
+            - frontend.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
+            - authenticator.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk
+          healthcheck:
+            path: /healthcheck
+            port: 8080
       target_container: nginx
       healthcheck:
         path: /healthcheck
         port: 8080
+
   uat:
     variables:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
