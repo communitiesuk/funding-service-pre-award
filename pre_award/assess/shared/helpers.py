@@ -145,3 +145,7 @@ def fund_matches_filters(fund: Fund, filters: LandingFilters):
     if filters.filter_fund_type not in fund.fund_types:
         return False
     return True
+
+
+def filter_questions(theme_questions):
+    return [question for question in theme_questions if "answer" in question and question["answer"] is not None]
