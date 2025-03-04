@@ -94,7 +94,7 @@ def create_question_validation(question: ProtoDataCollectionDefinitionQuestion, 
             validation.options = {"key": ValidationType.GREATER_THAN, "min": kwargs["min"]}
         case ValidationType.LESS_THAN:
             validation.expression = "((answer)) <= ((max))"
-            validation.options = {"key": ValidationType.LESS_THAN, "min": kwargs["max"]}
+            validation.options = {"key": ValidationType.LESS_THAN, "max": kwargs["max"]}
         case ValidationType.EQUAL_TO:
             validation.expression = "((answer)) == ((value))"
             validation.options = {"key": ValidationType.LESS_THAN, "value": kwargs["value"]}
