@@ -55,6 +55,7 @@ human_readable = {
     QuestionType.RADIOS: "Selection from a list of options",
     QuestionType.NUMBER: "Number",
     QuestionType.POUNDS_AND_PENCE: "Pounds and pence",
+    QuestionType.LIST_AUTOCOMPLETE: "Selection from a list of options",
 }
 
 

@@ -65,10 +65,25 @@
         {{ form.question(params={"label": {"isPageHeading": true, "classes": "govuk-label--l"}, "inputmode": "numeric", "spellcheck": false }) }}
       {% elif question.type == QuestionType.POUNDS_AND_PENCE %}
         {{ form.question(params={"label": {"isPageHeading": true, "classes": "govuk-label--l"}, "inputmode": "numeric", "spellcheck": false, "prefix": {"text": "£" } }) }}
+      {% elif question.type == QuestionType.LIST_AUTOCOMPLETE %}
+        {{ form.question(params={"label": {"isPageHeading": true, "classes": "govuk-label--l"} }) }}
       {% endif %}
 
       {{ form.submit }}
     </form>
   </div>
 </div>
+{% endblock %}
+
+{% block bodyEnd %}
+<script src="https://cdn.jsdelivr.net/npm/accessible-autocomplete@3.0.1/dist/accessible-autocomplete.min.js" nonce="{{ csp_nonce() }}"></script>
+<link href="https://cdn.jsdelivr.net/npm/accessible-autocomplete@3.0.1/dist/accessible-autocomplete.min.css" nonce="{{ csp_nonce() }}" rel="stylesheet">
+
+<script none="{{ csp_nonce() }}">
+accessibleAutocomplete.enhanceSelectElement({
+  selectElement: document.querySelector('#{{ form.question.id }}'),
+  showAllValues: true,
+  displayMenu: 'overlay'
+})
+</script>
 {% endblock %}

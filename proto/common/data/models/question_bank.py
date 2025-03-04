@@ -60,6 +60,11 @@ class QuestionType(str, enum.Enum):
     NUMBER = "NUMBER"
     POUNDS_AND_PENCE = "POUNDS_AND_PENCE"
 
+    # this shouldn't be a question type, need to work
+    # out how this relates to radios/ checkboxes/ selects/ etc.
+    # could use an internal list of data or a reference
+    LIST_AUTOCOMPLETE = "LIST_AUTOCOMPLETE"
+
 
 class ValidationType(str, enum.Enum):
     GREATER_THAN = "Greater than"
@@ -89,6 +94,9 @@ class TemplateQuestion(db.Model):
     hint: Mapped[str | None]
     order: Mapped[int]
     data_source: Mapped[t_data_source]
+
+    reference_data_source_id: Mapped[pk_int] = mapped_column(db.ForeignKey("data_store.id"), nullable=True)
+    reference_data_source: Mapped["DataStore"] = relationship("DataStore")  # noqa
 
     template_section_id: Mapped[int] = mapped_column(db.ForeignKey(TemplateSection.id))
     template_section: Mapped[TemplateSection] = relationship(TemplateSection, back_populates="template_questions")

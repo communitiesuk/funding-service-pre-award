@@ -214,7 +214,10 @@ class DataStore(db.Model):
     __table_args__ = ()
 
     id: Mapped[pk_int] = mapped_column(primary_key=True)
-    name: Mapped[str]
+
+    # calling this name maybe interefered with sql alchemy comparator?
+    # no it wasn't that
+    collection_name: Mapped[str]
 
     version: Mapped[int] = mapped_column(default=1)
 
@@ -234,6 +237,8 @@ class DataStoreEntry(db.Model):
 
     value: Mapped[str]
     label: Mapped[str]
+
+    version: Mapped[int] = mapped_column(default=1)
 
     created_at: Mapped[datetime] = mapped_column(default=func.now())
     updated_at: Mapped[datetime] = mapped_column(default=func.now(), onupdate=func.now())

@@ -20,7 +20,14 @@ depends_on = None
 fundstatus_enum = postgresql.ENUM("DRAFT", "LIVE", "RETIRED", name="fundstatus", create_type=False)
 templatetype_enum = postgresql.ENUM("APPLICATION", "REPORTING", name="templatetype", create_type=False)
 questiontype_enum = postgresql.ENUM(
-    "TEXT_INPUT", "TEXTAREA", "RADIOS", "NUMBER", "POUNDS_AND_PENCE", name="questiontype", create_type=False
+    "TEXT_INPUT",
+    "TEXTAREA",
+    "RADIOS",
+    "NUMBER",
+    "POUNDS_AND_PENCE",
+    "LIST_AUTOCOMPLETE",
+    name="questiontype",
+    create_type=False,
 )
 
 

@@ -2,9 +2,9 @@ from functools import partial
 
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
-from govuk_frontend_wtf.wtforms_widgets import GovRadioInput, GovSubmitInput, GovTextArea, GovTextInput
+from govuk_frontend_wtf.wtforms_widgets import GovRadioInput, GovSelect, GovSubmitInput, GovTextArea, GovTextInput
 from markupsafe import Markup
-from wtforms.fields.choices import RadioField
+from wtforms.fields.choices import RadioField, SelectField
 from wtforms.fields.numeric import FloatField, IntegerField
 from wtforms.fields.simple import StringField, SubmitField
 from wtforms.validators import InputRequired, ValidationError
@@ -112,6 +112,14 @@ def build_question_form(
         case QuestionType.POUNDS_AND_PENCE:
             field = FloatField(
                 label=question_text, description=question_hint, widget=GovTextInput(), validators=validators
+            )
+        case QuestionType.LIST_AUTOCOMPLETE:
+            field = SelectField(
+                label=question_text,
+                description=question_hint,
+                widget=GovSelect(),
+                validators=validators,
+                choices=[(choice.value, choice.label) for choice in question.reference_data_source.data],
             )
         case _:
             raise Exception("Unable to generate dynamic form for question type {_}")

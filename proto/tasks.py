@@ -6,7 +6,7 @@ from invoke import task
 from sqlalchemy import func, select, text
 
 from proto.common.data.models import Fund, Organisation, ProtoReportingRound, TemplateSection
-from proto.common.data.models.data_collection import ConditionCombination
+from proto.common.data.models.data_collection import ConditionCombination, DataStore, DataStoreEntry
 from proto.common.data.models.question_bank import (
     DataStandard,
     QuestionType,
@@ -27,6 +27,17 @@ def _env_var(key, value):
 
 def insert_question_bank_data():
     from db import db
+
+    local_council_data_store = DataStore(collection_name="Local councils")
+    local_council_data_store.data.extend(
+        [
+            DataStoreEntry(value="E06000038", label="Reading Borough Council"),
+            DataStoreEntry(value="E10000025", label="Oxford City Council"),
+        ]
+    )
+
+    db.session.add(local_council_data_store)
+    db.session.commit()
 
     data_standards_to_create = {
         "user.schema.json#properties/full_name": DataStandard(
@@ -260,6 +271,17 @@ def insert_question_bank_data():
             data_source=None,
             data_standard_id=None,
             template_section_id=template_sections_to_create["project-information"].id,
+        ),
+        "project-local-council": TemplateQuestion(
+            slug="project-local-council",
+            type=QuestionType.LIST_AUTOCOMPLETE,
+            title="When local council?",
+            hint=None,
+            order=7,
+            data_source=None,
+            data_standard_id=None,
+            template_section_id=template_sections_to_create["project-information"].id,
+            reference_data_source=local_council_data_store,
         ),
         "monitoring-project-money": TemplateQuestion(
             slug="monitoring-project-money",

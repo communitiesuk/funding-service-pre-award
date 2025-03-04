@@ -179,6 +179,7 @@ def add_template_sections_to_data_collection_definition(round, template_section_
                 section_id=section.id,
                 template_question_id=template_question.id,
                 condition_combination_type=template_question.condition_combination_type,
+                reference_data_source=template_question.reference_data_source,
             )
             section.questions.append(question)
 
