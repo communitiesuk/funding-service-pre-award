@@ -342,6 +342,7 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
                 quoted=True,
             )
             for key in file_keys
+            if answer == key.split("/")[-1]
         }
         return QuestionAboveHrefAnswerList.from_dict(item, key_to_url_dict)
 
