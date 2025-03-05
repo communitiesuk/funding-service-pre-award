@@ -100,9 +100,9 @@ mccabe.max-complexity = 12
 dev = [
     "asserts==0.13.1",
     "beautifulsoup4==4.13.3",
-    "click==8.1.7",
+    "click==8.1.8",
     "colored==2.3.0",
-    "debugpy==1.8.12",
+    "debugpy==1.8.13",
     "deepdiff==8.2.0",
     "dparse==0.6.4",
     "invoke==2.2.0",
