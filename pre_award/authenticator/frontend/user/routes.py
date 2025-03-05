@@ -20,11 +20,12 @@ def user():
     with roles_required, logged_in_user and login/
     logout urls.
     Query Args:
-       - roles_required: List[str] is set by checking if
-         logged_in_user
+       - roles_required: List[str] is set by checking if logged_in_user has all roles required
+       - source_app: SupportedApp is set by the app that is requesting the user page
     """
     status_code = 200
     roles_required = request.args.get("roles_required")
+    source_app = request.args.get("source_app")
     logged_in_user = g.user if g.is_authenticated else None
     if logged_in_user:
         if roles_required:
@@ -42,6 +43,7 @@ def user():
             login_url=url_for("api_sso.login"),
             logout_url=url_for("api_sso.logout"),
             support_desk_assess=Config.SUPPORT_DESK_ASSESS,
+            source_app=source_app,
         ),
         status_code,
     )

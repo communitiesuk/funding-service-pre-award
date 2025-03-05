@@ -3,43 +3,42 @@
 {%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
 
 {% block content %}
-<div>
-    <h1 class="govuk-heading-xl">Apply for Funding</h1>
-</div>
-<div>
+   {% if source_app == "fund-application-builder" %}
+       <h1 class="govuk-heading-xl">You do not have access to this service</h1>
+       <p class="govuk-body">Your account does not have the right permission to access this service.</p>
+       <p class="govuk-body">Contact us through the <a href="{{ support_desk_assess }}" target="_blank">service desk</a> to request access.</p>
+   {% else %}
+       <h1 class="govuk-heading-xl">Apply for Funding</h1>
+       <div>
+           {% if roles_required %}
+               <p class="govuk-body">You do not have access as your account does not have the right permissions set up.</p>
+               <p class="govuk-body">Please contact us through our support desk portal <a href="{{ support_desk_assess }}" target="_blank">here</a> to request access or get help if you think this is a mistake.</p>
+           {% else %}
+               {% if logged_in_user %}
+                   <p class="govuk-body">
+                       You are currently logged in as:
+                       {% if logged_in_user.full_name %}
+                           <br /><strong>{{ logged_in_user.full_name }}</strong>
+                           <br /><i>({{ logged_in_user.email }})</i>
+                       {% else %}
+                           <br /><strong>{{ logged_in_user.email }}</strong>
+                       {% endif %}
+                   </p>
+                   {{ govukButton({
+                       "isStartButton": false,
+                       "href" : logout_url,
+                       "text": "Sign out"
+                   }) }}
+               {% else %}
+                   <p class="govuk-body">You are not logged in.</p>
 
-    {% if roles_required %}
-    <p class="govuk-body">You do not have access as your account does not have the right permissions set up.
-    <p class="govuk-body">Please contact us through our support desk portal <a href="{{ support_desk_assess }}"
-            target="_blank">here</a> to request access or get help if you think this is a mistake.</p>
-    </p>
-    {% else %}
-
-    {% if logged_in_user %}
-    <p class="govuk-body">
-        You are currently logged in as:
-        {% if logged_in_user.full_name %}
-        <br /><strong>{{ logged_in_user.full_name }}</strong>
-        <br /><i>({{ logged_in_user.email }})</i>
-        {% else %}
-        <br /><strong>{{ logged_in_user.email }}</strong>
-        {% endif %}
-    </p>
-    {{ govukButton({
-    "isStartButton": false,
-    "href" : logout_url,
-    "text": "Sign out"
-    }) }}
-    {% else %}
-    <p class="govuk-body">You are not logged in.</p>
-
-    {{ govukButton({
-    "isStartButton": false,
-    "href" : login_url,
-    "text": "Sign in"
-    }) }}
-    {% endif %}
-
-    {% endif %}
-</div>
+                   {{ govukButton({
+                       "isStartButton": false,
+                       "href" : login_url,
+                       "text": "Sign in"
+                   }) }}
+               {% endif %}
+           {% endif %}
+       </div>
+   {% endif %}
 {% endblock content %}
