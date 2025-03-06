@@ -12,7 +12,7 @@
         <h1 class="govuk-heading-l">{% trans grant_name=grant.name %}{{ grant_name }}{% endtrans %}</h1>
 
         <ul class="govuk-list">
-        {% for reporting_round in grant.reporting_rounds %}
+        {% for reporting_round in grant.reporting_rounds | sort(attribute='submission_period_starts', reverse=true) %}
           <li class="govuk-!-margin-bottom-8">
               {{ govukSummaryList({
                 "card": {
