@@ -103,7 +103,7 @@ dev = [
     "click==8.1.8",
     "colored==2.3.0",
     "debugpy==1.8.13",
-    "deepdiff==8.2.0",
+    "deepdiff==8.3.0",
     "dparse==0.6.4",
     "invoke==2.2.0",
     "invoke==2.2.0",
@@ -126,7 +126,7 @@ dev = [
     "types-psycopg2==2.9.21.20250121",
     "mypy==1.15.0",
     "types-babel==2.11.0.15",
-    "testcontainers==4.9.1",
+    "testcontainers==4.9.2",
     "pytest-xdist==3.6.1",
 ]
 [tool.mypy]

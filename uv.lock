@@ -415,14 +415,14 @@ wheels = [
 
 [[package]]
 name = "deepdiff"
-version = "8.2.0"
+version = "8.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "orderly-set" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/89/12/207d2ec96a526cf9d04fc2423ff9832e93b665e94b9d7c9b5198903e18a7/deepdiff-8.2.0.tar.gz", hash = "sha256:6ec78f65031485735545ffbe7a61e716c3c2d12ca6416886d5e9291fc76c46c3", size = 432573 }
+sdist = { url = "https://files.pythonhosted.org/packages/06/23/26a13806c06d9a9202433dae15740444d0bfbb365965a8af8a0b6b3a95bb/deepdiff-8.3.0.tar.gz", hash = "sha256:92a8d7c75a4b26b385ec0372269de258e20082307ccf74a4314341add3d88391", size = 509468 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6c/13/d7dd6b8c297b1d5cfea4f1ebd678e68d90ab04b6613d005c0a7c506d11e1/deepdiff-8.2.0-py3-none-any.whl", hash = "sha256:5091f2cdfd372b1b9f6bfd8065ba323ae31118dc4e42594371b38c8bea3fd0a4", size = 83672 },
+    { url = "https://files.pythonhosted.org/packages/01/a5/79af91ab5909fa98a150b2fb16b2ab0aaaa440cb1264abe3ffc9806e391e/deepdiff-8.3.0-py3-none-any.whl", hash = "sha256:838acf1b17d228f4155bcb69bb265c41cbb5b2aba2575f07efa67ad9b9b7a0b5", size = 86227 },
 ]
 
 [[package]]
@@ -936,7 +936,7 @@ dev = [
     { name = "click", specifier = "==8.1.8" },
     { name = "colored", specifier = "==2.3.0" },
     { name = "debugpy", specifier = "==1.8.13" },
-    { name = "deepdiff", specifier = "==8.2.0" },
+    { name = "deepdiff", specifier = "==8.3.0" },
     { name = "dparse", specifier = "==0.6.4" },
     { name = "flask-debugtoolbar", specifier = "==0.16.0" },
     { name = "freezegun", specifier = "==1.5.1" },
@@ -954,7 +954,7 @@ dev = [
     { name = "requests-mock", specifier = "==1.12.1" },
     { name = "responses", specifier = "==0.25.6" },
     { name = "ruff", specifier = "==0.9.9" },
-    { name = "testcontainers", specifier = "==4.9.1" },
+    { name = "testcontainers", specifier = "==4.9.2" },
     { name = "types-babel", specifier = "==2.11.0.15" },
     { name = "types-colorama", specifier = "==0.4.15.20240311" },
     { name = "types-flask-migrate", specifier = "==4.1.0.20250112" },
@@ -2361,7 +2361,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/56/5b/53ca0fd447f73423c
 
 [[package]]
 name = "testcontainers"
-version = "4.9.1"
+version = "4.9.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "docker" },
@@ -2370,9 +2370,9 @@ dependencies = [
     { name = "urllib3" },
     { name = "wrapt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e6/be/32bcd4143bca261b70e02109d75c2dbb5eb3e47e72e99efac9ca6ae88f76/testcontainers-4.9.1.tar.gz", hash = "sha256:37fe9a222549ddb788463935965b16f91809e9a8d654f437d6a59eac9b77f76f", size = 62463 }
+sdist = { url = "https://files.pythonhosted.org/packages/83/15/68cee852bcafc18827db4deb6aa0dd3b2621eb21130a522184523ef2d379/testcontainers-4.9.2.tar.gz", hash = "sha256:348c72d369d0bd52b57ab4f07a965ae9562837098c28f0522b969b064b779f10", size = 62595 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d4/d1/bba4ad5dca32d48c0e9c4845e84fa44933308c595d22c9e4b977a5007c4b/testcontainers-4.9.1-py3-none-any.whl", hash = "sha256:315fb94b42a383872df530aa45319745278ef0cc18b9cfcdc231a75d14afa5a0", size = 105478 },
+    { url = "https://files.pythonhosted.org/packages/a2/71/5d4656efa6cf4a8b3bc361170b7df97fdd734aba1c7bfe592058bbab21e4/testcontainers-4.9.2-py3-none-any.whl", hash = "sha256:36bd2b58d91f2fc7ac4f4a73c6ec00e5e60c259c10f208dbfe3161029889be92", size = 105644 },
 ]
 
 [[package]]
