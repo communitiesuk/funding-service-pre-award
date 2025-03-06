@@ -58,7 +58,7 @@
 
       {{ form.csrf_token }}
       {{ form.expression(params={"attributes": {"data-mhclg-module": "autocomplete", "spellcheck": false}, "hint": {"html": helpWithCustomisation} })}}
-      {{ form.message(params={"hint": {"text": "If the rule is broken, this will be shown to the user and they will have to change their answer."} }) }}
+      {{ form.message(params={"attributes": {"data-mhclg-module": "autocomplete", "spellcheck": false}, "hint": {"text": "If the rule is broken, this will be shown to the user and they will have to change their answer."} }) }}
 
       {{ form.submit(params={ "text": _("Update validation") if is_edit else _("Add validation")  }) }}
     </form>

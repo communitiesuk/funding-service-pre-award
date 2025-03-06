@@ -148,7 +148,7 @@ def view_grant(short_name):
     )
 
 
-@report_blueprint.get("/report/<short_name>/<int:reporting_round_id>")
+@report_blueprint.route("/report/<short_name>/<int:reporting_round_id>", methods=["GET", "POST"])
 @is_authenticated
 def tasklist(short_name, reporting_round_id):
     grant_recipient = get_grant_recipient_for_organisation(g.account.organisation_id, short_name)
