@@ -872,6 +872,7 @@ dev = [
     { name = "types-babel" },
     { name = "types-colorama" },
     { name = "types-flask-migrate" },
+    { name = "types-openpyxl" },
     { name = "types-psycopg2" },
     { name = "types-pymysql" },
 ]
@@ -958,6 +959,7 @@ dev = [
     { name = "types-babel", specifier = "==2.11.0.15" },
     { name = "types-colorama", specifier = "==0.4.15.20240311" },
     { name = "types-flask-migrate", specifier = "==4.1.0.20250112" },
+    { name = "types-openpyxl", specifier = ">=3.1.5.20250306" },
     { name = "types-psycopg2", specifier = "==2.9.21.20250121" },
     { name = "types-pymysql", specifier = "==1.1.0.20241103" },
 ]
@@ -2447,6 +2449,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/d6/2a/15d922ddd3fad1ec0e06dab338f20c508becacaf8193ff373aee6986a1cc/types_flask_migrate-4.1.0.20250112.tar.gz", hash = "sha256:f2d2c966378ae7bb0660ec810e9af0a56ca03108235364c2a7b5e90418b0ff67", size = 8650 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/36/01/56e26643c54c5101a7bc11d277d15cd871b05a8a3ddbcc9acd3634d7fff8/types_Flask_Migrate-4.1.0.20250112-py3-none-any.whl", hash = "sha256:1814fffc609c2ead784affd011de92f0beecd48044963a8c898dd107dc1b5969", size = 8727 },
+]
+
+[[package]]
+name = "types-openpyxl"
+version = "3.1.5.20250306"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/5a/45/e86035e4181a9cc039348ae913fe0f7b3ce3e7538f0901436f3b27a9a8f9/types_openpyxl-3.1.5.20250306.tar.gz", hash = "sha256:aa7ad2425e8020ff46a31633becfe1f3c64114498d964c536199f654b464e6bc", size = 100479 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/20/b2/cdbf437c638b61a87afa51b50d122d4106558802c6d8528705774ae5ce0d/types_openpyxl-3.1.5.20250306-py3-none-any.whl", hash = "sha256:f7733dac1dcb07c89ff5ffde8452ee8d272be638defed855f4c48b2990ce5aa7", size = 166070 },
 ]
 
 [[package]]
