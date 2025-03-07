@@ -143,7 +143,7 @@ def build_autocomplete_context(
     autocomplete_context.extend(_autocomplete_context_for_db_model(grant, prefix="grant."))
 
     # this_collection
-    autocomplete_context.append({"value": "this_collection.", "label": "Information from this data collection"})
+    autocomplete_context.append({"value": "this_collection.", "label": "Answers from this data collection"})
     autocomplete_context.extend(
         _autocomplete_context_for_collection_definition_data(this_definition, prefix="this_collection.")
     )
@@ -167,7 +167,7 @@ def build_autocomplete_context(
         if context_for_application:
             # application - skipping a lot of edge cases and considerations here
             autocomplete_context.append(
-                {"value": "application.", "label": "Information from the original grant application"}
+                {"value": "application.", "label": "Answers from the original grant application"}
             )
             autocomplete_context.extend(context_for_application)
 
@@ -190,7 +190,7 @@ def build_autocomplete_context(
                 )
                 if context_for_reporting_round:
                     autocomplete_context.append(
-                        {"value": f"reports[{i}].", "label": f"Information from monitoring report #{i + 1}"}
+                        {"value": f"reports[{i}].", "label": f"Answers from monitoring report #{i + 1}"}
                     )
                     autocomplete_context.extend(context_for_reporting_round)
 
