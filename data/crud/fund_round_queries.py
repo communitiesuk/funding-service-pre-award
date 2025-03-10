@@ -11,6 +11,10 @@ def get_fund(fund_short_name: str) -> Fund | None:
     return db.session.scalar(select(Fund).where(Fund.short_name == fund_short_name))
 
 
+def get_funds_with_rounds() -> Sequence[Fund]:
+    return db.session.scalars(select(Fund).join(Fund.rounds).options(contains_eager(Fund.rounds))).unique().all()
+
+
 def get_round(fund_short_name: str, round_short_name: str) -> Round | None:
     round = db.session.scalar(
         select(Round)
