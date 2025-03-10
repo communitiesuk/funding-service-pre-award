@@ -238,7 +238,6 @@ environments:
         - account.access-funding.communities.gov.uk
         - assess.access-funding.communities.gov.uk
         - apply.access-funding.communities.gov.uk
-      hosted_zone: Z0686469NF3ZJTU9I02M
       additional_rules:
         - path: /
           alias:
