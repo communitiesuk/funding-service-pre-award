@@ -3,7 +3,7 @@ from invoke import Context, task  # type: ignore[attr-defined]
 from openpyxl import Workbook
 
 from app import create_app
-from reporting.reporting import generate_report_1, generate_report_2
+from reporting.reporting import export_applicant_information, export_end_of_application_survey_data
 
 
 def build_report_impl() -> None:
@@ -18,8 +18,8 @@ def build_report_impl() -> None:
 
     # List of reports
     reports = [
-        generate_report_1,
-        generate_report_2,
+        export_applicant_information,
+        export_end_of_application_survey_data,
     ]
 
     for report_function in reports:
