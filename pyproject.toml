@@ -128,6 +128,7 @@ dev = [
     "types-babel==2.11.0.15",
     "testcontainers==4.9.2",
     "pytest-xdist==3.6.1",
+    "types-openpyxl>=3.1.5.20250306",
 ]
 [tool.mypy]
 strict = true

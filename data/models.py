@@ -33,7 +33,7 @@ class Fund(Model):
     title_json: Mapped[dict[Literal["en", "cy"], str]]
     short_name: Mapped[str] = mapped_column(CITEXT, nullable=False, unique=True)
     description_json: Mapped[dict[Literal["en", "cy"], str]]
-    rounds: Mapped[List["Round"]] = relationship("Round")
+    rounds: Mapped[List["Round"]] = relationship("Round", back_populates="fund")
     welsh_available: Mapped[bool] = mapped_column(default=False, nullable=False)
     owner_organisation_name: Mapped[str]
     owner_organisation_shortname: Mapped[str]
@@ -67,7 +67,7 @@ class Round(Model):
     fund_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("fund.id"),
     )
-    fund: Mapped[Fund] = relationship(lazy=True)
+    fund: Mapped[Fund] = relationship(lazy=True, back_populates="rounds")
     title_json: Mapped[dict[Literal["en", "cy"], str]]
     short_name: Mapped[str] = mapped_column(CITEXT, nullable=False)
     opens: Mapped[Optional[datetime]]  # In Europe/London timezone, stored without tzinfo

@@ -6,8 +6,9 @@ from invoke import Context, task  # type: ignore[attr-defined]
 
 from app import create_app
 from data.crud.accounts import get_account
-from data.crud.applications import get_unsubmitted_applications_for_round
+from data.crud.applications import get_applications_for_round_by_status
 from data.crud.fund_round_queries import get_rounds_for_application_deadline_reminders, set_application_reminder_sent
+from pre_award.application_store.db.models.application.enums import Status
 from services.notify import NotificationError, get_notification_service
 
 
@@ -20,7 +21,9 @@ def send_application_deadline_reminders_impl() -> None:
 
     rounds_for_reminders = get_rounds_for_application_deadline_reminders()
     for round in rounds_for_reminders:
-        incomplete_applications = get_unsubmitted_applications_for_round(round.id)
+        incomplete_applications = get_applications_for_round_by_status(
+            round.id, [Status.NOT_STARTED, Status.IN_PROGRESS, Status.COMPLETED]
+        )
         notified_accounts = set()
         for application in incomplete_applications:
             account_id = str(application.account_id)
