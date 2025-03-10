@@ -19,6 +19,21 @@ class EndOfApplicationSurveyFeedback(BaseModel):
 
     __table_args__ = (db.UniqueConstraint("application_id", "page_number", name="_unique_application_page"),)
 
+    @property
+    def get_section_comment_rating(self) -> tuple[str, str, str]:
+        section = ""
+        comment = ""
+        rating = ""
+        for key in self.data.keys():
+            if key == "more_detail":
+                comment = self.data[key]
+
+            if key != "csrf_token" and key != "more_detail":
+                section = key
+                rating = self.data[key]
+
+        return section, comment, rating
+
     def as_dict(self):
         return {
             "id": self.id,
