@@ -11,7 +11,7 @@ dependencies = [
     "alembic-utils==0.8.6",
     "babel==2.17.0",
     "beautifulsoup4==4.13.3",
-    "boto3==1.37.8",
+    "boto3==1.37.9",
     "colored==2.3.0",
     "cssmin==0.2.0",
     "dataclass-dict-convert==1.7.4",
