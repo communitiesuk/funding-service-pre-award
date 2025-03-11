@@ -316,7 +316,7 @@ def test_get_assessment_averages_with_all_fields_populated() -> None:
     expected = {
         "application_success_rate": round(2 * 100 / 3, 2),  # 66.67
         "comments_per_assessment": round(6 / 3, 2),  # 2.00
-        "tags_per_assessment": round(3 / 3, 2),  # 1.00
+        "tags_per_assessment": round(1, 2),  # 1.00
         "flags_per_assessment": round(4 / 3, 2),  # 1.33
         "change_requests_per_assessment": round(1 / 3, 2),  # 0.33
     }
@@ -340,7 +340,7 @@ def test_get_assessment_averages_with_single_assessment() -> None:
         "comments_per_assessment": round(5 / 1, 2),  # 5.00
         "tags_per_assessment": round(2 / 1, 2),  # 2.00
         "flags_per_assessment": round(3 / 1, 2),  # 3.00
-        "change_requests_per_assessment": round(1 / 1, 2),  # 1.00
+        "change_requests_per_assessment": round(1, 2),  # 1.00
     }
 
     assert get_assessment_averages(assessments, assessment_stats) == expected

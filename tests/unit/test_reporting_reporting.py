@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 from openpyxl import Workbook
+from pytest import approx
 
 from reporting.reporting import (
     export_applicant_information,
@@ -160,10 +161,10 @@ def test_export_assess_feature_stats(
     assert sheet.cell(row=2, column=11).value == 8  # Number of assessments withdrawn
     assert sheet.cell(row=2, column=12).value == "50%"  # Application success rate
     assert sheet.cell(row=2, column=13).value == 9  # Total assessment comments
-    assert sheet.cell(row=2, column=14).value == 1.5  # Comments per assessment
+    assert sheet.cell(row=2, column=14).value == approx(1.5)  # Comments per assessment
     assert sheet.cell(row=2, column=15).value == 10  # Total tags assigned
-    assert sheet.cell(row=2, column=16).value == 2.0  # Tags per assessment
+    assert sheet.cell(row=2, column=16).value == approx(2.0)  # Tags per assessment
     assert sheet.cell(row=2, column=17).value == 11  # Total assessment flags
-    assert sheet.cell(row=2, column=18).value == 0.5  # Flags per assessment
+    assert sheet.cell(row=2, column=18).value == approx(0.5)  # Flags per assessment
     assert sheet.cell(row=2, column=19).value == 12  # Total change requests
-    assert sheet.cell(row=2, column=20).value == 0.8  # Change requests per assessment
+    assert sheet.cell(row=2, column=20).value == approx(0.8)  # Change requests per assessment
