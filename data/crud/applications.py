@@ -8,7 +8,19 @@ from pre_award.application_store.db.models.application.enums import Status
 from pre_award.db import db
 
 
-def get_applications_for_round_by_status(round_id: UUID, statuses: List[Status]) -> Sequence[Applications]:
+def get_applications_for_round_by_status(
+    round_id: UUID, statuses: List[Status] | None = None
+) -> Sequence[Applications]:
+    if statuses is None:
+        statuses = [
+            Status.SUBMITTED,
+            Status.IN_PROGRESS,
+            Status.COMPLETED,
+            Status.CHANGE_REQUESTED,
+            Status.CHANGE_RECEIVED,
+            Status.NOT_STARTED,
+        ]
+
     return db.session.scalars(
         select(Applications)
         .where(
