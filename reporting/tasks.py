@@ -5,7 +5,11 @@ from invoke import Context, task  # type: ignore[attr-defined]
 from openpyxl import Workbook
 
 from app import create_app
-from reporting.reporting import export_applicant_information, export_end_of_application_survey_data
+from reporting.reporting import (
+    export_applicant_information,
+    export_assess_feature_stats,
+    export_end_of_application_survey_data,
+)
 from services.notify import NotificationError, get_notification_service
 
 
@@ -23,6 +27,7 @@ def build_report_impl() -> None:
     reports = [
         export_applicant_information,
         export_end_of_application_survey_data,
+        export_assess_feature_stats,
     ]
 
     for report_function in reports:
