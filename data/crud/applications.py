@@ -11,21 +11,9 @@ from pre_award.db import db
 def get_applications_for_round_by_status(
     round_id: UUID, statuses: List[Status] | None = None
 ) -> Sequence[Applications]:
-    if statuses is None:
-        statuses = [
-            Status.SUBMITTED,
-            Status.IN_PROGRESS,
-            Status.COMPLETED,
-            Status.CHANGE_REQUESTED,
-            Status.CHANGE_RECEIVED,
-            Status.NOT_STARTED,
-        ]
+    filters = [Applications.round_id == str(round_id)]
 
-    return db.session.scalars(
-        select(Applications)
-        .where(
-            Applications.round_id == str(round_id),
-            Applications.status.in_(statuses),
-        )
-        .order_by(Applications.started_at)
-    ).all()
+    if statuses:
+        filters.append(Applications.status.in_(statuses))
+
+    return db.session.scalars(select(Applications).where(*filters).order_by(Applications.started_at)).all()

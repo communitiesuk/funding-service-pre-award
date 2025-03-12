@@ -9,19 +9,9 @@ from pre_award.db import db
 
 
 def get_assessments_by_round(round_id: UUID, statuses: List[Status] | None = None) -> Sequence[AssessmentRecord]:
-    if statuses is None:
-        statuses = [
-            Status.NOT_STARTED,
-            Status.IN_PROGRESS,
-            Status.SUBMITTED,
-            Status.COMPLETED,
-            Status.CHANGE_REQUESTED,
-            Status.CHANGE_RECEIVED,
-        ]
+    filters = [AssessmentRecord.round_id == str(round_id)]
 
-    return db.session.scalars(
-        select(AssessmentRecord).where(
-            AssessmentRecord.round_id == round_id,
-            AssessmentRecord.workflow_status.in_(statuses),
-        )
-    ).all()
+    if statuses:
+        filters.append(AssessmentRecord.workflow_status.in_(statuses))
+
+    return db.session.scalars(select(AssessmentRecord).where(*filters)).all()

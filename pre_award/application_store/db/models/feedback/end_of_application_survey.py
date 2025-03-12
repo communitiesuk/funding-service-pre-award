@@ -27,8 +27,7 @@ class EndOfApplicationSurveyFeedback(BaseModel):
         for key in self.data.keys():
             if key == "more_detail":
                 comment = self.data[key]
-
-            if key != "csrf_token" and key != "more_detail":
+            elif key != "csrf_token":
                 section = key
                 rating = self.data[key]
 
