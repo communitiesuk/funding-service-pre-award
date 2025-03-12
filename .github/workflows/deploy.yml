@@ -63,7 +63,7 @@ jobs:
             command: svc
           - deployment: pre-award-application-deadline-reminders
             command: job
-          - deployment: pre-award-send-report
+          - deployment: pre-award-send-application-assessment-report
             command: job
     permissions:
       id-token: write # This is required for requesting the JWT

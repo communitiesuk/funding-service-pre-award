@@ -5,7 +5,7 @@ from invoke import Context, task  # type: ignore[attr-defined]
 from openpyxl import Workbook
 
 from app import create_app
-from reporting.reporting import (
+from reporting import (
     export_applicant_information,
     export_assess_feature_stats,
     export_end_of_application_survey_data,
@@ -23,15 +23,9 @@ def build_report_impl() -> None:
     if default_sheet is not None:
         workbook.remove(default_sheet)
 
-    # List of reports
-    reports = [
-        export_applicant_information,
-        export_end_of_application_survey_data,
-        export_assess_feature_stats,
-    ]
-
-    for report_function in reports:
-        report_function(workbook)
+    export_applicant_information(workbook)
+    export_end_of_application_survey_data(workbook)
+    export_assess_feature_stats(workbook)
 
     output = io.BytesIO()
     workbook.save(output)
@@ -47,7 +41,7 @@ def build_report_impl() -> None:
 
 
 @task
-def send_report(c: Context) -> None:
+def send_application_assessment_report(c: Context) -> None:
     app = create_app()
     with app.app_context():
         build_report_impl()
