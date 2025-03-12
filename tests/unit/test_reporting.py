@@ -3,15 +3,15 @@ from unittest.mock import MagicMock, patch
 from openpyxl import Workbook
 from pytest import approx
 
-from reporting.reporting import (
+from reporting import (
     export_applicant_information,
     export_assess_feature_stats,
     export_end_of_application_survey_data,
 )
 
 
-@patch("reporting.reporting.get_funds_with_rounds")
-@patch("reporting.reporting.get_assessments_by_round")
+@patch("reporting.get_funds_with_rounds")
+@patch("reporting.get_assessments_by_round")
 def test_export_applicant_information(
     mock_get_assessments_by_round: MagicMock,
     mock_get_funds_with_rounds: MagicMock,
@@ -47,8 +47,8 @@ def test_export_applicant_information(
     assert sheet.cell(row=2, column=6).value == "Apply"
 
 
-@patch("reporting.reporting.get_funds_with_rounds")
-@patch("reporting.reporting.get_applications_for_round_by_status")
+@patch("reporting.get_funds_with_rounds")
+@patch("reporting.get_applications_for_round_by_status")
 def test_export_end_of_application_survey_data(
     mock_get_applications_for_round_by_status: MagicMock,
     mock_get_funds_with_rounds: MagicMock,
@@ -87,12 +87,12 @@ def test_export_end_of_application_survey_data(
     assert sheet.cell(row=2, column=6).value == "2024-03-11 10:00:00"
 
 
-@patch("reporting.reporting.get_funds_with_rounds")
-@patch("reporting.reporting.get_applications_for_round_by_status")
-@patch("reporting.reporting.get_assessments_by_round")
-@patch("reporting.reporting.get_applications_stats")
-@patch("reporting.reporting.get_assessments_stats")
-@patch("reporting.reporting.get_assessment_averages")
+@patch("reporting.get_funds_with_rounds")
+@patch("reporting.get_applications_for_round_by_status")
+@patch("reporting.get_assessments_by_round")
+@patch("reporting.get_applications_stats")
+@patch("reporting.get_assessments_stats")
+@patch("reporting.get_assessment_averages")
 def test_export_assess_feature_stats(
     mock_get_assessment_averages: MagicMock,
     mock_get_assessments_stats: MagicMock,
