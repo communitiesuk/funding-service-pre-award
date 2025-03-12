@@ -1,4 +1,5 @@
 import dataclasses
+import io
 import os
 import uuid
 from datetime import datetime
@@ -7,7 +8,7 @@ from typing import Any, Literal, cast
 import pytz
 from flask import Flask, current_app
 from fsd_utils import NotifyConstants
-from notifications_python_client import NotificationsAPIClient  # type: ignore[attr-defined]
+from notifications_python_client import NotificationsAPIClient, prepare_upload  # type: ignore[attr-defined]
 from notifications_python_client.errors import APIError, TokenError
 
 
@@ -122,6 +123,8 @@ class NotificationService:
 
     CHANGE_RECEIVED_TEMPLATE_ID = os.environ.get("CHANGE_RECEIVED_TEMPLATE_ID", "cc1a6287-7d70-4264-84aa-0f8dbf9341dc")
     CHANGE_REQUEST_TEMPLATE_ID = os.environ.get("CHANGE_REQUEST_TEMPLATE_ID", "272d50bf-88f1-4a2c-9e38-02ea54bd389c")
+
+    DOWNLOAD_REPORT_TEMPLATE_ID = os.environ.get("DOWNLOAD_REPORT_TEMPLATE_ID", "252e6b12-eb77-47e7-92d4-70fe9dad0fd1")
 
     FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS = "FundingService@communities.gov.uk"
 
@@ -470,6 +473,15 @@ class NotificationService:
             },
             govuk_notify_reference=govuk_notify_reference,
             email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(self.FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS),
+        )
+
+    def send_report_email(self, file_buffer: io.BytesIO) -> Notification:
+        return self._send_email(
+            os.getenv("NOTIFY_SEND_EMAIL", "test@example.com"),
+            self.DOWNLOAD_REPORT_TEMPLATE_ID,
+            personalisation={
+                "link_to_file": prepare_upload(file_buffer, filename="reports.xlsx"),  # type: ignore[no-untyped-call]
+            },
         )
 
 
