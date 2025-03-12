@@ -1,4 +1,4 @@
-name: fsd-pre-award-send-report
+name: fsd-pre-award-send-application-assessment-report
 type: Scheduled Job
 
 on:
