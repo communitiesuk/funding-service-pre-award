@@ -2,6 +2,7 @@ from flask import abort, current_app
 
 from pre_award.assess.scoring.forms.scores_and_justifications import (
     OneToFiveScoreForm,
+    ZeroToFourScoreForm,
     ZeroToOneScoreForm,
     ZeroToThreeScoreForm,
 )
@@ -16,6 +17,7 @@ def get_scoring_class(round_id):
             "ZeroToThree": ZeroToThreeScoreForm,
             "OneToFive": OneToFiveScoreForm,
             "ZeroToOne": ZeroToOneScoreForm,
+            "ZeroToFour": ZeroToFourScoreForm,
         }
         scoring_form_class = class_mapping[scoring_system]
     except KeyError:
