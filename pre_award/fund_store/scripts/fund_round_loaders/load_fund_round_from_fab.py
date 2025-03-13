@@ -31,6 +31,7 @@ def load_fund_from_fab_impl(fund_short_code="", seed_all_funds=False):
         for module_name in loader_module_names:
             # Remove the ".py" extension to get the module name
             file_name = module_name[:-3]
+
             skip_files = ["__init__", "cof_25", "cof_25_eoi"]
             if file_name in skip_files:
                 continue
