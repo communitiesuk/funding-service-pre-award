@@ -96,7 +96,10 @@ LOADER_CONFIG = {
         "instructions_json": {"en": None, "cy": None},
         "feedback_link": "",
         "project_name_field_id": "FuWchF",
-        "application_guidance_json": {"en": None, "cy": None},
+        "application_guidance_json": {
+            "en": "<h2 class='govuk-heading govuk-heading-s'>What we'll ask you for</h2> <p class='govuk-body'>You can preview the <a href='{all_questions_url}'>full list of application questions</a>.</p>",
+            "cy": None,
+        },
         "guidance_url": "",
         "all_uploaded_documents_section_available": False,
         "application_fields_download_available": True,
