@@ -6,6 +6,7 @@ from unittest import mock
 from uuid import uuid4
 
 import pytest
+from pytest import approx
 from sqlalchemy import select
 
 from pre_award.assessment_store.api.routes.assessment_routes import (
@@ -822,6 +823,53 @@ def test_calculate_overall_score_percentage_for_application(mocker, mock_get_sco
     )
     expected_score = ((3 * 2 + 4 * 2 + 5 * 1) / (5 * 2 * 2 + 5 * 1 * 1)) * 100
     assert result == expected_score, "The calculated score did not match the expected score"
+
+
+def test_calculate_running_score_percentage_for_application(mocker, mock_get_scores, mock_get_scoring_system):
+    mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
+    mock_config.ASSESSMENT_MAPPING_CONFIG = {
+        f"{COF_FUND_ID}:{COF_ROUND_2_ID}": {
+            "scored_criteria": [
+                {
+                    "id": "criteria1",
+                    "weighting": 0.3,
+                    "sub_criteria": [{"id": "sub1"}, {"id": "sub2"}],
+                },
+                {"id": "criteria2", "weighting": 0.6, "sub_criteria": [{"id": "sub3"}]},
+                {"id": "criteria3", "weighting": 0.1, "sub_criteria": [{"id": "sub4"}]},
+            ]
+        }
+    }
+    mock_get_scores.return_value = {"sub1": 3, "sub3": 5}
+    result = calculate_overall_score_percentage_for_application(
+        application_id=app["application_id"], fund_id=app["fund_id"], round_id=app["round_id"]
+    )
+    # Note this is a fractional percentage
+    expected_score = ((3 * 0.3 + 5 * 0.6) / (5 * 2 * 0.3 + 5 * 1 * 0.6 + 5 * 1 * 0.1)) * 100
+    assert result == approx(expected_score), "The calculated score did not match the expected score"
+
+
+def test_calculate_score_percentage_with_zero_weights(mocker, mock_get_scores, mock_get_scoring_system):
+    mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
+    mock_config.ASSESSMENT_MAPPING_CONFIG = {
+        f"{COF_FUND_ID}:{COF_ROUND_2_ID}": {
+            "scored_criteria": [
+                {
+                    "id": "criteria1",
+                    "weighting": 0.3,
+                    "sub_criteria": [{"id": "sub1"}, {"id": "sub2"}],
+                },
+                {"id": "criteria2", "weighting": 0.7, "sub_criteria": [{"id": "sub3"}]},
+                {"id": "criteria3", "weighting": 0, "sub_criteria": [{"id": "sub4"}]},
+            ]
+        }
+    }
+    mock_get_scores.return_value = {"sub1": 3, "sub2": 0, "sub3": 5, "sub4": 5}
+    result = calculate_overall_score_percentage_for_application(
+        application_id=app["application_id"], fund_id=app["fund_id"], round_id=app["round_id"]
+    )
+    expected_score = ((3 * 0.3 + 5 * 0.7) / (5 * 2 * 0.3 + 5 * 1 * 0.7)) * 100
+    assert result == approx(expected_score), "The calculated score did not match the expected score"
 
 
 def test_with_no_sub_criteria_scores(mocker, mock_get_scores, mock_get_scoring_system):
