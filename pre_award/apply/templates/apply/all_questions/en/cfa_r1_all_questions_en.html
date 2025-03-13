@@ -1,0 +1,1041 @@
+{% extends "apply/base.html" %}
+{%- from 'govuk_frontend_jinja/components/inset-text/macro.html' import govukInsetText -%}
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
+{% from "apply/partials/file-formats.html" import file_formats %}
+{% set pageHeading %}{% trans %}Full list of application questions{% endtrans %}{% endset %}
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{% trans %}{{ fund_title }}{% endtrans %}&nbsp;
+        {% trans %}{{ round_title }}{% endtrans %}
+        </span>
+        <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-m">
+    Table of contents
+  </h2>
+  <ol class="govuk-list govuk-list--number">
+    <li>
+      <a class="govuk-link" href="#before-you-start">
+        Before you start
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#about-your-organisation">
+        About your organisation
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#your-skills-and-experience">
+        Your skills and experience
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#your-project">
+        Your project
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#risk-and-deliverability">
+        Risk and deliverability
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#value-for-money">
+        Value for money
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#social-value">
+        Social value
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#declarations">
+        Declarations
+      </a>
+    </li>
+  </ol>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="before-you-start">
+    1. Before you start
+  </h2>
+  <h3 class="govuk-heading-m">
+    Application name
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Name your application
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Name your application
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="about-your-organisation">
+    2. About your organisation
+  </h2>
+  <h3 class="govuk-heading-m">
+    Before you start
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Which category does the lead organisation fall under?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      The lead partner in a joint bid (a consortium) must be a charity or a community group with a charitable purpose.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Charity
+      </li>
+      <li>
+        Community Group
+      </li>
+      <li>
+        Community Interest Company
+      </li>
+      <li>
+        Social Enterprise
+      </li>
+      <li>
+        Other voluntary/community organisation
+      </li>
+      <li>
+        Other type of organisation
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Explain how your organisation meets the eligibility criteria
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      The organisation must:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        be established for charitable, benevolent, or philanthropic purposes (see list of eligible organisations)
+      </li>
+      <li>
+        have a governing body with at least 3 members
+      </li>
+      <li>
+        have a governing document they can produce
+      </li>
+      <li>
+        have capacity to deliver an expected minimum of 125 sponsorship arrangements. Submissions below this number may be unsuccessful should minimum requirements be satisfactorily provided by other Principal Sponsors
+      </li>
+      <li>
+        set out the minimum and maximum (between 125 and 500 sponsor arrangements) number that will be financially viable
+      </li>
+    </ul>
+    <p class="govuk-body">
+      The £4.145 million will be divided by the number of sponsor arrangements a Principal Sponsor and MHCLG agree they will deliver.
+    </p>
+    <p class="govuk-body">
+      Eligible organisations
+    </p>
+    <p class="govuk-body">
+      ‘Charity’ – A registered charity with a UK charity number or a registered CIC (community interest company).
+    </p>
+    <p class="govuk-body">
+      ‘Community group’ – A group which meets all the following criteria:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        established for charitable, benevolent or philanthropic purposes
+      </li>
+      <li>
+        has a governing body with at least three members
+      </li>
+      <li>
+        has a governing document which they are able to produce
+      </li>
+      <li>
+        can provide accounts for the last two financial years
+      </li>
+    </ul>
+    <p class="govuk-body">
+      ‘Community Interest Company’ - a special type of limited company which exists to benefit the community rather than private shareholders.
+    </p>
+    <p class="govuk-body">
+      ‘Social enterprise’ - a business with primarily social objectives whose surpluses are principally reinvested for that purpose in the business or in the community, rather than being driven by the need to maximise profit for shareholders and owners.  
+Other voluntary and community organisations.
+    </p>
+    <p class="govuk-body">
+      ‘Consortium’ – a group of applicants, with a designated lead partner to manage the scheme, and a system for dividing the work and funds appropriately and effectively. The lead partner must be a charity or a community group with a charitable purpose.
+    </p>
+    <p class="govuk-body">
+      Organisations must be based in the United Kingdom and provide an offer that can cover England, Scotland, Wales and Northern Ireland.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your Charity Commission number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is your Charity Commission number?
+    </p>
+    <p class="govuk-body">
+      The number registered with the
+    </p>
+    <p class="govuk-body">
+      Charity Commission Service (opens in new tab)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is this a joint bid with a partner organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Is this a joint bid with partner organisations (as a consortium)?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your consortium’s name?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      The name you want MHCLG to use when referring to your group of organisations (consortium).
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    List all the partner organisations involved in this bid
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Use commas to separate each organisation name.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is there a formal agreement between the lead organisation and the partner organisations?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Is there a formal agreement between the lead organisation and the partner organisations?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your company registration number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is your company registration number?
+    </p>
+    <p class="govuk-body">
+      The number your organisation is registered with on
+    </p>
+    <p class="govuk-body">
+      Companies House (opens in new tab)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the lead organisation’s name?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the lead organisation’s name?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your lead organisation’s address?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is your lead organisation’s address?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the primary contact for this application?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Who is the primary contact for this application?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the primary contact’s role?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the primary contact’s role?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the primary contact’s telephone number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the primary contact’s telephone number?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the primary contact’s email address?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the primary contact’s email address?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the website address for your lead organisation? (Optional)
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the website address for your lead organisation?
+    </p>
+    <p class="govuk-body">
+      For example, https://www.organisation.com
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are the social media profiles for your lead organisation? (Optional)
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Social media link 1
+    </p>
+    <p class="govuk-body">
+      For example, your lead organisation's Facebook page
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Social media link 2
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Social media link 3
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="your-skills-and-experience">
+    3. Your skills and experience
+  </h2>
+  <h3 class="govuk-heading-m">
+    Before you start
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What experience do you, and partner organisations where applicable, have of delivering this type of activity or project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What experience do you, and partner organisations where applicable, have of delivering this type of activity or project?
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What skills will you bring to the project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What skills will you bring to the project?
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What relevant experience do you have of working with local authorities, Devolved Administrations and Strategic Migration Partners?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What relevant experience do you have of working with local authorities, Devolved Administrations and Strategic Migration Partners?
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much have you engaged with Strategic Migration Partners on your specific plans for this scheme?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How much have you engaged with Strategic Migration Partners on your specific plans for this scheme?
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What resources, including staff, will you use to deliver this project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What resources, including staff, will you use to deliver this project?
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="your-project">
+    4. Your project
+  </h2>
+  <h3 class="govuk-heading-m">
+    Before you start
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you work with and build relationships with devolved administrations, local authorities and Strategic Migration Partners?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you work with and build relationships with devolved administrations, local authorities and Strategic Migration Partners?
+    </p>
+    <p class="govuk-body">
+      (Max 350 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you ensure the households are successfully integrated into the local community?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you ensure the households are successfully integrated into the local community?
+    </p>
+    <p class="govuk-body">
+      (Max 450 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload your delivery plan
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Your delivery plan should include a fully detailed breakdown of your provision offer.
+    </p>
+    <p class="govuk-body">
+      You should highlight any activities you propose to carry out across the entire project (not just for the households in your bid) and associated costs outside of core costs. For example, matching across the scheme.
+    </p>
+    <p class="govuk-body">
+      Your delivery plan will be assessed if you score over 50% across all of the word-limited answers. The maximum weighting will be 15% for the full submitted delivery plan when this is assessed.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you recruit and train Sponsor Groups?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You must provide training at least until training can be carried out by a single provider.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will accommodation be sourced and what steps will be taken to ensure that the properties secured and the tenancies provided are in alignment with housing legislation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will accommodation be sourced and what steps will be taken to ensure that the properties secured and the tenancies provided are in alignment with housing legislation?
+    </p>
+    <p class="govuk-body">
+      (Max 450 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are the intended geographical areas for supporting and accommodating households?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What are the intended geographical areas for supporting and accommodating households?
+    </p>
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the proposed delivery model?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the proposed delivery model?
+    </p>
+    <p class="govuk-body">
+      This should include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        your organisation/consortium structure
+      </li>
+      <li>
+        staffing within your organisation or consortium including staff and volunteers, and the number of households and sponsor groups supported by staff and volunteers
+      </li>
+      <li>
+        the geographical spread of your staff and volunteers
+      </li>
+    </ul>
+    <p class="govuk-body">
+      (Max 400 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Do you have alternative proposals for matching households to Sponsor Groups?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Alternative proposals are worth 3% of your total score.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your alternative proposals for matching households to Sponsor Groups?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What are your alternative proposals for matching households to Sponsor Groups?
+    </p>
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will awarded funding, budgets and costs be monitored against delivery of the programme?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will awarded funding, budgets and costs be monitored against delivery of the programme?
+    </p>
+    <p class="govuk-body">
+      (Max 400 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you deal with over or underperformance against your delivery plan?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you deal with over or underperformance against your delivery plan?
+    </p>
+    <p class="govuk-body">
+      (Max 400 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are the contingency measures and escalation routes to address issues in delivery in contrast to overall funding/project risk management?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What are the contingency measures and escalation routes to address issues in delivery in contrast to overall funding/project risk management?
+    </p>
+    <p class="govuk-body">
+      (Max 400 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="risk-and-deliverability">
+    5. Risk and deliverability
+  </h2>
+  <h3 class="govuk-heading-m">
+    Before you start
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your governance and management structure?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is your governance and management structure?
+    </p>
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your governance processes and procedures?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You should include how  matters are escalated and resolved.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you monitor and manage delivery of your plan?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you monitor and manage delivery of your plan?
+    </p>
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you deal with issues arising, risks (including fraud risk) and mitigations?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you deal with issues arising, risks (including fraud risk) and mitigations?
+    </p>
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you check the quality of accommodation, safeguarding and welfare of households and Sponsor Groups?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you check the quality of accommodation, safeguarding and welfare of households and Sponsor Groups?
+    </p>
+    <p class="govuk-body">
+      (Max 400 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you ensure the funding awarded is only used for this project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you ensure the funding awarded is only used for this project?
+    </p>
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What processes will you put in place when making payments to Sponsor Groups?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What processes will you put in place when making payments to Sponsor Groups?
+    </p>
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="value-for-money">
+    6. Value for money
+  </h2>
+  <h3 class="govuk-heading-m">
+    Before you start
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much funding will you need for your preferred number of households, in pounds?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Exact funding amounts and number of households to be supported will be agreed in the negotiation period, before Grant Funding Agreements are signed.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This must be more than £900,000 and less than £4,145,000.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How many households do you (and your consortium, if applicable) intend to support by the end of March 2031?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How many households do you (and your consortium, if applicable) intend to support by the end of March 2031?
+    </p>
+    <p class="govuk-body">
+      This should be a minimum of 125 and maximum of 500 households.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload your funding spreadsheet for 125 households
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Provide the total cost of your project based on 125 households with a breakdown of the costs by year and activity. Ensure that they add up to the amount you are bidding for or provide an explanation. This should not exceed a total of £1,036,250 for the 125 households. This will be used as a benchmark for assessment.
+    </p>
+    <p class="govuk-body">
+      Your funding spreadsheet should include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Gross salaries
+      </li>
+      <li>
+        Staff expenses
+      </li>
+      <li>
+        Project costs (for example, IT)
+      </li>
+      <li>
+        Sponsor related costs (for example, DBS checks)
+      </li>
+      <li>
+        Any professional fees
+      </li>
+      <li>
+        Central costs
+      </li>
+      <li>
+        Any additional funding
+      </li>
+    </ul>
+    <p class="govuk-body">
+      If you would like a funding spreadsheet template, email sponsorship@communities.gov.uk
+    </p>
+    <p class="govuk-body">
+      MHCLG reserves the right to award varied funding per household, for example if one Principal Sponsor is going to carry out more of the Principal Sponsor activities across the entire scheme.
+    </p>
+    <p class="govuk-body">
+      How value for money will be scored
+    </p>
+    <p class="govuk-body">
+      For all bids that score a total of over 50% in the initial assessment, we will then score the value for money of full bids (including bids for higher number of families). At that point, the applicant achieving the lowest cost per household across either 125 households or any number of households greater than 125 will achieve the 7%.
+    </p>
+    <p class="govuk-body">
+      The 7% funding weighting section within the ‘Value for money’ section will be scored in order of the lowest cost per household receiving the highest score (7%), with the next lowest cost receiving the next highest score (6%), reducing by one each time to 0%, as follows:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Lowest cost = 7%
+      </li>
+      <li>
+        Second lowest cost = 6%
+      </li>
+      <li>
+        Third lowest cost = 5%
+      </li>
+      <li>
+        Fourth lowest cost = 4%
+      </li>
+      <li>
+        Fifth lowest cost = 3%
+      </li>
+      <li>
+        Sixth lowest cost = 2%
+      </li>
+      <li>
+        Seventh lowest cost = 1%
+      </li>
+      <li>
+        Eighth lowest cost = 0%
+      </li>
+    </ul>
+    <p class="govuk-body">
+      In the first instance we will assess value for money against proposals for 125 households as a benchmark to compare to other applicants.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload your second funding spreadsheet
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Provide the total cost of your project for your preferred total number of households with a breakdown of the costs by year and activity. Ensure that they add up to the amount you are bidding for or provide an explanation. This should include:
+    </p>
+    <p class="govuk-body">
+      Your funding spreadsheet should include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Gross salaries
+      </li>
+      <li>
+        Staff expenses
+      </li>
+      <li>
+        Project costs (for example, IT)
+      </li>
+      <li>
+        Sponsor related costs (for example, DBS checks)
+      </li>
+      <li>
+        Any professional fees
+      </li>
+      <li>
+        Central costs
+      </li>
+      <li>
+        Any additional funding
+      </li>
+    </ul>
+    <p class="govuk-body">
+      If you would like a funding spreadsheet template, email sponsorship@communities.gov.uk
+    </p>
+    <p class="govuk-body">
+      MHCLG reserves the right to award varied funding per household, for example if one Principal Sponsor is going to carry out more of the Principal Sponsor activities across the entire scheme.
+    </p>
+    <p class="govuk-body">
+      How value for money will be scored
+    </p>
+    <p class="govuk-body">
+      The 7% funding weighting section within the ‘Value for money’ section will be scored in order of the lowest cost per household receiving the highest score (7%), with the next lowest cost receiving the next highest score (6%), reducing by one each time to 0%, as follows:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Lowest cost = 7%
+      </li>
+      <li>
+        Second lowest cost = 6%
+      </li>
+      <li>
+        Third lowest cost = 5%
+      </li>
+      <li>
+        Fourth lowest cost = 4%
+      </li>
+      <li>
+        Fifth lowest cost = 3%
+      </li>
+      <li>
+        Sixth lowest cost = 2%
+      </li>
+      <li>
+        Seventh lowest cost = 1%
+      </li>
+      <li>
+        Eighth lowest cost = 0%
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Upload your second funding spreadsheet
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Have you secured additional funding outside of this grant?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Have you secured additional funding outside of this grant?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    State the source of these funds and how you will ensure activities are not double-funded
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      State the source of these funds and how you will ensure activities are not double-funded
+    </p>
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How would you scale up or scale down your project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How would you scale up or scale down your project?
+    </p>
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Will your Sponsor Groups fundraise?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Will your Sponsor Groups fundraise?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Provide details on how your Sponsor Groups will fundraise and how you will keep this funding separate from this grant’s funding
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Provide details on how your Sponsor Groups will fundraise and how you will keep this funding separate from this grant’s funding
+    </p>
+    <p class="govuk-body">
+      (Max 350 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="social-value">
+    7. Social value
+  </h2>
+  <h3 class="govuk-heading-m">
+    Before you start
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you plan to achieve social value through explicit delivery of this specific grant?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      MHCLG aims to secure and maximise tangible social value benefits as outlined under the wellbeing theme in the Social Value Model. This includes improving health and wellbeing and community cohesion. For example, integration support and dealing with trauma.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="declarations">
+    8. Declarations
+  </h2>
+  <h3 class="govuk-heading-m">
+    Before you start
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Confirm declarations
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You are confirming that:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        your organisation is based in the UK
+      </li>
+      <li>
+        your organisation meets all the eligibility criteria listed in the associated prospectus
+      </li>
+      <li>
+        you are able to commence and deliver the project within the timescales set out in the prospectus
+      </li>
+      <li>
+        within the past 5 years your organisation, or any person who has powers of representation, decision or control within the organisation, has not been convicted anywhere in the world of the list of offences
+      </li>
+      <li>
+        your organisation adheres to the government code of conduct
+      </li>
+      <li>
+        your organisation has a data handling process in place
+      </li>
+      <li>
+        you have a bank account set up for your organisation
+      </li>
+      <li>
+        your organisation’s safeguarding policies are up to date
+      </li>
+      <li>
+        the information you have provided is accurate
+      </li>
+    </ul>
+    <p class="govuk-body">
+      List of offences
+    </p>
+    <p class="govuk-body">
+      Offences include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        corruption
+      </li>
+      <li>
+        fraud
+      </li>
+      <li>
+        money laundering or terrorist financing
+      </li>
+      <li>
+        participation in a criminal organisation
+      </li>
+      <li>
+        terrorist offences or links to terrorist activity
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        I confirm these declarations
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+</div>
+    </div>
+</div>
+{% endblock content %}
