@@ -91,7 +91,7 @@ LOADER_CONFIG = {
         "reminder_date": "2025-04-07T09:00:00",
         "assessment_deadline": "2025-05-07T17:00:00",
         "prospectus": "https://www.gov.uk/government/publications/communities-for-afghans-project-dluhc-policy-update/communities-for-afghans-phase-2-prospectus",
-        "privacy_notice": "https://www.gov.uk/government/publications/communities-for-afghans-project-dluhc-policy-update/communities-for-afghans-beneficiaries-privacy-notice",
+        "privacy_notice": "https://www.gov.uk/government/publications/communities-for-afghans-project-dluhc-policy-update/communities-for-afghans-phase-2-application-guidance",
         "contact_email": "sponsorship@communities.gov.uk",
         "instructions_json": {"en": None, "cy": None},
         "feedback_link": "",
