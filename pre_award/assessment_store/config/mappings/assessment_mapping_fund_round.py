@@ -2,6 +2,12 @@
 
 from uuid import uuid4
 
+from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_scored_sections import (
+    scored_sections as cfa_r1_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_unscored_sections import (
+    unscored_sections as cfa_r1_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.cof_mapping_parts.cof25_r1_scored_criteria import (
     scored_criteria as cof25_scored_criteria_r1,
 )
@@ -279,8 +285,8 @@ fund_round_to_assessment_mapping = {
     },
     f"{CFA_FUND_ID}:{CFA_ROUND_1_ID}": {
         "schema_id": "cfa_r1_assessment",
-        "unscored_sections": [],
-        "scored_criteria": [],
+        "unscored_sections": cfa_r1_unscored_sections,
+        "scored_criteria": cfa_r1_scored_sections,
     },
 }
 
@@ -2064,6 +2070,10 @@ applicant_info_mapping = {
                 },
             }
         },
+    },
+    CFA_FUND_ID: {
+        "ASSESSOR_EXPORT": {},
+        "OUTPUT_TRACKER": {},
     },
 }
 
