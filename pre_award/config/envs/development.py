@@ -124,6 +124,9 @@ class DevelopmentConfig(Config):
             "UF1_ASSESSOR",
             "FFW_LEAD_ASSESSOR",
             "FFW_ASSESSOR",
+            "CFA_LEAD_ASSESSOR",
+            "CFA_ASSESSOR",
+            "CFA_COMMENTER",
         ],
         "highest_role_map": {
             "FFW": DEBUG_USER_ROLE,
@@ -138,6 +141,7 @@ class DevelopmentConfig(Config):
             "DPIF": DEBUG_USER_ROLE,
             "COF-EOI": DEBUG_USER_ROLE,
             "HSRA": DEBUG_USER_ROLE,
+            "CFA": DEBUG_USER_ROLE,
         },
     }
     DEBUG_USER_ACCOUNT_ID = "00000000-0000-0000-0000-000000000000"

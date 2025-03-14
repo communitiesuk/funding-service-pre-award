@@ -2,6 +2,12 @@
 
 from uuid import uuid4
 
+from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_scored_sections import (
+    scored_sections as cfa_r1_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_unscored_sections import (
+    unscored_sections as cfa_r1_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.cof_mapping_parts.cof25_r1_scored_criteria import (
     scored_criteria as cof25_scored_criteria_r1,
 )
@@ -151,6 +157,9 @@ LPDF_FUND_ID = "b1c13e1e-8fda-41bd-8abb-28e56f9d9322"
 LPDF_ROUND_1_ID = "f1d514da-0282-4a96-82c4-25c09645d0b0"
 LPDF_ROUND_2_ID = "4b519371-aa10-4d9d-ae28-1ff1739af5d3"
 
+CFA_FUND_ID = "35418582-d784-4715-8445-3b1f34320e3c"
+CFA_ROUND_1_ID = "25cca4ba-9dbe-45c7-ae2d-d14cadcd8bc6"
+
 # ASSESSMENT DISPLAY CONFIGURATION
 
 fund_round_to_assessment_mapping = {
@@ -273,6 +282,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "hsra_rp_assessment",
         "unscored_sections": hsra_unscored_sections_rp,
         "scored_criteria": hsra_scored_criteria_rp,
+    },
+    f"{CFA_FUND_ID}:{CFA_ROUND_1_ID}": {
+        "schema_id": "cfa_r1_assessment",
+        "unscored_sections": cfa_r1_unscored_sections,
+        "scored_criteria": cfa_r1_scored_sections,
     },
 }
 
@@ -431,6 +445,12 @@ fund_round_data_key_mappings = {
         "location": None,
         "asset_type": None,
         "funding_one": "uJIluf",
+        "funding_two": None,
+    },
+    "CFAR1": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": "GAqCNS",
         "funding_two": None,
     },
 }
@@ -2051,6 +2071,10 @@ applicant_info_mapping = {
             }
         },
     },
+    CFA_FUND_ID: {
+        "ASSESSOR_EXPORT": {},
+        "OUTPUT_TRACKER": {},
+    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
@@ -2160,6 +2184,11 @@ fund_round_mapping_config = {
         "fund_id": HSRA_FUND_ID,
         "round_id": HSRA_ROUND_RP_ID,
         "type_of_application": "HSRA",
+    },
+    "CFAR1": {
+        "fund_id": CFA_FUND_ID,
+        "round_id": CFA_ROUND_1_ID,
+        "type_of_application": "CFA",
     },
     "RANDOM_FUND_ROUND": {
         "fund_id": uuid4(),

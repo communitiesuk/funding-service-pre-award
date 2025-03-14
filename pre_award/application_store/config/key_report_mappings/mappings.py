@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+from pre_award.application_store.config.key_report_mappings.cfa_r1_key_report_mapping import CFA_R1_KEY_REPORT_MAPPING
 from pre_award.application_store.config.key_report_mappings.cof25_eoi_key_report_mapping import (
     COF25_EOI_KEY_REPORT_MAPPING,
 )
@@ -37,6 +38,7 @@ ROUND_ID_TO_KEY_REPORT_MAPPING = defaultdict(
         GBRF_R1_KEY_REPORT_MAPPING.round_id: GBRF_R1_KEY_REPORT_MAPPING.mapping,
         LPDF_R1_KEY_REPORT_MAPPING.round_id: LPDF_R1_KEY_REPORT_MAPPING.mapping,
         LPDF_R2_KEY_REPORT_MAPPING.round_id: LPDF_R2_KEY_REPORT_MAPPING.mapping,
+        CFA_R1_KEY_REPORT_MAPPING.round_id: CFA_R1_KEY_REPORT_MAPPING.mapping,
         **({key: COF_KEY_REPORT_MAPPING.mapping for key in COF_KEY_REPORT_MAPPING.round_id}),
     },
 )

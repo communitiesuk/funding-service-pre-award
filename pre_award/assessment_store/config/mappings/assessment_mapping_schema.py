@@ -148,7 +148,7 @@ scored_criteria_schema = {
             "name": {"type": "string"},
             "weighting": {
                 "type": "number",
-                "exclusiveMinimum": 0,
+                "inclusiveMinimum": 0,
                 "inclusiveMaximum": 1,
             },
             "sub_criteria": sub_criteria_schema,

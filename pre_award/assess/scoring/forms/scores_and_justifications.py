@@ -58,3 +58,19 @@ class ZeroToOneScoreForm(ScoreForm):
 
     # for validation
     score = RadioField("Score", choices=[0, 1], validators=[InputRequired()])
+
+
+class ZeroToFourScoreForm(ScoreForm):
+    def __init__(self):
+        ScoreForm.__init__(self)
+        self.scores_list = [
+            (4, "Strong"),
+            (3, "Good"),
+            (2, "Satisfactory"),
+            (1, "Partial"),
+            (0, "Poor"),
+        ]
+        self.max_score = 4
+
+    # for validation
+    score = RadioField("Score", choices=[0, 1, 2, 3, 4], validators=[InputRequired()])

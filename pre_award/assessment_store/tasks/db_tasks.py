@@ -148,6 +148,12 @@ def seed_assessment_store_db_impl(environment: Literal["local", "cloud"]):
         },
         {
             "id": str(uuid.uuid4()),
+            "scoring_system_name": "ZeroToFour",
+            "minimum_score": 0,
+            "maximum_score": 4,
+        },
+        {
+            "id": str(uuid.uuid4()),
             "scoring_system_name": "ZeroToOne",
             "minimum_score": 0,
             "maximum_score": 1,
