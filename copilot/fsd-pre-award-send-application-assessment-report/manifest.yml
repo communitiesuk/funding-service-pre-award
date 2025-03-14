@@ -26,7 +26,7 @@ variables:
   AWS_BUCKET_NAME:
     from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-FormUploadsBucket
   ASSESSMENT_FRONTEND_HOST: "https://assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
-  SENTRY_TRACES_SAMPLE_RATE: 1.0
+  SENTRY_TRACES_SAMPLE_RATE: 0.02
   API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local"
 
   ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: false
@@ -80,4 +80,4 @@ environments:
       FORMS_SERVICE_PUBLIC_HOST: "https://forms.access-funding.levellingup.gov.uk"
       POST_AWARD_FRONTEND_HOST: "https://find-monitoring-data.access-funding.levellingup.gov.uk"
       POST_AWARD_SUBMIT_HOST: "https://submit-monitoring-data.access-funding.levellingup.gov.uk"
-      SENTRY_TRACES_SAMPLE_RATE: 0.02
+      SENTRY_TRACES_SAMPLE_RATE: 1
