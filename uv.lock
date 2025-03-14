@@ -132,30 +132,30 @@ wheels = [
 
 [[package]]
 name = "boto3"
-version = "1.37.9"
+version = "1.37.12"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "botocore" },
     { name = "jmespath" },
     { name = "s3transfer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/32/f7/b870fb8d2ca96a996db97c9d30d1eb087b341cec1004722e99672a79800d/boto3-1.37.9.tar.gz", hash = "sha256:51b76da93d7c2a3dff6155ee4aa25455940e7ade08292d22aeeed08b9e0dbf0b", size = 111409 }
+sdist = { url = "https://files.pythonhosted.org/packages/39/36/03f64be665ae27d149ade9fe1ec5d4c83101fb26865d1246c81b6a399882/boto3-1.37.12.tar.gz", hash = "sha256:9412d404f103ad6d14f033eb29cd5e0cdca2b9b08cbfa9d4dabd1d7be2de2625", size = 111402 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d7/75/625b7e1cc2a8b470760273082e0c4d36c8ac8250ad2ff9df54528d1379b4/boto3-1.37.9-py3-none-any.whl", hash = "sha256:cfff6e9cf4b987480fbbe85873f3e609aeea1906631c7148e5b7e3c778aebd40", size = 139544 },
+    { url = "https://files.pythonhosted.org/packages/ce/1c/edfd0b54395849c57fdb21f1db697d05c04d0c4b957111130e03e74d2807/boto3-1.37.12-py3-none-any.whl", hash = "sha256:516feaa0d2afaeda1515216fd09291368a1215754bbccb0f28414c0a91a830a2", size = 139551 },
 ]
 
 [[package]]
 name = "botocore"
-version = "1.37.9"
+version = "1.37.12"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jmespath" },
     { name = "python-dateutil" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3c/9e/97ee17ec39395c67edfa694ae9e87177fdb7433e65be91bc84fef983dd86/botocore-1.37.9.tar.gz", hash = "sha256:2fdafbb9c44196cd371f4890aedf9f54352348fbae624a3880862d35724f0956", size = 13635008 }
+sdist = { url = "https://files.pythonhosted.org/packages/f1/12/7e685d2f32f646ddcde297c18c52122a5c8676105cb876b6702e515857ad/botocore-1.37.12.tar.gz", hash = "sha256:ae2d5328ce6ad02eb615270507235a6e90fd3eeed615a6c0732b5a68b12f2017", size = 13648734 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d1/7f/5463336d2bf8eb5131c063e37599fa2f504abaa26b197aea2d2faea78a4c/botocore-1.37.9-py3-none-any.whl", hash = "sha256:bf0ab085ae85a4a2fa1733321069c1039745fa65ca9f335a91b8712fd6745d5f", size = 13403070 },
+    { url = "https://files.pythonhosted.org/packages/f4/45/7db93d9b0b2d9060684af08d8fba1245b47fed41d7ed8c3d9f5c7efbe261/botocore-1.37.12-py3-none-any.whl", hash = "sha256:ba1948c883bbabe20d95ff62c3e36954c9269686f7db9361857835677ca3e676", size = 13410913 },
 ]
 
 [[package]]
@@ -883,7 +883,7 @@ requires-dist = [
     { name = "alembic-utils", specifier = "==0.8.6" },
     { name = "babel", specifier = "==2.17.0" },
     { name = "beautifulsoup4", specifier = "==4.13.3" },
-    { name = "boto3", specifier = "==1.37.9" },
+    { name = "boto3", specifier = "==1.37.12" },
     { name = "colored", specifier = "==2.3.0" },
     { name = "cssmin", specifier = "==0.2.0" },
     { name = "dataclass-dict-convert", specifier = "==1.7.4" },
