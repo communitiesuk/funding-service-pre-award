@@ -2,16 +2,16 @@
 
 scored_sections = [
     {
-        "id": "your-skills-and-experience-applicable-experience",
+        "id": "your_skills_and_experience_applicable_experience",
         "weighting": 0.06,
         "name": "Your skills and experience - Applicable experience",
         "sub_criteria": [
             {
-                "id": "applicable-experience",
+                "id": "applicable_experience",
                 "name": "Applicable experience",
                 "themes": [
                     {
-                        "id": "applicable-experience",
+                        "id": "applicable_experience",
                         "name": "Applicable experience",
                         "answers": [
                             {
@@ -28,7 +28,7 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-skills-and-experience-Skills",
+        "id": "your_skills_and_experience_skills",
         "weighting": 0.06,
         "name": "Your skills and experience - Skills",
         "sub_criteria": [
@@ -54,16 +54,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-skills-and-experience-relevant-exprience",
+        "id": "your_skills_and_experience_relevant_exprience",
         "weighting": 0.05,
         "name": "Your skills and experience - Relevant exprience",
         "sub_criteria": [
             {
-                "id": "relevant-exprience",
+                "id": "relevant_exprience",
                 "name": "Relevant exprience",
                 "themes": [
                     {
-                        "id": "relevant-exprience",
+                        "id": "relevant_exprience",
                         "name": "Relevant exprience",
                         "answers": [
                             {
@@ -80,16 +80,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-skills-and-experience-past-engagement",
+        "id": "your_skills_and_experience_past_engagement",
         "weighting": 0.02,
         "name": "Your skills and experience - Past engagement",
         "sub_criteria": [
             {
-                "id": "past-engagement",
+                "id": "past_engagement",
                 "name": "Past engagement",
                 "themes": [
                     {
-                        "id": "past-engagement",
+                        "id": "past_engagement",
                         "name": "Past engagement",
                         "answers": [
                             {
@@ -106,7 +106,7 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-skills-and-experience-resources",
+        "id": "your_skills_and_experience_resources",
         "weighting": 0.06,
         "name": "Your skills and experience - Resources",
         "sub_criteria": [
@@ -132,16 +132,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-work-and-build-relationships",
+        "id": "your_project_work_and_build_relationships",
         "weighting": 0.02,
         "name": "Your project - Work & Build Relationships",
         "sub_criteria": [
             {
-                "id": "work-and-build-relationships",
+                "id": "work_and_build_relationships",
                 "name": "Work & Build Relationships",
                 "themes": [
                     {
-                        "id": "work-and-build-relationships",
+                        "id": "work_and_build_relationships",
                         "name": "Work & Build Relationships",
                         "answers": [
                             {
@@ -158,7 +158,7 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-recruitment",
+        "id": "your_project_recruitment",
         "weighting": 0.02,
         "name": "Your project - Recruitment",
         "sub_criteria": [
@@ -184,7 +184,7 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-accomodation",
+        "id": "your_project_accomodation",
         "weighting": 0.04,
         "name": "Your project - Accomodation",
         "sub_criteria": [
@@ -210,16 +210,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-intended-geographical-areas",
+        "id": "your_project_intended_geographical_areas",
         "weighting": 0.01,
         "name": "Your project - Intended geographical areas",
         "sub_criteria": [
             {
-                "id": "intended-geographical-areas",
+                "id": "intended_geographical_areas",
                 "name": "Intended geographical areas",
                 "themes": [
                     {
-                        "id": "intended-geographical-areas",
+                        "id": "intended_geographical_areas",
                         "name": "Intended geographical areas",
                         "answers": [
                             {
@@ -236,16 +236,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-proposed-delivery-model",
+        "id": "your_project_proposed_delivery_model",
         "weighting": 0.03,
         "name": "Your project - Proposed delivery model",
         "sub_criteria": [
             {
-                "id": "proposed-delivery-model",
+                "id": "proposed_delivery_model",
                 "name": "Proposed delivery model",
                 "themes": [
                     {
-                        "id": "proposed-delivery-model",
+                        "id": "proposed_delivery_model",
                         "name": "Proposed delivery model",
                         "answers": [
                             {
@@ -262,16 +262,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-alternative-proposals",
+        "id": "your_project_alternative_proposals",
         "weighting": 0.03,
         "name": "Your project - Alternative proposals",
         "sub_criteria": [
             {
-                "id": "alternative-proposals",
+                "id": "alternative_proposals",
                 "name": "Alternative proposals",
                 "themes": [
                     {
-                        "id": "alternative-proposals",
+                        "id": "alternative_proposals",
                         "name": "Alternative proposals",
                         "answers": [
                             {
@@ -295,16 +295,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-proposed-cost-monitoring",
+        "id": "your_project_proposed_cost_monitoring",
         "weighting": 0.02,
         "name": "Your project - Cost monitoring",
         "sub_criteria": [
             {
-                "id": "cost-monitoring",
+                "id": "cost_monitoring",
                 "name": "Cost monitoring",
                 "themes": [
                     {
-                        "id": "cost-monitoring",
+                        "id": "cost_monitoring",
                         "name": "Cost monitoring",
                         "answers": [
                             {
@@ -321,7 +321,7 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-proposed-underperformance",
+        "id": "your_project_proposed_underperformance",
         "weighting": 0.03,
         "name": "Your project - Underperformance (Missing)",
         "sub_criteria": [
@@ -347,16 +347,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-proposed-contingency-measures",
+        "id": "your_project_proposed_contingency_measures",
         "weighting": 0.02,
         "name": "Your project - Contingency measures",
         "sub_criteria": [
             {
-                "id": "contingency-measures",
+                "id": "contingency_measures",
                 "name": "Contingency measures",
                 "themes": [
                     {
-                        "id": "contingency-measures",
+                        "id": "contingency_measures",
                         "name": "Contingency measures",
                         "answers": [
                             {
@@ -373,16 +373,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-proposed-ensure-success",
+        "id": "your_project_proposed_ensure_success",
         "weighting": 0.03,
         "name": "Your project - Ensure success",
         "sub_criteria": [
             {
-                "id": "ensure-success",
+                "id": "ensure_success",
                 "name": "Ensure success",
                 "themes": [
                     {
-                        "id": "ensure-success",
+                        "id": "ensure_success",
                         "name": "Ensure success",
                         "answers": [
                             {
@@ -399,16 +399,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "risk-and-deliverability-governance-and-management-structure",
+        "id": "risk_and_deliverability_governance_and_management_structure",
         "weighting": 0.04,
         "name": "Risk and deliverability - Governance & Management structure",
         "sub_criteria": [
             {
-                "id": "governance-and-management-structure",
+                "id": "governance_and_management_structure",
                 "name": "Governance & Management structure",
                 "themes": [
                     {
-                        "id": "governance-and-management-structure",
+                        "id": "governance_and_management_structure",
                         "name": "Governance & Management structure",
                         "answers": [
                             {
@@ -425,16 +425,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "risk-and-deliverability-governance-processes-and-procedures",
+        "id": "risk_and_deliverability_governance_processes_and_procedures",
         "weighting": 0.04,
         "name": "Risk and deliverability - Governance processes and Procedures",
         "sub_criteria": [
             {
-                "id": "governance-processes-and-procedures",
+                "id": "governance_processes_and_procedures",
                 "name": "Governance processes & Procedures",
                 "themes": [
                     {
-                        "id": "governance-processes-and-procedures",
+                        "id": "governance_processes_and_procedures",
                         "name": "Governance processes & Procedures",
                         "answers": [
                             {
@@ -451,16 +451,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "risk-and-deliverability-monitor-and-manage-delivery",
+        "id": "risk_and_deliverability_monitor_and_manage_delivery",
         "weighting": 0.02,
         "name": "Risk and deliverability - Monitor & Manage delivery",
         "sub_criteria": [
             {
-                "id": "monitor-and-manage-delivery",
+                "id": "monitor_and_manage_delivery",
                 "name": "Monitor & Manage delivery",
                 "themes": [
                     {
-                        "id": "monitor-and-manage-delivery",
+                        "id": "monitor_and_manage_delivery",
                         "name": "Monitor & Manage delivery",
                         "answers": [
                             {
@@ -477,16 +477,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "risk-and-deliverability-issues-and-risks",
+        "id": "risk_and_deliverability_issues_and_risks",
         "weighting": 0.02,
         "name": "Risk and deliverability - Issues & Risks",
         "sub_criteria": [
             {
-                "id": "issues-and-risks",
+                "id": "issues_and_risks",
                 "name": "Issues & Risks",
                 "themes": [
                     {
-                        "id": "issues-and-risks",
+                        "id": "issues_and_risks",
                         "name": "Issues & Risks",
                         "answers": [
                             {
@@ -503,16 +503,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "risk-and-deliverability-quality-check",
+        "id": "risk_and_deliverability_quality_check",
         "weighting": 0.04,
         "name": "Risk and deliverability - Quality check",
         "sub_criteria": [
             {
-                "id": "quality-check",
+                "id": "quality_check",
                 "name": "Quality check",
                 "themes": [
                     {
-                        "id": "quality-check",
+                        "id": "quality_check",
                         "name": "Quality check",
                         "answers": [
                             {
@@ -529,16 +529,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "risk-and-deliverability-ensure-funding",
+        "id": "risk_and_deliverability_ensure_funding",
         "weighting": 0.04,
         "name": "Risk and deliverability - Ensure funding",
         "sub_criteria": [
             {
-                "id": "ensure-funding",
+                "id": "ensure_funding",
                 "name": "Ensure funding",
                 "themes": [
                     {
-                        "id": "ensure-funding",
+                        "id": "ensure_funding",
                         "name": "Ensure funding",
                         "answers": [
                             {
@@ -555,16 +555,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "risk-and-deliverability-payment-process",
+        "id": "risk_and_deliverability_payment_process",
         "weighting": 0.05,
         "name": "Risk and deliverability - Payment process",
         "sub_criteria": [
             {
-                "id": "payment-process",
+                "id": "payment_process",
                 "name": "Payment process",
                 "themes": [
                     {
-                        "id": "payment-process",
+                        "id": "payment_process",
                         "name": "Payment process",
                         "answers": [
                             {
@@ -581,16 +581,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "value-for-money-funding-housing",
+        "id": "value_for_money_funding_housing",
         "weighting": 0.07,
         "name": "Value for money - Funding & Housing",
         "sub_criteria": [
             {
-                "id": "funding-housing",
+                "id": "funding_housing",
                 "name": "Funding & Housing",
                 "themes": [
                     {
-                        "id": "funding-housing",
+                        "id": "funding_housing",
                         "name": "Funding & Housing",
                         "answers": [
                             {
@@ -623,13 +623,6 @@ scored_sections = [
                                 "question": "Upload your second funding spreadsheet",
                                 "path": "upload-your-second-funding-spreadsheet",
                             },
-                            {
-                                "field_id": "VpZrUi",
-                                "form_name": "cfa-r1-value-for-money",
-                                "field_type": "yesNoField",
-                                "presentation_type": "text",
-                                "question": "Have you secured additional funding outside of this grant?",
-                            },
                         ],
                     }
                 ],
@@ -637,16 +630,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "value-for-money-additional-funding",
+        "id": "value_for_money_additional_funding",
         "weighting": 0.00,
         "name": "Value for money - Additional funding",
         "sub_criteria": [
             {
-                "id": "additional-funding",
+                "id": "additional_funding",
                 "name": "Additional funding",
                 "themes": [
                     {
-                        "id": "additional-funding",
+                        "id": "additional_funding",
                         "name": "Additional funding",
                         "answers": [
                             {
@@ -670,16 +663,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "value-for-money-project-scaling",
+        "id": "value_for_money_project_scaling",
         "weighting": 0.03,
         "name": "Value for money - Project scaling",
         "sub_criteria": [
             {
-                "id": "project-scaling",
+                "id": "project_scaling",
                 "name": "Project scaling",
                 "themes": [
                     {
-                        "id": "project-scaling",
+                        "id": "project_scaling",
                         "name": "Project scaling",
                         "answers": [
                             {
@@ -696,16 +689,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "value-for-money-fundraise-details",
+        "id": "value_for_money_fundraise_details",
         "weighting": 0.00,
         "name": "Value for money - Fundraise details",
         "sub_criteria": [
             {
-                "id": "fundraise-details",
+                "id": "fundraise_details",
                 "name": "Fundraise details",
                 "themes": [
                     {
-                        "id": "fundraise-details",
+                        "id": "fundraise_details",
                         "name": "Fundraise details",
                         "answers": [
                             {
@@ -729,16 +722,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "your-project-proposed-delivery-plan",
+        "id": "your_project_proposed_delivery_plan",
         "weighting": 0.15,
         "name": "Your project - Delivery plan",
         "sub_criteria": [
             {
-                "id": "delivery-plan",
+                "id": "delivery_plan",
                 "name": "Delivery plan",
                 "themes": [
                     {
-                        "id": "delivery-plan",
+                        "id": "delivery_plan",
                         "name": "Delivery plan",
                         "answers": [
                             {

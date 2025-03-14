@@ -170,11 +170,11 @@ unscored_sections = [
                 ],
             },
             {
-                "id": "social-value",
+                "id": "social_value",
                 "name": "Social value",
                 "themes": [
                     {
-                        "id": "social-value",
+                        "id": "social_value",
                         "name": "Social value",
                         "answers": [
                             {
