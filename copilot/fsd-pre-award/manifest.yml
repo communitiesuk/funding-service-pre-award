@@ -65,7 +65,6 @@ variables:
   SENTRY_DSN: "https://80c7f65b54f0eff535777a66b375adf0@o1432034.ingest.us.sentry.io/4508324370317312"
   AWS_BUCKET_NAME:
     from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-FormUploadsBucket
-  ASSESSMENT_FRONTEND_HOST: "https://assessment.${COPILOT_ENVIRONMENT_NAME}.access-funding.test.levellingup.gov.uk"
   SENTRY_TRACES_SAMPLE_RATE: 0.02
   API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local"
 
