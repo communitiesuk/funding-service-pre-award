@@ -24,7 +24,7 @@ To update requirements, use `uv add` or `uv remove`.
 This service depends on:
 - A postgres database
 
-### IDE Setup
+### IDE setup
 [Python IDE Setup](https://github.com/communitiesuk/funding-service-design-workflows/blob/main/readmes/python-repos-ide-setup.md)
 
 ### Setup pre-commit checks
