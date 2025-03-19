@@ -134,3 +134,17 @@ def test_format_rehydrate_payload_test_all_change_requests_filtered_out(app: Fla
     )
 
     assert formatted_data["metadata"]["change_requests"] is None
+
+
+def test_format_rehydrate_payload_test_adds_is_resubmission(app: Flask) -> None:
+    formatted_data = format_rehydrate_payload(
+        form_data={},
+        application_id="abc",
+        returnUrl="https://test.test",
+        form_name="test_form",
+        markAsCompleteEnabled=True,
+        change_requests=None,
+        is_resubmission=True,
+    )
+
+    assert formatted_data["metadata"]["is_resubmission"] is True
