@@ -10,7 +10,6 @@ from data.crud.applications import get_applications_for_round_by_status
 from data.crud.fund_round_queries import (
     create_event,
     extract_questions_and_answers,
-    get_passed_round_applications,
     get_rounds_for_application_deadline_reminders,
     get_rounds_with_passed_deadline,
     set_application_reminder_sent,
@@ -83,8 +82,10 @@ def send_application_deadline_reminders(c: Context) -> None:
 
 def send_incomplete_application_emails_impl() -> None:
     rounds_with_passed_deadline = get_rounds_with_passed_deadline()
+    incomplete_statuses = [Status.NOT_STARTED, Status.IN_PROGRESS, Status.COMPLETED]
+
     for round in rounds_with_passed_deadline:
-        applications = get_passed_round_applications(round)
+        applications = get_applications_for_round_by_status(round.id, incomplete_statuses)
 
         for application in applications:
             forms = get_forms_by_app_id(application.id)  # type: ignore
@@ -108,7 +109,7 @@ def send_incomplete_application_emails_impl() -> None:
                     "Sent incomplete application notification %(notification_id)s to %(account_id)s",
                     dict(notification_id=notification.id, account_id=account_id),
                 )
-                create_event(round.id, EventType.SEND_INCOMPLETE_APPLICATIONS, datetime.now())
+                create_event(round.id, EventType.SEND_INCOMPLETE_APPLICATIONS, datetime.now(), True)
             except NotificationError:
                 current_app.logger.exception(
                     (
