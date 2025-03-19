@@ -1,14 +1,12 @@
-import re
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Sequence
 from uuid import UUID
 
+from bs4 import BeautifulSoup
 from sqlalchemy import func, select
 from sqlalchemy.orm import contains_eager
 
 from data.models import Fund, Round
-from pre_award.application_store.db.models.application.applications import Applications
-from pre_award.application_store.db.models.application.enums import Status
 from pre_award.db import db
 from pre_award.fund_store.db.models.event import Event, EventType
 
@@ -80,22 +78,6 @@ def get_rounds_with_passed_deadline() -> Sequence[Round]:
     return rounds_without_event
 
 
-def get_passed_round_applications(round: Round) -> Sequence[Applications]:
-    """
-    Retrieve applications for the given round_ids where the status is
-    in ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"].
-    """
-    applications = (
-        db.session.query(Applications)
-        .filter(
-            Applications.round_id == str(round.id),
-            Applications.status.in_([Status.NOT_STARTED, Status.IN_PROGRESS, Status.COMPLETED]),
-        )
-        .all()
-    )
-    return applications
-
-
 def extract_questions_and_answers(data_list: List[Dict[str, Any]]) -> str:
     """
     Function to build a string of questions and answers of application forms
@@ -103,23 +85,23 @@ def extract_questions_and_answers(data_list: List[Dict[str, Any]]) -> str:
     result = []
     for data in data_list:
         for question in data["questions"]:
-            if question["category"] == "FabDefault":
-                for field in question["fields"]:
-                    question_text = field["title"]
-                    answer = field["answer"]
-                    if isinstance(answer, str):
-                        answer = strip_html_tags(answer)
-                    result.append(f"{question_text}: {answer}")
-    return ",\n".join(result)
+            for field in question["fields"]:
+                question_text = field["title"]
+                answer = field["answer"]
+                if isinstance(answer, str):
+                    soup = BeautifulSoup(answer, "html.parser")
+                    answer_text = soup.get_text()
+                elif isinstance(answer, bool):
+                    answer_text = str(answer)
+                else:
+                    answer_text = answer
+                result.append(f"{question_text}\n{answer_text}")
+    return "\n\n".join(result)
 
 
-def strip_html_tags(text: str) -> str:
-    """Remove HTML tags from a string."""
-    clean = re.compile("<.*?>")
-    return re.sub(clean, "", text)
-
-
-def create_event(round_id: UUID, event_type: EventType, activation_date: datetime) -> None:
+def create_event(round_id: UUID, event_type: EventType, activation_date: datetime, is_processed: bool) -> None:
     event = Event(round_id=round_id, type=event_type, activation_date=activation_date)
+    if is_processed:
+        event.processed = datetime.now()  # type: ignore
     db.session.add(event)
     db.session.commit()
