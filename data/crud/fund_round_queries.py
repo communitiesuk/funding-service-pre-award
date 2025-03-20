@@ -1,8 +1,7 @@
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Sequence
+from typing import Sequence
 from uuid import UUID
 
-from bs4 import BeautifulSoup
 from sqlalchemy import func, select
 from sqlalchemy.orm import contains_eager
 
@@ -63,40 +62,15 @@ def get_rounds_with_passed_deadline() -> Sequence[Round]:
     now = datetime.now()
     one_month_ago = now - timedelta(days=30)
 
-    rounds_with_passed_deadline = (
-        db.session.query(Round).filter(Round.deadline < now, Round.deadline >= one_month_ago).all()
+    subquery = db.session.query(Event.round_id).filter(Event.type == EventType.SEND_INCOMPLETE_APPLICATIONS).subquery()
+
+    rounds_without_event = (
+        db.session.query(Round)
+        .filter(Round.deadline < now, Round.deadline >= one_month_ago, Round.id.notin_(subquery))  # type: ignore
+        .all()
     )
 
-    rounds_without_event = [
-        round
-        for round in rounds_with_passed_deadline
-        if not db.session.query(Event)
-        .filter(Event.round_id == round.id, Event.type == EventType.SEND_INCOMPLETE_APPLICATIONS)
-        .first()
-    ]
-
     return rounds_without_event
-
-
-def extract_questions_and_answers(data_list: List[Dict[str, Any]]) -> str:
-    """
-    Function to build a string of questions and answers of application forms
-    """
-    result = []
-    for data in data_list:
-        for question in data["questions"]:
-            for field in question["fields"]:
-                question_text = field["title"]
-                answer = field["answer"]
-                if isinstance(answer, str):
-                    soup = BeautifulSoup(answer, "html.parser")
-                    answer_text = soup.get_text()
-                elif isinstance(answer, bool):
-                    answer_text = str(answer)
-                else:
-                    answer_text = answer
-                result.append(f"{question_text}\n{answer_text}")
-    return "\n\n".join(result)
 
 
 def create_event(round_id: UUID, event_type: EventType, activation_date: datetime, is_processed: bool) -> None:
