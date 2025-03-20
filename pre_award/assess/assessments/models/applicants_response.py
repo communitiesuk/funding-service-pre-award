@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 from typing import Iterable, List, Tuple
 from urllib.parse import quote
 
@@ -12,6 +13,11 @@ from pre_award.assess.services.aws import list_files_in_folder
 from pre_award.assess.shared.filters import format_address, format_date
 
 ANSWER_NOT_PROVIDED_DEFAULT = "<p>Not provided.</p>"
+
+
+class ResponseLabel(Enum):
+    REQUESTED_CHANGE = 1
+    UNREQUESTED_CHANGE = 2
 
 
 @dataclass
@@ -41,6 +47,8 @@ class QuestionHeading(ApplicantResponseComponent):
 class QuestionAnswerPair(ApplicantResponseComponent, ABC):
     question: str
     answer: str | float
+    field_id: str
+    label: ResponseLabel | None = None
 
     @property
     def should_render(self):
@@ -52,6 +60,8 @@ class QuestionAnswerPair(ApplicantResponseComponent, ABC):
         return cls(
             question=data["question"],
             answer=answer if answer else ANSWER_NOT_PROVIDED_DEFAULT,
+            field_id=data.get("field_id"),
+            label=_get_response_label(data),
         )
 
 
@@ -69,7 +79,7 @@ class BesideQuestionAnswerPair(QuestionAnswerPair):
 
 @dataclass
 class QuestionAnswerPairHref(QuestionAnswerPair, ABC):
-    answer_href: str
+    answer_href: str | None = None
 
     @classmethod
     def from_dict(cls, data: dict, href):  # noqa
@@ -78,6 +88,8 @@ class QuestionAnswerPairHref(QuestionAnswerPair, ABC):
             question=data["question"],
             answer=answer if answer else ANSWER_NOT_PROVIDED_DEFAULT,
             answer_href=href if answer else None,
+            field_id=data.get("field_id"),
+            label=_get_response_label(data),
         )
 
 
@@ -91,7 +103,7 @@ class BesideQuestionAnswerPairHref(QuestionAnswerPairHref):
 
 @dataclass
 class FormattedBesideQuestionAnswerPair(QuestionAnswerPair):
-    formatter: callable
+    formatter: callable = lambda x: x
 
     key = "question_beside_with_formatted_answer"
 
@@ -101,6 +113,8 @@ class FormattedBesideQuestionAnswerPair(QuestionAnswerPair):
             question=data["question"],
             answer=(data.get("answer") if data.get("answer") else ANSWER_NOT_PROVIDED_DEFAULT),
             formatter=formatter if data.get("answer") else lambda x: x,
+            field_id=data.get("field_id"),
+            label=_get_response_label(data),
         )
 
 
@@ -110,6 +124,8 @@ class MonetaryKeyValues(ApplicantResponseComponent):
     column_description: str
     question_answer_pairs: List[Tuple[str, float]]
     total: float
+    field_id: str
+    label: ResponseLabel | None = None
 
     key = "monetary_key_values"
 
@@ -121,6 +137,8 @@ class MonetaryKeyValues(ApplicantResponseComponent):
             return AboveQuestionAnswerPair(
                 question=question,
                 answer=ANSWER_NOT_PROVIDED_DEFAULT,
+                field_id=data.get("field_id"),
+                label=_get_response_label(data),
             )
 
         return cls(
@@ -128,6 +146,8 @@ class MonetaryKeyValues(ApplicantResponseComponent):
             column_description=question,
             question_answer_pairs=[(desc, float(amt)) for desc, amt in data["answer"]],
             total=sum([float(amt) for _, amt in data["answer"]]),
+            field_id=data.get("field_id"),
+            label=_get_response_label(data),
         )
 
 
@@ -135,6 +155,8 @@ class MonetaryKeyValues(ApplicantResponseComponent):
 class QuestionAboveHrefAnswerList(ApplicantResponseComponent):
     question: str
     key_to_url_dict: dict[str, str]
+    field_id: str
+    label: ResponseLabel | None = None
 
     key = "question_above_href_answer_list"
 
@@ -143,6 +165,8 @@ class QuestionAboveHrefAnswerList(ApplicantResponseComponent):
         return cls(
             question=data["question"],
             key_to_url_dict=key_to_url_dict,
+            field_id=data.get("field_id"),
+            label=_get_response_label(data),
         )
 
 
@@ -151,6 +175,8 @@ class NewAddAnotherTable(ApplicantResponseComponent):
     caption: str
     head: List[dict[str, str]]
     rows: List[dict[str, str]]
+    field_id: str
+    label: ResponseLabel | None = None
 
     key = "new_add_another_table"
 
@@ -200,7 +226,19 @@ class NewAddAnotherTable(ApplicantResponseComponent):
             caption=data["question"],
             head=headings,
             rows=rows,
+            field_id=data.get("field_id"),
+            label=_get_response_label(data),
         )
+
+
+def _get_response_label(data):
+    label = None
+    if data.get("requested_change"):
+        label = ResponseLabel.REQUESTED_CHANGE
+    elif data.get("unrequested_change"):
+        label = ResponseLabel.UNREQUESTED_CHANGE
+
+    return label
 
 
 def _convert_to_month_year(input_date):

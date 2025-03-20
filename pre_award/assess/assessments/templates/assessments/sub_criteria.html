@@ -12,6 +12,7 @@
 {% from "assess/macros/assessment_change_request.html" import assessment_change_request %}
 {% from "assess/macros/assessment_subcriteria_accepted.html" import assessment_subcriteria_accepted %}
 {%- from "govuk_frontend_jinja/components/pagination/macro.html" import govukPagination -%}
+{% from "govuk_frontend_jinja/components/warning-text/macro.html" import govukWarningText %}
 
 {% set pageHeading -%}
 {% if comment_form.comment.errors %}
@@ -63,18 +64,10 @@ Error:
     </div>
     <div class="theme govuk-grid-column-two-thirds">
         {% if unrequested_changes %}
-            <div class="assessment-alert assessment-alert--flagged" role="alert">
-                <h1 class="assessment-alert__heading govuk-heading-l">
-                    Unrequested Change Detected
-                </h1>
-                The applicant has modified one or more answers that were not requested for change. Please review the updated answers against the assessment criteria.
-                <h3>Questions modified</h3>
-                <ul>
-                    {% for question in unrequested_changes %}
-                        <li>{{ question }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+            {{ govukWarningText({
+                text: "The applicant has made unrequested changes",
+                iconFallbackText: "Warning"
+            }) }}
         {% endif %}
         <h3 class="govuk-heading-m response-title">Applicant's response</h3>
         {{ theme(answers_meta)}}

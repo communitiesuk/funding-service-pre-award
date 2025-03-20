@@ -673,16 +673,21 @@ def get_all_sub_criterias_with_application_json(application_id: str):
 
 
 def mark_themes_needing_assessor_review(application_json, theme_fields):
-    flag_for_assessor = set()
+    unrequested_changes = set()
+    requested_changes = set()
     for form in application_json["jsonb_blob"]["forms"]:
         for section in form["questions"]:
             for field in section["fields"]:
-                if field.get("flag_for_assessor"):
-                    flag_for_assessor.add(field["key"])
+                if field.get("unrequested_change"):
+                    unrequested_changes.add(field["key"])
+                elif field.get("requested_change"):
+                    requested_changes.add(field["key"])
 
     for theme in theme_fields:
-        if theme["field_id"] in flag_for_assessor:
-            theme["flag_for_assessor"] = True
+        if theme["field_id"] in unrequested_changes:
+            theme["unrequested_change"] = True
+        elif theme["field_id"] in requested_changes:
+            theme["requested_change"] = True
 
 
 def get_comments(
