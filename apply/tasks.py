@@ -9,13 +9,13 @@ from data.crud.accounts import get_account
 from data.crud.applications import get_applications_for_round_by_status
 from data.crud.fund_round_queries import (
     create_event,
-    extract_questions_and_answers,
     get_rounds_for_application_deadline_reminders,
     get_rounds_with_passed_deadline,
     set_application_reminder_sent,
 )
 from pre_award.application_store.db.models.application.enums import Status
 from pre_award.application_store.db.queries.form.queries import get_forms_by_app_id
+from pre_award.apply.helpers import extract_questions_and_answers
 from pre_award.fund_store.db.models.event import EventType
 from services.notify import NotificationError, get_notification_service
 
