@@ -12,7 +12,6 @@
 {% from "assess/macros/assessment_change_request.html" import assessment_change_request %}
 {% from "assess/macros/assessment_subcriteria_accepted.html" import assessment_subcriteria_accepted %}
 {%- from "govuk_frontend_jinja/components/pagination/macro.html" import govukPagination -%}
-{% from "govuk_frontend_jinja/components/warning-text/macro.html" import govukWarningText %}
 
 {% set pageHeading -%}
 {% if comment_form.comment.errors %}
@@ -64,10 +63,13 @@ Error:
     </div>
     <div class="theme govuk-grid-column-two-thirds">
         {% if unrequested_changes %}
-            {{ govukWarningText({
-                text: "The applicant has made unrequested changes",
-                iconFallbackText: "Warning"
-            }) }}
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                <span class="govuk-visually-hidden">Warning</span>
+                The applicant has made unrequested changes.
+                </strong>
+            </div>
         {% endif %}
         <h3 class="govuk-heading-m response-title">Applicant's response</h3>
         {{ theme(answers_meta)}}
