@@ -659,7 +659,7 @@ def get_sub_criteria_theme_answers_all(
         theme_mapping_data["sub_criterias"],
         theme_id,
     )
-    mark_themes_needing_assessor_review(theme_mapping_data["application_json"], theme_question_answers)
+    mark_themes_with_changes(theme_mapping_data["application_json"], theme_question_answers)
     return theme_question_answers
 
 
@@ -672,7 +672,7 @@ def get_all_sub_criterias_with_application_json(application_id: str):
     return theme_mapping_data
 
 
-def mark_themes_needing_assessor_review(application_json, theme_fields):
+def mark_themes_with_changes(application_json, theme_fields):
     unrequested_changes = set()
     requested_changes = set()
     for form in application_json["jsonb_blob"]["forms"]:

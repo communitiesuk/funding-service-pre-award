@@ -60,7 +60,7 @@ class QuestionAnswerPair(ApplicantResponseComponent, ABC):
         return cls(
             question=data["question"],
             answer=answer if answer else ANSWER_NOT_PROVIDED_DEFAULT,
-            field_id=data.get("field_id"),
+            field_id=_flatten_field_ids(data.get("field_id")),
             label=_get_response_label(data),
         )
 
@@ -88,7 +88,7 @@ class QuestionAnswerPairHref(QuestionAnswerPair, ABC):
             question=data["question"],
             answer=answer if answer else ANSWER_NOT_PROVIDED_DEFAULT,
             answer_href=href if answer else None,
-            field_id=data.get("field_id"),
+            field_id=_flatten_field_ids(data.get("field_id")),
             label=_get_response_label(data),
         )
 
@@ -113,7 +113,7 @@ class FormattedBesideQuestionAnswerPair(QuestionAnswerPair):
             question=data["question"],
             answer=(data.get("answer") if data.get("answer") else ANSWER_NOT_PROVIDED_DEFAULT),
             formatter=formatter if data.get("answer") else lambda x: x,
-            field_id=data.get("field_id"),
+            field_id=_flatten_field_ids(data.get("field_id")),
             label=_get_response_label(data),
         )
 
@@ -137,7 +137,7 @@ class MonetaryKeyValues(ApplicantResponseComponent):
             return AboveQuestionAnswerPair(
                 question=question,
                 answer=ANSWER_NOT_PROVIDED_DEFAULT,
-                field_id=data.get("field_id"),
+                field_id=_flatten_field_ids(data.get("field_id")),
                 label=_get_response_label(data),
             )
 
@@ -146,7 +146,7 @@ class MonetaryKeyValues(ApplicantResponseComponent):
             column_description=question,
             question_answer_pairs=[(desc, float(amt)) for desc, amt in data["answer"]],
             total=sum([float(amt) for _, amt in data["answer"]]),
-            field_id=data.get("field_id"),
+            field_id=_flatten_field_ids(data.get("field_id")),
             label=_get_response_label(data),
         )
 
@@ -165,7 +165,7 @@ class QuestionAboveHrefAnswerList(ApplicantResponseComponent):
         return cls(
             question=data["question"],
             key_to_url_dict=key_to_url_dict,
-            field_id=data.get("field_id"),
+            field_id=_flatten_field_ids(data.get("field_id")),
             label=_get_response_label(data),
         )
 
@@ -226,7 +226,7 @@ class NewAddAnotherTable(ApplicantResponseComponent):
             caption=data["question"],
             head=headings,
             rows=rows,
-            field_id=data.get("field_id"),
+            field_id=_flatten_field_ids(data.get("field_id")),
             label=_get_response_label(data),
         )
 
