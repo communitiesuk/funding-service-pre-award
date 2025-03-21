@@ -28,6 +28,15 @@
 <div class="template-answer bg-white">
     {% for meta in answers_meta %}
         {% if meta.should_render %}
+            {% if meta.label and meta.label.name == "REQUESTED_CHANGE" %}
+                <div class="govuk-tag requested-change-tag">
+                    Updated response
+                </div>
+            {% elif meta.label and meta.label.name == "UNREQUESTED_CHANGE"%}
+                <div class="govuk-tag govuk-tag--red unrequested-change-tag">
+                    Unrequested change
+                </div>
+            {% endif %}
           {{ ui_component_mapping[meta.key](meta) }}
         {% endif %}
     {% endfor %}

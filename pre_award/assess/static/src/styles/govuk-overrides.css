@@ -15,6 +15,7 @@
     text-transform: none;
 }
 
+
 .gov-uk-table__cell--align-right {
     text-align: right;
 }
@@ -121,6 +122,10 @@
     padding: 2px 4px;
     letter-spacing: normal;
     text-transform: capitalize;
+}
+
+.govuk-tag.requested-change-tag, .govuk-tag.unrequested-change-tag {
+    text-transform: None;
 }
 
 .assigned-to {

@@ -4,9 +4,7 @@ import pytest  # noqa
 from flask import Flask
 
 import pre_award.assess
-from pre_award.assess.assessments.models.applicants_response import (
-    ANSWER_NOT_PROVIDED_DEFAULT,
-)
+from pre_award.assess.assessments.models.applicants_response import ANSWER_NOT_PROVIDED_DEFAULT, ResponseLabel
 from pre_award.assess.assessments.models.applicants_response import (
     AboveQuestionAnswerPair,
 )
@@ -357,6 +355,99 @@ class TestApplicatorsResponseComponentFactory:
         with self.test_app.app_context():
             result = _ui_component_from_factory(item, "app_123")
             assert isinstance(result, expected_class)
+
+    @pytest.mark.parametrize(
+        "item,",
+        [
+            (
+                {
+                    "presentation_type": "grouped_fields",
+                    "answer": [("foo", "1"), ("bar", "2")],
+                    "question": ["foo", "foo"],
+                    "field_id": "A",
+                    "unrequested_change": True,
+                }
+            ),
+            (
+                {
+                    "presentation_type": "text",
+                    "field_type": "multilineTextField",
+                    "answer": "lorem ipsum",
+                    "question": "foo",
+                    "field_id": "B",
+                    "requested_change": True,
+                }
+            ),
+            (
+                {
+                    "presentation_type": "text",
+                    "field_type": "websiteField",
+                    "answer": "https://www.example.com",
+                    "question": "foo",
+                    "field_id": "C",
+                    "unrequested_change": True,
+                }
+            ),
+            (
+                {
+                    "presentation_type": "table",
+                    "field_type": "multiInputField",
+                    "answer": [
+                        ["", "", "html"],
+                        ["", ["06-2023"], "monthYearField"],
+                    ],
+                    "question": "foo",
+                    "field_id": "D",
+                    "requested_change": True,
+                }
+            ),
+            (
+                {
+                    "presentation_type": "file",
+                    "answer": "https://www.example.com/file.pdf",
+                    "question": "foo",
+                    "field_id": "E",
+                    "unrequested_change": True,
+                }
+            ),
+            (
+                {
+                    "presentation_type": "address",
+                    "answer": "123 Main St",
+                    "question": "foo",
+                    "field_id": "F",
+                    "unrequested_change": True,
+                }
+            ),
+            (
+                {
+                    "answer": [["Both revenue and capital", "1"]],
+                    "branched_field": "1",
+                    "field_id": ("pVBwci", "GRWtfV"),
+                    "field_type": "numberField",
+                    "form_name": "funding-required-ns",
+                    "presentation_type": "grouped_fields",
+                    "question": [
+                        "How much revenue are you applying for? 1 April 2023 to 31 March 2024",
+                        "How much revenue are you applying for? 1 April 2023 to 31 March 2024",
+                    ],
+                    "requested_change": True,
+                }
+            ),
+        ],
+    )
+    def test__ui_component_from_factory_optional_fields(self, item):
+        with self.test_app.app_context():
+            result = _ui_component_from_factory(item, "app_123")
+            if expected_field_ids := item.get("field_id"):
+                for field_id in expected_field_ids:
+                    assert field_id in result.field_id
+
+            if "requested_change" in item:
+                assert result.label == ResponseLabel.REQUESTED_CHANGE
+
+            if "unrequested_change" in item:
+                assert result.label == ResponseLabel.UNREQUESTED_CHANGE
 
 
 class TestConvertHeadingDescriptionAmountToGroupedFields:

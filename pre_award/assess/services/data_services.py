@@ -659,7 +659,7 @@ def get_sub_criteria_theme_answers_all(
         theme_mapping_data["sub_criterias"],
         theme_id,
     )
-    mark_themes_needing_assessor_review(theme_mapping_data["application_json"], theme_question_answers)
+    mark_themes_with_changes(theme_mapping_data["application_json"], theme_question_answers)
     return theme_question_answers
 
 
@@ -672,17 +672,22 @@ def get_all_sub_criterias_with_application_json(application_id: str):
     return theme_mapping_data
 
 
-def mark_themes_needing_assessor_review(application_json, theme_fields):
-    flag_for_assessor = set()
+def mark_themes_with_changes(application_json, theme_fields):
+    unrequested_changes = set()
+    requested_changes = set()
     for form in application_json["jsonb_blob"]["forms"]:
         for section in form["questions"]:
             for field in section["fields"]:
-                if field.get("flag_for_assessor"):
-                    flag_for_assessor.add(field["key"])
+                if field.get("unrequested_change"):
+                    unrequested_changes.add(field["key"])
+                elif field.get("requested_change"):
+                    requested_changes.add(field["key"])
 
     for theme in theme_fields:
-        if theme["field_id"] in flag_for_assessor:
-            theme["flag_for_assessor"] = True
+        if theme["field_id"] in unrequested_changes:
+            theme["unrequested_change"] = True
+        elif theme["field_id"] in requested_changes:
+            theme["requested_change"] = True
 
 
 def get_comments(

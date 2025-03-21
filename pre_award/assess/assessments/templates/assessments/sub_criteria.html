@@ -63,17 +63,12 @@ Error:
     </div>
     <div class="theme govuk-grid-column-two-thirds">
         {% if unrequested_changes %}
-            <div class="assessment-alert assessment-alert--flagged" role="alert">
-                <h1 class="assessment-alert__heading govuk-heading-l">
-                    Unrequested Change Detected
-                </h1>
-                The applicant has modified one or more answers that were not requested for change. Please review the updated answers against the assessment criteria.
-                <h3>Questions modified</h3>
-                <ul>
-                    {% for question in unrequested_changes %}
-                        <li>{{ question }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                <span class="govuk-visually-hidden">Warning</span>
+                The applicant has made unrequested changes.
+                </strong>
             </div>
         {% endif %}
         <h3 class="govuk-heading-m response-title">Applicant's response</h3>
