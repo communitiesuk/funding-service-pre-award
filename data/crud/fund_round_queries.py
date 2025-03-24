@@ -62,11 +62,13 @@ def get_rounds_with_passed_deadline() -> Sequence[Round]:
     now = datetime.now()
     one_month_ago = now - timedelta(days=30)
 
-    subquery = select(Event.round_id).filter(Event.type == EventType.SEND_INCOMPLETE_APPLICATIONS)
-
     rounds_without_event = (
         db.session.query(Round)
-        .filter(Round.deadline < now, Round.deadline >= one_month_ago, Round.id.notin_(subquery))
+        .filter(
+            Round.deadline < now,
+            Round.deadline >= one_month_ago,
+            Round.id.notin_(select(Event.round_id).filter(Event.type == EventType.SEND_INCOMPLETE_APPLICATIONS)),
+        )
         .all()
     )
 
