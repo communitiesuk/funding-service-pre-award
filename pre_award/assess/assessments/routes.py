@@ -1264,6 +1264,13 @@ def display_sub_criteria(
         )
 
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
+
+    # If the sub-criteria has been accepted, no need to label changed answers
+    if score:
+        for theme_answer in theme_answers_response:
+            theme_answer.pop("unrequested_change", None)
+            theme_answer.pop("requested_change", None)
+
     answers_meta = applicants_response.create_ui_components(theme_answers_response, application_id)
 
     common_template_config = {
@@ -1273,9 +1280,7 @@ def display_sub_criteria(
         "application_id": application_id,
         "comments": theme_matched_comments,
         "change_requests": sub_criteria_change_requests,
-        "unrequested_changes": [
-            theme["question"] for theme in theme_answers_response if theme.get("flag_for_assessor")
-        ],
+        "unrequested_changes": any(theme.get("unrequested_change") for theme in theme_answers_response),
         "accounts_list": approval_change_request_users,
         "is_flaggable": False,  # Flag button is disabled in sub-criteria page,
         "display_comment_box": add_comment_argument,

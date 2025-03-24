@@ -720,6 +720,8 @@ def test_no_changes(existing_json_blob, new_json_blob, mock_now):
         for section in form["questions"]:
             for field in section["fields"]:
                 assert "history_log" not in field
+                assert "requested_change" not in field
+                assert "unrequested_change" not in field
 
 
 @pytest.mark.parametrize("mock_now", ["2024-01-01T12:00:00+00:00"])
@@ -729,14 +731,16 @@ def test_multiple_fields_changed(existing_json_blob, new_json_blob, mock_now):
     with mock.patch("datetime.datetime") as mock_datetime:
         mock_datetime.now.return_value = datetime(2024, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
         mock_datetime.now.side_effect = lambda tz=None: mock_datetime.now.return_value
-        changed_fields = update_application_fields(existing_json_blob, new_json_blob, [])
+        changed_fields = update_application_fields(existing_json_blob, new_json_blob, ["field1"])
 
     assert changed_fields == {"field1", "field2"}
 
     f1 = new_json_blob["forms"][0]["questions"][0]["fields"][0]
     f2 = new_json_blob["forms"][0]["questions"][0]["fields"][1]
     assert "history_log" in f1
+    assert "requested_change" in f1
     assert "history_log" in f2
+    assert "unrequested_change" in f2
 
     assert len(f1["history_log"]) == 1
     assert len(f2["history_log"]) == 1
@@ -763,25 +767,6 @@ def test_existing_history_log_is_appended(existing_json_blob, new_json_blob, moc
 
     old_val = existing_json_blob["forms"][0]["questions"][0]["fields"][1]["answer"]
     assert list(f2["history_log"][-1].values())[0] == old_val
-
-
-def test_field_flagged_for_assessor(existing_json_blob, new_json_blob):
-    change_request_fields = {"field2"}
-    new_json_blob["forms"][0]["questions"][0]["fields"][0]["answer"] = "changed_value1"
-    new_json_blob["forms"][0]["questions"][0]["fields"][1]["answer"] = "changed_value2"
-
-    with mock.patch("datetime.datetime") as mock_datetime:
-        mock_datetime.now.return_value = datetime(2024, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
-        mock_datetime.now.side_effect = lambda tz=None: mock_datetime.now.return_value
-        changed_fields = update_application_fields(existing_json_blob, new_json_blob, change_request_fields)
-
-    assert changed_fields == {"field1", "field2"}
-
-    # Check that the field has been flagged
-    f1 = new_json_blob["forms"][0]["questions"][0]["fields"][0]
-    f2 = new_json_blob["forms"][0]["questions"][0]["fields"][1]
-    assert f1.get("flag_for_assessor") is True
-    assert "flag_for_assessor" not in f2
 
 
 @pytest.mark.fund_config(

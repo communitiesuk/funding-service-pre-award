@@ -276,8 +276,10 @@ def update_application_fields(existing_json_blob, new_json_blob, change_request_
             changed_fields.add(key)
             # Update history_log using the helper function.
             field["history_log"] = update_field_history(existing_fields.get(key, {}))
-            if field["key"] not in change_request_fields:
-                field["flag_for_assessor"] = True
+            if field["key"] in change_request_fields:
+                field["requested_change"] = True
+            else:
+                field["unrequested_change"] = True
 
     return changed_fields
 

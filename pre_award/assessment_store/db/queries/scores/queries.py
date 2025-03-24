@@ -122,7 +122,6 @@ def get_sub_criteria_to_latest_score_map(application_id: str) -> dict:
     for sid, score in result:
         if sid not in sub_criteria_to_latest_score:
             sub_criteria_to_latest_score[sid] = score
-
     return sub_criteria_to_latest_score
 
 
