@@ -1264,6 +1264,13 @@ def display_sub_criteria(
         )
 
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
+
+    # If the sub-criteria has been accepted, no need to label changed answers
+    if score:
+        for theme_answer in theme_answers_response:
+            theme_answer.pop("unrequested_change", None)
+            theme_answer.pop("requested_change", None)
+
     answers_meta = applicants_response.create_ui_components(theme_answers_response, application_id)
 
     common_template_config = {
