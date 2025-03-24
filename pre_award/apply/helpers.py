@@ -416,10 +416,16 @@ def format_application_questions_and_answers(data_list: List[Dict[str, Any]]) ->
             for field in question["fields"]:
                 question_text = field["title"]
                 answer = field["answer"]
-                if isinstance(answer, str):
-                    soup = BeautifulSoup(answer, "html.parser")
-                    answer_text = soup.get_text()
-                elif isinstance(answer, bool):
-                    answer_text = "Yes" if answer else "No"
+                answer_text = extract_answer_text(answer)
                 result.append(f"{question_text}\n{answer_text}")
     return "\n\n".join(result)
+
+
+def extract_answer_text(answer):
+    answer_text = None
+    if isinstance(answer, str):
+        soup = BeautifulSoup(answer, "html.parser")
+        answer_text = soup.get_text()
+    elif isinstance(answer, bool):
+        answer_text = "Yes" if answer else "No"
+    return answer_text
