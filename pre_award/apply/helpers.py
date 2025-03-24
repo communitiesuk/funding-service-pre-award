@@ -417,7 +417,8 @@ def format_application_questions_and_answers(data_list: List[Dict[str, Any]]) ->
                 question_text = field["title"]
                 answer = field["answer"]
                 answer_text = extract_answer_text(answer)
-                result.append(f"{question_text}\n{answer_text}")
+                if answer_text:
+                    result.append(f"{question_text}\n{answer_text}")
     return "\n\n".join(result)
 
 
