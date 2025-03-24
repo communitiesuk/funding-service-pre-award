@@ -817,7 +817,9 @@ def mock_get_scores(mocker):
 def test_calculate_overall_score_percentage_for_application(mocker, mock_get_scores, mock_get_scoring_system):
     mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
     mock_config.ASSESSMENT_MAPPING_CONFIG = mapping_config
-    result = calculate_overall_score_percentage_for_application(app)
+    result = calculate_overall_score_percentage_for_application(
+        application_id=app["application_id"], fund_id=app["fund_id"], round_id=app["round_id"]
+    )
     expected_score = ((3 * 2 + 4 * 2 + 5 * 1) / (5 * 2 * 2 + 5 * 1 * 1)) * 100
     assert result == expected_score, "The calculated score did not match the expected score"
 
@@ -826,7 +828,9 @@ def test_with_no_sub_criteria_scores(mocker, mock_get_scores, mock_get_scoring_s
     mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
     mock_config.ASSESSMENT_MAPPING_CONFIG = mapping_config
     mock_get_scores.return_value = {}
-    result = calculate_overall_score_percentage_for_application(app)
+    result = calculate_overall_score_percentage_for_application(
+        application_id=app["application_id"], fund_id=app["fund_id"], round_id=app["round_id"]
+    )
     assert result == 0, "The result should be 0 when there are no sub-criteria scores"
 
 
@@ -835,11 +839,15 @@ def test_with_invalid_application_id(mocker, mock_get_scores, mock_get_scoring_s
     mock_config.ASSESSMENT_MAPPING_CONFIG = mapping_config
     mock_get_scores.side_effect = KeyError("Invalid application ID")
     with pytest.raises(KeyError):
-        calculate_overall_score_percentage_for_application(app)
+        calculate_overall_score_percentage_for_application(
+            application_id=app["application_id"], fund_id=app["fund_id"], round_id=app["round_id"]
+        )
 
 
 def test_no_scored_criteria_exists(mocker, mock_get_scores, mock_get_scoring_system):
     mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
     mock_config.ASSESSMENT_MAPPING_CONFIG = {f"{COF_FUND_ID}:{COF_ROUND_2_ID}": {"scored_criteria": []}}
-    result = calculate_overall_score_percentage_for_application(app)
+    result = calculate_overall_score_percentage_for_application(
+        application_id=app["application_id"], fund_id=app["fund_id"], round_id=app["round_id"]
+    )
     assert result is None, "The result should be 0 when there are no scored criteria"
