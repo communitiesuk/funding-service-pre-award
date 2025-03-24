@@ -15,7 +15,7 @@ from data.crud.fund_round_queries import (
 )
 from pre_award.application_store.db.models.application.enums import Status
 from pre_award.application_store.db.queries.form.queries import get_forms_by_app_id
-from pre_award.apply.helpers import extract_questions_and_answers
+from pre_award.apply.helpers import format_application_questions_and_answers
 from pre_award.fund_store.db.models.event import EventType
 from services.notify import NotificationError, get_notification_service
 
@@ -89,7 +89,7 @@ def send_incomplete_application_emails_impl() -> None:
 
         for application in applications:
             forms = get_forms_by_app_id(application.id)  # type: ignore
-            summary = extract_questions_and_answers(forms)
+            summary = format_application_questions_and_answers(forms)
 
             try:
                 account_id = str(application.account_id)
