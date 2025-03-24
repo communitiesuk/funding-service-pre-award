@@ -139,6 +139,7 @@ from pre_award.assess.themes.deprecated_theme_mapper import (
     map_application_with_sub_criterias_and_themes,
     order_entire_application_by_themes,
 )
+from pre_award.assessment_store.api.routes.assessment_routes import calculate_overall_score_percentage_for_application
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
 from pre_award.assessment_store.db.queries.flags.queries import (
     get_change_requests_for_application,
@@ -1697,6 +1698,10 @@ def application(application_id):
             )
         )
 
+    percentage_score = calculate_overall_score_percentage_for_application(
+        application_id=application_id, fund_id=fund.id, round_id=fund_round.id
+    )
+
     return render_template(
         "assessments/assessor_tasklist.html",
         sub_criteria_status_completed=sub_criteria_status_completed,
@@ -1723,6 +1728,7 @@ def application(application_id):
         comment_form=comment_form,
         comments=theme_matched_comments,
         fund=fund,
+        percentage_score=percentage_score,
     )
 
 
