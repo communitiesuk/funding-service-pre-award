@@ -67,7 +67,11 @@ def get_rounds_with_passed_deadline() -> Sequence[Round]:
         .filter(
             Round.deadline < now,
             Round.deadline >= one_month_ago,
-            Round.id.notin_(select(Event.round_id).filter(Event.type == EventType.SEND_INCOMPLETE_APPLICATIONS)),
+            Round.id.notin_(
+                select(Event.round_id).filter(
+                    Event.type == EventType.SEND_INCOMPLETE_APPLICATIONS, Event.processed.isnot(None)
+                )
+            ),
         )
         .all()
     )
