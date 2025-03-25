@@ -1,10 +1,8 @@
 import re
 from datetime import datetime
 from functools import lru_cache
-from typing import Any, Dict, List
 
 import requests
-from bs4 import BeautifulSoup
 from flask import current_app, request
 
 from pre_award.apply.default.data import (
@@ -406,29 +404,3 @@ def get_section_feedback_data(application, section_display_config):
         existing_feedback_map.get(s.section_id) for s in section_display_config if s.requires_feedback
     ]
     return current_feedback_list, existing_feedback_map
-
-
-def format_application_questions_and_answers(data_list: List[Dict[str, Any]]) -> str:
-    """
-    Function to build a string of questions and answers of application forms
-    """
-    result = []
-    for data in data_list:
-        for question in data["questions"]:
-            for field in question["fields"]:
-                question_text = field["title"]
-                answer = field["answer"]
-                answer_text = extract_answer_text(answer)
-                if answer_text:
-                    result.append(f"{question_text}\n{answer_text}")
-    return "\n\n".join(result)
-
-
-def extract_answer_text(answer):
-    answer_text = None
-    if isinstance(answer, str):
-        soup = BeautifulSoup(answer, "html.parser")
-        answer_text = soup.get_text()
-    elif isinstance(answer, bool):
-        answer_text = "Yes" if answer else "No"
-    return answer_text
