@@ -1609,7 +1609,7 @@ class TestRoutes:
             f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/theme_id/test_theme_id/request_change"
         )
         assert 200 == response.status_code
-        assert b"Reasons for requesting change" in response.data
+        assert b"What changes are needed?" in response.data
 
         mock_submit_response = {
             "application_id": application_id,
