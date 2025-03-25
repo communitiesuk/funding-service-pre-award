@@ -71,6 +71,12 @@ Error:
                 </strong>
             </div>
         {% endif %}
+        <div>
+            <h2 class="govuk-heading-l">Review responses</h1>
+            <p class="govuk-body">Review the applicant's responses and 'Accept all responses' when you're ready.</p>
+            <p class="govuk-body govuk-!-margin-bottom-7">If you need more information from the applicant about one of these responses or
+                want to ask them to clarify something, you can 'Request a change'.</p>
+        </div>
         <h3 class="govuk-heading-m response-title">Applicant's response</h3>
         {{ theme(answers_meta)}}
         {% if is_uncompeted_flow(fund) and not score %}

@@ -21,19 +21,14 @@ Request changes –
       {{ govukPanel({
           "titleText": "Your request for changes has been sent",
       }) }}
-      <h1 class="govuk-heading-m govuk-!-margin-top-7">
-        What happens next
-      </h1>
-      <p class="govuk-body">
-        Your change request has been sent to the applicant and we've sent them an email
-        to let them know.
-      </p>
-      <p class="govuk-body">
-        We will email you when the applicant makes changes.
-      </p>
-      <p class="govuk-body">
-        The status for this criteria will be sent to <b>Change requested</b>.
-      </p>
+      <h1 class="govuk-heading-l govuk-!-margin-top-7">Change request sent</h1>
+
+      <p class="govuk-body">We've emailed the applicant to let them know you've requested changes.</p>
+      <p class="govuk-body">They'll need to sign in to their application form to see your change requests.</p>
+      <p class="govuk-body">We'll email you when the applicant makes changes.</p>
+      <p class="govuk-body">If you need the applicant to make more changes, you can request another change.</p>
+      <p class="govuk-body">The status will now be marked as <b>'Change requested'</b>.</p>
+
       <a
         class="govuk-link"
         href="{{ url_for(

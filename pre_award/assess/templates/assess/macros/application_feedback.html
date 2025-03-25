@@ -10,7 +10,7 @@
             {{ approval_form.csrf_token }}
             <input type="hidden" name="approve" value="1" />
             {{ govukButton({
-                "text": "Accept and save"
+                "text": "Approve all responses"
             }) }}
             {% set request_changes_url = url_for(
                 'assessment_bp.request_changes',
@@ -19,7 +19,7 @@
                 theme_id=current_theme_id
             ) %}
             {{ govukButton({
-                "text": "Request changes",
+                "text": "Request a change",
                 "classes": "govuk-button--secondary",
                 "href": request_changes_url
             }) }}
