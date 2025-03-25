@@ -11,6 +11,8 @@ from fsd_utils import NotifyConstants
 from notifications_python_client import NotificationsAPIClient, prepare_upload  # type: ignore[attr-defined]
 from notifications_python_client.errors import APIError, TokenError
 
+from pre_award.application_store.db.queries.application.queries import create_qa_base64file
+
 
 class NotificationError(Exception):
     def __init__(
@@ -491,10 +493,13 @@ class NotificationService:
         application_reference: str,
         fund_name: str,
         round_name: str,
-        question: str,
+        application_with_form_json: dict[str, Any],
         contact_help_email: str | None,
         govuk_notify_reference: str | None = None,
     ) -> Notification:
+        application_data = create_qa_base64file(application_with_form_json, True)
+        questions = application_data.get("questions_file")
+
         return self._send_email(
             email_address,
             self.APPLICATION_INCOMPLETE_TEMPLATE_ID,
@@ -502,7 +507,12 @@ class NotificationService:
                 "name of fund": fund_name,
                 "round name": round_name,
                 "application reference": application_reference,
-                "question": question,
+                "question": {
+                    "file": questions,
+                    "filename": None,
+                    "confirm_email_before_download": None,
+                    "retention_period": None,
+                },
                 "contact email": contact_help_email,
             },
             govuk_notify_reference=govuk_notify_reference,

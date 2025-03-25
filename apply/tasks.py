@@ -14,8 +14,7 @@ from data.crud.fund_round_queries import (
     set_application_reminder_sent,
 )
 from pre_award.application_store.db.models.application.enums import Status
-from pre_award.application_store.db.queries.form.queries import get_forms_by_app_id
-from pre_award.apply.helpers import format_application_questions_and_answers
+from pre_award.application_store.db.queries.application.queries import get_application
 from pre_award.fund_store.db.models.event import EventType
 from services.notify import NotificationError, get_notification_service
 
@@ -88,8 +87,7 @@ def send_incomplete_application_emails_impl() -> None:
         applications = get_applications_for_round_by_status(round.id, incomplete_statuses)
 
         for application in applications:
-            forms = get_forms_by_app_id(application.id)  # type: ignore
-            summary = format_application_questions_and_answers(forms)
+            application_with_form_json = get_application(application.id, as_json=True, include_forms=True)
 
             try:
                 account_id = str(application.account_id)
@@ -102,7 +100,7 @@ def send_incomplete_application_emails_impl() -> None:
                     application_reference=str(application.id),
                     fund_name=round.fund.name_json["en"],
                     round_name=round.title_json["en"],
-                    question=summary,
+                    application_with_form_json=application_with_form_json,
                     contact_help_email=round.contact_email,
                 )
                 current_app.logger.info(
