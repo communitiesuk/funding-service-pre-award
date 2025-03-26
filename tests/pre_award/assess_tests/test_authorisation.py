@@ -213,8 +213,8 @@ class TestAuthorisation:
                     f"Sidebar should contain score subcriteria link or link to score subcriteria: {response.data}"
                 )
             else:
-                assert b"Approve all responses" in response.data and b"Request a change" in response.data, (
-                    "Subcriteria page should contain accept and save "
+                assert b"Accept all responses" in response.data and b"Request a change" in response.data, (
+                    "Subcriteria page should contain accept all responses "
                     "and request changes button and link: {response.data}"
                 )
         else:

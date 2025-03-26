@@ -1293,9 +1293,13 @@ def display_sub_criteria(
         "assessment_status": assessment_status,
         "pagination": state.get_pagination_from_sub_criteria_id(sub_criteria_id),
     }
-
+    template_name = (
+        "assessments/uncompeted_sub_criteria.html"
+        if common_template_config["fund"].funding_type == "UNCOMPETED"
+        else "assessments/competed_sub_criteria.html"
+    )
     return render_template(
-        "assessments/sub_criteria.html",
+        template_name,
         answers_meta=answers_meta,
         questions={question["field_id"]: question["question"] for question in theme_answers_response},
         state=state,
