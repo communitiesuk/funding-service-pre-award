@@ -11,7 +11,7 @@
                 {{ user_info["full_name"] or "N/A" }} {{ user_info["email_address"] }}
             </div>
         </div>
-        {% else %}
+        {% else %
         <p class="govuk-body-m">This change was requested by assessor,{{ user_info["full_name"] or "N/A" }} {{ user_info["email_address"] }} on {{ flag.date_created|utc_to_bst }} </p>
         {% endif %}
         <p class="govuk-body">

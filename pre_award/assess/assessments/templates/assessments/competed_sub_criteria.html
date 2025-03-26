@@ -1,58 +1,6 @@
-{% extends "assess/base.html" %}
-{% from "assess/macros/theme.html" import theme %}
-{% from "assess/macros/sub_criteria_navbar.html" import navbar %}
-{% from "assess/macros/flag_application_button.html" import flag_application_button %}
-{% from "assess/macros/comments.html" import comment %}
-{% from "assess/macros/comments_edit_box.html" import edit_comment_box %}
-{% from "assess/macros/comments_box.html" import comment_box %}
-{% from "assess/macros/sub_criteria_heading.html" import sub_criteria_heading %}
-{% from "assess/macros/migration_banner.html" import migration_banner %}
-{% from "assess/macros/assessment_subcriteria_accepted.html" import assessment_subcriteria_accepted %}
+{% extends "assessments/base_sub_criteria.html" %}
 
-{% set pageHeading -%}
-{% if comment_form.comment.errors %}
-Error:
-{% endif %}
-{% if current_theme.id == sub_criteria.id %}
-{{ sub_criteria.name }} – {{ sub_criteria.project_name }}
-{% else %}
-{{ current_theme.name }} – {{ sub_criteria.name }} – {{ sub_criteria.project_name }}
-{% endif %}
-{% endset %}
-
-{% block header %}
-{{ super() }}
-{% include "assess/components/header.html" %}
-{% endblock header %}
-
-{% block content %}
-{% if comment_form.comment.errors %}
-<div class="govuk-error-summary" data-module="govuk-error-summary">
-  <div role="alert">
-    <h2 class="govuk-error-summary__title">
-      There is a problem
-    </h2>
-    <div class="govuk-error-summary__body">
-      <ul class="govuk-list govuk-error-summary__list">
-        <li>
-          <a href="#comments">Add a comment</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
-{% endif %}
-
-{% if is_flaggable and g.access_controller.has_any_assessor_role %}
-{{ flag_application_button(application_id) }}
-{% endif %}
-
-{% if migration_banner_enabled %}
-{{ migration_banner() }}
-{% endif %}
-
-{{ sub_criteria_heading(sub_criteria)}}
-
+{% block sub_criteria_content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-third">
     {{ navbar(application_id, sub_criteria, current_theme.id)}}
@@ -64,20 +12,10 @@ Error:
       <h2 class="govuk-heading-m govuk-!-margin-top-9 govuk-!-margin-bottom-3">Submission acceptance</h2>
       {{ assessment_subcriteria_accepted(score, accounts_list[score.user_id]) }}
     {% endif %}
-    {{ comment(comments, application_id, False, display_comment_box, display_comment_edit_box, sub_criteria,
-    current_theme) }}
-
-    {% if display_comment_box == True %}
-      {{ comment_box(comment_form) }}
-    {% endif %}
-
-    {% if display_comment_edit_box %}
-      {{ edit_comment_box(comments, comment_id, comment_form)}}
-    {% endif %}
 
     {% if score  %}
       {% include "assess/components/sub_section_pagination.html" %}
     {% endif %}
   </div>
 </div>
-{% endblock content %}
+{% endblock sub_criteria_content %}
