@@ -22,7 +22,9 @@ Request changes –
 <div class="govuk-grid-row">
     <div class="theme govuk-grid-column-two-thirds">
         <div class="govuk-!-margin-bottom-8">
-            <h2 class="govuk-heading-l scoring-heading">Reasons for requesting change</h2>
+            <h2 class="govuk-heading-l govuk-!-margin-bottom-6 scoring-heading">What changes are needed?</h2>
+            <p class="govuk-body">Select which responses you need more information about.</p>
+            <p class="govuk-body govuk-!-margin-bottom-7">You can view the applicant's response before requesting a change.</p>
         </div>
 
         {% if form.errors.get("field_ids") %}
@@ -51,8 +53,8 @@ Request changes –
         {% for choice in question_choices %}
             {% set reason_id = "reason_"~choice.value %}
             {% set textHtml %}
-                <p class="govuk-body">Answer: {{ choice.response }}</p>
-                <div class="govuk-hint">What changes are needed?</div>
+                <p class="govuk-body"><span class="govuk-!-font-weight-bold">Applicant's answer:</span> {{ choice.response }}</p>
+                <div class="govuk-hint">What information do you need from the applicant?</div>
                 {{ govukTextarea({
                     "id": form[reason_id].id,
                     "name": form[reason_id].id,
@@ -66,9 +68,12 @@ Request changes –
                     "value": form[reason_id].data or ""
                 }) }}
             {% endset %}
+            {% set question_html %}
+                <span class='govuk-!-font-weight-bold'>{{ choice.text }}</span>
+            {% endset %}
             {% set item = {
                 "value": choice.value,
-                "text": choice.text,
+                "text": question_html,
                 "conditional": {
                     "html": textHtml
                 },
@@ -86,19 +91,19 @@ Request changes –
 
         <div class="govuk-button-group">
             {{ govukButton({
-                "text": "Save and continue"
+                "text": "Request changes"
             }) }}
 
-            <a
-                class="govuk-link"
-                href="{{ url_for(
-                    'assessment_bp.display_sub_criteria',
+            {% set cancel_url = url_for(
+                'assessment_bp.display_sub_criteria',
                     application_id=application_id,
                     sub_criteria_id=sub_criteria.id
-                )}}"
-            >
-                Cancel
-            </a>
+            ) %}
+            {{ govukButton({
+                "text": "Cancel",
+                "classes": "govuk-button--secondary",
+                "href": cancel_url
+            }) }}
         </div>
     </form>
     </div>
