@@ -1134,7 +1134,7 @@ def fund_dashboard(fund_short_name: str, round_short_name: str):
     methods=["POST", "GET"],
 )
 @check_access_application_id
-def display_sub_criteria(
+def display_sub_criteria(  # noqa: C901
     application_id,
     sub_criteria_id,
 ):
@@ -1279,10 +1279,8 @@ def display_sub_criteria(
         "fund": get_fund(sub_criteria.fund_id),
         "application_id": application_id,
         "comments": theme_matched_comments,
-        "change_requests": sub_criteria_change_requests,
-        "unrequested_changes": any(theme.get("unrequested_change") for theme in theme_answers_response),
         "accounts_list": approval_change_request_users,
-        "is_flaggable": False,  # Flag button is disabled in sub-criteria page,
+        "is_flaggable": False,  # Flag button is disabled in sub-criteria page
         "display_comment_box": add_comment_argument,
         "display_comment_edit_box": edit_comment_argument,
         "comment_id": comment_id,
@@ -1294,14 +1292,26 @@ def display_sub_criteria(
         "pagination": state.get_pagination_from_sub_criteria_id(sub_criteria_id),
     }
 
-    return render_template(
-        "assessments/sub_criteria.html",
-        answers_meta=answers_meta,
-        questions={question["field_id"]: question["question"] for question in theme_answers_response},
-        state=state,
-        migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
-        **common_template_config,
-    )
+    if common_template_config["fund"].funding_type == "UNCOMPETED":
+        return render_template(
+            "assessments/uncompeted_sub_criteria.html",
+            unrequested_changes=any(theme.get("unrequested_change") for theme in theme_answers_response),
+            change_requests=sub_criteria_change_requests,
+            answers_meta=answers_meta,
+            questions={question["field_id"]: question["question"] for question in theme_answers_response},
+            state=state,
+            migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
+            **common_template_config,
+        )
+    else:
+        return render_template(
+            "assessments/competed_sub_criteria.html",
+            answers_meta=answers_meta,
+            questions={question["field_id"]: question["question"] for question in theme_answers_response},
+            state=state,
+            migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
+            **common_template_config,
+        )
 
 
 @assessment_bp.route(

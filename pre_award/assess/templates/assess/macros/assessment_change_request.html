@@ -1,5 +1,6 @@
-{% macro assessment_change_request(flag, questions, user_info) %}
+{% macro assessment_change_request(flag, questions, user_info, score ) %}
     <div class="comment-group">
+        {% if score %}
         <div class="govuk-body govuk-grid-row">
             <div class="govuk-grid-column-one-third">
                 <strong>Date:</strong>
@@ -10,6 +11,9 @@
                 {{ user_info["full_name"] or "N/A" }} {{ user_info["email_address"] }}
             </div>
         </div>
+        {% else %}
+        <p class="govuk-body-m">This change was requested by assessor,{{ user_info["full_name"] or "N/A" }} {{ user_info["email_address"] }} on {{ flag.date_created|utc_to_bst }} </p>
+        {% endif %}
         <p class="govuk-body">
             {% for field_id in flag.field_ids %}
                 <strong>{{ questions[field_id] }}</strong>
