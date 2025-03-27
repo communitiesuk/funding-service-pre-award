@@ -413,6 +413,7 @@ def continue_application(application_id):
 
     form_data = application.get_form_data(application, form_name)
     change_requests = prepare_change_requests_metadata(application_id)
+    is_resubmission = application.date_submitted != "null"
 
     rehydrate_payload = format_rehydrate_payload(
         form_data=form_data,
@@ -424,6 +425,7 @@ def continue_application(application_id):
         fund_name=fund.short_name,
         round_name=round.short_name,
         change_requests=change_requests,
+        is_resubmission=is_resubmission,
     )
 
     rehydration_token = get_token_to_return_to_application(form_name, rehydrate_payload)
