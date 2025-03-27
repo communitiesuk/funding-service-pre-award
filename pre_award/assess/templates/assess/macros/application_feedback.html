@@ -9,7 +9,7 @@
                     sub_criteria_id=sub_criteria.id) }}">
             {{ approval_form.csrf_token }}
             <input type="hidden" name="approve" value="1" />
-            {% set approve_text = "Approve all responses" if change_requests else "Accept all responses" %}
+            {% set approve_text = "Approve all changes" if change_requests else "Approve all responses" %}
             {{ govukButton({
             "text": approve_text
             }) }}
