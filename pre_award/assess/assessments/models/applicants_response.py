@@ -326,6 +326,7 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
     elif presentation_type == "table":
         if not item.get("answer"):
             return BesideQuestionAnswerPair(
+                field_id=item["field_id"],
                 question=item["question"],
                 answer=ANSWER_NOT_PROVIDED_DEFAULT,
             )
