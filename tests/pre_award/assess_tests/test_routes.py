@@ -944,7 +944,7 @@ class TestRoutes:
                 follow_redirects=True,
             )
         assert 200 == response.status_code
-        assert "Your change has been accepted" in str(response.data)
+        assert "Your have approved the applicant's changes" or "Responses approved" in str(response.data)
         mock_approve_sub_criteria.assert_called_once_with(
             application_id="resolved_app",
             sub_criteria_id="test_sub_criteria_id",

@@ -5,56 +5,69 @@
 
 {% block sub_criteria_content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-third">
-    {{ navbar(application_id, sub_criteria, current_theme.id, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
-  </div>
-  <div class="theme govuk-grid-column-two-thirds">
-    {% if not score %}
-      <h1 class="govuk-heading-m">Review Responses</h1>
-      {% if state.workflow_status=='CHANGE_REQUESTED' %}
-        <p class="govuk-body">Awaiting applicant’s update</p>
-      {% elif unrequested_changes %}
-        {{ govukWarningText({
-            "text": "The applicant has made unrequested changes",
-            "iconFallbackText": "Warning"
-        }) }}
-      <p class="govuk-body">The applicant has made their responses based on your change requests. They also made
-        unrequested changes.</p>
-      <p class="govuk-body">Approve and save all responses or request another change.</p>
-      {% elif change_requests and not score %}
-        <p class="govuk-body">The applicant updated their response following your change request.</p>
-        <p class="govuk-body">You can approve the updates or request another change.</p>
-      {% else %}
-        <p class="govuk-body">Review the applicant's responses and 'Accept all responses' when you're ready.</p>
-        <p class="govuk-body">If you need more information from the applicant about one of these responses or want to ask them to clarify something, you can 'Request a change'.</p>
-      {% endif %}
-    {% endif %}
+    <div class="govuk-grid-column-one-third">
+        {{ navbar(application_id, sub_criteria, current_theme.id, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
+    </div>
+    <div class="theme govuk-grid-column-two-thirds">
+        {% if not score %}
+            {% if change_requests %}
+                <h1 class="govuk-heading-l">Review changes</h1>
+            {% else %}
+                <h1 class="govuk-heading-l">Review responses</h1>
+            {% endif %}
 
-    {% if change_requests and not score %}
-      {% for change_request in change_requests %}
-        <h2 class="govuk-heading-s change-title">Change requested</h2>
-        {{ assessment_change_request(change_request, questions, accounts_list[change_request.latest_user_id], score) }}
-      {% endfor %}
-    {% endif %}
-    <h3 class="govuk-heading-m response-title">Applicant's response</h3>
-    {{ theme(answers_meta)}}
-    {% if not score %}
-      {{ application_feedback(application_id, sub_criteria, current_theme.id,
-      approval_form,change_requests,unrequested_changes) }}
-    {% endif %}
-    {% if score %}
-      <h2 class="govuk-heading-m govuk-!-margin-top-9 govuk-!-margin-bottom-3">Submission acceptance</h2>
-      {{ assessment_subcriteria_accepted(score, accounts_list[score.user_id]) }}
-      {% if change_requests %}
-      {% for change_request in change_requests %}
-        <h2 class="govuk-heading-s">Change requests</h2>
-        {{ assessment_change_request(change_request, questions, accounts_list[change_request.latest_user_id], score) }}
-      {% endfor %}
-      {% endif %}
-    {% endif %}
-    {% if score or not change_requests %}
-      {% include "assess/components/sub_section_pagination.html" %}
-    {% endif %}
-  </div>
+            {% if state.workflow_status=='CHANGE_REQUESTED' %}
+                <p class="govuk-body">Awaiting applicant’s update</p>
+            {% elif unrequested_changes %}
+                {{ govukWarningText({
+                    "text": "The applicant has made unrequested changes",
+                    "iconFallbackText": "Warning"
+                }) }}
+                <p class="govuk-body">The applicant has updated their responses based on your change requests. They have also made
+                  unrequested changes.</p>
+                <p class="govuk-body">Approve and save all responses or request another change.</p>
+
+            {% elif change_requests and not score %}
+                <p class="govuk-body">The applicant updated their response following your change request.</p>
+                <p class="govuk-body">You can approve the updates or request another change.</p>
+            {% else %}
+                <p class="govuk-body">Review the applicant's responses and 'Accept all responses' when you're ready.</p>
+                <p class="govuk-body">If you need more information from the applicant about one of these responses or want to ask them to clarify something, you can 'Request a change'.</p>
+            {% endif %}
+        {% endif %}
+
+        {% if change_requests and not score %}
+            {% for change_request in change_requests %}
+                <h2 class="govuk-heading-s change-title">Change requested</h2>
+                {{ assessment_change_request(change_request, questions, accounts_list[change_request.latest_user_id], score) }}
+            {% endfor %}
+        {% endif %}
+
+        {% if state.workflow_status=='CHANGE_RECEIVED' %}
+            <h3 class="govuk-heading-m response-title">Applicant's updated response</h3>
+        {% else %}
+            <h3 class="govuk-heading-m response-title">Applicant's responses</h3>
+        {% endif %}
+
+        {{ theme(answers_meta)}}
+        {% if not score %}
+            {{ application_feedback(application_id, sub_criteria, current_theme.id,
+            approval_form,change_requests,unrequested_changes) }}
+        {% endif %}
+        {% if score %}
+            <h2 class="govuk-heading-m govuk-!-margin-top-9 govuk-!-margin-bottom-3">Submission acceptance</h2>
+            {{ assessment_subcriteria_accepted(score, accounts_list[score.user_id]) }}
+            {% if change_requests %}
+                {% for change_request in change_requests %}
+                    <h2 class="govuk-heading-s">Change requests</h2>
+                    {{ assessment_change_request(change_request, questions, accounts_list[change_request.latest_user_id], score) }}
+                {% endfor %}
+            {% endif %}
+          {% endif %}
+
+          {% if score or not change_requests %}
+            {% include "assess/components/sub_section_pagination.html" %}
+          {% endif %}
+    </div>
 </div>
 {% endblock sub_criteria_content %}

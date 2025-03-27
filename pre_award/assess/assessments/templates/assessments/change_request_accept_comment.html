@@ -18,7 +18,10 @@
     {% include "assess/components/header.html" %}
 {% endblock header %}
 {% block content %}
-    <h1 class="govuk-heading-l">{{ sub_criteria.name }}: Accepted</h1>
+    <h1 class="govuk-heading-l">Tell us why you've approved the responses</h1>
+    <p class="govuk-body">Your response will be used for an audit trail and visible to other assessors.</p>
+    <p class="govuk-body">Applicants will not see your response.</p>
+    <p class="govuk-body govuk-!-margin-bottom-8">You can still request changes to the application before the quality assessment (QA).</p>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
             <form method="post">
@@ -30,11 +33,11 @@
                             "id": change_request_form.comment.id,
                             "rows": 8,
                             "label": {
-                                "text": "Why has the change been accepted?",
+                                "text": "",
                                 "classes": "govuk-label--m",
                                 isPageHeading: true
                             },
-                            "value": "This submission meets the required criteria",
+                            "value": "",
                             "errorMessage": {
                                 "text": change_request_form.comment.errors.0
                             } if change_request_form.comment.errors
