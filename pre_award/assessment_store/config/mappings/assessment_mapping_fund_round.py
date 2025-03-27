@@ -107,6 +107,9 @@ from pre_award.assessment_store.config.mappings.nstf_mapping_parts.r2_scored_cri
 from pre_award.assessment_store.config.mappings.nstf_mapping_parts.r2_unscored_sections import (
     unscored_sections as nstf_unscored_sections,
 )
+from pre_award.assessment_store.config.mappings.uf1_mapping_parts.scored_sections import (
+    scored_sections as uf1_scored_sections,
+)
 
 # FUND AND ROUND CONFIGURATION (Extracted from the fund store)
 COF_FUND_ID = "47aef2f5-3fcb-4d45-acb5-f0152b5f03c4"
@@ -269,9 +272,9 @@ fund_round_to_assessment_mapping = {
         "scored_criteria": ctdf_scored_sections,
     },
     f"{UF1_FUND__ID}:{UF1_ROUND_1_ID}": {
-        "schema_id": "ctdf_r1_assessment",
-        "unscored_sections": ctdf_unscored_sections,
-        "scored_criteria": ctdf_scored_sections,
+        "schema_id": "uf1_r1_assessment",
+        "unscored_sections": [],
+        "scored_criteria": uf1_scored_sections,
     },
     f"{HSRA_FUND_ID}:{HSRA_ROUND_VR_ID}": {
         "schema_id": "hsra_vr_assessment",
