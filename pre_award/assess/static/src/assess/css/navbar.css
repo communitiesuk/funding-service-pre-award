@@ -38,6 +38,7 @@
 .template-answer {
     border: 3px #b1b4b6 solid;
     padding: 25px 25px 4px;
+    margin-bottom: 25px;
     background-color: #ffffff;
   }
 

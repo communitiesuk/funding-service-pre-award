@@ -52,17 +52,24 @@ Error:
 {% endif %}
 
 {{ sub_criteria_heading(sub_criteria)}}
-{% block sub_criteria_content %}{% endblock sub_criteria_content %}
 
-{{ comment(comments, application_id, False, display_comment_box, display_comment_edit_box, sub_criteria,
-    current_theme) }}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-third">
+    {{ navbar(application_id, sub_criteria, current_theme.id, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
+  </div>
+  <div class="theme govuk-grid-column-two-thirds">
+    {% block sub_criteria_content %} {% endblock sub_criteria_content %}
 
-{% if display_comment_box == True %}
-  {{ comment_box(comment_form) }}
-{% endif %}
+    {{ comment(comments, application_id, False, display_comment_box, display_comment_edit_box, sub_criteria,
+        current_theme) }}
 
-{% if display_comment_edit_box %}
-  {{ edit_comment_box(comments, comment_id, comment_form)}}
-{% endif %}
+    {% if display_comment_box == True %}
+      {{ comment_box(comment_form) }}
+    {% endif %}
 
-{% endblock content %}
+    {% if display_comment_edit_box %}
+      {{ edit_comment_box(comments, comment_id, comment_form)}}
+    {% endif %}
+    {% endblock content %}
+    </div>
+  </div>
