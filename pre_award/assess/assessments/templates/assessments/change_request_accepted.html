@@ -7,18 +7,35 @@
 {% endblock header %}
 
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half-from-desktop">
-            {{ govukPanel({
-              "titleText": "Your change has been accepted"
-            }) }}
-            <h2 class="govuk-heading-l">What happens next</h2>
-            <p class="govuk-body">Your acceptance has been sent to the applicant by email.</p>
-            <p class="govuk-body">The applicant will no longer be able to make changes to this section.</p>
-            <p class="govuk-body">
-                The status for this criteria will now be marked as <strong>Reviewed</strong>.
-            </p>
-            <a href="{{ url_for('assessment_bp.application', application_id=application_id) }}" class="govuk-link">Back to application</a>
+    {% if state.workflow_status=='CHANGE_RECEIVED' %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half-from-desktop">
+                {{ govukPanel({
+                "titleText": "You have approved the applicant's changes"
+                }) }}
+                <h2 class="govuk-heading-l govuk-!-margin-top-8">What happens next</h2>
+                <p class="govuk-body">We&#39;ve emailed the applicant to let them know that you&#39;ve accepted their changes.</p>
+                <p class="govuk-body">The applicant will not be able to make any more changes to this section.</p>
+                <p class="govuk-body">
+                    The status for this criteria will now be marked as <strong>&#39;Complete&#39;</strong>.
+                </p>
+                <a href="{{ url_for('assessment_bp.application', application_id=application_id) }}" class="govuk-link">Back to application</a>
+            </div>
         </div>
-    </div>
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half-from-desktop">
+                {{ govukPanel({
+                "titleText": "Responses approved"
+                }) }}
+                <h2 class="govuk-heading-l govuk-!-margin-top-8">What happens next</h2>
+                <p class="govuk-body">We&#39;ve emailed the applicant to let them know that you&#39;ve approved their responses.</p>
+                <p class="govuk-body">If you need the applicant to make more changes, you can request another change.</p>
+                <p class="govuk-body">
+                    The status will now be marked as <strong>&#39;Complete&#39;</strong>.
+                </p>
+                <a href="{{ url_for('assessment_bp.application', application_id=application_id) }}" class="govuk-link">Back to application</a>
+            </div>
+        </div>
+    {% endif %}
 {% endblock content %}
