@@ -1,12 +1,18 @@
 {%- from "govuk_frontend_jinja/components/table/macro.html" import govukTable -%}
 
 {% macro question_above_href_answer(meta) %}
-
-    <h4 class="govuk-summary-list govuk-!-margin-bottom-4"><strong>{{ meta.question }}</strong></h4>
-    {% if meta.answer_href %}
-        <a class="govuk-link govuk-!-font-weight-regular" href="{{ meta.answer_href }}">{{ meta.answer }}</a>
-    {% else %}
-        <p class="govuk-body">{{ meta.answer }}</p>
-    {% endif %}
-
+    <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+            <dt>
+                <h4 class="govuk-summary-list govuk-!-margin-bottom-4"><strong>{{ meta.question }}</strong></h4>
+            </dt>
+            <dd class="govuk-body govuk-!-margin-left-0">
+                {% if meta.answer_href %}
+                    <a class="govuk-link govuk-!-font-weight-regular" href="{{ meta.answer_href }}">{{ meta.answer }}</a>
+                {% else %}
+                    <span class="govuk-body">{{ meta.answer }}</span>
+                {% endif %}
+            </dd>
+        </div>
+    </dl>
 {% endmacro %}

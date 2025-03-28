@@ -1,18 +1,23 @@
 {%- from "govuk_frontend_jinja/components/table/macro.html" import govukTable -%}
 
 {% macro question_above_href_answer_list(meta) %}
-
-    <h4 class="govuk-summary-list govuk-!-margin-bottom-4">
-        <strong>{{ meta.question }}</strong></h4>
-    {% for key, href in meta.key_to_url_dict.items() %}
-    <p class="govuk-body">
-        <a class="govuk-link govuk-!-font-weight-regular"
-           {# we split by / and render just the filename #}
-           href="{{ href }}">{{ key.rsplit("/", 1)[-1] }}</a>
-    </p>
-    {% endfor %}
-    {% if not meta.key_to_url_dict %}
-        <p class="govuk-body">Not provided.</p>
-    {% endif %}
-
+    <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+            <dt>
+                <h4 class="govuk-heading-s"><strong> {{ meta.question }} </strong></h4>
+            </dt>
+            <dd class="govuk-body govuk-!-margin-left-0">
+                {% for key, href in meta.key_to_url_dict.items() %}
+                    <p class="govuk-body">
+                        <a class="govuk-link govuk-!-font-weight-regular"
+                        {# we split by / and render just the filename #}
+                        href="{{ href }}">{{ key.rsplit("/", 1)[-1] }}</a>
+                    </p>
+                {% endfor %}
+                {% if not meta.key_to_url_dict %}
+                    <p class="govuk-body">Not provided.</p>
+                {% endif %}
+            </dd>
+        </div>
+    </dl>
 {% endmacro %}

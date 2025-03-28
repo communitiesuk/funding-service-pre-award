@@ -25,18 +25,19 @@ Your applications
 {% if migration_banner_enabled %}
     {{ migration_banner() }}
 {% endif %}
-    <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
-      {% if change_request %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                {{
-                    govukNotificationBanner({
-                        "text": "The assessor has requested changes to your application. Select 'Continue application' to make changes."
-                    })
-                }}
-            </div>
+    {% if change_request %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {{
+                govukNotificationBanner({
+                    "text": "The assessor has requested changes to your application. Select 'Continue application' to make changes."
+                })
+            }}
         </div>
-      {% endif %}
+    </div>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
 
     <p class="govuk-body">
         {% set application_count=display_data["total_applications_to_display"] %}
