@@ -47,7 +47,7 @@ class QuestionHeading(ApplicantResponseComponent):
 class QuestionAnswerPair(ApplicantResponseComponent, ABC):
     question: str
     answer: str | float
-    field_id: str
+    field_id: list[str]
     label: ResponseLabel | None = None
 
     @property
@@ -124,7 +124,7 @@ class MonetaryKeyValues(ApplicantResponseComponent):
     column_description: str
     question_answer_pairs: List[Tuple[str, float]]
     total: float
-    field_id: str
+    field_id: list[str]
     label: ResponseLabel | None = None
 
     key = "monetary_key_values"
@@ -155,7 +155,7 @@ class MonetaryKeyValues(ApplicantResponseComponent):
 class QuestionAboveHrefAnswerList(ApplicantResponseComponent):
     question: str
     key_to_url_dict: dict[str, str]
-    field_id: str
+    field_id: list[str]
     label: ResponseLabel | None = None
 
     key = "question_above_href_answer_list"
@@ -175,7 +175,7 @@ class NewAddAnotherTable(ApplicantResponseComponent):
     caption: str
     head: List[dict[str, str]]
     rows: List[dict[str, str]]
-    field_id: str
+    field_id: list[str]
     label: ResponseLabel | None = None
 
     key = "new_add_another_table"
@@ -326,8 +326,9 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
     elif presentation_type == "table":
         if not item.get("answer"):
             return BesideQuestionAnswerPair(
-                field_id=item["field_id"],
+                field_id=_flatten_field_ids(item["field_id"]),
                 question=item["question"],
+                label=_get_response_label(item),
                 answer=ANSWER_NOT_PROVIDED_DEFAULT,
             )
 
