@@ -1,7 +1,7 @@
 {%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
 
 
-{% macro application_feedback(application_id, sub_criteria, current_theme_id, approval_form,change_requests,unrequested_changes) %}
+{% macro application_feedback(application_id, sub_criteria, current_theme_id, approval_form, change_requests, unrequested_changes, has_flag_raised) %}
     <div class="govuk-!-margin-top-3">
         <div class="govuk-button-group">
             <form method="post" action="{{ url_for('assessment_bp.display_sub_criteria',
@@ -10,15 +10,22 @@
             {{ approval_form.csrf_token }}
             <input type="hidden" name="approve" value="1" />
             {% set approve_text = "Approve all changes" if change_requests else "Approve all responses" %}
-            {{ govukButton({
-            "text": approve_text
-            }) }}
-            {% set request_changes_url = url_for(
-                'assessment_bp.request_changes',
-                application_id=application_id,
-                sub_criteria_id=sub_criteria.id,
-                theme_id=current_theme_id
-            ) %}
+            {% if has_flag_raised %}
+                {{ govukButton({
+                    "text": approve_text,
+                     "disabled": true,
+                }) }}
+            {% else %}
+                {{ govukButton({
+                    "text": approve_text
+                }) }}
+                {% set request_changes_url = url_for(
+                    'assessment_bp.request_changes',
+                    application_id=application_id,
+                    sub_criteria_id=sub_criteria.id,
+                    theme_id=current_theme_id
+                ) %}
+            {% endif %}
             {% set request_change_text = "Request another change" if (unrequested_changes or change_requests) else "Request a change" %}
             {{ govukButton({
                 "text": request_change_text,
