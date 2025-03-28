@@ -403,6 +403,15 @@ class TestApplicatorsResponseComponentFactory:
             ),
             (
                 {
+                    "presentation_type": "table",
+                    "field_type": "multiInputField",
+                    "question": "foo",
+                    "field_id": "D",
+                    "requested_change": True,
+                }
+            ),
+            (
+                {
                     "presentation_type": "file",
                     "answer": "https://www.example.com/file.pdf",
                     "question": "foo",
