@@ -18,6 +18,8 @@
 
             {% if has_flag_raised %}
                 <p class="govuk-body">Awaiting applicant’s update</p>
+                <p class="govuk-body">You can accept all changes when the applicant sends their updated response.</p>
+                <p class="govuk-body">You can request more changes if required.</p>
             {% elif unrequested_changes %}
                 {{ govukWarningText({
                     "text": "The applicant has made unrequested changes",
