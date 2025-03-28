@@ -2,7 +2,7 @@
 
 
 {% macro application_feedback(application_id, sub_criteria, current_theme_id, approval_form,change_requests,unrequested_changes) %}
-    <div class="govuk-!-margin-top-3">
+    <div class="govuk-!-margin-top-4">
         <div class="govuk-button-group">
             <form method="post" action="{{ url_for('assessment_bp.display_sub_criteria',
                     application_id=application_id,

@@ -1,5 +1,5 @@
 {% macro assessment_subcriteria_accepted(score, user_info) %}
-    <div class="comment-group">
+    <div class="accepted-change-request-box govuk-!-margin-bottom-8">
         <p class="govuk-body">{{ score.justification }}</p><br>
         <p class="govuk-body-s">{{ user_info.full_name }} ({{ user_info.highest_role|all_caps_to_human }}) {{ user_info.email_address }}</p>
         <p class="govuk-body-s">{{ score.date_created|utc_to_bst }}</p>

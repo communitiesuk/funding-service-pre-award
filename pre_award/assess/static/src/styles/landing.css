@@ -105,7 +105,13 @@ button.left-margin-negative {
 
 .assessment-navigation {
     margin-top: 8px;
-    border-top: 3px #1d70b8 solid
+    border-top: 4px #1d70b8 solid
+}
+
+.assessment-reponses {
+    margin-top: 8px;
+    padding-top: 18px;
+    border-top: 4px #b1b4b6 solid
 }
 
 .assessment-navigation ul:first-of-type {
@@ -131,15 +137,25 @@ button.left-margin-negative {
 
 .response-title {
     margin-bottom: 0;
-    padding: 5px 5px 5px 20px;
+    padding: 12px 20px;
     background-color: #b1b4b6;
-    color: #0b0c0c
+    border: 2px #B1B4B6 solid;
+    border-bottom-width: 0;
+    color: #0b0c0c;
 }
 
 .template-answer {
-    border: 3px #b1b4b6 solid;
-    padding: 25px 25px 4px;
+    border: 2px #B1B4B6 solid;
+    padding: 20px;
     background-color: #fff
+}
+
+.template-answer .govuk-summary-list:last-of-type .govuk-summary-list__row {
+    border-bottom-width: 0;
+}
+
+.template-answer .govuk-summary-list {
+    margin-bottom: 20px;
 }
 
 .template-answer--dashboard-container {

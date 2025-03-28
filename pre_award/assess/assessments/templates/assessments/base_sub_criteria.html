@@ -26,43 +26,54 @@ Error:
 {% endblock header %}
 
 {% block content %}
-{% if comment_form.comment.errors %}
-<div class="govuk-error-summary" data-module="govuk-error-summary">
-  <div role="alert">
-    <h2 class="govuk-error-summary__title">
-      There is a problem
-    </h2>
-    <div class="govuk-error-summary__body">
-      <ul class="govuk-list govuk-error-summary__list">
-        <li>
-          <a href="#comments">Add a comment</a>
-        </li>
-      </ul>
+  {% if comment_form.comment.errors %}
+  <div class="govuk-error-summary" data-module="govuk-error-summary">
+    <div role="alert">
+      <h2 class="govuk-error-summary__title">
+        There is a problem
+      </h2>
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          <li>
+            <a href="#comments">Add a comment</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
-</div>
-{% endif %}
+  {% endif %}
 
-{% if is_flaggable and g.access_controller.has_any_assessor_role %}
-{{ flag_application_button(application_id) }}
-{% endif %}
+  {% if is_flaggable and g.access_controller.has_any_assessor_role %}
+    {{ flag_application_button(application_id) }}
+  {% endif %}
 
-{% if migration_banner_enabled %}
-{{ migration_banner() }}
-{% endif %}
+  {% if migration_banner_enabled %}
+    {{ migration_banner() }}
+  {% endif %}
 
-{{ sub_criteria_heading(sub_criteria)}}
-{% block sub_criteria_content %}{% endblock sub_criteria_content %}
+  {{ sub_criteria_heading(sub_criteria)}}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      {{ navbar(application_id, sub_criteria, current_theme.id, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <div class="assessment-reponses">
+        {% block sub_criteria_content %}{% endblock sub_criteria_content %}
 
-{{ comment(comments, application_id, False, display_comment_box, display_comment_edit_box, sub_criteria,
-    current_theme) }}
+        {{ comment(comments, application_id, False, display_comment_box, display_comment_edit_box, sub_criteria, current_theme) }}
 
-{% if display_comment_box == True %}
-  {{ comment_box(comment_form) }}
-{% endif %}
+        {% if display_comment_box == True %}
+          {{ comment_box(comment_form) }}
+        {% endif %}
 
-{% if display_comment_edit_box %}
-  {{ edit_comment_box(comments, comment_id, comment_form)}}
-{% endif %}
+        {% if display_comment_edit_box %}
+          {{ edit_comment_box(comments, comment_id, comment_form)}}
+        {% endif %}
 
+        {% if score %}
+          {% include "assess/components/sub_section_pagination.html" %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
 {% endblock content %}
