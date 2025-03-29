@@ -42,15 +42,17 @@
                                 "text": change_request_form.comment.errors.0
                             } if change_request_form.comment.errors
                         }) }}
-                        {{ govukButton({"text": "Save and continue", "type": "submit", "data-qa": "save-comment-button"}) }}
-                        {{ govukButton({
-                            "text": "Cancel",
-                            "classes": "govuk-button--secondary",
-                            "href": url_for(
-                            'assessment_bp.display_sub_criteria',
-                            application_id=application_id,
-                            sub_criteria_id=sub_criteria.id)
-                        }) }}
+                        <div class="govuk-button-group">
+                            {{ govukButton({"text": "Save and continue", "type": "submit", "data-qa": "save-comment-button"}) }}
+                            {{ govukButton({
+                                "text": "Cancel",
+                                "classes": "govuk-button--secondary",
+                                "href": url_for(
+                                'assessment_bp.display_sub_criteria',
+                                application_id=application_id,
+                                sub_criteria_id=sub_criteria.id)
+                            }) }}
+                        </div>
                     </div>
                 </div>
             </form>

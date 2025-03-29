@@ -28,6 +28,7 @@
                 No comments have been left yet.
             </div>
             {% else %}
+            <div class="govuk-!-margin-top-6">
             {% if scroll_comments %}
             <div class="scrollable-comments">
             {% endif %}
@@ -86,6 +87,7 @@
                 {% endif %}
                 {% endfor %}
             {% endfor %}
+            </div>
             {% endif %}
 
             {% if scroll_comments and comments %}

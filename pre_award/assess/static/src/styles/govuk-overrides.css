@@ -124,8 +124,9 @@
     text-transform: capitalize;
 }
 
-.govuk-tag.requested-change-tag, .govuk-tag.unrequested-change-tag {
+.govuk-tag {
     text-transform: None;
+    font-weight: normal;
 }
 
 .assigned-to {
@@ -238,10 +239,6 @@
     font-weight: 400;
     color: #505a5f;
     border: 1px solid #505a5f;
-  }
-
-  .govuk-tag--grey {
-    background-color: white;
   }
 
   .dluhc-body-empty {

@@ -20,7 +20,7 @@ Request changes –
 
 {% block content %}
 <div class="govuk-grid-row">
-    <div class="theme govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds">
         <div class="govuk-!-margin-bottom-8">
             <h2 class="govuk-heading-l govuk-!-margin-bottom-6 scoring-heading">What changes are needed?</h2>
             <p class="govuk-body">Select which responses you need more information about.</p>
@@ -53,7 +53,7 @@ Request changes –
         {% for choice in question_choices %}
             {% set reason_id = "reason_"~choice.value %}
             {% set textHtml %}
-                <p class="govuk-body"><span class="govuk-!-font-weight-bold">Applicant's answer:</span> {{ choice.response }}</p>
+                <p class="govuk-body"><span class="govuk-!-font-weight-bold">Applicant's answer:</span> {{ choice.response | striptags }}</p>
                 <div class="govuk-hint">What information do you need from the applicant?</div>
                 {{ govukTextarea({
                     "id": form[reason_id].id,

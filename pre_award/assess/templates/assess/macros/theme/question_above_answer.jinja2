@@ -1,6 +1,12 @@
 {% macro question_above_answer(meta) %}
-
-    <h4 class="govuk-heading-s"><strong> {{ meta.question }} </strong></h4>
-    <p class="govuk-body"> {{ "£{:,.2f}".format(meta.answer) if meta.answer is number else meta.answer }} </p>
-
+    <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+            <dt>
+                <h4 class="govuk-heading-s"><strong> {{ meta.question }} </strong></h4>
+            </dt>
+            <dd class="govuk-body govuk-!-margin-left-0">
+                <p class="govuk-body"> {{ "£{:,.2f}".format(meta.answer) if meta.answer is number else meta.answer }} </p>
+            </dd>
+        </div>
+    </dl>
 {% endmacro %}
