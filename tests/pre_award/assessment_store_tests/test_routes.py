@@ -846,7 +846,8 @@ def test_calculate_running_score_percentage_for_application(mocker, mock_get_sco
     )
     # Note this is a fractional percentage
     expected_score = ((3 * 0.3 + 5 * 0.6) / (5 * 2 * 0.3 + 5 * 1 * 0.6 + 5 * 1 * 0.1)) * 100
-    assert result == approx(expected_score), "The calculated score did not match the expected score"
+    rounded_expected_score = round(expected_score, 2)
+    assert result == approx(rounded_expected_score), "The calculated score did not match the expected score"
 
 
 def test_calculate_score_percentage_with_zero_weights(mocker, mock_get_scores, mock_get_scoring_system):
@@ -868,8 +869,36 @@ def test_calculate_score_percentage_with_zero_weights(mocker, mock_get_scores, m
     result = calculate_overall_score_percentage_for_application(
         application_id=app["application_id"], fund_id=app["fund_id"], round_id=app["round_id"]
     )
+
     expected_score = ((3 * 0.3 + 5 * 0.7) / (5 * 2 * 0.3 + 5 * 1 * 0.7)) * 100
-    assert result == approx(expected_score), "The calculated score did not match the expected score"
+    rounded_expected_score = round(expected_score, 2)
+    assert result == approx(rounded_expected_score), "The calculated score did not match the expected score"
+
+
+def test_calculate_score_percentage_round_half_up(mocker, mock_get_scores):
+    mock_config = mocker.patch("pre_award.assessment_store.api.routes.assessment_routes.Config")
+    mocker.patch(
+        "pre_award.assessment_store.api.routes.assessment_routes.get_scoring_system_for_round_id",
+        return_value={"maximum_score": 4},
+    )
+    mock_config.ASSESSMENT_MAPPING_CONFIG = {
+        f"{COF_FUND_ID}:{COF_ROUND_2_ID}": {
+            "scored_criteria": [
+                {
+                    "id": "criteria1",
+                    "weighting": 1,
+                    "sub_criteria": [{"id": "sub1"}],
+                },
+            ]
+        }
+    }
+    mock_get_scores.return_value = {"sub1": 0.405}
+    result = calculate_overall_score_percentage_for_application(
+        application_id=app["application_id"], fund_id=app["fund_id"], round_id=app["round_id"]
+    )
+    # We should get a raw score of 10.125 . In banker's rounding (default) this will be rounded to 10.12,
+    # in half-up rounding this should be 10.13.
+    assert result == approx(10.13), "The calculated score did not round the expected way"
 
 
 def test_with_no_sub_criteria_scores(mocker, mock_get_scores, mock_get_scoring_system):
