@@ -659,6 +659,7 @@ class TestAuthorisation:
         mock_get_associated_tags_for_application,
         mocker,
         mock_get_scoring_system,
+        mock_get_calculate_overall_score_percentage,
     ):
         token = create_valid_token(user_account)
         assess_test_client.set_cookie("fsd_user_token", token)
