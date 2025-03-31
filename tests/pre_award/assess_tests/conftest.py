@@ -849,6 +849,16 @@ def mock_get_tag_map_and_tag_options(mocker):
 
 
 @pytest.fixture(scope="function")
+def mock_get_calculate_overall_score_percentage(request, mocker):
+    mocker.patch(
+        "pre_award.assess.assessments.routes.calculate_overall_score_percentage_for_application",
+        return_value="0",
+    )
+
+    yield
+
+
+@pytest.fixture(scope="function")
 def mock_get_scoring_system(request, mocker):
     mocker.patch(
         "pre_award.assess.scoring.helpers.get_scoring_system",
