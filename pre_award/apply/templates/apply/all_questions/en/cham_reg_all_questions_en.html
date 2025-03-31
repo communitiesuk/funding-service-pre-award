@@ -1,0 +1,382 @@
+
+{% extends "apply/base.html" %}
+{%- from 'govuk_frontend_jinja/components/inset-text/macro.html' import govukInsetText -%}
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
+{% from "apply/partials/file-formats.html" import file_formats %}
+{% set pageHeading %}{% trans %}Full list of application questions{% endtrans %}{% endset %}
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{% trans %}{{ fund_title }}{% endtrans %}&nbsp;
+        {% trans %}{{ round_title }}{% endtrans %}
+        </span>
+        <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-m">
+    Table of contents
+  </h2>
+  <ol class="govuk-list govuk-list--number">
+    <li>
+      <a class="govuk-link" href="#lead-contact-information">
+        Lead contact information
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#organisation-information">
+        Organisation information
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#partner-organisations">
+        Partner organisations
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#declarations">
+        Declarations
+      </a>
+    </li>
+  </ol>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="lead-contact-information">
+    1. Lead contact information
+  </h2>
+  <h3 class="govuk-heading-m">
+    Lead contact information
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the lead contact for your project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Organisation
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Role
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="organisation-information">
+    2. Organisation information
+  </h2>
+  <h3 class="govuk-heading-m">
+    Organisation information
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This must match your full, registered legal organisation name.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Does your organisation have an alternative name?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This may be another name that your organisation uses in its day-to-day work.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the alternative name of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the alternative name of your organisation?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's address?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is your organisation's address?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Has your organisation been established for 2 years or more?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Has your organisation been established for 2 years or more?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the legal status of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the legal status of your organisation?
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Charitable incorporated organisation
+      </li>
+      <li>
+        Community benefit society
+      </li>
+      <li>
+        Company limited by guarantee
+      </li>
+      <li>
+        Other
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Specify the legal status of your organisation.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Specify the legal status of your organisation.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is the organisation a charity?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Is the organisation a charity?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Where is the charity registered?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Where is the charity registered?
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        England or Wales
+      </li>
+      <li>
+        Scotland
+      </li>
+      <li>
+        Northern Ireland
+      </li>
+      <li>
+        My organisation is an exempt charity
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your registered charity number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is the number registered with the
+    </p>
+    <p class="govuk-body">
+      Charity Commission for England and Wales (opens in new tab)
+    </p>
+    <p class="govuk-body">
+      .
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, 1004005
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the registered charity number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is the number registered with
+    </p>
+    <p class="govuk-body">
+      the Scottish Charity Regulator (opens in new tab)
+    </p>
+    <p class="govuk-body">
+      .
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, SC000022
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the registered charity number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is the number registered with
+    </p>
+    <p class="govuk-body">
+      the Charity Commission for Northern Ireland (opens in new tab)
+    </p>
+    <p class="govuk-body">
+      .
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, NIC00002
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Do you have a company registration number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Companies House may have sent this to you when you registered with them.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your company registration number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can
+    </p>
+    <p class="govuk-body">
+      search Companies House for your company registration number (opens in new tab)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      It is 8 characters. For example, 01234567 or AC012345.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is your organisation controlled by another entity?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Is your organisation controlled by another entity?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of the entity that controls your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the name of the entity that controls your organisation?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="partner-organisations">
+    3. Partner organisations
+  </h2>
+  <h3 class="govuk-heading-m">
+    Are you submitting a consortium bid for funding with one or more organisations?
+  </h3>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Are you submitting a joint bid for funding with one or more organisations?
+    </p>
+    <p class="govuk-body">
+      Consortium bids must have an accountable body.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Will you create a memorandum of understanding (MoU), or other legal agreement, between partner organisations?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Will you create a memorandum of understanding (MoU) between partner organisations?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Provide the names and details of the partner organisations involved in the consortium bid.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Provide the names and details of the partner organisations involved in the joint bid.
+    </p>
+    <p class="govuk-body">
+      Include the organisation name, address, company registration number and charity number (if applicable).
+    </p>
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="declarations">
+    4. Declarations
+  </h2>
+  <h3 class="govuk-heading-m">
+    Declarations
+  </h3>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      If successful for grant funding, as part of the programme, you declare that your organisation is willing to:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        participate in an evaluation of the project’s impact and be able to reliably capture the relevant data as set out in the prospectus
+      </li>
+      <li>
+        monitor and record instances of anti-Muslim hate that is consistent with any definitions adopted for this term, should the government choose to adopt a definition in future
+      </li>
+      <li>
+        share anonymised data with the Ministry of Housing, Communities and Local Government (MHCLG), the police and other public sector bodies, as required
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        I confirm that I have read and agree with the declarations
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Check your answers
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+</div>
+    </div>
+</div>
+{% endblock content %}
