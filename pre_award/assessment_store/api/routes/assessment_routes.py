@@ -1,4 +1,5 @@
 import copy
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Dict, List
 
 from flask import Response, current_app, request
@@ -68,8 +69,9 @@ def calculate_overall_score_percentage_for_application(application_id, fund_id, 
         sub_criteria_score * sub_criteria_to_criteria_weighting_map[sub_criteria]
         for sub_criteria, sub_criteria_score in get_sub_criteria_to_latest_score_map(application_id).items()
     )
-
-    return (application_weighted_score / highest_possible_weighted_score_for_round) * 100
+    score = (application_weighted_score / highest_possible_weighted_score_for_round) * 100
+    rounded_score = Decimal(score).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    return float(rounded_score)
 
 
 @assessment_assessment_bp.get("/application/<application_id>/metadata")
