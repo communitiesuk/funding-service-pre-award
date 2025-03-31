@@ -156,6 +156,12 @@ def ordered_themes(fund_round_short_name):
             "social_value",
             "declarations",
         ],
+        "CHAMREG": [
+            "lead_contact_information",
+            "organisation_information",
+            "partner_organisations",
+            "declarations",
+        ],
     }
 
     if fund_round_short_name in [

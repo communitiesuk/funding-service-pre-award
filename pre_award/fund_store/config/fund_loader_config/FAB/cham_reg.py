@@ -8,7 +8,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Lead contact information", "cy": ""},
             "tree_path": "1061.1.1.1",
-            "form_name_json": {"en": "lead-contact-information", "cy": ""},
+            "form_name_json": {"en": "cham-reg-lead-contact-information", "cy": ""},
         },
         {
             "section_name": {"en": "2. Organisation information", "cy": ""},
@@ -18,7 +18,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "2.1 Organisation information", "cy": ""},
             "tree_path": "1061.1.2.1",
-            "form_name_json": {"en": "organisation-information", "cy": ""},
+            "form_name_json": {"en": "cham-reg-organisation-information", "cy": ""},
         },
         {
             "section_name": {"en": "3. Partner organisations", "cy": ""},
@@ -28,7 +28,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "3.1 Partner organisations", "cy": ""},
             "tree_path": "1061.1.3.1",
-            "form_name_json": {"en": "partner-organisations", "cy": ""},
+            "form_name_json": {"en": "cham-reg-partner-organisations", "cy": ""},
         },
         {
             "section_name": {"en": "4. Declarations", "cy": ""},
@@ -38,7 +38,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "4.1 Declarations", "cy": ""},
             "tree_path": "1061.1.4.1",
-            "form_name_json": {"en": "declarations", "cy": ""},
+            "form_name_json": {"en": "cham-reg-declarations", "cy": ""},
         },
     ],
     "fund_config": {
@@ -85,7 +85,7 @@ LOADER_CONFIG = {
         },
         "guidance_url": "",
         "all_uploaded_documents_section_available": False,
-        "application_fields_download_available": False,
+        "application_fields_download_available": True,
         "display_logo_on_pdf_exports": False,
         "mark_as_complete_enabled": True,
         "is_expression_of_interest": False,

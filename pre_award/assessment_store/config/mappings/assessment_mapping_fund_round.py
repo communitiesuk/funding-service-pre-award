@@ -8,6 +8,9 @@ from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_scored_sect
 from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_unscored_sections import (
     unscored_sections as cfa_r1_unscored_sections,
 )
+from pre_award.assessment_store.config.mappings.cham_mapping_parts.reg_unscored_sections import (
+    unscored_sections as cham_reg_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.cof_mapping_parts.cof25_r1_scored_criteria import (
     scored_criteria as cof25_scored_criteria_r1,
 )
@@ -163,6 +166,9 @@ LPDF_ROUND_2_ID = "4b519371-aa10-4d9d-ae28-1ff1739af5d3"
 CFA_FUND_ID = "35418582-d784-4715-8445-3b1f34320e3c"
 CFA_ROUND_1_ID = "25cca4ba-9dbe-45c7-ae2d-d14cadcd8bc6"
 
+CHAM_FUND_ID = "ce1fae51-fbc9-4c0b-8d9f-79948633fab6"
+CHAM_ROUND_REG_ID = "b92044ee-17f0-4ed5-b4bb-d2ac04eaab54"
+
 # ASSESSMENT DISPLAY CONFIGURATION
 
 fund_round_to_assessment_mapping = {
@@ -290,6 +296,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "cfa_r1_assessment",
         "unscored_sections": cfa_r1_unscored_sections,
         "scored_criteria": cfa_r1_scored_sections,
+    },
+    f"{CHAM_FUND_ID}:{CHAM_ROUND_REG_ID}": {
+        "schema_id": "cham_reg_assessment",
+        "unscored_sections": cham_reg_unscored_sections,
+        "scored_criteria": [],
     },
 }
 
@@ -454,6 +465,12 @@ fund_round_data_key_mappings = {
         "location": None,
         "asset_type": None,
         "funding_one": "GAqCNS",
+        "funding_two": None,
+    },
+    "CHAMREG": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": None,
         "funding_two": None,
     },
 }
@@ -2078,6 +2095,76 @@ applicant_info_mapping = {
         "ASSESSOR_EXPORT": {},
         "OUTPUT_TRACKER": {},
     },
+    f"{CHAM_FUND_ID}:{CHAM_ROUND_REG_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "PSFujj": {"en": {"title": "Full name", "field_type": "textField"}},
+                "MUvyMa": {"en": {"title": "Organisation", "field_type": "textField"}},
+                "KrgFXy": {"en": {"title": "Role", "field_type": "textField"}},
+                "OPgJWR": {"en": {"title": "Email address", "field_type": "emailAddressField"}},
+                "MZMsaO": {"en": {"title": "Telephone number", "field_type": "telephoneNumberField"}},
+                "trYDMJ": {"en": {"title": "What is the name of your organisation?", "field_type": "textField"}},
+                "rocaEG": {
+                    "en": {"title": "Does your organisation have an alternative name?", "field_type": "yesNoField"}
+                },
+                "LAIyWE": {
+                    "en": {"title": "What is the alternative name of your organisation?", "field_type": "textField"}
+                },
+                "PsvKdR": {"en": {"title": "What is your organisation's address?", "field_type": "ukAddressField"}},
+                "wMrxig": {
+                    "en": {
+                        "title": "Has your organisation been established for 2 years or more?",
+                        "field_type": "yesNoField",
+                    }
+                },
+                "OgQBfd": {
+                    "en": {"title": "What is the legal status of your organisation?", "field_type": "radiosField"}
+                },
+                "COnttV": {"en": {"title": "Is the organisation a charity?", "field_type": "yesNoField"}},
+                "Lwzeak": {"en": {"title": "Where is the charity registered?", "field_type": "radiosField"}},
+                "fMjwht": {"en": {"title": "What is your registered charity number?", "field_type": "textField"}},
+                "IcYJJz": {
+                    "en": {"title": "Specify the legal status of your organisation.", "field_type": "textField"}
+                },
+                "EQjFsc": {"en": {"title": "Do you have a company registration number?", "field_type": "yesNoField"}},
+                "QCszWL": {"en": {"title": "What is your company registration number?", "field_type": "textField"}},
+                "iRkMMO": {
+                    "en": {"title": "Is your organisation controlled by another entity?", "field_type": "yesNoField"}
+                },
+                "bKDWQe": {
+                    "en": {
+                        "title": "What is the name of the entity that controls your organisation?",
+                        "field_type": "textField",
+                    }
+                },
+                "QBlbsv": {
+                    "en": {
+                        "title": "Are you submitting a joint bid for funding with one or more organisations?",
+                        "field_type": "yesNoField",
+                    }
+                },
+                "iJgTSg": {
+                    "en": {
+                        "title": "Will you create a memorandum of understanding (MoU) between partner organisations?",
+                        "field_type": "yesNoField",
+                    }
+                },
+                "mexLSQ": {
+                    "en": {
+                        "title": "Provide the names and details of the partner organisations involved in the joint bid.",
+                        "field_type": "freeTextField",
+                    }
+                },
+                "hPIzIm": {
+                    "en": {
+                        "title": "I confirm that I have read and agree with the declarations",
+                        "field_type": "checkboxesField",
+                    }
+                },
+            }
+        },
+        "OUTPUT_TRACKER": {},
+    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
@@ -2192,6 +2279,11 @@ fund_round_mapping_config = {
         "fund_id": CFA_FUND_ID,
         "round_id": CFA_ROUND_1_ID,
         "type_of_application": "CFA",
+    },
+    "CHAMREG": {
+        "fund_id": CHAM_FUND_ID,
+        "round_id": CHAM_ROUND_REG_ID,
+        "type_of_application": "CHAM",
     },
     "RANDOM_FUND_ROUND": {
         "fund_id": uuid4(),
