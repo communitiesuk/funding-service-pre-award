@@ -74,7 +74,7 @@ LOADER_CONFIG = {
         "privacy_notice": "https://www.gov.uk/government/publications/confronting-hate-against-muslims-fund-prospectus/confronting-hate-against-muslims-privacy-notice",
         "contact_email": "chambid@communities.gov.uk",
         "instructions_json": {
-            "en": "You must complete this registration form to apply for the Confronting Hate Against Muslims Fund. Read the fund's <a href='https://www.gov.uk/government/publications/confronting-hate-against-muslims-fund-prospectus'>prospectus</a> before you start.",
+            "en": "You must complete this registration form to apply for the Confronting Hate Against Muslims Fund.",
             "cy": None,
         },
         "feedback_link": "",
