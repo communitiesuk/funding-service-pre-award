@@ -52,7 +52,7 @@ dependencies = [
     "slugify==0.0.1",
     "sqlalchemy-json==0.7.0",
     "sqlalchemy-utils==0.41.2",
-    "sqlalchemy[mypy]==2.0.39",
+    "sqlalchemy[mypy]==2.0.40",
     "xhtml2pdf==0.2.17",
     "notifications-python-client==10.0.1",
     "funding-service-design-utils[toggles]==6.1.0",
