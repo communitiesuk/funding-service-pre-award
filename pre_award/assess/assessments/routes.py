@@ -1264,6 +1264,9 @@ def display_sub_criteria(  # noqa: C901
         )
 
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
+    has_document_upload = any(
+        theme_answer["field_type"] == "clientSideFileUploadField" for theme_answer in theme_answers_response
+    )
 
     # If the sub-criteria has been accepted, no need to label changed answers
     if score:
@@ -1297,6 +1300,7 @@ def display_sub_criteria(  # noqa: C901
             "assessments/uncompeted_sub_criteria.html",
             unrequested_changes=any(theme.get("unrequested_change") for theme in theme_answers_response),
             change_requests=sub_criteria_change_requests,
+            has_document_upload=has_document_upload,
             answers_meta=answers_meta,
             questions={question["field_id"]: question["question"] for question in theme_answers_response},
             state=state,
