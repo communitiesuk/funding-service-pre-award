@@ -43,6 +43,11 @@
                 If you need more information from the applicant about one of these responses or want to ask them to clarify something, you can 'Request a change'.
             </p>
         {% endif %}
+        {% if has_document_upload %}
+            <p class="govuk-body">
+                Check any uploaded documents again before approving changes.
+            </p>
+        {% endif %}
     </div>
 {% endif %}
 
