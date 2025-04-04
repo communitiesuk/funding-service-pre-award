@@ -162,6 +162,14 @@ def ordered_themes(fund_round_short_name):
             "partner_organisations",
             "declarations",
         ],
+        "CHAMAPPLY": [
+            "registration_details",
+            "upload_your_business_plan",
+            "organisation_information",
+            "programme_delivery",
+            "costs_and_value_for_money",
+            "risks_and_reporting_to_mhclg",
+        ],
     }
 
     if fund_round_short_name in [
