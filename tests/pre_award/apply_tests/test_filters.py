@@ -97,4 +97,4 @@ def test_kebab_case_to_human(input_string, expected):
 
 
 def test_status_translation(app):
-    assert filters.status_translation("NOT_STARTED") == "Not Started"
+    assert filters.status_translation("NOT_STARTED") == "Not started"

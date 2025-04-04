@@ -228,7 +228,8 @@ def test_dashboard_route(apply_test_client, mocker, mock_login):
 
     soup = BeautifulSoup(response.data, "html.parser")
 
-    assert len(soup.find_all("strong", class_="in-progress-tag-new")) == 2
+    assert len(soup.find_all("strong", class_="in-progress-tag-new")) == 1
+    assert len(soup.find_all("strong", class_="govuk-tag--yellow")) == 1
     assert len(soup.find_all("strong", class_="complete-tag")) == 2
     assert len(soup.find_all("a", string="Continue application")) == 2
     assert (

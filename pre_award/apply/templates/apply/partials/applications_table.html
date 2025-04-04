@@ -23,7 +23,7 @@
             {% elif application.status == 'CHANGE_REQUESTED' %}
                 govuk-tag--orange
             {% elif application.status == 'READY_TO_SUBMIT' %}
-                in-progress-tag-new
+                govuk-tag--yellow
             {% endif %}
         {% endif %}
         {% endset %}
