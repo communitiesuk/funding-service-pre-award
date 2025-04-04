@@ -4,15 +4,15 @@ scored_sections = [
     {
         "id": "your_skills_and_experience_applicable_experience",
         "weighting": 0.06,
-        "name": "Your skills and experience - Applicable experience",
+        "name": "Your skills and experience - Previous experience",
         "sub_criteria": [
             {
                 "id": "applicable_experience",
-                "name": "Applicable experience",
+                "name": "Previous experience",
                 "themes": [
                     {
                         "id": "applicable_experience",
-                        "name": "Applicable experience",
+                        "name": "Previous experience",
                         "answers": [
                             {
                                 "field_id": "pIOZGN",
@@ -56,15 +56,15 @@ scored_sections = [
     {
         "id": "your_skills_and_experience_relevant_exprience",
         "weighting": 0.05,
-        "name": "Your skills and experience - Relevant exprience",
+        "name": "Your skills and experience - Experience with local authorities, Devolved Administrations and Strategic Migration Partners",
         "sub_criteria": [
             {
                 "id": "relevant_exprience",
-                "name": "Relevant exprience",
+                "name": "Experience with local authorities, Devolved Administrations and Strategic Migration Partners",
                 "themes": [
                     {
                         "id": "relevant_exprience",
-                        "name": "Relevant exprience",
+                        "name": "Experience with local authorities, Devolved Administrations and Strategic Migration Partners",
                         "answers": [
                             {
                                 "field_id": "SsbjgJ",
@@ -82,15 +82,15 @@ scored_sections = [
     {
         "id": "your_skills_and_experience_past_engagement",
         "weighting": 0.02,
-        "name": "Your skills and experience - Past engagement",
+        "name": "Your skills and experience - Strategic Migration Partners engagement",
         "sub_criteria": [
             {
                 "id": "past_engagement",
-                "name": "Past engagement",
+                "name": "Strategic Migration Partners engagement",
                 "themes": [
                     {
                         "id": "past_engagement",
-                        "name": "Past engagement",
+                        "name": "Strategic Migration Partners engagement",
                         "answers": [
                             {
                                 "field_id": "BarOeX",
@@ -108,15 +108,15 @@ scored_sections = [
     {
         "id": "your_skills_and_experience_resources",
         "weighting": 0.06,
-        "name": "Your skills and experience - Resources",
+        "name": "Your skills and experience - Project resources",
         "sub_criteria": [
             {
                 "id": "resources",
-                "name": "Resources",
+                "name": "Project resources",
                 "themes": [
                     {
                         "id": "resources",
-                        "name": "Resources",
+                        "name": "Project resources",
                         "answers": [
                             {
                                 "field_id": "caAJpc",
@@ -134,15 +134,15 @@ scored_sections = [
     {
         "id": "your_project_work_and_build_relationships",
         "weighting": 0.02,
-        "name": "Your project - Work & Build Relationships",
+        "name": "Your project - Working with devolved administrations, local authorities and Strategic Migration Partners",
         "sub_criteria": [
             {
                 "id": "work_and_build_relationships",
-                "name": "Work & Build Relationships",
+                "name": "Working with devolved administrations, local authorities and Strategic Migration Partners",
                 "themes": [
                     {
                         "id": "work_and_build_relationships",
-                        "name": "Work & Build Relationships",
+                        "name": "Working with devolved administrations, local authorities and Strategic Migration Partners",
                         "answers": [
                             {
                                 "field_id": "lWEpUn",
@@ -160,15 +160,15 @@ scored_sections = [
     {
         "id": "your_project_recruitment",
         "weighting": 0.02,
-        "name": "Your project - Recruitment",
+        "name": "Your project - Recruiting and training Sponsor Groups",
         "sub_criteria": [
             {
                 "id": "recruitment",
-                "name": "Recruitment",
+                "name": "Recruiting and training Sponsor Groups",
                 "themes": [
                     {
                         "id": "recruitment",
-                        "name": "Recruitment",
+                        "name": "Recruiting and training Sponsor Groups",
                         "answers": [
                             {
                                 "field_id": "LFWPdc",
@@ -186,15 +186,15 @@ scored_sections = [
     {
         "id": "your_project_accomodation",
         "weighting": 0.04,
-        "name": "Your project - Accomodation",
+        "name": "Your project - Sourcing accommodation and housing legislation",
         "sub_criteria": [
             {
                 "id": "accomodation",
-                "name": "Accomodation",
+                "name": "Sourcing accommodation and housing legislation",
                 "themes": [
                     {
                         "id": "accomodation",
-                        "name": "Accomodation",
+                        "name": "Sourcing accommodation and housing legislation",
                         "answers": [
                             {
                                 "field_id": "TXFOoA",
@@ -264,15 +264,15 @@ scored_sections = [
     {
         "id": "your_project_alternative_proposals",
         "weighting": 0.03,
-        "name": "Your project - Alternative proposals",
+        "name": "Your project - Alternative proposals for matching households",
         "sub_criteria": [
             {
                 "id": "alternative_proposals",
-                "name": "Alternative proposals",
+                "name": "Alternative proposals for matching households",
                 "themes": [
                     {
                         "id": "alternative_proposals",
-                        "name": "Alternative proposals",
+                        "name": "Alternative proposals for matching households",
                         "answers": [
                             {
                                 "field_id": "lIaJIh",
@@ -297,15 +297,15 @@ scored_sections = [
     {
         "id": "your_project_proposed_cost_monitoring",
         "weighting": 0.02,
-        "name": "Your project - Cost monitoring",
+        "name": "Your project - Monitoring costs",
         "sub_criteria": [
             {
                 "id": "cost_monitoring",
-                "name": "Cost monitoring",
+                "name": "Monitoring costs",
                 "themes": [
                     {
                         "id": "cost_monitoring",
-                        "name": "Cost monitoring",
+                        "name": "Monitoring costs",
                         "answers": [
                             {
                                 "field_id": "rucZXo",
@@ -323,15 +323,15 @@ scored_sections = [
     {
         "id": "your_project_proposed_underperformance",
         "weighting": 0.03,
-        "name": "Your project - Underperformance (Missing)",
+        "name": "Your project - Performance against delivery plan",
         "sub_criteria": [
             {
                 "id": "underperformance",
-                "name": "Underperformance",
+                "name": "Performance against delivery plan",
                 "themes": [
                     {
                         "id": "underperformance",
-                        "name": "Underperformance",
+                        "name": "Performance against delivery plan",
                         "answers": [
                             {
                                 "field_id": "ODXhvT",
@@ -349,15 +349,15 @@ scored_sections = [
     {
         "id": "your_project_proposed_contingency_measures",
         "weighting": 0.02,
-        "name": "Your project - Contingency measures",
+        "name": "Your project - Managing delivery issues",
         "sub_criteria": [
             {
                 "id": "contingency_measures",
-                "name": "Contingency measures",
+                "name": "Managing delivery issues",
                 "themes": [
                     {
                         "id": "contingency_measures",
-                        "name": "Contingency measures",
+                        "name": "Managing delivery issues",
                         "answers": [
                             {
                                 "field_id": "KAIPNG",
@@ -375,15 +375,15 @@ scored_sections = [
     {
         "id": "your_project_proposed_ensure_success",
         "weighting": 0.03,
-        "name": "Your project - Ensure success",
+        "name": "Your project - Community integration",
         "sub_criteria": [
             {
                 "id": "ensure_success",
-                "name": "Ensure success",
+                "name": "Community integration",
                 "themes": [
                     {
                         "id": "ensure_success",
-                        "name": "Ensure success",
+                        "name": "Community integration",
                         "answers": [
                             {
                                 "field_id": "xMwPbL",
@@ -401,15 +401,15 @@ scored_sections = [
     {
         "id": "risk_and_deliverability_governance_and_management_structure",
         "weighting": 0.04,
-        "name": "Risk and deliverability - Governance & Management structure",
+        "name": "Risk and deliverability - Governance and management structure",
         "sub_criteria": [
             {
                 "id": "governance_and_management_structure",
-                "name": "Governance & Management structure",
+                "name": "Governance and management structure",
                 "themes": [
                     {
                         "id": "governance_and_management_structure",
-                        "name": "Governance & Management structure",
+                        "name": "Governance and management structure",
                         "answers": [
                             {
                                 "field_id": "MqWUHI",
@@ -427,15 +427,15 @@ scored_sections = [
     {
         "id": "risk_and_deliverability_governance_processes_and_procedures",
         "weighting": 0.04,
-        "name": "Risk and deliverability - Governance processes and Procedures",
+        "name": "Risk and deliverability - Governance processes and procedures",
         "sub_criteria": [
             {
                 "id": "governance_processes_and_procedures",
-                "name": "Governance processes & Procedures",
+                "name": "Governance processes and procedures",
                 "themes": [
                     {
                         "id": "governance_processes_and_procedures",
-                        "name": "Governance processes & Procedures",
+                        "name": "Governance processes and procedures",
                         "answers": [
                             {
                                 "field_id": "ArKxtQ",
@@ -453,15 +453,15 @@ scored_sections = [
     {
         "id": "risk_and_deliverability_monitor_and_manage_delivery",
         "weighting": 0.02,
-        "name": "Risk and deliverability - Monitor & Manage delivery",
+        "name": "Risk and deliverability - Monitoring and managing delivery",
         "sub_criteria": [
             {
                 "id": "monitor_and_manage_delivery",
-                "name": "Monitor & Manage delivery",
+                "name": "Monitoring and managing delivery",
                 "themes": [
                     {
                         "id": "monitor_and_manage_delivery",
-                        "name": "Monitor & Manage delivery",
+                        "name": "Monitoring and managing delivery",
                         "answers": [
                             {
                                 "field_id": "xrcpRz",
@@ -479,15 +479,15 @@ scored_sections = [
     {
         "id": "risk_and_deliverability_issues_and_risks",
         "weighting": 0.02,
-        "name": "Risk and deliverability - Issues & Risks",
+        "name": "Risk and deliverability - Managing issues",
         "sub_criteria": [
             {
                 "id": "issues_and_risks",
-                "name": "Issues & Risks",
+                "name": "Managing issues",
                 "themes": [
                     {
                         "id": "issues_and_risks",
-                        "name": "Issues & Risks",
+                        "name": "Managing issues",
                         "answers": [
                             {
                                 "field_id": "YyJtli",
@@ -505,15 +505,15 @@ scored_sections = [
     {
         "id": "risk_and_deliverability_quality_check",
         "weighting": 0.04,
-        "name": "Risk and deliverability - Quality check",
+        "name": "Risk and deliverability - Checking accommodation, safeguarding and welfare",
         "sub_criteria": [
             {
                 "id": "quality_check",
-                "name": "Quality check",
+                "name": "Checking accommodation, safeguarding and welfare",
                 "themes": [
                     {
                         "id": "quality_check",
-                        "name": "Quality check",
+                        "name": "Checking accommodation, safeguarding and welfare",
                         "answers": [
                             {
                                 "field_id": "cUrMJq",
@@ -531,15 +531,15 @@ scored_sections = [
     {
         "id": "risk_and_deliverability_ensure_funding",
         "weighting": 0.04,
-        "name": "Risk and deliverability - Ensure funding",
+        "name": "Risk and deliverability - Using awarded funding",
         "sub_criteria": [
             {
                 "id": "ensure_funding",
-                "name": "Ensure funding",
+                "name": "Using awarded funding",
                 "themes": [
                     {
                         "id": "ensure_funding",
-                        "name": "Ensure funding",
+                        "name": "Using awarded funding",
                         "answers": [
                             {
                                 "field_id": "WwCgTH",
@@ -557,15 +557,15 @@ scored_sections = [
     {
         "id": "risk_and_deliverability_payment_process",
         "weighting": 0.05,
-        "name": "Risk and deliverability - Payment process",
+        "name": "Risk and deliverability - Sponsor Group payments",
         "sub_criteria": [
             {
                 "id": "payment_process",
-                "name": "Payment process",
+                "name": "Sponsor Group payments",
                 "themes": [
                     {
                         "id": "payment_process",
-                        "name": "Payment process",
+                        "name": "Sponsor Group payments",
                         "answers": [
                             {
                                 "field_id": "Pnrxwa",
@@ -583,15 +583,15 @@ scored_sections = [
     {
         "id": "value_for_money_funding_housing",
         "weighting": 0.07,
-        "name": "Value for money - Funding & Housing",
+        "name": "Value for money - Funding and households",
         "sub_criteria": [
             {
                 "id": "funding_housing",
-                "name": "Funding & Housing",
+                "name": "Funding and households",
                 "themes": [
                     {
                         "id": "funding_housing",
-                        "name": "Funding & Housing",
+                        "name": "Funding and households",
                         "answers": [
                             {
                                 "field_id": "GAqCNS",
@@ -612,7 +612,7 @@ scored_sections = [
                                 "form_name": "cfa-r1-value-for-money",
                                 "field_type": "clientSideFileUploadField",
                                 "presentation_type": "s3bucketPath",
-                                "question": "Upload your delivery plan",
+                                "question": "Upload your funding spreadsheet for 125 households",
                                 "path": "upload-your-funding-spreadsheet-for-125-households",
                             },
                             {
@@ -691,15 +691,15 @@ scored_sections = [
     {
         "id": "value_for_money_fundraise_details",
         "weighting": 0.00,
-        "name": "Value for money - Fundraise details",
+        "name": "Value for money - Sponsor Group fundraising",
         "sub_criteria": [
             {
                 "id": "fundraise_details",
-                "name": "Fundraise details",
+                "name": "Sponsor Group fundraising",
                 "themes": [
                     {
                         "id": "fundraise_details",
-                        "name": "Fundraise details",
+                        "name": "Sponsor Group fundraising",
                         "answers": [
                             {
                                 "field_id": "ZoZCpJ",
