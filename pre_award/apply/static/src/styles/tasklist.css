@@ -149,6 +149,7 @@ ul li.no-bullet-point {
 .govuk-tag.incomplete-tag-new,
 .govuk-tag.in-progress-tag-new,
 .govuk-tag.not-started-tag,
+.govuk-tag.change-requested-tag,
 .govuk-tag.complete-tag {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -174,6 +175,11 @@ ul li.no-bullet-point {
 .govuk-tag.complete-tag {
   background-color: white;
   color: #0b0c0c;
+}
+
+.govuk-tag.change-requested-tag {
+  background-color: #fcd6c3;
+  color: #6e3619;;
 }
 
 .signout {
