@@ -1,0 +1,702 @@
+
+{% extends "apply/base.html" %}
+{%- from 'govuk_frontend_jinja/components/inset-text/macro.html' import govukInsetText -%}
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
+{% from "apply/partials/file-formats.html" import file_formats %}
+{% set pageHeading %}{% trans %}Full list of application questions{% endtrans %}{% endset %}
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{% trans %}{{ fund_title }}{% endtrans %}&nbsp;
+        {% trans %}{{ round_title }}{% endtrans %}
+        </span>
+        <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-m">
+    Table of contents
+  </h2>
+  <ol class="govuk-list govuk-list--number">
+    <li>
+      <a class="govuk-link" href="#organisation-details">
+        Organisation details
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#business-plan">
+        Business plan
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#skills-and-experience">
+        Skills and experience
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#programme-delivery">
+        Programme delivery
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#costs">
+        Costs
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#risks-and-reporting-to-mhclg">
+        Risks and reporting to MHCLG
+      </a>
+    </li>
+  </ol>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="organisation-details">
+    1. Organisation details
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Enter your registration reference number.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This should have been emailed to you after you registered to apply for the grant.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the lead contact?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Organisation
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Role
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Contact number
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This must match your full, registered legal organisation name.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Does your organisation have an alternative name?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This may be another name that your organisation uses in its day-to-day work.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the alternative name of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the alternative name of your organisation?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's address?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is your organisation's address?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Has your organisation been established for 2 years or more?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Has your organisation been established for 2 years or more?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the legal status of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the legal status of your organisation?
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Charitable incorporated organisation
+      </li>
+      <li>
+        Community benefit society
+      </li>
+      <li>
+        Company limited by guarantee
+      </li>
+      <li>
+        Other
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Specify the legal status of your organisation.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Specify the legal status of your organisation.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is the organisation a charity?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Is the organisation a charity?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Where is the charity registered?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Where is the charity registered?
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        England or Wales
+      </li>
+      <li>
+        Scotland
+      </li>
+      <li>
+        Northern Ireland
+      </li>
+      <li>
+        My organisation is an exempt charity
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your registered charity number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is the number registered with the
+    </p>
+    <p class="govuk-body">
+      Charity Commission for England and Wales (opens in new tab)
+    </p>
+    <p class="govuk-body">
+      .
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, 1004005
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the registered charity number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is the number registered with
+    </p>
+    <p class="govuk-body">
+      the Scottish Charity Regulator (opens in new tab)
+    </p>
+    <p class="govuk-body">
+      .
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, SC000022
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the registered charity number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is the number registered with
+    </p>
+    <p class="govuk-body">
+      the Charity Commission for Northern Ireland (opens in new tab)
+    </p>
+    <p class="govuk-body">
+      .
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, NIC00002
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Do you have a company registration number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Companies House may have sent this to you when you registered with them.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your company registration number?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can
+    </p>
+    <p class="govuk-body">
+      search Companies House for your company registration number (opens in new tab)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      It is 8 characters. For example, 01234567 or AC012345.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is your organisation controlled by another entity?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Is your organisation controlled by another entity?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of the entity that controls your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the name of the entity that controls your organisation?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="business-plan">
+    2. Business plan
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload your business plan.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This will be assessed alongside your answers provided in the other sections of the application form. The
+    </p>
+    <p class="govuk-body">
+      business plan checklist
+    </p>
+    <p class="govuk-body">
+      contains more guidance on what needs to be included.
+    </p>
+    <p class="govuk-body">
+      Your business plan can be used to expand on other questions in this form. Reference the corresponding page number in your answers where possible to highlight any areas you have expanded on a question.
+    </p>
+    <p class="govuk-body">
+      Tables should only be included in the business plan, not in the answers to this form.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      PDF files only, maximum file size: 10MB
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="skills-and-experience">
+    3. Skills and experience
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Provide a summary of your organisation.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include details about its mission statement, goals and governance arrangements.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will the skills and experience of the organisation and its staff lead to the success of the project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe your current working relationship with government and other public sector organisations.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include your experience of delivering projects for, and working with, central government and other public sector organisations.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe how you plan to gain and develop the trust of diverse Muslim communities throughout England.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include existing or planned relationships with Muslim organisations, places of worship and faith institutions.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Declaration
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      To be eligible for grant funding, you must declare that you are not aware of any reason that grant funding your organisation would bring the government into any disrepute.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        I confirm I have read and agree with the declaration above
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="programme-delivery">
+    4. Programme delivery
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This section contains questions 5 to 12. We will ask you about:
+    </p>
+  </div>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        activities proposed
+      </li>
+      <li>
+        programme for mobilisation and delivery
+      </li>
+      <li>
+        approach to partner and stakeholder management
+      </li>
+      <li>
+        facilitating and nurturing stakeholder relationships
+      </li>
+      <li>
+        complainant journey
+      </li>
+      <li>
+        key success factors – outputs and outcomes
+      </li>
+      <li>
+        technical proposal
+      </li>
+      <li>
+        capturing and verifying data
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include information about your organisation and any consortium members.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe the activities you are proposing for the project and why.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include details on:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        the marketing approach
+      </li>
+      <li>
+        key milestones for delivery
+      </li>
+      <li>
+        the use of varied and digital platforms
+      </li>
+      <li>
+        any staffing requirements
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 1000 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Outline the key milestones for the implementation of your project.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This should include principal activities and milestones, with a particular focus on demonstrating the time needed to mobilise and bring the services into operation.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you establish a network of local and national partners, and use these to help deliver outcomes?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, partners may help to promote the service, build confidence, encourage engagement, support complainants, provide data and insight.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you build effective and trusted working relationships with the government, other public bodies, and other faith and belief groups?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        a summary of previous work undertaken and the outcomes
+      </li>
+      <li>
+        evidence of collaborative working with stakeholders
+      </li>
+      <li>
+        key organisations you intend to form strong working relationships with
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe the anticipated experience for an individual wishing to report an anti-Muslim hate incident and the support they might expect to receive.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        detail of how complainants will be able to submit reports
+      </li>
+      <li>
+        how reports will be verified
+      </li>
+      <li>
+        what support will be made available to victims
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe your proposed key performance indicators and detail the expected outcomes of your programme.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This includes:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        the process you have for measuring success
+      </li>
+      <li>
+        how you would manage and improve the service to ensure that it remains effective
+      </li>
+      <li>
+        how the government would expect to be able to monitor and evaluate your progress
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What technical systems need to be adopted for the reporting service and how will they be managed?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Describe the systems you will implement and how data will be treated securely and in accordance with the data protection acts.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe the type of data you will collect from complainants, and how it will be collected and verified.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="costs">
+    5. Costs
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your total expected costs for the next 3 financial years?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Your business plan should include a detailed 3-year budget, including assumptions and calculations used to assess the budget lines of expenditure.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (2025/2026 financial year)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (2026/2027 financial year)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (2027/2028 financial year)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Explain how the expected project outcomes will provide value for money and justify the investment.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="risks-and-reporting-to-mhclg">
+    6. Risks and reporting to MHCLG
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe how you will protect against fraud and other key risks.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Your business plan should include a full risk assessment.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe how you will report to the Ministry of Housing, Communities and Local Government (MHCLG).
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        what data you would provide
+      </li>
+      <li>
+        how you will analyse, interpret and present data and recommendations for action
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+</div>
+    </div>
+</div>
+{% endblock content %}
