@@ -10,7 +10,7 @@ from flask_babel import Babel, gettext, pgettext
 from flask_compress import Compress
 from flipper import FeatureFlagClient, MemoryFeatureFlagStore
 
-from common.utils.filters import datetime_format_respect_lang
+from common.utils.filters import datetime_format_respect_lang, to_bst
 
 try:
     from flask_debugtoolbar import DebugToolbarExtension
@@ -186,6 +186,7 @@ def create_app() -> Flask:  # noqa: C901
 
     # new monolith filters
     flask_app.jinja_env.filters["datetime_format_respect_lang"] = datetime_format_respect_lang
+    flask_app.jinja_env.filters["to_bst"] = to_bst
 
     # This section is needed for url_for("foo", _external=True) to
     # automatically generate http scheme when this sample is
