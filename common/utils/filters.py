@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pytz
 from flask_babel import format_datetime, gettext
 
 
@@ -38,3 +39,13 @@ def datetime_format_respect_lang(value: datetime) -> str:
     formatted_date += gettext("at")
     formatted_date += " " + time_str
     return formatted_date
+
+
+def to_bst(value: datetime) -> datetime:
+    """Converts a datetime object to British Summer Time (BST)."""
+    if value:
+        utc = pytz.utc
+        bst = pytz.timezone("Europe/London")
+        value = utc.localize(value) if value.tzinfo is None else value
+        return value.astimezone(bst)
+    return value
