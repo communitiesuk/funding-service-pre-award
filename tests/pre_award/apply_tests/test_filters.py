@@ -1,8 +1,11 @@
 import datetime
+from datetime import datetime as dt
 
 import pytest
+from pytz import timezone
 
 import pre_award.apply.filters as filters
+from common.utils.filters import to_bst
 
 
 def test_date_format_short_month(app):
@@ -31,6 +34,32 @@ def test_datetime_format_short_month(app):
 def test_datetime_format(input_date, expected, app):
     with app.test_request_context():
         assert filters.datetime_format(input_date) == expected
+
+
+@pytest.mark.parametrize(
+    "input_date, expected",
+    [
+        (
+            dt(2025, 1, 1, 0, 0, 0),
+            timezone("Europe/London").localize(dt(2025, 1, 1, 0, 0, 0)),
+        ),  # Standard time (when UTC == BST)
+        (
+            dt(2025, 12, 25, 18, 30, 0),
+            timezone("Europe/London").localize(dt(2025, 12, 25, 18, 30, 0)),
+        ),  # Standard time (when UTC == BST
+        (
+            dt(2025, 6, 1, 12, 0, 0),
+            timezone("Europe/London").localize(dt(2025, 6, 1, 13, 0, 0)),
+        ),  # When BST is one hour ahead of UTC
+        (
+            dt(2025, 9, 30, 1, 25, 0),
+            timezone("Europe/London").localize(dt(2025, 9, 30, 2, 25, 0)),
+        ),  # When BST is one hour ahead of UTC
+        (None, None),
+    ],
+)
+def test_to_bst(input_date, expected):
+    assert to_bst(input_date) == expected
 
 
 @pytest.mark.parametrize(
