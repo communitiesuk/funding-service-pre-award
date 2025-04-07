@@ -18,7 +18,7 @@
       {{ base_title }}
     </h1>
     <p class="govuk-heading-s">
-      {% trans %}Submission deadline:{% endtrans %} <span class="govuk-body">{{ submission_deadline|datetime_format }}</span>
+      {% trans %}Submission deadline:{% endtrans %} <span class="govuk-body">{{ submission_deadline|string_to_datetime|to_bst|datetime_format_respect_lang }}</span>
     </p>
 
     <div data-qa="claim_magic_link">
