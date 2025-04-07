@@ -194,7 +194,11 @@
                 {{ criteria_element(criteria, name_classes, application_id, max_possible_sub_criteria_score) }}
             {% endfor %}
         {% endif %}
+        {% if not is_uncompeted_flow(fund) and percentage_score %}
+        <p class="govuk-body-l"><strong>Overall score:</strong> {{percentage_score}}%</p>
+        {% endif %}
     </div>
+
 
 </div>
 {% if g.access_controller.is_assessor %}

@@ -1,4 +1,5 @@
 import copy
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Dict, List
 
 from flask import Response, current_app, request
@@ -37,18 +38,18 @@ from pre_award.config import Config
 assessment_assessment_bp = Blueprint("assessment_assessment_bp", __name__)
 
 
-def calculate_overall_score_percentage_for_application(application):
-    scoring_system = get_scoring_system_for_round_id(application["round_id"])
+def calculate_overall_score_percentage_for_application(application_id, fund_id, round_id):
+    scoring_system = get_scoring_system_for_round_id(round_id)
 
     # Deep copy the assessment mapping configuration for the specific fund and round
-    mapping = copy.deepcopy(Config.ASSESSMENT_MAPPING_CONFIG[f"{application['fund_id']}:{application['round_id']}"])
+    mapping = copy.deepcopy(Config.ASSESSMENT_MAPPING_CONFIG[f"{fund_id}:{round_id}"])
     sub_criteria_to_criteria_weighting_map = {}
     highest_possible_weighted_score_for_round = 0
     if mapping["scored_criteria"] == []:
         # We have no scoring config for this round (possibly an EOI)
         current_app.logger.info(
             "No scoring config found for %(fund_id)s:%(round_id)s",
-            dict(fund_id=application["fund_id"], round_id=application["round_id"]),
+            dict(fund_id=fund_id, round_id=round_id),
         )
         return None
 
@@ -66,12 +67,11 @@ def calculate_overall_score_percentage_for_application(application):
 
     application_weighted_score = sum(
         sub_criteria_score * sub_criteria_to_criteria_weighting_map[sub_criteria]
-        for sub_criteria, sub_criteria_score in get_sub_criteria_to_latest_score_map(
-            application["application_id"]
-        ).items()
+        for sub_criteria, sub_criteria_score in get_sub_criteria_to_latest_score_map(application_id).items()
     )
-
-    return (application_weighted_score / highest_possible_weighted_score_for_round) * 100
+    score = (application_weighted_score / highest_possible_weighted_score_for_round) * 100
+    rounded_score = Decimal(score).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    return float(rounded_score)
 
 
 @assessment_assessment_bp.get("/application/<application_id>/metadata")
@@ -137,7 +137,9 @@ def all_assessments_for_fund_round_id(
 
     # Calculate and assign score percentages for each application
     for app in app_list:
-        app["overall_score_percentage"] = calculate_overall_score_percentage_for_application(app)
+        app["overall_score_percentage"] = calculate_overall_score_percentage_for_application(
+            application_id=app["application_id"], fund_id=app["fund_id"], round_id=app["round_id"]
+        )
 
     return compress_response(app_list)
 
