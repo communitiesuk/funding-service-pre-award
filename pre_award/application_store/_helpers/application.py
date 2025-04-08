@@ -134,9 +134,9 @@ def send_submit_notification(
         )
 
 
-def send_change_received_notification(account, fund, round_data):
+def send_change_received_notification(fund, round_data):
     get_notification_service().send_change_received_email(
-        email_address=account.email,
+        email_address=round_data.contact_email,
         fund_name=fund.name_json["en"],
         round_name=round_data.title,
         assess_url=Config.ASSESS_HOST + f"/assess/fund_dashboard/{fund.short_name}/{round_data.short_name}/",
