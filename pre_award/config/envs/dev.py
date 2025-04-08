@@ -3,7 +3,7 @@
 import logging
 from os import getenv
 
-from fsd_utils import CommonConfig, configclass
+from fsd_utils import configclass
 
 from pre_award.config.envs.aws import AwsConfig
 
@@ -22,5 +22,4 @@ class DevConfig(AwsConfig):
         "TAGGING": True,
         "ASSESSMENT_ASSIGNMENT": True,
         "UNCOMPETED_WORKFLOW": True,
-        **CommonConfig.dev_feature_configuration,
     }

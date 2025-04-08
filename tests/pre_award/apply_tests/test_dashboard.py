@@ -50,7 +50,6 @@ def test_serialise_application_summary(app):
 @pytest.mark.parametrize(
     "fund_short_name,round_short_name,expected_search_params",
     [
-        (None, None, {"account_id": "test-user"}),
         (
             "COF",
             "R2W2",
@@ -106,8 +105,6 @@ def test_dashboard_route_search_call(
     [
         ("?fund=abc&round=123", "apply/dashboard_single_fund.html"),
         ("?fund=abc", "apply/dashboard_single_fund.html"),
-        ("?round=123", "apply/dashboard_all.html"),
-        ("", "apply/dashboard_all.html"),
     ],
 )
 def test_dashboard_template_rendered(
@@ -155,11 +152,11 @@ def test_dashboard_eoi_suffix(
     )
     mocker.patch("pre_award.apply.default.account_routes.build_application_data_for_display", return_value=eoi_data)
 
-    response = apply_test_client.get("/account", follow_redirects=True)
+    response = apply_test_client.get("/account?fund=COF-EOI&round=R1", follow_redirects=True)
 
     assert response.status_code == 200
     soup = BeautifulSoup(response.data, "html.parser")
-    assert "Expression of interest" in soup.find("h2", class_="govuk-accordion__section-heading").get_text()
+    assert "Expression of interest" in soup.find("span", class_="govuk-caption-m").get_text()
 
 
 @pytest.mark.parametrize(
@@ -169,8 +166,6 @@ def test_dashboard_eoi_suffix(
         ("?fund=abc&round=123", True, "cy", "cy"),
         ("?fund=abc&round=123", False, "cy", "en"),
         ("?fund=abc&round=123", False, "en", "en"),
-        ("", True, "cy", "cy"),
-        ("", True, "en", "en"),
     ],
 )
 def test_dashboard_language(
@@ -272,29 +267,6 @@ def test_submitted_dashboard_route_shows_no_application_link(
     # there should be no link to application on the page
     assert b"Continue application" not in response.data
     assert b"Submitted" in response.data
-
-
-def test_dashboard_route_no_applications(apply_test_client, mocker, mock_login):
-    mocker.patch(
-        "pre_award.apply.default.account_routes.search_applications",
-        return_value=[],
-    )
-    mocker.patch(
-        "pre_award.apply.default.account_routes.check_change_requested_for_applications",
-        return_value=False,
-    )
-
-    response = apply_test_client.get("/account", follow_redirects=True)
-    assert response.status_code == 200
-
-    assert b"""<h1 class="govuk-heading-xl">All applications</h1>""" in response.data
-    assert (
-        b"""<p class="govuk-body">\nYou have started&nbsp;0 applications&nbsp;using this email address.\n"""  # noqa
-        in response.data
-    )
-    assert (
-        b"""class="govuk-link govuk-link">View applications from all rounds/windows</a></p>""" in response.data  # noqa
-    )
 
 
 @pytest.mark.parametrize(
