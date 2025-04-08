@@ -163,11 +163,6 @@ def dashboard():
             "account_id": account_id,
         }
         welsh_available = fund_details.welsh_available
-    else:
-        # Generic all applications dashboard
-        template_name = "apply/dashboard_all.html"
-        search_params = {"account_id": account_id}
-        welsh_available = False
 
     applications = search_applications(search_params=search_params, as_dict=False)
 
