@@ -48,7 +48,7 @@ def _derive_status(
     if has_flag_with_raised_status:
         return Status.CHANGE_REQUESTED.name
 
-    if has_flag_with_received_status and workflow_status == Status.CHANGE_RECEIVED.name:
+    if has_flag_with_received_status:
         return Status.CHANGE_RECEIVED.name
 
     if sub_criteria_id in comment_map:
