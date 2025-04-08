@@ -39,10 +39,10 @@ def test_derive_status():
             "sub_criteria_id": "criteria1",
             "expected": Status.CHANGE_REQUESTED.name,
         },
-        # Flag resolved, workflow status matches
+        # Flag resolved, any workflow status
         {
             "change_requests": [flag_resolved],
-            "workflow_status": Status.CHANGE_RECEIVED.name,
+            "workflow_status": Status.CHANGE_REQUESTED.name,
             "sub_criteria_id": "criteria1",
             "expected": Status.CHANGE_RECEIVED.name,
         },
