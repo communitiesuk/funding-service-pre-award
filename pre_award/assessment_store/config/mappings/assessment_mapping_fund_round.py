@@ -168,6 +168,7 @@ CFA_ROUND_1_ID = "25cca4ba-9dbe-45c7-ae2d-d14cadcd8bc6"
 
 CHAM_FUND_ID = "ce1fae51-fbc9-4c0b-8d9f-79948633fab6"
 CHAM_ROUND_REG_ID = "b92044ee-17f0-4ed5-b4bb-d2ac04eaab54"
+CHAM_ROUND_APPLY_ID = "0ea715b0-8736-4621-9914-51410f9ccafb"
 
 # ASSESSMENT DISPLAY CONFIGURATION
 
@@ -468,6 +469,12 @@ fund_round_data_key_mappings = {
         "funding_two": None,
     },
     "CHAMREG": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": None,
+        "funding_two": None,
+    },
+    "CHAMAPPLY": {
         "location": None,
         "asset_type": None,
         "funding_one": None,
@@ -2165,6 +2172,10 @@ applicant_info_mapping = {
         },
         "OUTPUT_TRACKER": {},
     },
+    f"{CHAM_FUND_ID}:{CHAM_ROUND_APPLY_ID}": {
+        "ASSESSOR_EXPORT": {"form_fields": {}},
+        "OUTPUT_TRACKER": {},
+    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
@@ -2283,6 +2294,11 @@ fund_round_mapping_config = {
     "CHAMREG": {
         "fund_id": CHAM_FUND_ID,
         "round_id": CHAM_ROUND_REG_ID,
+        "type_of_application": "CHAM",
+    },
+    "CHAMAPPLY": {
+        "fund_id": CHAM_FUND_ID,
+        "round_id": CHAM_ROUND_APPLY_ID,
         "type_of_application": "CHAM",
     },
     "RANDOM_FUND_ROUND": {
