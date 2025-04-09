@@ -110,6 +110,9 @@ class DevelopmentConfig(Config):
             "DPIF_LEAD_ASSESSOR",
             "DPIF_ASSESSOR",
             "DPIF_COMMENTER",
+            "DPIFEOI_LEAD_ASSESSOR",
+            "DPIFEOI_ASSESSOR",
+            "DPIFEOI_COMMENTER",
             "COF-EOI_LEAD_ASSESSOR",
             "COF-EOI_ASSESSOR",
             "COF-EOI_COMMENTER",
@@ -146,6 +149,7 @@ class DevelopmentConfig(Config):
             "HSRA": DEBUG_USER_ROLE,
             "CFA": DEBUG_USER_ROLE,
             "CHAM": DEBUG_USER_ROLE,
+            "DPIFEOI": DEBUG_USER_ROLE,
         },
     }
     DEBUG_USER_ACCOUNT_ID = "00000000-0000-0000-0000-000000000000"

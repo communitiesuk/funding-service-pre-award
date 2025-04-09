@@ -83,6 +83,12 @@ from pre_award.assessment_store.config.mappings.dpif_mappping_parts.r3_scored_cr
 from pre_award.assessment_store.config.mappings.dpif_mappping_parts.r3_unscored_criteria import (
     unscored_sections as dpif_unscored_sections_r3,
 )
+from pre_award.assessment_store.config.mappings.dpifeoi_mappping_parts.r3_scored_criteria import (
+    scored_criteria as dpifeoi_scored_sections_r3,
+)
+from pre_award.assessment_store.config.mappings.dpifeoi_mappping_parts.r3_unscored_criteria import (
+    unscored_sections as dpifeoi_unscored_sections_r3,
+)
 from pre_award.assessment_store.config.mappings.gbrf_mapping_parts.r1_unscored_criteria import (
     unscored_sections as gbrf_unscored_sections,
 )
@@ -140,6 +146,9 @@ DPIF_FUND_ID = "f493d512-5eb4-11ee-8c99-0242ac120002"
 DPIF_ROUND_2_ID = "0059aad4-5eb5-11ee-8c99-0242ac120002"
 DPIF_ROUND_3_ID = "ac835965-e8c9-4356-b486-c0c016dbb634"
 
+DPIFEOI_FUND_ID = "c1bb6533-372e-4ebb-b535-0fd75a6a7210"
+DPIFEOI_ROUND_3_ID = "c3b7dc71-6656-4b72-baca-c6baf0938681"
+
 HSRA_FUND_ID = "1e4bd8b0-b399-466d-bbd1-572171bbc7bd"
 HSRA_ROUND_VR_ID = "ae223686-cbcc-4548-8b52-05898c315a59"
 HSRA_ROUND_RP_ID = "bae275aa-86a5-4d3e-bcc7-0a25d040910d"
@@ -191,6 +200,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "DPIF_R3_assessment",
         "unscored_sections": dpif_unscored_sections_r3,
         "scored_criteria": dpif_scored_criteria_r3,
+    },
+    f"{DPIFEOI_FUND_ID}:{DPIFEOI_ROUND_3_ID}": {
+        "schema_id": "DPIFEOI_R3_assessment",
+        "unscored_sections": dpifeoi_unscored_sections_r3,
+        "scored_criteria": dpifeoi_scored_sections_r3,
     },
     f"{COF_FUND_ID}:{COF_ROUND_2_ID}": {
         "schema_id": "cof_r2w2_assessment",
@@ -336,6 +350,12 @@ fund_round_data_key_mappings = {
         "funding_two": None,
     },
     "DPIFR3": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": None,
+        "funding_two": None,
+    },
+    "DPIFEOIR3": {
         "location": None,
         "asset_type": None,
         "funding_one": None,
@@ -1520,6 +1540,10 @@ applicant_info_mapping = {
         },
         "OUTPUT_TRACKER": {},
     },
+    DPIFEOI_FUND_ID: {
+        "ASSESSOR_EXPORT": {},
+        "OUTPUT_TRACKER": {},
+    },
     GBRF_FUND_ID: {
         "ASSESSOR_EXPORT": {
             "form_fields": {
@@ -2194,6 +2218,11 @@ fund_round_mapping_config = {
         "fund_id": DPIF_FUND_ID,
         "round_id": DPIF_ROUND_3_ID,
         "type_of_application": "DPIF",
+    },
+    "DPIFEOIR3": {
+        "fund_id": DPIFEOI_FUND_ID,
+        "round_id": DPIFEOI_ROUND_3_ID,
+        "type_of_application": "DPIFEOI",
     },
     "CTDFCR1": {
         "fund_id": CTDF_FUND_ID,
