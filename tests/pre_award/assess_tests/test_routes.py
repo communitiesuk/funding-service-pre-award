@@ -893,7 +893,6 @@ class TestRoutes:
 
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
-        is_approval_or_change_request_allowed(mock_get_assessor_tasklist_state, sub_criteria_id)
         response = assess_test_client.get(
             f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/accept_changes"  # noqa
         )
@@ -930,7 +929,6 @@ class TestRoutes:
 
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
-        is_approval_or_change_request_allowed(mock_get_assessor_tasklist_state, sub_criteria_id)
 
         headers = {
             "Content-Type": "application/x-www-form-urlencoded",
