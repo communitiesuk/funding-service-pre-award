@@ -5,7 +5,7 @@ import logging
 from distutils.util import strtobool
 from os import getenv
 
-from fsd_utils import CommonConfig, configclass
+from fsd_utils import configclass
 
 from pre_award.config.envs.default import DefaultConfig
 from pre_award.config.envs.default import DefaultConfig as Config
@@ -160,5 +160,4 @@ class DevelopmentConfig(Config):
         "TAGGING": True,
         "ASSESSMENT_ASSIGNMENT": True,
         "UNCOMPETED_WORKFLOW": True,
-        **CommonConfig.dev_feature_configuration,
     }

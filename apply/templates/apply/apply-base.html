@@ -32,9 +32,6 @@
 {% block header %}
 {% set navigationItems = []%}
 {% if g.is_authenticated and g.logout_url %}
-  {% if toggle_dict.get("MULTIFUND_DASHBOARD") %}
-    {% do navigationItems.append({"text": _("View all applications"), "href":url_for('account_routes.dashboard')} ) %}
-  {% endif %}
   {% set signoutHtml %}
     <form method="post" action="{{ g.logout_url }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
