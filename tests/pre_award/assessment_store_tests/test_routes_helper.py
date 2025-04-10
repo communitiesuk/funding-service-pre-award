@@ -62,7 +62,6 @@ def test_derive_status():
             score_map=score_map,
             comment_map=comment_map,
             change_requests=case["change_requests"],
-            workflow_status=case["workflow_status"],
             sub_criteria_id=case["sub_criteria_id"],
         )
 

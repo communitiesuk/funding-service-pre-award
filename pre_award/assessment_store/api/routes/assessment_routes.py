@@ -202,7 +202,7 @@ def get_assessor_task_list_state(application_id: str) -> dict:
     comment_map = get_sub_criteria_to_has_comment_map(application_id)
     change_requests = [flag for flag in get_flags_for_application(application_id) if flag.is_change_request]
     sections, criterias = transform_to_assessor_task_list_metadata(
-        metadata["fund_id"], metadata["round_id"], score_map, comment_map, change_requests, metadata["workflow_status"]
+        metadata["fund_id"], metadata["round_id"], score_map, comment_map, change_requests
     )
     qa_complete = get_qa_complete_record_for_application(application_id)
 
