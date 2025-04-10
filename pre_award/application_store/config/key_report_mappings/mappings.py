@@ -25,6 +25,9 @@ from pre_award.application_store.config.key_report_mappings.cyp_r1_key_report_ma
 from pre_award.application_store.config.key_report_mappings.dpif_r2_key_report_mapping import (
     DPIF_R2_KEY_REPORT_MAPPING,
 )
+from pre_award.application_store.config.key_report_mappings.dpifeoi_r3_key_report_mapping import (
+    DPIFEOI_R3_KEY_REPORT_MAPPING,
+)
 from pre_award.application_store.config.key_report_mappings.gbrf_r1_key_report_mapping import GBRF_R1_KEY_REPORT_MAPPING
 from pre_award.application_store.config.key_report_mappings.lpdf_r1_key_report_mapping import LPDF_R1_KEY_REPORT_MAPPING
 from pre_award.application_store.config.key_report_mappings.lpdf_r2_key_report_mapping import LPDF_R2_KEY_REPORT_MAPPING
@@ -34,6 +37,7 @@ ROUND_ID_TO_KEY_REPORT_MAPPING = defaultdict(
     {
         CYP_R1_KEY_REPORT_MAPPING.round_id: CYP_R1_KEY_REPORT_MAPPING.mapping,
         DPIF_R2_KEY_REPORT_MAPPING.round_id: DPIF_R2_KEY_REPORT_MAPPING.mapping,
+        DPIFEOI_R3_KEY_REPORT_MAPPING.round_id: DPIFEOI_R3_KEY_REPORT_MAPPING.mapping,
         COF_EOI_KEY_REPORT_MAPPING.round_id: COF_EOI_KEY_REPORT_MAPPING.mapping,
         COF25_EOI_KEY_REPORT_MAPPING.round_id: COF25_EOI_KEY_REPORT_MAPPING.mapping,
         COF_R2_KEY_REPORT_MAPPING.round_id: COF_R2_KEY_REPORT_MAPPING.mapping,
