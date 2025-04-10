@@ -28,7 +28,6 @@ def _derive_status(
     score_map: dict,
     comment_map: dict,
     change_requests: list[AssessmentFlag],
-    workflow_status: str,
     sub_criteria_id: str,
 ) -> str:
     if sub_criteria_id in score_map:
@@ -48,7 +47,7 @@ def _derive_status(
     if has_flag_with_raised_status:
         return Status.CHANGE_REQUESTED.name
 
-    if has_flag_with_received_status and workflow_status == Status.CHANGE_RECEIVED.name:
+    if has_flag_with_received_status:
         return Status.CHANGE_RECEIVED.name
 
     if sub_criteria_id in comment_map:
@@ -64,7 +63,6 @@ def transform_to_assessor_task_list_metadata(
     score_map: dict,
     comment_map: dict,
     change_requests: list[AssessmentFlag],
-    workflow_status: str,
 ) -> tuple[list[dict], list[dict]]:
     current_app.logger.info("Configured fund-rounds:")
     current_app.logger.info(Config.ASSESSMENT_MAPPING_CONFIG.keys())
@@ -96,7 +94,7 @@ def transform_to_assessor_task_list_metadata(
                     "id": sc["id"],
                     "score": score_map.get(sc["id"]),
                     "theme_count": len(sc["themes"]),
-                    "status": _derive_status(score_map, comment_map, change_requests, workflow_status, sc["id"]),
+                    "status": _derive_status(score_map, comment_map, change_requests, sc["id"]),
                 }
                 for sc in c["sub_criteria"]
             ],
