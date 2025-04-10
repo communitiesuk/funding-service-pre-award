@@ -59,3 +59,12 @@ def update_ar_status_to_qa_completed(application_id, user_id):
             "Could not create qa_complete record for application %(application_id)s",
             dict(application_id=application_id),
         )
+
+
+def is_approval_or_change_request_allowed(state, sub_criteria_id):
+    """Return True only if sub_criteria's status is in  'COMPLETED' or 'CHANGE_REQUESTED'."""
+    for criteria in state.criterias:
+        for sub in criteria.sub_criterias:
+            if sub.id == sub_criteria_id and sub.status in ["COMPLETED", "CHANGE_REQUESTED"]:
+                return False
+    return True

@@ -64,6 +64,7 @@ from pre_award.assess.assessments.models.location_data import LocationData
 from pre_award.assess.assessments.models.round_summary import create_round_summaries, is_after_today
 from pre_award.assess.assessments.status import (
     all_status_completed,
+    is_approval_or_change_request_allowed,
     update_ar_status_to_completed,
     update_ar_status_to_qa_completed,
 )
@@ -1333,6 +1334,10 @@ def accept_changes(application_id, sub_criteria_id):
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
     assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
 
+    is_approval_or_change_request_allowed(state, sub_criteria_id)
+    if not is_approval_or_change_request_allowed(state, sub_criteria_id):
+        return abort(403)
+
     if request.method == "POST" and form.validate_on_submit():
         approve_sub_criteria(
             application_id=application_id,
@@ -1380,6 +1385,11 @@ def request_changes(application_id, sub_criteria_id, theme_id):
 
     field_ids = [question["field_id"] for question in filtered_questions]
     form = build_request_changes_form(field_ids)
+
+    is_approval_or_change_request_allowed(state, sub_criteria_id)
+    if not is_approval_or_change_request_allowed(state, sub_criteria_id):
+        return abort(403)
+
     if request.method == "POST" and form.validate_on_submit():
         selected_field = form.field_ids.data
         today_date = datetime.now(tz=timezone.utc).date()
