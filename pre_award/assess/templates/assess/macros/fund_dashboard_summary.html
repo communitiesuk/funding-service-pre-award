@@ -10,13 +10,13 @@
     <div class="govuk-tag govuk-!-margin-bottom-2 govuk-summary-card__title {{ display_class }}">
         <strong>
             {% if round_status.is_assessment_active %}
-            ASSESSMENT ACTIVE
+            Assessment active
             {% elif round_status.is_application_open %}
-            APPLICATION LIVE
+            Application live
             {% elif round_status.is_application_not_yet_open %}
-            APPLICATION NOT YET OPEN
+            Application not yet open
             {% else %}
-            ASSESSMENT CLOSED
+            Assessment closed
             {% endif %}
         </strong>
     </div>
