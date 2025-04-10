@@ -1334,7 +1334,6 @@ def accept_changes(application_id, sub_criteria_id):
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
     assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
 
-    is_approval_or_change_request_allowed(state, sub_criteria_id)
     if not is_approval_or_change_request_allowed(state, sub_criteria_id):
         return abort(403)
 
@@ -1386,7 +1385,6 @@ def request_changes(application_id, sub_criteria_id, theme_id):
     field_ids = [question["field_id"] for question in filtered_questions]
     form = build_request_changes_form(field_ids)
 
-    is_approval_or_change_request_allowed(state, sub_criteria_id)
     if not is_approval_or_change_request_allowed(state, sub_criteria_id):
         return abort(403)
 
