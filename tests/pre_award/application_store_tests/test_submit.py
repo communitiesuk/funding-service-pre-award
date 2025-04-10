@@ -843,7 +843,6 @@ def test_send_change_received_notification(
     exp_personalisation,
     mock_notification_service_calls,
 ):
-    mock_account = MagicMock(email="test@test.com", full_name="Test User")
     mock_round = MagicMock(title="test", contact_email="contact@test.com", short_name="test")
     mocker.patch(
         "services.notify.NotificationService.CHANGE_RECEIVED_TEMPLATE_ID",
@@ -854,14 +853,13 @@ def test_send_change_received_notification(
     fund_data = get_fund(fund_id)
 
     send_change_received_notification(
-        account=mock_account,
         fund=fund_data,
         round_data=mock_round,
     )
     assert len(mock_notification_service_calls) == 1
     assert mock_notification_service_calls == [
         mocker.call(
-            "test@test.com",
+            mock_round.contact_email,
             exp_template,
             personalisation=exp_personalisation,
             govuk_notify_reference=None,
