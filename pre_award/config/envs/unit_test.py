@@ -80,6 +80,7 @@ class UnitTestConfig(Config):
         "TAGGING": True,
         "ASSESSMENT_ASSIGNMENT": True,
         "UNCOMPETED_WORKFLOW": True,
+        **CommonConfig.dev_feature_configuration,
     }
 
     SHOW_ALL_ROUNDS = True

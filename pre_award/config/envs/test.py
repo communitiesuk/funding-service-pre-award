@@ -3,7 +3,7 @@
 import base64
 from os import environ
 
-from fsd_utils import configclass
+from fsd_utils import CommonConfig, configclass
 
 from pre_award.config.envs.aws import AwsConfig
 
@@ -19,4 +19,5 @@ class TestConfig(AwsConfig):
         "TAGGING": True,
         "ASSESSMENT_ASSIGNMENT": True,
         "UNCOMPETED_WORKFLOW": True,
+        **CommonConfig.dev_feature_configuration,
     }

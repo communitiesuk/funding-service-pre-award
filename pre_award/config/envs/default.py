@@ -326,6 +326,7 @@ class DefaultConfig(object):
         "TAGGING": True,
         "ASSESSMENT_ASSIGNMENT": False,
         "UNCOMPETED_WORKFLOW": False,
+        **CommonConfig.dev_feature_configuration,
     }
 
     # LRU cache settings
