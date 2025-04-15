@@ -1303,7 +1303,9 @@ def display_sub_criteria(  # noqa: C901
             unrequested_changes=any(theme.get("unrequested_change") for theme in theme_answers_response),
             change_requests=sub_criteria_change_requests,
             has_document_upload=has_document_upload,
-            has_flag_raised=any(flag.latest_status == FlagType.RAISED for flag in sub_criteria_change_requests),
+            has_active_change_request=any(
+                flag.latest_status == FlagType.RAISED for flag in sub_criteria_change_requests
+            ),
             answers_meta=answers_meta,
             questions={question["field_id"]: question["question"] for question in theme_answers_response},
             state=state,

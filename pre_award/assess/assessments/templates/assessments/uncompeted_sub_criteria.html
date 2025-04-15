@@ -15,7 +15,7 @@
     </h1>
 
     <div class="govuk-!-margin-bottom-8">
-        {% if has_flag_raised %}
+        {% if has_active_change_request %}
             <p class="govuk-body">You requested changes to this section and the applicant has not responded yet.</p>
             <p class="govuk-body">Once the applicant has sent their response, you can approve the changes or request another change.</p>
         {% elif unrequested_changes %}
@@ -68,7 +68,7 @@
 </h3>
 
 {{ theme(answers_meta)}}
-{% if not score and not has_flag_raised %}
+{% if not score and not has_active_change_request %}
     {{ application_feedback(application_id, sub_criteria, current_theme.id,
     approval_form,change_requests,unrequested_changes) }}
 {% endif %}
