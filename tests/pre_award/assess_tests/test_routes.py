@@ -8,6 +8,7 @@ from flask import session
 from pre_award.assess.assessments.models.round_status import RoundStatus
 from pre_award.assess.assessments.models.round_summary import RoundSummary, Stats
 from pre_award.assess.services.models.flag import Flag
+from pre_award.assessment_store.db.models.assessment_record.enums import Status
 from tests.pre_award.assess_tests.api_data.test_data import fund_specific_claim_map
 from tests.pre_award.assess_tests.conftest import create_valid_token, test_commenter_claims, test_lead_assessor_claims
 
@@ -892,7 +893,6 @@ class TestRoutes:
 
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
-
         response = assess_test_client.get(
             f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/accept_changes"  # noqa
         )
@@ -1611,7 +1611,6 @@ class TestRoutes:
 
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
-
         response = assess_test_client.get(
             f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/theme_id/test_theme_id/request_change"
         )
@@ -1651,6 +1650,40 @@ class TestRoutes:
         )
         assert 200 == response.status_code
         assert b"Your request for changes has been sent" in response.data
+
+    @pytest.mark.application_id("resolved_app")
+    @pytest.mark.sub_criteria_id("test_sub_criteria_id")
+    @pytest.mark.parametrize("sub_criteria_status", [Status.CHANGE_REQUESTED.name, Status.COMPLETED.name])
+    def test_prevent_approval_or_change_request(
+        self,
+        sub_criteria_status,
+        assess_test_client,
+        request,
+        mock_get_sub_criteria,
+        mock_get_sub_criteria_theme,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_assessor_tasklist_state,
+    ):
+        application_id = request.node.get_closest_marker("application_id").args[0]
+        sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
+
+        token = create_valid_token(test_lead_assessor_claims)
+        assess_test_client.set_cookie("fsd_user_token", token)
+        mock_get_assessor_tasklist_state.return_value["criterias"][0]["sub_criterias"][0]["status"] = (
+            sub_criteria_status
+        )
+        post_data = {"field_ids": ["JCACTy"], "reason_JCACTy": "testing"}
+
+        response = assess_test_client.post(
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/theme_id/test_theme_id/request_change",
+            data=post_data,
+            follow_redirects=True,
+        )
+        assert 403 == response.status_code
+        assert b"Access Denied" in response.data
 
 
 @pytest.mark.parametrize(
