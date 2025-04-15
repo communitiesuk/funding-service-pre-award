@@ -55,6 +55,18 @@ def test_datetime_format(input_date, expected, app):
             dt(2025, 9, 30, 1, 25, 0),
             timezone("Europe/London").localize(dt(2025, 9, 30, 2, 25, 0)),
         ),  # When BST is one hour ahead of UTC
+        (
+            timezone("UTC").localize(dt(2025, 1, 1, 12, 0, 0)),
+            timezone("Europe/London").localize(dt(2025, 1, 1, 12, 0, 0)),
+        ),  # Input with an existing UTC timezone when UTC == BST
+        (
+            timezone("UTC").localize(dt(2025, 6, 1, 12, 0, 0)),
+            timezone("Europe/London").localize(dt(2025, 6, 1, 13, 0, 0)),
+        ),  # Input with an existing UTC timezone when BST is one hour ahead of UTC
+        (
+            timezone("Europe/London").localize(dt(2025, 6, 1, 12, 0, 0)),
+            timezone("Europe/London").localize(dt(2025, 6, 1, 12, 0, 0)),
+        ),  # Input already in BST
         (None, None),
     ],
 )
