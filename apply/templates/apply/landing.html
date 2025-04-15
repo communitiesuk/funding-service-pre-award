@@ -63,7 +63,7 @@
             {% endif %}
             {% if not round.is_expression_of_interest %}
                 <p class="govuk-body">
-                    <strong>{% trans %}Submission deadline:{% endtrans %} </strong>{{round.deadline|datetime_format_respect_lang}}
+                    <strong>{% trans %}Submission deadline:{% endtrans %} </strong>{{round.deadline|to_bst|datetime_format_respect_lang}}
                 </p>
             {% endif %}
             {{ govukButton({
