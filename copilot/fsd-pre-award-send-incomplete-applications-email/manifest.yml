@@ -9,7 +9,7 @@ timeout: 10m
 # We inject `image.location` in our deployment pipeline
 image: {}
 entrypoint: launcher
-command: invoke apply.send-incomplete-application-email
+command: invoke apply.send-incomplete-application-emails
 
 cpu: 256
 memory: 512
