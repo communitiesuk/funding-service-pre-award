@@ -1,0 +1,81 @@
+name: fsd-pre-award-send-incomplete-applications-emails
+type: Scheduled Job
+
+on:
+  schedule: "cron(30 9 * * ? *)"
+retries: 0
+timeout: 10m
+
+# We inject `image.location` in our deployment pipeline
+image: {}
+entrypoint: launcher
+command: invoke apply.send-incomplete-application-emails
+
+cpu: 256
+memory: 512
+platform: linux/x86_64
+
+network:
+  vpc:
+    security_groups:
+      - from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-fsdpreawardstoresclusterSecurityGroup
+
+variables:
+  FLASK_ENV: ${COPILOT_ENVIRONMENT_NAME}
+  SENTRY_DSN: "https://80c7f65b54f0eff535777a66b375adf0@o1432034.ingest.us.sentry.io/4508324370317312"
+  AWS_BUCKET_NAME:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-FormUploadsBucket
+  ASSESSMENT_FRONTEND_HOST: "https://assess.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  SENTRY_TRACES_SAMPLE_RATE: 0.02
+  API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local"
+
+  ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: false
+  APPLICANT_FRONTEND_HOST: "https://apply.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk" # TODO: remove me when all frontends combined
+  APPLY_HOST: "apply.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  ASSESS_HOST: "assess.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  AUTH_HOST: "account.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  COOKIE_DOMAIN: ".access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  FORM_DESIGNER_HOST: "https://form-designer.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  FORMS_SERVICE_PUBLIC_HOST: "https://application-questions.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  POST_AWARD_FRONTEND_HOST: "https://find-monitoring-data.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  POST_AWARD_SUBMIT_HOST: "https://submit-monitoring-data.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
+  COPILOT_AWS_BUCKET_NAME:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-FormUploadsBucket
+  REDIS_INSTANCE_URI:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-MagicLinksRedisInstanceURI
+
+secrets:
+  FUND_STORE_API_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_PRE_AWARD_FUND_STORE_API_HOST
+  ACCOUNT_STORE_API_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_PRE_AWARD_ACCOUNT_STORE_API_HOST
+  APPLICATION_STORE_API_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_PRE_AWARD_APPLICATION_STORE_API_HOST
+  ASSESSMENT_STORE_API_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_PRE_AWARD_ASSESSMENT_STORE_API_HOST
+  SECRET_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SECRET_KEY
+  PREAWARD_DB_SECRET:
+    from_cfn: ${COPILOT_APPLICATION_NAME}-${COPILOT_ENVIRONMENT_NAME}-fsdpreawardstoresclusterAuroraSecret
+  AUTHENTICATOR_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AUTHENTICATOR_HOST
+  AZURE_AD_CLIENT_ID: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AZURE_AD_CLIENT_ID
+  AZURE_AD_CLIENT_SECRET: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AZURE_AD_CLIENT_SECRET
+  AZURE_AD_TENANT_ID: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/AZURE_AD_TENANT_ID
+  MAINTENANCE_MODE: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_FRONTEND_MAINTENANCE_MODE
+  MAINTENANCE_END_TIME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FSD_FRONTEND_MAINTENANCE_END_TIME
+  RSA256_PUBLIC_KEY_BASE64: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/RSA256_PUBLIC_KEY_BASE64
+  RSA256_PRIVATE_KEY_BASE64: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/RSA256_PRIVATE_KEY_BASE64
+  GOV_NOTIFY_API_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/GOV_NOTIFY_API_KEY
+
+environments:
+  prod:
+    variables:
+      FLASK_ENV: production
+      ASSESSMENT_FRONTEND_HOST: "https://assess.access-funding.communities.gov.uk"
+      ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: false
+      COOKIE_DOMAIN: ".access-funding.communities.gov.uk"
+      APPLY_HOST: "apply.access-funding.communities.gov.uk"
+      ASSESS_HOST: "assess.access-funding.communities.gov.uk"
+      AUTH_HOST: "account.access-funding.communities.gov.uk"
+      API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local:8080"
+      APPLICANT_FRONTEND_HOST: "https://apply.access-funding.communities.gov.uk" # TODO: remove me when all frontends combined
+      FORMS_SERVICE_PUBLIC_HOST: "https://application-questions.access-funding.communities.gov.uk"
+      POST_AWARD_FRONTEND_HOST: "https://find-monitoring-data.access-funding.communities.gov.uk"
+      POST_AWARD_SUBMIT_HOST: "https://submit-monitoring-data.access-funding.communities.gov.uk"
+      SENTRY_TRACES_SAMPLE_RATE: 1
