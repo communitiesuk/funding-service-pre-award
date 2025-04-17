@@ -141,7 +141,7 @@
                         {{ application_status("COMPLETED") }}
                     </dd>
                 {% endif %}
-                <p class="govuk-body govuk-!-margin-bottom-7">
+                <dt class="govuk-body govuk-!-margin-bottom-7">
                     {% if application_meta_data["number_of_completed_forms"] == 0 %}
                         {% trans %}None of the sections have been completed.{% endtrans %}
                     {% else %}
@@ -149,7 +149,7 @@
                         {{ application_meta_data["number_of_completed_forms"] }} {% trans %}of{% endtrans %}
                         {{ application_meta_data["number_of_forms"] }} {% trans %}sections.{% endtrans %}
                     {% endif %}
-                </p>
+                </dt>
             {% endif %}
             </dl>
 
