@@ -5,13 +5,15 @@
     {% for sub_criteria in criteria.sub_criterias %}
         {% set status %}
             {% if sub_criteria.status == 'NOT_STARTED' %}
-                <span class="govuk-tag govuk-tag--blue">Not started</span>
+                <span class="govuk-tag govuk-tag--blue">Ready for review</span>
             {% elif sub_criteria.status == 'COMPLETED' %}
                 <span class="">Complete</span>
             {% elif sub_criteria.status == 'CHANGE_REQUESTED' %}
                 <span class="govuk-tag govuk-tag--orange">{{ sub_criteria.status|all_caps_to_human }}</span>
             {% elif sub_criteria.status == 'CHANGE_RECEIVED' %}
                 <span class="govuk-tag govuk-tag--yellow">Review changes</span>
+            {% elif sub_criteria.status == 'IN_PROGRESS' %}
+                <span class="govuk-tag govuk-tag--blue">Review in progress</span>
             {% else %}
                 <span class="govuk-tag govuk-tag--blue">{{ sub_criteria.status|all_caps_to_human }}</span>
             {% endif %}
