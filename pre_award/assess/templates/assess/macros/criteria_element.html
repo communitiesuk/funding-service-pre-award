@@ -13,7 +13,7 @@
             {% elif sub_criteria.status == 'CHANGE_RECEIVED' %}
                 <span class="govuk-tag govuk-tag--yellow">Review changes</span>
             {% elif sub_criteria.status == 'IN_PROGRESS' %}
-                <span class="govuk-tag govuk-tag--blue">Review in progress</span>
+                <span class="govuk-tag govuk-tag--green">Review in progress</span>
             {% else %}
                 <span class="govuk-tag govuk-tag--blue">{{ sub_criteria.status|all_caps_to_human }}</span>
             {% endif %}
