@@ -92,7 +92,7 @@ def test_change_tags_route(
     response = client_with_valid_session.get("/assess/application/app_id/tags")
     soup = BeautifulSoup(response.data, "html.parser")
     assert soup.find("h1").text == "Change tags"
-    assert soup.find("strong").text == "In progress"
+    assert soup.find("strong").text == "Review in progress"
     assert (table := soup.find("table", class_="govuk-table dluhc-table-checkboxes"))
     assert len(table.findAll("tr")) == 3
     assert table.findAll("tr")[0].findAll("th")[0].text.strip() == "Tag name"

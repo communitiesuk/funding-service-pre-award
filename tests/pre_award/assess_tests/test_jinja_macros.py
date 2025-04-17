@@ -873,11 +873,11 @@ class TestJinjaMacros(object):
         "application_not_yet_open, application_open, is_assessment_active, has_assessment_closed, exp_colour_class,"
         " exp_text",
         [
-            (True, False, False, False, " govuk-tag--grey", "APPLICATION NOT YET OPEN"),
-            (False, True, False, False, None, "APPLICATION LIVE"),
-            (False, False, True, False, None, "ASSESSMENT ACTIVE"),
-            (False, True, True, False, None, "ASSESSMENT ACTIVE"),
-            (False, False, False, True, " govuk-tag--grey", "ASSESSMENT CLOSED"),
+            (True, False, False, False, " govuk-tag--grey", "Application not yet open"),
+            (False, True, False, False, None, "Application live"),
+            (False, False, True, False, None, "Assessment active"),
+            (False, True, True, False, None, "Assessment active"),
+            (False, False, False, True, " govuk-tag--grey", "Assessment closed"),
         ],
     )
     def test_dashboard_summary_assessment_status(
