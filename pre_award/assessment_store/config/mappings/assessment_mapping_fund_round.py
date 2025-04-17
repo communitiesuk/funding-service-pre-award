@@ -8,6 +8,12 @@ from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_scored_sect
 from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_unscored_sections import (
     unscored_sections as cfa_r1_unscored_sections,
 )
+from pre_award.assessment_store.config.mappings.cham_mapping_parts.apply_scored_sections import (
+    scored_criteria as cham_apply_scored_criteria,
+)
+from pre_award.assessment_store.config.mappings.cham_mapping_parts.apply_unscored_sections import (
+    unscored_sections as cham_apply_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.cham_mapping_parts.reg_unscored_sections import (
     unscored_sections as cham_reg_unscored_sections,
 )
@@ -302,6 +308,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "cham_reg_assessment",
         "unscored_sections": cham_reg_unscored_sections,
         "scored_criteria": [],
+    },
+    f"{CHAM_FUND_ID}:{CHAM_ROUND_APPLY_ID}": {
+        "schema_id": "cham_apply_assessment",
+        "unscored_sections": cham_apply_unscored_sections,
+        "scored_criteria": cham_apply_scored_criteria,
     },
 }
 
