@@ -134,7 +134,10 @@ STOPPED_FLAG = [
 
 
 def test_determine_display_status():
-    assert determine_display_status(workflow_status="IN_PROGRESS", Flags=None, is_qa_complete=False) == "In progress"
+    assert (
+        determine_display_status(workflow_status="IN_PROGRESS", Flags=None, is_qa_complete=False)
+        == "Review in progress"
+    )
     assert (
         determine_display_status(
             workflow_status="IN_PROGRESS",
@@ -149,7 +152,7 @@ def test_determine_display_status():
             Flags=RESOLVED_FLAG,
             is_qa_complete=False,
         )
-        == "In progress"
+        == "Review in progress"
     )
 
 
