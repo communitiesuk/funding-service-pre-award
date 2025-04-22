@@ -1,10 +1,13 @@
+from datetime import datetime, timedelta
 from typing import Sequence
+from uuid import UUID
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import contains_eager
 
 from data.models import Fund, Round
 from pre_award.db import db
+from pre_award.fund_store.db.models.event import Event, EventType
 
 
 def get_fund(fund_short_name: str) -> Fund | None:
@@ -48,4 +51,37 @@ def get_rounds_for_application_deadline_reminders() -> Sequence[Round]:
 
 def set_application_reminder_sent(round: Round) -> None:
     round.application_reminder_sent = True
+    db.session.commit()
+
+
+def get_rounds_with_passed_deadline() -> Sequence[Round]:
+    """
+    Retrieve rounds that have passed their deadline but have not yet had an event
+    created for sending incomplete applications.
+    """
+    now = datetime.now()
+    one_month_ago = now - timedelta(days=30)
+
+    rounds_without_event = (
+        db.session.query(Round)
+        .filter(
+            Round.deadline < now,
+            Round.deadline >= one_month_ago,
+            Round.id.notin_(
+                select(Event.round_id).filter(
+                    Event.type == EventType.SEND_INCOMPLETE_APPLICATIONS, Event.processed.isnot(None)
+                )
+            ),
+        )
+        .all()
+    )
+
+    return rounds_without_event
+
+
+def create_event(round_id: UUID, event_type: EventType, activation_date: datetime, is_processed: bool) -> None:
+    event = Event(round_id=round_id, type=event_type, activation_date=activation_date)
+    if is_processed:
+        event.processed = datetime.now()  # type: ignore
+    db.session.add(event)
     db.session.commit()

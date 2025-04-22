@@ -486,6 +486,37 @@ class NotificationService:
             },
         )
 
+    def send_unsubmitted_application_email(
+        self,
+        email_address: str,
+        application_reference: str,
+        fund_name: str,
+        round_name: str,
+        contact_help_email: str | None,
+        application_data: dict[str, Any],
+        govuk_notify_reference: str | None = None,
+    ) -> Notification:
+        questions = application_data.get("questions_file")
+
+        return self._send_email(
+            email_address,
+            self.APPLICATION_INCOMPLETE_TEMPLATE_ID,
+            personalisation={
+                "name of fund": fund_name,
+                "round name": round_name,
+                "application reference": application_reference,
+                "question": {
+                    "file": questions,
+                    "filename": None,
+                    "confirm_email_before_download": None,
+                    "retention_period": None,
+                },
+                "contact email": contact_help_email,
+            },
+            govuk_notify_reference=govuk_notify_reference,
+            email_reply_to_id=self.REPLY_TO_EMAILS_WITH_NOTIFY_ID.get(contact_help_email),  # type: ignore[arg-type]
+        )
+
 
 def get_notification_service() -> NotificationService:
     return cast(NotificationService, current_app.extensions["notification_service"])
