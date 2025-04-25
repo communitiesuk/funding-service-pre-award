@@ -127,6 +127,13 @@
 .govuk-tag {
     text-transform: None;
     font-weight: normal;
+    letter-spacing: normal;
+    font-size: 1.1875rem;
+}
+
+.govuk-tag.govuk-tag--mastblue{
+    background-color: white;
+    color: #1d70b8;
 }
 
 .assigned-to {
