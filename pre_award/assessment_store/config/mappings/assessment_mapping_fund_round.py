@@ -8,6 +8,12 @@ from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_scored_sect
 from pre_award.assessment_store.config.mappings.cfa_mapping_parts.r1_unscored_sections import (
     unscored_sections as cfa_r1_unscored_sections,
 )
+from pre_award.assessment_store.config.mappings.cham_mapping_parts.apply_scored_sections import (
+    scored_criteria as cham_apply_scored_criteria,
+)
+from pre_award.assessment_store.config.mappings.cham_mapping_parts.apply_unscored_sections import (
+    unscored_sections as cham_apply_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.cham_mapping_parts.reg_unscored_sections import (
     unscored_sections as cham_reg_unscored_sections,
 )
@@ -302,6 +308,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "cham_reg_assessment",
         "unscored_sections": cham_reg_unscored_sections,
         "scored_criteria": [],
+    },
+    f"{CHAM_FUND_ID}:{CHAM_ROUND_APPLY_ID}": {
+        "schema_id": "cham_apply_assessment",
+        "unscored_sections": cham_apply_unscored_sections,
+        "scored_criteria": cham_apply_scored_criteria,
     },
 }
 
@@ -2173,7 +2184,84 @@ applicant_info_mapping = {
         "OUTPUT_TRACKER": {},
     },
     f"{CHAM_FUND_ID}:{CHAM_ROUND_APPLY_ID}": {
-        "ASSESSOR_EXPORT": {"form_fields": {}},
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "Gaibvs": {"en": {"title": "Registration reference number", "field_type": "textField"}},
+                "JgqOiG": {"en": {"title": "Full name", "field_type": "textField"}},
+                "fSohIv": {"en": {"title": "Organisation", "field_type": "textField"}},
+                "JeGsjj": {"en": {"title": "Role", "field_type": "textField"}},
+                "bzFqFj": {"en": {"title": "Email address", "field_type": "emailAddressField"}},
+                "oWuVdi": {"en": {"title": "Contact number", "field_type": "telephoneNumberField"}},
+                "trYDMJ": {"en": {"title": "What is the name of your organisation?", "field_type": "textField"}},
+                "rocaEG": {
+                    "en": {"title": "Does your organisation have an alternative name?", "field_type": "textField"}
+                },
+                "LAIyWE": {
+                    "en": {"title": "What is the alternative name of your organisation?", "field_type": "textField"}
+                },
+                "PsvKdR": {"en": {"title": "What is your organisation's address?", "field_type": "ukAddressField"}},
+                "wMrxig": {
+                    "en": {
+                        "title": "Has your organisation been established for 2 years or more?",
+                        "field_type": "yesNoField",
+                    }
+                },
+                "OgQBfd": {
+                    "en": {"title": "What is the legal status of your organisation?", "field_type": "radiosField"}
+                },
+                "COnttV": {"en": {"title": "Is the organisation a charity?", "field_type": "yesNoField"}},
+                "Lwzeak": {"en": {"title": "Where is the charity registered?", "field_type": "radiosField"}},
+                "fMjwht": {"en": {"title": "What is your registered charity number?", "field_type": "textField"}},
+                "EQjFsc": {"en": {"title": "Do you have a company registration number?", "field_type": "yesNoField"}},
+                "QCszWL": {"en": {"title": "What is your company registration number?", "field_type": "textField"}},
+                "iRkMMO": {
+                    "en": {"title": "Is your organisation controlled by another entity?", "field_type": "yesNoField"}
+                },
+                "bKDWQe": {
+                    "en": {
+                        "title": "What is the name of the entity that controls your organisation?",
+                        "field_type": "textField",
+                    }
+                },
+                "sShZrO": {"en": {"title": "Summary of organisation", "field_type": "textField"}},
+                "ghzCjW": {"en": {"title": "Success of project", "field_type": "textField"}},
+                "zvxncU": {
+                    "en": {"title": "relationship with government and other organisations", "field_type": "textField"}
+                },
+                "aulnWx": {"en": {"title": "Trust of Muslim communities", "field_type": "textField"}},
+                "Jpikbj": {"en": {"title": "Activities proposed", "field_type": "textField"}},
+                "vuLooU": {"en": {"title": "Key milestones", "field_type": "textField"}},
+                "hFwOXS": {
+                    "en": {"title": "Establishing a network of local and national partners", "field_type": "textField"}
+                },
+                "MdgkZt": {"en": {"title": "Building relationships", "field_type": "textField"}},
+                "UTdjiQ": {"en": {"title": "Experience and support for individuals", "field_type": "textField"}},
+                "hYrOSx": {"en": {"title": "Performance indicatiors and outcomes", "field_type": "textField"}},
+                "fwPHTY": {"en": {"title": "Technical systems for reporting", "field_type": "textField"}},
+                "lXdDPK": {"en": {"title": "Data collection from complaints", "field_type": "textField"}},
+                "oADTGM": {
+                    "en": {
+                        "title": "Total excepted costs: Year 1 (2025/2026 financial year)",
+                        "field_type": "textField",
+                    }
+                },
+                "OpwBcM": {
+                    "en": {
+                        "title": "Total excepted costs: Year 2 (2026/2027 financial year)",
+                        "field_type": "textField",
+                    }
+                },
+                "wfrkZN": {
+                    "en": {
+                        "title": "Total excepted costs: Year 3 (2027/2028 financial year)",
+                        "field_type": "textField",
+                    }
+                },
+                "EEZGWu": {"en": {"title": "Value for money", "field_type": "textField"}},
+                "YlivDw": {"en": {"title": "Protect against fraud and other key risks", "field_type": "textField"}},
+                "YxXPoy": {"en": {"title": "Reporting to MHCLG", "field_type": "textField"}},
+            }
+        },
         "OUTPUT_TRACKER": {},
     },
 }
