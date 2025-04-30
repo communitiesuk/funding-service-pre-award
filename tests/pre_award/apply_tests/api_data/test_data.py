@@ -109,6 +109,7 @@ TEST_ROUNDS_DATA = [
             "short_name": "r2w2",
             "title": "closed_round",
             "deadline": "2023-01-01T00:00:01",
+            "assessment_start": "2024-11-01T01:01:00Z",
         }
     ),
     Round.from_dict(
