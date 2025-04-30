@@ -3,6 +3,7 @@ import os
 import time
 import uuid
 from collections import namedtuple
+from datetime import datetime
 from functools import lru_cache
 from typing import List
 from urllib.parse import urlencode
@@ -204,6 +205,22 @@ def get_round_data(fund_id, round_id, language=None, as_dict=False, ttl_hash=Non
         return round_response
     else:
         return Round.from_dict(round_response)
+
+
+def get_assessment_start(fund_id, round_id, language=None):
+    """Get the assessment start date for a specific round in GOV.UK style format."""
+    round_dict = get_round_data(
+        fund_id, round_id, language=language, as_dict=True, ttl_hash=get_ttl_hash(Config.LRU_CACHE_TIME)
+    )
+
+    assessment_start_str = round_dict.get("assessment_start")
+    if not assessment_start_str:
+        return None
+    try:
+        assessment_start_date = datetime.fromisoformat(assessment_start_str.replace("Z", "+00:00"))
+        return assessment_start_date
+    except (ValueError, TypeError):
+        return assessment_start_str
 
 
 def get_round_data_without_cache(fund_id, round_id, language=None):
