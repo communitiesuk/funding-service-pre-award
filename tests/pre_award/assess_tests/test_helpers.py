@@ -261,21 +261,29 @@ def test_generate_csv_for_fields():
             "AppId": "de36ae35-9ef6-4dc5-a2bf-de9ee481c8af",
             "Charity number ": "Test missing keys",
         },
+        {
+            "AppId": "de36ae35-9ef6-4dc5-a2bf-de9ee481c8af",
+            "Charity number ": "01234567",
+            "Company registration number": "01112222",
+        },
+        {
+            "AppId": "de36ae35-9ef6-4dc5-a2bf-de9ee481c8af",
+            "Charity number ": "00123456",
+            "Company registration number": "AK123456",
+        },
     ]
 
     expected_result = (
-        "AppId,Charity number ,Do you need to do any further feasibility"
-        " work?,Project name,Doc"
-        " Name\r\n9a8b6c00-e461-466c-acb3-2519621b3a38,Test,False,Save the"
-        " humble pub in"
-        " Bangor,sample1.doc\r\nde36ae35-9ef6-4dc5-a2bf-de9ee481c8af,Test,False,Save"
-        " the humble pub in"
-        " Bangor,sample1.doc\r\nde36ae35-9ef6-4dc5-a2bf-de9ee481c8af,Test"
-        " missing keys,,,\r\n"
+        '"AppId","Charity number ","Do you need to do any further feasibility work?",'
+        '"Project name","Doc Name","Company registration number"\r\n"9a8b6c00-e461-466c-acb3-2519621b3a38",'
+        '"Test","False","Save the humble pub in Bangor","sample1.doc",""\r\n'
+        '"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","Test","False","Save the humble pub in Bangor",'
+        '"sample1.doc",""\r\n"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","Test missing keys","","","",'
+        '""\r\n"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","01234567","","","","01112222"\r\n'
+        '"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","00123456","","","","AK123456"\r\n'
     )
 
     result = generate_assessment_info_csv(test_data)
-
     assert result == expected_result
 
 

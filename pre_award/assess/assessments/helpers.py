@@ -190,7 +190,7 @@ _EXCLUDED_HEADERS = (
 def generate_assessment_info_csv(data: dict):
     output = StringIO()
     headers = list(OrderedDict.fromkeys(key for d in data for key in d.keys() if key not in _EXCLUDED_HEADERS))
-    csv_writer = csv.writer(output)
+    csv_writer = csv.writer(output, quoting=csv.QUOTE_ALL)
 
     if len(data) == 0:
         return output.getvalue()
