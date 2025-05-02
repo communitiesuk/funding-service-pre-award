@@ -3933,11 +3933,11 @@ msgid ""
 msgstr ""
 
 #: pre_award/apply/templates/apply/partials/tasklist_submit.html:7
-msgid "All sections complete"
+msgid "You can now submit your application"
 msgstr ""
 
 #: pre_award/apply/templates/apply/partials/tasklist_submit.html:10
-msgid "You can submit your application when you are ready."
+msgid "You can still edit any of the completed sections before submitting your application."
 msgstr ""
 
 #: pre_award/apply/templates/apply/partials/tasklist_submit.html:11
@@ -3945,6 +3945,10 @@ msgid "Once your application has been submitted, you cannot change your answers.
 msgstr ""
 
 #: pre_award/apply/templates/apply/partials/tasklist_submit.html:12
+msgid "If the assessor needs additional information or has any questions about your application we will email you."
+msgstr ""
+
+#: pre_award/apply/templates/apply/partials/tasklist_submit.html:13
 msgid "Submit your application"
 msgstr ""
 
