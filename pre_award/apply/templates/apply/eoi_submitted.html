@@ -3,7 +3,7 @@
 {% from "apply/partials/migration_banner.html" import migration_banner %}
 {%- from "govuk_frontend_jinja/components/notification-banner/macro.html" import govukNotificationBanner -%}
 
-{% set pageHeading %}{% trans %}Application complete{% endtrans %}{% endset %}
+{% set pageHeading %}{% trans %}Application submitted{% endtrans %}{% endset %}
 {% block content %}
 {% if migration_banner_enabled %}
 {{ migration_banner() }}
@@ -16,7 +16,7 @@
               {{ pageHeading }}
             </h1>
             <div class="govuk-panel__body">
-              {% trans %}Your reference number{% endtrans %}<br><strong>{{ application_reference }}</strong>
+              {% trans %}Reference number{% endtrans %}<br><strong>{{ application_reference }}</strong>
             </div>
           </div>
           <p class="govuk-caption-m">{{ fund_name }}</p>
