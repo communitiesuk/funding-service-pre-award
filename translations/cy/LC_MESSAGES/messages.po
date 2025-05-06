@@ -3944,11 +3944,11 @@ msgstr ""
 msgid "Once your application has been submitted, you cannot change your answers."
 msgstr ""
 
-#: pre_award/apply/templates/apply/partials/tasklist_submit.html:12
+#: pre_award/apply/templates/apply/partials/tasklist_submit.html:13
 msgid "If the assessor needs additional information or has any questions about your application we will email you."
 msgstr ""
 
-#: pre_award/apply/templates/apply/partials/tasklist_submit.html:13
+#: pre_award/apply/templates/apply/partials/tasklist_submit.html:15
 msgid "Submit your application"
 msgstr ""
 
