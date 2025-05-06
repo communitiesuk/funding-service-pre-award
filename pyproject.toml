@@ -10,7 +10,6 @@ dependencies = [
     "airium==0.2.6",
     "alembic-utils==0.8.8",
     "babel==2.17.0",
-    "beautifulsoup4==4.13.4",
     "boto3==1.37.27",
     "colored==2.3.0",
     "cssmin==0.2.0",
@@ -99,7 +98,6 @@ mccabe.max-complexity = 12
 [dependency-groups]
 dev = [
     "asserts==0.13.1",
-    "beautifulsoup4==4.13.3",
     "click==8.1.8",
     "colored==2.3.0",
     "debugpy==1.8.13",
