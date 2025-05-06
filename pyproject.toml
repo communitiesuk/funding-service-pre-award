@@ -10,6 +10,7 @@ dependencies = [
     "airium==0.2.6",
     "alembic-utils==0.8.8",
     "babel==2.17.0",
+    "beautifulsoup4==4.13.4",
     "boto3==1.37.27",
     "colored==2.3.0",
     "cssmin==0.2.0",
