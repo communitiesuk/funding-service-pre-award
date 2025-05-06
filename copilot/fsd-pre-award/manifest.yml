@@ -57,7 +57,6 @@ variables:
   AUTH_HOST: "account.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
   AUTHENTICATOR_HOST: "https://account.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
   FORM_DESIGNER_HOST: "https://form-designer.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
-  FORMS_SERVICE_PUBLIC_HOST: "https://application-questions.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
   FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
   POST_AWARD_FRONTEND_HOST: "https://find-monitoring-data.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
   POST_AWARD_SUBMIT_HOST: "https://submit-monitoring-data.access-funding.${COPILOT_ENVIRONMENT_NAME}.communities.gov.uk"
@@ -90,6 +89,7 @@ secrets:
   RSA256_PRIVATE_KEY_BASE64: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/RSA256_PRIVATE_KEY_BASE64
   GOV_NOTIFY_API_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/GOV_NOTIFY_API_KEY
   FORMS_SERVICE_PRIVATE_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FORM_RUNNER_INTERNAL_HOST
+  FORMS_SERVICE_PUBLIC_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/FORM_RUNNER_EXTERNAL_HOST
 
 
 # You can override any of the values defined above by environment.
