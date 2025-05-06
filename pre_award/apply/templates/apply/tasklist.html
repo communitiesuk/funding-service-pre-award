@@ -1,7 +1,7 @@
 {% extends "apply/base.html" %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
 {% from "apply/partials/tasklist_section.html" import tasklist_section %}
-{% from "apply/partials/tasklist_submit.html" import tasklist_submit %}
+{% from "apply/partials/tasklist_submit.html" import tasklist_submit with context %}
 {% from "apply/partials/round_closed_warning.html" import round_closed_warning %}
 {% from "apply/partials/migration_banner.html" import migration_banner %}
 {% from "apply/macros/contact-details.html" import fs_contact_details %}

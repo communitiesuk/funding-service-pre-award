@@ -4,11 +4,14 @@
     {{ form.csrf_token }}
     <div class="govuk-grid-row .assessment-alert">
         <div class="assessment-alert govuk-!-margin-bottom-8">
-            <h2 class="assessment-alert__heading govuk-heading-l govuk-!-margin-top-4">{% trans %}All sections complete{% endtrans %}</h2>
+            <h2 class="assessment-alert__heading govuk-heading-l govuk-!-margin-top-4">{% trans %}You can now submit your application{% endtrans %}</h2>
             <input type="hidden" id="application_id" name="application_id" value="{{ application_meta_data["application_id"] }}">
             <input type="hidden" id="redirect_to_fund" name="redirect_to_fund" value="true">
-            <p class="govuk-body">{% trans %}You can submit your application when you are ready.{% endtrans %}</p>
+            <p class="govuk-body">{% trans %}You can still edit any of the completed sections before submitting your application.{% endtrans %}</p>
             <p class="govuk-body">{% trans %}Once your application has been submitted, you cannot change your answers.{% endtrans %}</p>
+            {% if is_uncompeted_flow(None) %}
+                <p class="govuk-body">{% trans %}If the assessor needs additional information or has any questions about your application we will email you.{% endtrans %}</p>
+            {% endif %}
             <button class="govuk-button" data-module="govuk-button">{% trans %}Submit your application{% endtrans %}</button>
           </div>
     </div>
