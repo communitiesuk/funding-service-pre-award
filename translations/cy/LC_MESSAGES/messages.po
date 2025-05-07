@@ -398,7 +398,7 @@ msgstr ""
 #: pre_award/apply/templates/apply/accessibility_statement.html:16
 msgid ""
 "This accessibility statement applies to content on the access-"
-"funding.levellingup.gov.uk domain and the following services:"
+"funding.communities.gov.uk domain and the following services:"
 msgstr ""
 
 #: pre_award/apply/templates/apply/accessibility_statement.html:19
@@ -4301,12 +4301,12 @@ msgstr ""
 #~ msgid ""
 #~ "This accessibility statement applies to "
 #~ "content on the access-"
-#~ "funding.levellingup.gov.uk domain and the "
+#~ "funding.communities.gov.uk domain and the "
 #~ "following services:"
 #~ msgstr ""
 #~ "Mae'r datganiad hygyrchedd hwn yn "
 #~ "berthnasol i gynnwys ar barth access-"
-#~ "funding.levellingup.gov.uk a'r gwasanaethau "
+#~ "funding.communities.gov.uk a'r gwasanaethau "
 #~ "canlynol:"
 
 #~ msgid "Community Ownership Fund online application"

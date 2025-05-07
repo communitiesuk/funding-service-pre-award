@@ -65,7 +65,7 @@ class TestExport:
             ("awskey123123123123123/sample1.doc", "dummy/path/to/file.dmp"),
             (
                 "filename1.png",
-                "http://assessment.levellingup.gov.localhost:3010/assess/application/app_id/export/"
+                "http://assessment.communities.gov.localhost:3010/assess/application/app_id/export/"
                 "form_name%252Fpath%252Fname%252Ffilename1.png?short_id=d_id&quoted=True",
             ),
         ]

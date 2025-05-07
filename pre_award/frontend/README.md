@@ -95,7 +95,7 @@ The code for the backend endpoints are stored in the [`/api`](/api) directory. T
 ### How it works
 This service issues *signed* tokens, like a digital ticket, which is saved in a user's browser as cookie. The token contains *claims* about the user (like their name, email and account id), and a hash of that data which is signed using the private key of an RSA256 key pair.
 
-When this token is saved in a cookie by this authenticator, with both this authenticator and the other microservices on a common domain like `.access-funding.levellingup.gov.uk` it can then be read by any other microservices.
+When this token is saved in a cookie by this authenticator, with both this authenticator and the other microservices on a common domain like `.access-funding.communities.gov.uk` it can then be read by any other microservices.
 
 Those services can check the *signature* on the token using the public key from the RSA256 keypair to verify that the data in it has been issued by this authenticator service.
 

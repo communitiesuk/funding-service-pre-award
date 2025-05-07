@@ -106,17 +106,17 @@ class DefaultConfig(object):
     SUPPORT_DESK_APPLY = "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/5/group/68"
     SUPPORT_DESK_ASSESS = "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/5/group/70"
 
-    API_HOST = getenv("API_HOST", "api.levellingup.gov.localhost:3012")
-    APPLY_HOST = getenv("APPLY_HOST", "frontend.levellingup.gov.localhost:3008")
-    ASSESS_HOST = getenv("ASSESS_HOST", "assessment.levellingup.gov.localhost:3010")
-    AUTH_HOST = getenv("AUTH_HOST", "authenticator.levellingup.gov.localhost:4004")
+    API_HOST = getenv("API_HOST", "api.communities.gov.localhost:3012")
+    APPLY_HOST = getenv("APPLY_HOST", "frontend.communities.gov.localhost:3008")
+    ASSESS_HOST = getenv("ASSESS_HOST", "assessment.communities.gov.localhost:3010")
+    AUTH_HOST = getenv("AUTH_HOST", "authenticator.communities.gov.localhost:4004")
 
     STATIC_FOLDER = "static"
     TEMPLATES_FOLDER = "templates"
     LOCAL_SERVICE_NAME = "local_flask"
     FSD_USER_TOKEN_COOKIE_NAME = "fsd_user_token"
     FSD_FUND_AND_ROUND_COOKIE_NAME = "user_fund_and_round"
-    AUTHENTICATOR_HOST = environ.get("AUTHENTICATOR_HOST", "https://authenticator.levellingup.gov.localhost:4004")
+    AUTHENTICATOR_HOST = environ.get("AUTHENTICATOR_HOST", "https://authenticator.communities.gov.localhost:4004")
     ENTER_APPLICATION_URL = AUTHENTICATOR_HOST + "/service/magic-links/new"
     MAGIC_LINK_URL = (
         AUTHENTICATOR_HOST + "/service/magic-links/new?" + "fund={fund_short_name}&round={round_short_name}"
@@ -198,12 +198,12 @@ class DefaultConfig(object):
 
     # Post-award frontend
     POST_AWARD_FRONTEND_HOST = environ.get(
-        "POST_AWARD_FRONTEND_HOST", "https://find-monitoring-data.levellingup.gov.localhost:4001"
+        "POST_AWARD_FRONTEND_HOST", "https://find-monitoring-data.communities.gov.localhost:4001"
     )
 
     # Post-award submit
     POST_AWARD_SUBMIT_HOST = environ.get(
-        "POST_AWARD_SUBMIT_HOST", "https://submit-monitoring-data.levellingup.gov.localhost:4001"
+        "POST_AWARD_SUBMIT_HOST", "https://submit-monitoring-data.communities.gov.localhost:4001"
     )
 
     # Form Designer
@@ -211,7 +211,7 @@ class DefaultConfig(object):
 
     # Fund Application Builder
     FUND_APPLICATION_BUILDER_HOST = environ.get(
-        "FUND_APPLICATION_BUILDER_HOST", "https://fund-application-builder.levellingup.gov.localhost:3011"
+        "FUND_APPLICATION_BUILDER_HOST", "https://fund-application-builder.communities.gov.localhost:3011"
     )
 
     # Safe list of return applications
