@@ -857,7 +857,7 @@ class TestRoutes:
 
         # Send a request to the route you want to test
         response = assess_test_client.get(
-            "http://assessment.levellingup.gov.localhost:3010/assess/application_id/app_123/sub_criteria_id/1a2b3c4d/score"
+            "http://assessment.communities.gov.localhost:3010/assess/application_id/app_123/sub_criteria_id/1a2b3c4d/score"
         )  # noqa
 
         # Assert that the response has the expected status code
@@ -867,7 +867,7 @@ class TestRoutes:
         params = {"roles_required": "TF_LEAD_ASSESSOR|TF_ASSESSOR"}
         encoded_params = urllib.parse.urlencode(params)
         assert (
-            response.location == f"https://authenticator.levellingup.gov.localhost:4004/service/user?{encoded_params}"  # noqa
+            response.location == f"https://authenticator.communities.gov.localhost:4004/service/user?{encoded_params}"  # noqa
         )
 
     @pytest.mark.application_id("resolved_app")

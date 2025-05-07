@@ -131,10 +131,10 @@ class TestAccountMethods(object):
                 personalisation={
                     "name of fund": "test fund",
                     "link to application": AnyStringMatching(
-                        r"https://authenticator.levellingup.gov.localhost:4004/service/magic-links/landing/[A-Za-z]{8}\?fund=COF&round=R1W1"
+                        r"https://authenticator.communities.gov.localhost:4004/service/magic-links/landing/[A-Za-z]{8}\?fund=COF&round=R1W1"
                     ),
                     "contact details": "asdf@asdf.com",
-                    "request new link url": "https://authenticator.levellingup.gov.localhost:4004/service/magic-links/new?fund=COF&round=R1W1",
+                    "request new link url": "https://authenticator.communities.gov.localhost:4004/service/magic-links/new?fund=COF&round=R1W1",
                 },
                 govuk_notify_reference="1f829816-b7e5-4cf7-bbbb-1b062e5ee399",
                 email_reply_to_id=None,

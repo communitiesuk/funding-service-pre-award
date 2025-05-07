@@ -231,7 +231,7 @@ def test_sso_get_token_sets_expected_fsd_user_token_cookie_claims(
 
     response = authenticator_test_client.get(endpoint)
     assert response.status_code == 302
-    auth_cookie = authenticator_test_client.get_cookie(key=expected_cookie_name, domain="levellingup.gov.localhost")
+    auth_cookie = authenticator_test_client.get_cookie(key=expected_cookie_name, domain="communities.gov.localhost")
 
     # Check auth token cookie is set and is valid
     assert auth_cookie is not None, (
@@ -263,7 +263,7 @@ def test_sso_get_token_redirects_to_return_app_login_url(
 
     response = authenticator_test_client.get(endpoint)
 
-    assert response.location == "https://find-monitoring-data.levellingup.gov.localhost:4001/"
+    assert response.location == "https://find-monitoring-data.communities.gov.localhost:4001/"
 
 
 def test_sso_get_token_redirects_to_return_app_host_with_request_path(
@@ -285,7 +285,7 @@ def test_sso_get_token_redirects_to_return_app_host_with_request_path(
 
     response = authenticator_test_client.get(endpoint)
 
-    assert response.location == "https://find-monitoring-data.levellingup.gov.localhost:4001/foo"
+    assert response.location == "https://find-monitoring-data.communities.gov.localhost:4001/foo"
 
 
 def test_sso_get_token_400_abort_with_invalid_return_app(

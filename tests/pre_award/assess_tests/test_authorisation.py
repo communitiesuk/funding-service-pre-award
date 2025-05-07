@@ -70,7 +70,7 @@ class TestAuthorisation:
         assert response.status_code == 200
         assert b"Assessment tool" in response.data
         assert (
-            b'<a href="https://authenticator.levellingup.gov.localhost:4004/sso/login" role="button"'
+            b'<a href="https://authenticator.communities.gov.localhost:4004/sso/login" role="button"'
             b' draggable="false" class="govuk-button govuk-button--start"'
             b' data-module="govuk-button">' in response.data
         )
@@ -94,7 +94,7 @@ class TestAuthorisation:
 
         assert response.status_code == 302
         assert response.location == (
-            "https://authenticator.levellingup.gov.localhost:4004/service/user?"
+            "https://authenticator.communities.gov.localhost:4004/service/user?"
             "roles_required=TF_COMMENTER%7CNSTF_COMMENTER%7CCYP_COMMENTER%7CCOF_COMMENTER%7CDPIF_COMMENTER"
         )
 
