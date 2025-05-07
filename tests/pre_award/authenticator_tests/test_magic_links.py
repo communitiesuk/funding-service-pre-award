@@ -68,7 +68,7 @@ class TestMagicLinks(AuthSessionBase):
         link_key = create_magic_link
         use_endpoint = f"/magic-links/{link_key}"
         authenticator_test_client.get(use_endpoint)
-        auth_cookie = authenticator_test_client.get_cookie(key=expected_cookie_name, domain="levellingup.gov.localhost")
+        auth_cookie = authenticator_test_client.get_cookie(key=expected_cookie_name, domain="communities.gov.localhost")
 
         # Check auth token cookie is set and is valid
         assert auth_cookie is not None, (

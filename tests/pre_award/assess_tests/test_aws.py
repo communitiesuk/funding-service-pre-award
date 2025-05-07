@@ -6,7 +6,7 @@ def test_generate_url_short_id(app):
     file_data = FileData("app1", "form1", "path1", "comp1", "file1.txt")
     assert (
         generate_url(file_data, "short-id")
-        == "http://assessment.levellingup.gov.localhost:3010/assess/application/app1/export/form1%252Fpath1%252Fcomp1%252Ffile1.txt?short_id=short-id&quoted=True"
+        == "http://assessment.communities.gov.localhost:3010/assess/application/app1/export/form1%252Fpath1%252Fcomp1%252Ffile1.txt?short_id=short-id&quoted=True"
     )
 
 
@@ -14,7 +14,7 @@ def test_generate_url(app):
     file_data = FileData("app1", "form1", "path1", "comp1", "file1.txt")
     assert (
         generate_url(file_data)
-        == "http://assessment.levellingup.gov.localhost:3010/assess/application/app1/export/form1%252Fpath1%252Fcomp1%252Ffile1.txt?quoted=True"
+        == "http://assessment.communities.gov.localhost:3010/assess/application/app1/export/form1%252Fpath1%252Fcomp1%252Ffile1.txt?quoted=True"
     )
 
 

@@ -53,7 +53,7 @@ class TestSignout:
 
             assert response.status_code == 302
             assert (
-                "fsd_user_token=; Domain=levellingup.gov.localhost; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/"
+                "fsd_user_token=; Domain=communities.gov.localhost; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/"
                 in response.headers.get(  # noqa
                     "Set-Cookie"
                 )
@@ -85,7 +85,7 @@ class TestSignout:
         use_endpoint = f"/magic-links/{link_key}"
         authenticator_test_client.get(use_endpoint)
         self.used_link_keys.append(link_key)
-        auth_cookie = authenticator_test_client.get_cookie(key=expected_cookie_name, domain="levellingup.gov.localhost")
+        auth_cookie = authenticator_test_client.get_cookie(key=expected_cookie_name, domain="communities.gov.localhost")
 
         # Check auth token cookie is set and is valid
         assert auth_cookie is not None, (
@@ -100,7 +100,7 @@ class TestSignout:
         response = authenticator_test_client.get(endpoint)
         assert response.status_code == 302
         assert (
-            "fsd_user_token=; Domain=levellingup.gov.localhost; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/"
+            "fsd_user_token=; Domain=communities.gov.localhost; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/"
             in response.headers.get("Set-Cookie")
         )
         assert response.location == "/service/magic-links/signed-out/sign_out_request"
