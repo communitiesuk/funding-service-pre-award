@@ -1,5 +1,5 @@
 name: Deploy to AWS
-run-name: ${{ github.event_name == 'workflow_dispatch' && format('Deploy to {0}', github.event.inputs.environment) || (github.ref == 'refs/heads/main' && 'Deploy to Test-Prod' || 'Build & Unit Test') }}
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('Deploy to {0}', github.event.inputs.environment) || (github.ref == 'refs/heads/main' && 'Deploy to Test-UAT-Prod' || 'Build & Unit Test') }}
 
 on:
   workflow_dispatch:
@@ -11,6 +11,7 @@ on:
         options:
         - dev
         - test
+        - uat
         - prod
       run_e2e_tests_assessment:
         required: false
@@ -156,7 +157,7 @@ jobs:
 
   test_deploy:
     needs: [ setup, unit_tests, type_checking, paketo_build ]
-    if: ${{ contains(fromJSON(needs.setup.outputs.jobs_to_run), 'test') || contains(fromJSON(needs.setup.outputs.jobs_to_run), 'prod') }}
+    if: ${{ contains(fromJSON(needs.setup.outputs.jobs_to_run), 'test') || contains(fromJSON(needs.setup.outputs.jobs_to_run), 'uat') || contains(fromJSON(needs.setup.outputs.jobs_to_run), 'prod') }}
     uses: ./.github/workflows/deploy.yml
     concurrency:
       group: 'fsd-preaward-test'
@@ -179,8 +180,33 @@ jobs:
       run_e2e_tests_application: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_application }}
       run_e2e_tests_python: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_python }}
 
-  prod_deploy:
+  uat_deploy:
     needs: [ setup, unit_tests, type_checking, paketo_build, test_deploy ]
+    if: ${{ contains(fromJSON(needs.setup.outputs.jobs_to_run), 'uat') || contains(fromJSON(needs.setup.outputs.jobs_to_run), 'prod') }}
+    uses: ./.github/workflows/deploy.yml
+    concurrency:
+      group: 'fsd-preaward-uat'
+      cancel-in-progress: false
+    secrets:
+      AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
+      FSD_GH_APP_ID: ${{ secrets.FSD_GH_APP_ID }}
+      FSD_GH_APP_KEY: ${{ secrets.FSD_GH_APP_KEY }}
+      FS_BASIC_AUTH_USERNAME: ${{ secrets.FS_BASIC_AUTH_USERNAME }}
+      FS_BASIC_AUTH_PASSWORD: ${{ secrets.FS_BASIC_AUTH_PASSWORD }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_NOTIFICATION_CHANNEL_ID: ${{ secrets.SLACK_NOTIFICATION_CHANNEL_ID }}
+      SLACK_DEPLOYMENTS_CHANNEL_ID: ${{ secrets.SLACK_DEPLOYMENTS_CHANNEL_ID }}
+    with:
+      environment: uat
+      image_location: ${{ needs.paketo_build.outputs.image_location }}
+      alert_slack_on_failure: true
+      notify_slack_on_deployment: false
+      run_e2e_tests_assessment: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_assessment }}
+      run_e2e_tests_application: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_application }}
+      run_e2e_tests_python: false  # Never been turned on for UAT yet
+
+  prod_deploy:
+    needs: [ setup, unit_tests, type_checking, paketo_build, test_deploy, uat_deploy ]
     if: ${{ contains(fromJSON(needs.setup.outputs.jobs_to_run), 'prod') }}
     uses: ./.github/workflows/deploy.yml
     concurrency:

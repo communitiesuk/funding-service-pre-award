@@ -9,6 +9,7 @@ from pre_award.config.envs.default import DefaultConfig
         ("development", True),
         ("dev", False),
         ("test", False),
+        ("uat", False),
         ("prod", False),
         ("production", False),
     ),

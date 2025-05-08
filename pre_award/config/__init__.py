@@ -12,7 +12,7 @@ match FLASK_ENV:
         from pre_award.config.envs.test import TestConfig as Config
     case "unit_test":
         from pre_award.config.envs.unit_test import UnitTestConfig as Config
-    case "production":
+    case "uat" | "production":
         from pre_award.config.envs.production import ProductionConfig as Config
     case _:
         from pre_award.config.envs.default import DefaultConfig as Config
