@@ -8,7 +8,7 @@ Once this data has been loaded, if it needs to change, there are 2 options:
 This folder is intended to serve option 2.
 
 ## Script format
-When data needs to be updated (after it has already been inserted in UAT/production - for changes during development use option 1 and truncate the data then reinsert).
+When data needs to be updated (after it has already been inserted in production - for changes during development use option 1 and truncate the data then reinsert).
 
 For each change,
 1. Update the main [fund loader config](/config/fund_loader_config/) with any new values.
