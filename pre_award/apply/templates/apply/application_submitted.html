@@ -30,9 +30,9 @@ import govukButton -%}
           <p class="govuk-body">
             {% trans %}The assessors will start reviewing applications from {% endtrans %} {{ assessment_start_date|to_bst|datetime_format_respect_lang }}.
           </p>
-
-          <p class="govuk-body">{% trans %}We’ll email you if the assessor needs additional information or has any questions about your application for{% endtrans %} {{fund_name}}.</p>
-
+          {% if fund_type == "UNCOMPETED" %}
+            <p class="govuk-body">{% trans %}We’ll email you if the assessor needs additional information or has any questions about your application for{% endtrans %} {{fund_name}}.</p>
+          {% endif %}
           <a href="{{ url_for('account_routes.dashboard', fund=fund_short_name, round=round_short_name) }}" >
             <p class="govuk-link">{% trans %}Go to your applications{% endtrans %}</p>
           </a>
