@@ -255,19 +255,9 @@ def test_dashboard_route(apply_test_client, mocker, mock_login):
     assert len(soup.find_all("h2", string=lambda text: "Round 2 Window 2" == str.strip(text))) == 1
 
 
-@pytest.mark.skip(reason="Logic covered in build data for display")
-def test_submitted_dashboard_route_shows_no_application_link(
-    apply_test_client, mocker, mock_login, mock_get_fund_round
-):
-    mocker.patch(
-        "pre_award.apply.default.account_routes.get_applications_for_account",
-        return_value=TEST_SUBMITTED_APPLICATION_STORE_DATA,
-    )
+def test_account_dashboard_with_no_fund_or_round_doesnt_500(apply_test_client, mocker, mock_login, mock_get_fund_round):
     response = apply_test_client.get("/account", follow_redirects=True)
-    assert response.status_code == 200
-    # there should be no link to application on the page
-    assert b"Continue application" not in response.data
-    assert b"Submitted" in response.data
+    assert response.status_code == 404
 
 
 @pytest.mark.parametrize(

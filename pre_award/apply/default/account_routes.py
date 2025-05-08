@@ -1,5 +1,5 @@
 import requests
-from flask import current_app, g, make_response, redirect, render_template, request, url_for
+from flask import abort, current_app, g, make_response, redirect, render_template, request, url_for
 from flask_babel import force_locale
 from fsd_utils.authentication.decorators import login_required
 
@@ -163,6 +163,12 @@ def dashboard():
             "account_id": account_id,
         }
         welsh_available = fund_details.welsh_available
+
+    else:
+        # Without a fund in the URL we don't know what to show. Theoretically we should design around this, but
+        # currently we're getting errors from `search_params` being undefined if this page is hit, and it happens
+        # as an edge case, so we're not designing to fix it.
+        raise abort(404)
 
     applications = search_applications(search_params=search_params, as_dict=False)
 
