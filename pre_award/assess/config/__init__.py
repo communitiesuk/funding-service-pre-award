@@ -14,7 +14,7 @@ match FLASK_ENV:
         from pre_award.config.envs.dev import DevConfig as Config
     case "test":
         from pre_award.config.envs.test import TestConfig as Config
-    case "uat" | "production":
+    case "production":
         from pre_award.config.envs.production import ProductionConfig as Config
     case _:
         from pre_award.config.envs.default import DefaultConfig as Config
