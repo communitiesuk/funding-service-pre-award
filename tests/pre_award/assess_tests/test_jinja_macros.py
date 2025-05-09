@@ -40,113 +40,166 @@ def default_flask_g():
 
 
 class TestJinjaMacros(object):
+    def is_uncompeted_flow(self):
+        test_cases = [
+            {
+                "mock_value": False,
+                "description": "Test with is_uncompeted_flow=False",
+            },
+            {
+                "mock_value": True,
+                "description": "Test with is_uncompeted_flow=True",
+            },
+        ]
+        return test_cases
+
     def test_criteria_macro_lead_assessor(self, app):
-        with app.test_request_context(headers={"Host": app.config["ASSESS_HOST"]}):
-            rendered_html = render_template_string(
-                "{{criteria_element(criteria, name_classes, application_id, max_possible_sub_criteria_score)}}",
-                criteria_element=get_template_attribute("assess/macros/criteria_element.html", "criteria_element"),
-                criteria=_Criteria(
-                    name="Example title",
-                    total_criteria_score=2,
-                    number_of_scored_sub_criteria=2,
-                    weighting=0.5,
-                    sub_criterias=[
-                        _CriteriaSubCriteria(
-                            id="1",
-                            name="Sub Criteria 1",
-                            status="NOT_STARTED",
-                            theme_count=1,
-                            score=0,
-                        ),
-                        _CriteriaSubCriteria(
-                            id="2",
-                            name="Sub Criteria 2",
-                            status="NOT_STARTED",
-                            theme_count=2,
-                            score=2,
-                        ),
-                    ],
-                ),
-                name_classes="example-class",
-                application_id=1,
-                max_possible_sub_criteria_score=4,
-                g=default_flask_g(),
-            )
+        test_cases = self.is_uncompeted_flow()
+        for case in test_cases:
+            with app.test_request_context(headers={"Host": app.config["ASSESS_HOST"]}):
 
-            soup = BeautifulSoup(rendered_html, "html.parser")
+                def mock_is_uncompeted_flow(fund=None):
+                    return case["mock_value"]  # noqa: B023
 
-            assert soup.find("h3", class_="example-class").text == "Example title", "Title not found"
+                app.jinja_env.globals["is_uncompeted_flow"] = mock_is_uncompeted_flow
 
-            assert (
-                soup.find("p", class_="govuk-body govuk-!-margin-bottom-2").text.strip() == "50% of overall score."
-            ), "Weighting not found"
+                rendered_html = render_template_string(
+                    "{{criteria_element(criteria, name_classes, application_id, max_possible_sub_criteria_score)}}",
+                    criteria_element=get_template_attribute("assess/macros/criteria_element.html", "criteria_element"),
+                    criteria=_Criteria(
+                        name="Example title",
+                        total_criteria_score=2,
+                        number_of_scored_sub_criteria=2,
+                        weighting=0.5,
+                        sub_criterias=[
+                            _CriteriaSubCriteria(
+                                id="1",
+                                name="Sub Criteria 1",
+                                status="NOT_STARTED",
+                                theme_count=1,
+                                score=0,
+                            ),
+                            _CriteriaSubCriteria(
+                                id="2",
+                                name="Sub Criteria 2",
+                                status="NOT_STARTED",
+                                theme_count=2,
+                                score=2,
+                            ),
+                        ],
+                    ),
+                    name_classes="example-class",
+                    application_id=1,
+                    max_possible_sub_criteria_score=4,
+                    g=default_flask_g(),
+                    fund="COF",
+                )
 
-            table = soup.find(
-                "table",
-                class_="govuk-table govuk-!-margin-bottom-6 govuk-table-no-bottom-border",
-            )
+                soup = BeautifulSoup(rendered_html, "html.parser")
 
-            assert table is not None, "Table should have border negation class"
+                assert soup.find("h3", class_="example-class").text == "Example title", "Title not found"
 
-            assert len(soup.find_all("table")) == 1, "Should have 1 table"
-            assert len(table.find_all("thead")) == 1, "Should have 1 table header"
-            assert len(table.find_all("tbody")) == 1, "Should have 1 table body"
-            assert len(table.find_all("tr")) == 4, "Should have 4 table rows"
+                table = soup.find(
+                    "table",
+                    class_="govuk-table govuk-!-margin-bottom-6 govuk-table-no-bottom-border",
+                )
+                assert table is not None, "Table should have border negation class"
+                assert len(soup.find_all("table")) == 1, "Should have 1 table"
+                assert len(table.find_all("thead")) == 1, "Should have 1 table header"
+                assert len(table.find_all("tbody")) == 1, "Should have 1 table body"
 
-            assert table.find("strong", text="Total criteria score") is not None, "Should have Total criteria score"
-            assert table.find("th", text="Score out of 4") is not None, "Should have Score out of 4 column"
-            assert soup.find_all("td", class_="govuk-table__cell--numeric")[0].text == "0", "Should have 0 score"
-            assert soup.find_all("td", class_="govuk-table__cell--numeric")[2].text == "2", "Should have 2 score"
-            assert soup.find_all("td", class_="govuk-table__cell--numeric")[4].text == "2 of 8", (
-                "Should have 2 of 8 score"
-            )
+                if case["mock_value"]:
+                    # Assertions for uncompeted flow
+                    # There should be no Totals row in case of uncompeted flow, so only 3 rows
+                    assert len(table.find_all("tr")) == 3, "Should have 3 table rows"
+                    assert table.find("strong", text="Total criteria score") is None, (
+                        "Should not have Total criteria score"
+                    )
+                    assert table.find("th", text="Score out of 4") is None, "Should not have 'Score out of 4 column'"
+
+                    all_numeric_cells = soup.find_all("td", class_="govuk-table__cell--numeric")
+                    # None of these values below should be present in the table
+                    for cell in all_numeric_cells:
+                        assert cell.text != "0", "Should not have 0 score"
+                        assert cell.text != "2", "Should not have 2 score"
+                        assert cell.text != "2 of 8", "Should not have 2 of 8 score"
+
+                else:
+                    # Assertions for competed flow
+                    assert (
+                        soup.find("p", class_="govuk-body govuk-!-margin-bottom-2").text.strip()
+                        == "50% of overall score."
+                    ), "Weighting not found"
+
+                    assert len(table.find_all("tr")) == 4, "Should have 4 table rows"
+                    assert table.find("strong", text="Total criteria score") is not None, (
+                        "Should have Total criteria score"
+                    )
+                    assert table.find("th", text="Score out of 4") is not None, "Should have Score out of 4 column"
+                    assert soup.find_all("td", class_="govuk-table__cell--numeric")[0].text == "0", (
+                        "Should have 0 score"
+                    )
+                    assert soup.find_all("td", class_="govuk-table__cell--numeric")[2].text == "2", (
+                        "Should have 2 score"
+                    )
+                    assert soup.find_all("td", class_="govuk-table__cell--numeric")[4].text == "2 of 8", (
+                        "Should have 2 of 8 score"
+                    )
 
     def test_criteria_macro_commenter(self, app):
-        with app.test_request_context(headers={"Host": app.config["ASSESS_HOST"]}):
-            g.user = User(
-                full_name="Test Commenter",
-                email="test@example.com",
-                roles=["COF_COMMENTER"],
-                highest_role_map={"COF": "COMMENTER"},
-            )
-            g.access_controller = AssessmentAccessController("COF")
-            rendered_html = render_template_string(
-                "{{criteria_element(criteria, name_classes, application_id)}}",
-                criteria_element=get_template_attribute("assess/macros/criteria_element.html", "criteria_element"),
-                criteria=_Criteria(
-                    name="Example title",
-                    total_criteria_score=0,
-                    number_of_scored_sub_criteria=0,
-                    weighting=0.5,
-                    sub_criterias=[
-                        _CriteriaSubCriteria(
-                            id="1",
-                            name="Sub Criteria 1",
-                            status="NOT_STARTED",
-                            theme_count=1,
-                            score=2,
-                        ),
-                        _CriteriaSubCriteria(
-                            id="2",
-                            name="Sub Criteria 2",
-                            status="NOT_STARTED",
-                            theme_count=2,
-                            score=2,
-                        ),
-                    ],
-                ),
-                name_classes="example-class",
-                application_id=1,
-                g=g,
-            )
+        test_cases = self.is_uncompeted_flow()
+        for case in test_cases:
+            with app.test_request_context(headers={"Host": app.config["ASSESS_HOST"]}):
 
-            soup = BeautifulSoup(rendered_html, "html.parser")
+                def mock_is_uncompeted_flow(fund=None):
+                    return case["mock_value"]  # noqa: B023
 
-            assert len(soup.select("tr")) == 3, "Should have 3 table rows"
+                app.jinja_env.globals["is_uncompeted_flow"] = mock_is_uncompeted_flow
 
-            assert not soup.find("strong", text="Total criteria score"), "Should not have Total criteria score"
+                g.user = User(
+                    full_name="Test Commenter",
+                    email="test@example.com",
+                    roles=["COF_COMMENTER"],
+                    highest_role_map={"COF": "COMMENTER"},
+                )
+                g.access_controller = AssessmentAccessController("COF")
+                rendered_html = render_template_string(
+                    "{{criteria_element(criteria, name_classes, application_id)}}",
+                    criteria_element=get_template_attribute("assess/macros/criteria_element.html", "criteria_element"),
+                    criteria=_Criteria(
+                        name="Example title",
+                        total_criteria_score=0,
+                        number_of_scored_sub_criteria=0,
+                        weighting=0.5,
+                        sub_criterias=[
+                            _CriteriaSubCriteria(
+                                id="1",
+                                name="Sub Criteria 1",
+                                status="NOT_STARTED",
+                                theme_count=1,
+                                score=2,
+                            ),
+                            _CriteriaSubCriteria(
+                                id="2",
+                                name="Sub Criteria 2",
+                                status="NOT_STARTED",
+                                theme_count=2,
+                                score=2,
+                            ),
+                        ],
+                    ),
+                    name_classes="example-class",
+                    application_id=1,
+                    g=g,
+                )
 
-            assert not soup.find("th", text="Score out of 5"), "Should not have Score out of 5 column"
+                soup = BeautifulSoup(rendered_html, "html.parser")
+
+                # Neither when is_uncompeted_flow is True or False should show the weighting-related text
+                # e.g. no "Total criteria score" or "Score out of 5" text, and only 3 rows
+                assert len(soup.select("tr")) == 3, "Should have 3 table rows"
+                assert not soup.find("strong", text="Total criteria score"), "Should not have Total criteria score"
+                assert not soup.find("th", text="Score out of 5"), "Should not have Score out of 5 column"
 
     def test_section_macro(self, app):
         with app.test_request_context(headers={"Host": app.config["ASSESS_HOST"]}):
