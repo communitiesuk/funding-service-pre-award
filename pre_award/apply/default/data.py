@@ -10,11 +10,13 @@ from urllib.parse import urlencode
 
 import requests
 from flask import abort, current_app
+from flask_babel import format_datetime
 from fsd_utils.simple_utils.date_utils import (
     current_datetime_after_given_iso_string,
     current_datetime_before_given_iso_string,
 )
 
+from common.utils.filters import to_bst
 from pre_award.apply.models.account import Account
 from pre_award.apply.models.application import Application
 from pre_award.apply.models.application_display_mapping import ApplicationMapping
@@ -217,8 +219,8 @@ def get_assessment_start(fund_id, round_id, language=None):
     if not assessment_start_str:
         return None
     try:
-        assessment_start_date = datetime.fromisoformat(assessment_start_str.replace("Z", "+00:00"))
-        return assessment_start_date
+        assessment_start_date = to_bst(datetime.fromisoformat(assessment_start_str.replace("Z", "+00:00")))
+        return format_datetime(assessment_start_date, format="d MMMM yyyy")
     except (ValueError, TypeError):
         return assessment_start_str
 
