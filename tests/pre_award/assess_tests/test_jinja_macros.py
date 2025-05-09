@@ -117,6 +117,13 @@ class TestJinjaMacros(object):
                     )
                     assert table.find("th", text="Score out of 4") is None, "Should not have 'Score out of 4 column'"
 
+                    assert soup.find("p", class_="govuk-body govuk-!-margin-bottom-2") is None, (
+                        "Weighting should not be present"
+                    )
+                    assert "50% of overall score." not in soup.text, (
+                        "Should not have '50% of overall score.' in the HTML"
+                    )
+
                     all_numeric_cells = soup.find_all("td", class_="govuk-table__cell--numeric")
                     # None of these values below should be present in the table
                     for cell in all_numeric_cells:
