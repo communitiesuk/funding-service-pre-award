@@ -29,7 +29,7 @@
                     sub_criteria.name
                 )
             },
-            { "text": sub_criteria.score if sub_criteria.score is not none or "", "format": "numeric" } if g.access_controller.has_any_assessor_role else None,
+            { "text": sub_criteria.score if sub_criteria.score is not none or "", "format": "numeric" } if not is_uncompeted_flow(fund) and g.access_controller.has_any_assessor_role else None,
             {
                 "html": status,
                 "format": "numeric"
@@ -37,23 +37,28 @@
         ]) %}
     {% endfor %}
 
-    {% set _ = rows.append([
-        { "html": "<strong>Total criteria score</strong>" },
-        { "text": "" },
-        { "text": "{} of {}".format(criteria.total_criteria_score, criteria.number_of_scored_sub_criteria * max_possible_sub_criteria_score), "format": "numeric" },
-    ]) if g.access_controller.has_any_assessor_role %}
+    {% if not is_uncompeted_flow(fund) and g.access_controller.has_any_assessor_role %}
+        {% set _ = rows.append([
+            { "html": "<strong>Total criteria score</strong>" },
+            { "text": "" },
+            { "text": "{} of {}".format(criteria.total_criteria_score, criteria.number_of_scored_sub_criteria * max_possible_sub_criteria_score), "format": "numeric" },
+        ]) %}
+    {% endif %}
 
     <h3 class="{{ name_classes or '' }}">{{ criteria.name }}</h3>
-    <p class="govuk-body govuk-!-margin-bottom-2">
-        <strong>{{ (criteria.weighting * 100)|int }}%</strong> of overall score.
-    </p>
+
+    {% if not is_uncompeted_flow(fund) %}
+        <p class="govuk-body govuk-!-margin-bottom-2">
+            <strong>{{ (criteria.weighting * 100)|int }}%</strong> of overall score.
+        </p>
+    {% endif %}
 
     {{
         govukTable({
         "firstCellIsHeader":false,
         "head": [
             { "text": "Assessment sub criteria", "classes": "govuk-!-width-one-half"  },
-            { "text": "Score out of {}".format(max_possible_sub_criteria_score), "format": "numeric" } if g.access_controller.has_any_assessor_role else None,
+            { "text": "Score out of {}".format(max_possible_sub_criteria_score), "format": "numeric" } if not is_uncompeted_flow(fund) and g.access_controller.has_any_assessor_role else None,
             { "text": "Status", "format": "numeric" }
         ],
         "rows": rows,

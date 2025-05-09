@@ -3,7 +3,7 @@
 {%- from "govuk_frontend_jinja/components/table/macro.html" import govukTable -%}
 {% from "assess/macros/flag_history.html" import flag_tabs %}
 {% from "assess/macros/section_element.html" import section_element -%}
-{% from "assess/macros/criteria_element.html" import criteria_element -%}
+{% from "assess/macros/criteria_element.html" import criteria_element with context -%}
 {% from "assess/macros/banner_summary.html" import banner_summary %}
 {% from "assess/macros/flag_application_button.html" import flag_application_button %}
 {% from "assess/macros/mark_qa_complete_button.html" import mark_qa_complete_button %}
