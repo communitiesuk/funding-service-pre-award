@@ -117,12 +117,21 @@ class TestJinjaMacros(object):
                     )
                     assert table.find("th", text="Score out of 4") is None, "Should not have 'Score out of 4 column'"
 
+                    assert soup.find("p", class_="govuk-body govuk-!-margin-bottom-2") is None, (
+                        "Weighting should not be present"
+                    )
+                    assert "50% of overall score." not in soup.text, (
+                        "Should not have '50% of overall score.' in the HTML"
+                    )
+
                     all_numeric_cells = soup.find_all("td", class_="govuk-table__cell--numeric")
                     # None of these values below should be present in the table
                     for cell in all_numeric_cells:
                         assert cell.text != "0", "Should not have 0 score"
                         assert cell.text != "2", "Should not have 2 score"
                         assert cell.text != "2 of 8", "Should not have 2 of 8 score"
+                    # There should only be 2 <th> elements in the <row> element
+                    assert len(table.find_all("th")) == 2, "Should have 2 table headers"
 
                 else:
                     # Assertions for competed flow
@@ -145,6 +154,8 @@ class TestJinjaMacros(object):
                     assert soup.find_all("td", class_="govuk-table__cell--numeric")[4].text == "2 of 8", (
                         "Should have 2 of 8 score"
                     )
+                    # There should be 3 <th> elements in the <row> element
+                    assert len(table.find_all("th")) == 3, "Should have 3 table headers"
 
     def test_criteria_macro_commenter(self, app):
         test_cases = self.is_uncompeted_flow()
@@ -200,6 +211,21 @@ class TestJinjaMacros(object):
                 assert len(soup.select("tr")) == 3, "Should have 3 table rows"
                 assert not soup.find("strong", text="Total criteria score"), "Should not have Total criteria score"
                 assert not soup.find("th", text="Score out of 5"), "Should not have Score out of 5 column"
+
+                table = soup.find(
+                    "table",
+                    class_="govuk-table govuk-!-margin-bottom-6 govuk-table-no-bottom-border",
+                )
+
+                # There should only be 2 <th> elements in the <row> element for both cases
+                # (commenters don't see the scoring details)
+                assert len(table.find_all("th")) == 2, "Should have 2 table headers"
+
+                if case["mock_value"]:
+                    # Assertions for uncompeted flow
+                    assert "50% of overall score." not in soup.text, (
+                        "Should not have '50% of overall score.' in the HTML"
+                    )
 
     def test_section_macro(self, app):
         with app.test_request_context(headers={"Host": app.config["ASSESS_HOST"]}):

@@ -1,6 +1,9 @@
 {%- from "govuk_frontend_jinja/components/table/macro.html" import govukTable -%}
 {% macro criteria_element(criteria, name_classes, application_id, max_possible_sub_criteria_score) %}
 
+{# Determine if the scoring details should be shown #}
+{% set show_scoring = not is_uncompeted_flow(fund) and g.access_controller.has_any_assessor_role %}
+
     {% set rows = [] %}
     {% for sub_criteria in criteria.sub_criterias %}
         {% set status %}
@@ -18,26 +21,43 @@
                 <span class="govuk-tag govuk-tag--blue">{{ sub_criteria.status|all_caps_to_human }}</span>
             {% endif %}
         {% endset %}
-        {% set _ = rows.append([
-            {
-                "html": '<a class="govuk-link" data-qa="sub_criteria_name" href="{}">{}</a>'.format(
-                    url_for(
-                        'assessment_bp.display_sub_criteria',
-                         application_id=application_id,
-                         sub_criteria_id=sub_criteria.id
-                    ),
-                    sub_criteria.name
-                )
-            },
-            { "text": sub_criteria.score if sub_criteria.score is not none or "", "format": "numeric" } if not is_uncompeted_flow(fund) and g.access_controller.has_any_assessor_role else None,
-            {
-                "html": status,
+
+        {# First column: the link for the sub criteria #}
+        {% set row = [] %}
+        {% set _ = row.append(
+                {
+                    "html": '<a class="govuk-link" data-qa="sub_criteria_name" href="{}">{}</a>'.format(
+                        url_for(
+                            'assessment_bp.display_sub_criteria',
+                            application_id=application_id,
+                            sub_criteria_id=sub_criteria.id
+                        ),
+                        sub_criteria.name
+                    )
+                }
+            )
+        %}
+
+        {# Optionally add the score column only if the flag is true #}
+        {% if show_scoring %}
+            {% set _ = row.append({
+                "text": sub_criteria.score if sub_criteria.score is not none else "",
                 "format": "numeric"
-            }
-        ]) %}
+                })
+            %}
+        {% endif %}
+
+        {# Add the status column #}
+        {% set _ = row.append({
+            "html": status,
+            "format": "numeric"
+            })
+        %}
+        {% set _ = rows.append(row) %}
     {% endfor %}
 
-    {% if not is_uncompeted_flow(fund) and g.access_controller.has_any_assessor_role %}
+    {# Optionally add the totals row if scoring details should be shown #}
+    {% if show_scoring %}
         {% set _ = rows.append([
             { "html": "<strong>Total criteria score</strong>" },
             { "text": "" },
@@ -53,16 +73,31 @@
         </p>
     {% endif %}
 
+    {# Build the table header conditionally to match the row columns #}
+    {% set table_head = [] %}
+    {% set _ = table_head.append({
+        "text": "Assessment sub criteria",
+        "classes": "govuk-!-width-one-half"
+    }) %}
+    {% if show_scoring %}
+        {% set _ = table_head.append({
+            "text": "Score out of " ~ max_possible_sub_criteria_score,
+            "format": "numeric"
+        }) %}
+    {% endif %}
+    {% set _ = table_head.append({
+        "text": "Status",
+        "format": "numeric"
+    }) %}
+
+
     {{
         govukTable({
-        "firstCellIsHeader":false,
-        "head": [
-            { "text": "Assessment sub criteria", "classes": "govuk-!-width-one-half"  },
-            { "text": "Score out of {}".format(max_possible_sub_criteria_score), "format": "numeric" } if not is_uncompeted_flow(fund) and g.access_controller.has_any_assessor_role else None,
-            { "text": "Status", "format": "numeric" }
-        ],
-        "rows": rows,
-        "classes": "govuk-!-margin-bottom-6 govuk-table-no-bottom-border"
-    }) }}
+            "firstCellIsHeader": false,
+            "head": table_head,
+            "rows": rows,
+            "classes": "govuk-!-margin-bottom-6 govuk-table-no-bottom-border"
+        })
+    }}
 
 {% endmacro %}
