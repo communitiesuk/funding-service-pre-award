@@ -320,6 +320,7 @@ def submit_application(application_id) -> Applications:  # noqa: C901
             .options(load_only(AssessmentRecord.jsonb_blob))
         )
 
+        # TODO find a better way to do this without hardcoding fund name
         if existing_application and fund.funding_type == "UNCOMPETED" and fund.short_name != "DPIF":
             # For uncompeted funds, the application may already exist and this may be a resubmission.
 
