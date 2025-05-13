@@ -1297,7 +1297,10 @@ def display_sub_criteria(  # noqa: C901
         "pagination": state.get_pagination_from_sub_criteria_id(sub_criteria_id),
     }
 
-    if common_template_config["fund"].funding_type == "UNCOMPETED":
+    if (
+        common_template_config["fund"].funding_type == "UNCOMPETED"
+        and common_template_config["fund"].short_name != "DPIF"
+    ):
         return render_template(
             "assessments/uncompeted_sub_criteria.html",
             unrequested_changes=any(theme.get("unrequested_change") for theme in theme_answers_response),
