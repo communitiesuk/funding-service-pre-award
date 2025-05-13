@@ -1297,6 +1297,7 @@ def display_sub_criteria(  # noqa: C901
         "pagination": state.get_pagination_from_sub_criteria_id(sub_criteria_id),
     }
 
+    # TODO find a better way to do this without hardcoding fund name
     if (
         common_template_config["fund"].funding_type == "UNCOMPETED"
         and common_template_config["fund"].short_name != "DPIF"
