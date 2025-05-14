@@ -14,6 +14,7 @@ from pre_award.apply.default.data import (
     determine_round_status,
     get_application_data,
     get_application_display_config,
+    get_assessment_start,
     get_feedback,
     get_feedback_survey_from_store,
     get_fund_data,
@@ -457,6 +458,11 @@ def submit_application():
         as_dict=False,
         ttl_hash=get_ttl_hash(Config.LRU_CACHE_TIME),
     )
+
+    assessment_start_date = get_assessment_start(
+        application.fund_id, application.round_id, language=application.language
+    )
+
     submitted = format_payload_and_submit_application(application_id)
 
     with force_locale(application.language):
@@ -486,7 +492,9 @@ def submit_application():
                 application_email=application_email,
                 fund_name=fund_data.name,
                 fund_short_name=fund_data.short_name,
+                fund_type=fund_data.funding_type,
                 round_short_name=round_data.short_name,
+                assessment_start_date=assessment_start_date,
                 migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
             )
 
