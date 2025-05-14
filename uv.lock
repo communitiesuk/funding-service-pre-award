@@ -760,7 +760,7 @@ wheels = [
 
 [[package]]
 name = "funding-service-design-utils"
-version = "6.1.0"
+version = "6.1.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "beautifulsoup4" },
@@ -781,9 +781,9 @@ dependencies = [
     { name = "sentry-sdk", extra = ["flask"] },
     { name = "sqlalchemy-utils" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f3/a4/85d0fa3a958027d1b61131f3a9c34913c6159814c55a8f8001b5abf3f5ba/funding_service_design_utils-6.1.0.tar.gz", hash = "sha256:bef1f66e0d3a4e6a6aa383668ac01c7dfa7d9a4ad42a7d1954b0c227794cd632", size = 67990, upload-time = "2025-03-05T15:24:30.031Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/9d/41/61261ac7051cc3f0259583a8c52a069684be5f053f6269a0dc132b387f06/funding_service_design_utils-6.1.3.tar.gz", hash = "sha256:d28d463c1c460f72e823fae557dd2f710ef6459b3bdd36e1051cb471ef095411", size = 67972, upload-time = "2025-04-30T12:33:05.337Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ef/b0/35b714680499a62498a7b3a11ed2fcfb6a95fd029402ccd18953855e3e1d/funding_service_design_utils-6.1.0-py3-none-any.whl", hash = "sha256:223fd5b700e9459946e414084677812a66d806b9f8a52500f0523b9a3c3a324b", size = 81655, upload-time = "2025-03-05T15:24:28.608Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/0f/21063098ecd667b97084f60622a094ed8706df4ba9de8b37aa7d37df3efa/funding_service_design_utils-6.1.3-py3-none-any.whl", hash = "sha256:206acb561e31285986bf9ab1848aa73c553aad70ec6bb097548683bc32a1a329", size = 81668, upload-time = "2025-04-30T12:33:04.152Z" },
 ]
 
 [package.optional-dependencies]
@@ -904,7 +904,7 @@ requires-dist = [
     { name = "flask-sqlalchemy", specifier = "==3.1.1" },
     { name = "flask-talisman", specifier = "==1.1.0" },
     { name = "flask-wtf", specifier = "==1.2.2" },
-    { name = "funding-service-design-utils", extras = ["toggles"], specifier = "==6.1.0" },
+    { name = "funding-service-design-utils", extras = ["toggles"], specifier = "==6.1.3" },
     { name = "govuk-frontend-jinja", specifier = "==2.8.0" },
     { name = "greenlet", specifier = "==3.1.1" },
     { name = "gunicorn", extras = ["gevent"], specifier = "==23.0.0" },
