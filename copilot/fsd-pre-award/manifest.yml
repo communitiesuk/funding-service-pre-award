@@ -244,7 +244,6 @@ environments:
       AUTH_HOST: "account.access-funding.communities.gov.uk"
       API_HOST: "fsd-pre-award.${COPILOT_ENVIRONMENT_NAME}.pre-award.local:8080"
       APPLICANT_FRONTEND_HOST: "https://apply.access-funding.communities.gov.uk" # TODO: remove me when all frontends combined
-      FORMS_SERVICE_PUBLIC_HOST: "https://application-questions.access-funding.communities.gov.uk"
       POST_AWARD_FRONTEND_HOST: "https://find-monitoring-data.access-funding.communities.gov.uk"
       POST_AWARD_SUBMIT_HOST: "https://submit-monitoring-data.access-funding.communities.gov.uk"
       SENTRY_TRACES_SAMPLE_RATE: 0.1
