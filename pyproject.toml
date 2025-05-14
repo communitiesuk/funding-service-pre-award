@@ -28,7 +28,7 @@ dependencies = [
     "flask-sqlalchemy==3.1.1",
     "flask-talisman==1.1.0",
     "flask-wtf==1.2.2",
-    "flask==3.0.3",
+    "flask==3.1.1",
     "govuk-frontend-jinja==2.8.0",
     "greenlet==3.1.1",
     "gunicorn[gevent]==23.0.0",
