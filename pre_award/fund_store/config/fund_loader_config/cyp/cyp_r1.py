@@ -161,7 +161,7 @@ round_config = [
         "assessment_deadline": CYP_R1_ASSESSMENT_DEADLINE_DATE,
         "prospectus": CYP_PROSPECTS_LINK,
         "privacy_notice": "https://www.gov.uk/guidance/the-children-and-young-peoples-resettlement-fund-privacy-notice",
-        "contact_email": "cyprfund@levellingup.gov.uk",
+        "contact_email": "cyprfund@communities.gov.uk",
         "instructions_json": None,
         "feedback_link": "",
         "project_name_field_id": "bsUoNG",

@@ -137,7 +137,7 @@ round_config = [
         "assessment_deadline": DPI_R2_ASSESSMENT_DEADLINE_DATE,
         "prospectus": DPI_PROSPECTS_LINK,
         "privacy_notice": DPI_PRIVACY_NOTICE,
-        "contact_email": "digitalplanningteam@levellingup.gov.uk",
+        "contact_email": "digitalplanningteam@communities.gov.uk",
         "instructions_json": None,
         "feedback_link": "",
         "project_name_field_id": "JAAhRP",

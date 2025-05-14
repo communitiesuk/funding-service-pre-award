@@ -87,7 +87,7 @@ LOADER_CONFIG = {
         "assessment_deadline": "2026-02-28T09:00:00",
         "prospectus": "https://www.gov.uk/government/publications/high-street-rental-auctions-grants-for-local-authorities/high-street-rental-auctions-fund-prospectus",
         "privacy_notice": "https://www.gov.uk/government/publications/high-street-rental-auctions-grants-for-local-authorities/high-street-rental-auctions-privacy-notice",
-        "contact_email": "HighStreetRentalAuctions@levellingup.gov.uk",
+        "contact_email": "HighStreetRentalAuctions@communities.gov.uk",
         "instructions_json": {
             "en": None,
             "cy": None,
