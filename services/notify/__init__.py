@@ -132,13 +132,11 @@ class NotificationService:
     REPLY_TO_EMAILS_WITH_NOTIFY_ID = {
         "LocalPlansandGreenBeltFunding@communities.gov.uk": "7bc1b42f-512d-4e43-a70a-3c06a3197f38",
         FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS: "10668b8d-9472-4ce8-ae07-4fcc7bf93a9d",
-        "COF@levellingup.gov.uk": "10668b8d-9472-4ce8-ae07-4fcc7bf93a9d",
         "COF@communities.gov.uk": "10668b8d-9472-4ce8-ae07-4fcc7bf93a9d",
-        "transformationfund@levellingup.gov.uk": "25286d9a-8543-41b5-a00f-331b999e51f0",
-        "cyprfund@levellingup.gov.uk": "72bb79a8-2748-4404-9f01-14690bee3843",
+        "transformationfund@communities.gov.uk": "25286d9a-8543-41b5-a00f-331b999e51f0",
+        "cyprfund@communities.gov.uk": "72bb79a8-2748-4404-9f01-14690bee3843",
         "digitalplanningteam@communities.gov.uk": "73eecbb1-5dbc-4653-8c58-46aa79151210",
-        "digitalplanningteam@levellingup.gov.uk": "73eecbb1-5dbc-4653-8c58-46aa79151210",
-        "HighStreetRentalAuctions@levellingup.gov.uk": "0874cafb-a297-4f3c-bb3f-99bc578cce4a",
+        "HighStreetRentalAuctions@communities.gov.uk": "0874cafb-a297-4f3c-bb3f-99bc578cce4a",
         "sponsorship@communities.gov.uk": "cc80c848-a9e6-432a-bd3a-cf6fe6b77b3d",
         "chambid@communities.gov.uk": "51b1b1bb-5c4e-4faa-bca2-3e17c118c446",
     }
