@@ -10,7 +10,12 @@ from pre_award.assess.assessments.models.round_summary import RoundSummary, Stat
 from pre_award.assess.services.models.flag import Flag
 from pre_award.assessment_store.db.models.assessment_record.enums import Status
 from tests.pre_award.assess_tests.api_data.test_data import fund_specific_claim_map
-from tests.pre_award.assess_tests.conftest import create_valid_token, test_commenter_claims, test_lead_assessor_claims
+from tests.pre_award.assess_tests.conftest import (
+    create_valid_token,
+    test_commenter_claims,
+    test_dpif_commenter_claims,
+    test_lead_assessor_claims,
+)
 
 
 class TestRoutes:
@@ -1436,6 +1441,77 @@ class TestRoutes:
         assert (
             soup.title.string
             == "test_theme_name – test_sub_criteria – Project In prog and Res – Assessment Hub – GOV.UK"
+        )
+
+    @pytest.mark.application_id("uncompeted_app")
+    @pytest.mark.fund_id("UNCOMPETED_FUND")
+    @pytest.mark.sub_criteria_id("test_uncomp_sub_criteria_id")
+    def test_uncompeted_fund_subcriteria(
+        self,
+        request,
+        assess_test_client,
+        mock_get_sub_criteria,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_flags,
+        mock_get_comments,
+        mock_get_sub_criteria_theme,
+        mock_get_assessor_tasklist_state,
+        mock_get_bulk_accounts,
+        mock_get_assessment_flags,
+    ):
+        # Mocking fsd-user-token cookie
+        token = create_valid_token(test_commenter_claims)
+        assess_test_client.set_cookie("fsd_user_token", token)
+
+        application_id = request.node.get_closest_marker("application_id").args[0]
+        sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
+
+        response = assess_test_client.get(
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}"  # noqa
+        )
+        soup = BeautifulSoup(response.data, "html.parser")
+        assert (
+            "Review the applicant's responses and 'Accept all responses' when you're ready."
+            in soup.findAll("p", class_="govuk-body")[4].text
+        )
+
+    @pytest.mark.application_id("resolved_app")
+    @pytest.mark.fund_id("DPIF")
+    @pytest.mark.sub_criteria_id("test_sub_criteria_id")
+    def test_dpif_subcriteria(
+        self,
+        request,
+        assess_test_client,
+        mock_get_sub_criteria,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_flags,
+        mock_get_comments,
+        mock_get_sub_criteria_theme,
+        mock_get_assessor_tasklist_state,
+        mock_get_bulk_accounts,
+        mock_get_assessment_flags,
+    ):
+        # Mocking fsd-user-token cookie
+        token = create_valid_token(test_dpif_commenter_claims)
+        assess_test_client.set_cookie("fsd_user_token", token)
+
+        application_id = request.node.get_closest_marker("application_id").args[0]
+        sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
+
+        response = assess_test_client.get(
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}"  # noqa
+        )
+        soup = BeautifulSoup(response.data, "html.parser")
+        # Verify that the text specific to uncompeted journey is not present
+        assert (
+            "Review the applicant's responses and 'Accept all responses' when you're ready."
+            not in soup.findAll("p", class_="govuk-body")[4].text
         )
 
     @pytest.mark.application_id("resolved_app")
