@@ -534,6 +534,7 @@ mock_api_results = {
         "name": "Digital Planning Innovation Fund",
         "short_name": "DPIF",
         "description": "unit testing fund",
+        "funding_type": "UNCOMPETED",
     },
     "fund_store/funds/{fund_id}/rounds/{round_id}": {
         "id": test_round_id,

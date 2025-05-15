@@ -46,6 +46,13 @@ test_commenter_claims = {
     "roles": ["TF_COMMENTER", "UF_COMMENTER"],
 }
 
+test_dpif_commenter_claims = {
+    "accountId": "dpif_commenter",
+    "email": "commenter@test.com",
+    "fullName": "DPIF commenter User",
+    "roles": ["DPIF_COMMENTER"],
+}
+
 test_roleless_user_claims = {
     "accountId": "test-user",
     "email": "test@example.com",
