@@ -664,19 +664,37 @@ def test_flags_resubmitted_uncompeted_application(setup_submitted_application, d
     assert updated_flag_updates[0].assessment_flag_id == updated_assessment_flags[0].id
 
 
-@pytest.mark.fund_config(
-    {
-        "name": "Generated test fund",
-        "identifier": "1",
-        "short_name": "TEST",
-        "description": "Testing fund",
-        "welsh_available": False,
-        "name_json": {"en": "English title", "cy": "Welsh title"},
-        "funding_type": "COMPETED",
-        "rounds": [],
-    }
+COMPETED_CONFIG = {
+    "name": "Generated test fund",
+    "identifier": "1",
+    "short_name": "TEST",
+    "description": "Testing fund",
+    "welsh_available": False,
+    "name_json": {"en": "English title", "cy": "Welsh title"},
+    "funding_type": "COMPETED",
+    "rounds": [],
+}
+
+DPIF_CONFIG = {
+    "name": "Generated test fund",
+    "identifier": "1",
+    "short_name": "DPIF",
+    "description": "Testing fund",
+    "welsh_available": False,
+    "name_json": {"en": "English title", "cy": "Welsh title"},
+    "funding_type": "UNCOMPETED",
+    "rounds": [],
+}
+
+
+@pytest.mark.parametrize(
+    "fund_configs",
+    [
+        pytest.param(None, marks=pytest.mark.fund_config(COMPETED_CONFIG), id="COMPETED"),
+        pytest.param(None, marks=pytest.mark.fund_config(DPIF_CONFIG), id="DPIF"),
+    ],
 )
-def test_resubmitted_application_from_competed_fund(setup_submitted_application, db):
+def test_resubmitted_application_from_competed_fund(fund_configs, setup_submitted_application, db):
     application_id = str(setup_submitted_application)
     application = get_application(application_id, include_forms=True)
 
