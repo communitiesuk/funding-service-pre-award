@@ -37,7 +37,7 @@ dependencies = [
     "jsonpath-rw-ext==1.2.2",
     "marshmallow-enum==1.5.1",
     "marshmallow-sqlalchemy==1.0.0",
-    "msal==1.31.1",
+    "msal==1.32.3",
     "num2words==0.5.14",
     "openapi-spec-validator==0.7.1",
     "openpyxl==3.1.5",
