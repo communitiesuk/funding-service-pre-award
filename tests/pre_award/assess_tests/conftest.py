@@ -998,3 +998,19 @@ def assert_fund_dashboard(
     all_text = " ".join(tr.text for tr in tbody.find_all("tr"))
     for v in expected_assigned_values:
         assert v in all_text
+
+
+def get_subcriteria_soup(request, assess_test_client):
+    # Mocking fsd-user-token cookie
+    token = create_valid_token(test_commenter_claims)
+    assess_test_client.set_cookie("fsd_user_token", token)
+
+    # Retrieve markers
+    application_id = request.node.get_closest_marker("application_id").args[0]
+    sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
+
+    # Send the GET request and parse the response
+    response = assess_test_client.get(
+        f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}"  # noqa
+    )
+    return BeautifulSoup(response.data, "html.parser")
