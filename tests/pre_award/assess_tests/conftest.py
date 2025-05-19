@@ -9,6 +9,7 @@ from unittest import mock
 import jwt as jwt
 import pytest
 import werkzeug
+from bs4 import BeautifulSoup
 from flask import template_rendered
 from flask.sessions import SessionMixin
 from flask.testing import FlaskClient
@@ -347,7 +348,14 @@ def mock_get_users_for_fund(request, mocker):
     try:
         param_fund_short_name = request.getfixturevalue("fund_short_name")
     except pytest.FixtureLookupError:
-        param_fund_short_name = None
+        # If not available, check if we are using the new parameterization via "case"
+        if hasattr(request.node, "callspec"):
+            case = request.node.callspec.params.get("case", None)
+            param_fund_short_name = case.fund_short if case else None
+        else:
+            # When the test isn't parameterized at all for "fund_short_name" or "case".
+            param_fund_short_name = None
+
     func_path = "pre_award.assess.assessments.routes.get_users_for_fund"
     if param_fund_short_name:
         fund_short_name = param_fund_short_name
@@ -927,3 +935,66 @@ COF_R2_W2_GENERATE_MAPS_FROM_FORM_NAMES = (
     COF_R2_W2_FORM_NAME_TO_TITLE_MAP,
     COF_R2_W2_FORM_NAME_TO_PATH_MAP,
 )
+
+
+@pytest.fixture
+def fund_dashboard_all_mocks(request):
+    """
+    Pulls in all of the mock_... fixtures by name so individual tests
+    don’t have to declare them one by one.
+    """
+    mock_names = [
+        "mock_get_funds",
+        "mock_get_round",
+        "mock_get_fund",
+        "mock_get_application_overviews",
+        "mock_get_users_for_fund",
+        "mock_get_assessment_progress",
+        "mock_get_application_metadata",
+        "mock_get_active_tags_for_fund_round",
+        "mock_get_tag_types",
+    ]
+    # Force each fixture to be set up
+    for name in mock_names:
+        request.getfixturevalue(name)
+    return None
+
+
+def assert_fund_dashboard(
+    response,
+    *,
+    expected_titles,
+    expected_tabs,
+    expected_first_row,
+    expected_filter_labels,
+    expected_assigned_values,
+    assigned_div_id="assigned-to-you",
+):
+    assert response.status_code == 200, "Wrong status code on response"
+    soup = BeautifulSoup(response.data, "html.parser")
+
+    # table headings
+    actual_titles = [th.text.strip() for th in soup.find_all("th", class_="govuk-table__header")]
+    for title in expected_titles:
+        assert title in actual_titles
+
+    # tabs
+    actual_tabs = [a.text.strip() for a in soup.find_all("a", class_="govuk-tabs__tab")]
+    for tab in expected_tabs:
+        assert tab in actual_tabs
+
+    # first row cells
+    first_row = soup.find("tbody").find("tr")
+    cells = [td.text.strip() for td in first_row.find_all("td")]
+    assert cells == expected_first_row
+
+    # filters
+    actual_filters = [lbl.text.strip() for lbl in soup.find_all("label", class_="govuk-label")]
+    for fl in expected_filter_labels:
+        assert fl in actual_filters
+
+    # assigned-to-you (or reporting-to-you)
+    tbody = soup.find("div", id=assigned_div_id).find("table", id="application_overviews_table").find("tbody")
+    all_text = " ".join(tr.text for tr in tbody.find_all("tr"))
+    for v in expected_assigned_values:
+        assert v in all_text

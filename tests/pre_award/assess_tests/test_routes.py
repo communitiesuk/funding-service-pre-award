@@ -1,4 +1,5 @@
 import urllib
+from collections import namedtuple
 from unittest import mock
 
 import pytest
@@ -11,6 +12,7 @@ from pre_award.assess.services.models.flag import Flag
 from pre_award.assessment_store.db.models.assessment_record.enums import Status
 from tests.pre_award.assess_tests.api_data.test_data import fund_specific_claim_map
 from tests.pre_award.assess_tests.conftest import (
+    assert_fund_dashboard,
     create_valid_token,
     test_commenter_claims,
     test_dpif_commenter_claims,
@@ -137,41 +139,40 @@ class TestRoutes:
         if not download_available and mock_is_lead_assessor:
             assert "Assessment Tracker Export" in all_exports_links[-1].text
 
-    @pytest.mark.parametrize(
-        "fund_short_name, round_short_name",
-        [("CYP", "TR"), ("NSTF", "TR"), ("COF", "TR"), ("DPIF", "TR")],
-    )
-    @pytest.mark.application_id("resolved_app")
-    def test_route_fund_dashboard_for_assessor(
-        self,
-        request,
-        assess_test_client,
-        mock_get_funds,
-        mock_get_round,
-        mock_get_fund,
-        mock_get_application_overviews,
-        mock_get_users_for_fund,
-        mock_get_assessment_progress,
-        mock_get_application_metadata,
-        mock_get_active_tags_for_fund_round,
-        mock_get_tag_types,
-        fund_short_name,
-        round_short_name,
-    ):
-        assess_test_client.set_cookie(
-            "fsd_user_token",
-            create_valid_token(fund_specific_claim_map[fund_short_name]["ASSESSOR"]),
-        )
+    fund_case = namedtuple("FundCase", "fund_short round_short role_key assigned_div expected_extra_tabs")
 
+    @pytest.mark.parametrize(
+        "case",
+        [
+            fund_case("CYP", "TR", "ASSESSOR", "assigned-to-you", []),
+            fund_case("CYP", "TR", "LEAD_ASSESSOR", "assigned-to-you", ["reporting-to-you"]),
+            fund_case("NSTF", "TR", "ASSESSOR", "assigned-to-you", []),
+            fund_case("NSTF", "TR", "LEAD_ASSESSOR", "assigned-to-you", ["reporting-to-you"]),
+            fund_case("COF", "TR", "ASSESSOR", "assigned-to-you", []),
+            fund_case("COF", "TR", "LEAD_ASSESSOR", "assigned-to-you", ["reporting-to-you"]),
+            fund_case("DPIF", "TR", "ASSESSOR", "assigned-to-you", []),
+            fund_case("DPIF", "TR", "LEAD_ASSESSOR", "assigned-to-you", ["reporting-to-you"]),
+        ],
+    )
+    def test_fund_dashboard_for_assessors(
+        self,
+        case,
+        assess_test_client,
+        fund_dashboard_all_mocks,
+    ):
+        fund_short_name, round_short_name = case.fund_short, case.round_short
+
+        # set the cookie to the correct assessor role
+        token = create_valid_token(fund_specific_claim_map[fund_short_name][case.role_key])
+        assess_test_client.set_cookie("fsd_user_token", token)
+
+        # hit the dashboard
         response = assess_test_client.get(
             f"/assess/fund_dashboard/{fund_short_name}/{round_short_name}",
             follow_redirects=True,
         )
 
-        assert 200 == response.status_code, "Wrong status code on response"
-        soup = BeautifulSoup(response.data, "html.parser")
-
-        all_table_headings = str(soup.find_all("th", class_="govuk-table__header"))
+        # common expectations
         expected_titles = [
             "Reference",
             "Project name",
@@ -182,18 +183,11 @@ class TestRoutes:
             "Assigned to",
             "Date submitted",
         ]
-        assert all(title in all_table_headings for title in expected_titles)
+        expected_tabs = ["All applications", "Assigned to you (1)"]
+        for extra in case.expected_extra_tabs:
+            expected_tabs.append(extra.replace("-", " ").capitalize() + " (1)")
 
-        all_tab_names = str(soup.find_all("a", class_="govuk-tabs__tab"))
-        expected_tabs = ["All applications", "Assigned to you"]
-
-        assert all(tab_name in all_tab_names for tab_name in expected_tabs)
-
-        # Find the first row in the table body
-        first_row = soup.find("tbody").find("tr")
-        # Iterate through each cell in the first row
-        # Define the array of expected answers
-        expected_answers = [
+        expected_first_row = [
             "FQAC",
             "Project Completed Flag and QA",
             "£7,000.00",
@@ -204,154 +198,31 @@ class TestRoutes:
             "-",
             "04/01/2024 at 15:54",
         ]
-        # Check each cell against the expected answers
-        for i, cell in enumerate(first_row.find_all("td")):
-            expected_answer = expected_answers[i]
-            actual_answer = cell.text.strip()  # Get the text content of the cell, stripping any whitespace
-            assert actual_answer == expected_answer, (
-                f"Cell {i + 1} does not match! Expected: {expected_answer}, Actual: {actual_answer}"
-            )
-
-        all_filter_labels = str(soup.find_all("label", class_="govuk-label"))
         expected_filter_labels = [
             "Search reference or project name",
             "Filter by status",
             "Filter by assigned to",
             "Filter by tag",
         ]
-        assert all(label in all_filter_labels for label in expected_filter_labels)
-
-        # Check the 'assigned to you' tab
-        assigned_to_you_table = (
-            soup.find("div", id="assigned-to-you").find("table", id="application_overviews_table").find("tbody")
-        )
-
-        expected_values = [
+        expected_assigned_values = [
             "ASAP",
             "Project In prog and assigned",
             "£13,000.00",
             "Gallery",
             "England",
-            fund_specific_claim_map[fund_short_name]["ASSESSOR"]["fullName"],
+            fund_specific_claim_map[fund_short_name][case.role_key]["fullName"],
         ]
-        assigned_application_values = str(assigned_to_you_table.find_all("tr"))
-        assert all(value in assigned_application_values for value in expected_values)
 
-    @pytest.mark.parametrize(
-        "fund_short_name, round_short_name",
-        [("CYP", "TR"), ("NSTF", "TR"), ("COF", "TR"), ("DPIF", "TR")],
-    )
-    @pytest.mark.application_id("resolved_app")
-    def test_route_fund_dashboard_for_lead_assessor(
-        self,
-        assess_test_client,
-        mock_get_funds,
-        mock_get_round,
-        mock_get_fund,
-        mock_get_application_overviews,
-        mock_get_users_for_fund,
-        mock_get_assessment_progress,
-        mock_get_application_metadata,
-        mock_get_active_tags_for_fund_round,
-        mock_get_tag_types,
-        fund_short_name,
-        round_short_name,
-    ):
-        assess_test_client.set_cookie(
-            "fsd_user_token",
-            create_valid_token(fund_specific_claim_map[fund_short_name]["LEAD_ASSESSOR"]),
+        # do all the assertions
+        assert_fund_dashboard(
+            response,
+            expected_titles=expected_titles,
+            expected_tabs=expected_tabs,
+            expected_first_row=expected_first_row,
+            expected_filter_labels=expected_filter_labels,
+            expected_assigned_values=expected_assigned_values,
+            assigned_div_id=case.assigned_div,
         )
-        response = assess_test_client.get(
-            f"/assess/fund_dashboard/{fund_short_name}/{round_short_name}",
-            follow_redirects=True,
-        )
-
-        assert 200 == response.status_code, "Wrong status code on response"
-        soup = BeautifulSoup(response.data, "html.parser")
-
-        all_table_headings = str(soup.find_all("th", class_="govuk-table__header"))
-        expected_titles = [
-            "Reference",
-            "Project name",
-            "Funding requested",
-            "Asset type",
-            "Location",
-            "Status",
-            "Assigned to",
-            "Date submitted",
-        ]
-        assert all(title in all_table_headings for title in expected_titles)
-
-        all_tab_names = str(soup.find_all("a", class_="govuk-tabs__tab"))
-        expected_tabs = ["All applications", "Assigned to you"]
-
-        assert all(tab_name in all_tab_names for tab_name in expected_tabs)
-
-        # Find the first row in the table body
-        first_row = soup.find("tbody").find("tr")
-        # Iterate through each cell in the first row
-        # Define the array of expected answers
-        expected_answers = [
-            "FQAC",
-            "Project Completed Flag and QA",
-            "£7,000.00",
-            "Gallery",
-            "England",
-            "1 tag\n                            \n\n\n\n\n                                Tag one red",
-            "Flagged for test_team",
-            "-",
-            "04/01/2024 at 15:54",
-        ]
-        # Check each cell against the expected answers
-        for i, cell in enumerate(first_row.find_all("td")):
-            expected_answer = expected_answers[i]
-            actual_answer = cell.text.strip()  # Get the text content of the cell, stripping any whitespace
-            assert actual_answer == expected_answer, (
-                f"Cell {i + 1} does not match! Expected: {expected_answer}, Actual: {actual_answer}"
-            )
-
-        all_filter_labels = str(soup.find_all("label", class_="govuk-label"))
-        expected_filter_labels = [
-            "Search reference or project name",
-            "Filter by status",
-            "Filter by assigned to",
-            "Filter by tag",
-        ]
-        assert all(label in all_filter_labels for label in expected_filter_labels)
-
-        # Check the 'assigned to you' tab
-        assigned_to_you_table = (
-            soup.find("div", id="assigned-to-you").find("table", id="application_overviews_table").find("tbody")
-        )
-
-        expected_values = [
-            "ASAP",
-            "Project In prog and assigned",
-            "£13,000.00",
-            "Gallery",
-            "England",
-            fund_specific_claim_map[fund_short_name]["LEAD_ASSESSOR"]["fullName"],
-        ]
-
-        assigned_application_values = str(assigned_to_you_table.find_all("tr"))
-        assert all(value in assigned_application_values for value in expected_values)
-
-        # Check the 'reporting to you' tab
-        reporting_to_you_table = (
-            soup.find("div", id="reporting-to-you").find("table", id="application_overviews_table").find("tbody")
-        )
-
-        expected_values = [
-            "ASAP",
-            "Project In prog and assigned",
-            "£13,000.00",
-            "Gallery",
-            "England",
-            fund_specific_claim_map[fund_short_name]["LEAD_ASSESSOR"]["fullName"],
-        ]
-
-        reporting_to_you_values = str(reporting_to_you_table.find_all("tr"))
-        assert all(value in reporting_to_you_values for value in expected_values)
 
     @pytest.mark.mock_parameters(
         {
