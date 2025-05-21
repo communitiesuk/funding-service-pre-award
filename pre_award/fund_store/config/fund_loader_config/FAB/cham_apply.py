@@ -92,7 +92,7 @@ LOADER_CONFIG = {
         "deadline": "2025-05-18T22:59:00",
         "application_reminder_sent": False,
         "reminder_date": "2025-05-13T08:00:00",
-        "assessment_deadline": "2025-06-01T22:59:00",
+        "assessment_deadline": "2025-06-01T23:59:00",
         "prospectus": "https://www.gov.uk/government/publications/combatting-hate-against-muslims-fund-prospectus",
         "privacy_notice": "https://www.gov.uk/government/publications/combatting-hate-against-muslims-fund-prospectus/combatting-hate-against-muslims-privacy-notice",
         "contact_email": "chambid@communities.gov.uk",
