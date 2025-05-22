@@ -8,7 +8,7 @@ from sqlalchemy.dialects.postgresql import CITEXT
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from common.utils.date_time_utils import get_now_from_utc_time_without_tzinfo
+from common.utils.date_time_utils import get_now_from_utc_time_without_tzinfo, get_now_UK_time_without_tzinfo
 from pre_award.common.locale_selector.get_lang import get_lang
 from pre_award.db import FundingType, db
 
@@ -95,7 +95,7 @@ class Round(Model):
 
     @hybrid_property
     def _is_past_submission_deadline(self) -> bool:
-        return get_now_from_utc_time_without_tzinfo() > self.deadline if self.deadline else False
+        return get_now_UK_time_without_tzinfo() > self.deadline if self.deadline else False
 
     @_is_past_submission_deadline.expression
     def is_past_submission_deadline(cls) -> ColumnElement[bool]:
