@@ -1,4 +1,4 @@
-FROM python:3.10-bullseye@sha256:24645cd6f38fd6f9b1b8106ffba23ed8e0e4ef798f81a80f67165973b0989f02
+FROM python:3.13-bullseye@sha256:1c9cea3c337d9491593f7aa3c9af6f109892612de54465def03ccfe639c7687d
 
 WORKDIR /app
 
