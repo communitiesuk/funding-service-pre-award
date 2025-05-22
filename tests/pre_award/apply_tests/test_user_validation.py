@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 
 from bs4 import BeautifulSoup
+from flask_babel import format_datetime
 
 from pre_award.apply.default.data import RoundStatus
 from pre_award.apply.models.application_display_mapping import ApplicationMapping
@@ -116,7 +117,7 @@ class TestUserValidation:
         )
         mocker.patch(
             "pre_award.apply.default.application_routes.get_assessment_start",
-            return_value=datetime(2024, 11, 1, 1, 1),
+            return_value=format_datetime(datetime(2024, 11, 1, 1, 1), format="d MMMM yyyy"),
         )
         mocker.patch(
             "pre_award.apply.default.application_routes.determine_round_status",
@@ -138,6 +139,7 @@ class TestUserValidation:
         assert 200 == response.status_code, "Incorrect status code"
         assert b"Application submitted" in response.data
         assert b"Reference number<br><strong>ABC-123</strong>" in response.data
+        assert b"The assessors will start reviewing applications from 1 November 2024" in response.data
 
     def test_submit_correct_user_bad_dates(self, apply_test_client, mocker, mock_login):
         mocker.patch(
