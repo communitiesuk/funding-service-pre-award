@@ -498,11 +498,7 @@ msgstr "Beth sy'n digwydd nesaf"
 msgid "You do not need to do anything else at this time."
 msgstr ""
 
-#: pre_award/apply/templates/apply/application_submitted.html:27
-msgid "has been submitted."
-msgstr ""
-
-#: pre_award/apply/templates/apply/application_submitted.html:30
+#: pre_award/apply/templates/apply/application_submitted.html:31
 msgid "The assessors will start reviewing applications from"
 msgstr ""
 
@@ -510,7 +506,7 @@ msgstr ""
 msgid "We’ll email you if the assessor needs additional information or has any questions about your application for"
 msgstr ""
 
-#: pre_award/apply/templates/apply/application_submitted.html:33
+#: pre_award/apply/templates/apply/application_submitted.html:37
 msgid "Go to your applications"
 msgstr ""
 
