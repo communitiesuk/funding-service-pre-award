@@ -25,13 +25,13 @@
         <div class="govuk-grid-column-two-thirds">
             <span class="govuk-caption-xl">{{ fund.name}} {{ round.title }}</span>
             <h1 class="govuk-heading-xl">{%trans fund_title=fund.title%}Start or continue an application for {{ fund_title }}{%endtrans%}</h1>
-            is_past_submission_deadline: {{ round.is_past_submission_deadline }}<br>
+
             {% if round.is_past_submission_deadline %}
 
                 {% set closed_html %}
                     <p class="govuk-notification-banner__heading">{%trans fund_round_names = fund.name + " " + round.title%}Window closed - {{fund_round_names}}{% endtrans %}</p>
                     <p class="govuk-body">
-                        ({% trans closed_date = round.deadline|to_bst|datetime_format_respect_lang %}Closed: {{ closed_date }}{% endtrans %})
+                        ({% trans closed_date = round.deadline|datetime_format_respect_lang %}Closed: {{ closed_date }}{% endtrans %})
                     </p>
                     <p class="govuk-body">{% trans %}You can no longer submit applications in this window. Any you had in progress will be
             emailed to you.{% endtrans %}
