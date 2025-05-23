@@ -95,15 +95,13 @@ class Round(Model):
 
     @hybrid_property
     def _is_past_submission_deadline(self) -> bool:
-        return get_now_BST_time_without_tzinfo() > self.deadline if self.deadline else False
-        # return (
-        #     get_now_from_utc_time_without_tzinfo() > self.deadline - relativedelta(hours=1)
-        # if self.deadline else False
-        # )
+        # return get_now_BST_time_without_tzinfo() > self.deadline if self.deadline else False
+        return get_now_from_utc_time_without_tzinfo() > self.deadline if self.deadline else False
 
     @_is_past_submission_deadline.expression
     def is_past_submission_deadline(cls) -> ColumnElement[bool]:
         return func.now() > cls.deadline
+        # return func.timezone("UTC", func.now()) > cls.deadline
 
     @hybrid_property
     def _is_not_yet_open(self) -> bool:
@@ -112,18 +110,19 @@ class Round(Model):
     @_is_not_yet_open.expression
     def is_not_yet_open(cls) -> ColumnElement[bool]:
         return func.now() < cls.opens
+        print("func.timezone, cls.opens", func.timezone("UTC", func.now()), cls.opens)
+        # return func.timezone("UTC", func.now()) < cls.opens
 
     @hybrid_property
     def _is_open(self) -> bool:
         return (
-            self.opens < get_now_from_utc_time_without_tzinfo() < self.deadline
-            if (self.deadline and self.opens)
-            else False
+            self.opens < get_now_BST_time_without_tzinfo() < self.deadline if (self.deadline and self.opens) else False
         )
 
     @_is_open.expression
     def is_open(cls) -> ColumnElement[bool]:
-        return cls.opens < func.now() < cls.deadline
+        # return cls.opens < func.now() < cls.deadline
+        return cls.opens < func.timezone("UTC", func.now()) < cls.deadline
 
     @property
     def title(self) -> str | None:

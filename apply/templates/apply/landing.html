@@ -25,7 +25,14 @@
         <div class="govuk-grid-column-two-thirds">
             <span class="govuk-caption-xl">{{ fund.name}} {{ round.title }}</span>
             <h1 class="govuk-heading-xl">{%trans fund_title=fund.title%}Start or continue an application for {{ fund_title }}{%endtrans%}</h1>
-
+            round.is_past_submission_deadline: {{ round.is_past_submission_deadline }}<br>
+            round.opens: {{ round.opens }}
+            <br>
+            round.deadline: {{ round.deadline }}
+            <br>
+            round.is_not_yet_open: {{ round.is_not_yet_open }}
+            <br>
+            round.is_open: {{ round.is_open }}
             {% if round.is_past_submission_deadline %}
 
                 {% set closed_html %}

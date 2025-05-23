@@ -362,6 +362,7 @@ def determine_round_status(round: Round):
         is_open=current_datetime_after_given_iso_string(round.opens)
         and current_datetime_before_given_iso_string(round.deadline),
     )
+    print("\n\n\nRound status:", round_status)
     return round_status
 
 
