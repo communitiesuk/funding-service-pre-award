@@ -476,16 +476,16 @@ msgstr ""
 
 #: pre_award/apply/templates/apply/application_submitted.html:4
 #: pre_award/apply/templates/apply/eoi_submitted.html:6
-msgid "Application complete"
+msgid "Application submitted"
 msgstr ""
 
 #: pre_award/apply/templates/apply/application_submitted.html:18
 #: pre_award/apply/templates/apply/eoi_submitted.html:19
-msgid "Your reference number"
+msgid "Reference number"
 msgstr ""
 
 #: pre_award/apply/templates/apply/application_submitted.html:22
-msgid "We have sent you a confirmation email and a copy of your answers to"
+msgid "We have sent a confirmation email including details of your application to"
 msgstr ""
 
 #: pre_award/apply/templates/apply/application_submitted.html:24
@@ -495,19 +495,23 @@ msgid "What happens next"
 msgstr "Beth sy'n digwydd nesaf"
 
 #: pre_award/apply/templates/apply/application_submitted.html:27
-msgid "Your application to the"
+msgid "You do not need to do anything else at this time."
 msgstr ""
 
-#: pre_award/apply/templates/apply/application_submitted.html:27
-msgid "has been submitted."
+#: pre_award/apply/templates/apply/application_submitted.html:31
+msgid "The assessors will start reviewing applications from"
 msgstr ""
 
-#: pre_award/apply/templates/apply/application_submitted.html:30
-msgid "We'll email you to let you know whether you have been successful."
+#: pre_award/apply/templates/apply/application_submitted.html:34
+msgid "We’ll email you if the assessor needs additional information or has any questions about your application for"
 msgstr ""
 
-#: pre_award/apply/templates/apply/application_submitted.html:33
-msgid "Return to your applications page."
+#: pre_award/apply/templates/apply/application_submitted.html:37
+msgid "Go to your applications"
+msgstr ""
+
+#: pre_award/apply/templates/apply/application_submitted.html:41
+msgid "Sign out"
 msgstr ""
 
 #: pre_award/apply/templates/apply/cookie_policy.html:147

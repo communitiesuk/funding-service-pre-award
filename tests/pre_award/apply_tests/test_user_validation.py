@@ -1,6 +1,8 @@
 import json
+from datetime import datetime
 
 from bs4 import BeautifulSoup
+from flask_babel import format_datetime
 
 from pre_award.apply.default.data import RoundStatus
 from pre_award.apply.models.application_display_mapping import ApplicationMapping
@@ -101,7 +103,6 @@ class TestUserValidation:
             "pre_award.apply.default.application_routes.get_application_data",
             return_value=TEST_APPLICATIONS[0],
         )
-
         response = apply_test_client.get(f"/tasklist/{self.TEST_ID}", follow_redirects=False)
         assert 401 == response.status_code, "Incorrect status code"
 
@@ -115,6 +116,10 @@ class TestUserValidation:
             return_value=TEST_APPLICATIONS[0],
         )
         mocker.patch(
+            "pre_award.apply.default.application_routes.get_assessment_start",
+            return_value=format_datetime(datetime(2024, 11, 1, 1, 1), format="d MMMM yyyy"),
+        )
+        mocker.patch(
             "pre_award.apply.default.application_routes.determine_round_status",
             return_value=RoundStatus(False, False, True),
         )
@@ -126,15 +131,15 @@ class TestUserValidation:
                 "reference": "ABC-123",
             },
         )
-
         response = apply_test_client.post(
             "/submit_application",
             data={"application_id": self.TEST_ID},
             follow_redirects=False,
         )
         assert 200 == response.status_code, "Incorrect status code"
-        assert b"Application complete" in response.data
-        assert b"Your reference number<br><strong>ABC-123</strong>" in response.data
+        assert b"Application submitted" in response.data
+        assert b"Reference number<br><strong>ABC-123</strong>" in response.data
+        assert b"The assessors will start reviewing applications from 1 November 2024" in response.data
 
     def test_submit_correct_user_bad_dates(self, apply_test_client, mocker, mock_login):
         mocker.patch(
