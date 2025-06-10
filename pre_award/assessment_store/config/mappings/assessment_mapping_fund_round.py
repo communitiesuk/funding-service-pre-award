@@ -176,6 +176,9 @@ CHAM_FUND_ID = "ce1fae51-fbc9-4c0b-8d9f-79948633fab6"
 CHAM_ROUND_REG_ID = "b92044ee-17f0-4ed5-b4bb-d2ac04eaab54"
 CHAM_ROUND_APPLY_ID = "0ea715b0-8736-4621-9914-51410f9ccafb"
 
+PFN_FUND_ID = "26e831c1-8ae7-4f62-b230-6f409e2700fa"
+PFN_ROUND_RP_ID = "9217792e-d8c2-45c8-8170-eed4a8946184"
+
 # ASSESSMENT DISPLAY CONFIGURATION
 
 fund_round_to_assessment_mapping = {
@@ -313,6 +316,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "cham_apply_assessment",
         "unscored_sections": cham_apply_unscored_sections,
         "scored_criteria": cham_apply_scored_criteria,
+    },
+    f"{PFN_FUND_ID}:{PFN_ROUND_RP_ID}": {
+        "schema_id": "pfn_rp_assessment",
+        "unscored_sections": [],
+        "scored_criteria": [],
     },
 }
 
@@ -486,6 +494,12 @@ fund_round_data_key_mappings = {
         "funding_two": None,
     },
     "CHAMAPPLY": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": None,
+        "funding_two": None,
+    },
+    "PFNRP": {
         "location": None,
         "asset_type": None,
         "funding_one": None,
@@ -2388,6 +2402,11 @@ fund_round_mapping_config = {
         "fund_id": CHAM_FUND_ID,
         "round_id": CHAM_ROUND_APPLY_ID,
         "type_of_application": "CHAM",
+    },
+    "PFNRP": {
+        "fund_id": PFN_FUND_ID,
+        "round_id": PFN_ROUND_RP_ID,
+        "type_of_application": "PFN",
     },
     "RANDOM_FUND_ROUND": {
         "fund_id": uuid4(),
