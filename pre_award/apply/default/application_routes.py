@@ -111,6 +111,7 @@ def verify_round_open(f):
             redirect_to_fund = request.form.get("redirect_to_fund", False)
         elif request.method == "GET":
             application_id = kwargs["application_id"]
+            redirect_to_fund = request.args.get("redirect_to_fund", False)
         else:
             abort(
                 METHOD_NOT_ALLOWED,
