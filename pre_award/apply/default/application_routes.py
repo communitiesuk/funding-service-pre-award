@@ -275,6 +275,7 @@ def tasklist(application_id):
         "funding_type": fund_data.funding_type,
         "fund_title": fund_data.title,
         "round_name": round_data.title,
+        "round_id": round_data.id,
         "application_guidance": round_data.application_guidance,
         "not_started_status": ApplicationStatus.NOT_STARTED.name,
         "in_progress_status": ApplicationStatus.IN_PROGRESS.name,
@@ -350,7 +351,11 @@ def tasklist(application_id):
             research_survey_data=research_survey_data,
             migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
             # Set service_title here so it uses the application language - overrides the context_processor
-            service_title=gettext("Apply for") + " " + fund_data.title,  # title is already translated
+            service_title=fund_data.title
+            # TODO Assuming that this is the only round (PFN-RP) that is not going to need the hardcoded text
+            # "Apply for ...". otherwise we need to find a better way to handle this
+            if round_data.id == "9217792e-d8c2-45c8-8170-eed4a8946184"
+            else gettext("Apply for") + " " + fund_data.title,  # title is already translated
         )
         response.set_data(response_content)
 

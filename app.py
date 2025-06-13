@@ -45,7 +45,7 @@ from pre_award.apply.filters import (
     status_translation,
     string_to_datetime,
 )
-from pre_award.apply.helpers import find_fund_and_round_in_request, find_fund_in_request
+from pre_award.apply.helpers import find_fund_and_round_in_request, find_fund_in_request, find_round_in_request
 from pre_award.assess.shared.filters import (
     add_to_dict,
     all_caps_to_human,
@@ -354,10 +354,11 @@ def create_app() -> Flask:  # noqa: C901
     @flask_app.context_processor
     def utility_processor():
         def _get_service_title():
-            fund = None
+            fund, round = None, None
             if request.view_args or request.args or request.form:
                 try:
                     fund = find_fund_in_request()
+                    round = find_round_in_request()
                 except Exception as e:  # noqa
                     current_app.logger.warning(
                         (
@@ -366,8 +367,16 @@ def create_app() -> Flask:  # noqa: C901
                         ),
                         dict(e=e, url=request.url, view_args=request.view_args, args=request.args),
                     )
+            # TODO Assuming that this is the only round that is not going to need the hardcoded text
+            # "Apply for ...". otherwise we need to find a better way to handle this
+
+            # 1) If we got a fund AND it’s that special round (PFN-RP), show just the fund title
+            if fund and round and round.id == "9217792e-d8c2-45c8-8170-eed4a8946184":
+                return fund.title
+
+            # 2) If we got a fund (any other round or no round at all), show “Apply for …”
             if fund:
-                return gettext("Apply for") + " " + fund.title
+                return f"{gettext('Apply for')} {fund.title}"
             elif (
                 request.args
                 and (return_app := request.args.get("return_app"))
