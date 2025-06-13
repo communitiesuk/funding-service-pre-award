@@ -1269,6 +1269,7 @@ def display_sub_criteria(  # noqa: C901
     has_document_upload = any(
         theme_answer["field_type"] == "clientSideFileUploadField" for theme_answer in theme_answers_response
     )
+
     # If the sub-criteria has been accepted, no need to label changed answers
     if score:
         for theme_answer in theme_answers_response:

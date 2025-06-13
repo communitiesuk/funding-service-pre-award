@@ -83,13 +83,6 @@ scored_sections = [
                                 "presentation_type": "text",
                                 "question": "Alternative name 3",
                             },
-                            {
-                                "field_id": "WFRgIa",
-                                "form_name": "uf1-organisation-information",
-                                "field_type": "checkboxesField",
-                                "presentation_type": "text",
-                                "question": "Which categories of pre-approved interventions do you plan to fund?",
-                            },
                         ],
                     }
                 ],

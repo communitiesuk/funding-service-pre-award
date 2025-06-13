@@ -2278,39 +2278,6 @@ applicant_info_mapping = {
         },
         "OUTPUT_TRACKER": {},
     },
-    f"{UF1_FUND__ID}:{UF1_ROUND_1_ID}": {
-        "ASSESSOR_EXPORT": {
-            "form_fields": {
-                "Gaibvs": {"en": {"title": "Registration reference number", "field_type": "textField"}},
-                "JgqOiG": {"en": {"title": "Full name", "field_type": "textField"}},
-                "fSohIv": {"en": {"title": "Organisation", "field_type": "textField"}},
-                "JeGsjj": {"en": {"title": "Role", "field_type": "textField"}},
-                "bzFqFj": {"en": {"title": "Email address", "field_type": "emailAddressField"}},
-                "oWuVdi": {"en": {"title": "Contact number", "field_type": "telephoneNumberField"}},
-                "trYDMJ": {"en": {"title": "What is the name of your organisation?", "field_type": "textField"}},
-                "rocaEG": {
-                    "en": {"title": "Does your organisation have an alternative name?", "field_type": "textField"}
-                },
-                "LAIyWE": {
-                    "en": {"title": "What is the alternative name of your organisation?", "field_type": "textField"}
-                },
-                "PsvKdR": {"en": {"title": "What is your organisation's address?", "field_type": "ukAddressField"}},
-                "wMrxig": {
-                    "en": {
-                        "title": "Has your organisation been established for 2 years or more?",
-                        "field_type": "yesNoField",
-                    }
-                },
-                "WFRgIa": {
-                    "en": {
-                        "title": "Which categories of pre-approved interventions do you plan to fund?",
-                        "field_type": "checkboxesField",
-                    }
-                },
-            }
-        },
-        "OUTPUT_TRACKER": {},
-    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
@@ -2445,11 +2412,6 @@ fund_round_mapping_config = {
         "fund_id": uuid4(),
         "round_id": uuid4(),
         "type_of_application": "RFR",
-    },
-    "UF1R1": {
-        "fund_id": UF1_FUND__ID,
-        "round_id": UF1_ROUND_1_ID,
-        "type_of_application": "UF1",
     },
 }
 
