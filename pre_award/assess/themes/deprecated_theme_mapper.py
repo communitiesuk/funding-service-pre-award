@@ -31,6 +31,10 @@ def map_application_with_sub_criteria_themes_fields(
             current_app.logger.error("Incorrect theme id -> %(theme_id)s", dict(theme_id=theme_id))
             return f"Incorrect theme id -> {theme_id}"
 
+    print("\n\n\nthemes_fields BEFORE: ", themes_fields, "\n\n\n")
+    replace_underscores_in_answers(themes_fields)
+    print("\n\n\nthemes_fields AFTER: ", themes_fields, "\n\n\n")
+
     convert_boolean_values(themes_fields)
 
     # Does not sort on the new version of add-another simply pass the object through for display by assessment frontend
@@ -38,6 +42,20 @@ def map_application_with_sub_criteria_themes_fields(
     deprecated_sort_add_another_component_contents(themes_fields)
 
     return format_add_another_component_contents(themes_fields)
+
+
+def replace_underscores_in_answers(theme_fields):
+    """
+    Replace underscores with commas in the 'answer' field of each item in the list.
+    Handles both string and list types for 'answer'.
+    """
+    for item in theme_fields:
+        answer = item.get("answer")
+        if isinstance(answer, str):
+            item["answer"] = answer.replace("_", ",")
+        elif isinstance(answer, list):
+            item["answer"] = [a.replace("_", ",") if isinstance(a, str) else a for a in answer]
+    return theme_fields
 
 
 def map_application_with_sub_criterias_and_themes(
