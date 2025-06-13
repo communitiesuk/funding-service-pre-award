@@ -32,7 +32,13 @@
         {% else %}
         <span class="govuk-caption-l">{{ application_meta_data["fund_name"] }} {{ application_meta_data["round_name"]
             }}</span>
-        <h1 class="govuk-heading-xl">{% trans %}Application for{% endtrans %} {{ application_meta_data["fund_title"] }}</h1>
+            <!-- TODO Assuming that this is the only round (PFN-RP) that is not going to need the hardcoded text
+            "Application for ...". otherwise we need to find a better way to handle this -->
+            {% if application_meta_data["round_id"] == "9217792e-d8c2-45c8-8170-eed4a8946184" %}
+            <h1 class="govuk-heading-xl">{{ application_meta_data["fund_title"] }}</h1>
+            {% else %}
+            <h1 class="govuk-heading-xl">{% trans %}Application for{% endtrans %} {{ application_meta_data["fund_title"] }}</h1>
+            {% endif %}
         {% endif %}
         <details class="govuk-details" data-module="govuk-details">
             <summary class="govuk-details__summary">
