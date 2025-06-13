@@ -182,6 +182,7 @@ def ordered_themes(fund_round_short_name):
             "protect_against_fraud",
             "reporting",
         ],
+        "UF1R1": ["project_details", "organisation_information"],
     }
 
     if fund_round_short_name in [

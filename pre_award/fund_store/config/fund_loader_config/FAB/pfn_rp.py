@@ -113,7 +113,7 @@ LOADER_CONFIG = {
         "id": "9217792e-d8c2-45c8-8170-eed4a8946184",
         "fund_id": "26e831c1-8ae7-4f62-b230-6f409e2700fa",
         "short_name": "RP",
-        "opens": "2025-06-16T09:00:00",
+        "opens": "2025-06-10T09:00:00",
         "assessment_start": "2025-07-07T09:00:00",
         "deadline": "2025-11-28T23:59:00",
         "application_reminder_sent": False,

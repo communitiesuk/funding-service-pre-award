@@ -41,8 +41,11 @@ def get_data(endpoint: str, payload: Dict = None):
         else:
             current_app.logger.info("Fetching data from '%(endpoint)s'", dict(endpoint=endpoint))
             response = requests.get(endpoint)
+            print("\n\n\n111 response: ", response, "\n\n\n")
+        print("\n\n\n222 response.headers['Content-Type']: ", response.headers["Content-Type"], "\n\n\n")
         if response.status_code == 200:
             if "application/json" == response.headers["Content-Type"]:
+                print("\n\n\n333 response.json(): ", response.json(), "\n\n\n")
                 return response.json()
             else:
                 return response.content
@@ -654,13 +657,34 @@ def get_sub_criteria_theme_answers_all(
         f"{Config.SUB_CRITERIA_THEME_ANSWERS_ENDPOINT.format(application_id=application_id)}"
     )
     theme_mapping_data = get_data(theme_mapping_data_url)
+
+    print("\n\n\n444: theme_mapping_data: ", theme_mapping_data, "\n\n\n")
     theme_question_answers = map_application_with_sub_criteria_themes_fields(
         theme_mapping_data["application_json"],
         theme_mapping_data["sub_criterias"],
         theme_id,
     )
+
+    # print("\n\n\ntheme_answers_response before conversion: ", theme_question_answers, "\n\n\n")
+    # theme_question_answers = replace_underscores_in_answers(theme_question_answers)
+    # print("\n\n\ntheme_answers_response after conversion: ", theme_question_answers, "\n\n\n")
+
     mark_themes_with_changes(theme_mapping_data["application_json"], theme_question_answers)
     return theme_question_answers
+
+
+# def replace_underscores_in_answers(theme_answers_response):
+#     """
+#     Replace underscores with commas in the 'answer' field of each item in the list.
+#     Handles both string and list types for 'answer'.
+#     """
+#     for item in theme_answers_response:
+#         answer = item.get("answer")
+#         if isinstance(answer, str):
+#             item["answer"] = answer.replace("_", ",")
+#         elif isinstance(answer, list):
+#             item["answer"] = [a.replace("_", ",") if isinstance(a, str) else a for a in answer]
+#     return theme_answers_response
 
 
 def get_all_sub_criterias_with_application_json(application_id: str):
