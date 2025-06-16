@@ -26,10 +26,13 @@ import govukButton -%}
           <p class="govuk-body">
             {% trans %}You do not need to do anything else at this time.{% endtrans %}
           </p>
-
+          <!-- TODO Assuming that this is the only round (PFN-RP) that is not going to need the hardcoded text
+            "The assessors will start ...". otherwise we need to find a better way to handle this -->
+          {% if round_id|string != '9217792e-d8c2-45c8-8170-eed4a8946184' %}
           <p class="govuk-body">
             {% trans %}The assessors will start reviewing applications from {% endtrans %}{{ assessment_start_date }}.
           </p>
+          {% endif %}
           {% if fund_type == "UNCOMPETED" %}
             <p class="govuk-body">{% trans %}We’ll email you if the assessor needs additional information or has any questions about your application for{% endtrans %} {{fund_name}}.</p>
           {% endif %}

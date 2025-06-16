@@ -497,6 +497,7 @@ def submit_application():
                 application_email=application_email,
                 fund_name=fund_data.name,
                 fund_short_name=fund_data.short_name,
+                round_id=round_data.id,
                 fund_type=fund_data.funding_type,
                 round_short_name=round_data.short_name,
                 assessment_start_date=assessment_start_date,
