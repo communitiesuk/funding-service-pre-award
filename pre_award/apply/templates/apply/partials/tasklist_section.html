@@ -38,12 +38,12 @@
       <li class="app-task-list__item task-list__new-design">
         <span class="app-task-list__task-name">
           {% if not application_meta_data.is_resubmission %}
-              <a class="govuk-body govuk-link govuk-link--no-visited-state" href='{{ url_for("application_routes.continue_application", application_id=application_meta_data["application_id"], form_name=form["form_name"]) }}'>
+              <a class="govuk-body govuk-link govuk-link--no-visited-state" href='{{ url_for("application_routes.continue_application", application_id=application_meta_data["application_id"], form_name=form["form_name"], redirect_to_fund=True) }}'>
                 {{ form["form_title"] }}
               </a>
           {% else %}
               {% if form["form_name"] in form_names_with_change_request %}
-                  <a class="govuk-body govuk-link govuk-link--no-visited-state" href='{{ url_for("application_routes.continue_application", application_id=application_meta_data["application_id"], form_name=form["form_name"]) }}'>
+                  <a class="govuk-body govuk-link govuk-link--no-visited-state" href='{{ url_for("application_routes.continue_application", application_id=application_meta_data["application_id"], form_name=form["form_name"], redirect_to_fund=True) }}'>
                     {{ form["form_title"] }}
                   </a>
               {% else %}

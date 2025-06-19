@@ -3,12 +3,13 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Any, List, Literal, Optional
 
 from alembic_utils.pg_extension import PGExtension
+from fsd_utils.simple_utils.date_utils import current_datetime_after_given_iso_string
 from sqlalchemy import ColumnElement, Enum, ForeignKey, UniqueConstraint, func
 from sqlalchemy.dialects.postgresql import CITEXT
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from common.utils.date_time_utils import get_now_from_utc_time_without_tzinfo, get_now_UK_time_without_tzinfo
+from common.utils.date_time_utils import get_now_from_utc_time_without_tzinfo
 from pre_award.common.locale_selector.get_lang import get_lang
 from pre_award.db import FundingType, db
 
@@ -95,7 +96,10 @@ class Round(Model):
 
     @hybrid_property
     def _is_past_submission_deadline(self) -> bool:
-        return get_now_UK_time_without_tzinfo() > self.deadline if self.deadline else False
+        if self.deadline:
+            result = current_datetime_after_given_iso_string(self.deadline.isoformat())
+            return bool(result)
+        return False
 
     @_is_past_submission_deadline.expression
     def is_past_submission_deadline(cls) -> ColumnElement[bool]:
