@@ -107,7 +107,7 @@ LOADER_CONFIG = {
         "short_name": "R4",
         "opens": "2025-06-27T08:00:00",
         "assessment_start": "2025-06-27T09:00:00",
-        "deadline": "2026-02-27T17:00:00",
+        "deadline": "2026-02-27T12:00:00",
         "application_reminder_sent": False,
         "reminder_date": "2025-10-31T09:00:00",
         "assessment_deadline": "2026-02-27T17:00:00",
