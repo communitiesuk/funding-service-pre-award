@@ -89,6 +89,12 @@ from pre_award.assessment_store.config.mappings.dpif_mappping_parts.r3_scored_cr
 from pre_award.assessment_store.config.mappings.dpif_mappping_parts.r3_unscored_criteria import (
     unscored_sections as dpif_unscored_sections_r3,
 )
+from pre_award.assessment_store.config.mappings.dpif_mappping_parts.r4_scored_criteria import (
+    scored_criteria as dpif_scored_criteria_r4,
+)
+from pre_award.assessment_store.config.mappings.dpif_mappping_parts.r4_unscored_criteria import (
+    unscored_sections as dpif_unscored_sections_r4,
+)
 from pre_award.assessment_store.config.mappings.gbrf_mapping_parts.r1_unscored_criteria import (
     unscored_sections as gbrf_unscored_sections,
 )
@@ -145,6 +151,7 @@ CYP_ROUND_1_ID = "888aae3d-7e2c-4523-b9c1-95952b3d1644"
 DPIF_FUND_ID = "f493d512-5eb4-11ee-8c99-0242ac120002"
 DPIF_ROUND_2_ID = "0059aad4-5eb5-11ee-8c99-0242ac120002"
 DPIF_ROUND_3_ID = "ac835965-e8c9-4356-b486-c0c016dbb634"
+DPIF_ROUND_4_ID = "83d49d14-ced1-4610-a3f5-36b432364b43"
 
 HSRA_FUND_ID = "1e4bd8b0-b399-466d-bbd1-572171bbc7bd"
 HSRA_ROUND_VR_ID = "ae223686-cbcc-4548-8b52-05898c315a59"
@@ -201,6 +208,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "DPIF_R3_assessment",
         "unscored_sections": dpif_unscored_sections_r3,
         "scored_criteria": dpif_scored_criteria_r3,
+    },
+    f"{DPIF_FUND_ID}:{DPIF_ROUND_4_ID}": {
+        "schema_id": "DPIF_R3_assessment",
+        "unscored_sections": dpif_unscored_sections_r4,
+        "scored_criteria": dpif_scored_criteria_r4,
     },
     f"{COF_FUND_ID}:{COF_ROUND_2_ID}": {
         "schema_id": "cof_r2w2_assessment",
@@ -356,6 +368,12 @@ fund_round_data_key_mappings = {
         "funding_two": None,
     },
     "DPIFR3": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": None,
+        "funding_two": None,
+    },
+    "DPIFR4": {
         "location": None,
         "asset_type": None,
         "funding_one": None,
@@ -2278,6 +2296,37 @@ applicant_info_mapping = {
         },
         "OUTPUT_TRACKER": {},
     },
+    f"{DPIF_FUND_ID}:{DPIF_ROUND_4_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "hIhsfx": {"en": {"title": "Organisation name", "field_type": "textField"}},
+                "KsUjOe": {"en": {"title": "Lead contact name", "field_type": "textField"}},
+                "field_id": {"en": {"title": "Lead contact's job title", "field_type": "textField"}},
+                "iKcumx": {"en": {"title": "Lead contact email address", "field_type": "emailAddressField"}},
+                "jExOjt": {"en": {"title": "Lead contact telephone number", "field_type": "telephoneNumberField"}},
+                "sDPMGY": {"en": {"title": "Project sponsor name", "field_type": "textField"}},
+                "DkPLbp": {"en": {"title": "Project sponsor email address", "field_type": "emailAddressField"}},
+                "VNbFQP": {"en": {"title": "Project sponsor telephone number", "field_type": "telephoneNumberField"}},
+                "jHPPTB": {
+                    "en": {
+                        "title": "Section 151 officer name",
+                        "field_type": "textField",
+                    }
+                },
+                "pqCEMQ": {"en": {"title": "Section 151 officer email address?", "field_type": "emailAddressField"}},
+                "cyQcaf": {
+                    "en": {"title": "Section 151 officer telephone number", "field_type": "telephoneNumberField"}
+                },
+                "DCQllx": {
+                    "en": {
+                        "title": "Which software improvements are you interested in working on in the future?",
+                        "field_type": "textField",
+                    }
+                },
+            }
+        },
+        "OUTPUT_TRACKER": {},
+    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
@@ -2306,6 +2355,11 @@ fund_round_mapping_config = {
     "DPIFR3": {
         "fund_id": DPIF_FUND_ID,
         "round_id": DPIF_ROUND_3_ID,
+        "type_of_application": "DPIF",
+    },
+    "DPIFR4": {
+        "fund_id": DPIF_FUND_ID,
+        "round_id": DPIF_ROUND_4_ID,
         "type_of_application": "DPIF",
     },
     "CTDFCR1": {
