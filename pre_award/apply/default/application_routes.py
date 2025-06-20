@@ -450,6 +450,23 @@ def continue_application(application_id):
 @verify_round_open
 def submit_application():
     application_id = request.form.get("application_id")
+    submitted = format_payload_and_submit_application(application_id)
+    return redirect(
+        url_for(
+            "application_routes.application_submitted",
+            application_id=application_id,
+            email=submitted.get("email"),
+            eoi_decision=submitted.get("eoi_decision", None),
+        )
+    )
+
+
+@application_bp.route("/application_submitted/<application_id>", methods=["GET"])
+@login_required
+@verify_application_owner_local
+def application_submitted(application_id):
+    email = request.args.get("email")
+
     application = get_application_data(application_id)
 
     fund_data = get_fund_data(
@@ -459,21 +476,21 @@ def submit_application():
         ttl_hash=get_ttl_hash(Config.LRU_CACHE_TIME),
     )
     round_data = get_round_data(
-        application.fund_id,
-        application.round_id,
+        fund_id=application.fund_id,
+        round_id=application.round_id,
+        language=application.language,
         as_dict=False,
         ttl_hash=get_ttl_hash(Config.LRU_CACHE_TIME),
     )
-
     assessment_start_date = get_assessment_start(
         application.fund_id, application.round_id, language=application.language
     )
 
-    submitted = format_payload_and_submit_application(application_id)
+    migration_banner_enabled = Config.MIGRATION_BANNER_ENABLED
 
     with force_locale(application.language):
         if round_data.is_expression_of_interest:
-            eoi_decision = submitted.get("eoi_decision")
+            eoi_decision = int(request.args.get("eoi_decision"))
             return render_template(
                 "apply/eoi_submitted.html",
                 eoi_pass=Decision(eoi_decision) in [Decision.PASS, Decision.PASS_WITH_CAVEATS],
@@ -482,27 +499,22 @@ def submit_application():
                 fund_short_name=fund_data.short_name,
                 round_short_name=round_data.short_name,
                 round_prospectus=round_data.prospectus,
-                migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
+                migration_banner_enabled=migration_banner_enabled,
                 application_reference=application.reference,
             )
-
         else:
-            application_id = submitted.get("id")
-            application_reference = submitted.get("reference")
-            application_email = submitted.get("email")
-
             return render_template(
                 "apply/application_submitted.html",
                 application_id=application_id,
-                application_reference=application_reference,
-                application_email=application_email,
+                application_reference=application.reference,
+                application_email=email,
                 fund_name=fund_data.name,
                 fund_short_name=fund_data.short_name,
                 round_id=round_data.id,
                 fund_type=fund_data.funding_type,
                 round_short_name=round_data.short_name,
                 assessment_start_date=assessment_start_date,
-                migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
+                migration_banner_enabled=migration_banner_enabled,
             )
 
 
