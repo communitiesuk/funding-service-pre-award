@@ -69,8 +69,10 @@
 
 {{ theme(answers_meta)}}
 {% if not score and not has_active_change_request %}
-    {{ application_feedback(application_id, sub_criteria, current_theme.id,
-    approval_form,change_requests,unrequested_changes) }}
+    {% if g.access_controller.is_assessor or g.access_controller.is_lead_assessor %}
+        {{ application_feedback(application_id, sub_criteria, current_theme.id,
+        approval_form,change_requests,unrequested_changes) }}
+    {% endif %}
 {% endif %}
 {% if score %}
     <h2 class="govuk-heading-s govuk-!-margin-top-8 accepted-change-title">Responses accepted</h2>
