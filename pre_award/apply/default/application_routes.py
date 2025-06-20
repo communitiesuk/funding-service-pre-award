@@ -470,38 +470,84 @@ def submit_application():
 
     submitted = format_payload_and_submit_application(application_id)
 
-    with force_locale(application.language):
-        if round_data.is_expression_of_interest:
-            eoi_decision = submitted.get("eoi_decision")
+    # with force_locale(application.language):
+    #     if round_data.is_expression_of_interest:
+    #         eoi_decision = submitted.get("eoi_decision")
+    #         return render_template(
+    #             "apply/eoi_submitted.html",
+    #             eoi_pass=Decision(eoi_decision) in [Decision.PASS, Decision.PASS_WITH_CAVEATS],
+    #             fund_name=fund_data.name,
+    #             round_name=round_data.title,
+    #             fund_short_name=fund_data.short_name,
+
+    return redirect(
+        url_for(
+            "application_routes.application_submitted",
+            application_id=submitted.get("id"),
+            application_language=application.language,
+            reference=submitted.get("reference"),
+            application_reference=application.reference,
+            email=submitted.get("email"),
+            fund_name=fund_data.name,
+            fund_short_name=fund_data.short_name,
+            round_id=round_data.id,
+            fund_type=fund_data.funding_type,
+            round_short_name=round_data.short_name,
+            assessment_start_date=assessment_start_date,
+            is_eoi=round_data.is_expression_of_interest,
+            eoi_decision=submitted.get("eoi_decision"),
+            round_name=round_data.title,
+            round_prospectus=round_data.prospectus,
+        )
+    )
+
+
+@application_bp.route("/application_submitted/<application_id>", methods=["GET"])
+def application_submitted(application_id):
+    # Get query parameters
+    reference = request.args.get("reference")
+    application_language = request.args.get("application_language")
+    application_reference = request.args.get("application_reference")
+    email = request.args.get("email")
+    fund_name = request.args.get("fund_name")
+    fund_short_name = request.args.get("fund_short_name")
+    round_id = request.args.get("round_id")
+    fund_type = request.args.get("fund_type")
+    round_short_name = request.args.get("round_short_name")
+    assessment_start_date = request.args.get("assessment_start_date")
+    is_eoi = request.args.get("is_eoi", "False") == "True"
+    eoi_decision = request.args.get("eoi_decision")
+    round_name = request.args.get("round_name")
+    round_prospectus = request.args.get("round_prospectus")
+
+    migration_banner_enabled = Config.MIGRATION_BANNER_ENABLED
+
+    with force_locale(application_language):
+        if is_eoi:
             return render_template(
                 "apply/eoi_submitted.html",
                 eoi_pass=Decision(eoi_decision) in [Decision.PASS, Decision.PASS_WITH_CAVEATS],
-                fund_name=fund_data.name,
-                round_name=round_data.title,
-                fund_short_name=fund_data.short_name,
-                round_short_name=round_data.short_name,
-                round_prospectus=round_data.prospectus,
-                migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
-                application_reference=application.reference,
+                fund_name=fund_name,
+                round_name=round_name,
+                fund_short_name=fund_short_name,
+                round_short_name=round_short_name,
+                round_prospectus=round_prospectus,
+                migration_banner_enabled=migration_banner_enabled,
+                application_reference=application_reference,
             )
-
         else:
-            application_id = submitted.get("id")
-            application_reference = submitted.get("reference")
-            application_email = submitted.get("email")
-
             return render_template(
                 "apply/application_submitted.html",
                 application_id=application_id,
-                application_reference=application_reference,
-                application_email=application_email,
-                fund_name=fund_data.name,
-                fund_short_name=fund_data.short_name,
-                round_id=round_data.id,
-                fund_type=fund_data.funding_type,
-                round_short_name=round_data.short_name,
+                application_reference=reference,
+                application_email=email,
+                fund_name=fund_name,
+                fund_short_name=fund_short_name,
+                round_id=round_id,
+                fund_type=fund_type,
+                round_short_name=round_short_name,
                 assessment_start_date=assessment_start_date,
-                migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
+                migration_banner_enabled=migration_banner_enabled,
             )
 
 

@@ -134,7 +134,7 @@ class TestUserValidation:
         response = apply_test_client.post(
             "/submit_application",
             data={"application_id": self.TEST_ID},
-            follow_redirects=False,
+            follow_redirects=True,
         )
         assert 200 == response.status_code, "Incorrect status code"
         assert b"Application submitted" in response.data
