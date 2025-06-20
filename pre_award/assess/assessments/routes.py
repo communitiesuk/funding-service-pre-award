@@ -1331,7 +1331,7 @@ def display_sub_criteria(  # noqa: C901
     "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/accept_changes",
     methods=["GET", "POST"],
 )
-@check_access_application_id
+@check_access_application_id(roles_required=[Config.LEAD_ASSESSOR, Config.ASSESSOR])
 def accept_changes(application_id, sub_criteria_id):
     form = ChangeRequestForm()
     state = get_state_for_tasklist_banner(application_id)
@@ -1378,7 +1378,7 @@ def accept_changes(application_id, sub_criteria_id):
     "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/request_change",
     methods=["GET", "POST"],
 )
-@check_access_application_id
+@check_access_application_id(roles_required=[Config.LEAD_ASSESSOR, Config.ASSESSOR])
 def request_changes(application_id, sub_criteria_id, theme_id):
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
     current_theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
