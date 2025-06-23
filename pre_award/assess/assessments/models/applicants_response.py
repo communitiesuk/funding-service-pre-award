@@ -185,6 +185,7 @@ class NewAddAnotherTable(ApplicantResponseComponent):
         answer = data.get("answer")
 
         totals, headings = [], []
+        headings.append([{"text": "", "classes": ""}])
         for column_name, values, fmt in answer:
             if fmt == "currency":
                 column_format = "numeric"
@@ -198,6 +199,7 @@ class NewAddAnotherTable(ApplicantResponseComponent):
         num_columns = len(answer[0][1])  # Assuming all rows have the same number of values
         for j in range(num_columns):
             columns = []
+            columns.append([{"text": "", "classes": ""}])
             for _i, (_, values, fmt) in enumerate(answer):
                 render_type = "html" if fmt == "html" else "text"
                 render_val = values[j]
@@ -207,6 +209,7 @@ class NewAddAnotherTable(ApplicantResponseComponent):
                     render_val = f"£{render_val:.2f}"
                     format_val = "numeric"
 
+                # columns.append([{"text": "", "classes": ""}])
                 columns.append({render_type: render_val, "format": format_val})
             rows.append(columns)
 
@@ -216,9 +219,10 @@ class NewAddAnotherTable(ApplicantResponseComponent):
                 + [
                     {
                         "text": f"£{val:.2f}" if val else "",
+                        # "classes": "govuk-table__header",
                         "format": "numeric" if val else "",
                     }
-                    for val in totals[1:]
+                    for val in totals
                 ]  # we assume the first column is a string
             )
 

@@ -684,9 +684,15 @@ def mark_themes_with_changes(application_json, theme_fields):
                     requested_changes.add(field["key"])
 
     for theme in theme_fields:
-        if theme["field_id"] in unrequested_changes:
+        field_ids = theme["field_id"]
+        # Ensure field_ids is always a list for uniform processing
+        if not isinstance(field_ids, list):
+            field_ids = [field_ids]
+
+        # Check if any of the field_ids are in the change lists
+        if any(fid in unrequested_changes for fid in field_ids):
             theme["unrequested_change"] = True
-        elif theme["field_id"] in requested_changes:
+        elif any(fid in requested_changes for fid in field_ids):
             theme["requested_change"] = True
 
 
