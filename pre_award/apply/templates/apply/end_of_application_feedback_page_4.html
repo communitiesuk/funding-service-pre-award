@@ -3,17 +3,39 @@
 {% from "apply/partials/migration_banner.html" import migration_banner %}
 
 {% block beforeContent %}
-    <a href="{{ url_for("application_routes.tasklist", application_id=application_id) }}"
+    <a href="{{ url_for('application_routes.tasklist', application_id=application_id) }}"
        class="govuk-back-link">{% trans %}Go back to application overview{% endtrans %}</a>
 {% endblock beforeContent %}
 
 {% block content %}
-    {% if form.errors.get('hours_spent') %}
-        {{ feedback_error_summary(form.errors.get('hours_spent')[0], "#hours_spent") }}
+    {% if form.errors.get('research_participation') or form.errors.get('research_email') or form.errors.get('research_organisation') %}
+        {% set error_list = [] %}
+        {% if form.errors.get('research_participation') %}
+            {% set _ = error_list.extend(form.errors.get('research_participation')) %}
+        {% endif %}
+        {% if form.errors.get('research_email') %}
+            {% set _ = error_list.extend(form.errors.get('research_email')) %}
+        {% endif %}
+        {% if form.errors.get('research_organisation') %}
+            {% set _ = error_list.extend(form.errors.get('research_organisation')) %}
+        {% endif %}
+        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
+            <h2 class="govuk-error-summary__title" id="error-summary-title">
+                {% trans %}There is a problem{% endtrans %}
+            </h2>
+            <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__list">
+                    {% for error in error_list %}
+                    <li>
+                        <a href="#research_participation">{{ error }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     {% endif %}
-    {# djlint:off #}
+
     <div class="govuk-grid-row">
-    {# djlint:on #}
         <div class="govuk-grid-column-two-thirds">
             {% if migration_banner_enabled %}
                 {{ migration_banner() }}
@@ -30,29 +52,67 @@
             <form method="post" novalidate>
                 {{ form.hidden_tag() }}
 
-                <div class="govuk-form-group">
+                <div class="govuk-form-group {% if form.errors.get('research_participation') %}govuk-form-group--error{% endif %}">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                             <h1 class="govuk-fieldset__heading">
-                                {% trans %}Approximately how many hours did your organisation spend preparing and working on this application?{% endtrans %}
+                                {% trans %}Would you like to participate in our research to help improve the service?{% endtrans %}
                             </h1>
                         </legend>
-                        <div class="govuk-form-group  {% if form.errors.get('hours_spent') %} govuk-form-group--error {% endif -%}" id="hours_spent">
-                            <div class="govuk-hint">
-                                {% trans %}This includes time spent attending meetings, preparing documents and business cases, doing research and collating answers, from both paid and volunteer resources.{% endtrans %}
-                        </div>
-                        {% if form.errors.get('hours_spent') %}
-                            <p id="hours-error" class="govuk-error-message">
-                                <span class="govuk-visually-hidden">{% trans %}Error:{% endtrans %}</span> {{ form.errors.get('hours_spent')[0] }}
-                            </p>
+                        {% if form.errors.get('research_participation') %}
+                        <p id="research-participation-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">{% trans %}Error:{% endtrans %}</span> {{ form.errors.get('research_participation')[0] }}
+                        </p>
                         {% endif %}
-                        <div class="govuk-label govuk-label--s">
-                        <label for="hours-spent" class="govuk-label govuk-label--s">
-                            {{ form.hours_spent.label }}
-                        </label>
-                        <div class="govuk-form-group">
-                            {{ form.hours_spent(class="govuk-input", id="hours-spent") }}
-                        </div>
+                        <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios" id="research_participation">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="research_participation-yes"
+                                       name="{{ form.research_participation.name }}" type="radio"
+                                       value="yes" data-aria-controls="conditional-research_participation-yes"
+                                       {% if form.research_participation.data == 'yes' %}checked{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="research_participation-yes">
+                                    {% trans %}Yes{% endtrans %}
+                                </label>
+                            </div>
+                            <div class="govuk-radios__conditional {% if form.research_participation.data != 'yes' %}govuk-radios__conditional--hidden{% endif %}" id="conditional-research_participation-yes">
+                                <div class="govuk-form-group {% if form.errors.get('research_email') %}govuk-form-group--error{% endif %}">
+                                    <label class="govuk-label govuk-label--s" for="{{ form.research_email.id }}">
+                                        {% trans %}What is your email address?{% endtrans %}
+                                    </label>
+                                    <div class="govuk-hint">
+                                        {% trans %}We’ll only contact you about opportunities to help improve MHCLG services through user research{% endtrans %}
+                                    </div>
+                                    {% if form.errors.get('research_email') %}
+                                    <p id="research-email-error" class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">{% trans %}Error:{% endtrans %}</span> {{ form.errors.get('research_email')[0] }}
+                                    </p>
+                                    {% endif %}
+                                    {{ form.research_email(class="govuk-input govuk-!-width-two-thirds", type="email") }}
+                                </div>
+                                <div class="govuk-form-group {% if form.errors.get('research_organisation') %}govuk-form-group--error{% endif %}">
+                                    <label class="govuk-label govuk-label--s" for="{{ form.research_organisation.id }}">
+                                        {% trans %}What organisation do you work for?{% endtrans %}
+                                    </label>
+                                    <div class="govuk-hint">
+                                        {% trans %}We’ll only contact you about relevant user research opportunities{% endtrans %}
+                                    </div>
+                                    {% if form.errors.get('research_organisation') %}
+                                    <p id="research-organisation-error" class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">{% trans %}Error:{% endtrans %}</span> {{ form.errors.get('research_organisation')[0] }}
+                                    </p>
+                                    {% endif %}
+                                    {{ form.research_organisation(class="govuk-input govuk-!-width-two-thirds") }}
+                                </div>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="research_participation-no"
+                                       name="{{ form.research_participation.name }}" type="radio"
+                                       value="no"
+                                       {% if form.research_participation.data == 'no' %}checked{% endif %}>
+                                <label class="govuk-label govuk-radios__label" for="research_participation-no">
+                                    {% trans %}No{% endtrans %}
+                                </label>
+                            </div>
                         </div>
                     </fieldset>
                 </div>

@@ -1,6 +1,6 @@
 from flask_babel import gettext
-from wtforms import FloatField, RadioField, TextAreaField
-from wtforms.validators import DataRequired, InputRequired, NumberRange
+from wtforms import RadioField, StringField, TextAreaField
+from wtforms.validators import Email, InputRequired
 
 from pre_award.apply.forms.base import ApplicationFlaskForm, PrepopulatedForm
 
@@ -36,11 +36,12 @@ class DefaultSectionFeedbackForm(ApplicationFlaskForm):
 
 class EndOfApplicationPage1Form(PrepopulatedForm):
     overall_application_experience = RadioField()
-    more_detail = TextAreaField()
 
     def __init__(self, *args, **kwargs):
         super(EndOfApplicationPage1Form, self).__init__(*args, **kwargs)
-        self.overall_application_experience.label.text = gettext("How was your overall application experience?")
+        self.overall_application_experience.label.text = gettext(
+            "How was your overall experience of using this service?"
+        )
         self.overall_application_experience.choices = [
             ("very good", gettext("Very good")),
             ("good", gettext("Good")),
@@ -48,63 +49,76 @@ class EndOfApplicationPage1Form(PrepopulatedForm):
             ("poor", gettext("Poor")),
             ("very poor", gettext("Very poor")),
         ]
-        self.more_detail.label.text = gettext("Explain why you chose this score (optional)")
         self.overall_application_experience.validators = [InputRequired(message=gettext("Select a score"))]
 
 
 class EndOfApplicationPage2Form(PrepopulatedForm):
-    demonstrate_why_org_funding = RadioField()
+    service_improvement = TextAreaField()
 
     def __init__(self, *args, **kwargs):
         super(EndOfApplicationPage2Form, self).__init__(*args, **kwargs)
-        self.demonstrate_why_org_funding.label.text = gettext(
-            "To what extent do you agree that this application form allowed"
-            " you to demonstrate why your organization should receive funding?"
-        )
-        self.demonstrate_why_org_funding.choices = [
-            ("strongly agree", gettext("Strongly agree")),
-            ("agree", gettext("Agree")),
-            (
-                "neither agree nor disagree",
-                gettext("Neither agree nor disagree"),
-            ),
-            ("disagree", gettext("Disagree")),
-            ("strongly disagree", gettext("Strongly disagree")),
-        ]
-        self.demonstrate_why_org_funding.validators = [InputRequired(message=gettext("Select a score"))]
+        self.service_improvement.label.text = gettext("How could we improve this service?")
 
 
 class EndOfApplicationPage3Form(PrepopulatedForm):
-    understand_eligibility_criteria = RadioField()
+    time_spent = RadioField()
 
     def __init__(self, *args, **kwargs):
         super(EndOfApplicationPage3Form, self).__init__(*args, **kwargs)
-        self.understand_eligibility_criteria.label.text = gettext(
-            "How easy was it to understand the eligibility criteria for this fund?"
+        self.time_spent.label.text = gettext(
+            "On average, how much time did you and your team spend completing the form (including collating and "
+            "providing information)?"
         )
-        self.understand_eligibility_criteria.choices = [
-            ("very easy", gettext("Very easy")),
-            ("easy", gettext("Easy")),
-            (
-                "neither easy or difficult",
-                gettext("Neither easy nor difficult"),
-            ),
-            ("difficult", gettext("Difficult")),
-            ("very difficult", gettext("Very difficult")),
+        self.time_spent.choices = [
+            ("up_to_3_hours", gettext("Up to 3 hours")),
+            ("4_to_6_hours", gettext("4 to 6 hours")),
+            ("7_to_9_hours", gettext("7 to 9 hours")),
+            ("10_to_12_hours", gettext("10 to 12 hours")),
+            ("more_than_12_hours", gettext("More than 12 hours")),
         ]
-        self.understand_eligibility_criteria.validators = [InputRequired(message=gettext("Select a score"))]
+        self.time_spent.validators = [InputRequired(message=gettext("Select an option"))]
 
 
 class EndOfApplicationPage4Form(PrepopulatedForm):
-    hours_spent = FloatField()
+    research_participation = RadioField()
+    research_email = StringField()
+    research_organisation = StringField()
 
     def __init__(self, *args, **kwargs):
         super(EndOfApplicationPage4Form, self).__init__(*args, **kwargs)
-        self.hours_spent.label.text = gettext("Number of hours spent:")
-        self.hours_spent.validators = [
-            DataRequired(message=gettext("Enter a number only. The number must be at least 0.5 or greater.")),
-            NumberRange(min=0.5),
+        self.research_participation.label.text = gettext(
+            "Would you like to participate in our research to help improve the service?"
+        )
+        self.research_participation.choices = [
+            ("yes", gettext("Yes")),
+            ("no", gettext("No")),
         ]
+        self.research_participation.validators = [InputRequired(message=gettext("Select an option"))]
+        self.research_email.label.text = gettext("What is your email address?")
+        self.research_organisation.label.text = gettext("What organisation do you work for?")
+
+    def validate(self, extra_validators=None):
+        if not super().validate(extra_validators):
+            return False
+
+        valid = True
+
+        if self.research_participation.data == "yes":
+            if not self.research_email.data:
+                self.research_email.errors.append(gettext("Enter your email address"))
+                valid = False
+            else:
+                try:
+                    Email()(None, self.research_email)
+                except Exception:
+                    self.research_email.errors.append(gettext("Enter a valid email address"))
+                    valid = False
+
+            if not self.research_organisation.data:
+                self.research_organisation.errors.append(gettext("Enter your organisation name"))
+                valid = False
+
+        return valid
 
 
 END_OF_APPLICATION_FEEDBACK_SURVEY_PAGE_NUMBER_MAP = {
