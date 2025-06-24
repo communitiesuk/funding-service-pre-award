@@ -3,13 +3,13 @@
 {% from "apply/partials/migration_banner.html" import migration_banner %}
 
 {% block beforeContent %}
-    <a href="{{ url_for("application_routes.tasklist", application_id=application_id) }}"
+    <a href="{{ url_for('application_routes.tasklist', application_id=application_id) }}"
        class="govuk-back-link">{% trans %}Go back to application overview{% endtrans %}</a>
 {% endblock beforeContent %}
 
 {% block content %}
-    {% if form.errors.get('understand_eligibility_criteria') %}
-        {{ feedback_error_summary(form.errors.get('understand_eligibility_criteria')[0], "#understand_eligibility_criteria") }}
+    {% if form.errors.get('time_spent') %}
+        {{ feedback_error_summary(form.errors.get('time_spent')[0], "#time_spent") }}
     {% endif %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -28,28 +28,28 @@
             <form method="post">
                 {{ form.hidden_tag() }}
 
-                <div class="govuk-form-group">
+                <div class="govuk-form-group {% if form.errors.get('time_spent') %}govuk-form-group--error{% endif %}">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                             <h1 class="govuk-fieldset__heading">
-                                {{ form.understand_eligibility_criteria.label }}
+                                {% trans %}On average, how much time did you and your team spend completing the form (including collating and providing information)?{% endtrans %}
                             </h1>
                         </legend>
-                        <div class="govuk-radios {% if form.errors.get('understand_eligibility_criteria') %} govuk-form-group--error {% endif -%}" data-module="govuk-radios" id="understand_eligibility_criteria">
-                            {% if form.errors.get('understand_eligibility_criteria') %}
-                            <p id="experience-error" class="govuk-error-message">
-                                <span class="govuk-visually-hidden">Error:</span> {{ form.errors.get('understand_eligibility_criteria')[0] }}
-                            </p>
-                            {% endif %}
-                            {% for choice_value, choice_label in form.understand_eligibility_criteria.choices %}
-                                <div class="govuk-radios__item ">
-                                    <input class="govuk-radios__input" id="{{ choice_value }}"
-                                           name="{{ form.understand_eligibility_criteria.name }}" type="radio"
+                        {% if form.errors.get('time_spent') %}
+                        <p id="time-spent-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">{% trans %}Error:{% endtrans %}</span> {{ form.errors.get('time_spent')[0] }}
+                        </p>
+                        {% endif %}
+                        <div class="govuk-radios" data-module="govuk-radios" id="time_spent">
+                            {% for choice_value, choice_label in form.time_spent.choices %}
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="{{ form.time_spent.id }}-{{ loop.index }}"
+                                           name="{{ form.time_spent.name }}" type="radio"
                                            value="{{ choice_value }}"
-                                            {% if choice_value == form.understand_eligibility_criteria.data %}
+                                            {% if choice_value == form.time_spent.data %}
                                            checked
                                             {% endif %}>
-                                    <label class="govuk-label govuk-radios__label" for="{{ choice_value }}">
+                                    <label class="govuk-label govuk-radios__label" for="{{ form.time_spent.id }}-{{ loop.index }}">
                                         {{ choice_label }}
                                     </label>
                                 </div>
