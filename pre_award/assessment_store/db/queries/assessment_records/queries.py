@@ -792,7 +792,24 @@ def get_export_data(  # noqa: C901 - historical sadness
                                 for sum_item in field["answer"]:
                                     answer += int(sum_item[field_to_sum])
 
-                            applicant_info[title] = answer
+                            if field_type == "MultiInputField" and isinstance(answer, list):
+                                formatted_children = form_fields[field["key"]][language].get("formatted_children", "")
+                                child_map = {
+                                    line.split(": ")[1]: line.split(": ")[0]
+                                    for line in formatted_children.split("\n")
+                                    if ": " in line
+                                }
+                                if title not in applicant_info:
+                                    applicant_info[title] = ""
+                                for child in answer:
+                                    for child_key, child_value in child.items():
+                                        child_title = child_map.get(child_key, child_key)
+                                        # Append each child value as a new line in the same column
+                                        applicant_info[title] += f"({child_title}): {child_value}\n"
+
+                                applicant_info[title].strip()
+                            else:
+                                applicant_info[title] = answer
             applicant_info = add_missing_elements_with_empty_values(applicant_info, form_fields, language)
         final_list.append(applicant_info)
 

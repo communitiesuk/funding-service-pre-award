@@ -2327,6 +2327,125 @@ applicant_info_mapping = {
         },
         "OUTPUT_TRACKER": {},
     },
+    f"{PFN_FUND_ID}:{PFN_ROUND_RP_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "lREPmq": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for capacity funding throughout the programme.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Capacity funding (2024-25): kzCRNQ\nCapacity funding (2025-26): hWffef\nCapacity funding (2026-27): exKKtD\nCapacity funding (2027-28): SWBFvn\nCapacity funding (2028-29): OdZjMh\nCapacity funding (2029-30): DbQDzt\nCapacity funding (2030-31): mjXkxo\nCapacity funding (2031-32): jhEJRB\nCapacity funding (2032-33): nZFwqm\nCapacity funding (2033-34): IlUUxg\nCapacity funding (2034-35): GCnfMS\nCapacity funding (2035-36): rQUbSC",
+                    }
+                },
+                "igStco": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for programme delivery funding (capital) throughout the programme.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Programme delivery funding - capital (2026-27): JoEKPs\nProgramme delivery funding - capital (2027-28): MaHzlK\nProgramme delivery funding - capital (2028-29): cSAvLl\nProgramme delivery funding - capital (2029-30): lXHVDo\nProgramme delivery funding - capital (2030-31): yksYVj\nProgramme delivery funding - capital (2031-32): foBOGa\nProgramme delivery funding - capital (2032-33): BmNYxJ\nProgramme delivery funding - capital (2033-34): UYiAHd\nProgramme delivery funding - capital (2034-35): LzXJTJ\nProgramme delivery funding - capital (2035-36): LwEzPI",
+                    }
+                },
+                "ZaxlkA": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for programme delivery funding (revenue) throughout the programme.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Programme delivery funding - revenue (2026-27): YQGJbm\nProgramme delivery funding - revenue (2027-28): VmCcNW\nProgramme delivery funding - revenue (2028-29): pCCkfZ\nProgramme delivery funding - revenue (2029-30): aaOhAH\nProgramme delivery funding - revenue (2030-31): ehgQSG\nProgramme delivery funding - revenue (2031-32): mmMPXd\nProgramme delivery funding - revenue (2032-33): iLMwbk\nProgramme delivery funding - revenue (2033-34): ThaiNt\nProgramme delivery funding - revenue (2034-35): ROCfYU\nProgramme delivery funding - revenue (2035-36): qMNUxP",
+                    }
+                },
+                "ZzaODW": {
+                    "en": {
+                        "title": "Tell us how you have developed your indicative spend forecast and why it is important for spend to occur in these years.",
+                        "field_type": "MultilineTextField",
+                    }
+                },
+                "MEaRya": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for pre-approved interventions in year 1.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Cohesion (2026-27): zsdDQk\nEducation and opportunity (2026-27): DBqPzO\nHealth and wellbeing (2026-27): MNzARq\nHousing (2026-27): IVFTCQ\nRegeneration, high streets and heritage (2026-27): nqmOwu\nSafety and security (2026-27): UbTbvU\nTransport (2026-27): qNiSsO\nWork, productivity and skills (2026-27): hNACOp",
+                    }
+                },
+                "Grlvkx": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for pre-approved interventions in year 2.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Cohesion (2027-28): wYgMdi\nEducation and opportunity (2027-28): YlgCLY\nHealth and wellbeing (2027-28): ESRHVS\nHousing (2027-28): qUrvtI\nRegeneration, high streets and heritage (2027-28): VsEWYE\nSafety and security (2027-28): YIpOAe\nTransport (2027-28): lSlyHK\nWork, productivity and skills (2027-28): TaXzeh",
+                    }
+                },
+                "gEOHHl": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for pre-approved interventions in year 3.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Cohesion (2028-29): FwurgE\nEducation and opportunity (2028-29): tmOkiG\nHealth and wellbeing (2028-29): sSQLwH\nHousing (2028-29): uUTyWH\nRegeneration, high streets and heritage (2028-29): ZsNcbA\nSafety and security (2028-29): iuTXHe\nTransport (2028-29): lXTtKN\nWork, productivity and skills (2028-29): FfSahl",
+                    }
+                },
+                "yYqyaG": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for pre-approved interventions in year 4.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Cohesion (2029-30): ygHERI\nEducation and opportunity (2029-30): QoEuWY\nHealth and wellbeing (2029-30): QpOTwg\nHousing (2029-30): jCEizE\nRegeneration, high streets and heritage (2029-30): zODcnS\nSafety and security (2029-30): pAnzYr\nTransport (2029-30): ZKFXMr\nWork, productivity and skills (2029-30): flkyla",
+                    }
+                },
+                "QEywSA": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for any off-menu interventions in the first investment period.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Off-menu interventions (2026-27): NCgxYf\nOff-menu interventions (2027-28): afjufs\nOff-menu interventions (2028-29): EbZeKz\nOff-menu interventions (2029-30): MRjEso",
+                    }
+                },
+                "aUQnBP": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for management costs in the first investment period.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Management costs (2026-27): QVuIFv\nManagement costs (2027-28): GHFRTw\nManagement costs (2028-29): sAelLv\nManagement costs (2029-30): ZvlDXd",
+                    }
+                },
+                "aLeDKy": {
+                    "en": {
+                        "title": "Tell us about any unknown uses of funding in the first investment period.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": "Unknown uses of funding (2026-27): wajlvP\nUnknown uses of funding (2027-28): bPbTEe\nUnknown uses of funding (2028-29): XGBxKK\nUnknown uses of funding (2029-30): fqmDlx",
+                    }
+                },
+                "SZrPXB": {
+                    "en": {
+                        "title": "Tell us about the local challenges you have identified as priorities to address in the first investment period and why. (Objective 1: Thriving places)",
+                        "field_type": "multilineTextField",
+                    }
+                },
+                "DOWpEu": {
+                    "en": {
+                        "title": "Tell us about any local opportunities for improvement or investment that you have identified and wish to pursue in the first investment period. (Objective 1: Thriving places)",
+                        "field_type": "multilineTextField",
+                    }
+                },
+                "XaZCkd": {
+                    "en": {
+                        "title": "Tell us about the local challenges you have identified as priorities to address in the first investment period and why. (Objective 2: Stronger communities)",
+                        "field_type": "multilineTextField",
+                    }
+                },
+                "aJyHdS": {
+                    "en": {
+                        "title": "Tell us about any local opportunities for improvement or investment that you have identified and wish to pursue in the first investment period. (Objective 2: Stronger communities",
+                        "field_type": "multilineTextField",
+                    }
+                },
+                "PjdnJZ": {
+                    "en": {
+                        "title": "Tell us about the local challenges you have identified as priorities to address in the first investment period and why. (Objective 3: Taking back control)",
+                        "field_type": "multilineTextField",
+                    }
+                },
+                "wmpvjb": {
+                    "en": {
+                        "title": "Can you provide details of any projects you have identified for funding? ",
+                        "field_type": "YesNoField",
+                    }
+                },
+            },
+        }
+    },
+    "OUTPUT_TRACKER": {},
 }
 
 # APPLICATION SEEDING CONFIGURATION
