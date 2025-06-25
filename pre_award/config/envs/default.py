@@ -502,3 +502,5 @@ class DefaultConfig(object):
     MS_GRAPH_PERMISSIONS_SCOPE = ["User.ReadBasic.All"]
 
     GOV_NOTIFY_API_KEY = getenv("GOV_NOTIFY_API_KEY")
+
+    ASSESSOR_FEEDBACK_SURVEY_MS_FORMS_URL = "https://forms.office.com/Pages/ResponsePage.aspx?id=EGg0v32c3kOociSi7zmVqIpdDApnKW5Ep4Er6o1SfUlUMExWMFhKNk5YWVRLTlpGODAxWTlQMEwyMC4u"
