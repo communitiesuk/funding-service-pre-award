@@ -28,7 +28,7 @@ import govukButton -%}
           </p>
           <!-- TODO Assuming that this is the only round (PFN-RP) that is not going to need the hardcoded text
             "The assessors will start ...". otherwise we need to find a better way to handle this -->
-          {% if round_id|string != '9217792e-d8c2-45c8-8170-eed4a8946184' %}
+          {% if round_id|string != '9217792e-d8c2-45c8-8170-eed4a8946184' and not (fund_short_name == 'DPIF' and round_short_name == 'R4') %}
           <p class="govuk-body">
             {% trans %}The assessors will start reviewing applications from {% endtrans %}{{ assessment_start_date }}.
           </p>
