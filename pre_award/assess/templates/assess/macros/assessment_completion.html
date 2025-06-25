@@ -29,6 +29,9 @@
                 It may now be selected for quality assurance (QA). New scores and rationales could be added if this
                 happens.
             </p>
+            <p class="govuk-body">
+                If you would like to provide feedback on the assessment process, you can do so via this Microsoft Form: <a href="{{ config.ASSESSOR_FEEDBACK_SURVEY_MS_FORMS_URL }}">Assessor feedback survey</a>.
+            </p>
             {% if g.access_controller.is_lead_assessor %}
                 {{ link_to_download_contract_docs(csrf_token, application_id) }}
             {% endif %}
