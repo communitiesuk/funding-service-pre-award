@@ -405,3 +405,8 @@ a.govuk-link.deactivate {
     font-size: medium;
     width: 54px;
 }
+.custom-scrollable-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
