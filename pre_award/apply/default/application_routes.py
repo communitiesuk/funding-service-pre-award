@@ -647,12 +647,14 @@ def round_feedback(application_id, page_number):
         return redirect(url_for("application_routes.tasklist", application_id=application_id))
 
     if form.validate_on_submit():
+        form_data_dict = form.as_dict()
+        form_data_dict.pop("csrf_token", None)
         posted_survey_data = post_feedback_survey_to_store(
             application_id,
             application.fund_id,
             application.round_id,
             page_number,
-            form.as_dict(),
+            form_data_dict,
         )
 
         if posted_survey_data:
