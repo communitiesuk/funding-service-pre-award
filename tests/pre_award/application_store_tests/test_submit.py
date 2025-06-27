@@ -851,7 +851,7 @@ def test_assessment_records_workflow_status(
         )
     ],
 )
-def test_send_change_received_notification(
+def test_send_change_received_notification_only_for_uncompeted_fund(
     mocker,
     db,
     app,
@@ -869,7 +869,7 @@ def test_send_change_received_notification(
 
     fund_id = get_fund_id(setup_completed_application)
     fund_data = get_fund(fund_id)
-
+    fund_data.funding_type = "UNCOMPETED"
     send_change_received_notification(
         fund=fund_data,
         round_data=mock_round,
@@ -886,3 +886,27 @@ def test_send_change_received_notification(
             ),
         )
     ]
+
+
+def test_send_change_received_notification_skip_for_competitive_fund(
+    mocker,
+    db,
+    app,
+    setup_completed_application,
+    mock_get_files,
+    mock_notification_service_calls,
+):
+    mock_round = MagicMock(title="test", contact_email="contact@test.com", short_name="test")
+    mocker.patch(
+        "services.notify.NotificationService.CHANGE_RECEIVED_TEMPLATE_ID",
+        "00000000-0000-0000-0000-000000000004",
+    )
+
+    fund_id = get_fund_id(setup_completed_application)
+    fund_data = get_fund(fund_id)
+    fund_data.funding_type = "COMPETITIVE"
+    send_change_received_notification(
+        fund=fund_data,
+        round_data=mock_round,
+    )
+    assert len(mock_notification_service_calls) == 0
