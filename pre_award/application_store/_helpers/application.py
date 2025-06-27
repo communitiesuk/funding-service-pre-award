@@ -135,6 +135,8 @@ def send_submit_notification(
 
 
 def send_change_received_notification(fund, round_data):
+    if fund.funding_type != "UNCOMPETED":
+        return
     get_notification_service().send_change_received_email(
         email_address=round_data.contact_email,
         fund_name=fund.name_json["en"],
