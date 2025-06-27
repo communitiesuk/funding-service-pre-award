@@ -793,12 +793,7 @@ def get_export_data(  # noqa: C901 - historical sadness
                                     answer += int(sum_item[field_to_sum])
 
                             if field_type == "MultiInputField" and isinstance(answer, list):
-                                formatted_children = form_fields[field["key"]][language].get("formatted_children", "")
-                                child_map = {
-                                    line.split(": ")[1]: line.split(": ")[0]
-                                    for line in formatted_children.split("\n")
-                                    if ": " in line
-                                }
+                                child_map = form_fields[field["key"]][language].get("formatted_children", "")
                                 if title not in applicant_info:
                                     applicant_info[title] = ""
                                 for child in answer:
