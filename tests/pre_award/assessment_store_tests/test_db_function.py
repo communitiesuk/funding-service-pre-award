@@ -1,3 +1,4 @@
+import json
 import random
 
 import pytest
@@ -42,8 +43,7 @@ def test_select_field_by_id(seed_application_records):
     picked_key = picked_field["key"]
 
     field_found = find_answer_by_key_runner(picked_key, picked_app_id)[0]
-
-    assert field_found == picked_field
+    assert json.dumps(field_found, sort_keys=True) == json.dumps(picked_field, sort_keys=True)
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])

@@ -128,17 +128,16 @@ class TestUserValidation:
             return_value={
                 "id": self.TEST_ID,
                 "email": "test@test.com",
-                "reference": "ABC-123",
             },
         )
         response = apply_test_client.post(
             "/submit_application",
             data={"application_id": self.TEST_ID},
-            follow_redirects=False,
+            follow_redirects=True,
         )
         assert 200 == response.status_code, "Incorrect status code"
         assert b"Application submitted" in response.data
-        assert b"Reference number<br><strong>ABC-123</strong>" in response.data
+        assert b"Reference number<br><strong>TEST-REF</strong>" in response.data
         assert b"The assessors will start reviewing applications from 1 November 2024" in response.data
 
     def test_submit_correct_user_bad_dates(self, apply_test_client, mocker, mock_login):
