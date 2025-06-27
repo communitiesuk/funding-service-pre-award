@@ -6,8 +6,14 @@ from enum import Enum, auto
 
 class CommentType(Enum):
     COMMENT = auto()
-
     WHOLE_APPLICATION = auto()
+
+    @property
+    def label(self):
+        if self == CommentType.WHOLE_APPLICATION:
+            return "Whole application comment"
+        elif self == CommentType.COMMENT:
+            return "Sub-criteria comment"
 
 
 @dataclass
