@@ -995,8 +995,8 @@ class TestJinjaMacros(object):
             )
 
     @pytest.mark.parametrize(
-        "is_lead_assessor, download_available, export_href, feedback_export_href,assessment_tracker_href,"
-        " is_assessment_active, has_assessment_opened, has_application_closed, exp_links_text",
+        "is_lead_assessor, download_available, export_href, feedback_export_href, assessment_tracker_href, "
+        "comments_export_href, is_assessment_active, has_assessment_opened, has_application_closed, exp_links_text",
         [
             (
                 True,
@@ -1004,6 +1004,7 @@ class TestJinjaMacros(object):
                 "export",
                 "feedback",
                 "tracker",
+                "comments",
                 True,
                 True,
                 True,
@@ -1012,6 +1013,7 @@ class TestJinjaMacros(object):
                     "Export applicant information",
                     "Export feedback survey responses",
                     "Assessment Tracker Export",
+                    "Export comments",
                 ],
             ),
             (
@@ -1020,11 +1022,13 @@ class TestJinjaMacros(object):
                 "export",
                 "feedback",
                 "tracker",
+                "comments",
                 False,
                 False,
                 False,
                 [
                     "Export feedback survey responses",
+                    "Export comments",
                 ],
             ),
             (
@@ -1033,6 +1037,7 @@ class TestJinjaMacros(object):
                 "export",
                 "feedback",
                 "tracker",
+                "comments",
                 True,
                 True,
                 False,
@@ -1041,6 +1046,7 @@ class TestJinjaMacros(object):
                     "Export applicant information",
                     "Export feedback survey responses",
                     "Assessment Tracker Export",
+                    "Export comments",
                 ],
             ),
             (
@@ -1049,6 +1055,7 @@ class TestJinjaMacros(object):
                 "export",
                 "feedback",
                 "tracker",
+                "comments",
                 True,
                 True,
                 True,
@@ -1062,6 +1069,7 @@ class TestJinjaMacros(object):
                 "export",
                 "feedback",
                 "tracker",
+                "comments",
                 False,
                 True,
                 True,
@@ -1070,6 +1078,7 @@ class TestJinjaMacros(object):
                     "Export applicant information",
                     "Export feedback survey responses",
                     "Assessment Tracker Export",
+                    "Export comments",
                 ],
             ),
             (
@@ -1078,6 +1087,7 @@ class TestJinjaMacros(object):
                 "export",
                 None,
                 "tracker",
+                "comments",
                 False,
                 True,
                 True,
@@ -1085,6 +1095,7 @@ class TestJinjaMacros(object):
                     "View all closed assessments",
                     "Export applicant information",
                     "Assessment Tracker Export",
+                    "Export comments",
                 ],
             ),
             (
@@ -1093,12 +1104,14 @@ class TestJinjaMacros(object):
                 "",
                 "feedback",
                 "",
+                "comments",
                 False,
                 True,
                 True,
                 [
                     "View all closed assessments",
                     "Export feedback survey responses",
+                    "Export comments",
                 ],
             ),
             (
@@ -1107,12 +1120,14 @@ class TestJinjaMacros(object):
                 "export",
                 "feedback",
                 "tracker",
+                "comments",
                 True,
                 True,
                 True,
                 [
                     "View all active assessments",
                     "Assessment Tracker Export",
+                    "Export comments",
                 ],
             ),
         ],
@@ -1125,6 +1140,7 @@ class TestJinjaMacros(object):
         export_href,
         feedback_export_href,
         assessment_tracker_href,
+        comments_export_href,
         is_assessment_active,
         has_assessment_opened,
         has_application_closed,
@@ -1135,7 +1151,7 @@ class TestJinjaMacros(object):
             mock_access_controller.is_lead_assessor = is_lead_assessor
             rendered_html = render_template_string(
                 "{{round_links(access_controller, assessments_href, download_available, export_href,"
-                " feedback_export_href,assessment_tracker_href, round_status)}}",
+                " feedback_export_href,assessment_tracker_href, comments_export_href, round_status)}}",
                 round_links=get_template_attribute("assess/macros/fund_dashboard_summary.html", "round_links"),
                 access_controller=mock_access_controller,
                 assessments_href="assessments_href",
@@ -1143,6 +1159,7 @@ class TestJinjaMacros(object):
                 export_href=export_href,
                 feedback_export_href=feedback_export_href,
                 assessment_tracker_href=assessment_tracker_href,
+                comments_export_href=comments_export_href,
                 round_status=RoundStatus(
                     False,
                     False,

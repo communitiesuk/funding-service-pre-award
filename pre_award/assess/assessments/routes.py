@@ -1870,7 +1870,7 @@ def feedback_export(fund_short_name: str, round_short_name: str):
     methods=["GET"],
 )
 @check_access_fund_short_name_round_sn(roles_required=[Config.LEAD_ASSESSOR])
-def comments_export(fund_short_name: str, round_short_name: str):
+def comments_export(fund_short_name, round_short_name):
     round = get_round(
         fund_short_name,
         round_short_name,
@@ -1879,7 +1879,7 @@ def comments_export(fund_short_name: str, round_short_name: str):
     )
 
     comments_list = retrieve_all_comments(round.fund_id, round.id)
-    return export_comments_to_excel(comments_list)
+    return export_comments_to_excel(comments_list, fund_short_name, round_short_name)
 
 
 @assessment_bp.route("/qa_complete/<application_id>", methods=["GET", "POST"])
