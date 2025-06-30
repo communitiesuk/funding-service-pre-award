@@ -904,6 +904,7 @@ def test_send_change_received_notification_skip_for_competitive_fund(
 
     fund_id = get_fund_id(setup_completed_application)
     fund_data = get_fund(fund_id)
+    fund_data.short_name = "DPIF"
     fund_data.funding_type = "COMPETITIVE"
     send_change_received_notification(
         fund=fund_data,
