@@ -58,6 +58,7 @@ class EndOfApplicationPage2Form(PrepopulatedForm):
     def __init__(self, *args, **kwargs):
         super(EndOfApplicationPage2Form, self).__init__(*args, **kwargs)
         self.service_improvement.label.text = gettext("How could we improve this service?")
+        self.service_improvement.validators = [InputRequired(message=gettext("Enter your feedback"))]
 
 
 class EndOfApplicationPage3Form(PrepopulatedForm):
