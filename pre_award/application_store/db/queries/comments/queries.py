@@ -52,12 +52,12 @@ def retrieve_all_comments(fund_id, round_id):
                 "Application ID": str(comment.application_id) if comment else None,
                 "Application reference": application.reference if application else None,
                 "Project name": application.project_name if application else None,
-                "Comment ID": str(cu.comment_id),
-                "Comments update ID": str(cu.id),
                 "Date created": cu.date_created.strftime("%d %B %Y, %H:%M") if cu.date_created else None,
                 "Comment type": (comment.comment_type.label if comment and comment.comment_type else None),
                 "Sub-criteria ID": comment.sub_criteria_id if comment else None,
-                "Sub-criteria name": sub_criteria_name_map.get(comment.sub_criteria_id) if sub_criteria_id else None,
+                "Sub-criteria name": sub_criteria_name_map.get(comment.sub_criteria_id)
+                if comment and comment.sub_criteria_id
+                else None,
                 "Commenter name": commenter_account.full_name if commenter_account else None,
                 "Commenter email": commenter_account.email if commenter_account else None,
                 "Comment": cu.comment,
@@ -69,7 +69,7 @@ def retrieve_all_comments(fund_id, round_id):
 
 def export_comments_to_excel(
     comments_list,
-    fund_short_name: str,
+    fund_short_name,
     round_short_name,
 ):
     output = io.BytesIO()
