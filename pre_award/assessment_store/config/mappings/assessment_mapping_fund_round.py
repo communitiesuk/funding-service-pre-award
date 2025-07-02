@@ -122,6 +122,12 @@ from pre_award.assessment_store.config.mappings.nstf_mapping_parts.r2_scored_cri
 from pre_award.assessment_store.config.mappings.nstf_mapping_parts.r2_unscored_sections import (
     unscored_sections as nstf_unscored_sections,
 )
+from pre_award.assessment_store.config.mappings.pfn_mapping_parts.r1_scored_sections import (
+    scored_sections as pfn_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.pfn_mapping_parts.r1_unscored_sections import (
+    unscored_sections as pfn_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.uf1_mapping_parts.scored_sections import (
     scored_sections as uf1_scored_sections,
 )
@@ -331,8 +337,8 @@ fund_round_to_assessment_mapping = {
     },
     f"{PFN_FUND_ID}:{PFN_ROUND_RP_ID}": {
         "schema_id": "pfn_rp_assessment",
-        "unscored_sections": [],
-        "scored_criteria": [],
+        "unscored_sections": pfn_unscored_sections,
+        "scored_criteria": pfn_scored_sections,
     },
 }
 

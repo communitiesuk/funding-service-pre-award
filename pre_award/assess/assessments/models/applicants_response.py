@@ -6,7 +6,7 @@ from typing import Iterable, List, Tuple
 from urllib.parse import quote
 
 from bs4 import BeautifulSoup
-from flask import url_for
+from flask import current_app, url_for
 
 from pre_award.assess.assessments.form_lists_helper import map_form_json_list_value
 from pre_award.assess.services.aws import list_files_in_folder
@@ -292,10 +292,12 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
         if isinstance(answer, list):
             try:
                 for i, ans in enumerate(answer):
-                    if ans[2] == "monthYearField":
+                    if isinstance(ans, (list, tuple)) and len(ans) > 2 and ans[2] == "monthYearField":
                         for j, val in enumerate(ans[1]):
                             input_date = val
                             item["answer"][i][1][j] = _convert_to_month_year(input_date)
+                    else:
+                        current_app.logger.warning("Unexpected answer format: %s", ans)
             except IndexError:
                 pass
         else:
