@@ -6,7 +6,7 @@
 
 {% macro render(application_overviews, round_details, query_params, asset_types,
 assessment_statuses, display_config,
-sort_column, sort_order, tag_option_groups, tags, tagging_purpose_config, users) -%}
+sort_column, sort_order, tag_option_groups, tags, tagging_purpose_config, users, is_uncompeted_flow_flag) -%}
 
 {% if display_config["assessment_form"] and display_config["assessment_form"].form_errors %}
 <div class="govuk-error-summary" data-module="govuk-error-summary">
@@ -101,7 +101,7 @@ sort_column, sort_order, tag_option_groups, tags, tagging_purpose_config, users)
       <td class="govuk-table__cell">{{ overview.location_json_blob.get('country') or "Not found" }}</td>
       {{ tags_table(tags[overview.application_id], tagging_purpose_config, query_params.show_tags == "ON") }}
       {% if g.access_controller.has_any_assessor_role %}
-      {{ application_status_column(overview.application_status, overview.get("progress", ""), assessment_statuses) }}
+      {{ application_status_column(overview.application_status, overview.get("progress", ""), assessment_statuses, is_uncompeted_flow_flag) }}
       {% endif %}
       <td class="govuk-table__cell">
         {% if overview.assigned_to_names %}

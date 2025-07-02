@@ -3,11 +3,14 @@ from typing import Dict, List
 
 from flask import request
 
+from pre_award.assess.services.data_services import is_uncompeted_flow
 from pre_award.assessment_store.db.queries import (
     create_score_for_app_sub_crit,
     get_scores_for_app_sub_crit,
     get_scoring_system_for_round_id,
 )
+from pre_award.assessment_store.db.queries.assessment_records.queries import find_assessor_task_list_state
+from pre_award.assessment_store.db.queries.scores.queries import accept_sub_criteria
 from pre_award.common.blueprints import Blueprint
 
 assessment_score_bp = Blueprint("assessment_score_bp", __name__)
@@ -69,12 +72,23 @@ def post_score_for_application_sub_criteria() -> Dict:
     justification = args["justification"]
     user_id = args["user_id"]
 
-    created_score = create_score_for_app_sub_crit(
-        application_id=application_id,
-        sub_criteria_id=sub_criteria_id,
-        score=score,
-        justification=justification,
-        user_id=user_id,
-    )
+    tasklist_metadata = find_assessor_task_list_state(application_id)
+
+    if is_uncompeted_flow(tasklist_metadata["fund_id"]):
+        created_score = accept_sub_criteria(
+            application_id=application_id,
+            sub_criteria_id=sub_criteria_id,
+            user_id=user_id,
+            message=justification,
+            score=score,
+        )
+    else:
+        created_score = create_score_for_app_sub_crit(
+            application_id=application_id,
+            sub_criteria_id=sub_criteria_id,
+            score=score,
+            justification=justification,
+            user_id=user_id,
+        )
 
     return created_score

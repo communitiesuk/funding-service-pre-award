@@ -1,6 +1,9 @@
 from flask import abort, current_app, g, render_template, request
 
-from pre_award.assess.authentication.validation import check_access_application_id
+from pre_award.assess.authentication.validation import (
+    check_access_application_id,
+    check_approval_or_change_request_allowed_uncompeted_only,
+)
 from pre_award.assess.flagging.helpers import get_flags
 from pre_award.assess.scoring.forms.rescore_form import RescoreForm
 from pre_award.assess.scoring.helpers import get_scoring_class
@@ -9,6 +12,7 @@ from pre_award.assess.services.data_services import (
     get_fund,
     get_score_and_justification,
     get_sub_criteria,
+    is_uncompeted_flow,
     match_comment_to_theme,
     match_score_to_user_account,
     submit_score_and_justification,
@@ -31,6 +35,7 @@ scoring_bp = Blueprint(
     "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/score",
     methods=["POST", "GET"],
 )
+@check_approval_or_change_request_allowed_uncompeted_only
 @check_access_application_id(roles_required=["LEAD_ASSESSOR", "ASSESSOR"])
 def score(
     application_id,
@@ -78,7 +83,9 @@ def score(
         else None
     )
 
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        sub_criteria.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
     flag_status = determine_flag_status(flags_list)
 
     # call to assessment store to get latest score.
