@@ -2327,6 +2327,169 @@ applicant_info_mapping = {
         },
         "OUTPUT_TRACKER": {},
     },
+    f"{PFN_FUND_ID}:{PFN_ROUND_RP_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "lREPmq": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for capacity funding throughout the programme.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "kzCRNQ": "Capacity funding (2024-25)",
+                            "hWffef": "Capacity funding (2025-26)",
+                            "exKKtD": "Capacity funding (2026-27)",
+                            "SWBFvn": "Capacity funding (2027-28)",
+                            "OdZjMh": "Capacity funding (2028-29)",
+                            "DbQDzt": "Capacity funding (2029-30)",
+                            "mjXkxo": "Capacity funding (2030-31)",
+                            "jhEJRB": "Capacity funding (2031-32)",
+                            "nZFwqm": "Capacity funding (2032-33)",
+                            "IlUUxg": "Capacity funding (2033-34)",
+                            "GCnfMS": "Capacity funding (2034-35)",
+                            "rQUbSC": "Capacity funding (2035-36)",
+                        },
+                    }
+                },
+                "igStco": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for programme delivery funding (capital) throughout the programme.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "JoEKPs": "Programme delivery funding - capital (2026-27)",
+                            "MaHzlK": "Programme delivery funding - capital (2027-28)",
+                            "cSAvLl": "Programme delivery funding - capital (2028-29)",
+                            "lXHVDo": "Programme delivery funding - capital (2029-30)",
+                            "yksYVj": "Programme delivery funding - capital (2030-31)",
+                            "foBOGa": "Programme delivery funding - capital (2031-32)",
+                            "BmNYxJ": "Programme delivery funding - capital (2032-33)",
+                            "UYiAHd": "Programme delivery funding - capital (2033-34)",
+                            "LzXJTJ": "Programme delivery funding - capital (2034-35)",
+                            "LwEzPI": "Programme delivery funding - capital (2035-36)",
+                        },
+                    }
+                },
+                "ZaxlkA": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for programme delivery funding (revenue) throughout the programme.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "YQGJbm": "Programme delivery funding - revenue (2026-27)",
+                            "VmCcNW": "Programme delivery funding - revenue (2027-28)",
+                            "pCCkfZ": "Programme delivery funding - revenue (2028-29)",
+                            "aaOhAH": "Programme delivery funding - revenue (2029-30)",
+                            "ehgQSG": "Programme delivery funding - revenue (2030-31)",
+                            "mmMPXd": "Programme delivery funding - revenue (2031-32)",
+                            "iLMwbk": "Programme delivery funding - revenue (2032-33)",
+                            "ThaiNt": "Programme delivery funding - revenue (2033-34)",
+                            "ROCfYU": "Programme delivery funding - revenue (2034-35)",
+                            "qMNUxP": "Programme delivery funding - revenue (2035-36)",
+                        },
+                    }
+                },
+                "MEaRya": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for pre-approved interventions in year 1.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "zsdDQk": "Cohesion (2026-27)",
+                            "DBqPzO": "Education and opportunity (2026-27)",
+                            "MNzARq": "Health and wellbeing (2026-27)",
+                            "IVFTCQ": "Housing (2026-27)",
+                            "nqmOwu": "Regeneration, high streets and heritage (2026-27)",
+                            "UbTbvU": "Safety and security (2026-27)",
+                            "qNiSsO": "Transport (2026-27)",
+                            "hNACOp": "Work, productivity and skills (2026-27)",
+                        },
+                    }
+                },
+                "Grlvkx": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for pre-approved interventions in year 2.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "wYgMdi": "Cohesion (2027-28)",
+                            "YlgCLY": "Education and opportunity (2027-28)",
+                            "ESRHVS": "Health and wellbeing (2027-28)",
+                            "qUrvtI": "Housing (2027-28)",
+                            "VsEWYE": "Regeneration, high streets and heritage (2027-28)",
+                            "YIpOAe": "Safety and security (2027-28)",
+                            "lSlyHK": "Transport (2027-28)",
+                            "TaXzeh": "Work, productivity and skills (2027-28)",
+                        },
+                    }
+                },
+                "gEOHHl": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for pre-approved interventions in year 3.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "FwurgE": "Cohesion (2028-29)",
+                            "tmOkiG": "Education and opportunity (2028-29)",
+                            "sSQLwH": "Health and wellbeing (2028-29)",
+                            "uUTyWH": "Housing (2028-29)",
+                            "ZsNcbA": "Regeneration, high streets and heritage (2028-29)",
+                            "iuTXHe": "Safety and security (2028-29)",
+                            "lXTtKN": "Transport (2028-29)",
+                            "FfSahl": "Work, productivity and skills (2028-29)",
+                        },
+                    }
+                },
+                "yYqyaG": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for pre-approved interventions in year 4.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "ygHERI": "Cohesion (2029-30)",
+                            "QoEuWY": "Education and opportunity (2029-30)",
+                            "QpOTwg": "Health and wellbeing (2029-30)",
+                            "jCEizE": "Housing (2029-30)",
+                            "zODcnS": "Regeneration, high streets and heritage (2029-30)",
+                            "pAnzYr": "Safety and security (2029-30)",
+                            "ZKFXMr": "Transport (2029-30)",
+                            "flkyla": "Work, productivity and skills (2029-30)",
+                        },
+                    }
+                },
+                "QEywSA": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for any off-menu interventions in the first investment period.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "NCgxYf": "Off-menu interventions (2026-27)",
+                            "afjufs": "Off-menu interventions (2027-28)",
+                            "EbZeKz": "Off-menu interventions (2028-29)",
+                            "MRjEso": "Off-menu interventions (2029-30)",
+                        },
+                    }
+                },
+                "aUQnBP": {
+                    "en": {
+                        "title": "Tell us your indicative spend forecast for management costs in the first investment period.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "QVuIFv": "Management costs (2026-27)",
+                            "GHFRTw": "Management costs (2027-28)",
+                            "sAelLv": "Management costs (2028-29)",
+                            "ZvlDXd": "Management costs (2029-30)",
+                        },
+                    }
+                },
+                "aLeDKy": {
+                    "en": {
+                        "title": "Tell us about any unknown uses of funding in the first investment period (financial years 2026 to 2030).",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "wajlvP": "Unknown uses of funding (2026-27)",
+                            "bPbTEe": "Unknown uses of funding (2027-28)",
+                            "XGBxKK": "Unknown uses of funding (2028-29)",
+                            "fqmDlx": "Unknown uses of funding (2029-30)",
+                        },
+                    }
+                },
+            }
+        },
+        "OUTPUT_TRACKER": {},
+    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
