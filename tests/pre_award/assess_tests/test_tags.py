@@ -88,6 +88,7 @@ def test_change_tags_route(
     mock_get_active_tags_for_fund_round,
     mock_get_associated_tags_for_application,
     mock_get_round,
+    mock_competed_cof_fund,
 ):
     response = client_with_valid_session.get("/assess/application/app_id/tags")
     soup = BeautifulSoup(response.data, "html.parser")
@@ -111,6 +112,7 @@ def test_change_tags_route_does_not_show_deactivated_tags_as_options(
     mock_get_inactive_tags_for_fund_round,
     mock_get_associated_tags_for_application,
     mock_get_round,
+    mock_competed_cof_fund,
 ):
     response = client_with_valid_session.get("/assess/application/app_id/tags")
     soup = BeautifulSoup(response.data, "html.parser")
@@ -134,6 +136,7 @@ def test_change_tags_route_associated_tag_checked(
     mock_get_active_tags_for_fund_round,
     mock_get_associated_tags_for_application,
     mock_get_round,
+    mock_competed_cof_fund,
 ):
     response = client_with_valid_session.get("/assess/application/app_id/tags")
     soup = BeautifulSoup(response.data, "html.parser")
@@ -153,6 +156,7 @@ def test_change_tags_route_no_tags(
     mock_get_application_metadata,
     mock_get_fund,
     mock_get_round,
+    mock_competed_cof_fund,
 ):
     mocker.patch(
         "pre_award.assess.tagging.routes.get_tags_for_fund_round",

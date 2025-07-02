@@ -13,6 +13,7 @@ from pre_award.assess.services.data_services import (
     get_tag_for_fund_round,
     get_tag_types,
     get_tags_for_fund_round,
+    is_uncompeted_flow,
     post_new_tag_for_fund_round,
     update_associated_tags,
     update_tag,
@@ -84,7 +85,9 @@ def load_change_tags(application_id):
             tag.associated = True
         if tag.active:
             active_tags.append(tag)
-    assessment_status = determine_assessment_status(state.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        state.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
     return render_template(
         "tagging/change_tags.html",
         form=tag_association_form,
