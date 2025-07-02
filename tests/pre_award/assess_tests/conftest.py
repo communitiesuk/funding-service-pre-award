@@ -467,7 +467,7 @@ def mock_get_assessor_tasklist_state(request, mocker):
             "fund_name": "Test Fund",
             "fund_short_name": "TF",
             "round_short_name": "R1",
-            "fund_guidance_url": "http://example.com",
+            "fund_guidance_url": "https://example.com",
             "is_eoi_round": False,
         }
     )
