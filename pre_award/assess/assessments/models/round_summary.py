@@ -86,6 +86,11 @@ def _add_links_to_summary(summary, fund_short_name, round) -> RoundSummary:
         if (round.feedback_survey_config.has_feedback_survey or round.feedback_survey_config.has_section_feedback)
         else ""
     )
+    summary.comments_export_href = url_for(
+        "assessment_bp.comments_export",
+        fund_short_name=fund_short_name,
+        round_short_name=round.short_name.lower(),
+    )
     return summary
 
 

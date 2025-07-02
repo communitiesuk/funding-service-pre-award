@@ -6,5 +6,11 @@ class CommentType(Enum):
     values for the `comment_type` column."""
 
     COMMENT = 0
-
     WHOLE_APPLICATION = 1
+
+    @property
+    def label(self):
+        if self == CommentType.WHOLE_APPLICATION:
+            return "Whole application comment"
+        elif self == CommentType.COMMENT:
+            return "Sub-criteria comment"

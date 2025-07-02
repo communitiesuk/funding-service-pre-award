@@ -84,7 +84,7 @@ class TestRoutes:
     )
     @pytest.mark.parametrize(
         "exp_link_count, download_available, mock_is_lead_assessor",
-        [(1, False, True), (3, True, True), (0, False, False)],
+        [(2, False, True), (4, True, True), (0, False, False)],
     )
     def test_route_landing_export_link_visibility(
         self,
@@ -138,7 +138,7 @@ class TestRoutes:
         )
         assert len(all_exports_links) == exp_link_count
         if not download_available and mock_is_lead_assessor:
-            assert "Assessment Tracker Export" in all_exports_links[-1].text
+            assert "Assessment Tracker Export" in all_exports_links[-2].text
 
     fund_case = namedtuple("FundCase", "fund_short round_short role_key assigned_div expected_extra_tabs")
 
