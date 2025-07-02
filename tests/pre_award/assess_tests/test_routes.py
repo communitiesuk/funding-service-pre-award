@@ -6,13 +6,12 @@ import pytest
 from bs4 import BeautifulSoup
 from flask import session
 
-from pre_award.apply.models.application_summary import ApplicationSummary
 from pre_award.apply.models.fund import Fund
-from pre_award.apply.models.round import Round
 from pre_award.assess.assessments.models.round_status import RoundStatus
 from pre_award.assess.assessments.models.round_summary import RoundSummary, Stats
 from pre_award.assess.services.models.flag import Flag
 from pre_award.assessment_store.db.models.assessment_record.enums import Status
+from tests.pre_award.apply_tests.api_data.test_data import TEST_APPLICATION_SUMMARIES, TEST_FUNDS_DATA, TEST_ROUNDS_DATA
 from tests.pre_award.assess_tests.api_data.test_data import fund_specific_claim_map
 from tests.pre_award.assess_tests.conftest import (
     assert_fund_dashboard,
@@ -22,147 +21,6 @@ from tests.pre_award.assess_tests.conftest import (
     test_dpif_commenter_claims,
     test_lead_assessor_claims,
 )
-
-common_round_data = {
-    "opens": "2022-09-01T00:00:01",
-    "assessment_deadline": "2030-03-20T00:00:01",
-    "contact_email": "test@example.com",
-    "prospectus": "/cof_r2w2_prospectus",
-    "instructions": "Round specific instruction text",
-    "privacy_notice": "http://privacy.com",
-    "project_name_field_id": "",
-    "feedback_link": "http://feedback.com",
-    "application_guidance": "",
-    "mark_as_complete_enabled": False,
-    "is_expression_of_interest": False,
-    "eligibility_config": {"has_eligibility": True},
-}
-common_application_data = {
-    "account_id": "test-user",
-    "reference": "TEST-REF-B",
-    "project_name": "Test project",
-    "date_submitted": None,
-    "started_at": "2022-05-20T14:47:12",
-    "last_edited": "2022-05-24T11:03:59",
-    "language": "en",
-    "id": "xxxx",
-    "status": "IN_PROGRESS",
-    "fund_id": "xxx",
-    "round_id": "xxx",
-}
-
-TEST_APPLICATION_SUMMARIES = [
-    ApplicationSummary.from_dict(
-        {
-            **common_application_data,
-            "id": "1111",
-            "status": "IN_PROGRESS",
-            "fund_id": "111",
-            "round_id": "fsd-r2w2",
-        }
-    ),
-    ApplicationSummary.from_dict(
-        {
-            **common_application_data,
-            "id": "2222",
-            "status": "NOT_STARTED",
-            "fund_id": "111",
-            "round_id": "fsd-r2w3",
-        }
-    ),
-    ApplicationSummary.from_dict(
-        {
-            **common_application_data,
-            "id": "3333",
-            "status": "SUBMITTED",
-            "fund_id": "222",
-            "round_id": "abc-r1",
-        }
-    ),
-    ApplicationSummary.from_dict(
-        {
-            **common_application_data,
-            "id": "4444",
-            "status": "READY_TO_SUBMIT",
-            "fund_id": "222",
-            "round_id": "abc-r1",
-        }
-    ),
-]
-
-TEST_FUNDS_DATA = [
-    {
-        "id": "111",
-        "name": "Test Fund",
-        "description": "test test",
-        "short_name": "FSD",
-        "title": "fund for testing",
-        "welsh_available": True,
-        "funding_type": "COMPETITIVE",
-    },
-    {
-        "id": "222",
-        "name": "Test Fund 2",
-        "description": "test test 2",
-        "short_name": "FSD2",
-        "title": "fund for testing 2",
-        "welsh_available": False,
-        "funding_type": "COMPETITIVE",
-    },
-    {
-        "id": "333",
-        "name": "Welsh Fund",
-        "description": "test test 2",
-        "short_name": "FSD2",
-        "title": "gronfa cymraeg",
-        "welsh_available": True,
-        "funding_type": "COMPETITIVE",
-    },
-]
-
-TEST_ROUNDS_DATA = [
-    Round.from_dict(
-        {
-            **common_round_data,
-            "fund_id": "111",
-            "id": "fsd-r2w2",
-            "short_name": "r2w2",
-            "title": "closed_round",
-            "deadline": "2023-01-01T00:00:01",
-            "assessment_start": "2024-11-01T01:01:00Z",
-        }
-    ),
-    Round.from_dict(
-        {
-            **common_round_data,
-            "fund_id": "111",
-            "id": "fsd-r2w3",
-            "short_name": "r2w3",
-            "title": "open_round",
-            "deadline": "2050-01-01T00:00:01",
-        }
-    ),
-    Round.from_dict(
-        {
-            **common_round_data,
-            "fund_id": "222",
-            "id": "abc-r1",
-            "short_name": "r1",
-            "title": "closed_round",
-            "deadline": "2023-01-01T00:00:01",
-        }
-    ),
-    Round.from_dict(
-        {
-            **common_round_data,
-            "fund_id": "222",
-            "id": "abc-r2",
-            "short_name": "r2",
-            "title": "open_round",
-            "deadline": "2050-01-01T00:00:01",
-        }
-    ),
-]
 
 
 class TestRoutes:
