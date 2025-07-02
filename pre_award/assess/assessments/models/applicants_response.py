@@ -185,6 +185,11 @@ class NewAddAnotherTable(ApplicantResponseComponent):
         answer = data.get("answer")
 
         totals, headings = [], []
+        form_name = data.get("form_name", "").lower()
+        pfn_rp = False
+        if "pfn-rp" in form_name:
+            pfn_rp = True
+
         for column_name, values, fmt in answer:
             if fmt == "currency":
                 column_format = "numeric"
@@ -209,18 +214,18 @@ class NewAddAnotherTable(ApplicantResponseComponent):
 
                 columns.append({render_type: render_val, "format": format_val})
             rows.append(columns)
-
-        if any(totals):
-            rows.append(
-                [{"text": "Total", "classes": "govuk-table__header"}]
-                + [
-                    {
-                        "text": f"£{val:.2f}" if val else "",
-                        "format": "numeric" if val else "",
-                    }
-                    for val in totals[1:]
-                ]  # we assume the first column is a string
-            )
+        if not pfn_rp:
+            if any(totals):
+                rows.append(
+                    [{"text": "Total", "classes": "govuk-table__header"}]
+                    + [
+                        {
+                            "text": f"£{val:.2f}" if val else "",
+                            "format": "numeric" if val else "",
+                        }
+                        for val in totals[1:]
+                    ]  # we assume the first column is a string
+                )
 
         return cls(
             caption=data["question"],

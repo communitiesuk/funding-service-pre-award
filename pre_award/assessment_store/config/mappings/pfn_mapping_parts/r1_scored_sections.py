@@ -238,31 +238,134 @@ scored_sections = [
                         "answers": [
                             {
                                 "field_id": "aLeDKy",
-                                "form_name": "payment-profile-and-spend-forecast",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
                                 "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Tell us about any unknown uses of funding in the first investment period.",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us about any unknown uses of funding in the first investment period.",
+                                    {
+                                        "wajlvP": {
+                                            "column_title": "Unknown uses of funding (2026-27)",
+                                            "type": "numberField",
+                                        },
+                                        "bPbTEe": {
+                                            "column_title": "Unknown uses of funding (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "XGBxKK": {
+                                            "column_title": "Unknown uses of funding (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "fqmDlx": {
+                                            "column_title": "Unknown uses of funding (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
                             },
                             {
                                 "field_id": "lREPmq",
-                                "form_name": "payment-profile-and-spend-forecast",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
                                 "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Tell us your indicative spend forecast for capacity funding throughout the programme.",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for capacity funding throughout the programme.",
+                                    {
+                                        "kzCRNQ": {
+                                            "column_title": "Capacity funding (2024-25)",
+                                            "type": "numberField",
+                                        },
+                                        "hWffef": {
+                                            "column_title": "Capacity funding (2025-26)",
+                                            "type": "numberField",
+                                        },
+                                        "exKKtD": {
+                                            "column_title": "Capacity funding (2026-27)",
+                                            "type": "numberField",
+                                        },
+                                        "SWBFvn": {
+                                            "column_title": "Capacity funding (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "mjXkxo": {
+                                            "column_title": "Capacity funding (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "lREPmq",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "",
+                                    {
+                                        "jhEJRB": {
+                                            "column_title": "Capacity funding (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                        "IlUUxg": {
+                                            "column_title": "Capacity funding (2030-31)",
+                                            "type": "numberField",
+                                        },
+                                        "nZFwqm": {
+                                            "column_title": "Capacity funding (2031-32)",
+                                            "type": "numberField",
+                                        },
+                                        "rQUbSC": {
+                                            "column_title": "Capacity funding (2033-34)",
+                                            "type": "numberField",
+                                        },
+                                        "GCnfMS": {
+                                            "column_title": "Capacity funding (2034-25)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
                             },
                             {
                                 "field_id": "aUQnBP",
-                                "form_name": "payment-profile-and-spend-forecast",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
                                 "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Tell us your indicative spend forecast for management costs in the first investment period.",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for management costs in the first investment period.",
+                                    {
+                                        "QVuIFv": {"column_title": "Management costs (2026-27)", "type": "numberField"},
+                                        "GHFRTw": {"column_title": "Management costs (2027-28)", "type": "numberField"},
+                                        "sAelLv": {"column_title": "Management costs (2028-29)", "type": "numberField"},
+                                        "ZvlDXd": {"column_title": "Management costs (2029-30)", "type": "numberField"},
+                                    },
+                                ],
                             },
                             {
                                 "field_id": "QEywSA",
-                                "form_name": "payment-profile-and-spend-forecast",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
                                 "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Tell us your indicative spend forecast for any off-menu interventions in the first investment period.",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for any off-menu interventions in the first investment period.",
+                                    {
+                                        "NCgxYf": {
+                                            "column_title": "Off-menu interventions (2026-27)",
+                                            "type": "numberField",
+                                        },
+                                        "afjufs": {
+                                            "column_title": "Off-menu interventions (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "EbZeKz": {
+                                            "column_title": "Off-menu interventions (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "MRjEso": {
+                                            "column_title": "Off-menu interventions (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
                             },
                             {
                                 "field_id": "ZzaODW",
@@ -273,38 +376,314 @@ scored_sections = [
                             },
                             {
                                 "field_id": "Grlvkx",
-                                "form_name": "payment-profile-and-spend-forecast",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
                                 "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Tell us your indicative spend forecast for pre-approved interventions in year 2.",
-                            },
-                            {
-                                "field_id": "MEaRya",
-                                "form_name": "payment-profile-and-spend-forecast",
-                                "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Tell us your indicative spend forecast for pre-approved interventions in year 1.",
-                            },
-                            {
-                                "field_id": "yYqyaG",
-                                "form_name": "payment-profile-and-spend-forecast",
-                                "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Tell us your indicative spend forecast for pre-approved interventions in year 4.",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for pre-approved interventions in year 2.",
+                                    {
+                                        "wYgMdi": {"column_title": "Cohesion (2027-28)", "type": "numberField"},
+                                        "YlgCLY": {
+                                            "column_title": "Education and opportunity (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "ESRHVS": {
+                                            "column_title": "Health and wellbeing (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "qUrvtI": {"column_title": "Housing (2027-28)", "type": "numberField"},
+                                    },
+                                ],
                             },
                             {
                                 "field_id": "ZaxlkA",
-                                "form_name": "payment-profile-and-spend-forecast",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
                                 "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Tell us your indicative spend forecast for programme delivery funding (revenue) throughout the programme.",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for programme delivery funding (revenue) throughout the programme.",
+                                    {
+                                        "YQGJbm": {
+                                            "column_title": "Programme delivery funding - revenue (2026-27)",
+                                            "type": "numberField",
+                                        },
+                                        "VmCcNW": {
+                                            "column_title": "Programme delivery funding - revenue (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "pCCkfZ": {
+                                            "column_title": "Programme delivery funding - revenue (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "aaOhAH": {
+                                            "column_title": "Programme delivery funding - revenue (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                        "ehgQSG": {
+                                            "column_title": "Programme delivery funding - revenue (2030-31)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "ZaxlkA",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "",
+                                    {
+                                        "mmMPXd": {
+                                            "column_title": "Programme delivery funding - revenue (2031-32)",
+                                            "type": "numberField",
+                                        },
+                                        "iLMwbk": {
+                                            "column_title": "Programme delivery funding - revenue (2032-33)",
+                                            "type": "numberField",
+                                        },
+                                        "ThaiNt": {
+                                            "column_title": "Programme delivery funding - revenue (2033-34)",
+                                            "type": "numberField",
+                                        },
+                                        "ROCfYU": {
+                                            "column_title": "Programme delivery funding - revenue (2034-35)",
+                                            "type": "numberField",
+                                        },
+                                        "qMNUxP": {
+                                            "column_title": "Programme delivery funding - revenue (2035-36)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "MEaRya",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for pre-approved interventions in year 1.",
+                                    {
+                                        "zsdDQk": {"column_title": "Cohesion (2026-27)", "type": "numberField"},
+                                        "DBqPzO": {
+                                            "column_title": "Education and opportunity (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "MNzARq": {
+                                            "column_title": "Health and wellbeing (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "IVFTCQ": {"column_title": "Housing (2029-30)", "type": "numberField"},
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "MEaRya",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "",
+                                    {
+                                        "nqmOwu": {
+                                            "column_title": "Regeneration, high streets and heritage (2030-31)",
+                                            "type": "numberField",
+                                        },
+                                        "UbTbvU": {
+                                            "column_title": "Safety and security (2031-32)",
+                                            "type": "numberField",
+                                        },
+                                        "qNiSsO": {"column_title": "Transport (2032-33)", "type": "numberField"},
+                                        "hNACOp": {
+                                            "column_title": "Work, productivity and skills (2033-34)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "Grlvkx",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "",
+                                    {
+                                        "VsEWYE": {
+                                            "column_title": "Regeneration, high streets and heritage (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "YIpOAe": {
+                                            "column_title": "Safety and security (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "lSlyHK": {"column_title": "Transport (2027-28)", "type": "numberField"},
+                                        "TaXzeh": {
+                                            "column_title": "Work, productivity and skills (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
                             },
                             {
                                 "field_id": "gEOHHl",
-                                "form_name": "payment-profile-and-spend-forecast",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
                                 "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Tell us your indicative spend forecast for pre-approved interventions in year 3.",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for pre-approved interventions in year 3.",
+                                    {
+                                        "FwurgE": {"column_title": "Cohesion (2028-29)", "type": "numberField"},
+                                        "tmOkiG": {
+                                            "column_title": "Education and opportunity (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "sSQLwH": {
+                                            "column_title": "Health and wellbeing (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "uUTyWH": {"column_title": "Housing (2028-29)", "type": "numberField"},
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "gEOHHl",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "",
+                                    {
+                                        "ZsNcbA": {
+                                            "column_title": "Regeneration, high streets and heritage (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "iuTXHe": {
+                                            "column_title": "Safety and security (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "lXTtKN": {"column_title": "Transport (2028-29)", "type": "numberField"},
+                                        "FfSahl": {
+                                            "column_title": "Work, productivity and skills (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "yYqyaG",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for pre-approved interventions in year 4.",
+                                    {
+                                        "ygHERI": {"column_title": "Cohesion (2029-30)", "type": "numberField"},
+                                        "QoEuWY": {
+                                            "column_title": "Education and opportunity (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                        "QpOTwg": {
+                                            "column_title": "Health and wellbeing (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                        "jCEizE": {"column_title": "Housing (2029-30)", "type": "numberField"},
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "yYqyaG",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "",
+                                    {
+                                        "zODcnS": {
+                                            "column_title": "Regeneration, high streets and heritage (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                        "pAnzYr": {
+                                            "column_title": "Safety and security (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                        "ZKFXMr": {"column_title": "Transport (2029-30)", "type": "numberField"},
+                                        "flkyla": {
+                                            "column_title": "Work, productivity and skills (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "QEywSA",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for any off-menu interventions in the first investment period.",
+                                    {
+                                        "NCgxYf": {
+                                            "column_title": "Off-menu interventions (2026-27)",
+                                            "type": "numberField",
+                                        },
+                                        "afjufs": {
+                                            "column_title": "Off-menu interventions (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "EbZeKz": {
+                                            "column_title": "Off-menu interventions (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "MRjEso": {
+                                            "column_title": "Off-menu interventions (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "aUQnBP",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us your indicative spend forecast for management costs in the first investment period.",
+                                    {
+                                        "QVuIFv": {"column_title": "Management costs (2026-27)", "type": "numberField"},
+                                        "GHFRTw": {"column_title": "Management costs (2027-28)", "type": "numberField"},
+                                        "sAelLv": {"column_title": "Management costs (2028-29)", "type": "numberField"},
+                                        "ZvlDXd": {"column_title": "Management costs (2029-30)", "type": "numberField"},
+                                    },
+                                ],
+                            },
+                            {
+                                "field_id": "aLeDKy",
+                                "form_name": "pfn-rp-payment-profile-and-spend-forecast",
+                                "field_type": "multiInputField",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Tell us about any unknown uses of funding in the first investment period.",
+                                    {
+                                        "wajlvP": {
+                                            "column_title": "Unknown uses of funding (2026-27)",
+                                            "type": "numberField",
+                                        },
+                                        "bPbTEe": {
+                                            "column_title": "Unknown uses of funding (2027-28)",
+                                            "type": "numberField",
+                                        },
+                                        "XGBxKK": {
+                                            "column_title": "Unknown uses of funding (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "fqmDlx": {
+                                            "column_title": "Unknown uses of funding (2029-30)",
+                                            "type": "numberField",
+                                        },
+                                    },
+                                ],
                             },
                             {
                                 "field_id": "igStco",
