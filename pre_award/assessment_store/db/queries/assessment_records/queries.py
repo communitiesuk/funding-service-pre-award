@@ -803,8 +803,10 @@ def get_export_data(  # noqa: C901 - historical sadness
                                         applicant_info[title] += f"({child_title}): {child_value}\n"
 
                                 applicant_info[title].strip()
+                                continue
                             else:
-                                applicant_info[title] = answer
+                                applicant_info[title] = str(answer)
+                            applicant_info[title] = answer
             applicant_info = add_missing_elements_with_empty_values(applicant_info, form_fields, language)
         final_list.append(applicant_info)
 
