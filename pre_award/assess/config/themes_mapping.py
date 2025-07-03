@@ -195,6 +195,16 @@ def ordered_themes(fund_round_short_name):
             "protect_against_fraud",
             "reporting",
         ],
+        "PFNRP": [
+            "place_and_secondary_contact_information",
+            "projects",
+            "additional-support",
+            "do-the-activities-being-pursued-by-a-place-fit-with-the-plan-for-neighbourhoods-programme-objectives",
+            "does-the-place-have-a-credible-and-realistic-expenditure-forecast-fitting-with-the-funding-flexibility-rules",
+            "have-the-local-community-and-key-stakeholders-been-key-in-informing-and-shaping-the-plan-and-will-they-be-actively-involved-in-evolution-and-delivery-of-the-plan-throughout-the-next-decade",
+            "will-appropriate-governance-arrangements-be-in-place-to-fully-realise-the-intended-role-of-the-neighbourhood-board-and-to-allow-the-board-to-work-in-partnership-with-the-accountable-body-to-deliver-the-programme-successfully",
+            "will-appropriate-control-processes-will-be-in-place-for-management-of-public-funds",
+        ],
     }
 
     if fund_round_short_name in [
