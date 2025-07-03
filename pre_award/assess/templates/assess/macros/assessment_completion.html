@@ -11,7 +11,13 @@
             <div class="assessment-alert  govuk-margin-bottom-8" role="alert">
                 <h2 class="assessment-alert__heading govuk-heading-l">All sections assessed</h2>
                 <p class="govuk-body">You can now mark the assessment as complete when you're ready.</p>
-                <p class="govuk-body">It may be selected for quality assurance (QA) once you've done this.</p>
+                <p class="govuk-body">
+                {% if is_uncompeted_flow_flag %}
+                    It may be selected for moderation once you've done this.
+                {% else %}
+                    It may be selected for quality assurance (QA) once you've done this.
+                {% endif %}
+                </p>
                 <button class="govuk-button primary-button" data-module="govuk-button" type="submit">Mark as
                     complete</button>
             </div>
