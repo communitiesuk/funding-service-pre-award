@@ -99,7 +99,7 @@
                             overview.project_name }}</a></td>
                         <td class="govuk-table__cell">£{{ "{:,.2f}".format(overview.funding_amount_requested|int|round) }}</td>
                         <td class="govuk-table__cell">{{ overview.location_json_blob.get('country') or "Not found" }}</td>
-                        {{ application_status_column(overview.application_status, overview.get("progress", ""), assessment_statuses) }}
+                        {{ application_status_column(overview.application_status, overview.get("progress", ""), assessment_statuses, is_uncompeted_flow_flag=is_uncompeted_flow()) }}
                         <td class="govuk-table__cell">
                             {% if overview.assigned_to_names %}
                             {% for name in overview.assigned_to_names %}

@@ -177,6 +177,7 @@ class TestAuthorisation:
         claims,
         ability_to_score,
         mock_get_assessment_flags,
+        mock_competed_cof_fund,
     ):
         # Mocking fsd-user-token cookie
         token = create_valid_token(claims)
@@ -213,7 +214,7 @@ class TestAuthorisation:
                     f"Sidebar should contain score subcriteria link or link to score subcriteria: {response.data}"
                 )
             else:
-                assert b"Accept all responses" in response.data and b"Request a change" in response.data, (
+                assert b"Accept and score" in response.data and b"Request a change" in response.data, (
                     "Subcriteria page should contain accept all responses "
                     "and request changes button and link: {response.data}"
                 )
@@ -249,6 +250,7 @@ class TestAuthorisation:
         mock_get_assessor_tasklist_state,
         mock_get_bulk_accounts,
         mock_get_assessment_flags,
+        mock_competed_cof_fund,
     ):
         """
         GIVEN authorized users
@@ -334,6 +336,7 @@ class TestAuthorisation:
         mock_get_assessor_tasklist_state,
         mock_get_bulk_accounts,
         mock_get_assessment_flags,
+        mock_competed_cof_fund,
     ):
         """
         GIVEN authorized users
@@ -495,6 +498,7 @@ class TestAuthorisation:
         mock_get_round,
         mock_get_funds,
         mock_get_application_metadata,
+        mock_competed_cof_fund,
     ):
         """
         GIVEN authorised users
@@ -541,6 +545,7 @@ class TestAuthorisation:
         mock_get_funds,
         mock_get_round,
         mock_get_application_metadata,
+        mock_competed_cof_fund,
     ):
         """
         GIVEN authorised users
@@ -598,6 +603,7 @@ class TestAuthorisation:
         mock_get_sub_criteria_banner_state,
         mock_get_fund,
         mock_get_round,
+        mock_competed_cof_fund,
     ):
         """
         GIVEN authorised users
@@ -660,6 +666,7 @@ class TestAuthorisation:
         mocker,
         mock_get_scoring_system,
         mock_get_calculate_overall_score_percentage,
+        mock_competed_cof_fund,
     ):
         token = create_valid_token(user_account)
         assess_test_client.set_cookie("fsd_user_token", token)

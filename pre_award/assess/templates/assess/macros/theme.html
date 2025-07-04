@@ -23,11 +23,11 @@
     "question_above_answer_html": question_above_answer_html,
 } %}
 
-{% macro theme(answers_meta) %}
+{% macro theme(answers_meta, is_sub_criteria_scored) %}
 <div class="template-answer bg-white">
     {% for meta in answers_meta %}
         {% if meta.should_render %}
-            {% if meta.label %}
+            {% if meta.label and is_sub_criteria_scored%}
                 <div class="govuk-!-margin-bottom-4">
                     {% if meta.label and meta.label.name == "REQUESTED_CHANGE" %}
                         <div class="govuk-tag requested-change-tag">

@@ -37,7 +37,6 @@ from pre_award.assess.assessments.forms.assignment_forms import (
     AssessorTypeForm,
     AssignmentOverviewForm,
 )
-from pre_award.assess.assessments.forms.change_request_form import ChangeRequestForm
 from pre_award.assess.assessments.forms.comments_form import CommentsForm
 from pre_award.assess.assessments.forms.mark_qa_complete_form import MarkQaCompleteForm
 from pre_award.assess.assessments.helpers import (
@@ -65,13 +64,13 @@ from pre_award.assess.assessments.models.location_data import LocationData
 from pre_award.assess.assessments.models.round_summary import create_round_summaries, is_after_today
 from pre_award.assess.assessments.status import (
     all_status_completed,
-    is_approval_or_change_request_allowed,
     update_ar_status_to_completed,
     update_ar_status_to_qa_completed,
 )
 from pre_award.assess.authentication.validation import (
     check_access_application_id,
     check_access_fund_short_name_round_sn,
+    check_approval_or_change_request_allowed_uncompeted_only,
     has_access_to_fund,
 )
 from pre_award.assess.config.display_value_mappings import (
@@ -114,6 +113,7 @@ from pre_award.assess.services.data_services import (
     get_tag_types,
     get_tags_for_fund_round,
     get_users_for_fund,
+    is_uncompeted_flow,
     match_comment_to_theme,
     notify_applicant_changes_requested,
     submit_change_request,
@@ -147,7 +147,6 @@ from pre_award.assessment_store.db.queries.flags.queries import (
     get_change_requests_for_application,
     is_first_change_request_for_date,
 )
-from pre_award.assessment_store.db.queries.scores.queries import approve_sub_criteria
 from pre_award.assessment_store.db.schemas.schemas import AssessmentFlagSchema
 from pre_award.common.blueprints import Blueprint
 from pre_award.config import Config
@@ -185,7 +184,9 @@ def _handle_all_uploaded_documents(application_id):
     answers_meta = applicants_response.create_ui_components(theme_answers_response, application_id)
 
     state = get_state_for_tasklist_banner(application_id)
-    assessment_status = determine_assessment_status(state.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        state.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
     return render_template(
         "assessments/all_uploaded_documents.html",
         state=state,
@@ -1182,11 +1183,6 @@ def display_sub_criteria(  # noqa: C901
             )
         )
 
-    if "approve" in request.form and approval_form.validate_on_submit():
-        return redirect(
-            url_for("assessment_bp.accept_changes", application_id=application_id, sub_criteria_id=sub_criteria_id)
-        )
-
     state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
     change_requests_desc = AssessmentFlagSchema().dump(
@@ -1224,7 +1220,9 @@ def display_sub_criteria(  # noqa: C901
         else None
     )
 
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        sub_criteria.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(sub_criteria.fund_id)
+    )
     flag_status = determine_flag_status(flags_list)
 
     edit_comment_argument = request.args.get("edit_comment")
@@ -1271,8 +1269,15 @@ def display_sub_criteria(  # noqa: C901
         theme_answer["field_type"] == "clientSideFileUploadField" for theme_answer in theme_answers_response
     )
 
-    # If the sub-criteria has been accepted, no need to label changed answers
-    if score:
+    # If the sub-criteria has been accepted and scored after the applicant responded to a change request
+    # (i.e. the latest change request flag is in STOPPED status)
+    # In this case, we no longer need to highlight or label any changes in the applicant's answers.
+    if (
+        score
+        and sub_criteria_change_requests
+        and len(sub_criteria_change_requests) > 0
+        and sub_criteria_change_requests[0].latest_status == FlagType.STOPPED
+    ):
         for theme_answer in theme_answers_response:
             theme_answer.pop("unrequested_change", None)
             theme_answer.pop("requested_change", None)
@@ -1314,6 +1319,7 @@ def display_sub_criteria(  # noqa: C901
             answers_meta=answers_meta,
             questions={question["field_id"]: question["question"] for question in theme_answers_response},
             state=state,
+            is_qa_complete=state.is_qa_complete,
             migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
             **common_template_config,
         )
@@ -1329,71 +1335,24 @@ def display_sub_criteria(  # noqa: C901
 
 
 @assessment_bp.route(
-    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/accept_changes",
-    methods=["GET", "POST"],
-)
-@check_access_application_id(roles_required=[Config.LEAD_ASSESSOR, Config.ASSESSOR])
-def accept_changes(application_id, sub_criteria_id):
-    form = ChangeRequestForm()
-    state = get_state_for_tasklist_banner(application_id)
-    flags_list = get_flags(application_id)
-    flag_status = determine_flag_status(flags_list)
-    sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
-
-    if not is_approval_or_change_request_allowed(state, sub_criteria_id):
-        return abort(403)
-
-    if request.method == "POST" and form.validate_on_submit():
-        approve_sub_criteria(
-            application_id=application_id,
-            sub_criteria_id=sub_criteria_id,
-            user_id=g.account_id,
-            message=form.comment.data,
-        )
-        return render_template(
-            "assessments/change_request_accepted.html",
-            fund=get_fund(sub_criteria.fund_id),
-            application_id=application_id,
-            sub_criteria=sub_criteria,
-            state=state,
-            migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
-            flag_status=flag_status,
-            assessment_status=assessment_status,
-        )
-
-    return render_template(
-        "assessments/change_request_accept_comment.html",
-        fund=get_fund(sub_criteria.fund_id),
-        application_id=application_id,
-        sub_criteria=sub_criteria,
-        state=state,
-        migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
-        flag_status=flag_status,
-        assessment_status=assessment_status,
-        change_request_form=form,
-    )
-
-
-@assessment_bp.route(
     "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/request_change",
     methods=["GET", "POST"],
 )
+@check_approval_or_change_request_allowed_uncompeted_only
 @check_access_application_id(roles_required=[Config.LEAD_ASSESSOR, Config.ASSESSOR])
 def request_changes(application_id, sub_criteria_id, theme_id):
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
     current_theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
     state = get_state_for_tasklist_banner(application_id)
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        sub_criteria.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(sub_criteria.fund_id)
+    )
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
 
     filtered_questions = filter_questions(theme_answers_response)
 
     field_ids = [question["field_id"] for question in filtered_questions]
     form = build_request_changes_form(field_ids)
-
-    if not is_approval_or_change_request_allowed(state, sub_criteria_id):
-        return abort(403)
 
     if request.method == "POST" and form.validate_on_submit():
         selected_field = form.field_ids.data
@@ -1484,7 +1443,9 @@ def generate_doc_list_for_download(application_id):
         )
         for file_type in FILE_GENERATORS.keys()
     ]
-    assessment_status = determine_assessment_status(state.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        state.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
 
     return render_template(
         "assessments/contract_downloads.html",
@@ -1613,7 +1574,9 @@ def application(application_id):
     if qa_complete:
         user_id_list.append(qa_complete["user_id"])
 
-    assessment_status = determine_assessment_status(state.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        state.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(fund.id)
+    )
     flag_status = determine_flag_status(flags_list)
 
     if flags_list:
@@ -1962,7 +1925,9 @@ def success_page(application_id, sub_criteria_id, theme_id):
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
     current_theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
     state = get_state_for_tasklist_banner(application_id)
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        sub_criteria.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
     return render_template(
         "assessments/change_request_success_page.html",
         application_id=application_id,

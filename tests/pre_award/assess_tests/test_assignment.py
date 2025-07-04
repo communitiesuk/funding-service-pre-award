@@ -135,6 +135,33 @@ def test_assign_assessments_post(
     assert b"Select the type of role you would like to assign." in response.data
 
 
+def setup_test_context(request, assess_test_client, role="LEAD_ASSESSOR"):
+    params = request.node.get_closest_marker("mock_parameters").args[0]
+    fund_short_name = params["fund_short_name"]
+    round_short_name = params["round_short_name"]
+
+    assess_test_client.set_cookie(
+        "fsd_user_token",
+        create_valid_token(fund_specific_claim_map[fund_short_name][role]),
+    )
+
+    form_data = {
+        "selected_assessments": ["assessment1"],
+        "assessor_role": ["lead_assessor"],
+    }
+
+    headers = {
+        "Referer": url_for(
+            "assessment_bp.assessor_type",
+            fund_short_name=fund_short_name,
+            round_short_name=round_short_name,
+            _external=True,
+        ),
+    }
+
+    return fund_short_name, round_short_name, form_data, headers
+
+
 @pytest.mark.mock_parameters(
     {
         "fund_short_name": "COF",
@@ -152,28 +179,7 @@ def test_assessor_type_post(
     mock_get_users_for_fund,
     patch_resolve_redirect,
 ):
-    params = request.node.get_closest_marker("mock_parameters").args[0]
-    fund_short_name = params["fund_short_name"]
-    round_short_name = params["round_short_name"]
-
-    assess_test_client.set_cookie(
-        "fsd_user_token",
-        create_valid_token(fund_specific_claim_map[fund_short_name]["LEAD_ASSESSOR"]),
-    )
-
-    form_data = {
-        "selected_assessments": ["assessment1"],
-        "assessor_role": ["lead_assessor"],
-    }
-
-    headers = {
-        "Referer": url_for(
-            "assessment_bp.assessor_type",
-            fund_short_name=fund_short_name,
-            round_short_name=round_short_name,
-            _external=True,
-        ),
-    }
+    fund_short_name, round_short_name, form_data, headers = setup_test_context(request, assess_test_client)
 
     with mock.patch(
         "pre_award.assess.assessments.routes.get_application_assignments",
@@ -251,28 +257,7 @@ def test_assessor_type_post_existing_assignment(
     mock_get_users_for_fund,
     patch_resolve_redirect,
 ):
-    params = request.node.get_closest_marker("mock_parameters").args[0]
-    fund_short_name = params["fund_short_name"]
-    round_short_name = params["round_short_name"]
-
-    assess_test_client.set_cookie(
-        "fsd_user_token",
-        create_valid_token(fund_specific_claim_map[fund_short_name]["LEAD_ASSESSOR"]),
-    )
-
-    form_data = {
-        "selected_assessments": ["assessment1"],
-        "assessor_role": ["lead_assessor"],
-    }
-
-    headers = {
-        "Referer": url_for(
-            "assessment_bp.assessor_type",
-            fund_short_name=fund_short_name,
-            round_short_name=round_short_name,
-            _external=True,
-        ),
-    }
+    fund_short_name, round_short_name, form_data, headers = setup_test_context(request, assess_test_client)
 
     with mock.patch(
         "pre_award.assess.assessments.routes.get_application_assignments",
@@ -340,6 +325,7 @@ def test_assessor_type_list_post(
     mock_get_users_for_fund,
     mock_get_assessment_progress,
     patch_resolve_redirect,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -412,6 +398,7 @@ def test_assignment_overview_remove_assessor(
     mock_get_users_for_fund,
     mock_get_assessment_progress,
     patch_resolve_redirect,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -473,6 +460,7 @@ def test_assignment_overview_add_and_remove_assessors(
     mock_get_users_for_fund,
     mock_get_assessment_progress,
     patch_resolve_redirect,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -553,6 +541,7 @@ def test_assignment_overview_post_new_and_exising(
     mock_get_application_metadata,
     mock_get_active_tags_for_fund_round,
     mock_get_tag_types,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -678,6 +667,7 @@ def test_assignment_overview_post_add_and_remove(
     mock_get_application_metadata,
     mock_get_active_tags_for_fund_round,
     mock_get_tag_types,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -846,6 +836,7 @@ def test_assignment_overview_cancel_messages(
     mock_get_users_for_fund,
     mock_get_assessment_progress,
     patch_resolve_redirect,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]

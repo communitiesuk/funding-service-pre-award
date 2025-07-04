@@ -1,7 +1,17 @@
 {% macro assessment_subcriteria_accepted(score, user_info) %}
-    <div class="accepted-change-request-box govuk-!-margin-bottom-8">
-        <p class="govuk-body">{{ score.justification }}</p><br>
-        <p class="govuk-body-s">{{ user_info.full_name }} ({{ user_info.highest_role|all_caps_to_human }}) {{ user_info.email_address }}</p>
-        <p class="govuk-body-s">{{ score.date_created|utc_to_bst }}</p>
+<div class="score-group govuk-!-margin-top-8 govuk-!-margin-bottom-8" id="score" role="status">
+    <h2 class="govuk-heading-m">Current score: {{ score['score'] }}</h2>
+    <div>
+        <p class="govuk-body-m"><strong>Rationale: </strong>{{ score.justification }}</p>
+        <p class="govuk-body-s">
+            <strong>
+                {% if user_info.full_name %}{{ user_info.full_name }} {% endif %}
+            </strong> ({{ user_info.highest_role|all_caps_to_human }})
+            {% if user_info.email_address %}
+                {{ user_info.email_address }}
+            {% endif %}
+        </p>
+        <p class="govuk-body-s"> <strong>Date/time:</strong> {{ score.date_created|utc_to_bst }}</p>
     </div>
+</div>
 {% endmacro %}

@@ -1,6 +1,12 @@
 from flask import redirect, render_template, request, url_for
 
-from pre_award.assess.services.data_services import get_flags, get_fund, get_sub_criteria_banner_state, submit_flag
+from pre_award.assess.services.data_services import (
+    get_flags,
+    get_fund,
+    get_sub_criteria_banner_state,
+    is_uncompeted_flow,
+    submit_flag,
+)
 from pre_award.assess.shared.helpers import determine_assessment_status, determine_flag_status, get_ttl_hash
 from pre_award.config import Config
 
@@ -57,6 +63,7 @@ def resolve_application(
     assessment_status = determine_assessment_status(
         state.workflow_status if state else sub_criteria_banner_state.workflow_status,
         state.is_qa_complete,
+        is_uncompeted_flag=is_uncompeted_flow(sub_criteria_banner_state.fund_id),
     )
     flag_status = determine_flag_status(flags_list)
 

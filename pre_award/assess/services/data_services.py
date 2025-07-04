@@ -298,6 +298,13 @@ def get_fund(fid: str, use_short_name: bool = False, ttl_hash=None) -> Union[Fun
     return fund
 
 
+def is_uncompeted_flow(fund_id: str) -> bool:
+    """Check if the fund is uncompeted or not."""
+    fund = get_fund(fund_id)
+    # TODO: Remove the check for short_name != "DPIF" once type of DPIF is changed to COMPETED
+    return fund.funding_type == "UNCOMPETED" and fund.short_name != "DPIF"
+
+
 @lru_cache(maxsize=1)
 def get_rounds(fund_id: str, ttl_hash=None) -> list[Round]:
     del ttl_hash  # unused, but required for lru_cache
