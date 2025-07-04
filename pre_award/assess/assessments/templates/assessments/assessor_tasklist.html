@@ -54,7 +54,7 @@
 {# djlint:on #}
     <div class="govuk-grid-column-one-quarter">
         {% if g.access_controller.is_assessor %}
-            {{ assessment_actions(application_id) }}
+            {{ assessment_actions(application_id, fund.short_name, round.short_name) }}
         {% endif %}
 
         {{ comment(comments, application_id, True, display_comment_box, display_comment_edit_box) }}
