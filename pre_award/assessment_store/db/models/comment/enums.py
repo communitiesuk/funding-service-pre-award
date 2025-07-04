@@ -11,6 +11,6 @@ class CommentType(Enum):
     @property
     def label(self):
         if self == CommentType.WHOLE_APPLICATION:
-            return "Whole application comment"
+            return "Application-level comment"
         elif self == CommentType.COMMENT:
             return "Sub-criteria comment"

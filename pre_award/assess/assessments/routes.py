@@ -1744,6 +1744,7 @@ def application(application_id):
         comment_form=comment_form,
         comments=theme_matched_comments,
         fund=fund,
+        round=fund_round,
         percentage_score=percentage_score,
     )
 
@@ -1880,6 +1881,27 @@ def comments_export(fund_short_name, round_short_name):
 
     comments_list = retrieve_all_comments(round.fund_id, round.id)
     return export_comments_to_excel(comments_list, fund_short_name, round_short_name)
+
+
+@assessment_bp.route(
+    "/comments_export_for_application/<fund_short_name>/<round_short_name>/<application_id>",
+    methods=["GET"],
+)
+@check_access_fund_short_name_round_sn(roles_required=[Config.LEAD_ASSESSOR])
+def comments_export_for_application(fund_short_name, round_short_name, application_id):
+    round = get_round(
+        fund_short_name,
+        round_short_name,
+        use_short_name=True,
+        ttl_hash=get_ttl_hash(Config.LRU_CACHE_TIME),
+    )
+
+    comments_list = retrieve_all_comments(
+        round.fund_id,
+        round.id,
+        application_id=application_id,
+    )
+    return export_comments_to_excel(comments_list, fund_short_name, round_short_name, application_id)
 
 
 @assessment_bp.route("/qa_complete/<application_id>", methods=["GET", "POST"])
