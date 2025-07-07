@@ -182,14 +182,13 @@ def insert_scoring_system_for_round_id(round_id: str, scoring_system_id: str) ->
     return inserted_assessment_round
 
 
-def approve_sub_criteria(application_id, sub_criteria_id, user_id, message):
-    # Temporary solution to "accept" a sub-criteria is to provide it a non-zero score
-    create_score_for_app_sub_crit(
-        score=1,
-        justification=message,
+def accept_sub_criteria(application_id, sub_criteria_id, user_id, message, score) -> dict:
+    created_score = create_score_for_app_sub_crit(
         application_id=application_id,
-        user_id=user_id,
         sub_criteria_id=sub_criteria_id,
+        score=score,
+        justification=message,
+        user_id=user_id,
     )
 
     resolve_open_change_requests_for_sub_criteria(
@@ -198,6 +197,8 @@ def approve_sub_criteria(application_id, sub_criteria_id, user_id, message):
 
     if check_all_change_requests_accepted(application_id=application_id):
         update_application_status(application_id=application_id, status=ApplicationStatus.IN_PROGRESS)
+
+    return created_score
 
 
 def update_scoring_system_for_round_id(round_id: str, scoring_system_id: str) -> dict:

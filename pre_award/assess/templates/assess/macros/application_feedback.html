@@ -1,17 +1,22 @@
 {%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
 
 
-{% macro application_feedback(application_id, sub_criteria, current_theme_id, approval_form,change_requests,unrequested_changes) %}
+{% macro application_feedback(application_id, sub_criteria, current_theme_id, approval_form, change_requests, unrequested_changes, score) %}
     <div class="govuk-!-margin-top-4">
         <div class="govuk-button-group">
             <form method="post" action="{{ url_for('assessment_bp.display_sub_criteria',
                     application_id=application_id,
                     sub_criteria_id=sub_criteria.id) }}">
             {{ approval_form.csrf_token }}
-            <input type="hidden" name="approve" value="1" />
-            {% set approve_text = "Approve all changes" if change_requests else "Approve all responses" %}
+            {% set score_url = url_for(
+                'scoring_bp.score',
+                application_id=application_id,
+                sub_criteria_id=sub_criteria.id
+            ) %}
+            {% set score_text = "Accept and score" if not score else "Accept and rescore" %}
             {{ govukButton({
-            "text": approve_text
+                "text": score_text,
+                "href": score_url
             }) }}
             {% set request_changes_url = url_for(
                 'assessment_bp.request_changes',

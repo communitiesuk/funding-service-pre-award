@@ -5,7 +5,7 @@
 
 {% block sub_criteria_content %}
 
-{% if not score %}
+{% if sub_criteria.is_scored and not is_qa_complete %}
     <h1 class="govuk-heading-l">
         {% if change_requests %}
             Review changes
@@ -17,7 +17,7 @@
     <div class="govuk-!-margin-bottom-8">
         {% if has_active_change_request %}
             <p class="govuk-body">You requested changes to this section and the applicant has not responded yet.</p>
-            <p class="govuk-body">Once the applicant has sent their response, you can approve the changes or request another change.</p>
+            <p class="govuk-body">Once the applicant has sent their response, you can accept and score the changes or request another change.</p>
         {% elif unrequested_changes %}
             {{ govukWarningText({
                 "text": "The applicant has made unrequested changes",
@@ -27,18 +27,18 @@
                 The applicant has updated their responses based on your change requests. They have also made unrequested changes.
             </p>
             <p class="govuk-body">
-                Approve and save all responses or request another change.
+                Accept and score all responses or request another change.
             </p>
-        {% elif change_requests and not score %}
+        {% elif change_requests %}
             <p class="govuk-body">
                 The applicant updated their response following your change request.
             </p>
             <p class="govuk-body">
-                You can approve the updates or request another change.
+                You can accept and score the updates or request another change.
             </p>
         {% else %}
             <p class="govuk-body">
-                Review the applicant's responses and 'Accept all responses' when you're ready.
+                Review the applicant's responses and 'Accept and score' when you're ready.
             </p>
             <p class="govuk-body">
                 If you need more information from the applicant about one of these responses or want to ask them to clarify something, you can 'Request a change'.
@@ -59,6 +59,18 @@
     {% endfor %}
 {% endif %}
 
+{% if score %}
+    {% if change_requests %}
+        {% for change_request in change_requests %}
+            {% if change_request.latest_status.name == "RAISED" or change_request.latest_status.name == "RESOLVED" %}
+                <h2 class="govuk-heading-s change-title">Change requested</h2>
+                {{ assessment_change_request(change_request, questions, accounts_list[change_request.latest_user_id], score) }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {{ assessment_subcriteria_accepted(score, accounts_list[score.user_id]) }}
+{% endif %}
+
 <h3 class="govuk-heading-s response-title">
     {% if change_requests %}
         Applicant's updated response
@@ -67,21 +79,13 @@
     {% endif %}
 </h3>
 
-{{ theme(answers_meta)}}
-{% if not score and not has_active_change_request %}
-    {% if g.access_controller.is_assessor or g.access_controller.is_lead_assessor %}
-        {{ application_feedback(application_id, sub_criteria, current_theme.id,
-        approval_form,change_requests,unrequested_changes) }}
-    {% endif %}
-{% endif %}
-{% if score %}
-    <h2 class="govuk-heading-s govuk-!-margin-top-8 accepted-change-title">Responses accepted</h2>
-    {{ assessment_subcriteria_accepted(score, accounts_list[score.user_id]) }}
-    {% if change_requests %}
-        {% for change_request in change_requests %}
-            <h2 class="govuk-heading-s change-title">Change requested</h2>
-            {{ assessment_change_request(change_request, questions, accounts_list[change_request.latest_user_id], score) }}
-        {% endfor %}
+{{ theme(answers_meta, is_sub_criteria_scored=sub_criteria.is_scored )}}
+{% if not is_qa_complete and not has_active_change_request %}
+    {% if g.access_controller.has_any_assessor_role %}
+        {% if sub_criteria.is_scored %}
+            {{ application_feedback(application_id, sub_criteria, current_theme.id,
+            approval_form,change_requests,unrequested_changes,score) }}
+        {% endif %}
     {% endif %}
 {% endif %}
 {% endblock sub_criteria_content %}
