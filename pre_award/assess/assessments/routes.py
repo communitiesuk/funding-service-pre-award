@@ -37,7 +37,6 @@ from pre_award.assess.assessments.forms.assignment_forms import (
     AssessorTypeForm,
     AssignmentOverviewForm,
 )
-from pre_award.assess.assessments.forms.change_request_form import ChangeRequestForm
 from pre_award.assess.assessments.forms.comments_form import CommentsForm
 from pre_award.assess.assessments.forms.mark_qa_complete_form import MarkQaCompleteForm
 from pre_award.assess.assessments.helpers import (
@@ -147,7 +146,6 @@ from pre_award.assessment_store.db.queries.flags.queries import (
     get_change_requests_for_application,
     is_first_change_request_for_date,
 )
-from pre_award.assessment_store.db.queries.scores.queries import approve_sub_criteria
 from pre_award.assessment_store.db.schemas.schemas import AssessmentFlagSchema
 from pre_award.common.blueprints import Blueprint
 from pre_award.config import Config
@@ -1182,11 +1180,6 @@ def display_sub_criteria(  # noqa: C901
             )
         )
 
-    if "approve" in request.form and approval_form.validate_on_submit():
-        return redirect(
-            url_for("assessment_bp.accept_changes", application_id=application_id, sub_criteria_id=sub_criteria_id)
-        )
-
     state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
     change_requests_desc = AssessmentFlagSchema().dump(
@@ -1314,6 +1307,7 @@ def display_sub_criteria(  # noqa: C901
             answers_meta=answers_meta,
             questions={question["field_id"]: question["question"] for question in theme_answers_response},
             state=state,
+            is_qa_complete=state.is_qa_complete,
             migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
             **common_template_config,
         )
@@ -1326,53 +1320,6 @@ def display_sub_criteria(  # noqa: C901
             migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
             **common_template_config,
         )
-
-
-@assessment_bp.route(
-    "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/accept_changes",
-    methods=["GET", "POST"],
-)
-@check_access_application_id(roles_required=[Config.LEAD_ASSESSOR, Config.ASSESSOR])
-def accept_changes(application_id, sub_criteria_id):
-    form = ChangeRequestForm()
-    state = get_state_for_tasklist_banner(application_id)
-    flags_list = get_flags(application_id)
-    flag_status = determine_flag_status(flags_list)
-    sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
-
-    if not is_approval_or_change_request_allowed(state, sub_criteria_id):
-        return abort(403)
-
-    if request.method == "POST" and form.validate_on_submit():
-        approve_sub_criteria(
-            application_id=application_id,
-            sub_criteria_id=sub_criteria_id,
-            user_id=g.account_id,
-            message=form.comment.data,
-        )
-        return render_template(
-            "assessments/change_request_accepted.html",
-            fund=get_fund(sub_criteria.fund_id),
-            application_id=application_id,
-            sub_criteria=sub_criteria,
-            state=state,
-            migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
-            flag_status=flag_status,
-            assessment_status=assessment_status,
-        )
-
-    return render_template(
-        "assessments/change_request_accept_comment.html",
-        fund=get_fund(sub_criteria.fund_id),
-        application_id=application_id,
-        sub_criteria=sub_criteria,
-        state=state,
-        migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
-        flag_status=flag_status,
-        assessment_status=assessment_status,
-        change_request_form=form,
-    )
 
 
 @assessment_bp.route(

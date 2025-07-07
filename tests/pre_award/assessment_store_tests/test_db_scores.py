@@ -12,7 +12,7 @@ from pre_award.assessment_store.db.models.flags import FlagStatus, FlagUpdate
 from pre_award.assessment_store.db.queries.assessment_records.queries import check_all_change_requests_accepted
 from pre_award.assessment_store.db.queries.flags.queries import get_change_requests_for_application
 from pre_award.assessment_store.db.queries.scores.queries import (
-    approve_sub_criteria,
+    accept_sub_criteria,
     create_score_for_app_sub_crit,
     get_scores_for_app_sub_crit,
     get_sub_criteria_to_latest_score_map,
@@ -446,8 +446,8 @@ def test_approve_sub_criteria_resolves_change_request(db, setup_application_with
     section_1 = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[section_1], [section_1]])
 
-    approve_sub_criteria(
-        application_id=application_id, sub_criteria_id=section_1, user_id=str(uuid.uuid4()), message="test"
+    accept_sub_criteria(
+        application_id=application_id, sub_criteria_id=section_1, user_id=str(uuid.uuid4()), message="test", score=1
     )
 
     change_requests = get_change_requests_for_application(application_id)
@@ -458,8 +458,12 @@ def test_approve_sub_criteria_creates_score(db, setup_application_with_requests_
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id]])
 
-    approve_sub_criteria(
-        application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()), message="test"
+    accept_sub_criteria(
+        application_id=application_id,
+        sub_criteria_id=sub_criteria_id,
+        user_id=str(uuid.uuid4()),
+        message="test",
+        score=1,
     )
 
     scores = db.session.query(Score).filter_by(application_id=application_id, sub_criteria_id=sub_criteria_id).all()
@@ -472,8 +476,12 @@ def test_approve_sub_criteria_updates_application_status(db, setup_application_w
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id]])
 
-    approve_sub_criteria(
-        application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()), message="test"
+    accept_sub_criteria(
+        application_id=application_id,
+        sub_criteria_id=sub_criteria_id,
+        user_id=str(uuid.uuid4()),
+        message="test",
+        score=1,
     )
 
     application = db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
@@ -485,8 +493,12 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(setup_ap
     sub_criteria_id_2 = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id_1], [sub_criteria_id_2]])
 
-    approve_sub_criteria(
-        application_id=application_id, sub_criteria_id=sub_criteria_id_1, user_id=str(uuid.uuid4()), message="test"
+    accept_sub_criteria(
+        application_id=application_id,
+        sub_criteria_id=sub_criteria_id_1,
+        user_id=str(uuid.uuid4()),
+        message="test",
+        score=1,
     )
 
     change_requests = get_change_requests_for_application(application_id, only_raised=False, sort_by_update=True)
@@ -500,9 +512,13 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(setup_ap
     application = db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
     assert application.workflow_status == ApplicationStatus.CHANGE_REQUESTED
 
-    # Approving last remaining sub-criteria should change application status
-    approve_sub_criteria(
-        application_id=application_id, sub_criteria_id=sub_criteria_id_2, user_id=str(uuid.uuid4()), message="test"
+    # Accepting last remaining sub-criteria should change application status
+    accept_sub_criteria(
+        application_id=application_id,
+        sub_criteria_id=sub_criteria_id_2,
+        user_id=str(uuid.uuid4()),
+        message="test",
+        score=2,
     )
 
     change_requests = get_change_requests_for_application(application_id)
@@ -516,12 +532,16 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(setup_ap
     assert application.workflow_status == ApplicationStatus.IN_PROGRESS
 
 
-def test_approve_sub_criteria_multiple_change_requests_same_subcriteria(setup_application_with_requests_and_scores):
+def test_accept_sub_criteria_multiple_change_requests_same_subcriteria(setup_application_with_requests_and_scores):
     sub_criteria_id = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[sub_criteria_id], [sub_criteria_id]])
 
-    approve_sub_criteria(
-        application_id=application_id, sub_criteria_id=sub_criteria_id, user_id=str(uuid.uuid4()), message="test"
+    accept_sub_criteria(
+        application_id=application_id,
+        sub_criteria_id=sub_criteria_id,
+        user_id=str(uuid.uuid4()),
+        message="test",
+        score=1,
     )
 
     change_requests = get_change_requests_for_application(application_id)

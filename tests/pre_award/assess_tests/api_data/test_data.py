@@ -185,7 +185,7 @@ flagged_app = {
         }
     ],
     "qa_complete": [],
-    "is_qa_complete": False,
+    "is_qa_complete": True,
     "criteria_sub_criteria_name": "test_sub_criteria",
     "criteria_sub_criteria_id": "test_sub_criteria_id",
     "theme_id": "test_theme_id",
@@ -265,8 +265,15 @@ resolved_app = {
         }
     ],
     "user_associations": [],
-    "qa_complete": [],
-    "is_qa_complete": False,
+    "qa_complete": [
+        {
+            "id": "416f607a-03b7-4592-b927-5021a28b7d6b",
+            "application_id": resolved_app_id,
+            "user_id": test_user_id_lead_assessor,
+            "date_created": "2023-02-19 12:00:00",
+        }
+    ],
+    "is_qa_complete": True,
     "criteria_sub_criteria_name": "test_sub_criteria",
     "criteria_sub_criteria_id": "test_sub_criteria_id",
     "theme_id": "test_theme_id",
@@ -288,7 +295,7 @@ uncompeted_app = {
     "project_name": "Uncompeted project In prog and Res",
     "short_id": "UNCMP-INP",
     "qa_complete": [],
-    "is_qa_complete": False,
+    "is_qa_complete": True,
     "criteria_sub_criteria_name": "test_uncomp_sub_criteria",
     "criteria_sub_criteria_id": "test_uncomp_sub_criteria_id",
     "flags": [
@@ -409,7 +416,7 @@ stopped_app = {
         }
     ],
     "qa_complete": [],
-    "is_qa_complete": False,
+    "is_qa_complete": True,
 }
 
 assigned_app_id = "assigned_app"
@@ -434,7 +441,7 @@ assigned_app = {
         for user_id in all_fund_user_ids
     ],
     "flags": [],
-    "is_qa_complete": False,
+    "is_qa_complete": True,
 }
 
 flagged_qa_completed_app_id = "flagged_qa_completed_app"
@@ -516,6 +523,7 @@ mock_api_results = {
         "name": "Night Shelter Test Fund",
         "short_name": "NSTF",
         "description": "unit testing fund",
+        "funding_type": "COMPETED",
     },
     "fund_store/funds/CYP": {
         "id": "CYP",
@@ -625,7 +633,7 @@ mock_api_results = {
             "flags": stopped_app["flags"],
             "qa_complete": stopped_app["qa_complete"],
             "funding_amount_requested": test_funding_requested + 1000,
-            "is_qa_complete": False,
+            "is_qa_complete": True,
             "language": "en",
             "location_json_blob": {
                 "constituency": "test-constituency",
@@ -652,7 +660,7 @@ mock_api_results = {
             "flags": resolved_app["flags"],
             "qa_complete": resolved_app["qa_complete"],
             "funding_amount_requested": test_funding_requested,
-            "is_qa_complete": False,
+            "is_qa_complete": True,
             "language": "en",
             "location_json_blob": {
                 "constituency": "test-constituency",
@@ -680,7 +688,7 @@ mock_api_results = {
             "flags": stopped_app["flags"],
             "qa_complete": stopped_app["qa_complete"],
             "funding_amount_requested": test_funding_requested,
-            "is_qa_complete": False,
+            "is_qa_complete": True,
             "language": "en",
             "location_json_blob": {
                 "constituency": "test-constituency",
@@ -770,6 +778,7 @@ mock_api_results = {
         "fund_id": test_fund_id,
         "round_id": test_round_id,
         "qa_complete": resolved_app["qa_complete"],
+        "is_qa_complete": resolved_app["is_qa_complete"],
     },
     "assessment_store/application_overviews/uncompeted_app": {
         "criterias": [
@@ -876,7 +885,7 @@ mock_api_results = {
     "assessment_store/flags?application_id=stopped_app": stopped_app["flags"],
     "assessment_store/flags?application_id=flagged_qa_completed_app": flagged_qa_completed_app["flags"],
     "assessment_store/qa_complete/flagged_app": {},
-    "assessment_store/qa_complete/resolved_app": {},
+    "assessment_store/qa_complete/resolved_app": flagged_qa_completed_app["qa_complete"][0],
     "assessment_store/qa_complete/stopped_app": {},
     "assessment_store/qa_complete/flagged_qa_completed_app": flagged_qa_completed_app["qa_complete"][0],
     "account_store/bulk-accounts": {
@@ -1053,7 +1062,7 @@ mock_api_results = {
         "flags": stopped_app["flags"],
         "qa_complete": stopped_app["qa_complete"],
         "funding_amount_requested": test_funding_requested + 1000,
-        "is_qa_complete": False,
+        "is_qa_complete": True,
         "language": "en",
         "location_json_blob": {
             "constituency": "test-constituency",
