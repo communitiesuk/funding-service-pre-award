@@ -3,7 +3,7 @@
 {% from "apply/partials/migration_banner.html" import migration_banner %}
 
 {% block beforeContent %}
-    <a href="{{ url_for("application_routes.tasklist", application_id=application_id) }}"
+    <a href="{{ url_for('application_routes.tasklist', application_id=application_id) }}"
        class="govuk-back-link">{% trans %}Go back to application overview{% endtrans %}</a>
 {% endblock beforeContent %}
 
@@ -29,19 +29,19 @@
             <form class="form" method="post">
                 {{ form.hidden_tag() }}
 
-                <div class="govuk-form-group">
+                <div class="govuk-form-group {% if form.errors.get('overall_application_experience') %}govuk-form-group--error{% endif %}">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                             <h1 class="govuk-fieldset__heading">
-                                {{ form.overall_application_experience.label }}
+                                {% trans %}How was your overall experience of using this service?{% endtrans %}
                             </h1>
                         </legend>
-                        <div class="govuk-radios {% if form.errors.get('overall_application_experience') %} govuk-form-group--error {% endif -%}" data-module="govuk-radios" id="overall_application_experience">
-                            {% if form.errors.get('overall_application_experience') %}
-                            <p id="experience-error" class="govuk-error-message">
-                                <span class="govuk-visually-hidden">{% trans %}Error:{% endtrans %}</span> {{ form.errors.get('overall_application_experience')[0] }}
-                            </p>
-                            {% endif %}
+                        {% if form.errors.get('overall_application_experience') %}
+                        <p id="overall-application-experience-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">{% trans %}Error:{% endtrans %}</span> {{ form.errors.get('overall_application_experience')[0] }}
+                        </p>
+                        {% endif %}
+                        <div class="govuk-radios" data-module="govuk-radios" id="overall_application_experience">
                             {% for choice, label in form.overall_application_experience.choices %}
                                 <div class="govuk-radios__item">
                                     <input class="govuk-radios__input"
@@ -55,13 +55,6 @@
                                     </label>
                                 </div>
                             {% endfor %}
-                        </div>
-                        <br><br>
-                        <div class="govuk-form-group">
-                            <label class="govuk-label govuk-label--s" for="{{ form.more_detail.id }}">
-                                {{ form.more_detail.label }}
-                            </label>
-                            {{ form.more_detail(class="govuk-textarea", rows=5) }}
                         </div>
                     </fieldset>
                 </div>

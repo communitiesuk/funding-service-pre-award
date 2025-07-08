@@ -3,13 +3,13 @@
 {% from "apply/partials/migration_banner.html" import migration_banner %}
 
 {% block beforeContent %}
-    <a href="{{ url_for("application_routes.tasklist", application_id=application_id) }}"
+    <a href="{{ url_for('application_routes.tasklist', application_id=application_id) }}"
        class="govuk-back-link">{% trans %}Go back to application overview{% endtrans %}</a>
 {% endblock beforeContent %}
 
 {% block content %}
-    {% if form.errors.get('demonstrate_why_org_funding') %}
-        {{ feedback_error_summary(form.errors.get('demonstrate_why_org_funding')[0], "#demonstrate_why_org_funding") }}
+    {% if form.errors.get('service_improvement') %}
+        {{ feedback_error_summary(form.errors.get('service_improvement')[0], "#service_improvement") }}
     {% endif %}
 
     <div class="govuk-grid-row">
@@ -29,33 +29,18 @@
             <form class="form" method="post">
                 {{ form.hidden_tag() }}
 
-                <div class="govuk-form-group">
-                    <fieldset class="govuk-fieldset">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                            <h1 class="govuk-fieldset__heading">
-                                {{ form.demonstrate_why_org_funding.label }}
-                            </h1>
-                        </legend>
-                        <div class="govuk-radios {% if form.errors.get('demonstrate_why_org_funding') %} govuk-form-group--error {% endif -%}" data-module="govuk-radios" id="demonstrate_why_org_funding">
-                            {% if form.errors.get('demonstrate_why_org_funding') %}
-                            <p id="experience-error" class="govuk-error-message">
-                                <span class="govuk-visually-hidden">Error:</span> {{ form.errors.get('demonstrate_why_org_funding')[0] }}
-                            </p>
-                            {% endif %}
-                            {% for choice_value, choice_label in form.demonstrate_why_org_funding.choices %}
-                                <div class="govuk-radios__item">
-                                    <input class="govuk-radios__input" id="{{ form.demonstrate_why_org_funding.id }}-{{ loop.index }}"
-                                           name="{{ form.demonstrate_why_org_funding.name }}" type="radio"
-                                           value="{{ choice_value }}"
-                                           {% if form.demonstrate_why_org_funding.data == choice_value %}checked{% endif %}>
-                                    <label class="govuk-label govuk-radios__label"
-                                           for="{{ form.demonstrate_why_org_funding.id }}-{{ loop.index }}">
-                                        {{ choice_label }}
-                                    </label>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </fieldset>
+                <div class="govuk-form-group {% if form.errors.get('service_improvement') %}govuk-form-group--error{% endif %}">
+                    <h1 class="govuk-label-wrapper">
+                        <label class="govuk-label govuk-label--l" for="{{ form.service_improvement.id }}">
+                            {% trans %}How could we improve this service?{% endtrans %}
+                        </label>
+                    </h1>
+                    {% if form.errors.get('service_improvement') %}
+                    <p id="service-improvement-error" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">{% trans %}Error:{% endtrans %}</span> {{ form.errors.get('service_improvement')[0] }}
+                    </p>
+                    {% endif %}
+                    {{ form.service_improvement(class="govuk-textarea", rows=5) }}
                 </div>
 
                 <div>
