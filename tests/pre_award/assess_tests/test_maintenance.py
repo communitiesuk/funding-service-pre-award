@@ -71,6 +71,7 @@ def test_route_fund_dashboard_maintenance_mode_disabled(
     mock_get_assessment_progress,
     mock_get_active_tags_for_fund_round,
     mock_get_tag_types,
+    mock_competed_cof_fund,
 ):
     flask_test_maintenance_client.set_cookie(
         "fsd_user_token",
