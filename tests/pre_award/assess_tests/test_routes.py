@@ -162,6 +162,7 @@ class TestRoutes:
         case,
         assess_test_client,
         fund_dashboard_all_mocks,
+        mock_competed_cof_fund,
     ):
         fund_short_name, round_short_name = case.fund_short, case.round_short
 
@@ -255,6 +256,7 @@ class TestRoutes:
         mock_get_application_metadata,
         mock_get_active_tags_for_fund_round,
         mock_get_tag_types,
+        mock_competed_cof_fund,
     ):
         params = request.node.get_closest_marker("mock_parameters").args[0]
         fund_short_name = params["fund_short_name"]
@@ -301,6 +303,7 @@ class TestRoutes:
         mock_get_application_metadata,
         mock_get_active_tags_for_fund_round,
         mock_get_tag_types,
+        mock_competed_cof_fund,
     ):
         params = request.node.get_closest_marker("mock_parameters").args[0]
         fund_short_name = params["fund_short_name"]
@@ -368,6 +371,7 @@ class TestRoutes:
         mock_get_application_metadata,
         mock_get_active_tags_for_fund_round,
         mock_get_tag_types,
+        mock_competed_cof_fund,
     ):
         params = request.node.get_closest_marker("mock_parameters").args[0]
         fund_short_name = params["fund_short_name"]
@@ -422,6 +426,7 @@ class TestRoutes:
         mock_get_assessment_progress,
         mock_get_active_tags_for_fund_round,
         mock_get_tag_types,
+        mock_competed_cof_fund,
     ):
         params = request.node.get_closest_marker("mock_parameters").args[0]
         fund_short_name = params["fund_short_name"]
@@ -465,6 +470,7 @@ class TestRoutes:
         mock_get_assessment_progress,
         mock_get_active_tags_for_fund_round,
         mock_get_tag_types,
+        mock_competed_cof_fund,
     ):
         params = request.node.get_closest_marker("mock_parameters").args[0]
         fund_short_name = params["fund_short_name"]
@@ -508,6 +514,7 @@ class TestRoutes:
         mock_get_assessment_progress,
         mock_get_active_tags_for_fund_round,
         mock_get_tag_types,
+        mock_competed_cof_fund,
     ):
         params = request.node.get_closest_marker("mock_parameters").args[0]
         fund_short_name = params["fund_short_name"]
@@ -552,6 +559,7 @@ class TestRoutes:
         mock_get_assessment_progress,
         mock_get_active_tags_for_fund_round,
         mock_get_tag_types,
+        mock_competed_cof_fund,
     ):
         params = request.node.get_closest_marker("mock_parameters").args[0]
         fund_short_name = params["fund_short_name"]
@@ -615,6 +623,7 @@ class TestRoutes:
         column_id,
         mock_get_active_tags_for_fund_round,
         mock_get_tag_types,
+        mock_competed_cof_fund,
     ):
         assess_test_client.set_cookie(
             "fsd_user_token",
@@ -700,6 +709,7 @@ class TestRoutes:
         mock_get_bulk_accounts,
         mock_get_assessor_tasklist_state,
         mock_get_scoring_system,
+        mock_competed_cof_fund,
     ):
         application_id = request.node.get_closest_marker("application_id").args[0]
         sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
@@ -722,6 +732,8 @@ class TestRoutes:
         assert b"Lead assessor" in response.data
         assert b"This is a comment" in response.data
 
+    @pytest.mark.application_id("resolved_app")
+    @pytest.mark.sub_criteria_id("test_sub_criteria_id")
     def test_route_sub_criteria_scoring_inaccessible_to_commenters(
         self,
         assess_test_client,
@@ -729,6 +741,9 @@ class TestRoutes:
         mock_get_application_metadata,
         mock_get_fund,
         mock_get_round,
+        mock_get_assessor_tasklist_state,
+        mock_competed_cof_fund,
+        expect_flagging,
     ):
         # Mocking fsd-user-token cookie
         token = create_valid_token(test_commenter_claims)
@@ -766,6 +781,7 @@ class TestRoutes:
         mock_get_bulk_accounts,
         mock_get_assessor_tasklist_state,
         mock_get_scoring_system,
+        mock_uncompeted_pfn_fund,
     ):
         application_id = request.node.get_closest_marker("application_id").args[0]
         sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
@@ -815,6 +831,7 @@ class TestRoutes:
         mock_get_funds,
         mock_get_round,
         mock_get_application_metadata,
+        mock_competed_cof_fund,
     ):
         application_id = request.node.get_closest_marker("application_id").args[0]
         token = create_valid_token(test_lead_assessor_claims)
@@ -839,6 +856,7 @@ class TestRoutes:
         mock_get_funds,
         mock_get_round,
         mock_get_application_metadata,
+        mock_competed_cof_fund,
     ):
         marker = request.node.get_closest_marker("application_id")
         application_id = marker.args[0]
@@ -866,6 +884,7 @@ class TestRoutes:
         mocker,
         mock_get_scoring_system,
         mock_get_calculate_overall_score_percentage,
+        mock_competed_cof_fund,
     ):
         marker = request.node.get_closest_marker("application_id")
         application_id = marker.args[0]
@@ -901,6 +920,7 @@ class TestRoutes:
         mocker,
         mock_get_scoring_system,
         mock_get_calculate_overall_score_percentage,
+        mock_competed_cof_fund,
     ):
         mocker.patch(
             "pre_award.apply.default.application_routes.get_fund_and_round",
@@ -980,6 +1000,7 @@ class TestRoutes:
         mock_get_funds,
         mock_get_round,
         mock_get_application_metadata,
+        mock_competed_cof_fund,
     ):
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
@@ -1069,6 +1090,7 @@ class TestRoutes:
         mock_get_fund,
         mock_get_funds,
         mock_get_application_metadata,
+        mock_competed_cof_fund,
     ):
         application_id = request.node.get_closest_marker("application_id").args[0]
         flag_id = request.node.get_closest_marker("flag_id").args[0]
@@ -1157,6 +1179,7 @@ class TestRoutes:
         mocker,
         mock_get_scoring_system,
         mock_get_calculate_overall_score_percentage,
+        mock_competed_cof_fund,
     ):
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
@@ -1186,6 +1209,7 @@ class TestRoutes:
         mocker,
         mock_get_scoring_system,
         mock_get_calculate_overall_score_percentage,
+        mock_competed_cof_fund,
     ):
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
@@ -1230,6 +1254,7 @@ class TestRoutes:
         mock_get_assessment_progress,
         mock_get_active_tags_for_fund_round,
         mock_get_tag_types,
+        mock_competed_cof_fund,
     ):
         assess_test_client.set_cookie(
             "fsd_user_token",
@@ -1275,6 +1300,7 @@ class TestRoutes:
         mock_get_assessor_tasklist_state,
         mock_get_bulk_accounts,
         mock_get_assessment_flags,
+        mock_competed_cof_fund,
     ):
         soup = get_subcriteria_soup(request, assess_test_client)
         assert soup.title.string == (
@@ -1299,6 +1325,9 @@ class TestRoutes:
         mock_get_assessor_tasklist_state,
         mock_get_bulk_accounts,
         mock_get_assessment_flags,
+        mock_get_scores,
+        expect_flagging,
+        mock_uncompeted_pfn_fund,
     ):
         soup = get_subcriteria_soup(request, assess_test_client)
         # Check that the expected text exists in a specified paragraph element.
@@ -1357,6 +1386,7 @@ class TestRoutes:
         templates_rendered,
         mock_get_associated_tags_for_application,
         mocker,
+        mock_competed_cof_fund,
     ):
         marker = request.node.get_closest_marker("application_id")
         application_id = marker.args[0]
@@ -1414,6 +1444,7 @@ class TestRoutes:
         mock_get_assessor_tasklist_state,
         mock_get_scoring_system,
         mock_get_calculate_overall_score_percentage,
+        mock_competed_cof_fund,
     ):
         response = assess_test_client.get("/assess/application/uncompeted_app")
         assert response.status_code == 200
@@ -1482,6 +1513,7 @@ class TestRoutes:
         mock_get_round,
         mock_get_application_metadata,
         mock_get_assessor_tasklist_state,
+        mock_competed_cof_fund,
     ):
         application_id = request.node.get_closest_marker("application_id").args[0]
         sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
@@ -1510,6 +1542,7 @@ class TestRoutes:
         mock_get_round,
         mock_get_application_metadata,
         mock_get_assessor_tasklist_state,
+        mock_competed_cof_fund,
     ):
         application_id = request.node.get_closest_marker("application_id").args[0]
         sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
@@ -1558,8 +1591,8 @@ class TestRoutes:
 
     @pytest.mark.application_id("resolved_app")
     @pytest.mark.sub_criteria_id("test_sub_criteria_id")
-    @pytest.mark.parametrize("sub_criteria_status", [Status.CHANGE_REQUESTED.name, Status.COMPLETED.name])
-    def test_prevent_approval_or_change_request(
+    @pytest.mark.parametrize("sub_criteria_status", [Status.CHANGE_REQUESTED.name])
+    def test_prevent_acceptance_and_request_change_when_sub_status_change_requested(
         self,
         sub_criteria_status,
         assess_test_client,
@@ -1571,13 +1604,65 @@ class TestRoutes:
         mock_get_round,
         mock_get_application_metadata,
         mock_get_assessor_tasklist_state,
+        mock_uncompeted_pfn_fund,
+        expect_flagging,
     ):
         application_id = request.node.get_closest_marker("application_id").args[0]
         sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
 
         token = create_valid_token(test_lead_assessor_claims)
         assess_test_client.set_cookie("fsd_user_token", token)
-        mock_get_assessor_tasklist_state.return_value["criterias"][0]["sub_criterias"][0]["status"] = (
+        mock_get_assessor_tasklist_state[0].return_value["criterias"][0]["sub_criterias"][0]["status"] = (
+            sub_criteria_status
+        )
+
+        mock_get_assessor_tasklist_state[1].return_value.is_qa_complete = False
+
+        for criteria in mock_get_assessor_tasklist_state[1].return_value.criterias:
+            for sub in criteria.sub_criterias:
+                if sub.id == sub_criteria_id:
+                    sub.status = "CHANGE_REQUESTED"
+
+        post_data = {"field_ids": ["JCACTy"], "reason_JCACTy": "testing"}
+
+        response = assess_test_client.post(
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/theme_id/test_theme_id/request_change",
+            data=post_data,
+            follow_redirects=True,
+        )
+        assert 403 == response.status_code
+        assert b"Access Denied" in response.data
+
+        response = assess_test_client.get(
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/score"  # noqa
+        )
+        assert 403 == response.status_code
+        assert b"Access Denied" in response.data
+
+    @pytest.mark.application_id("resolved_app")
+    @pytest.mark.sub_criteria_id("test_sub_criteria_id")
+    @pytest.mark.parametrize("sub_criteria_status", [Status.COMPLETED.name])
+    def test_prevent_acceptance_and_request_change_when_is_qa_complete(
+        self,
+        sub_criteria_status,
+        assess_test_client,
+        request,
+        mock_get_sub_criteria,
+        mock_get_sub_criteria_theme,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_assessor_tasklist_state,
+        mock_uncompeted_pfn_fund,
+        expect_flagging,
+    ):
+        application_id = request.node.get_closest_marker("application_id").args[0]
+        sub_criteria_id = request.node.get_closest_marker("sub_criteria_id").args[0]
+
+        token = create_valid_token(test_lead_assessor_claims)
+        assess_test_client.set_cookie("fsd_user_token", token)
+        mock_get_assessor_tasklist_state[0].return_value["criterias"][0]["sub_criterias"][0]["status"] = (
             sub_criteria_status
         )
         post_data = {"field_ids": ["JCACTy"], "reason_JCACTy": "testing"}
@@ -1586,6 +1671,12 @@ class TestRoutes:
             f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/theme_id/test_theme_id/request_change",
             data=post_data,
             follow_redirects=True,
+        )
+        assert 403 == response.status_code
+        assert b"Access Denied" in response.data
+
+        response = assess_test_client.get(
+            f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/score"  # noqa
         )
         assert 403 == response.status_code
         assert b"Access Denied" in response.data

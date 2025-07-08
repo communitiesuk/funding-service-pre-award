@@ -110,28 +110,29 @@ class TestJinjaMacros(object):
 
                 if case["mock_value"]:
                     # Assertions for uncompeted flow
-                    # There should be no Totals row in case of uncompeted flow, so only 3 rows
-                    assert len(table.find_all("tr")) == 3, "Should have 3 table rows"
-                    assert table.find("strong", text="Total criteria score") is None, (
-                        "Should not have Total criteria score"
-                    )
-                    assert table.find("th", text="Score out of 4") is None, "Should not have 'Score out of 4 column'"
+                    assert len(table.find_all("tr")) == 4, "Should have 4 table rows"
+                    assert table.find("strong", text="Total criteria score"), "Should have Total criteria score"
+                    assert table.find("th", text="Score out of 4"), "Should have 'Score out of 4 column'"
 
-                    assert soup.find("p", class_="govuk-body govuk-!-margin-bottom-2") is None, (
-                        "Weighting should not be present"
-                    )
-                    assert "50% of overall score." not in soup.text, (
-                        "Should not have '50% of overall score.' in the HTML"
-                    )
+                    assert soup.find("p", class_="govuk-body govuk-!-margin-bottom-2"), "Weighting should be present"
+                    assert "50% of overall score." in soup.text, "Should have '50% of overall score.' in the HTML"
 
                     all_numeric_cells = soup.find_all("td", class_="govuk-table__cell--numeric")
-                    # None of these values below should be present in the table
-                    for cell in all_numeric_cells:
-                        assert cell.text != "0", "Should not have 0 score"
-                        assert cell.text != "2", "Should not have 2 score"
-                        assert cell.text != "2 of 8", "Should not have 2 of 8 score"
-                    # There should only be 2 <th> elements in the <row> element
-                    assert len(table.find_all("th")) == 2, "Should have 2 table headers"
+
+                    for i, cell in enumerate(all_numeric_cells):
+                        cell_text = cell.get_text(strip=True)
+                        print(f"Cell {i}: '{cell_text}'")
+                        if i == 0:
+                            assert cell_text == "0"
+                        elif i in [1, 3]:
+                            assert cell_text == "Ready for review"
+                        elif i == 2:
+                            assert cell_text == "2"
+                        elif i == 4:
+                            assert cell_text == "2 of 8"
+
+                    # There should only be 3 <th> elements in the <row> element
+                    assert len(table.find_all("th")) == 3, "Should have 3 table headers"
 
                 else:
                     # Assertions for competed flow

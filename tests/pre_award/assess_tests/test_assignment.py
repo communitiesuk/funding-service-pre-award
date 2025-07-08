@@ -325,6 +325,7 @@ def test_assessor_type_list_post(
     mock_get_users_for_fund,
     mock_get_assessment_progress,
     patch_resolve_redirect,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -397,6 +398,7 @@ def test_assignment_overview_remove_assessor(
     mock_get_users_for_fund,
     mock_get_assessment_progress,
     patch_resolve_redirect,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -458,6 +460,7 @@ def test_assignment_overview_add_and_remove_assessors(
     mock_get_users_for_fund,
     mock_get_assessment_progress,
     patch_resolve_redirect,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -538,6 +541,7 @@ def test_assignment_overview_post_new_and_exising(
     mock_get_application_metadata,
     mock_get_active_tags_for_fund_round,
     mock_get_tag_types,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -663,6 +667,7 @@ def test_assignment_overview_post_add_and_remove(
     mock_get_application_metadata,
     mock_get_active_tags_for_fund_round,
     mock_get_tag_types,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]
@@ -831,6 +836,7 @@ def test_assignment_overview_cancel_messages(
     mock_get_users_for_fund,
     mock_get_assessment_progress,
     patch_resolve_redirect,
+    mock_competed_cof_fund,
 ):
     params = request.node.get_closest_marker("mock_parameters").args[0]
     fund_short_name = params["fund_short_name"]

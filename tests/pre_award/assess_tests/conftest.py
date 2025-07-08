@@ -5,6 +5,7 @@ from distutils.util import strtobool
 from pathlib import Path
 from typing import Any
 from unittest import mock
+from unittest.mock import Mock
 
 import jwt as jwt
 import pytest
@@ -17,6 +18,7 @@ from werkzeug.test import TestResponse
 
 from app import create_app
 from pre_award.assess.assessments.models.round_status import RoundStatus
+from pre_award.assess.services.data_services import get_fund
 from pre_award.assess.services.models.assessor_task_list import AssessorTaskList
 from pre_award.assess.shared.helpers import get_ttl_hash
 from pre_award.assess.tagging.models.tag import AssociatedTag, Tag, TagType
@@ -302,6 +304,7 @@ def mock_get_round(mocker):
         "pre_award.assess.tagging.routes.get_round",
         "pre_award.assess.services.shared_data_helpers.get_round",
         "pre_award.assess.authentication.validation.get_round",
+        "pre_award.apply.helpers.get_round",
     ]
 
     mock_round_info = Round.from_dict(mock_api_results["fund_store/funds/{fund_id}/rounds/{round_id}"])
@@ -443,24 +446,47 @@ def mock_get_application_overviews(request, mocker):
     mocked_apps_overview.assert_called_with(fund_id, round_id, search_params)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def mock_get_assessor_tasklist_state(request, mocker):
-    marker = request.node.get_closest_marker("application_id")
-    if "expect_flagging" in request.fixturenames:
-        expect_flagging = request.getfixturevalue("expect_flagging")
-    else:
-        expect_flagging = True
+    application_id = request.node.get_closest_marker("application_id").args[0]
+    expect_flagging = request.getfixturevalue("expect_flagging") if "expect_flagging" in request.fixturenames else True
 
-    application_id = marker.args[0]
+    # Load the mock dict from your test data
     mock_tasklist_state = mock_api_results[f"assessment_store/application_overviews/{application_id}"]
-    mocked_tasklist_state = mocker.patch(
+
+    # Patch the raw dict-returning function
+    patch_1 = mocker.patch(
         "pre_award.assess.services.shared_data_helpers.get_assessor_task_list_state",
         return_value=mock_tasklist_state,
     )
-    yield mocked_tasklist_state
+
+    # Convert the dict into an AssessorTaskList object
+    mock_tasklist_object = AssessorTaskList.from_json(
+        {
+            **mock_tasklist_state,
+            "fund_name": "Test Fund",
+            "fund_short_name": "TF",
+            "round_short_name": "R1",
+            "fund_guidance_url": "https://example.com",
+            "is_eoi_round": False,
+        }
+    )
+
+    # Patch the object-returning function
+    patch_2 = mocker.patch(
+        "pre_award.assess.authentication.validation.get_state_for_tasklist_banner",
+        return_value=mock_tasklist_object,
+    )
+
+    yield patch_1, patch_2
 
     if expect_flagging:
-        mocked_tasklist_state.assert_called_with(application_id)
+        patch_1.assert_called_with(application_id)
+
+
+@pytest.fixture
+def expect_flagging():
+    return False
 
 
 @pytest.fixture(scope="function")
@@ -1014,3 +1040,40 @@ def get_subcriteria_soup(request, assess_test_client):
         f"/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}"  # noqa
     )
     return BeautifulSoup(response.data, "html.parser")
+
+
+@pytest.fixture
+def mock_competed_cof_fund(mocker):
+    """
+    Mocks:
+    - `find_fund_in_request` to return a COMPETED fund with short_name 'COF'
+    - `get_fund` to return the same when called with a fund_id
+    """
+    fund_mock = Mock(funding_type="COMPETED", short_name="COF")
+
+    # Clear the cache to ensure the mock is used
+    get_fund.cache_clear()
+
+    mocker.patch("app.find_fund_in_request", return_value=fund_mock)
+    mocker.patch("pre_award.assess.services.data_services.get_fund", return_value=fund_mock)
+    mocker.patch("pre_award.apply.helpers.get_fund", return_value=fund_mock)
+
+    return fund_mock
+
+
+@pytest.fixture
+def mock_uncompeted_pfn_fund(mocker):
+    """
+    Mocks:
+    - `find_fund_in_request` to return a UNCOMPETED fund with short_name 'PFN'
+    - `get_fund` to return the same when called with a fund_id
+    """
+    fund_mock = Mock(funding_type="UNCOMPETED", short_name="PFN")
+
+    # Clear the cache to ensure the mock is used
+    get_fund.cache_clear()
+
+    mocker.patch("app.find_fund_in_request", return_value=fund_mock)
+    mocker.patch("pre_award.assess.services.data_services.get_fund", return_value=fund_mock)
+
+    return fund_mock
