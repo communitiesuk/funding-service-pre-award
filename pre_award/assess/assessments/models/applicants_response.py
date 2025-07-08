@@ -6,7 +6,7 @@ from typing import Iterable, List, Tuple
 from urllib.parse import quote
 
 from bs4 import BeautifulSoup
-from flask import url_for
+from flask import current_app, url_for
 
 from pre_award.assess.assessments.form_lists_helper import map_form_json_list_value
 from pre_award.assess.services.aws import list_files_in_folder
@@ -185,6 +185,11 @@ class NewAddAnotherTable(ApplicantResponseComponent):
         answer = data.get("answer")
 
         totals, headings = [], []
+        form_name = data.get("form_name", "").lower()
+        pfn_rp = False
+        if "pfn-rp" in form_name:
+            pfn_rp = True
+
         for column_name, values, fmt in answer:
             if fmt == "currency":
                 column_format = "numeric"
@@ -209,18 +214,18 @@ class NewAddAnotherTable(ApplicantResponseComponent):
 
                 columns.append({render_type: render_val, "format": format_val})
             rows.append(columns)
-
-        if any(totals):
-            rows.append(
-                [{"text": "Total", "classes": "govuk-table__header"}]
-                + [
-                    {
-                        "text": f"£{val:.2f}" if val else "",
-                        "format": "numeric" if val else "",
-                    }
-                    for val in totals[1:]
-                ]  # we assume the first column is a string
-            )
+        if not pfn_rp:
+            if any(totals):
+                rows.append(
+                    [{"text": "Total", "classes": "govuk-table__header"}]
+                    + [
+                        {
+                            "text": f"£{val:.2f}" if val else "",
+                            "format": "numeric" if val else "",
+                        }
+                        for val in totals[1:]
+                    ]  # we assume the first column is a string
+                )
 
         return cls(
             caption=data["question"],
@@ -292,10 +297,12 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
         if isinstance(answer, list):
             try:
                 for i, ans in enumerate(answer):
-                    if ans[2] == "monthYearField":
+                    if isinstance(ans, (list, tuple)) and len(ans) > 2 and ans[2] == "monthYearField":
                         for j, val in enumerate(ans[1]):
                             input_date = val
                             item["answer"][i][1][j] = _convert_to_month_year(input_date)
+                    else:
+                        current_app.logger.warning("Unexpected answer format: %s", ans)
             except IndexError:
                 pass
         else:
