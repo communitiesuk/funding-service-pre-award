@@ -752,7 +752,7 @@ class TestJinjaMacros(object):
                 "a",
                 {
                     "href": "/assess/flag/12345",
-                    "class": "govuk-button primary-button",
+                    "class": "govuk-button govuk-button--secondary",
                     "data-module": "govuk-button",
                 },
             )
