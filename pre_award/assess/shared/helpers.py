@@ -52,9 +52,9 @@ def process_assessments_stats(application_overviews) -> Dict:
     return stats
 
 
-def determine_assessment_status(workflow_status: str, is_qa_complete: bool) -> str:
+def determine_assessment_status(workflow_status: str, is_qa_complete: bool, is_uncompeted_flag: bool) -> str:
     if is_qa_complete:
-        assessment_status = "QA complete"
+        assessment_status = "Moderation complete" if is_uncompeted_flag else "QA complete"
     else:
         assessment_status = assessment_statuses[workflow_status]
 
