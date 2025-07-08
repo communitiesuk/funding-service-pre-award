@@ -1264,8 +1264,15 @@ def display_sub_criteria(  # noqa: C901
         theme_answer["field_type"] == "clientSideFileUploadField" for theme_answer in theme_answers_response
     )
 
-    # If the sub-criteria has been accepted, no need to label changed answers
-    if score:
+    # If the sub-criteria has been accepted and scored after the applicant responded to a change request
+    # (i.e. the latest change request flag is in STOPPED status)
+    # In this case, we no longer need to highlight or label any changes in the applicant's answers.
+    if (
+        score
+        and sub_criteria_change_requests
+        and len(sub_criteria_change_requests) > 0
+        and sub_criteria_change_requests[0].latest_status == FlagType.STOPPED
+    ):
         for theme_answer in theme_answers_response:
             theme_answer.pop("unrequested_change", None)
             theme_answer.pop("requested_change", None)
