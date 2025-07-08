@@ -113,6 +113,7 @@ from pre_award.assess.services.data_services import (
     get_tag_types,
     get_tags_for_fund_round,
     get_users_for_fund,
+    is_uncompeted_flow,
     match_comment_to_theme,
     notify_applicant_changes_requested,
     submit_change_request,
@@ -183,7 +184,9 @@ def _handle_all_uploaded_documents(application_id):
     answers_meta = applicants_response.create_ui_components(theme_answers_response, application_id)
 
     state = get_state_for_tasklist_banner(application_id)
-    assessment_status = determine_assessment_status(state.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        state.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
     return render_template(
         "assessments/all_uploaded_documents.html",
         state=state,
@@ -1217,7 +1220,9 @@ def display_sub_criteria(  # noqa: C901
         else None
     )
 
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        sub_criteria.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(sub_criteria.fund_id)
+    )
     flag_status = determine_flag_status(flags_list)
 
     edit_comment_argument = request.args.get("edit_comment")
@@ -1339,7 +1344,9 @@ def request_changes(application_id, sub_criteria_id, theme_id):
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
     current_theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
     state = get_state_for_tasklist_banner(application_id)
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        sub_criteria.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(sub_criteria.fund_id)
+    )
     theme_answers_response = get_sub_criteria_theme_answers_all(application_id, theme_id)
 
     filtered_questions = filter_questions(theme_answers_response)
@@ -1436,7 +1443,9 @@ def generate_doc_list_for_download(application_id):
         )
         for file_type in FILE_GENERATORS.keys()
     ]
-    assessment_status = determine_assessment_status(state.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        state.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
 
     return render_template(
         "assessments/contract_downloads.html",
@@ -1565,7 +1574,9 @@ def application(application_id):
     if qa_complete:
         user_id_list.append(qa_complete["user_id"])
 
-    assessment_status = determine_assessment_status(state.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        state.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(fund.id)
+    )
     flag_status = determine_flag_status(flags_list)
 
     if flags_list:
@@ -1914,7 +1925,9 @@ def success_page(application_id, sub_criteria_id, theme_id):
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
     current_theme = next(iter(t for t in sub_criteria.themes if t.id == theme_id))
     state = get_state_for_tasklist_banner(application_id)
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        sub_criteria.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
     return render_template(
         "assessments/change_request_success_page.html",
         application_id=application_id,
