@@ -64,13 +64,13 @@ from pre_award.assess.assessments.models.location_data import LocationData
 from pre_award.assess.assessments.models.round_summary import create_round_summaries, is_after_today
 from pre_award.assess.assessments.status import (
     all_status_completed,
-    is_approval_or_change_request_allowed,
     update_ar_status_to_completed,
     update_ar_status_to_qa_completed,
 )
 from pre_award.assess.authentication.validation import (
     check_access_application_id,
     check_access_fund_short_name_round_sn,
+    check_approval_or_change_request_allowed_uncompeted_only,
     has_access_to_fund,
 )
 from pre_award.assess.config.display_value_mappings import (
@@ -1326,6 +1326,7 @@ def display_sub_criteria(  # noqa: C901
     "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/request_change",
     methods=["GET", "POST"],
 )
+@check_approval_or_change_request_allowed_uncompeted_only
 @check_access_application_id(roles_required=[Config.LEAD_ASSESSOR, Config.ASSESSOR])
 def request_changes(application_id, sub_criteria_id, theme_id):
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
@@ -1338,9 +1339,6 @@ def request_changes(application_id, sub_criteria_id, theme_id):
 
     field_ids = [question["field_id"] for question in filtered_questions]
     form = build_request_changes_form(field_ids)
-
-    if not is_approval_or_change_request_allowed(state, sub_criteria_id):
-        return abort(403)
 
     if request.method == "POST" and form.validate_on_submit():
         selected_field = form.field_ids.data
