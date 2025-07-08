@@ -131,7 +131,7 @@ class NotificationService:
     # E.G. "EMAIL": "GOV_NOTIFY_ID"
     REPLY_TO_EMAILS_WITH_NOTIFY_ID = {
         "LocalPlansandGreenBeltFunding@communities.gov.uk": "7bc1b42f-512d-4e43-a70a-3c06a3197f38",
-        FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS: "10668b8d-9472-4ce8-ae07-4fcc7bf93a9d",
+        FUNDING_SERVICE_SUPPORT_EMAIL_ADDRESS: "9c6ac236-7137-4981-9995-84bd9728de82",
         "COF@communities.gov.uk": "10668b8d-9472-4ce8-ae07-4fcc7bf93a9d",
         "transformationfund@communities.gov.uk": "25286d9a-8543-41b5-a00f-331b999e51f0",
         "cyprfund@communities.gov.uk": "72bb79a8-2748-4404-9f01-14690bee3843",
