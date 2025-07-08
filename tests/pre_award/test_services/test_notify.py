@@ -284,7 +284,7 @@ class TestNotificationService:
                             "assessment link": "test_link_to_assess",
                             "lead assessor email": "assessor@test.com",
                         },
-                        "email_reply_to_id": "10668b8d-9472-4ce8-ae07-4fcc7bf93a9d",
+                        "email_reply_to_id": "9c6ac236-7137-4981-9995-84bd9728de82",
                         "reference": "abc123",
                     }
                 )
@@ -323,7 +323,7 @@ class TestNotificationService:
                             "assessment link": "test_link_to_assess",
                             "lead assessor email": "assessor@test.com",
                         },
-                        "email_reply_to_id": "10668b8d-9472-4ce8-ae07-4fcc7bf93a9d",
+                        "email_reply_to_id": "9c6ac236-7137-4981-9995-84bd9728de82",
                         "reference": "abc123",
                     }
                 )
@@ -360,7 +360,7 @@ class TestNotificationService:
                             "sign in link": "https://prospectus",
                             "contact email": "contact@test.com",
                         },
-                        "email_reply_to_id": "10668b8d-9472-4ce8-ae07-4fcc7bf93a9d",
+                        "email_reply_to_id": "9c6ac236-7137-4981-9995-84bd9728de82",
                         "reference": "abc123",
                     }
                 )
