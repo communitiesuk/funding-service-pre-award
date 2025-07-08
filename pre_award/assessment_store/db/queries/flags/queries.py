@@ -125,12 +125,42 @@ def add_update_to_assessment_flag(
 
 
 def resolve_open_change_requests_for_sub_criteria(
-    application_id, sub_criteria_id, user_id, justification="Sub-criteria was approved"
+    application_id, sub_criteria_id, user_id, justification="Sub-criteria was accepted and scored"
 ):
+    """
+    Resolves open change requests for a given sub-criteria within an application.
+
+    This function identifies all change requests (AssessmentFlags) that:
+    - Belong to the specified application,
+    - Are marked as change requests (`is_change_request=True`),
+    - Have a latest status of `RESOLVED` (indicating the applicant has responded),
+    - Include the specified sub-criteria in their flagged sections.
+
+    For each matching change request, the function:
+    - Creates a new `FlagUpdate` with the status set to `STOPPED`, indicating that the assessor has accepted and scored
+    the response,
+    - Updates the `latest_status` of the flag to `STOPPED`,
+    - Commits the changes to the database.
+
+    Args:
+        application_id (int): The ID of the application containing the change requests.
+        sub_criteria_id (str): The identifier of the sub-criteria being resolved.
+        user_id (int): The ID of the user (assessor) performing the resolution.
+        justification (str, optional): A justification message for stopping the flag. Defaults to
+        "Sub-criteria was accepted and scored".
+
+    Returns:
+        List[AssessmentFlag]: A list of the updated change request flags.
+
+    Note:
+        The `RESOLVED` status is used when the applicant has responded to a change request.
+        The `STOPPED` status is used when the assessor has accepted and scored the response.
+    """
+
     stmt = select(AssessmentFlag).where(
         AssessmentFlag.application_id == application_id,
         AssessmentFlag.is_change_request.is_(True),
-        AssessmentFlag.latest_status == FlagStatus.RAISED,
+        AssessmentFlag.latest_status == FlagStatus.RESOLVED,
         AssessmentFlag.sections_to_flag.contains([sub_criteria_id]),
     )
     open_change_requests = db.session.scalars(stmt).all()
@@ -138,12 +168,12 @@ def resolve_open_change_requests_for_sub_criteria(
         flag_update = FlagUpdate(
             justification=justification,
             user_id=user_id,
-            status=FlagStatus.RESOLVED,
+            status=FlagStatus.STOPPED,
             allocation=None,
             assessment_flag_id=open_change_request.id,
         )
         open_change_request.updates.append(flag_update)
-        open_change_request.latest_status = FlagStatus.RESOLVED
+        open_change_request.latest_status = FlagStatus.STOPPED
         db.session.add(open_change_request)
 
     db.session.commit()
