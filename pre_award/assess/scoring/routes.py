@@ -1,6 +1,9 @@
 from flask import abort, current_app, g, render_template, request
 
-from pre_award.assess.authentication.validation import check_access_application_id
+from pre_award.assess.authentication.validation import (
+    check_access_application_id,
+    check_approval_or_change_request_allowed_uncompeted_only,
+)
 from pre_award.assess.flagging.helpers import get_flags
 from pre_award.assess.scoring.forms.rescore_form import RescoreForm
 from pre_award.assess.scoring.helpers import get_scoring_class
@@ -31,6 +34,7 @@ scoring_bp = Blueprint(
     "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/score",
     methods=["POST", "GET"],
 )
+@check_approval_or_change_request_allowed_uncompeted_only
 @check_access_application_id(roles_required=["LEAD_ASSESSOR", "ASSESSOR"])
 def score(
     application_id,
