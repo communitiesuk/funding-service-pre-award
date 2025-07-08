@@ -12,6 +12,7 @@ from pre_award.assess.services.data_services import (
     get_fund,
     get_score_and_justification,
     get_sub_criteria,
+    is_uncompeted_flow,
     match_comment_to_theme,
     match_score_to_user_account,
     submit_score_and_justification,
@@ -82,7 +83,9 @@ def score(
         else None
     )
 
-    assessment_status = determine_assessment_status(sub_criteria.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        sub_criteria.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
     flag_status = determine_flag_status(flags_list)
 
     # call to assessment store to get latest score.
