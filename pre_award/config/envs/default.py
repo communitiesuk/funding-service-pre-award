@@ -325,7 +325,7 @@ class DefaultConfig(object):
     FEATURE_CONFIG = {
         "TAGGING": True,
         "ASSESSMENT_ASSIGNMENT": False,
-        "UNCOMPETED_WORKFLOW": False,
+        "UNCOMPETED_WORKFLOW": True,
         **CommonConfig.dev_feature_configuration,
     }
 
