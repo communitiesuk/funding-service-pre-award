@@ -1,6 +1,6 @@
 {% from "assess/macros/link_to_download_contract_docs.html" import link_to_download_contract_docs %}
 
-{% macro assessment_complete(state, csrf_token, application_id) %}
+{% macro assessment_complete(state, csrf_token, application_id, is_uncompeted_flow_flag) %}
 
 {% if state.workflow_status=="IN_PROGRESS" %}
 
@@ -26,8 +26,11 @@
             <h2 class="assessment-alert__heading govuk-heading-l" autofocus>Assessment complete</h2>
             <p class="govuk-body">You have marked this assessment as complete.</p>
             <p class="govuk-body">
-                It may now be selected for quality assurance (QA). New scores and rationales could be added if this
-                happens.
+                {% if is_uncompeted_flow_flag %}
+                    It may now be selected for moderation. No changes can be made after moderation.
+                {% else %}
+                    It may now be selected for quality assurance (QA). New scores and rationales could be added if this happens.
+                {% endif %}
             </p>
             <p class="govuk-body">
                 If you would like to provide feedback on the assessment process, you can do so via this Microsoft Form: <a href="{{ config.ASSESSOR_FEEDBACK_SURVEY_MS_FORMS_URL }}">Assessor feedback survey</a>.

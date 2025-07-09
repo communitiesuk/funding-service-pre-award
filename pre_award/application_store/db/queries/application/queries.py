@@ -324,11 +324,17 @@ def submit_application(application_id) -> Applications:  # noqa: C901
         if existing_application and fund.funding_type == "UNCOMPETED" and fund.short_name != "DPIF":
             # For uncompeted funds, the application may already exist and this may be a resubmission.
 
-            # updating row json blob
-            change_requests = existing_application.change_requests
+            # Filter change requests that are not STOPPED (Have been accepted and scored))
+            active_change_requests = [
+                cr for cr in existing_application.change_requests if cr.latest_status != FlagStatus.STOPPED
+            ]
+
+            # Collect field_ids from active change requests
             change_request_fields = set(
-                field_id for change_request in change_requests for field_id in change_request.field_ids
+                field_id for change_request in active_change_requests for field_id in change_request.field_ids
             )
+
+            # updating row json blob
             update_application_fields(existing_application.jsonb_blob, row["jsonb_blob"], change_request_fields)
             if existing_application.workflow_status == WorkflowStatus.CHANGE_REQUESTED:
                 row["workflow_status"] = WorkflowStatus.CHANGE_RECEIVED
@@ -344,15 +350,17 @@ def submit_application(application_id) -> Applications:  # noqa: C901
 
             change_requests = existing_application.change_requests
             for change_request in change_requests:
-                flag_update = FlagUpdate(
-                    justification="Applicant updated their submission",
-                    status=FlagStatus.RESOLVED,
-                    assessment_flag_id=change_request.id,
-                    user_id=application.account_id,
-                )
-                change_request.updates.append(flag_update)
-                change_request.latest_status = flag_update.status
-                db.session.add(change_request)
+                # Only process change requests that are not STOPPED (already accepted and scored)
+                if change_request.latest_status != FlagStatus.STOPPED:
+                    flag_update = FlagUpdate(
+                        justification="Applicant updated their submission",
+                        status=FlagStatus.RESOLVED,
+                        assessment_flag_id=change_request.id,
+                        user_id=application.account_id,
+                    )
+                    change_request.updates.append(flag_update)
+                    change_request.latest_status = flag_update.status
+                    db.session.add(change_request)
 
             db.session.commit()
         else:

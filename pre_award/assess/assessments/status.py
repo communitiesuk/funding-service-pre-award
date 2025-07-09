@@ -62,10 +62,20 @@ def update_ar_status_to_qa_completed(application_id, user_id):
         )
 
 
-def is_approval_or_change_request_allowed(state, sub_criteria_id):
-    """Return True only if sub_criteria's status is in  'COMPLETED' or 'CHANGE_REQUESTED'."""
+def is_score_or_change_request_allowed_uncompeted(state, sub_criteria_id):
+    """
+    Return True if 'Accept and score' or change request is allowed.
+
+    Accept(Score)/change request is allowed only if:
+    - The application has NOT been marked as QA complete (Moderation complete for uncompeted funds)
+    - The sub-criteria is NOT already in 'CHANGE_REQUESTED' status
+    """
+    if state.is_qa_complete:
+        return False
+
     for criteria in state.criterias:
         for sub in criteria.sub_criterias:
-            if sub.id == sub_criteria_id and sub.status in [Status.COMPLETED.name, Status.CHANGE_REQUESTED.name]:
+            if sub.id == sub_criteria_id and sub.status == Status.CHANGE_REQUESTED.name:
                 return False
+
     return True

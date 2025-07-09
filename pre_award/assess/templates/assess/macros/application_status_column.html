@@ -1,8 +1,14 @@
-{% macro application_status_column(application_status, application_progress, assessment_statuses) %}
+{% macro application_status_column(application_status, application_progress, assessment_statuses, is_uncompeted_flow_flag) %}
 
     <td class="govuk-table__cell">
     {% if application_status == "QA_COMPLETED" %}
-    <span>{{ assessment_statuses[application_status] }}</span>
+        <span>
+        {% if is_uncompeted_flow_flag %}
+            Moderation complete
+        {% else %}
+            {{ assessment_statuses[application_status] }}
+        {% endif %}
+        </span>
     {% elif application_status == "STOPPED" %}
     <span class="stopped-tag">
         {{ assessment_statuses[application_status] }}

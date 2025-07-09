@@ -341,12 +341,12 @@ def setup_application_with_requests_and_scores(db):
                         application_id=application_id,
                         sections_to_flag=sections,
                         latest_allocation=[],
-                        latest_status=FlagStatus.RAISED,
+                        latest_status=FlagStatus.RESOLVED,
                         updates=[
                             FlagUpdate(
                                 justification="None",
                                 user_id=user_id,
-                                status=FlagStatus.RAISED,
+                                status=FlagStatus.RESOLVED,
                                 allocation=None,
                             )
                         ],
@@ -442,7 +442,7 @@ def test_change_request_multiple_sections_all_accepted(db, setup_application_wit
     assert result is True
 
 
-def test_approve_sub_criteria_resolves_change_request(db, setup_application_with_requests_and_scores):
+def test_approve_sub_criteria_stops_change_request(db, setup_application_with_requests_and_scores):
     section_1 = str(uuid.uuid4())
     application_id = setup_application_with_requests_and_scores(flag_data=[[section_1], [section_1]])
 
@@ -451,7 +451,7 @@ def test_approve_sub_criteria_resolves_change_request(db, setup_application_with
     )
 
     change_requests = get_change_requests_for_application(application_id)
-    assert all(cr.latest_status == FlagStatus.RESOLVED for cr in change_requests)
+    assert all(cr.latest_status == FlagStatus.STOPPED for cr in change_requests)
 
 
 def test_approve_sub_criteria_creates_score(db, setup_application_with_requests_and_scores):
@@ -502,12 +502,12 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(setup_ap
     )
 
     change_requests = get_change_requests_for_application(application_id, only_raised=False, sort_by_update=True)
-    resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
-    unresolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RAISED]
+    accepted_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.STOPPED]
+    unaccepted_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
 
-    assert len(resolved_requests) == 1
-    assert len(unresolved_requests) == 1
-    assert unresolved_requests[0].sections_to_flag == [sub_criteria_id_2]
+    assert len(accepted_requests) == 1
+    assert len(unaccepted_requests) == 1
+    assert unaccepted_requests[0].sections_to_flag == [sub_criteria_id_2]
 
     application = db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
     assert application.workflow_status == ApplicationStatus.CHANGE_REQUESTED
@@ -522,11 +522,11 @@ def test_approve_sub_criteria_multiple_change_requests_diff_subcriteria(setup_ap
     )
 
     change_requests = get_change_requests_for_application(application_id)
-    resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
-    unresolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RAISED]
+    accepted_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.STOPPED]
+    unaccepted_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RAISED]
 
-    assert len(resolved_requests) == 2
-    assert len(unresolved_requests) == 0
+    assert len(accepted_requests) == 2
+    assert len(unaccepted_requests) == 0
 
     application = db.session.query(AssessmentRecord).filter_by(application_id=application_id).first()
     assert application.workflow_status == ApplicationStatus.IN_PROGRESS
@@ -545,8 +545,8 @@ def test_accept_sub_criteria_multiple_change_requests_same_subcriteria(setup_app
     )
 
     change_requests = get_change_requests_for_application(application_id)
-    resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
-    unresolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RAISED]
+    resolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.STOPPED]
+    unresolved_requests = [cr for cr in change_requests if cr.latest_status == FlagStatus.RESOLVED]
 
     assert len(resolved_requests) == 2
     assert len(unresolved_requests) == 0

@@ -1,9 +1,7 @@
 from flask import abort, current_app, g, redirect, render_template, request, url_for
 
 from pre_award.assess.authentication.validation import check_access_application_id
-from pre_award.assess.flagging.forms.continue_application_form import (
-    ContinueApplicationForm,
-)
+from pre_award.assess.flagging.forms.continue_application_form import ContinueApplicationForm
 from pre_award.assess.flagging.forms.flag_form import FlagApplicationForm
 from pre_award.assess.flagging.forms.resolve_flag_form import ResolveFlagForm
 from pre_award.assess.flagging.helpers import resolve_application
@@ -12,6 +10,7 @@ from pre_award.assess.services.data_services import (
     get_flag,
     get_flags,
     get_sub_criteria_banner_state,
+    is_uncompeted_flow,
     submit_flag,
 )
 from pre_award.assess.services.models.flag import FlagType
@@ -68,7 +67,9 @@ def flag(application_id):
     sub_criteria_banner_state = get_sub_criteria_banner_state(application_id)
 
     flags_list = get_flags(application_id)
-    assessment_status = determine_assessment_status(state.workflow_status, state.is_qa_complete)
+    assessment_status = determine_assessment_status(
+        state.workflow_status, state.is_qa_complete, is_uncompeted_flag=is_uncompeted_flow(state.fund_id)
+    )
     flag_status = determine_flag_status(flags_list)
     return render_template(
         "flagging/flag_application.html",

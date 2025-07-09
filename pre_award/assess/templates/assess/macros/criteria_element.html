@@ -2,7 +2,7 @@
 {% macro criteria_element(criteria, name_classes, application_id, max_possible_sub_criteria_score) %}
 
 {# Determine if the scoring details should be shown #}
-{% set show_scoring = not is_uncompeted_flow(fund) and g.access_controller.has_any_assessor_role %}
+{% set show_scoring = g.access_controller.has_any_assessor_role %}
 
     {% set rows = [] %}
     {% for sub_criteria in criteria.sub_criterias %}
@@ -67,7 +67,7 @@
 
     <h3 class="{{ name_classes or '' }}">{{ criteria.name }}</h3>
 
-    {% if not is_uncompeted_flow(fund) %}
+    {% if show_scoring %}
         <p class="govuk-body govuk-!-margin-bottom-2">
             <strong>{{ (criteria.weighting * 100)|int }}%</strong> of overall score.
         </p>

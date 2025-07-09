@@ -7,7 +7,9 @@ from flask import abort, g
 from fsd_utils.authentication.decorators import login_required
 
 from pre_award.assess.assessments.models.round_status import RoundStatus, determine_round_status
-from pre_award.assess.services.data_services import get_application_metadata, get_fund, get_round
+from pre_award.assess.assessments.status import is_score_or_change_request_allowed_uncompeted
+from pre_award.assess.services.data_services import get_application_metadata, get_fund, get_round, is_uncompeted_flow
+from pre_award.assess.services.shared_data_helpers import get_state_for_tasklist_banner
 from pre_award.assess.shared.helpers import get_ttl_hash, get_value_from_request
 from pre_award.config import Config
 
@@ -189,6 +191,53 @@ check_access_fund_short_name_round_sn = functools.partial(
     fund_key="fund_short_name",
     round_key="round_short_name",
 )
+
+
+def check_approval_or_change_request_allowed_uncompeted_only(func):
+    """
+    Decorator to enforce access control for endpoints related to scoring and requesting changes
+    in the context of 'uncompeted' fund flows.
+
+    This decorator checks whether the current application and sub-criteria are eligible for
+    scoring or change requests based on the application's state and fund type. If the fund is
+    part of an uncompeted flow and there are pending change requests, access is denied with a
+    context-specific 403 error message.
+
+    The error message varies depending on the endpoint being accessed:
+    - For 'request_changes': informs that changes cannot be requested due to pending requests.
+    - For 'score': informs that scoring is blocked due to pending change requests.
+    - For other endpoints: provides a generic access denial message.
+
+    Args:
+        func (Callable): The view function to wrap.
+
+    Returns:
+        Callable: The wrapped function with access control applied.
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        application_id = kwargs.get("application_id") or get_value_from_request(("application_id",))
+        sub_criteria_id = kwargs.get("sub_criteria_id") or get_value_from_request(("sub_criteria_id",))
+
+        if not application_id or not sub_criteria_id:
+            abort(400, "Missing application or sub-criteria ID.")
+
+        state = get_state_for_tasklist_banner(application_id)
+        fund_id = state.fund_id if hasattr(state, "fund_id") else get_application_metadata(application_id)["fund_id"]
+
+        if is_uncompeted_flow(fund_id):
+            if not is_score_or_change_request_allowed_uncompeted(state, sub_criteria_id):
+                if func.__name__ == "request_changes":
+                    abort(403, "You cannot request changes when there are still pending change requests.")
+                elif func.__name__ == "score":
+                    abort(403, "Scoring is not allowed when there are still pending change requests.")
+                else:
+                    abort(403, "Action not allowed for this application at this stage.")
+
+        return func(*args, **kwargs)
+
+    return wrapper
 
 
 class AssessmentAccessController(object):
