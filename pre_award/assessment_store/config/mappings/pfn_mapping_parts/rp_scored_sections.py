@@ -8,11 +8,11 @@ scored_sections = [
         "sub_criteria": [
             {
                 "id": "do-the-activities-being-pursued-by-a-place-fit-with-the-plan-for-neighbourhoods-programme-objectives",
-                "name": "Do the activities being pursued by a place fit with the Plan for Neighbourhoods programme objectives?",
+                "name": "Activities. Do the activities being pursued by a place fit with the Plan for Neighbourhoods programme objectives?",
                 "themes": [
                     {
                         "id": "do-the-activities-being-pursued-by-a-place-fit-with-the-plan-for-neighbourhoods-programme-objectives",
-                        "name": "Do the activities being pursued by a place fit with the Plan for Neighbourhoods programme objectives?",
+                        "name": "Activities. Do the activities being pursued by a place fit with the Plan for Neighbourhoods programme objectives?",
                         "answers": [
                             {
                                 "field_id": "yMWAhw",
@@ -232,11 +232,11 @@ scored_sections = [
             },
             {
                 "id": "does-the-place-have-a-credible-and-realistic-expenditure-forecast-fitting-with-the-funding-flexibility-rules",
-                "name": "Does the place have a credible and realistic expenditure forecast, fitting with the funding flexibility rules?",
+                "name": "Expenditure. Does the place have a credible and realistic expenditure forecast, fitting with the funding flexibility rules?",
                 "themes": [
                     {
                         "id": "does-the-place-have-a-credible-and-realistic-expenditure-forecast-fitting-with-the-funding-flexibility-rules",
-                        "name": "Does the place have a credible and realistic expenditure forecast, fitting with the funding flexibility rules?",
+                        "name": "Expenditure. Does the place have a credible and realistic expenditure forecast, fitting with the funding flexibility rules?",
                         "answers": [
                             {
                                 "field_id": "lREPmq",
@@ -877,11 +877,11 @@ scored_sections = [
             },
             {
                 "id": "have-the-local-community-and-key-stakeholders-been-key-in-informing-and-shaping-the-plan-and-will-they-be-actively-involved-in-evolution-and-delivery-of-the-plan-throughout-the-next-decade",
-                "name": "Have the local community and key stakeholders been key in informing and shaping the plan and will they be actively involved in evolution and delivery of the plan throughout the next decade?",
+                "name": "Community. Have the local community and key stakeholders been key in informing and shaping the plan and will they be actively involved in evolution and delivery of the plan throughout the next decade?",
                 "themes": [
                     {
                         "id": "have-the-local-community-and-key-stakeholders-been-key-in-informing-and-shaping-the-plan-and-will-they-be-actively-involved-in-evolution-and-delivery-of-the-plan-throughout-the-next-decade",
-                        "name": "Have the local community and key stakeholders been key in informing and shaping the plan and will they be actively involved in evolution and delivery of the plan throughout the next decade?",
+                        "name": "Community. Have the local community and key stakeholders been key in informing and shaping the plan and will they be actively involved in evolution and delivery of the plan throughout the next decade?",
                         "answers": [
                             {
                                 "field_id": "gAJCVy",
@@ -1101,11 +1101,11 @@ scored_sections = [
             },
             {
                 "id": "will-appropriate-governance-arrangements-be-in-place-to-fully-realise-the-intended-role-of-the-neighbourhood-board-and-to-allow-the-board-to-work-in-partnership-with-the-accountable-body-to-deliver-the-programme-successfully",
-                "name": "Will appropriate governance arrangements be in place to fully realise the intended role of the Neighbourhood Board and to allow the board to work in partnership with the accountable body to deliver the programme successfully?",
+                "name": "Governance. Will appropriate governance arrangements be in place to fully realise the intended role of the Neighbourhood Board and to allow the board to work in partnership with the accountable body to deliver the programme successfully?",
                 "themes": [
                     {
                         "id": "will-appropriate-governance-arrangements-be-in-place-to-fully-realise-the-intended-role-of-the-neighbourhood-board-and-to-allow-the-board-to-work-in-partnership-with-the-accountable-body-to-deliver-the-programme-successfully",
-                        "name": "Will appropriate governance arrangements be in place to fully realise the intended role of the Neighbourhood Board and to allow the board to work in partnership with the accountable body to deliver the programme successfully?",
+                        "name": "Governance. Will appropriate governance arrangements be in place to fully realise the intended role of the Neighbourhood Board and to allow the board to work in partnership with the accountable body to deliver the programme successfully?",
                         "answers": [
                             {
                                 "field_id": "qjonxe",
@@ -1267,11 +1267,11 @@ scored_sections = [
             },
             {
                 "id": "will-appropriate-control-processes-will-be-in-place-for-management-of-public-funds",
-                "name": "Will appropriate control processes will be in place for management of public funds?",
+                "name": "Management. Will appropriate control processes will be in place for management of public funds?",
                 "themes": [
                     {
                         "id": "will-appropriate-control-processes-will-be-in-place-for-management-of-public-funds",
-                        "name": "Will appropriate control processes will be in place for management of public funds?",
+                        "name": "Management. Will appropriate control processes will be in place for management of public funds?",
                         "answers": [
                             {
                                 "field_id": "lsLcXO",
