@@ -70,8 +70,8 @@ from pre_award.assess.assessments.status import (
 from pre_award.assess.authentication.validation import (
     check_access_application_id,
     check_access_fund_short_name_round_sn,
-    check_approval_or_change_request_allowed_uncompeted_only,
     has_access_to_fund,
+    restrict_uncompeted_actions,
 )
 from pre_award.assess.config.display_value_mappings import (
     assessment_statuses,
@@ -1338,7 +1338,7 @@ def display_sub_criteria(  # noqa: C901
     "/application_id/<application_id>/sub_criteria_id/<sub_criteria_id>/theme_id/<theme_id>/request_change",
     methods=["GET", "POST"],
 )
-@check_approval_or_change_request_allowed_uncompeted_only
+@restrict_uncompeted_actions(message="You cannot request changes when there are still pending change requests.")
 @check_access_application_id(roles_required=[Config.LEAD_ASSESSOR, Config.ASSESSOR])
 def request_changes(application_id, sub_criteria_id, theme_id):
     sub_criteria = get_sub_criteria(application_id, sub_criteria_id)
