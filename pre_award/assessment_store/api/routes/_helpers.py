@@ -24,45 +24,36 @@ def compress_response(data):
     return response
 
 
+def _has_flag_status(change_requests, sub_criteria_id, status_name):
+    return any(
+        sub_criteria_id in cr.sections_to_flag and cr.latest_status.name == status_name for cr in change_requests
+    )
+
+
 def _derive_status(
     score_map: dict,
     comment_map: dict,
-    change_requests: list[AssessmentFlag],
+    change_requests: list,
     sub_criteria_id: str,
 ) -> str:
-    has_flag_with_raised_status = False
-    has_flag_with_received_status = False
-    has_flag_with_accepted_status = False
-    for change_request in change_requests:
-        if sub_criteria_id in change_request.sections_to_flag:
-            if change_request.latest_status.name == FlagType.RAISED.name:
-                # Assessor has requested a change — flag is in 'raised' state
-                has_flag_with_raised_status = True
-                break
-
-            if change_request.latest_status.name == FlagType.RESOLVED.name:
-                # Applicant has responded to the change request — flag is 'resolved'
-                has_flag_with_received_status = True
-
-            if change_request.latest_status.name == FlagType.STOPPED.name:
-                # Assessor has accepted the applicant's response — flag is 'stopped'
-                has_flag_with_accepted_status = True
-
-    if has_flag_with_raised_status:
+    if _has_flag_status(change_requests, sub_criteria_id, FlagType.RAISED.name):
+        # Assessor has requested a change — flag is in 'raised' state
         return Status.CHANGE_REQUESTED.name
 
-    if has_flag_with_received_status:
+    if _has_flag_status(change_requests, sub_criteria_id, FlagType.RESOLVED.name):
+        # Applicant has responded to the change request — flag is 'resolved'
         return Status.CHANGE_RECEIVED.name
 
-    if has_flag_with_accepted_status or sub_criteria_id in score_map:
+    if _has_flag_status(change_requests, sub_criteria_id, FlagType.STOPPED.name) or sub_criteria_id in score_map:
         # Either the change request was accepted and scored after applicant responded to it (uncompeted flow)
         # or the sub-criteria has been scored (competed flow)
         return Status.COMPLETED.name
 
     if sub_criteria_id in comment_map:
-        return Status.IN_PROGRESS.name  # if we've commented, but not scored, we're in progress
+        # If we've commented, but not scored, we're in progress
+        return Status.IN_PROGRESS.name
 
-    # if we haven't commented or scored, we're not started
+    # If we haven't commented or scored, we're not started
     return Status.NOT_STARTED.name
 
 
