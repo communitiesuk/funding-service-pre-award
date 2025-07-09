@@ -1316,13 +1316,10 @@ class TestRoutes:
         mock_get_funds,
         mock_get_round,
         mock_get_application_metadata,
-        mock_get_comments,
         mock_get_sub_criteria_theme,
         mock_get_assessor_tasklist_state,
         mock_get_bulk_accounts,
         mock_get_assessment_flags,
-        mock_get_scores,
-        expect_flagging,
         mock_uncompeted_pfn_fund,
     ):
         soup = get_subcriteria_soup(request, assess_test_client)
