@@ -36,10 +36,10 @@ class ZeroToThreeScoreForm(ScoreForm):
     def __init__(self):
         ScoreForm.__init__(self)
         self.scores_list = [
-            (3, "Exceeds requirements"),
-            (2, "Meets requirements"),
-            (1, "Partially meets requirements"),
-            (0, "No evidence"),
+            (3, "Approved with feedback"),
+            (2, "Approved with conditions"),
+            (1, "Not approved"),
+            (0, "Insufficient information provided"),
         ]
         self.max_score = 3
 
