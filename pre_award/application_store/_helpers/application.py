@@ -135,6 +135,10 @@ def send_submit_notification(
 
 
 def send_change_received_notification(fund, round_data):
+    if (
+        fund.short_name == "DPIF" or fund.funding_type != "UNCOMPETED"
+    ):  # TODO remove DPIF conditon once we move it to COMPETITIVE funds`
+        return
     get_notification_service().send_change_received_email(
         email_address=round_data.contact_email,
         fund_name=fund.name_json["en"],
