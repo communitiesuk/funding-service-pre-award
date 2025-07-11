@@ -17,7 +17,7 @@
     <div class="govuk-!-margin-bottom-8">
         {% if has_active_change_request %}
             <p class="govuk-body">You requested changes to this section and the applicant has not responded yet.</p>
-            <p class="govuk-body">Once the applicant has sent their response, you can accept and score the changes or request another change.</p>
+            <p class="govuk-body">Once the applicant has sent their response, you can approve and score the changes or request another change.</p>
         {% elif unrequested_changes %}
             {{ govukWarningText({
                 "text": "The applicant has made unrequested changes",
@@ -27,18 +27,18 @@
                 The applicant has updated their responses based on your change requests. They have also made unrequested changes.
             </p>
             <p class="govuk-body">
-                Accept and score all responses or request another change.
+                Approve and score all responses or request another change.
             </p>
         {% elif change_requests %}
             <p class="govuk-body">
                 The applicant updated their response following your change request.
             </p>
             <p class="govuk-body">
-                You can accept and score the updates or request another change.
+                You can approve and score the updates or request another change.
             </p>
         {% else %}
             <p class="govuk-body">
-                Review the applicant's responses and 'Accept and score' when you're ready.
+                Review the applicant's responses and 'Approve and score' when you're ready.
             </p>
             <p class="govuk-body">
                 If you need more information from the applicant about one of these responses or want to ask them to clarify something, you can 'Request a change'.

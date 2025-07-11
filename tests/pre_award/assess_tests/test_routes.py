@@ -1325,7 +1325,7 @@ class TestRoutes:
         soup = get_subcriteria_soup(request, assess_test_client)
         # Check that the expected text exists in a specified paragraph element.
         assert (
-            "Review the applicant's responses and 'Accept and score' when you're ready."
+            "Review the applicant's responses and 'Approve and score' when you're ready."
             in soup.findAll("p", class_="govuk-body")[4].text
         )
 
