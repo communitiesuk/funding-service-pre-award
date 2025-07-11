@@ -13,7 +13,7 @@
                 application_id=application_id,
                 sub_criteria_id=sub_criteria.id
             ) %}
-            {% set score_text = "Accept and score" if not score else "Accept and rescore" %}
+            {% set score_text = "Approve and score" if not score else "Approve and rescore" %}
             {{ govukButton({
                 "text": score_text,
                 "href": score_url
