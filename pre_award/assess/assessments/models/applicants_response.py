@@ -257,6 +257,19 @@ def _convert_to_month_year(input_date):
     return str(date_object.strftime("%B %Y"))
 
 
+def parse_date(val):
+    """Parse ISO date strings and format as 'd Month yyyy' (e.g., 1 January 2025)."""
+    try:
+        # Try full ISO format with time and Z
+        return datetime.strptime(val, "%Y-%m-%dT%H:%M:%S.%fZ").strftime("%-d %B %Y")
+    except Exception:
+        try:
+            # Try just date part
+            return datetime.strptime(val, "%Y-%m-%d").strftime("%-d %B %Y")
+        except Exception:
+            return val  # fallback if parsing fails
+
+
 def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
     """
     :param item: dict
@@ -338,6 +351,15 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
                 label=_get_response_label(item),
                 answer=ANSWER_NOT_PROVIDED_DEFAULT,
             )
+        elif field_type in ("multiInputField",):
+            # Format dates in multiInputField columns
+            for col in item["answer"]:
+                col_title, col_values, col_type = col
+                if col_type == "text" and "date" in col_title.lower():
+                    if isinstance(col_values, list):
+                        for i, val in enumerate(col_values):
+                            col_values[i] = parse_date(val)
+            return NewAddAnotherTable.from_dict(item)
 
         return NewAddAnotherTable.from_dict(item)
 
