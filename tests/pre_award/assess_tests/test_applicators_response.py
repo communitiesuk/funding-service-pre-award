@@ -458,6 +458,62 @@ class TestApplicatorsResponseComponentFactory:
             if "unrequested_change" in item:
                 assert result.label == ResponseLabel.UNREQUESTED_CHANGE
 
+    @pytest.mark.parametrize(
+        "answer, expected_dates",
+        [
+            (
+                [
+                    ["Estimated start date", ["2026-01-01T00:00:00.000Z"], "text"],
+                    ["Estimated completion date", ["2026-03-01T00:00:00.000Z"], "text"],
+                    ["Summary of activities", ["Test activities 1"], "html"],
+                ],
+                ["1 January 2026", "1 March 2026"],
+            ),
+            (
+                [
+                    ["Estimated start date", ["2026-04-01"], "text"],
+                    ["Estimated completion date", ["2026-05-01"], "text"],
+                    ["Summary of activities", ["Some activity."], "html"],
+                ],
+                ["1 April 2026", "1 May 2026"],
+            ),
+            (
+                [
+                    ["Estimated start date", ["2026-06-15T00:00:00.000Z"], "text"],
+                    ["Estimated completion date", ["2026-07-20"], "text"],
+                    ["Summary of activities", ["Another activity."], "html"],
+                ],
+                ["15 June 2026", "20 July 2026"],
+            ),
+            (
+                [
+                    ["Estimated start date", ["2026-11-11T00:00:00.000Z"], "text"],
+                    ["Estimated completion date", ["2026-12-11"], "text"],
+                    ["Summary of activities", ["Yet another activity."], "html"],
+                ],
+                ["11 November 2026", "11 December 2026"],
+            ),
+        ],
+    )
+    def test_multiinputfield_date_formatting(self, answer, expected_dates):
+        """Test to verify that the date fields inside multiInputField table components correctly format
+        from two different formats to 'd Month Year' format:
+        from (ISO 8601 format with time and timezone (e.g., "2026-01-01T00:00:00.000Z") and
+        without time (e.g., "2026-01-01"))."""
+        item = {
+            "presentation_type": "table",
+            "field_type": "multiInputField",
+            "question": "Key activities and dates",
+            "answer": answer,
+            "field_id": "field_5",
+        }
+        with self.test_app.app_context():
+            result = _ui_component_from_factory(item, "app_123")
+            assert isinstance(result, NewAddAnotherTable)
+            # Check that dates are formatted as expected
+            assert result.rows[0][0]["text"] == expected_dates[0]
+            assert result.rows[0][1]["text"] == expected_dates[1]
+
 
 class TestConvertHeadingDescriptionAmountToGroupedFields:
     @pytest.mark.parametrize(

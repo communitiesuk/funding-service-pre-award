@@ -356,8 +356,9 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
             for col in item["answer"]:
                 col_title, col_values, col_type = col
                 if col_type == "text" and "date" in col_title.lower():
-                    for i, val in enumerate(col_values):
-                        col_values[i] = parse_date(val)
+                    if isinstance(col_values, list):
+                        for i, val in enumerate(col_values):
+                            col_values[i] = parse_date(val)
             return NewAddAnotherTable.from_dict(item)
 
         return NewAddAnotherTable.from_dict(item)
