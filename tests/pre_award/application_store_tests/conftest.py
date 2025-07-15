@@ -376,3 +376,335 @@ def mocked_get_fund(mocker):
             funding_type="COMPETED",
         ),
     )
+
+
+@pytest.fixture()
+def pfn_application_json_extract():
+    return {
+        "language": "en",
+        "project_name": "Test Council",
+        "started_at": "2025-06-11T15:15:31.337210",
+        "status": "SUBMITTED",
+        "last_edited": "2025-07-08T14:24:15.643035",
+        "date_submitted": "2025-07-14T23:25:58.425162",
+        "round_name": "Regeneration Plan",
+        "forms": [
+            {
+                "status": "COMPLETED",
+                "name": "pfn-rp-declarations",
+                "questions": [
+                    {
+                        "category": "FabDefault",
+                        "question": "Which country is your place based in?",
+                        "fields": [
+                            {
+                                "key": "lsLcXO",
+                                "title": "Which country is your place based in?",
+                                "type": "list",
+                                "answer": "England",
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Confirm you have read and agree with the declarations.",
+                        "fields": [
+                            {
+                                "key": "qpeEcB",
+                                "title": "Confirm you have read and agree with the declarations.",
+                                "type": "list",
+                                "answer": ["I confirm that I have read and agree with the declarations"],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": None,
+                        "question": "MarkAsComplete",
+                        "fields": [
+                            {
+                                "key": "markAsComplete",
+                                "title": "Do you want to mark this section as complete?",
+                                "type": "boolean",
+                                "answer": True,
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                ],
+            },
+            {
+                "status": "COMPLETED",
+                "name": "pfn-rp-payment-profile-and-spend-forecast",
+                "questions": [
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us your indicative spend forecast for capacity funding "
+                        "throughout the programme.",
+                        "fields": [
+                            {
+                                "key": "lREPmq",
+                                "title": "Tell us your indicative spend forecast for capacity "
+                                "funding throughout the programme.",
+                                "type": "multiInput",
+                                "answer": [
+                                    {
+                                        "kzCRNQ": 1000,
+                                        "hWffef": 1000,
+                                        "exKKtD": 1000,
+                                        "SWBFvn": 1000,
+                                        "OdZjMh": 1000,
+                                        "DbQDzt": 1000,
+                                        "mjXkxo": 1000,
+                                        "jhEJRB": 1000,
+                                        "nZFwqm": 1000,
+                                        "IlUUxg": 1000,
+                                        "GCnfMS": 1000,
+                                        "rQUbSC": 1000,
+                                    }
+                                ],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us your indicative spend forecast for programme delivery "
+                        "funding (capital) throughout the programme.",
+                        "fields": [
+                            {
+                                "key": "igStco",
+                                "title": "Tell us your indicative spend forecast for programme "
+                                "delivery funding (capital) throughout the programme.",
+                                "type": "multiInput",
+                                "answer": [
+                                    {
+                                        "JoEKPs": 1500,
+                                        "MaHzlK": 2500,
+                                        "cSAvLl": 3500,
+                                        "lXHVDo": 4500,
+                                        "yksYVj": 5500,
+                                        "foBOGa": 6500,
+                                        "BmNYxJ": 7500,
+                                        "UYiAHd": 8500,
+                                        "LzXJTJ": 9500,
+                                        "LwEzPI": 10500,
+                                    }
+                                ],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us your indicative spend forecast for programme delivery "
+                        "funding (revenue) throughout the programme.",
+                        "fields": [
+                            {
+                                "key": "ZaxlkA",
+                                "title": "Tell us your indicative spend forecast for programme "
+                                "delivery funding (revenue) throughout the programme.",
+                                "type": "multiInput",
+                                "answer": [
+                                    {
+                                        "YQGJbm": 3000,
+                                        "VmCcNW": 4000,
+                                        "pCCkfZ": 5000,
+                                        "aaOhAH": 6000,
+                                        "ehgQSG": 7000,
+                                        "mmMPXd": 8000,
+                                        "iLMwbk": 9000,
+                                        "ThaiNt": 10000,
+                                        "ROCfYU": 11000,
+                                        "qMNUxP": 12000,
+                                    }
+                                ],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us how you have developed your indicative spend forecast "
+                        "and why it is important for spend to occur in these years.",
+                        "fields": [
+                            {
+                                "key": "ZzaODW",
+                                "title": "Tell us how you have developed your indicative spend "
+                                "forecast and why it is important for spend to occur in these years.",
+                                "type": "text",
+                                "answer": "Something.",
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us your indicative spend forecast for pre-approved interventions in year 1.",
+                        "fields": [
+                            {
+                                "key": "MEaRya",
+                                "title": "Tell us your indicative spend forecast for pre-approved "
+                                "interventions in year 1.",
+                                "type": "multiInput",
+                                "answer": [
+                                    {
+                                        "zsdDQk": 4000,
+                                        "DBqPzO": 4000,
+                                        "MNzARq": 4000,
+                                        "IVFTCQ": 4000,
+                                        "nqmOwu": 4000,
+                                        "UbTbvU": 4000,
+                                        "qNiSsO": 4000,
+                                        "hNACOp": 4000,
+                                    }
+                                ],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us your indicative spend forecast for pre-approved interventions in year 2.",
+                        "fields": [
+                            {
+                                "key": "Grlvkx",
+                                "title": "Tell us your indicative spend forecast for pre-approved "
+                                "interventions in year 2.",
+                                "type": "multiInput",
+                                "answer": [
+                                    {
+                                        "wYgMdi": 5000,
+                                        "YlgCLY": 5000,
+                                        "ESRHVS": 5000,
+                                        "qUrvtI": 5000,
+                                        "VsEWYE": 5000,
+                                        "YIpOAe": 5000,
+                                        "lSlyHK": 5000,
+                                        "TaXzeh": 5000,
+                                    }
+                                ],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us your indicative spend forecast for pre-approved interventions in year 3.",
+                        "fields": [
+                            {
+                                "key": "gEOHHl",
+                                "title": "Tell us your indicative spend forecast for pre-approved "
+                                "interventions in year 3.",
+                                "type": "multiInput",
+                                "answer": [
+                                    {
+                                        "FwurgE": 6000,
+                                        "tmOkiG": 6000,
+                                        "sSQLwH": 6000,
+                                        "uUTyWH": 6000,
+                                        "ZsNcbA": 6000,
+                                        "iuTXHe": 6000,
+                                        "lXTtKN": 6000,
+                                        "FfSahl": 6000,
+                                    }
+                                ],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us your indicative spend forecast for pre-approved interventions in year 4.",
+                        "fields": [
+                            {
+                                "key": "yYqyaG",
+                                "title": "Tell us your indicative spend forecast for pre-approved "
+                                "interventions in year 4.",
+                                "type": "multiInput",
+                                "answer": [
+                                    {
+                                        "ygHERI": 5900,
+                                        "QoEuWY": 5900,
+                                        "QpOTwg": 5900,
+                                        "jCEizE": 5900,
+                                        "zODcnS": 5900,
+                                        "pAnzYr": 5900,
+                                        "ZKFXMr": 5900,
+                                        "flkyla": 5900,
+                                    }
+                                ],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us your indicative spend forecast for any off-menu "
+                        "interventions in the first investment period (financial years 2026 to 2030).",
+                        "fields": [
+                            {
+                                "key": "QEywSA",
+                                "title": "Tell us your indicative spend forecast for any off-menu "
+                                "interventions in the first investment period.",
+                                "type": "multiInput",
+                                "answer": [{"NCgxYf": 6700, "afjufs": 6700, "EbZeKz": 6700, "MRjEso": 6700}],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us your indicative spend forecast for management costs in the "
+                        "first investment period (financial years 2026 to 2030).",
+                        "fields": [
+                            {
+                                "key": "aUQnBP",
+                                "title": "Tell us your indicative spend forecast for management costs "
+                                "in the first investment period.",
+                                "type": "multiInput",
+                                "answer": [
+                                    {"QVuIFv": 8900, "GHFRTw": 8900, "sAelLv": 8900, "ZvlDXd": 8900},
+                                    {"QVuIFv": 7600, "GHFRTw": 7600, "sAelLv": 7600, "ZvlDXd": 7600},
+                                ],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": "FabDefault",
+                        "question": "Tell us about any unknown uses of funding in the first investment "
+                        "period (financial years 2026 to 2030).",
+                        "fields": [
+                            {
+                                "key": "aLeDKy",
+                                "title": "Tell us about any unknown uses of funding in the first investment period.",
+                                "type": "multiInput",
+                                "answer": [{"wajlvP": 1900, "bPbTEe": 1900, "XGBxKK": 1900, "fqmDlx": 1900}],
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                    {
+                        "category": None,
+                        "question": "MarkAsComplete",
+                        "fields": [
+                            {
+                                "key": "markAsComplete",
+                                "title": "Do you want to mark this section as complete?",
+                                "type": "boolean",
+                                "answer": True,
+                            }
+                        ],
+                        "status": "COMPLETED",
+                    },
+                ],
+            },
+        ],
+        "id": "1234567-abcd-ab12-cd34-123456asdfgh",
+        "account_id": "asdf1234-262f-4650-8ddb-dabf4e22a0a3",
+        "fund_id": "26e831c1-12as-89jk-76hg-765432dcfvgb",
+        "round_id": "9217792e-d8c2-45c8-8170-eed4a8946184",
+        "reference": "PFN-RP-ASDFGH",
+    }

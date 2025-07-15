@@ -526,8 +526,9 @@ fund_round_data_key_mappings = {
     "PFNRP": {
         "location": None,
         "asset_type": None,
-        "funding_one": None,
-        "funding_two": None,
+        "funding_one": ["JoEKPs", "MaHzlK", "cSAvLl", "lXHVDo"],
+        "funding_two": ["YQGJbm", "VmCcNW", "pCCkfZ", "aaOhAH"],
+        "funding_field_type": "multiInputField",
     },
 }
 

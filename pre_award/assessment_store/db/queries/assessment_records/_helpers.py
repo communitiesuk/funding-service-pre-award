@@ -29,8 +29,40 @@ def get_answer_value(application_json, answer_key):
         return None
 
 
+def sum_total_for_pfn(application_json, keys):
+    """Sum values for a list of keys for PFN applications."""
+    total = 0
+    for form in application_json.get("forms", []):
+        for question in form.get("questions", []):
+            for field in question.get("fields", []):
+                if field.get("type") == "multiInput" and field.get("answer"):
+                    if isinstance(field["answer"], list):
+                        for answer_dict in field["answer"]:
+                            if isinstance(answer_dict, dict):
+                                for key in keys:
+                                    if key in answer_dict and answer_dict[key] is not None:
+                                        try:
+                                            total += int(float(answer_dict[key]))
+                                        except Exception as e:
+                                            current_app.logger.warning(
+                                                "Could not calculate total for %(answer_key)s in "
+                                                "application: %(application_id)s.",
+                                                dict(
+                                                    application_id=application_json["id"],
+                                                    answer_key=", ".join(keys) if isinstance(keys, list) else keys,
+                                                ),
+                                                exc_info=e,
+                                            )
+    return total
+
+
 def get_answer_value_for_multi_input(application_json, answer_key, value_key):
     try:
+        reference = application_json.get("reference", "")
+        if reference.startswith(("PFN-RP",)) and isinstance(answer_key, list):
+            # PFN logic. (answer_key is a list of keys to sum)
+            return sum_total_for_pfn(application_json, answer_key)
+
         answers = (
             jsonpath_rw_ext.parse(f"$.forms[*].questions[*].fields[?(@.key == '{answer_key}')]")
             .find(application_json)[0]
@@ -144,6 +176,13 @@ def derive_application_values(application_json):  # noqa: C901 - historical sadn
         if asset_key := field_mappings["asset_type"]:
             asset_type = get_answer_value(application_json, asset_key) or FIELD_DEFAULT_VALUE
 
+        reference = application_json.get("reference", "")
+        # Get the mapping for PFN-RP
+        if reference.startswith("PFN-RP"):
+            mapping = fund_round_data_key_mappings["PFNRP"]
+            funding_one_keys = mapping["funding_one"]
+            funding_two_keys = mapping["funding_two"]
+
         # search for capital funding
         funding_field_type = fund_round_data_key_mappings.get(fund_round_shortname, {}).get("funding_field_type")
         funding_one = 0
@@ -151,9 +190,13 @@ def derive_application_values(application_json):  # noqa: C901 - historical sadn
             funding_one_keys = [funding_one_keys] if isinstance(funding_one_keys, str) else funding_one_keys
 
             if funding_field_type == "multiInputField" and len(funding_one_keys) > 1:
-                funding_one = (
-                    get_answer_value_for_multi_input(application_json, funding_one_keys[0], funding_one_keys[1]) or 0
-                )
+                if reference.startswith(("PFN-RP",)):
+                    funding_one = get_answer_value_for_multi_input(application_json, funding_one_keys, None)
+                else:
+                    funding_one = (
+                        get_answer_value_for_multi_input(application_json, funding_one_keys[0], funding_one_keys[1])
+                        or 0
+                    )
             else:
                 for key in funding_one_keys:
                     funding_one = funding_one + int(float(get_answer_value(application_json, key) or 0))
@@ -163,9 +206,13 @@ def derive_application_values(application_json):  # noqa: C901 - historical sadn
         if funding_two_keys := field_mappings["funding_two"]:
             funding_two_keys = [funding_two_keys] if isinstance(funding_two_keys, str) else funding_two_keys
             if funding_field_type == "multiInputField" and len(funding_two_keys) > 1:
-                funding_two = (
-                    get_answer_value_for_multi_input(application_json, funding_two_keys[0], funding_two_keys[1]) or 0
-                )
+                if reference.startswith(("PFN-RP",)):
+                    funding_two = get_answer_value_for_multi_input(application_json, funding_two_keys, None)
+                else:
+                    funding_two = (
+                        get_answer_value_for_multi_input(application_json, funding_two_keys[0], funding_two_keys[1])
+                        or 0
+                    )
             else:
                 for key in funding_two_keys:
                     funding_two = funding_two + int(float(get_answer_value(application_json, key) or 0))

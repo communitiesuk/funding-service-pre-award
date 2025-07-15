@@ -31,6 +31,7 @@ from pre_award.assessment_store.db.models.assessment_record.enums import Status
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
 from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from pre_award.assessment_store.db.models.flags.flag_update import FlagStatus, FlagUpdate
+from pre_award.assessment_store.db.queries.assessment_records._helpers import derive_application_values
 from pre_award.assessment_store.scripts.derive_assessment_values import derive_assessment_values
 from pre_award.config import Config
 from services.notify import NotificationService
@@ -886,3 +887,20 @@ def test_send_change_received_notification(
             ),
         )
     ]
+
+
+def test_derive_application_values_pfn(pfn_application_json_extract, app):
+    """Test the derive_application_values function with a PFN application JSON extract.
+    Specifically, check that the funding amount requested is calculated correctly"""
+    app.logger.disabled = True
+
+    result = derive_application_values(pfn_application_json_extract)
+    assert result["application_id"] == "1234567-abcd-ab12-cd34-123456asdfgh"
+    assert result["short_id"].startswith("PFN-RP")
+
+    # funding_one: sum of ["JoEKPs", "MaHzlK", "cSAvLl", "lXHVDo"] fields' values in pfn_application_json
+    # funding_two: sum of ["YQGJbm", "VmCcNW", "pCCkfZ", "aaOhAH"] fields' values in pfn_application_json
+    # funding_amount_requested: sum of funding_one and funding_two
+    assert result["funding_amount_requested"] == 12000 + 18000
+    assert result["language"] == "en"
+    assert result["project_name"] == "Test Council"
