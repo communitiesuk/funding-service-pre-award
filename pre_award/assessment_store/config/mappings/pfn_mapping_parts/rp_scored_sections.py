@@ -63,7 +63,7 @@ scored_sections = [
                                 "form_name": "pfn-rp-4-year-investment-plan-key-priorities",
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
-                                "question": "Objective 2: Stronger communities = Tell us about the local challenges you have identified as priorities to address in the first investment period and why.",
+                                "question": "Objective 2: Stronger communities - Tell us about the local challenges you have identified as priorities to address in the first investment period and why.",
                             },
                             {
                                 "field_id": "aJyHdS",
@@ -77,14 +77,14 @@ scored_sections = [
                                 "form_name": "pfn-rp-4-year-investment-plan-key-priorities",
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
-                                "question": "Tell us about the local challenges you have identified as priorities to address in the first investment period and why.",
+                                "question": "Objective 3: Tell us about the local challenges you have identified as priorities to address in the first investment period and why.",
                             },
                             {
                                 "field_id": "AORTLp",
                                 "form_name": "pfn-rp-4-year-investment-plan-key-priorities",
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
-                                "question": "Tell us about any local opportunities for improvement or investment that you have identified and wish to pursue in the first investment period.",
+                                "question": "Objective 3: Tell us about any local opportunities for improvement or investment that you have identified and wish to pursue in the first investment period.",
                             },
                             {
                                 "field_id": "WFRgIa",
@@ -1072,7 +1072,7 @@ scored_sections = [
                                 "form_name": "pfn-rp-4-year-investment-plan-key-priorities",
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
-                                "question": "Objective 2: Stronger communities = Tell us about the local challenges you have identified as priorities to address in the first investment period and why.",
+                                "question": "Objective 2: Stronger communities - Tell us about the local challenges you have identified as priorities to address in the first investment period and why.",
                             },
                             {
                                 "field_id": "aJyHdS",
@@ -1086,7 +1086,7 @@ scored_sections = [
                                 "form_name": "pfn-rp-4-year-investment-plan-key-priorities",
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
-                                "question": "Objective 3: Taking back control = Tell us about the local challenges you have identified as priorities to address in the first investment period and why.",
+                                "question": "Objective 3: Taking back control - Tell us about the local challenges you have identified as priorities to address in the first investment period and why.",
                             },
                             {
                                 "field_id": "AORTLp",
