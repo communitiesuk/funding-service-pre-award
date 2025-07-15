@@ -94,13 +94,6 @@ scored_sections = [
                                 "question": "Which categories of pre-approved interventions do you plan to fund?",
                             },
                             {
-                                "field_id": "UHWiHB",
-                                "form_name": "pfn-rp-4-year-investment-plan-interventions",
-                                "field_type": "checkboxesField",
-                                "presentation_type": "list",
-                                "question": "Which categories of pre-approved interventions do you plan to fund?",
-                            },
-                            {
                                 "field_id": "DgNaHl",
                                 "form_name": "pfn-rp-4-year-investment-plan-interventions",
                                 "field_type": "yesNoField",
@@ -181,8 +174,30 @@ scored_sections = [
                                 "field_id": "cpsPOw",
                                 "form_name": "pfn-rp-4-year-investment-plan-interventions",
                                 "field_type": "multiInputField",
-                                "presentation_type": "text",
-                                "question": "Describe the proposed intervention.",
+                                "presentation_type": "table",
+                                "question": [
+                                    "Describe the proposed intervention.",
+                                    {
+                                        "iSuQcm": {"column_title": "Brief description", "type": "textField"},
+                                        "vhDdtP": {"column_title": "Estimated cost", "type": "numberField"},
+                                        "Urvfex": {
+                                            "column_title": "Why the proposed intervention cannot be delivered through pre-approved interventions",
+                                            "type": "multilineTextField",
+                                        },
+                                        "hjOHaG": {
+                                            "column_title": "How the proposed intervention will support delivery of one or more of the strategic objectives",
+                                            "type": "multilineTextField",
+                                        },
+                                        "eyyfUI": {
+                                            "column_title": "How the proposed intervention will be value for money and the outcomes and outputs that you aim to deliver through the investment",
+                                            "type": "multilineTextField",
+                                        },
+                                        "FiPgJD": {
+                                            "column_title": "How you have consulted with relevant bodies, where relevant, when developing this proposal",
+                                            "type": "multilineTextField",
+                                        },
+                                    },
+                                ],
                             },
                             {
                                 "field_id": "GrBsow",
