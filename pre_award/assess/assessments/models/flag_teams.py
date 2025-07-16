@@ -32,10 +32,13 @@ class TeamsFlagData:
 
         if not teams_list:
             teams_list = [flag.latest_allocation for flag in flags_list]
-            teams_list = list(set(teams_list) - set([None]))  # filter for unique teams
+            teams_list = list(set(teams_list))  # filter for unique teams
 
         for team in teams_list:
-            team_flags = [f for f in flags_list if f.latest_allocation == team]
+            if team is None:
+                team_flags = [f for f in flags_list if f.latest_allocation is None]
+            else:
+                team_flags = [f for f in flags_list if f.latest_allocation == team]
             num_of_flags = len(team_flags)
             num_of_raised = len([f for f in team_flags if f.latest_status == FlagType.RAISED])
             num_of_resolved = len([f for f in team_flags if f.latest_status == FlagType.RESOLVED])
