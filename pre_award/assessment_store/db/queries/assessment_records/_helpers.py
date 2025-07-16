@@ -34,7 +34,7 @@ def is_multiinput_field_with_answers(field):
     return field.get("type") == "multiInput" and field.get("answer") and isinstance(field["answer"], list)
 
 
-def extract_multiinput_fields(application_json):
+def yield_multiinput_answers(application_json):
     """Yield all multiInput fields with answers from the application JSON."""
     for form in application_json.get("forms", []):
         for question in form.get("questions", []):
@@ -66,7 +66,7 @@ def sum_total_for_pfn(application_json, keys):
     """Sum values for a list of keys for PFN applications."""
     total = 0
     application_id = application_json.get("id")
-    answers_list = extract_multiinput_fields(application_json)
+    answers_list = yield_multiinput_answers(application_json)
     for answers in answers_list:
         for answer_dict in answers:
             if isinstance(answer_dict, dict):
