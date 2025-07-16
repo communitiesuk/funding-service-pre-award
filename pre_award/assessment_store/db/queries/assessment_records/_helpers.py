@@ -29,14 +29,18 @@ def get_answer_value(application_json, answer_key):
         return None
 
 
+def is_multiinput_field_with_answers(field):
+    """Check if a field is a multiInput field with a list of answers."""
+    return field.get("type") == "multiInput" and field.get("answer") and isinstance(field["answer"], list)
+
+
 def extract_multiinput_fields(application_json):
     """Yield all multiInput fields with answers from the application JSON."""
     for form in application_json.get("forms", []):
         for question in form.get("questions", []):
             for field in question.get("fields", []):
-                if field.get("type") == "multiInput" and field.get("answer"):
-                    if isinstance(field["answer"], list):
-                        yield field["answer"]
+                if is_multiinput_field_with_answers(field):
+                    yield field["answer"]
 
 
 def sum_keys_in_answer_dict(answer_dict, keys, application_id):
