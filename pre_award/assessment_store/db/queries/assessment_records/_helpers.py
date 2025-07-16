@@ -29,30 +29,44 @@ def get_answer_value(application_json, answer_key):
         return None
 
 
-def sum_total_for_pfn(application_json, keys):
-    """Sum values for a list of keys for PFN applications."""
-    total = 0
+def extract_multiinput_fields(application_json):
+    """Yield all multiInput fields with answers from the application JSON."""
     for form in application_json.get("forms", []):
         for question in form.get("questions", []):
             for field in question.get("fields", []):
                 if field.get("type") == "multiInput" and field.get("answer"):
                     if isinstance(field["answer"], list):
-                        for answer_dict in field["answer"]:
-                            if isinstance(answer_dict, dict):
-                                for key in keys:
-                                    if key in answer_dict and answer_dict[key] is not None:
-                                        try:
-                                            total += int(float(answer_dict[key]))
-                                        except Exception as e:
-                                            current_app.logger.warning(
-                                                "Could not calculate total for %(answer_key)s in "
-                                                "application: %(application_id)s.",
-                                                dict(
-                                                    application_id=application_json["id"],
-                                                    answer_key=", ".join(keys) if isinstance(keys, list) else keys,
-                                                ),
-                                                exc_info=e,
-                                            )
+                        yield field["answer"]
+
+
+def sum_keys_in_answer_dict(answer_dict, keys, application_id):
+    """Sum the values for the given keys in a single answer_dict."""
+    total = 0
+    for key in keys:
+        if key in answer_dict and answer_dict[key] is not None:
+            try:
+                total += int(float(answer_dict[key]))
+            except Exception as e:
+                current_app.logger.warning(
+                    "Could not calculate total for %(answer_key)s in application: %(application_id)s.",
+                    dict(
+                        application_id=application_id,
+                        answer_key=", ".join(keys) if isinstance(keys, list) else keys,
+                    ),
+                    exc_info=e,
+                )
+    return total
+
+
+def sum_total_for_pfn(application_json, keys):
+    """Sum values for a list of keys for PFN applications."""
+    total = 0
+    application_id = application_json.get("id")
+    answers_list = extract_multiinput_fields(application_json)
+    for answers in answers_list:
+        for answer_dict in answers:
+            if isinstance(answer_dict, dict):
+                total += sum_keys_in_answer_dict(answer_dict, keys, application_id)
     return total
 
 
