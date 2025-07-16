@@ -302,8 +302,17 @@ def set_event_to_processed(event_id):
     abort(404)
 
 
+@fund_store_bp.get("/funds/<fund_id>/rounds/<round_id>/available_flag_allocations")
+def get_available_flag_allocations_endpoint(fund_id, round_id):
+    return jsonify(get_available_flag_allocations(fund_id, round_id))
+
+
 def get_available_flag_allocations(fund_id, round_id):
     # TODO: Currently teams are hardcoded, move it to database implementation
+    from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
+        CTDF_FUND_ID,
+        CTDF_ROUND_1_ID,
+    )
     from pre_award.fund_store.config.fund_loader_config.cof.cof_r2 import (
         COF_ROUND_2_WINDOW_2_ID,
         COF_ROUND_2_WINDOW_3_ID,
@@ -354,6 +363,11 @@ def get_available_flag_allocations(fund_id, round_id):
         {"key": "MODERATION", "value": "Moderation"},
         {"key": "LEAD_ASSESSOR", "value": "Lead Assessor"},
     ]
+    ctdf_teams = [  # ctdf is a dummy fund and the teams are also setup for the sake of demo
+        {"key": "CTDF_TEAM", "value": "Funding Service"},
+        {"key": "MODERATION", "value": "Moderation"},
+        {"key": "LEAD_ASSESSOR", "value": "Lead Assessor"},
+    ]
     if is_valid_uuid(fund_id) and is_valid_uuid(round_id):
         if fund_id == COF_FUND_ID and round_id in COF_ROUND_2_WINDOW_2_ID:
             return cof_teams
@@ -373,6 +387,8 @@ def get_available_flag_allocations(fund_id, round_id):
             return cyp_teams
         elif fund_id == DPI_FUND_ID and round_id == DPI_ROUND_2_ID:
             return dpif_teams
+        elif fund_id == CTDF_FUND_ID and round_id == CTDF_ROUND_1_ID:
+            return ctdf_teams
     abort(404)
 
 
