@@ -277,8 +277,12 @@ scored_sections = [
                                             "column_title": "Capacity funding (2027-28)",
                                             "type": "numberField",
                                         },
-                                        "mjXkxo": {
+                                        "OdZjMh": {
                                             "column_title": "Capacity funding (2028-29)",
+                                            "type": "numberField",
+                                        },
+                                        "DbQDzt": {
+                                            "column_title": "Capacity funding (2029-30)",
                                             "type": "numberField",
                                         },
                                     },
@@ -292,24 +296,28 @@ scored_sections = [
                                 "question": [
                                     "",
                                     {
-                                        "jhEJRB": {
-                                            "column_title": "Capacity funding (2029-30)",
-                                            "type": "numberField",
-                                        },
-                                        "IlUUxg": {
+                                        "mjXkxo": {
                                             "column_title": "Capacity funding (2030-31)",
                                             "type": "numberField",
                                         },
-                                        "nZFwqm": {
+                                        "jhEJRB": {
                                             "column_title": "Capacity funding (2031-32)",
                                             "type": "numberField",
                                         },
-                                        "rQUbSC": {
+                                        "nZFwqm": {
+                                            "column_title": "Capacity funding (2032-33)",
+                                            "type": "numberField",
+                                        },
+                                        "IlUUxg": {
                                             "column_title": "Capacity funding (2033-34)",
                                             "type": "numberField",
                                         },
                                         "GCnfMS": {
-                                            "column_title": "Capacity funding (2034-25)",
+                                            "column_title": "Capacity funding (2034-35)",
+                                            "type": "numberField",
+                                        },
+                                        "rQUbSC": {
+                                            "column_title": "Capacity funding (2035-36)",
                                             "type": "numberField",
                                         },
                                     },
