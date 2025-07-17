@@ -33,7 +33,7 @@ class Fund:
     # TODO: Move fund_type to a property on fund_store
     @property
     def fund_types(self) -> set[str]:
-        return {ALL_VALUE, "competitive"}
+        return {ALL_VALUE, self.funding_type}
 
     def add_round(self, fund_round: Round):
         if not self.rounds:

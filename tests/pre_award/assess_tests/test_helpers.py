@@ -10,11 +10,17 @@ from pre_award.assess.assessments.helpers import (
     set_assigned_info_in_overview,
     sort_assigned_column,
 )
+from pre_award.assess.config.display_value_mappings import LandingFilters
 from pre_award.assess.scoring.forms.scores_and_justifications import OneToFiveScoreForm, ZeroToThreeScoreForm
 from pre_award.assess.scoring.helpers import get_scoring_class
 from pre_award.assess.services.models.flag import Flag
 from pre_award.assess.services.models.fund import Fund
-from pre_award.assess.shared.helpers import determine_display_status, is_flaggable, process_assessments_stats
+from pre_award.assess.shared.helpers import (
+    determine_display_status,
+    fund_matches_filters,
+    is_flaggable,
+    process_assessments_stats,
+)
 
 RAISED_FLAG = [
     Flag.from_dict(
@@ -626,3 +632,35 @@ def test_set_assigned_info_in_overview_empty_input():
 )
 def test_sort_assigned_column(first, second, expected):
     assert sort_assigned_column(first, second) == expected
+
+
+@pytest.mark.parametrize(
+    "funding_type, filter_fund_type, expected_result",
+    [
+        ("COMPETITIVE", "ALL", True),
+        ("COMPETITIVE", "COMPETITIVE", True),
+        ("COMPETITIVE", "UNCOMPETED", False),
+        ("COMPETITIVE", "EOI", False),
+        ("UNCOMPETED", "ALL", True),
+        ("UNCOMPETED", "COMPETITIVE", False),
+        ("UNCOMPETED", "UNCOMPETED", True),
+        ("UNCOMPETED", "EOI", False),
+        ("EOI", "ALL", True),
+        ("EOI", "COMPETITIVE", False),
+        ("EOI", "UNCOMPETED", False),
+        ("EOI", "EOI", True),
+    ],
+)
+def test_fund_matches_filters_fund_type(funding_type, filter_fund_type, expected_result):
+    fund = Fund(
+        name="Test Fund",
+        id="test-fund-id",
+        description="Test Fund Description",
+        short_name="TF",
+        funding_type=funding_type,
+    )
+
+    filters = LandingFilters(filter_status="ALL", filter_fund_type=filter_fund_type, filter_fund_name="")
+
+    result = fund_matches_filters(fund, filters)
+    assert result == expected_result
