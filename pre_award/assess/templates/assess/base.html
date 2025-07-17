@@ -1,6 +1,7 @@
 {% extends "govuk_frontend_jinja/template.html" %}
 
 {% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
+{% from "govuk_frontend_jinja/components/service-navigation/macro.html" import govukServiceNavigation %}
 
 {% set assetPath = url_for('static', filename='assess').rstrip('/') %}
 
@@ -12,10 +13,15 @@
 
 {% block header %}
   {{ govukHeader({
-    "homepageUrl": "/",
-    "serviceName": "Assess grant applications",
+    "homepageUrl": "https://gov.uk",
     "useTudorCrown": true,
+    "rebrand": true
   }) }}
+  {{ govukServiceNavigation({
+    "serviceName": "Assess grant applications",
+    "serviceUrl": "#"
+    })
+  }}
 {% endblock header %}
 
 {% block main %}
@@ -33,7 +39,7 @@
 
 {% block bodyEnd %}
   <!--[if gt IE 8]><!-->
-    <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/govuk-frontend/govuk-frontend-4.8.0.min.js') }}"></script>
+    <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/govuk-frontend/govuk-frontend-5.11.0.min.js') }}"></script>
     <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/js/main.min.js') }}"></script>
   <!--<![endif]-->
   <!-- Google Tag Manager (noscript) -->

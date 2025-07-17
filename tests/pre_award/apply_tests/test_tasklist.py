@@ -1,4 +1,5 @@
 import json
+import string
 
 import pytest
 from bs4 import BeautifulSoup
@@ -111,7 +112,9 @@ def test_language_cookie_update_welsh_to_english(
     assert current_set_language == "en"
 
     soup = BeautifulSoup(response.data, "html.parser")
-    assert soup.find("span", class_="app-service-name").text == "Apply for fund for testing"
+    assert strip_all_ws(soup.find("a", class_="govuk-service-navigation__link").text) == strip_all_ws(
+        "Apply for fund for testing"
+    )
 
 
 def test_language_cookie_update_english_to_welsh(
@@ -141,4 +144,10 @@ def test_language_cookie_update_english_to_welsh(
     assert current_set_language == "cy"
 
     soup = BeautifulSoup(response.data, "html.parser")
-    assert soup.find("span", class_="app-service-name").text == "Gwneud cais am gronfa cymraeg"
+    assert strip_all_ws(soup.find("a", class_="govuk-service-navigation__link").text) == strip_all_ws(
+        "Gwneud cais am gronfa cymraeg"
+    )
+
+
+def strip_all_ws(text):
+    return text.translate({ord(c): None for c in string.whitespace})
