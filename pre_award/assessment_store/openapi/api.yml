@@ -633,33 +633,6 @@ paths:
               schema:
                 type: object
                 $ref: 'assessor_task_list.yml#/components/schemas/AssessorTaskListState'
-  '/sub_criteria_themes/{application_id}':
-    parameters:
-    - name: application_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: path
-    get:
-      tags:
-        - assessments
-      summary: Retrieves application json and sub criterias
-      description: Retrieves application json and sub criterias
-      operationId: assessment_store.api.routes.get_application_json_and_sub_criterias
-      responses:
-        200:
-          description: SUCCESS
-          content:
-            application/json:
-              example:
-                {}
-        500:
-          description: "Bad request - Incorrect application_id or theme_id"
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yml#/components/schemas/GeneralError'
   '/comment':
     get:
       tags:
