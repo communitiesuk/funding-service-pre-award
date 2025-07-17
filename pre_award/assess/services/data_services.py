@@ -22,6 +22,7 @@ from pre_award.assess.services.models.sub_criteria import SubCriteria
 from pre_award.assess.shared.helpers import get_ttl_hash
 from pre_award.assess.tagging.models.tag import AssociatedTag, Tag, TagType
 from pre_award.assess.themes.deprecated_theme_mapper import map_application_with_sub_criteria_themes_fields
+from pre_award.assessment_store.api.routes.assessment_routes import get_application_json_and_sub_criterias
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
 from pre_award.common.locale_selector.get_lang import get_lang
@@ -656,11 +657,7 @@ def get_sub_criteria_theme_answers_all(
     application_id: str,
     theme_id: str,
 ) -> Union[list, None]:
-    theme_mapping_data_url = (
-        f"{Config.ASSESSMENT_STORE_API_HOST}"
-        f"{Config.SUB_CRITERIA_THEME_ANSWERS_ENDPOINT.format(application_id=application_id)}"
-    )
-    theme_mapping_data = get_data(theme_mapping_data_url)
+    theme_mapping_data = get_application_json_and_sub_criterias(application_id)
     theme_question_answers = map_application_with_sub_criteria_themes_fields(
         theme_mapping_data["application_json"],
         theme_mapping_data["sub_criterias"],
@@ -668,15 +665,6 @@ def get_sub_criteria_theme_answers_all(
     )
     mark_themes_with_changes(theme_mapping_data["application_json"], theme_question_answers)
     return theme_question_answers
-
-
-def get_all_sub_criterias_with_application_json(application_id: str):
-    theme_mapping_data_url = (
-        f"{Config.ASSESSMENT_STORE_API_HOST}"
-        f"{Config.SUB_CRITERIA_THEME_ANSWERS_ENDPOINT.format(application_id=application_id)}"
-    )
-    theme_mapping_data = get_data(theme_mapping_data_url)
-    return theme_mapping_data
 
 
 def mark_themes_with_changes(application_json, theme_fields):

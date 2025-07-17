@@ -90,7 +90,6 @@ from pre_award.assess.services.aws import get_file_for_download_from_aws
 from pre_award.assess.services.data_services import (
     assign_user_to_assessment,
     get_all_associated_tags_for_application,
-    get_all_sub_criterias_with_application_json,
     get_all_uploaded_documents_theme_answers,
     get_applicant_export,
     get_applicant_feedback_and_survey_report,
@@ -141,7 +140,10 @@ from pre_award.assess.themes.deprecated_theme_mapper import (
     map_application_with_sub_criterias_and_themes,
     order_entire_application_by_themes,
 )
-from pre_award.assessment_store.api.routes.assessment_routes import calculate_overall_score_percentage_for_application
+from pre_award.assessment_store.api.routes.assessment_routes import (
+    calculate_overall_score_percentage_for_application,
+    get_application_json_and_sub_criterias,
+)
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
 from pre_award.assessment_store.db.queries.flags.queries import (
     get_change_requests_for_application,
@@ -1887,7 +1889,7 @@ def view_entire_application(application_id):
     state = get_state_for_tasklist_banner(application_id)
     fund_round_name = state.fund_short_name + state.round_short_name
 
-    _data = get_all_sub_criterias_with_application_json(application_id)
+    _data = get_application_json_and_sub_criterias(application_id)
     application_json = _data["application_json"]
     sub_criterias = _data["sub_criterias"]
 
