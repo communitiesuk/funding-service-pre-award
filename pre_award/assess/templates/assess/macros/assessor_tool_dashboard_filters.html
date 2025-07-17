@@ -21,8 +21,9 @@
             </label>
             <select id="filter_fund_type" name="filter_fund_type" class="govuk-select">
                 {{ generate_option(filters.filter_fund_type, 'ALL', 'All') }}
-                {{ generate_option(filters.filter_fund_type, 'competitive', 'Competitive fund') }}
-                {{ generate_option(filters.filter_fund_type, 'allocative', 'Allocative fund') }}
+                {{ generate_option(filters.filter_fund_type, 'COMPETITIVE', 'Competitive fund') }}
+                {{ generate_option(filters.filter_fund_type, 'UNCOMPETED', 'Uncompeted fund') }}
+                {{ generate_option(filters.filter_fund_type, 'EOI', 'Expression of Interest') }}
             </select>
         </div>
         <div class="govuk-form-group govuk-!-display-inline-block">
