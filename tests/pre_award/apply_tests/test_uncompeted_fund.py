@@ -58,10 +58,7 @@ def test_changes_requested_notification(apply_test_client, mocker, templates_ren
     template, context = templates_rendered[0]
     assert template.name == "apply/dashboard_single_fund.html"
 
-    rendered_html = template.render(
-        display_data=display_data,
-        change_request=True,
-    )
+    rendered_html = template.render(display_data=display_data, change_request=True, govukRebrand=True)
     soup = BeautifulSoup(rendered_html, "html.parser")
 
     assert "The assessor has requested changes to your application." in soup.prettify()
@@ -88,9 +85,6 @@ def test_no_changes_requested_notification(apply_test_client, mocker, templates_
     template, context = templates_rendered[0]
     assert template.name == "apply/dashboard_single_fund.html"
 
-    rendered_html = template.render(
-        display_data=display_data,
-        change_request=False,
-    )
+    rendered_html = template.render(display_data=display_data, change_request=False, govukRebrand=True)
     soup = BeautifulSoup(rendered_html, "html.parser")
     assert "The assessor has requested changes to your application." not in soup.prettify()

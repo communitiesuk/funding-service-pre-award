@@ -1,3 +1,4 @@
+import string
 import typing as t
 from collections import OrderedDict
 from contextlib import contextmanager
@@ -986,6 +987,10 @@ def fund_dashboard_all_mocks(request):
     return None
 
 
+def strip_all_ws(s):
+    return s.translate({ord(c): None for c in string.whitespace})
+
+
 def assert_fund_dashboard(
     response,
     *,
@@ -1012,7 +1017,7 @@ def assert_fund_dashboard(
     # first row cells
     first_row = soup.find("tbody").find("tr")
     cells = [td.text.strip() for td in first_row.find_all("td")]
-    assert cells == expected_first_row
+    assert [strip_all_ws(c) for c in cells] == [strip_all_ws(c) for c in expected_first_row]
 
     # filters
     actual_filters = [lbl.text.strip() for lbl in soup.find_all("label", class_="govuk-label")]

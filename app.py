@@ -352,6 +352,10 @@ def create_app() -> Flask:  # noqa: C901
         return {}
 
     @flask_app.context_processor
+    def inject_govuk_rebrand():
+        return {"govukRebrand": True}
+
+    @flask_app.context_processor
     def utility_processor():
         def _get_service_title():
             fund, round = None, None
