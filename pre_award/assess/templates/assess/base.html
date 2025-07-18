@@ -39,8 +39,13 @@
 
 {% block bodyEnd %}
   <!--[if gt IE 8]><!-->
-    <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/govuk-frontend/govuk-frontend-5.11.0.min.js') }}"></script>
-    <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/js/main.min.js') }}"></script>
+    <script type="module" nonce="{{ csp_nonce() }}"
+            src="{{ url_for('static', filename='assess/govuk-frontend-5.11.0.min.js') }}"></script>
+    <script type="module" nonce="{{ csp_nonce() }}">
+        import {initAll} from "{{ url_for('static', filename='assess/govuk-frontend-5.11.0.min.js') }}";
+
+        initAll();
+    </script>
   <!--<![endif]-->
   <!-- Google Tag Manager (noscript) -->
   {# djlint:off #}
