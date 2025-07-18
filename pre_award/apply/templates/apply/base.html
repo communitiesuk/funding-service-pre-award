@@ -18,9 +18,13 @@
 {% endblock footer %}
 
 {% block bodyEnd %}
-  <!--[if gt IE 8]><!-->
-  <script src="{{ url_for('static', filename='apply/govuk-frontend-5.11.0.min.js') }}"> </script>
-  <script>window.GOVUKFrontend.initAll()</script>
+    <!--[if gt IE 8]><!-->
+    <script type="module" src="{{ url_for('static', filename='apply/govuk-frontend-5.11.0.min.js') }}"></script>
+    <script type="module" nonce="{{ csp_nonce() }}">
+        import {initAll} from "{{ url_for('static', filename='apply/govuk-frontend-5.11.0.min.js') }}";
+
+        initAll();
+    </script>
   <!--<![endif]-->
     <!-- Google Tag Manager (noscript) -->
     <noscript>
