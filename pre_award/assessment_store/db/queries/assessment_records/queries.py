@@ -230,6 +230,11 @@ def get_metadata_for_fund_round_id(  # noqa: C901 - historical sadness
                 display_status = "STOPPED"
             elif all_latest_status.count(FlagStatus.RAISED) > 1:
                 display_status = "MULTIPLE_FLAGS"
+            elif (
+                all_latest_status.count(FlagStatus.RAISED) == 1
+                and assessment.workflow_status == Status.CHANGE_REQUESTED
+            ):
+                display_status = "CHANGE_REQUESTED"
             elif all_latest_status.count(FlagStatus.RAISED) == 1:
                 display_status = "FLAGGED"
             elif is_qa_complete:
