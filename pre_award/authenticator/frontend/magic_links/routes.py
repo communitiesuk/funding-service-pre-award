@@ -28,7 +28,6 @@ def invalid():
             "authenticator/magic_links/invalid.html",
             fund=request.args.get("fund"),
             round=request.args.get("round"),
-            govukRebrand=True,
         ),
         403,
     )
@@ -43,7 +42,6 @@ def signed_out(status):
             new_magic_link_url=url_for("magic_links_bp.new"),
             fund=request.args.get("fund"),
             round=request.args.get("round"),
-            govukRebrand=True,
         ),
         200,
     )
@@ -119,7 +117,6 @@ def landing(link_id):
             support_desk_apply=Config.SUPPORT_DESK_APPLY,
             has_previous_applications=has_previous_applications,
             has_eligibility=round_data.has_eligibility,
-            govukRebrand=True,
         )
     return redirect(
         url_for(
@@ -197,7 +194,6 @@ def new():
         fund_short_name=fund_short_name,
         migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
         is_expression_of_interest=round.is_expression_of_interest,
-        govukRebrand=True,
     )
 
 
@@ -214,5 +210,4 @@ def check_email():
         fund=request.args.get("fund"),
         round=request.args.get("round"),
         migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
-        govukRebrand=True,
     )
