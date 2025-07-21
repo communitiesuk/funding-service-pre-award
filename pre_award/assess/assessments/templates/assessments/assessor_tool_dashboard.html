@@ -51,8 +51,7 @@
                             </span>
                         </button>
                     </h2>
-                    <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content display-none"
-                            aria-labelledby="accordion-default-heading-{{ loop.index }}">
+                    <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content display-none">
                         {% if fund_summaries[fund_id] %}
                             {% set chunk_size = 3 %}
                             {% set summaries = fund_summaries[fund_id] %}
