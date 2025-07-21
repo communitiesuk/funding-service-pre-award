@@ -135,15 +135,11 @@ class TestRoutes:
         response = assess_test_client.get("/assess/assessor_tool_dashboard/")
         assert 200 == response.status_code, "Wrong status code on response"
         soup = BeautifulSoup(response.data, "html.parser")
-
-        all_exports_links = soup.find_all(
-            "a",
-            class_="govuk-link",
-            string=lambda text: "Export" in text if text else False,
-        )
+        all_links = soup.find_all("a", class_="govuk-link")
+        all_exports_links = [link for link in all_links if "Export" in link.get_text()]
         assert len(all_exports_links) == exp_link_count
         if not download_available and mock_is_lead_assessor:
-            assert "Assessment Tracker Export" in all_exports_links[-2].text
+            assert "Assessment Tracker Export" in all_exports_links[-2].get_text()
 
     fund_case = namedtuple("FundCase", "fund_short round_short role_key assigned_div expected_extra_tabs")
 
