@@ -109,7 +109,7 @@ LOADER_CONFIG = {
         "assessment_start": "2025-06-27T09:00:00",
         "deadline": "2025-07-29T12:00:00",
         "application_reminder_sent": False,
-        "reminder_date": "2025-07-22T09:00:00",
+        "reminder_date": "2025-10-23T09:00:00",
         "assessment_deadline": "2026-02-27T17:00:00",
         "prospectus": "https://www.localdigital.gov.uk/digital-planning/digital-planning-improvement-fund-2025-2026/",
         "privacy_notice": "https://www.gov.uk/guidance/digital-planning-improvement-fund-privacy-notice",
