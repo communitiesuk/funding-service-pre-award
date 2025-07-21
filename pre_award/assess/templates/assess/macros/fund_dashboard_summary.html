@@ -86,9 +86,9 @@ assessment_tracker_href, comments_export_href, round_status) %}
         {% if summary.is_expression_of_interest %}
             {{ govukTable({
                 "caption": "",
-                "firstCellIsHeader": false,
+                "firstCellIsHeader": true,
                 "rows": [
-                    [{'html': '<strong>Applications received</strong>'},
+                    [{'text': 'Applications received'},
                     {'text': summary.live_round_stats.submitted if summary.live_round_stats.submitted is not none else
                     'Unavailable'}],
                     ],
@@ -98,20 +98,20 @@ assessment_tracker_href, comments_export_href, round_status) %}
         {% elif summary.status.is_application_open %}
             {{ govukTable({
                 "caption": "",
-                "firstCellIsHeader": false,
+                "firstCellIsHeader": true,
                 "rows": [
-                    [{'html': '<strong>Application closing date</strong>', 'classes': 'govuk-!-width-one-third'},
+                    [{'text': 'Application closing date', 'classes': 'govuk-!-width-one-third'},
                     {'text': summary.live_round_stats.closing_date | assess_datetime_format("%d %B %Y at %H:%M") }],
-                    [{'html': '<strong>Applications submitted</strong>'},
+                    [{'text': 'Applications submitted'},
                     {'text': summary.live_round_stats.submitted if summary.live_round_stats.submitted is not none else
                     'Unavailable'}],
-                    [{'html': '<strong>Applications in progress</strong>'},
+                    [{'text': 'Applications in progress'},
                     {'text': summary.live_round_stats.in_progress if summary.live_round_stats.in_progress is not none else
                     'Unavailable'}],
-                    [{'html': '<strong>Applications not started</strong>'},
+                    [{'text': 'Applications not started'},
                     {'text': summary.live_round_stats.not_started if summary.live_round_stats.not_started is not none else
                     'Unavailable'}],
-                    [{'html': '<strong>Applications completed but not submitted</strong>'},
+                    [{'text': 'Applications completed but not submitted'},
                     {'text': summary.live_round_stats.completed if summary.live_round_stats.completed is not none else
                     'Unavailable'}],
                     ],
@@ -122,19 +122,19 @@ assessment_tracker_href, comments_export_href, round_status) %}
 
             {{ govukTable({
                 "caption": "",
-                "firstCellIsHeader": false,
+                "firstCellIsHeader": true,
                 "rows": [
-                    [{'html': '<strong>Assessment closing date</strong>', 'classes': 'govuk-!-width-one-third'},
+                    [{'text': 'Assessment closing date', 'classes': 'govuk-!-width-one-third'},
                     {'text': summary.assessment_stats.date | assess_datetime_format("%d %B %Y at %H:%M") }],
-                    [{'html': '<strong>Applications received</strong>'},
+                    [{'text': 'Applications received'},
                     {'text': summary.assessment_stats.total_received}],
-                    [{'html': '<strong>Assessments completed</strong>'},
+                    [{'text': 'Assessments completed'},
                     {'text': summary.assessment_stats.completed}],
-                    [{'html': '<strong>Assessments started</strong>'},
+                    [{'text': 'Assessments started'},
                     {'text': summary.assessment_stats.started}],
-                    [{'html': '<strong>QA Complete</strong>'},
+                    [{'text': 'QA Complete'},
                     {'text': summary.assessment_stats.qa_complete}],
-                    [{'html': '<strong>Stopped assessments</strong>'},
+                    [{'text': 'Stopped assessments'},
                     {'text': summary.assessment_stats.stopped}],
                     ],
                 })

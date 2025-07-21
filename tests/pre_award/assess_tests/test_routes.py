@@ -49,7 +49,9 @@ class TestRoutes:
         assert soup.title.string == "Assessment tool dashboard – Assessment Hub – GOV.UK", (
             "Response does not contain expected heading"
         )
-        all_table_data_elements = str(soup.find_all("td", class_="govuk-table__cell"))
+        all_table_data_elements = str(
+            soup.find_all(["td", "th"], class_=lambda c: c and ("govuk-table__cell" in c or "govuk-table__header" in c))
+        )
         assert len(all_table_data_elements) > 0
         project_titles = [
             "Assessment closing date",
@@ -64,6 +66,7 @@ class TestRoutes:
             "Applications not started",
             "Applications completed but not started",
         ]
+        # breakpoint()
         assert all(title in all_table_data_elements for title in project_titles) or all(
             title in all_table_data_elements for title in live_round_titles
         )
