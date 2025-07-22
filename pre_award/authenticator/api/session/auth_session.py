@@ -165,17 +165,28 @@ class AuthSessionBase:
         timeout_seconds: int = Config.FSD_SESSION_TIMEOUT_SECONDS,
     ):
         """
-        Creates a signed expiring session token for the given account
-        :param account: The account object for the user to create a token for
-        :param timeout_seconds: The length of the token expiry (or timeout)
-        :return: A dict including the signed session token
+        Creates a signed session token for the given account with appropriate roles.
+
+        In development with debug user enabled, magic link sessions receive the debug user's
+        roles to enable seamless switching between Apply and Assess workflows. In production,
+        magic link users receive limited roles based on the ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK
+        setting to maintain security separation between applicants and assessors.
         """
+        is_development_with_debug_user = (
+            Config.FLASK_ENV == "development" and hasattr(Config, "DEBUG_USER_ON") and Config.DEBUG_USER_ON
+        )
+
+        if is_development_with_debug_user:
+            roles = Config.DEBUG_USER.get("roles", [])
+        else:
+            roles = [] if is_via_magic_link and not Config.ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK else account.roles
+
         session_details = {
             "accountId": account.id,
             "azureAdSubjectId": account.azure_ad_subject_id,
             "email": account.email,
             "fullName": account.full_name,
-            "roles": [] if is_via_magic_link and not Config.ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK else account.roles,
+            "roles": roles,
             "iat": int(datetime.now().timestamp()),
             "exp": int(datetime.now().timestamp() + timeout_seconds),
         }
