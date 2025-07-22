@@ -42,7 +42,7 @@
                 <div class="govuk-accordion__section-header">
                     <h2 class="govuk-accordion__section-heading">
                         <button type="button" aria-controls="accordion-default-content-{{ loop.index }}"
-                                class="govuk-accordion__section-button landing-accordion" data-qa="show"
+                                class="govuk-accordion__section-button" data-qa="show"
                                 aria-label="{{ funds[fund_id].name }} ({{ fund_summaries[fund_id] | length }}), Show this section">
                             <span class="govuk-accordion__section-heading-text" id="accordion-default-heading-{{ loop.index }}">
                                 <span class="govuk-accordion__section-heading-text-focus">
@@ -51,21 +51,21 @@
                             </span>
                         </button>
                     </h2>
-                    <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content display-none">
-                        {% if fund_summaries[fund_id] %}
-                            {% set chunk_size = 3 %}
-                            {% set summaries = fund_summaries[fund_id] %}
-                            {% for chunk in summaries|batch(chunk_size) %}
-                                <div class="govuk-grid-row">
-                                    {% for summary in chunk %}
-                                        <div class="govuk-grid-column-one-third">
-                                            {{ fund_summary(summary) }}
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
+                </div>
+                <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content">
+                    {% if fund_summaries[fund_id] %}
+                        {% set chunk_size = 3 %}
+                        {% set summaries = fund_summaries[fund_id] %}
+                        {% for chunk in summaries|batch(chunk_size) %}
+                            <div class="govuk-grid-row">
+                                {% for summary in chunk %}
+                                    <div class="govuk-grid-column-one-third">
+                                        {{ fund_summary(summary) }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
