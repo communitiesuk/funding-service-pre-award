@@ -3,7 +3,7 @@ from datetime import datetime
 
 import pandas as pd
 from flask import send_file
-from sqlalchemy import String, cast
+from sqlalchemy import String, cast, nullsfirst
 
 from pre_award.account_store.db.models.account import Account
 from pre_award.application_store.db.models import Applications
@@ -28,7 +28,7 @@ def retrieve_all_comments(fund_id, round_id, application_id=None):
         .join(Applications, Comment.application_id == Applications.id)
         .join(Account, Comment.user_id == cast(Account.id, String))
         .filter(*filters)
-        .order_by(Comment.application_id, Comment.sub_criteria_id, Comment.date_created)
+        .order_by(Comment.application_id, nullsfirst(Comment.sub_criteria_id), CommentsUpdate.date_created)
         .all()
     )
 
@@ -63,7 +63,6 @@ def build_comments_list(results, sub_criteria_name_map):
                 "Project name": application.project_name if application else None,
                 "Date created": cu.date_created.strftime("%d %B %Y, %H:%M") if cu.date_created else None,
                 "Comment type": (comment.comment_type.label if comment and comment.comment_type else None),
-                "Sub-criteria ID": comment.sub_criteria_id if comment else None,
                 "Sub-criteria name": sub_criteria_name_map.get(comment.sub_criteria_id)
                 if comment and comment.sub_criteria_id
                 else None,
@@ -82,7 +81,24 @@ def export_comments_to_excel(
     application_id=None,
 ):
     output = io.BytesIO()
-    df = pd.DataFrame(comments_list)
+
+    columns = [
+        "Application ID",
+        "Application reference",
+        "Project name",
+        "Date created",
+        "Comment type",
+        "Sub-criteria name",
+        "Commenter name",
+        "Commenter email",
+        "Comment",
+    ]
+
+    # If comments_list is empty, create an empty DataFrame with columns
+    if not comments_list:
+        df = pd.DataFrame(columns=columns)
+    else:
+        df = pd.DataFrame(comments_list, columns=columns)
     with pd.ExcelWriter(output, engine="openpyxl") as writer:
         df.to_excel(writer, sheet_name="comments", index=False)
     output.seek(0)
