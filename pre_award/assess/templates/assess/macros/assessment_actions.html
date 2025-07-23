@@ -1,7 +1,16 @@
-{% macro assessment_actions(application_id) %}
+{% macro assessment_actions(application_id, fund_short_name, round_short_name) %}
 
     <h3 class="govuk-heading-m">Assessment actions</h3>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible section_break_blue">
     <p class="govuk-body">   <a href="{{ url_for('assessment_bp.view_entire_application', application_id=application_id) }}" target="_blank">View entire application (opens in new tab)</a></p>
 
+    {% if g.access_controller.is_lead_assessor %}
+        <p class="govuk-body">
+            <a href="{{ url_for('assessment_bp.comments_export_for_application',
+            fund_short_name=fund_short_name,
+            round_short_name=round_short_name,
+            application_id=application_id) }}">
+            Export assessment comments</a>
+        </p>
+    {% endif %}
 {% endmacro %}

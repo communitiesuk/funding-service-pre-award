@@ -356,10 +356,11 @@ def test_get_team_flag_stats(flask_test_client, seed_application_records):
 
     assert response.status_code == 200
     assert len(response.json) == 2
-    assert response.json[0]["team_name"] == "ASSESSOR"
-    assert response.json[0]["raised"] == 2
-    assert response.json[1]["team_name"] == "LEAD_ASSESSOR"
-    assert response.json[1]["raised"] == 1
+    teams = {team["team_name"]: team for team in response.json}
+    assert "ASSESSOR" in teams
+    assert "LEAD_ASSESSOR" in teams
+    assert teams["ASSESSOR"]["raised"] == 2
+    assert teams["LEAD_ASSESSOR"]["raised"] == 1
 
 
 def test_create_flag(flask_test_client):

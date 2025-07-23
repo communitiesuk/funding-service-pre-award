@@ -7,10 +7,15 @@ from flask.testing import FlaskClient
 from werkzeug.test import TestResponse
 
 from app import create_app
+from pre_award.account_store.db.models.account import Account
 from pre_award.application_store.db.models.application.applications import Applications
 from pre_award.application_store.db.queries.application import create_application
 from pre_award.application_store.db.queries.form import add_new_forms
 from pre_award.application_store.external_services.models.fund import Fund, Round
+from pre_award.assess.services.models.sub_criteria import SubCriteria
+from pre_award.assessment_store.db.models.comment.comments import Comment
+from pre_award.assessment_store.db.models.comment.comments_update import CommentsUpdate
+from pre_award.assessment_store.db.models.comment.enums import CommentType
 from pre_award.config import Config
 from tests.pre_award.application_store_tests.helpers import (
     APPLICATION_DISPLAY_CONFIG,
@@ -708,3 +713,96 @@ def pfn_application_json_extract():
         "round_id": "9217792e-d8c2-45c8-8170-eed4a8946184",
         "reference": "PFN-RP-ASDFGH",
     }
+
+
+@pytest.fixture
+def comments_test_account(db):
+    user_id = str(uuid4())
+    account = Account(id=user_id, full_name="Test User", email="test@example.com")
+    db.session.add(account)
+    db.session.commit()
+    return account
+
+
+@pytest.fixture
+def comments_base_time():
+    return datetime(2025, 6, 30, 8, 0, 0)
+
+
+@pytest.fixture
+def comments_data():
+    return [
+        # Application-level comments (sub_criteria_id=None)
+        {"sub_criteria_id": None, "comment_type": CommentType.WHOLE_APPLICATION, "updates": ["App-level 1"]},
+        {
+            "sub_criteria_id": None,
+            "comment_type": CommentType.WHOLE_APPLICATION,
+            "updates": ["App-level 2", "App-level 2 update"],
+        },
+        # Sub-criteria comments
+        {"sub_criteria_id": "SC1", "comment_type": CommentType.COMMENT, "updates": ["SC1 comment 1"]},
+        {
+            "sub_criteria_id": "SC1",
+            "comment_type": CommentType.COMMENT,
+            "updates": ["SC1 comment 2", "SC1 comment 2 update"],
+        },
+        {"sub_criteria_id": "SC2", "comment_type": CommentType.COMMENT, "updates": ["SC2 comment 1"]},
+        {"sub_criteria_id": "SC2", "comment_type": CommentType.COMMENT, "updates": ["SC2 comment 2"]},
+    ]
+
+
+def create_comment_with_updates(
+    db, application_id, user_id, sub_criteria_id, comment_type, update_texts, comments_base_time, account
+):
+    comment = Comment(
+        application_id=application_id,
+        user_id=user_id,
+        sub_criteria_id=sub_criteria_id,
+        comment_type=comment_type,
+        date_created=comments_base_time,
+    )
+    db.session.add(comment)
+    db.session.flush()
+
+    updates = []
+    for i, text in enumerate(update_texts):
+        update = CommentsUpdate(
+            comment_id=comment.id,
+            comment=text,
+            date_created=comments_base_time + timedelta(minutes=i),
+        )
+        db.session.add(update)
+        updates.append(update)
+    db.session.commit()
+    return comment, updates
+
+
+@pytest.fixture
+def mock_comments_sub_criteria(mocker):
+    sc1 = SubCriteria(
+        id="SC1",
+        name="Sub Criteria 1",
+        themes=[],
+        funding_amount_requested=1000,
+        project_name="Test Project",
+        fund_id="test_fund_id",
+        workflow_status="IN_PROGRESS",
+        short_id="SC1",
+        is_scored=True,
+    )
+    sc2 = SubCriteria(
+        id="SC2",
+        name="Sub Criteria 2",
+        themes=[],
+        funding_amount_requested=2000,
+        project_name="Test Project",
+        fund_id="test_fund_id",
+        workflow_status="IN_PROGRESS",
+        short_id="SC2",
+        is_scored=True,
+    )
+
+    mocker.patch(
+        "pre_award.application_store.db.queries.comments.queries.get_sub_criteria",
+        side_effect=lambda app_id, sub_criteria_id: {"SC1": sc1, "SC2": sc2}[sub_criteria_id],
+    )
