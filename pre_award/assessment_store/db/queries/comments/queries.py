@@ -14,7 +14,7 @@ from flask import send_file
 from sqlalchemy import String, and_, cast, nullsfirst, select
 
 from pre_award.account_store.db.models.account import Account
-from pre_award.application_store.db.models import Applications
+from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from pre_award.assessment_store.db.models.comment.comments import Comment
 from pre_award.assessment_store.db.models.comment.comments_update import CommentsUpdate
 from pre_award.assessment_store.db.models.comment.enums import CommentType
@@ -148,36 +148,38 @@ def get_sub_criteria_to_has_comment_map(application_id: str) -> dict:
 def retrieve_all_comments(fund_id, round_id, application_id=None):
     filters = []
     if fund_id:
-        filters.append(Applications.fund_id == fund_id)
+        filters.append(AssessmentRecord.fund_id == fund_id)
     if round_id:
-        filters.append(Applications.round_id == round_id)
+        filters.append(AssessmentRecord.round_id == round_id)
     if application_id:
-        filters.append(Applications.id == application_id)
+        filters.append(AssessmentRecord.application_id == application_id)
 
     results = (
-        db.session.query(CommentsUpdate, Comment, Applications, Account)
+        db.session.query(CommentsUpdate, Comment, AssessmentRecord, Account)
         .join(Comment, CommentsUpdate.comment_id == Comment.id)
-        .join(Applications, Comment.application_id == Applications.id)
+        .join(AssessmentRecord, Comment.application_id == AssessmentRecord.application_id)
         .join(Account, Comment.user_id == cast(Account.id, String))
         .filter(*filters)
         .order_by(Comment.application_id, nullsfirst(Comment.sub_criteria_id), CommentsUpdate.date_created)
         .all()
     )
 
-    # Collect all unique sub_criteria_ids and the first application_id
+    # Collect all unique sub_criteria_ids and the first assessment record
     sub_criteria_ids = set()
-    first_application: Applications = None
-    for _, comment, application, _ in results:
+    first_assessment_record: AssessmentRecord = None
+    for _, comment, assessment_record, _ in results:
         if comment and comment.sub_criteria_id:
             sub_criteria_ids.add(comment.sub_criteria_id)
-            if not first_application and application:
-                first_application = application
+            if not first_assessment_record and assessment_record:
+                first_assessment_record = assessment_record
 
-    # Build the sub_criteria_id -> name mapping using the first application_id
+    # Build the sub_criteria_id -> name mapping using the first assessment record
     sub_criteria_name_map = {}
-    if sub_criteria_ids and first_application:
-        language = first_application.language if first_application.language else "en"
-        all_subcriteria = get_all_subcriteria(fund_id, round_id, language)
+    if sub_criteria_ids and first_assessment_record:
+        language = first_assessment_record.language if first_assessment_record.language else "en"
+        all_subcriteria = get_all_subcriteria(
+            first_assessment_record.fund_id, first_assessment_record.round_id, language
+        )
         sub_criteria_name_map = {
             sub_criteria["id"]: sub_criteria["name"]
             for sub_criteria in all_subcriteria
@@ -192,12 +194,12 @@ def retrieve_all_comments(fund_id, round_id, application_id=None):
 def build_comments_list(results, sub_criteria_name_map):
     """Build a list of comment dictionaries from query results."""
     comments_list = []
-    for cu, comment, application, commenter_account in results:
+    for cu, comment, assessment_record, commenter_account in results:
         comments_list.append(
             {
                 "Application ID": str(comment.application_id) if comment else None,
-                "Application reference": application.reference if application else None,
-                "Project name": application.project_name if application else None,
+                "Application reference": assessment_record.short_id if assessment_record else None,
+                "Project name": assessment_record.project_name if assessment_record else None,
                 "Date created": cu.date_created.strftime("%d %B %Y, %H:%M") if cu.date_created else None,
                 "Comment type": (comment.comment_type.label if comment and comment.comment_type else None),
                 "Sub-criteria name": sub_criteria_name_map.get(comment.sub_criteria_id)
