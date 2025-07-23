@@ -6,10 +6,6 @@ from flask import Response, current_app, request
 
 from pre_award.assessment_store.api.models.sub_criteria import SubCriteria
 from pre_award.assessment_store.api.routes._helpers import compress_response, transform_to_assessor_task_list_metadata
-from pre_award.assessment_store.api.routes.subcriterias.get_sub_criteria import (
-    get_all_subcriteria,
-    return_subcriteria_from_mapping,
-)
 from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
     applicant_info_mapping,
 )
@@ -31,6 +27,10 @@ from pre_award.assessment_store.db.queries.qa_complete.queries import (
 from pre_award.assessment_store.db.queries.scores.queries import (
     get_scoring_system_for_round_id,
     get_sub_criteria_to_latest_score_map,
+)
+from pre_award.assessment_store.services.data_services import (
+    get_all_subcriteria,
+    return_subcriteria_from_mapping,
 )
 from pre_award.common.blueprints import Blueprint
 from pre_award.config import Config
