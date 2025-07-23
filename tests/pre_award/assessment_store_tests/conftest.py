@@ -322,7 +322,8 @@ def flask_test_client():
 @pytest.fixture
 def comments_test_account(db):
     user_id = str(uuid4())
-    account = Account(id=user_id, full_name="Test User", email="test@example.com")
+    unique_email = f"test-{user_id}@example.com"  # Make email unique
+    account = Account(id=user_id, full_name="Test User", email=unique_email)
     db.session.add(account)
     db.session.commit()
     return account

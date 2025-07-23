@@ -80,7 +80,7 @@ def test_find_assessor_task_list_ui_metadata(seed_application_records):
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_post_comment(seed_application_records):
+def test_post_comment(seed_application_records, comments_test_account):
     """test_post_comment tests we can create comment records in the comments
     table."""
 
@@ -93,19 +93,19 @@ def test_post_comment(seed_application_records):
         "sub_criteria_id": sub_criteria_id,
         "comment": "Please provide more information",
         "comment_type": "COMMENT",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": "something",
     }
     comment_metadata = create_comment(**assessment_payload)
 
     assert len(comment_metadata) == 8
-    assert comment_metadata["user_id"] == "test"
+    assert comment_metadata["user_id"] == str(comments_test_account.id)
     assert comment_metadata["theme_id"] == "something"
     assert comment_metadata["comment_type"] == "COMMENT"
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_post_comment_whole_application(seed_application_records):
+def test_post_comment_whole_application(seed_application_records, comments_test_account):
     """test_post_comment_whole_application tests we can create comment records in
     the comments table."""
 
@@ -117,20 +117,20 @@ def test_post_comment_whole_application(seed_application_records):
         "sub_criteria_id": None,
         "comment": "Please provide more information",
         "comment_type": "WHOLE_APPLICATION",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": None,
     }
     comment_metadata = create_comment(**assessment_payload)
 
     assert len(comment_metadata) == 8
-    assert comment_metadata["user_id"] == "test"
+    assert comment_metadata["user_id"] == str(comments_test_account.id)
     assert comment_metadata["theme_id"] is None
     assert comment_metadata["sub_criteria_id"] is None
     assert comment_metadata["comment_type"] == "WHOLE_APPLICATION"
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_put_comment(seed_application_records):
+def test_put_comment(seed_application_records, comments_test_account):
     """test_put_comment tests we can create comment records in the comments
     table."""
 
@@ -143,13 +143,13 @@ def test_put_comment(seed_application_records):
         "sub_criteria_id": sub_criteria_id,
         "comment": "Please provide more information",
         "comment_type": "COMMENT",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": "something",
     }
     comment_metadata = create_comment(**assessment_payload)
 
     assert len(comment_metadata) == 8
-    assert comment_metadata["user_id"] == "test"
+    assert comment_metadata["user_id"] == str(comments_test_account.id)
     assert comment_metadata["theme_id"] == "something"
 
     updated_comment = "This is updated comment"
@@ -160,7 +160,7 @@ def test_put_comment(seed_application_records):
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_put_comment_whole_application(seed_application_records):
+def test_put_comment_whole_application(seed_application_records, comments_test_account):
     """test_put_comment_whole_application tests we can create comment records in
     the comments table."""
 
@@ -172,13 +172,13 @@ def test_put_comment_whole_application(seed_application_records):
         "sub_criteria_id": None,
         "comment": "Please provide more information",
         "comment_type": "WHOLE_APPLICATION",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": None,
     }
     comment_metadata = create_comment(**assessment_payload)
 
     assert len(comment_metadata) == 8
-    assert comment_metadata["user_id"] == "test"
+    assert comment_metadata["user_id"] == str(comments_test_account.id)
     assert comment_metadata["theme_id"] is None
     assert comment_metadata["sub_criteria_id"] is None
     assert comment_metadata["comment_type"] == "WHOLE_APPLICATION"
@@ -191,7 +191,7 @@ def test_put_comment_whole_application(seed_application_records):
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_get_comments(seed_application_records):
+def test_get_comments(seed_application_records, comments_test_account):
     """test_get_comments tests we can get all comment records in the comments
     table filtered by application_id, subcriteria_id and theme_id."""
 
@@ -205,7 +205,7 @@ def test_get_comments(seed_application_records):
         "sub_criteria_id": sub_criteria_id,
         "comment": "Please provide more information",
         "comment_type": "COMMENT",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": theme_id,
     }
     create_comment(**assessment_payload_1)
@@ -215,7 +215,7 @@ def test_get_comments(seed_application_records):
         "sub_criteria_id": sub_criteria_id,
         "comment": "Please provide more information",
         "comment_type": "COMMENT",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": theme_id,
     }
     create_comment(**assessment_payload_2)
@@ -225,7 +225,7 @@ def test_get_comments(seed_application_records):
         "sub_criteria_id": sub_criteria_id,
         "comment": "Please provide more information",
         "comment_type": "COMMENT",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": "different theme",
     }
     comment_metadata = create_comment(**assessment_payload_3)
@@ -243,7 +243,7 @@ def test_get_comments(seed_application_records):
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_get_comments_whole_application(seed_application_records):
+def test_get_comments_whole_application(seed_application_records, comments_test_account):
     """test_get_comments_whole_application tests we can get all comment records in
     the comments table filtered by application_id, subcriteria_id and theme_id."""
 
@@ -255,7 +255,7 @@ def test_get_comments_whole_application(seed_application_records):
         "sub_criteria_id": None,
         "comment": "Please provide more information",
         "comment_type": "WHOLE_APPLICATION",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": None,
     }
     create_comment(**assessment_payload_1)
@@ -265,7 +265,7 @@ def test_get_comments_whole_application(seed_application_records):
         "sub_criteria_id": None,
         "comment": "Please provide more information",
         "comment_type": "WHOLE_APPLICATION",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": None,
     }
     create_comment(**assessment_payload_2)
@@ -275,7 +275,7 @@ def test_get_comments_whole_application(seed_application_records):
         "sub_criteria_id": None,
         "comment": "Please provide more information",
         "comment_type": "WHOLE_APPLICATION",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": None,
     }
     comment_metadata = create_comment(**assessment_payload_3)
@@ -291,7 +291,7 @@ def test_get_comments_whole_application(seed_application_records):
 
 
 @pytest.mark.apps_to_insert([test_input_data[0]])
-def test_get_sub_criteria_to_has_comment_map(seed_application_records):
+def test_get_sub_criteria_to_has_comment_map(seed_application_records, comments_test_account):
     picked_row: AssessmentRecord = get_assessment_record(seed_application_records[0]["application_id"])
     application_id = picked_row.application_id
     sub_criteria_id = "app-info"
@@ -302,7 +302,7 @@ def test_get_sub_criteria_to_has_comment_map(seed_application_records):
         "sub_criteria_id": sub_criteria_id,
         "comment": "Please provide more information",
         "comment_type": "COMMENT",
-        "user_id": "test",
+        "user_id": str(comments_test_account.id),
         "theme_id": theme_id,
     }
     create_comment(**assessment_payload_1)
