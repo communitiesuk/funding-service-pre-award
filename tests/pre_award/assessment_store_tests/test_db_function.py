@@ -18,7 +18,7 @@ from pre_award.assessment_store.db.queries.assessment_records.queries import (
 )
 from pre_award.assessment_store.db.queries.comments.queries import (
     create_comment,
-    get_comments_from_db,
+    get_comments_for_display,
     get_sub_criteria_to_has_comment_map,
     update_comment,
 )
@@ -230,15 +230,15 @@ def test_get_comments(seed_application_records, comments_test_account):
     }
     comment_metadata = create_comment(**assessment_payload_3)
 
-    comment_metadata_for_theme = get_comments_from_db(application_id, sub_criteria_id, theme_id)
+    comment_metadata_for_theme = get_comments_for_display(application_id, sub_criteria_id, theme_id)
     assert len(comment_metadata_for_theme) == 2
     assert comment_metadata_for_theme[0]["theme_id"] == comment_metadata_for_theme[1]["theme_id"]
 
-    comment_metadata_no_theme = get_comments_from_db(application_id, sub_criteria_id, theme_id=None)
+    comment_metadata_no_theme = get_comments_for_display(application_id, sub_criteria_id, theme_id=None)
     assert len(comment_metadata_no_theme) == 3
 
     # test without application_id
-    comment_metadata_for_comment_id = get_comments_from_db(comment_id=comment_metadata["id"])
+    comment_metadata_for_comment_id = get_comments_for_display(comment_id=comment_metadata["id"])
     assert len(comment_metadata_for_comment_id) == 1
 
 
@@ -280,13 +280,13 @@ def test_get_comments_whole_application(seed_application_records, comments_test_
     }
     comment_metadata = create_comment(**assessment_payload_3)
 
-    comment_metadata_for_theme = get_comments_from_db(application_id, None, None)
+    comment_metadata_for_theme = get_comments_for_display(application_id, None, None)
     assert len(comment_metadata_for_theme) == 3
     assert comment_metadata_for_theme[0]["theme_id"] == comment_metadata_for_theme[1]["theme_id"]
     assert comment_metadata_for_theme[0]["comment_type"] == comment_metadata_for_theme[1]["comment_type"]
 
     # test without application_id
-    comment_metadata_for_comment_id = get_comments_from_db(comment_id=comment_metadata["id"])
+    comment_metadata_for_comment_id = get_comments_for_display(comment_id=comment_metadata["id"])
     assert len(comment_metadata_for_comment_id) == 1
 
 

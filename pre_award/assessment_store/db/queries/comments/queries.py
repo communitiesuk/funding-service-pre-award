@@ -220,14 +220,15 @@ def export_comments_to_excel(
     )
 
 
-# Convenience functions for backward compatibility
-def get_comments_from_db(application_id=None, sub_criteria_id=None, theme_id=None, comment_id=None, comment_type=None):
+def get_comments_for_display(
+    application_id=None, sub_criteria_id=None, theme_id=None, comment_id=None, comment_type=None
+):
     """Get comments formatted for display."""
     raw_data = get_comments(application_id, sub_criteria_id, theme_id, comment_id, comment_type)
     return format_comments_for_display(raw_data)
 
 
-def retrieve_all_comments(fund_id, round_id, application_id=None):
+def get_comments_for_export(fund_id, round_id, application_id=None):
     """Get comments formatted for export."""
     raw_data = get_comments(fund_id=fund_id, round_id=round_id, application_id=application_id)
     return format_comments_for_export(raw_data)

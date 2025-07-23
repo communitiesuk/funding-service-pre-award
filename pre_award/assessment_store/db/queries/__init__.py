@@ -3,7 +3,7 @@ from .assessment_records.queries import (
     find_answer_by_key_runner,
     get_metadata_for_fund_round_id,
 )
-from .comments.queries import create_comment, get_comments_from_db
+from .comments.queries import create_comment, get_comments_for_display
 from .progress.queries import get_progress_for_app
 from .scores.queries import (
     _insert_scoring_system,
@@ -20,7 +20,7 @@ __all__ = [
     "find_answer_by_key_runner",
     "get_scores_for_app_sub_crit",
     "create_score_for_app_sub_crit",
-    "get_comments_from_db",
+    "get_comments_for_display",
     "create_comment",
     "get_progress_for_app",
     "delete_assessment_record",

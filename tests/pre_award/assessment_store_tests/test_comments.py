@@ -8,7 +8,7 @@ import pandas as pd
 from pre_award.application_store.db.models import Applications
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from pre_award.assessment_store.db.models.comment.enums import CommentType
-from pre_award.assessment_store.db.queries.comments.queries import export_comments_to_excel, retrieve_all_comments
+from pre_award.assessment_store.db.queries.comments.queries import export_comments_to_excel, get_comments_for_export
 from tests.pre_award.assessment_store_tests.conftest import create_comment_with_updates
 
 
@@ -110,7 +110,7 @@ def test_export_comments_to_excel(
     )
 
     # Retrieve comments for the test application
-    comments_list = retrieve_all_comments(
+    comments_list = get_comments_for_export(
         fund_id=test_fund_id,
         round_id=test_round_id,
         application_id=application_id,
