@@ -2,7 +2,7 @@ from typing import Dict
 
 from flask import request
 
-from pre_award.assessment_store.db.queries.comments import create_comment, get_comments_from_db, update_comment
+from pre_award.assessment_store.db.queries.comments import create_comment, get_comments_for_display, update_comment
 from pre_award.common.blueprints import Blueprint
 
 assessment_comment_bp = Blueprint("assessment_comment_bp", __name__)
@@ -16,7 +16,7 @@ def get_comments() -> Dict:
     comment_id = request.args.get("comment_id")
     comment_type = request.args.get("comment_type")
 
-    comment_metadatas = get_comments_from_db(
+    comment_metadatas = get_comments_for_display(
         application_id, sub_criteria_id, theme_id, comment_id, comment_type=comment_type
     )
 

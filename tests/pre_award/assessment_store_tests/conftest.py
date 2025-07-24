@@ -1,6 +1,7 @@
 import copy
 import json
 import random
+from datetime import datetime, timedelta
 from typing import Any, List
 from uuid import uuid4
 
@@ -12,6 +13,7 @@ from sqlalchemy.dialects.postgresql import insert as postgres_insert
 from werkzeug.test import TestResponse
 
 from app import create_app
+from pre_award.account_store.db.models.account import Account
 from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import (
     fund_round_mapping_config_with_round_id,
 )
@@ -20,6 +22,7 @@ from pre_award.assessment_store.db.models.assessment_record import AssessmentRec
 from pre_award.assessment_store.db.models.assessment_record.allocation_association import AllocationAssociation
 from pre_award.assessment_store.db.models.assessment_record.tag_association import TagAssociation
 from pre_award.assessment_store.db.models.comment import Comment, CommentsUpdate
+from pre_award.assessment_store.db.models.comment.enums import CommentType
 from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from pre_award.assessment_store.db.models.flags.flag_update import FlagUpdate
 from pre_award.assessment_store.db.models.qa_complete import QaComplete
@@ -314,3 +317,85 @@ def flask_test_client():
     app.test_client_class = _FlaskClientWithHost
     with app.test_client() as test_client:
         yield test_client
+
+
+@pytest.fixture
+def comments_test_account(db):
+    user_id = str(uuid4())
+    unique_email = f"test-{user_id}@example.com"  # Make email unique
+    account = Account(id=user_id, full_name="Test User", email=unique_email)
+    db.session.add(account)
+    db.session.commit()
+    return account
+
+
+@pytest.fixture
+def comments_base_time():
+    return datetime(2025, 6, 30, 8, 0, 0)
+
+
+@pytest.fixture
+def comments_data():
+    return [
+        # Application-level comments (sub_criteria_id=None)
+        {"sub_criteria_id": None, "comment_type": CommentType.WHOLE_APPLICATION, "updates": ["App-level 1"]},
+        {
+            "sub_criteria_id": None,
+            "comment_type": CommentType.WHOLE_APPLICATION,
+            "updates": ["App-level 2", "App-level 2 update"],
+        },
+        # Sub-criteria comments
+        {"sub_criteria_id": "SC1", "comment_type": CommentType.COMMENT, "updates": ["SC1 comment 1"]},
+        {
+            "sub_criteria_id": "SC1",
+            "comment_type": CommentType.COMMENT,
+            "updates": ["SC1 comment 2", "SC1 comment 2 update"],
+        },
+        {"sub_criteria_id": "SC2", "comment_type": CommentType.COMMENT, "updates": ["SC2 comment 1"]},
+        {"sub_criteria_id": "SC2", "comment_type": CommentType.COMMENT, "updates": ["SC2 comment 2"]},
+    ]
+
+
+def create_comment_with_updates(
+    db, application_id, user_id, sub_criteria_id, comment_type, update_texts, comments_base_time, account
+):
+    comment = Comment(
+        application_id=application_id,
+        user_id=user_id,
+        sub_criteria_id=sub_criteria_id,
+        comment_type=comment_type,
+        date_created=comments_base_time,
+    )
+    db.session.add(comment)
+    db.session.flush()
+
+    updates = []
+    for i, text in enumerate(update_texts):
+        update = CommentsUpdate(
+            comment_id=comment.id,
+            comment=text,
+            date_created=comments_base_time + timedelta(minutes=i),
+        )
+        db.session.add(update)
+        updates.append(update)
+    db.session.commit()
+    return comment, updates
+
+
+@pytest.fixture
+def mock_comments_sub_criteria(mocker):
+    mock_subcriteria_data = [
+        {
+            "id": "SC1",
+            "name": "Sub Criteria 1",
+            "themes": [],
+        },
+        {
+            "id": "SC2",
+            "name": "Sub Criteria 2",
+            "themes": [],
+        },
+    ]
+    mocker.patch(
+        "pre_award.assessment_store.db.queries.comments.queries.get_all_subcriteria", return_value=mock_subcriteria_data
+    )

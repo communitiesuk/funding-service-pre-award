@@ -6,8 +6,7 @@ from pre_award.assessment_store.db.models.assessment_record import AssessmentRec
 from pre_award.assessment_store.db.models.assessment_record.allocation_association import AllocationAssociation
 from pre_award.assessment_store.db.models.assessment_record.enums import Language, Status
 from pre_award.assessment_store.db.models.assessment_record.tag_association import TagAssociation
-from pre_award.assessment_store.db.models.comment import Comment, CommentsUpdate
-from pre_award.assessment_store.db.models.comment.enums import CommentType
+from pre_award.assessment_store.db.models.comment import CommentsUpdate
 from pre_award.assessment_store.db.models.flags.assessment_flag import AssessmentFlag
 from pre_award.assessment_store.db.models.flags.flag_update import FlagUpdate
 from pre_award.assessment_store.db.models.qa_complete import QaComplete
@@ -54,20 +53,6 @@ class ScoreMetadata(SQLAlchemyAutoSchema):
         load_instance = True
 
     application_id = auto_field(dump_only=True)
-
-
-class CommentMetadata(SQLAlchemyAutoSchema):
-    """CommentMetadata The marshmallow class used to turn SQLAlchemy rows into
-    json for return in http responses."""
-
-    class Meta:
-        model = Comment
-        include_relationships = True
-        load_instance = True
-
-    comment_type = Enum(CommentType)
-    application_id = auto_field(dump_only=True)
-    updates = Nested("CommentsUpdateSchema", many=True)
 
 
 class CommentsUpdateSchema(SQLAlchemyAutoSchema):

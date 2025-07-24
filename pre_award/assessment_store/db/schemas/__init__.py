@@ -3,7 +3,6 @@ from .schemas import (
     AssessmentRoundMetadata,
     AssessmentSubCriteriaMetadata,
     AssessorTaskListMetadata,
-    CommentMetadata,
     ScoreMetadata,
     ScoringSystemMetadata,
 )
@@ -13,7 +12,6 @@ __all__ = [
     "ScoreMetadata",
     "AssessorTaskListMetadata",
     "AssessmentSubCriteriaMetadata",
-    "CommentMetadata",
     "AssessmentRoundMetadata",
     "ScoringSystemMetadata",
 ]

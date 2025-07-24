@@ -17,7 +17,6 @@ from markupsafe import escape
 from werkzeug.datastructures import ImmutableMultiDict, MultiDict
 
 from pre_award.application_store.db.queries.application.queries import mark_application_with_requested_changes
-from pre_award.application_store.db.queries.comments.queries import export_comments_to_excel, retrieve_all_comments
 from pre_award.assess.assessments.activity_trail import (
     AssociatedTags,
     CheckboxForm,
@@ -145,6 +144,7 @@ from pre_award.assessment_store.api.routes.assessment_routes import (
     get_application_json_and_sub_criterias,
 )
 from pre_award.assessment_store.db.models.assessment_record.enums import Status as WorkflowStatus
+from pre_award.assessment_store.db.queries.comments.queries import export_comments_to_excel, get_comments_for_export
 from pre_award.assessment_store.db.queries.flags.queries import (
     get_change_requests_for_application,
     is_first_change_request_for_date,
@@ -1844,7 +1844,7 @@ def comments_export(fund_short_name, round_short_name):
         ttl_hash=get_ttl_hash(Config.LRU_CACHE_TIME),
     )
 
-    comments_list = retrieve_all_comments(round.fund_id, round.id)
+    comments_list = get_comments_for_export(round.fund_id, round.id)
     return export_comments_to_excel(comments_list, fund_short_name, round_short_name)
 
 
@@ -1861,7 +1861,7 @@ def comments_export_for_application(fund_short_name, round_short_name, applicati
         ttl_hash=get_ttl_hash(Config.LRU_CACHE_TIME),
     )
 
-    comments_list = retrieve_all_comments(
+    comments_list = get_comments_for_export(
         rnd.fund_id,
         rnd.id,
         application_id=application_id,
