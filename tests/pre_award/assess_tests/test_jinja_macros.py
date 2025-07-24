@@ -1152,7 +1152,8 @@ class TestJinjaMacros(object):
             mock_access_controller.is_lead_assessor = is_lead_assessor
             rendered_html = render_template_string(
                 "{{round_links(access_controller, assessments_href, download_available, export_href,"
-                " feedback_export_href,assessment_tracker_href, comments_export_href, round_status)}}",
+                " feedback_export_href,assessment_tracker_href, comments_export_href, round_status, round_name,"
+                " fund_name)}}",
                 round_links=get_template_attribute("assess/macros/fund_dashboard_summary.html", "round_links"),
                 access_controller=mock_access_controller,
                 assessments_href="assessments_href",
@@ -1169,10 +1170,16 @@ class TestJinjaMacros(object):
                     has_assessment_opened,
                     False,
                 ),
+                round_name="Test Round",
+                fund_name="Test Fund",
             )
 
             soup = BeautifulSoup(rendered_html, "html.parser")
             found_links = soup.find_all("a", class_="govuk-link")
             assert len(found_links) == len(exp_links_text)
-            for text in exp_links_text:
-                assert soup.find("a", class_="govuk-link", string=lambda str: text in str)  # noqa: B023
+
+            link_texts = [link.get_text() for link in found_links]
+            for expected_text in exp_links_text:
+                assert any(expected_text in link_text for link_text in link_texts), (
+                    f"Expected text '{expected_text}' not found in any link"
+                )

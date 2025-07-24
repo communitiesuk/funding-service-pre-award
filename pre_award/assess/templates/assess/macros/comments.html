@@ -54,14 +54,14 @@
                                             theme_id=comment.theme_id,
                                             edit_comment="1",
                                             comment_id=comment.id
-                                        ) }}" >Edit comment</a>
+                                        ) }}" >Edit comment<span class="govuk-visually-hidden"> left by {{ comment.full_name }} on {{ comment.updates[-1].date_created|utc_to_bst }}</span></a>
                                     {% elif comment.comment_type == "WHOLE_APPLICATION" %}
                                         <a class="govuk-link" href="{{ url_for(
                                             "assessment_bp.application",
                                             application_id=comment.application_id,
                                             edit_comment="1",
                                             comment_id=comment.id
-                                        ) }}" >Edit comment</a>
+                                        ) }}" >Edit comment<span class="govuk-visually-hidden"> left by {{ comment.full_name }} on {{ comment.updates[-1].date_created|utc_to_bst }}</span></a>
                                     {% endif %}
                                 {% endif %}
                                 {% if comment.updates|length > 1 %}
@@ -72,13 +72,13 @@
                                         sub_criteria_id=comment.sub_criteria_id,
                                         theme_id=comment.theme_id,
                                         show_comment_history="1",
-                                        comment_id=comment.id) }}">See history</a>
+                                        comment_id=comment.id) }}">See history<span class="govuk-visually-hidden"> for comment left by {{ comment.full_name }} on {{ comment.updates[-1].date_created|utc_to_bst }}</span></a>
                                     {% elif comment.comment_type == "WHOLE_APPLICATION" %}
                                         <a class="govuk-link" href="{{ url_for(
                                         "assessment_bp.application",
                                         application_id=comment.application_id,
                                         show_comment_history="1",
-                                        comment_id=comment.id) }}">See history</a>
+                                        comment_id=comment.id) }}">See history<span class="govuk-visually-hidden"> for comments on whole application</span></a>
                                     {% endif %}
                                 {% endif %}
                             </div>

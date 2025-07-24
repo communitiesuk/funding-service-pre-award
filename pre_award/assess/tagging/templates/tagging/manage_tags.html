@@ -131,7 +131,7 @@
                                             fund_id = fund_round['fund_id'],
                                             round_id = fund_round['round_id'],
                                             tag_id=tag.id) }}">
-                                                Edit
+                                                Edit<span class="govuk-visually-hidden"> {{ tag.value }} tag</span>
                                             </a>
                                         </td>
                                     {% else %}
@@ -140,7 +140,7 @@
                                             fund_id=fund_round['fund_id'],
                                             round_id=fund_round['round_id'],
                                             tag_id=tag.id) }}">
-                                                Reactivate
+                                                Reactivate<span class="govuk-visually-hidden"> {{ tag.value }} tag</span>
                                             </a>
                                         </td>
                                     {% endif %}

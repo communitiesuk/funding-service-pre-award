@@ -23,10 +23,10 @@
 {% endmacro %}
 
 {% macro round_links(access_controller, assessments_href, download_available, export_href, feedback_export_href,
-assessment_tracker_href, comments_export_href, round_status) %}
+assessment_tracker_href, comments_export_href, round_status, round_name, fund_name) %}
     {% if round_status.has_assessment_opened %}
         <a class="govuk-link" data-qa="dashboard_summary" href="{{ assessments_href }}">
-            View all {% if round_status.is_assessment_active %}active{% else %}closed{% endif %} assessments
+            View all {% if round_status.is_assessment_active %}active{% else %}closed{% endif %} assessments<span class="govuk-visually-hidden"> for {{ fund_name }} {{ round_name }}</span>
         </a>
         </br>
         </br>
@@ -35,14 +35,14 @@ assessment_tracker_href, comments_export_href, round_status) %}
         {% if download_available %}
             {% if export_href and round_status.has_assessment_opened %}
                 <a class="govuk-link" href="{{ export_href }}">
-                    Export applicant information
+                    Export applicant information<span class="govuk-visually-hidden"> for {{ fund_name }} {{ round_name }}</span>
                 </a>
                 </br>
                 </br>
             {% endif %}
             {% if feedback_export_href %}
                 <a class="govuk-link" href="{{ feedback_export_href }}">
-                    Export feedback survey responses
+                    Export feedback survey responses<span class="govuk-visually-hidden"> for {{ fund_name }} {{ round_name }}</span>
                 </a>
                 </br>
                 </br>
@@ -50,13 +50,13 @@ assessment_tracker_href, comments_export_href, round_status) %}
         {% endif %}
         {% if assessment_tracker_href and round_status.has_assessment_opened %}
             <a class="govuk-link" href="{{ assessment_tracker_href }}">
-                Assessment Tracker Export
+                Assessment Tracker Export<span class="govuk-visually-hidden"> for {{ fund_name }} {{ round_name }}</span>
             </a>
             </br>
             </br>
         {% endif %}
         <a class="govuk-link" href="{{ comments_export_href }}">
-            Export comments
+            Export comments<span class="govuk-visually-hidden"> for {{ fund_name }} {{ round_name }}</span>
         </a>
     {% endif %}
 {% endmacro %}
@@ -72,7 +72,7 @@ assessment_tracker_href, comments_export_href, round_status) %}
             <li class="govuk-summary-card__action">
                 <a class="govuk-link govuk-link__white_font govuk-!-margin-right-4" data-qa="manage-tags"
                     href="{{ url_for('tagging_bp.load_fund_round_tags', fund_id=summary.fund_id, round_id=summary.round_id) }}">
-                    Manage tags
+                    Manage tags<span class="govuk-visually-hidden"> for {{ summary.fund_name }} {{ summary.round_name }}</span>
                 </a>
             </li>
         </ul>
@@ -145,7 +145,7 @@ assessment_tracker_href, comments_export_href, round_status) %}
             {{ round_links(summary.access_controller, summary.assessments_href,
                 summary.round_application_fields_download_available,
                 summary.export_href, summary.feedback_export_href, summary.assessment_tracker_href,
-                summary.comments_export_href, summary.status)
+                summary.comments_export_href, summary.status, summary.round_name, summary.fund_name)
             }}
         {% endif %}
 

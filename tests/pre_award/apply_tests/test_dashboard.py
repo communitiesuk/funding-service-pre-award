@@ -231,7 +231,10 @@ def test_dashboard_route(apply_test_client, mocker, mock_login):
     assert len(soup.find_all("strong", class_="in-progress-tag-new")) == 1
     assert len(soup.find_all("strong", class_="govuk-tag--yellow")) == 1
     assert len(soup.find_all("strong", class_="complete-tag")) == 2
-    assert len(soup.find_all("a", string="Continue application")) == 2
+
+    continue_application_links = [link for link in soup.find_all("a") if "Continue application" in link.get_text()]
+    assert len(continue_application_links) == 2
+
     assert (
         len(
             soup.find_all(
