@@ -1,4 +1,4 @@
-{% macro filter_options(query_params, search_label, assessment_statuses, round_details, display_config, tag_option_groups, users) %}
+{% macro filter_options(query_params, search_label, assessment_statuses, round_details, display_config, tag_option_groups, users, is_uncompeted_flow_flag) %}
 
 <fieldset class="govuk-fieldset">
     <div class="govuk-grid-row">
@@ -18,8 +18,13 @@
                 </label>
                 <select class="govuk-select govuk-!-width-full" name="status" id="filter_status">
                     {% for item in assessment_statuses %}
-                    <option value='{{ item }}' {% if query_params.status==item %} selected="" {% endif %}>{{
-                        assessment_statuses[item] }}</option>
+                    <option value='{{ item }}' {% if query_params.status==item %} selected="" {% endif %}>
+                        {% if item == "QA_COMPLETED" and is_uncompeted_flow_flag %}
+                            Moderation complete
+                        {% else %}
+                            {{ assessment_statuses[item] }}
+                        {% endif %}
+                    </option>
                     {% endfor %}
                 </select>
             </div>
