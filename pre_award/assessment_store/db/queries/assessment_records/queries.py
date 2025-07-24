@@ -226,22 +226,37 @@ def get_metadata_for_fund_round_id(  # noqa: C901 - historical sadness
             all_latest_status = [flag.latest_status for flag in assessment.flags]
             is_qa_complete = True if assessment.qa_complete else False
 
-            if FlagStatus.STOPPED in all_latest_status:
-                display_status = "STOPPED"
-            elif all_latest_status.count(FlagStatus.RAISED) > 1:
-                display_status = "MULTIPLE_FLAGS"
-            elif (
-                all_latest_status.count(FlagStatus.RAISED) == 1
-                and assessment.workflow_status == Status.CHANGE_REQUESTED
-            ):
-                display_status = "CHANGE_REQUESTED"
-            elif all_latest_status.count(FlagStatus.RAISED) == 1:
-                display_status = "FLAGGED"
-            elif is_qa_complete:
-                display_status = "QA_COMPLETED"
-            else:
-                display_status = assessment.workflow_status.name
+            raised_flags = all_latest_status.count(FlagStatus.RAISED)
 
+            # Set default display status to workflow status name e.g., "Ready to review"
+            display_status = assessment.workflow_status.name
+
+            # If QA is complete, update display status
+            display_status = "QA_COMPLETED" if is_qa_complete else display_status
+
+            # If flagged, update display status
+            if assessment.workflow_status == Status.CHANGE_REQUESTED:
+                # A change request technically counts as a flag but is not a "real" flag
+                match raised_flags:
+                    case 0:
+                        pass
+                    case 1:
+                        display_status = "CHANGE_REQUESTED"
+                    case 2:
+                        display_status = "FLAGGED"
+                    case _:
+                        display_status = "MULTIPLE_FLAGS"
+            else:
+                match raised_flags:
+                    case 0:
+                        pass
+                    case 1:
+                        display_status = "FLAGGED"
+                    case _:
+                        display_status = "MULTIPLE_FLAGS"
+
+            # Stopped status overrides all!
+            display_status = "STOPPED" if FlagStatus.STOPPED in all_latest_status else display_status
             if display_status == status:
                 filter_assessments.append(assessment)
 
