@@ -114,7 +114,7 @@
         {% if is_past_submission_deadline %}
         {{ round_closed_warning(fund_name, round_title, submission_deadline) }}
         {% endif %}
-        <dl>
+        <dl class="govuk-!-margin-bottom-0">
             {% if not is_expression_of_interest %}
                 <dt class="govuk-heading-s dl-inline">{% trans %}Submission deadline:{% endtrans %}</dt>
                 <dd class="govuk-body govuk-!-margin-bottom-2"> {{ submission_deadline|string_to_datetime|datetime_format_full_month }}</dd>
@@ -147,17 +147,17 @@
                         {{ application_status("COMPLETED") }}
                     </dd>
                 {% endif %}
-                <dt class="govuk-body govuk-!-margin-bottom-7">
-                    {% if application_meta_data["number_of_completed_forms"] == 0 %}
-                        {% trans %}None of the sections have been completed.{% endtrans %}
-                    {% else %}
-                        {% trans %}You have completed{% endtrans %}
-                        {{ application_meta_data["number_of_completed_forms"] }} {% trans %}of{% endtrans %}
-                        {{ application_meta_data["number_of_forms"] }} {% trans %}sections.{% endtrans %}
-                    {% endif %}
-                </dt>
             {% endif %}
-            </dl>
+        </dl>
+        <p class="govuk-body govuk-!-margin-bottom-7">
+            {% if application_meta_data["number_of_completed_forms"] == 0 %}
+                {% trans %}None of the sections have been completed.{% endtrans %}
+            {% else %}
+                {% trans %}You have completed{% endtrans %}
+                {{ application_meta_data["number_of_completed_forms"] }} {% trans %}of{% endtrans %}
+                {{ application_meta_data["number_of_forms"] }} {% trans %}sections.{% endtrans %}
+            {% endif %}
+        </p>
 
         {% if application["status"] == application_meta_data["completed_status"] %}
             {{ tasklist_submit(application.id, application_meta_data, form, url_for('application_routes.submit_application')) }}
