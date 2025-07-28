@@ -62,20 +62,20 @@
                 {% endfor %}
                 <div class="govuk-radios" id="assessor-type-selection">
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="lead_assessor" name="assessor_role" type="radio" value="lead_assessor" {% if selected_assessor_role == "lead_assessor" %}checked{% endif %}>
+                        <input class="govuk-radios__input" id="lead_assessor" name="assessor_role" type="radio" value="lead_assessor" {% if selected_assessor_role == "lead_assessor" %}checked{% endif %} aria-describedby="lead_assessor-hint">
                         <label class="govuk-label govuk-radios__label" for="lead_assessor">
                             Lead assessor
                         </label>
-                        <span class="govuk-hint">
+                        <span id="lead_assessor-hint" class="govuk-hint">
                             A lead assessor is the person who is responsible for the entire assessment
                         </span>
                     </div>
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="general_assessor" name="assessor_role" type="radio" value="general_assessor" {% if selected_assessor_role == "general_assessor" %}checked{% endif %}>
+                        <input class="govuk-radios__input" id="general_assessor" name="assessor_role" type="radio" value="general_assessor" {% if selected_assessor_role == "general_assessor" %}checked{% endif %} aria-describedby="general_assessor-hint">
                         <label class="govuk-label govuk-radios__label" for="general_assessor">
                             General assessor
                         </label>
-                        <span class="govuk-hint">
+                        <span id="general_assessor-hint" class="govuk-hint">
                             A general assessor is a person who is responsible for completing part of an assessment
                         </span>
                     </div>
