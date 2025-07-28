@@ -17,9 +17,11 @@ class TagAssociationForm(FlaskForm):
 tag_value_field = TextAreaField(
     "value",
     validators=[
-        InputRequired(message="Provide a value for the tag."),
+        InputRequired(message="Enter a tag name"),
         length(max=Config.TEXT_AREA_INPUT_MAX_CHARACTERS),
-        Regexp(r"^[A-Za-z0-9_' -]+$", message="Invalid characters in value."),
+        Regexp(
+            r"^[A-Za-z0-9_' -]+$", message="Tag name can only include letters, numbers, apostrophes, hyphens and spaces"
+        ),
     ],
 )
 
@@ -29,7 +31,7 @@ class NewTagForm(FlaskForm):
 
     type = RadioField(
         "type",
-        validators=[InputRequired()],
+        validators=[InputRequired(message="Select a tag purpose")],
     )
 
 
