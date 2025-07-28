@@ -240,8 +240,8 @@ def test_create_tag_invalid_form_post(
     mock_get_active_tags_for_fund_round,
 ):
     expected_errors = [
-        "Provide a value for the tag.",
-        "This field is required.",
+        "Enter a tag name",
+        "Select a tag purpose",
     ]
     response = client_with_valid_session.post(
         f"/assess/tags/create/{test_fund_id}/{test_round_id}",
@@ -274,7 +274,10 @@ def test_create_tag_invalid_character_post(
     mock_get_round,
     mock_get_active_tags_for_fund_round,
 ):
-    expected_errors = ["Invalid characters in value.", "Not a valid choice."]
+    expected_errors = [
+        "Tag name can only include letters, numbers, apostrophes, hyphens and spaces",
+        "Not a valid choice.",
+    ]
     response = client_with_valid_session.post(
         f"/assess/tags/create/{test_fund_id}/{test_round_id}",
         data={"value": "!!", "type": "invalid_type"},  # SPECIAL CHARACTER
