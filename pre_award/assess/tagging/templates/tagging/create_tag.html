@@ -91,7 +91,7 @@ round_id=fund_round["round_id"]), fund_round, sso_logout_url) }}
           <div class="govuk-radios__item">
             <input class="govuk-radios__input" id="{{ form.type.id }}-{{ tag_type['purpose'] }}" name="{{ form.type.id }}"
               type="radio" value="{{ tag_type['id'] }}" {% if tag_type['id']==form.type.data %} checked {% endif
-              %}aria-describedby="tag-item-hint">
+              %}aria-describedby="tag-item-hint-{{ tag_type['purpose'] }}">
             <label class="govuk-label govuk-radios__label" for="{{ form.type.id }}-{{ tag_type['purpose'] }}">
               {{ tag_type['purpose'].title() }}
               <strong
