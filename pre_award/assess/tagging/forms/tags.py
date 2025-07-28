@@ -29,7 +29,7 @@ class NewTagForm(FlaskForm):
 
     type = RadioField(
         "type",
-        validators=[InputRequired()],
+        validators=[InputRequired(message="Select a tag purpose")],
     )
 
 
