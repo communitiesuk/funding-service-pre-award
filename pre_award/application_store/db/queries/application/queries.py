@@ -48,6 +48,25 @@ def get_application(app_id, include_forms=False, as_json=False) -> dict | Applic
         return row
 
 
+def get_application_by_reference(app_ref, include_forms=False, as_json=False) -> dict | Applications:
+    stmt: Select = select(Applications).filter(Applications.reference == app_ref)
+
+    if include_forms:
+        stmt.options(joinedload(Applications.forms))
+        serialiser = ApplicationSchema()
+    else:
+        stmt.options(noload(Applications.forms))
+        serialiser = ApplicationSchema(exclude=["forms"])
+
+    row: Applications = db.session.scalars(stmt).unique().one()
+
+    if as_json:
+        json_row = serialiser.dump(row)
+        return json_row
+    else:
+        return row
+
+
 def get_applications(filters=None, include_forms=False, as_json=False) -> list[dict] | list[Applications]:
     if filters is None:
         filters = []
