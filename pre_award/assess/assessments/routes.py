@@ -249,7 +249,9 @@ def _get_fund_dashboard_data(fund: Fund, round: Round, request):
     tag_types = future_tag_types.result()
 
     thread_executor.executor.shutdown()
-
+    all_applications_metadata = [
+        item for item in all_applications_metadata if item.get("workflow_status") != WorkflowStatus.DELETED.name
+    ]
     unfiltered_stats = process_assessments_stats(all_applications_metadata)
     all_application_locations = LocationData.from_json_blob(all_applications_metadata)
 
@@ -275,6 +277,9 @@ def _get_fund_dashboard_data(fund: Fund, round: Round, request):
     )
 
     # get and set application status
+    post_processed_overviews = [
+        item for item in post_processed_overviews if item.get("workflow_status") != WorkflowStatus.DELETED.name
+    ]
     post_processed_overviews = set_application_status_in_overview(post_processed_overviews)
     post_processed_overviews, users_not_mapped = set_assigned_info_in_overview(post_processed_overviews, users_for_fund)
 
