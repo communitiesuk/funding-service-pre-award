@@ -31,6 +31,7 @@ common_application_data = {
     "status": "IN_PROGRESS",
     "fund_id": "xxx",
     "round_id": "xxx",
+    "is_deleted": False,
 }
 TEST_APPLICATION_SUMMARIES = [
     ApplicationSummary.from_dict(
@@ -179,6 +180,7 @@ TEST_DISPLAY_DATA = {
                             "fund_id": "funding-service-design",
                             "started_at": "2020-01-01T12:03:00",
                             "project_name": None,
+                            "is_deleted": False,
                             "last_edited": datetime.strptime("2020-01-01T12:03:00", "%Y-%m-%dT%H:%M:%S"),
                         },
                         {
@@ -189,6 +191,7 @@ TEST_DISPLAY_DATA = {
                             "fund_id": "funding-service-design",
                             "started_at": "2023-01-01T12:01:00",
                             "project_name": "",
+                            "is_deleted": False,
                             "last_edited": None,
                         },
                     ],
@@ -216,6 +219,7 @@ TEST_DISPLAY_DATA = {
                             "fund_id": "funding-service-design",
                             "started_at": "2020-01-01T12:03:00",
                             "project_name": None,
+                            "is_deleted": False,
                             "last_edited": datetime.strptime("2020-01-01T12:03:00", "%Y-%m-%dT%H:%M:%S"),
                         },
                         {
@@ -226,6 +230,7 @@ TEST_DISPLAY_DATA = {
                             "fund_id": "funding-service-design",
                             "started_at": "2023-01-01T12:01:00",
                             "project_name": "",
+                            "is_deleted": False,
                             "last_edited": None,
                         },
                     ],
@@ -249,6 +254,7 @@ TEST_APPLICATIONS = [
             "started_at": "2022-10-11T09:43:40.632095",
             "status": "IN_PROGRESS",
             "language": "en",
+            "is_deleted": False,
             "forms": COF_TEST_FORMS,
         }
     ),
@@ -266,6 +272,7 @@ TEST_APPLICATIONS = [
             "started_at": "2022-10-11T09:43:40.632095",
             "status": "IN_PROGRESS",
             "language": "cy",
+            "is_deleted": False,
             "forms": COF_TEST_FORMS,
         }
     ),
@@ -285,6 +292,7 @@ SUBMITTED_APPLICATION = Application.from_dict(
         "started_at": "2022-10-11T09:43:40.632095",
         "status": "SUBMITTED",
         "language": "en",
+        "is_deleted": False,
         "forms": [],
     }
 )
@@ -302,6 +310,7 @@ NOT_STARTED_APPLICATION = Application.from_dict(
         "started_at": "2022-05-20T14:47:12",
         "last_edited": None,
         "language": "en",
+        "is_deleted": False,
         "feedback_survey_config": {
             "has_feedback_survey": True,
             "has_section_feedback": True,

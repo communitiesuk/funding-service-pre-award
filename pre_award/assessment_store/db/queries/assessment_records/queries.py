@@ -51,6 +51,10 @@ def get_metadata_for_application(
     return metadata_serializer.dump(result)
 
 
+def get_assessment_record(app_id) -> AssessmentRecord | None:
+    return AssessmentRecord.query.get(app_id)
+
+
 def get_metadata_for_fund_round_id(  # noqa: C901 - historical sadness
     fund_id: str,
     round_id: str,
@@ -361,6 +365,7 @@ def find_assessor_task_list_state(application_id: str) -> dict:
             "round_id",
             "funding_amount_requested",
             "language",
+            "is_deleted",
         )
     ).dump(assessment_record)
 

@@ -311,6 +311,7 @@ application_expected_data = [
         "started_at": datetime.fromisoformat("2022-05-20 14:47:12"),
         "last_edited": None,
         "status": None,
+        "is_deleted": False,
         **application_data,
     }
     for application_data in test_application_data

@@ -212,7 +212,7 @@ def tasklist(application_id):
         ttl_hash=get_ttl_hash(Config.LRU_CACHE_TIME),
     )
 
-    if application.status == ApplicationStatus.SUBMITTED.name:
+    if application.status == ApplicationStatus.SUBMITTED.name or application.is_deleted:
         with force_locale(application.language):
             return redirect(
                 url_for(

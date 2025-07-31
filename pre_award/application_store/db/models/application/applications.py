@@ -5,6 +5,7 @@ from sqlalchemy import Column, DateTime
 from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from sqlalchemy.sql.sqltypes import Boolean
 
 from pre_award.application_store.db.models.application.enums import Language, Status
 from pre_award.db import db
@@ -35,6 +36,7 @@ class Applications(BaseModel):
     status = Column("status", ENUM(Status), default="NOT_STARTED", nullable=False)
     date_submitted = Column("date_submitted", DateTime())
     last_edited = Column("last_edited", DateTime(), server_default=func.now())
+    is_deleted = Column(Boolean, nullable=False, default=False)
     forms = relationship("Forms")
     feedbacks = relationship("Feedback")
     end_of_application_survey = relationship("EndOfApplicationSurveyFeedback")
