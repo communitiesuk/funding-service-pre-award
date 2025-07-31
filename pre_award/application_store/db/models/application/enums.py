@@ -13,3 +13,4 @@ class Status(Enum):
     COMPLETED = 3
     CHANGE_REQUESTED = 4
     CHANGE_RECEIVED = 5
+    DELETED = 6

@@ -22,13 +22,15 @@
                 in-progress-tag-new
             {% elif application.status == 'CHANGE_REQUESTED' %}
                 govuk-tag--orange
+            {% elif application.status == 'DELETED' %}
+                govuk-tag--red
             {% elif application.status == 'READY_TO_SUBMIT' %}
                 govuk-tag--yellow
             {% endif %}
         {% endif %}
         {% endset %}
 
-        {% if not application.status == 'SUBMITTED' and not is_past_submission_deadline %}
+        {% if not application.status == 'SUBMITTED' and not application.status == 'DELETED' and not is_past_submission_deadline %}
             {% set application_link = '<a class="govuk-link" href="{}">{}<span class="govuk-visually-hidden"> for {}</span></a>'.format(
                 url_for(
                     'application_routes.tasklist',
