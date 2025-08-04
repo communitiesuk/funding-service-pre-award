@@ -407,8 +407,7 @@ def update_application_reminder_sent_status(round_id):
             db.session.commit()
             (
                 current_app.logger.info(
-                    "application_reminder_sent status has been updated to True for round %(round_id)s",
-                    dict(round_id=round_id),
+                    "application_reminder_sent status updated successfully",
                 ),
                 200,
             )
