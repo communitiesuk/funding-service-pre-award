@@ -133,6 +133,7 @@ class DevelopmentConfig(Config):
             "PFN_LEAD_ASSESSOR",
             "PFN_ASSESSOR",
             "PFN_COMMENTER",
+            "FSD_ADMIN",
         ],
         "highest_role_map": {
             "FFW": DEBUG_USER_ROLE,
