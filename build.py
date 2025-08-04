@@ -62,6 +62,10 @@ def build_apply_assets():
     # Deletes temp. files.
     shutil.rmtree("./static/apply/assets")
     os.remove("./govuk_frontend.zip")
+    shutil.copyfile(
+        "apply/static/src/images/mhclg-crest.png",
+        "./static/apply/images/mhclg-crest.png",
+    )
 
 
 def build_some_assess_assets(static_dist_root="static/assess"):
@@ -190,6 +194,10 @@ def build_assess_authenticator_assets(remove_existing=False):
     build_some_authenticator_assets(static_dist_root="static/authenticator")
     build_some_assess_assets(static_dist_root="static/assess")
     static_assets.build_bundles(static_folder="static")
+    shutil.copyfile(
+        "apply/static/src/images/mhclg-crest.png",
+        "./static/authenticator/images/mhclg-crest.png",
+    )
 
 
 def build_monolith_assets(static_dist_root="static/fs", remove_existing=False) -> None:
@@ -262,6 +270,10 @@ def build_monolith_assets(static_dist_root="static/fs", remove_existing=False) -
     shutil.copyfile(
         "apply/static/src/styles/apply.css",
         "./static/fs/styles/apply.css",
+    )
+    shutil.copyfile(
+        "apply/static/src/images/mhclg-crest.png",
+        "./static/fs/images/mhclg-crest.png",
     )
 
 

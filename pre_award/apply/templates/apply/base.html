@@ -1,16 +1,53 @@
 {% extends "govuk_frontend_jinja/template.html" %}
-
+{% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner -%}
+{% from "apply/partials/mhclg-header.html" import mhclgHeader %}
 {% set assetPath = url_for('static', filename='/apply').rstrip('/') %}
 {% set title = gettext("Access Funding") if is_error else service_title or get_service_title() %}
 
 {% block pageTitle %}{{ [pageHeading, title]|join(' - ') if pageHeading else title }}{% endblock pageTitle %}
 
 {% block head %}
-  {% include "apply/head.html" %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='fs/govuk-frontend-4.8.0.min.css' ) }}"> </link>
+    <meta name="description" content="Access Funding" />
+    <meta name="keywords" content="Access Funding" />
+    <meta name="author" content="Ministry of Housing, Communities and Local Government" />
+    {% include "apply/head.html" %}
 {% endblock head %}
 
 {% block header %}
-  {% include "apply/header.html" %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='fs/styles/apply.css' ) }}">
+    {% set navigationItems = []%}
+    {% if g.is_authenticated and g.logout_url %}
+    {% set signoutHtml %}
+    <form method="post" action="{{ g.logout_url }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ govukButton({
+                "isStartButton": false,
+                "type":"submit",
+                "text": _("Sign out"),
+                "classes": "app-header__button--signout"
+            }) }}
+    </form>
+    {% endset %}
+    {% do navigationItems.append({"html": signoutHtml})%}
+    {% endif %}
+    {{
+        mhclgHeader(
+            params={
+                "serviceName": title,
+                "homepageUrl": "#",
+                "navigation": navigationItems
+            }
+        )
+    }}
+    <div class="govuk-width-container">
+        {{ govukPhaseBanner({
+            'tag': {
+                'text': gettext('beta')
+            },
+            'html': gettext('This is a new service.')
+        })}}
+    </div>
 {% endblock header %}
 
 {% block footer %}

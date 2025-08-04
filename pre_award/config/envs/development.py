@@ -41,6 +41,8 @@ class DevelopmentConfig(Config):
             "'sha256-fHdQRrIUf6pjwHfX7CTFKabEZ1qmGXrWk9TRExXo9ZY='",
             "'sha256-Hw2dKmajmSN3MPIUjiOlZtZGa+LcQKY3gdW95UOmTAk='",
             "'sha256-7eLPjKEGogf4iYql5CFUp5LBUXCOKJkJ52Lrgz5DOg0='",
+            "'sha256-9/aFFbAwf+Mwl6MrBQzrJ/7ZK5vo7HdOUR7iKlBk78U='",
+            "'sha256-VBr2Tt5IGQFsOMysbKE7LQMh4eDrrCoFAeQhG1VcKPw='",
         ]
     )
 
