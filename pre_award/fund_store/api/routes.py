@@ -392,6 +392,7 @@ def get_available_flag_allocations(fund_id, round_id):
     abort(404)
 
 
+@fund_store_bp.put("/funds/<round_id>/application_reminder_status")
 def update_application_reminder_sent_status(round_id):
     try:
         status = request.args.get("status")
