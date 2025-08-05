@@ -5,7 +5,7 @@
   {%- set _productName = params.productName if params.productName else 'MHCLG' -%}
   {%- set _classes = params.classes if params.classes else 'govuk-header--full-width-border app-!-no-wrap' -%}
   {%- set _navigation = params.navigation if params.navigation else [{ "text": ("Sign out"), "href": url_for('auth.sign_out') }] if currentUser and currentUser.is_authenticated else [] -%}
-  {%- set _navigationClasses = params.navigationClasses if params.navigationClasses else 'govuk-header__navigation--end' -%}
+  {%- set _navigationClasses = params.navigationClasses if params.navigationClasses else '' -%}
 
 
   {%- set _hmgInsignia %}
@@ -16,15 +16,9 @@
     <div class="govuk-header__container {{ params.containerClasses | default("govuk-width-container", true) }}">
       <div class="govuk-header__logo govuk-!-margin-bottom-1">
         <a href="{{ params.homepageUrl | default("/", true) }}" class="govuk-header__link govuk-header__link--homepage">
-          {#- The SVG needs `focusable="false"` so that Internet Explorer does
-        not treat it as an interactive element - without this it will be
-        'focusable' when using the keyboard to navigate.
-
-        We use a single compound path for the logo to prevent subpixel rounding
-        shifting different elements unevenly relative to one another. #}
           {{ _hmgInsignia | safe | trim | indent(8) }}
           {% if (_productName) %}
-            <span class="govuk-header__product-name">{{ _productName }}</span>
+            <span class="govuk-header__logotype-text">{{ _productName }}</span>
           {% endif %}
         </a>
       </div>
@@ -39,10 +33,6 @@
           {% endif %}
           {% if _navigation | length %}
             <nav aria-label="{{ params.navigationLabel | default(menuButtonText, true) }}" class="govuk-header__navigation {% if _navigationClasses %}{{ _navigationClasses }}{% endif %}">
-              {# <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" {%- if params.menuButtonLabel and params.menuButtonLabel != menuButtonText %} aria-label="{{ params.menuButtonLabel }}"{% endif %} hidden>
-          {{ menuButtonText }}
-        </button> #}
-
               <ul class="govuk-header__navigation-list">
                 {% for item in _navigation %}
                   {% if item.text or item.html %}

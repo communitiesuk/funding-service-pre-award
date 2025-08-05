@@ -268,6 +268,13 @@ class DefaultConfig(object):
         "img-src": ["data:", "'self'", "https://ssl.gstatic.com"],
         "style-src": [
             "'self'",
+            "'unsafe-hashes'",  # 'Unsafe-hashes' is a special keyword you can add to your
+            # Content Security Policy (CSP). It allows specific inline styles or event handlers
+            # (like style="..." or onclick="...") —
+            # but only if you also provide a valid SHA-256 hash of the exact code
+            # you want to allow.
+            "'sha256-9/aFFbAwf+Mwl6MrBQzrJ/7ZK5vo7HdOUR7iKlBk78U='",
+            "'sha256-VBr2Tt5IGQFsOMysbKE7LQMh4eDrrCoFAeQhG1VcKPw='",
         ],
     }
 
