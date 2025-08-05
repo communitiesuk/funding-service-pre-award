@@ -63,8 +63,8 @@ def get_comments(
     # Get sub-criteria names if we have any
     sub_criteria_name_map = {}
     if results and results[0][2]:  # if we have assessment records
-        first_record = results[0][2]
-        language = first_record.language or "en"
+        first_record: AssessmentRecord = results[0][2]
+        language = first_record.language.name if first_record.language else "en"
         all_subcriteria = get_all_subcriteria(first_record.fund_id, first_record.round_id, language)
         sub_criteria_name_map = {sc["id"]: sc["name"] for sc in all_subcriteria}
 
