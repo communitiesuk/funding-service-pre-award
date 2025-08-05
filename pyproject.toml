@@ -47,7 +47,7 @@ dependencies = [
     "pyjwt==2.10.1",
     "python-dateutil==2.9.0.post0",
     "python-slugify==8.0.4",
-    "requests==2.32.3",
+    "requests==2.32.4",
     "shortuuid==1.0.13",
     "slugify==0.0.1",
     "sqlalchemy-json==0.7.0",
