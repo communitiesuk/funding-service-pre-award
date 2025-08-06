@@ -1,6 +1,6 @@
 {% extends "govuk_frontend_jinja/template.html" %}
 
-{% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
+{% from "assess/partials/mhclg-header.html" import mhclgHeader %}
 
 {% set assetPath = url_for('static', filename='assess').rstrip('/') %}
 
@@ -11,10 +11,9 @@
 {% endblock head %}
 
 {% block header %}
-  {{ govukHeader({
+  {{ mhclgHeader({
     "homepageUrl": "/",
     "serviceName": "Assess grant applications",
-    "useTudorCrown": true,
   }) }}
 {% endblock header %}
 
