@@ -18,7 +18,7 @@
         <a href="{{ params.homepageUrl | default("/", true) }}" class="govuk-header__link govuk-header__link--homepage">
           {{ _hmgInsignia | safe | trim | indent(8) }}
           {% if (_productName) %}
-            <span class="govuk-header__logotype-text">{{ _productName }}</span>
+            <span class="govuk-header__product-name">{{ _productName }}</span>
           {% endif %}
         </a>
       </div>

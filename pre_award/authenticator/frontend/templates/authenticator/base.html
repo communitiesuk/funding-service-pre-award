@@ -19,8 +19,7 @@
 {% endblock footer %}
 
 {% block bodyEnd %}
-  <!--[if gt IE 8]><!-->
-  <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='authenticator/govuk-frontend-4.8.0.min.js') }}"> </script>
+  <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='authenticator/govuk-frontend-5.6.0.min.js') }}"> </script>
   <script nonce="{{ csp_nonce() }}">
 
     window.addEventListener('load', (event) => {
