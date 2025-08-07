@@ -32,7 +32,6 @@ class DevelopmentConfig(Config):
     # Flask-DebugToolbar styles
     TALISMAN_SETTINGS["content_security_policy"]["style-src"].extend(
         [
-            "'unsafe-hashes'",
             "'sha256-biLFinpqYMtWHmXfkA1BPeCY0/fNt46SAZ+BBk5YUog='",
             "'sha256-0EZqoz+oBhx7gF4nvY2bSqoGyy4zLjNF+SDQXGp/ZrY='",
             "'sha256-1NkfmhNaD94k7thbpTCKG0dKnMcxprj9kdSKzKR6K/k='",

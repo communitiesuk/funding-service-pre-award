@@ -13,7 +13,7 @@ def build_apply_assets():
     # Download zips using "url"
     print("Downloading static file zip.")
 
-    url = "https://github.com/alphagov/govuk-frontend/releases/download/v4.0.0/release-v4.0.0.zip"
+    url = "https://github.com/alphagov/govuk-frontend/releases/download/v5.6.0/release-v5.6.0.zip"
 
     # There is a known problem on Mac where one must manually
     # run the script "Install Certificates.command" found
@@ -62,12 +62,16 @@ def build_apply_assets():
     # Deletes temp. files.
     shutil.rmtree("./static/apply/assets")
     os.remove("./govuk_frontend.zip")
+    shutil.copyfile(
+        "apply/static/src/images/mhclg-crest.png",
+        "./static/apply/images/mhclg-crest.png",
+    )
 
 
 def build_some_assess_assets(static_dist_root="static/assess"):
     DIST_ROOT = "./" + static_dist_root
     GOVUK_DIR = "/govuk-frontend"
-    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v4.8.0/release-v4.8.0.zip"
+    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v5.6.0/release-v5.6.0.zip"
     ZIP_FILE = "./govuk_frontend.zip"
     DIST_PATH = DIST_ROOT + GOVUK_DIR
     ASSETS_DIR = "/assets"
@@ -136,7 +140,7 @@ def build_some_assess_assets(static_dist_root="static/assess"):
 
 def build_some_authenticator_assets(static_dist_root="static/authenticator", remove_existing=False) -> None:
     DIST_ROOT = "./" + static_dist_root
-    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v4.8.0/release-v4.8.0.zip"
+    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v5.6.0/release-v5.6.0.zip"
     ZIP_FILE = "./govuk_frontend.zip"
     DIST_PATH = DIST_ROOT
     ASSETS_DIR = "/assets"
@@ -190,12 +194,16 @@ def build_assess_authenticator_assets(remove_existing=False):
     build_some_authenticator_assets(static_dist_root="static/authenticator")
     build_some_assess_assets(static_dist_root="static/assess")
     static_assets.build_bundles(static_folder="static")
+    shutil.copyfile(
+        "apply/static/src/images/mhclg-crest.png",
+        "./static/authenticator/images/mhclg-crest.png",
+    )
 
 
 def build_monolith_assets(static_dist_root="static/fs", remove_existing=False) -> None:
     MONOLITH_DIST_PATH = "./" + static_dist_root
     MAIN_DIST_PATH = "./static"
-    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v4.8.0/release-v4.8.0.zip"
+    GOVUK_URL = "https://github.com/alphagov/govuk-frontend/releases/download/v5.6.0/release-v5.6.0.zip"
     ZIP_FILE = "./monolith_govuk_frontend.zip"
 
     ASSETS_DIR = "/assets"
@@ -262,6 +270,10 @@ def build_monolith_assets(static_dist_root="static/fs", remove_existing=False) -
     shutil.copyfile(
         "apply/static/src/styles/apply.css",
         "./static/fs/styles/apply.css",
+    )
+    shutil.copyfile(
+        "apply/static/src/images/mhclg-crest.png",
+        "./static/fs/images/mhclg-crest.png",
     )
 
 
