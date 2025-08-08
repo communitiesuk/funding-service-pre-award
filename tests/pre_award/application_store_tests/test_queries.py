@@ -235,12 +235,13 @@ def test_process_files(application, all_application_files, expected):
                                 "SUBMITTED": 4,
                                 "CHANGE_REQUESTED": 0,
                                 "CHANGE_RECEIVED": 0,
+                                "DELETED": 0,
                             },
                         }
                     ],
                 }
             ],
-            ["111,r1r1r1,1,2,3,4,0,0"],
+            ["111,r1r1r1,1,2,3,4,0,0,0"],
         ),
         (
             [
@@ -256,6 +257,7 @@ def test_process_files(application, all_application_files, expected):
                                 "SUBMITTED": 4,
                                 "CHANGE_REQUESTED": 0,
                                 "CHANGE_RECEIVED": 0,
+                                "DELETED": 0,
                             },
                         },
                         {
@@ -267,12 +269,13 @@ def test_process_files(application, all_application_files, expected):
                                 "SUBMITTED": 5,
                                 "CHANGE_REQUESTED": 0,
                                 "CHANGE_RECEIVED": 0,
+                                "DELETED": 0,
                             },
                         },
                     ],
                 }
             ],
-            ["111,r1r1r1,1,2,3,4,0,0", "111,r2,2,3,4,5,0,0"],
+            ["111,r1r1r1,1,2,3,4,0,0,0", "111,r2,2,3,4,5,0,0,0"],
         ),
         (
             [
@@ -288,6 +291,7 @@ def test_process_files(application, all_application_files, expected):
                                 "SUBMITTED": 4,
                                 "CHANGE_REQUESTED": 0,
                                 "CHANGE_RECEIVED": 0,
+                                "DELETED": 0,
                             },
                         },
                         {
@@ -299,6 +303,7 @@ def test_process_files(application, all_application_files, expected):
                                 "SUBMITTED": 4,
                                 "CHANGE_REQUESTED": 0,
                                 "CHANGE_RECEIVED": 0,
+                                "DELETED": 0,
                             },
                         },
                     ],
@@ -315,12 +320,13 @@ def test_process_files(application, all_application_files, expected):
                                 "SUBMITTED": 6,
                                 "CHANGE_REQUESTED": 0,
                                 "CHANGE_RECEIVED": 0,
+                                "DELETED": 0,
                             },
                         },
                     ],
                 },
             ],
-            ["f1,r1,1,2,3,4,0,0", "f1,r2,0,0,0,4,0,0", "f2,r1,2,2,1,6,0,0"],
+            ["f1,r1,1,2,3,4,0,0,0", "f1,r2,0,0,0,4,0,0,0", "f2,r1,2,2,1,6,0,0,0"],
         ),
     ],
 )
@@ -330,7 +336,7 @@ def test_application_status_csv(data, lines_exp):
     lines = result.readlines()
     assert (
         lines[0].decode().strip()
-        == "fund_id,round_id,NOT_STARTED,IN_PROGRESS,COMPLETED,SUBMITTED,CHANGE_REQUESTED,CHANGE_RECEIVED"
+        == "fund_id,round_id,NOT_STARTED,IN_PROGRESS,COMPLETED,SUBMITTED,CHANGE_REQUESTED,CHANGE_RECEIVED,DELETED"
     )
     idx = 1
     for line in lines_exp:

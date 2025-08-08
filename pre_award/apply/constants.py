@@ -8,3 +8,4 @@ class ApplicationStatus(Enum):
     SUBMITTED = auto()
     CHANGE_REQUESTED = auto()
     CHANGE_RECEIVED = auto()
+    DELETED = auto()
