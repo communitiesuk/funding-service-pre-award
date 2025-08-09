@@ -29,7 +29,7 @@ dependencies = [
     "flask-talisman==1.1.0",
     "flask-wtf==1.2.2",
     "flask==3.1.1",
-    "govuk-frontend-jinja==2.8.0",
+    "govuk-frontend-jinja==3.6.0",
     "greenlet==3.2.2",
     "gunicorn[gevent]==23.0.0",
     "invoke==2.2.0",
