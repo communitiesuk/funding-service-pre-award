@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = "==3.10.*"
 resolution-markers = [
     "platform_python_implementation != 'PyPy'",
@@ -905,7 +905,7 @@ requires-dist = [
     { name = "flask-talisman", specifier = "==1.1.0" },
     { name = "flask-wtf", specifier = "==1.2.2" },
     { name = "funding-service-design-utils", extras = ["toggles"], specifier = "==6.1.4" },
-    { name = "govuk-frontend-jinja", specifier = "==2.8.0" },
+    { name = "govuk-frontend-jinja", specifier = "==3.6.0" },
     { name = "greenlet", specifier = "==3.2.2" },
     { name = "gunicorn", extras = ["gevent"], specifier = "==23.0.0" },
     { name = "invoke", specifier = "==2.2.0" },
@@ -924,7 +924,7 @@ requires-dist = [
     { name = "pyjwt", specifier = "==2.10.1" },
     { name = "python-dateutil", specifier = "==2.9.0.post0" },
     { name = "python-slugify", specifier = "==8.0.4" },
-    { name = "requests", specifier = "==2.32.3" },
+    { name = "requests", specifier = "==2.32.4" },
     { name = "shortuuid", specifier = "==1.0.13" },
     { name = "slugify", specifier = "==0.0.1" },
     { name = "sqlalchemy", extras = ["mypy"], specifier = "==2.0.41" },
@@ -991,14 +991,14 @@ wheels = [
 
 [[package]]
 name = "govuk-frontend-jinja"
-version = "2.8.0"
+version = "3.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/02/06/9b7d66f5dd98daa230262f58d6d071df7115d68828e54ac3d7bed4b05524/govuk-frontend-jinja-2.8.0.tar.gz", hash = "sha256:0c67e8df4069848acd614253b0d618f4052941baa5eec6835756d05d061a14dc", size = 28103, upload-time = "2024-02-06T17:23:45.79Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f1/f1/8c6aa2d234f4cdc004aee0aa4ffe822b62623f622f374375764ef7f94e59/govuk_frontend_jinja-3.6.0.tar.gz", hash = "sha256:04392645d733f3e5737cadc781035fae95c28e0c864f601519c7f266e2406831", size = 35219, upload-time = "2025-05-14T08:17:07.363Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/81/4d/18c773f5192176b18c292f8e8244df6c416d31686b2be369c713a2fc1c8e/govuk_frontend_jinja-2.8.0-py3-none-any.whl", hash = "sha256:e7202be806ec99657ef152f7c6c7c80e16e949a1cc3caddda4b97f54fb32b00e", size = 39988, upload-time = "2024-02-06T17:23:44.021Z" },
+    { url = "https://files.pythonhosted.org/packages/60/c4/7dab7703e22e5fc56638b2247f6b75aedbd89cdcc84e92f464ba666f5e57/govuk_frontend_jinja-3.6.0-py3-none-any.whl", hash = "sha256:4c1d430d7679a45fa62075bee7c4cbab10b6ccd46e3123f81e0ddfc0a51f58a2", size = 48689, upload-time = "2025-05-14T08:17:05.982Z" },
 ]
 
 [[package]]
@@ -2069,7 +2069,7 @@ wheels = [
 
 [[package]]
 name = "requests"
-version = "2.32.3"
+version = "2.32.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
@@ -2077,9 +2077,9 @@ dependencies = [
     { name = "idna" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/63/70/2bf7780ad2d390a8d301ad0b550f1581eadbd9a20f896afe06353c2a2913/requests-2.32.3.tar.gz", hash = "sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760", size = 131218, upload-time = "2024-05-29T15:37:49.536Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e1/0a/929373653770d8a0d7ea76c37de6e41f11eb07559b103b1c02cafb3f7cf8/requests-2.32.4.tar.gz", hash = "sha256:27d0316682c8a29834d3264820024b62a36942083d52caf2f14c0591336d3422", size = 135258, upload-time = "2025-06-09T16:43:07.34Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f9/9b/335f9764261e915ed497fcdeb11df5dfd6f7bf257d4a6a2a686d80da4d54/requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6", size = 64928, upload-time = "2024-05-29T15:37:47.027Z" },
+    { url = "https://files.pythonhosted.org/packages/7c/e4/56027c4a6b4ae70ca9de302488c5ca95ad4a39e190093d6c1a8ace08341b/requests-2.32.4-py3-none-any.whl", hash = "sha256:27babd3cda2a6d50b30443204ee89830707d396671944c998b5975b031ac2b2c", size = 64847, upload-time = "2025-06-09T16:43:05.728Z" },
 ]
 
 [[package]]
