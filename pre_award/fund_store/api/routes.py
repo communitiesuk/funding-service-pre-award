@@ -1,4 +1,3 @@
-import os
 import uuid
 from datetime import datetime
 from distutils.util import strtobool
@@ -459,42 +458,10 @@ def create_fund_config():
 
         result = process_fund_config(fund_config_data)
         if result["success"]:
-            # Create Python file after successful processing with correct structure
-            fund_short_name = fund_config_data["short_name"].lower()
-            round_data = fund_config_data["rounds"][list(fund_config_data["rounds"].keys())[0]]
-            round_short_name = round_data["short_name"].lower()
-            filename = f"{fund_short_name}_{round_short_name}.py"
-
-            # Structure data as expected by __init__.py
-            fund_config = {k: v for k, v in fund_config_data.items() if k != "rounds"}
-            round_config = round_data.copy()
-            sections_config = round_config.pop("sections_config", [])
-            base_path = round_config.pop("base_path", 1001)
-
-            loader_config = {
-                "sections_config": sections_config,
-                "fund_config": fund_config,
-                "round_config": round_config,
-                "base_path": base_path,
-            }
-
-            fab_config_dir = "pre_award/fund_store/config/fund_loader_config/FAB"
-            file_path = os.path.join(fab_config_dir, filename)
-            python_content = f"LOADER_CONFIG = {loader_config}"
-
-            try:
-                with open(file_path, "w") as f:
-                    f.write(python_content)
-                current_app.logger.info("Created Python config file: %s", file_path)
-            except Exception as file_error:
-                current_app.logger.warning("Failed to create Python file %s: %s", file_path, str(file_error))
-                file_path = "Failed to create"
-
             return jsonify(
                 {
                     "message": result["message"],
                     "fund_short_name": fund_config_data["short_name"],
-                    "python_file_created": file_path,
                 }
             ), 201
         else:
