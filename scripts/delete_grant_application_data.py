@@ -3,7 +3,6 @@ from sqlalchemy.orm.attributes import flag_modified
 
 from app import create_app
 from pre_award.application_store.db.models import Applications
-from pre_award.application_store.db.models.application.enums import Status
 from pre_award.application_store.db.queries.application import get_application_by_reference
 from pre_award.assess.services.aws import delete_file_from_aws, list_files_in_folder
 from pre_award.assessment_store.db.models import AssessmentRecord
@@ -41,8 +40,6 @@ def delete_grant_application_data(application_reference) -> None:
         assessment_record: AssessmentRecord = get_assessment_record(application.id)
         if assessment_record:
             assessment_record.is_deleted = True
-            assessment_record.jsonb_blob["forms"] = []
-            assessment_record.jsonb_blob["is_deleted"] = True
             assessment_record.jsonb_blob["forms"] = []
             assessment_record.jsonb_blob["is_deleted"] = True
             flag_modified(assessment_record, "jsonb_blob")

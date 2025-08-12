@@ -63,4 +63,5 @@ class Applications(BaseModel):
             if self.last_edited
             else (self.started_at.isoformat() if self.started_at else None),
             "date_submitted": date_submitted,
+            "is_deleted": self.is_deleted,
         }

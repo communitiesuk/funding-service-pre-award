@@ -250,6 +250,7 @@ TEST_APPLICATIONS = [
             "status": "IN_PROGRESS",
             "language": "en",
             "forms": COF_TEST_FORMS,
+            "is_deleted": False,
         }
     ),
     Application.from_dict(
@@ -267,6 +268,7 @@ TEST_APPLICATIONS = [
             "status": "IN_PROGRESS",
             "language": "cy",
             "forms": COF_TEST_FORMS,
+            "is_deleted": False,
         }
     ),
 ]
@@ -286,6 +288,7 @@ SUBMITTED_APPLICATION = Application.from_dict(
         "status": "SUBMITTED",
         "language": "en",
         "forms": [],
+        "is_deleted": False,
     }
 )
 
@@ -398,5 +401,6 @@ NOT_STARTED_APPLICATION = Application.from_dict(
                 "status": "NOT_STARTED",
             },
         ],
+        "is_deleted": False,
     }
 )

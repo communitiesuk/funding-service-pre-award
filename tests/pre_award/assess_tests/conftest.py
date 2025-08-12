@@ -749,6 +749,7 @@ def mock_get_tasklist_state_for_banner(mocker):
         sections=[],
         criterias=[],
         is_eoi_round=False,
+        is_deleted=False,
     )
     mocker.patch(
         "pre_award.assess.assessments.routes.get_state_for_tasklist_banner",
