@@ -71,20 +71,22 @@
     {{ assessment_subcriteria_accepted(score, accounts_list[score.user_id]) }}
 {% endif %}
 
-<h3 class="govuk-heading-s response-title">
-    {% if change_requests %}
-        Applicant's updated response
-    {% else %}
-        Applicant's responses
-    {% endif %}
-</h3>
+{% if not state.is_deleted %}
+    <h3 class="govuk-heading-s response-title">
+        {% if change_requests %}
+            Applicant's updated response
+        {% else %}
+            Applicant's responses
+        {% endif %}
+    </h3>
 
-{{ theme(answers_meta, is_sub_criteria_scored=sub_criteria.is_scored )}}
-{% if not is_qa_complete and not has_active_change_request %}
-    {% if g.access_controller.has_any_assessor_role %}
-        {% if sub_criteria.is_scored %}
-            {{ application_feedback(application_id, sub_criteria, current_theme.id,
-            approval_form,change_requests,unrequested_changes,score) }}
+    {{ theme(answers_meta, is_sub_criteria_scored=sub_criteria.is_scored )}}
+    {% if not is_qa_complete and not has_active_change_request %}
+        {% if g.access_controller.has_any_assessor_role %}
+            {% if sub_criteria.is_scored %}
+                {{ application_feedback(application_id, sub_criteria, current_theme.id,
+                approval_form,change_requests,unrequested_changes,score) }}
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endif %}

@@ -54,7 +54,7 @@ Error:
   {{ sub_criteria_heading(sub_criteria)}}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-      {{ navbar(application_id, sub_criteria, current_theme.id, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
+      {{ navbar(application_id, sub_criteria, current_theme.id, state, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
     </div>
     <div class="govuk-grid-column-two-thirds">
       <div class="assessment-reponses">
