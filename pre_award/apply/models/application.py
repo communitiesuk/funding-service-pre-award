@@ -18,6 +18,7 @@ class Application:
     fund_id: str
     round_id: str
     project_name: str
+    is_deleted: bool
     date_submitted: datetime
     started_at: datetime
     last_edited: datetime

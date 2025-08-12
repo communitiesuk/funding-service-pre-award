@@ -145,6 +145,7 @@ flagged_app = {
     "id": flagged_app_id,
     "workflow_status": "IN_PROGRESS",
     "project_name": "Project In prog and Res",
+    "is_deleted": False,
     "short_id": "INP",
     "flags": [
         {
@@ -205,6 +206,7 @@ resolved_app = {
     "id": resolved_app_id,
     "workflow_status": "IN_PROGRESS",
     "project_name": "Project In prog and Res",
+    "is_deleted": False,
     "short_id": "INP",
     "flags": [
         {
@@ -294,6 +296,7 @@ uncompeted_app = {
     "workflow_status": "CHANGE_RECEIVED",
     "project_name": "Uncompeted project In prog and Res",
     "short_id": "UNCMP-INP",
+    "is_deleted": False,
     "qa_complete": [],
     "is_qa_complete": True,
     "criteria_sub_criteria_name": "test_uncomp_sub_criteria",
@@ -580,6 +583,7 @@ mock_api_results = {
             "qa_complete": flagged_qa_completed_app["qa_complete"],
             "funding_amount_requested": test_funding_requested + 2000,
             "is_qa_complete": True,
+            "is_deleted": False,
             "language": "en",
             "location_json_blob": {
                 "constituency": "test-constituency",
@@ -607,6 +611,7 @@ mock_api_results = {
             "qa_complete": assigned_app["qa_complete"],
             "funding_amount_requested": test_funding_requested + 8000,
             "is_qa_complete": True,
+            "is_deleted": False,
             "language": "en",
             "location_json_blob": {
                 "constituency": "test-constituency",
@@ -634,6 +639,7 @@ mock_api_results = {
             "qa_complete": stopped_app["qa_complete"],
             "funding_amount_requested": test_funding_requested + 1000,
             "is_qa_complete": True,
+            "is_deleted": False,
             "language": "en",
             "location_json_blob": {
                 "constituency": "test-constituency",
@@ -661,6 +667,7 @@ mock_api_results = {
             "qa_complete": resolved_app["qa_complete"],
             "funding_amount_requested": test_funding_requested,
             "is_qa_complete": True,
+            "is_deleted": False,
             "language": "en",
             "location_json_blob": {
                 "constituency": "test-constituency",
@@ -688,6 +695,7 @@ mock_api_results = {
             "flags": stopped_app["flags"],
             "qa_complete": stopped_app["qa_complete"],
             "funding_amount_requested": test_funding_requested,
+            "is_deleted": False,
             "is_qa_complete": True,
             "language": "en",
             "location_json_blob": {
@@ -746,6 +754,7 @@ mock_api_results = {
         "workflow_status": stopped_app["workflow_status"],
         "fund_id": test_fund_id,
         "round_id": test_round_id,
+        "is_deleted": False,
         "qa_complete": stopped_app["qa_complete"],
     },
     "assessment_store/application_overviews/resolved_app": {
@@ -778,6 +787,7 @@ mock_api_results = {
         "fund_id": test_fund_id,
         "round_id": test_round_id,
         "qa_complete": resolved_app["qa_complete"],
+        "is_deleted": False,
         "is_qa_complete": resolved_app["is_qa_complete"],
     },
     "assessment_store/application_overviews/uncompeted_app": {
@@ -809,6 +819,7 @@ mock_api_results = {
         "workflow_status": uncompeted_app["workflow_status"],
         "fund_id": "UNCOMPETED_FUND",
         "round_id": test_round_id,
+        "is_deleted": False,
         "qa_complete": uncompeted_app["qa_complete"],
     },
     "assessment_store/application_overviews/flagged_app": {
@@ -839,6 +850,7 @@ mock_api_results = {
         "short_id": flagged_app["short_id"],
         "workflow_status": flagged_app["workflow_status"],
         "fund_id": test_fund_id,
+        "is_deleted": False,
         "round_id": test_round_id,
         "qa_complete": flagged_app["qa_complete"],
     },
@@ -847,6 +859,7 @@ mock_api_results = {
         "sections": [],
         "fund_id": test_fund_id,
         "round_id": test_round_id,
+        "is_deleted": False,
         "project_name": flagged_qa_completed_app["project_name"],
         "short_id": flagged_qa_completed_app["short_id"],
         "workflow_status": flagged_qa_completed_app["workflow_status"],
@@ -857,6 +870,7 @@ mock_api_results = {
         "project_name": resolved_app["project_name"],
         "funding_amount_requested": test_funding_requested,
         "workflow_status": resolved_app["workflow_status"],
+        "is_deleted": False,
         "fund_id": test_fund_id,
     },
     "assessment_store/sub_criteria_overview/banner_state/stopped_app": {
@@ -864,6 +878,7 @@ mock_api_results = {
         "project_name": stopped_app["project_name"],
         "funding_amount_requested": test_funding_requested,
         "workflow_status": stopped_app["workflow_status"],
+        "is_deleted": False,
         "fund_id": test_fund_id,
     },
     "assessment_store/sub_criteria_overview/banner_state/flagged_qa_completed_app": {
@@ -871,6 +886,7 @@ mock_api_results = {
         "project_name": flagged_qa_completed_app["project_name"],
         "funding_amount_requested": test_funding_requested,
         "workflow_status": flagged_qa_completed_app["workflow_status"],
+        "is_deleted": False,
         "fund_id": test_fund_id,
     },
     "assessment_store/flag_data?flag_id=flagged_app": flagged_app["flags"][-1],

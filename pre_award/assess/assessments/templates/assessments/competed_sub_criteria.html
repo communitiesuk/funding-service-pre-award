@@ -1,10 +1,14 @@
 {% extends "assessments/base_sub_criteria.html" %}
 
 {% block sub_criteria_content %}
-  <h3 class="govuk-heading-s response-title">Applicant's response</h3>
-  {{ theme(answers_meta)}}
+    {% if not state.is_deleted %}
+      <h3 class="govuk-heading-s response-title">Applicant's response</h3>
+      {{ theme(answers_meta)}}
+    {% endif %}
   {% if score %}
-    <h2 class="govuk-heading-s govuk-!-margin-top-8 accepted-change-title">Responses accepted</h2>
+    {% if not state.is_deleted %}
+        <h2 class="govuk-heading-s govuk-!-margin-top-8 accepted-change-title">Responses accepted</h2>
+    {% endif %}
     {{ assessment_subcriteria_accepted(score, accounts_list[score.user_id]) }}
   {% endif %}
 {% endblock sub_criteria_content %}

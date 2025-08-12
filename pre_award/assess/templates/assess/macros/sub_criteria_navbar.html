@@ -1,4 +1,4 @@
-{% macro navbar(application_id, sub_criteria, current_theme_id, is_score_page=False, is_uncompeted_flow_flag=False) %}
+{% macro navbar(application_id, sub_criteria, current_theme_id, state, is_score_page=False, is_uncompeted_flow_flag=False) %}
 <nav class="assessment-navigation">
     {% if not is_uncompeted_flow_flag %}
         <ul class="govuk-list">
@@ -17,7 +17,7 @@
             {% endfor %}
         </ul>
 
-        {% if g.access_controller.has_any_assessor_role and sub_criteria.is_scored %}
+        {% if g.access_controller.has_any_assessor_role and sub_criteria.is_scored and not state.is_deleted %}
             <ul class="govuk-list">
                 <li>
                     {% if not is_score_page %}
