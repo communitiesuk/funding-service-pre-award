@@ -1,3 +1,4 @@
+import re
 import typing as t
 from collections import OrderedDict
 from contextlib import contextmanager
@@ -749,6 +750,7 @@ def mock_get_tasklist_state_for_banner(mocker):
         sections=[],
         criterias=[],
         is_eoi_round=False,
+        is_deleted=False,
     )
     mocker.patch(
         "pre_award.assess.assessments.routes.get_state_for_tasklist_banner",
@@ -1011,8 +1013,8 @@ def assert_fund_dashboard(
 
     # first row cells
     first_row = soup.find("tbody").find("tr")
-    cells = [td.text.strip() for td in first_row.find_all("td")]
-    assert cells == expected_first_row
+    cells = [re.sub(r"[ \n]+", "", td.get_text()) for td in first_row.find_all("td")]
+    assert cells == [re.sub(r"[ \n]+", "", row) for row in expected_first_row]
 
     # filters
     actual_filters = [lbl.text.strip() for lbl in soup.find_all("label", class_="govuk-label")]
