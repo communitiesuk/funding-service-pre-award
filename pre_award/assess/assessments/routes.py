@@ -249,7 +249,6 @@ def _get_fund_dashboard_data(fund: Fund, round: Round, request):
     tag_types = future_tag_types.result()
 
     thread_executor.executor.shutdown()
-
     unfiltered_stats = process_assessments_stats(all_applications_metadata)
     all_application_locations = LocationData.from_json_blob(all_applications_metadata)
 

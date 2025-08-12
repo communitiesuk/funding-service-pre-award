@@ -46,6 +46,7 @@ class AssessorTaskList:
     fund_short_name: str
     round_short_name: str
     is_qa_complete: bool
+    is_deleted: bool
     fund_id: str
     round_id: str
     fund_guidance_url: str
@@ -66,6 +67,7 @@ class AssessorTaskList:
             funding_amount_requested=json.get("funding_amount_requested"),
             project_reference=json.get("project_reference"),
             fund_guidance_url=json.get("fund_guidance_url"),
+            is_deleted=json.get("is_deleted"),
             is_qa_complete=True if json.get("qa_complete") else False,
             sections=[
                 _Section(
