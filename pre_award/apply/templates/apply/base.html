@@ -56,8 +56,12 @@
 {% endblock footer %}
 
 {% block bodyEnd %}
-  <script src="{{ url_for('static', filename='apply/govuk-frontend-5.6.0.min.js') }}"> </script>
-  <script>window.GOVUKFrontend.initAll()</script>
+    <script type="module" src="{{ url_for('static', filename='apply/govuk-frontend-5.6.0.min.js') }}"></script>
+    <script type="module" nonce="{{ csp_nonce() }}">
+        import {initAll} from "{{ url_for('static', filename='apply/govuk-frontend-5.6.0.min.js') }}";
+
+        initAll();
+    </script>
     <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe class="display-none-visibility-hidden" src="https://www.googletagmanager.com/ns.html?id=GTM-M5J9Q8HV"

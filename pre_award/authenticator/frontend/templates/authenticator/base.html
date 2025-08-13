@@ -19,15 +19,13 @@
 {% endblock footer %}
 
 {% block bodyEnd %}
-  <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='authenticator/govuk-frontend-5.6.0.min.js') }}"> </script>
-  <script nonce="{{ csp_nonce() }}">
+  <!--[if gt IE 8]><!-->
+    <script type="module" nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='authenticator/govuk-frontend-5.6.0.min.js') }}"></script>
+    <script type="module" nonce="{{ csp_nonce() }}">
+        import {initAll} from "{{ url_for('static', filename='authenticator/govuk-frontend-5.6.0.min.js') }}";
 
-    window.addEventListener('load', (event) => {
-
-        window.GOVUKFrontend.initAll();
-        AuthenticatorFrontend.initAll();
-    });
-  </script>
+        initAll();
+    </script>
   <!--<![endif]-->
     <!-- Google Tag Manager (noscript) -->
     <noscript>

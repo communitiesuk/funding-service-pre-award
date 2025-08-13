@@ -26,7 +26,6 @@ def init_assets(app=None, auto_build=False, static_folder="static"):
             "./assess/js/helpers.js",
             "./assess/js/all.js",
             "./assess/js/components/*/*.js",
-            "./assess/js/init.js",
             filters="jsmin",
             output="pre_award/assess/js/main.min.js",
         )

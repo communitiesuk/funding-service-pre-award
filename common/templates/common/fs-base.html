@@ -26,8 +26,12 @@
 {# Run JavaScript at end of the
 
 <body>, to avoid blocking the initial render. #}
-  <script src="{{ url_for('static', filename='fs/govuk-frontend-5.6.0.min.js') }}"> </script>
-  <script>window.GOVUKFrontend.initAll()</script>
+    <script type="module" src="{{ url_for('static', filename='fs/govuk-frontend-5.6.0.min.js') }}"></script>
+    <script type="module" nonce="{{ csp_nonce() }}">
+        import {initAll} from "{{ url_for('static', filename='fs/govuk-frontend-5.6.0.min.js') }}";
+
+        initAll();
+    </script>
     <!-- Google Tag Manager -->
   <script nonce="{{ csp_nonce() }}">(function (w, d, s, l, i) {
       w[l] = w[l] || [];
