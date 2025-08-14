@@ -1011,7 +1011,8 @@ def assert_fund_dashboard(
 
     # first row cells
     first_row = soup.find("tbody").find("tr")
-    cells = [td.text.strip() for td in first_row.find_all("td")]
+    cells = ["".join(td.text.split()) for td in first_row.find_all("td")]
+    expected_first_row = ["".join(data.split()) for data in expected_first_row]
     assert cells == expected_first_row
 
     # filters

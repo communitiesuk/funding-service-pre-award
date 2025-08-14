@@ -11,13 +11,13 @@
 {% from "govuk_frontend_jinja/components/phase-banner/macro.html" import govukPhaseBanner %}
 {% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter %}
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
+{% from "apply/partials/mhclg-header.html" import mhclgHeader %}
 
 {% set serviceName = get_service_title() %}
 
 
 
 {% block head %}
-
   {{super()}}
   <link rel="stylesheet" href="{{ url_for('static', filename='fs/styles/apply.css' ) }}"> </link>
 {% endblock head%}
@@ -45,11 +45,16 @@
   {% endset %}
   {% do navigationItems.append({"html": signoutHtml})%}
 {% endif %}
-  {{ govukHeader({
-    "serviceName": serviceName,
-    "useTudorCrown": true,
-    "navigation": navigationItems
-  }) }}
+    {{
+        mhclgHeader(
+            params={
+                "serviceName": serviceName,
+                "homepageUrl": "#",
+                "assetPath": assetPath,
+                "navigation": navigationItems
+            }
+       )
+    }}
 {% endblock header %}
 
 {% set mainClasses = "app-main-class" %}
@@ -61,7 +66,7 @@
 {% block beforeContent %}
   {{ govukPhaseBanner({
       "tag": {
-        "text": "Beta"
+        "text": "beta"
       },
       "html": _("This is a new service.")
     })

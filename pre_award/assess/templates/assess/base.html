@@ -1,6 +1,6 @@
 {% extends "govuk_frontend_jinja/template.html" %}
 
-{% from "govuk_frontend_jinja/components/header/macro.html" import govukHeader %}
+{% from "assess/partials/mhclg-header.html" import mhclgHeader %}
 
 {% set assetPath = url_for('static', filename='assess').rstrip('/') %}
 
@@ -11,10 +11,9 @@
 {% endblock head %}
 
 {% block header %}
-  {{ govukHeader({
+  {{ mhclgHeader({
     "homepageUrl": "/",
     "serviceName": "Assess grant applications",
-    "useTudorCrown": true,
   }) }}
 {% endblock header %}
 
@@ -32,10 +31,12 @@
 {% endblock footer %}
 
 {% block bodyEnd %}
-  <!--[if gt IE 8]><!-->
-    <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/govuk-frontend/govuk-frontend-4.8.0.min.js') }}"></script>
-    <script nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/js/main.min.js') }}"></script>
-  <!--<![endif]-->
+    <script type="module" nonce="{{ csp_nonce() }}" src="{{ url_for('static', filename='assess/govuk-frontend/govuk-frontend-5.6.0.min.js') }}"></script>
+    <script type="module" nonce="{{ csp_nonce() }}">
+        import {initAll} from "{{ url_for('static', filename='assess/govuk-frontend/govuk-frontend-5.6.0.min.js') }}";
+
+        initAll();
+    </script>
   <!-- Google Tag Manager (noscript) -->
   {# djlint:off #}
   <noscript>

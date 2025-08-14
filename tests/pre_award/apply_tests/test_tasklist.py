@@ -111,7 +111,7 @@ def test_language_cookie_update_welsh_to_english(
     assert current_set_language == "en"
 
     soup = BeautifulSoup(response.data, "html.parser")
-    assert soup.find("span", class_="app-service-name").text == "Apply for fund for testing"
+    assert soup.find("span", class_="govuk-header__service-name").text == "Apply for fund for testing"
 
 
 def test_language_cookie_update_english_to_welsh(
@@ -141,4 +141,4 @@ def test_language_cookie_update_english_to_welsh(
     assert current_set_language == "cy"
 
     soup = BeautifulSoup(response.data, "html.parser")
-    assert soup.find("span", class_="app-service-name").text == "Gwneud cais am gronfa cymraeg"
+    assert soup.find("span", class_="govuk-header__service-name").text == "Gwneud cais am gronfa cymraeg"

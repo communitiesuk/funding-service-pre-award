@@ -268,6 +268,9 @@ class DefaultConfig(object):
         "img-src": ["data:", "'self'", "https://ssl.gstatic.com"],
         "style-src": [
             "'self'",
+            "'unsafe-hashes'",  # 'unsafe-hashes' lets specific inline styles run only if the exact code’s hash.
+            "'sha256-9/aFFbAwf+Mwl6MrBQzrJ/7ZK5vo7HdOUR7iKlBk78U='",  # color: white; filter: brightness(0) invert(1);
+            "'sha256-VBr2Tt5IGQFsOMysbKE7LQMh4eDrrCoFAeQhG1VcKPw='",  # color: #080; font-weight: bold
         ],
     }
 
