@@ -4,65 +4,77 @@ Tests for fund config service
 
 from unittest.mock import patch
 
+import pytest
+
 from pre_award.fund_store.services.fund_config_service import process_fund_config
 
 
-def test_process_fund_config_adds_defaults():
-    """Test that missing organisation fields get default values"""
-    config = {
+@pytest.fixture
+def sample_converted_config():
+    """Sample converted fund config for testing"""
+    return {
         "short_name": "TEST",
-        "rounds": {"r1": {"id": "test-id", "base_path": "test.path", "sections_config": {}}},
+        "id": "test-fund-id",
+        "rounds": {
+            "r1": {
+                "id": "test-round-id",
+                "fund_id": "test-fund-id",
+                "short_name": "r1",
+                "base_path": 1001,
+                "sections_config": [],
+            }
+        },
     }
 
+
+def test_process_fund_config_success(sample_converted_config):
+    """Test successful fund config processing"""
     with (
-        patch("pre_award.fund_store.services.fund_config_service.insert_fund_data"),
-        patch("pre_award.fund_store.services.fund_config_service.upsert_round_data"),
-        patch("pre_award.fund_store.services.fund_config_service.insert_base_sections"),
-        patch("pre_award.fund_store.services.fund_config_service.insert_or_update_application_sections"),
-        patch("pre_award.fund_store.services.fund_config_service.db.session.commit"),
+        patch("pre_award.fund_store.services.fund_config_service.insert_fund_data") as mock_insert_fund,
+        patch("pre_award.fund_store.services.fund_config_service.upsert_round_data") as mock_upsert_round,
+        patch("pre_award.fund_store.services.fund_config_service.insert_base_sections") as mock_insert_base,
+        patch(
+            "pre_award.fund_store.services.fund_config_service.insert_or_update_application_sections"
+        ) as mock_insert_app,
+        patch("pre_award.fund_store.services.fund_config_service.db.session.commit") as mock_commit,
     ):
-        result = process_fund_config(config)
+        result = process_fund_config(sample_converted_config)
 
         assert result["success"] is True
-        assert config["owner_organisation_name"] == ""
-        assert config["owner_organisation_shortname"] == ""
-        assert config["owner_organisation_logo_uri"] == ""
+        assert "Successfully processed fund configuration for TEST" == result["message"]
+
+        # Verify all database operations were called
+        mock_insert_fund.assert_called_once_with(sample_converted_config, commit=False)
+        mock_upsert_round.assert_called_once_with(
+            [
+                {
+                    "id": "test-round-id",
+                    "fund_id": "test-fund-id",
+                    "short_name": "r1",
+                    "base_path": 1001,
+                    "sections_config": [],
+                }
+            ],
+            commit=False,
+        )
+        mock_insert_base.assert_called_once_with("1001.1", "1001.2", "test-round-id")
+        mock_insert_app.assert_called_once_with("test-round-id", [])
+        mock_commit.assert_called_once()
 
 
-def test_process_fund_config_preserves_existing_values():
-    """Test that existing organisation values are preserved"""
-    config = {
-        "short_name": "TEST",
-        "owner_organisation_name": "Real Org",
-        "rounds": {"r1": {"id": "test-id", "base_path": "test.path", "sections_config": {}}},
-    }
-
-    with (
-        patch("pre_award.fund_store.services.fund_config_service.insert_fund_data"),
-        patch("pre_award.fund_store.services.fund_config_service.upsert_round_data"),
-        patch("pre_award.fund_store.services.fund_config_service.insert_base_sections"),
-        patch("pre_award.fund_store.services.fund_config_service.insert_or_update_application_sections"),
-        patch("pre_award.fund_store.services.fund_config_service.db.session.commit"),
-    ):
-        result = process_fund_config(config)
-
-        assert result["success"] is True
-        assert config["owner_organisation_name"] == "Real Org"
-
-
-def test_process_fund_config_handles_errors():
+def test_process_fund_config_handles_errors(app, sample_converted_config):
     """Test error handling and rollback"""
-    config = {
-        "short_name": "TEST",
-        "rounds": {"r1": {"id": "test-id", "base_path": "test.path", "sections_config": {}}},
-    }
+    with app.app_context():
+        with (
+            patch(
+                "pre_award.fund_store.services.fund_config_service.insert_fund_data",
+                side_effect=Exception("Database connection failed"),
+            ) as mock_insert,
+            patch("pre_award.fund_store.services.fund_config_service.db.session.rollback") as mock_rollback,
+        ):
+            result = process_fund_config(sample_converted_config)
 
-    with (
-        patch("pre_award.fund_store.services.fund_config_service.insert_fund_data", side_effect=Exception("DB Error")),
-        patch("pre_award.fund_store.services.fund_config_service.db.session.rollback") as mock_rollback,
-    ):
-        result = process_fund_config(config)
-
-        assert result["success"] is False
-        assert "DB Error" in result["message"]
-        mock_rollback.assert_called_once()
+            assert result["success"] is False
+            assert "Database connection failed" in result["message"]
+            mock_insert.assert_called_once_with(sample_converted_config, commit=False)
+            mock_rollback.assert_called_once()
