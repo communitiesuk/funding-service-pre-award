@@ -3,6 +3,8 @@ Service for handling fund configuration data from FAB.
 This service contains the core business logic for processing fund store config data.
 """
 
+from flask import current_app
+
 from pre_award.db import db
 from pre_award.fund_store.db.queries import (
     insert_base_sections,
@@ -12,29 +14,29 @@ from pre_award.fund_store.db.queries import (
 )
 
 
-def process_fund_config(FUND_CONFIG):
+def process_fund_config(converted_config):
     """
     Process fund configuration data and save to database.
     Extracted from load_fund_round_from_fab script.
     Args:
-        FUND_CONFIG (dict): Fund configuration dictionary from FAB
+        converted_config (dict): Fund configuration dictionary from FAB
     Returns:
         dict: Result of the operation with success status and any error messages
     """
     try:
-        print(f"Preparing fund data for the {FUND_CONFIG['short_name']} fund.")
+        print(f"Preparing fund data for the {converted_config['short_name']} fund.")
 
         # Add required default values if missing or None from FAB
-        if not FUND_CONFIG.get("owner_organisation_name"):
-            FUND_CONFIG["owner_organisation_name"] = ""
-        if not FUND_CONFIG.get("owner_organisation_shortname"):
-            FUND_CONFIG["owner_organisation_shortname"] = ""
-        if not FUND_CONFIG.get("owner_organisation_logo_uri"):
-            FUND_CONFIG["owner_organisation_logo_uri"] = ""
+        if not converted_config.get("owner_organisation_name"):
+            converted_config["owner_organisation_name"] = ""
+        if not converted_config.get("owner_organisation_shortname"):
+            converted_config["owner_organisation_shortname"] = ""
+        if not converted_config.get("owner_organisation_logo_uri"):
+            converted_config["owner_organisation_logo_uri"] = ""
 
-        insert_fund_data(FUND_CONFIG, commit=False)
+        insert_fund_data(converted_config, commit=False)
 
-        for round_short_name, round in FUND_CONFIG["rounds"].items():
+        for round_short_name, round in converted_config["rounds"].items():
             round_base_path = round["base_path"]
 
             APPLICATION_BASE_PATH = ".".join([str(round_base_path), str(1)])
@@ -55,12 +57,12 @@ def process_fund_config(FUND_CONFIG):
         print("Config has now been committed to the database.")
         return {
             "success": True,
-            "message": f"Successfully processed fund configuration for {FUND_CONFIG['short_name']}",
+            "message": f"Successfully processed fund configuration for {converted_config['short_name']}",
         }
     except Exception as e:
-        print(f"Error processing fund config: {str(e)}")
+        current_app.logger.error("Error processing fund config: %s", str(e))
         try:
             db.session.rollback()
-        except RuntimeError:
-            pass
+        except RuntimeError as rollback_error:
+            current_app.logger.error("Error during db rollback: %s", str(rollback_error))
         return {"success": False, "message": f"Error processing fund configuration: {str(e)}"}
