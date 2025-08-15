@@ -34,12 +34,13 @@ class MagicLinksView(MagicLinkMethods, MethodView):
         :param link_id: String short key for the link
         :return: 302 Redirect / 404 Error
         """
+        current_app.logger.info(f"[MagicLinksView] GET /magic-links/{link_id}")
         fund_short_name = request.args.get("fund")
         round_short_name = request.args.get("round")
-
+        current_app.logger.info(f"[MagicLinksView] GET /magic-links/{fund_short_name}/{round_short_name}")
         fund_data = FundMethods.get_fund(fund_short_name)
         round_data = get_round_data(fund_short_name, round_short_name)
-
+        current_app.logger.info(f"[MagicLinksView] fund_data {fund_data.name}")
         link_key = ":".join([Config.MAGIC_LINK_RECORD_PREFIX, link_id])
         link_hash = self.redis_mlinks.get(link_key)
         if link_hash:
@@ -50,11 +51,13 @@ class MagicLinksView(MagicLinkMethods, MethodView):
                     link.get("accountId"),
                 ]
             )
+            current_app.logger.info(f"[MagicLinksView] user_key: {user_key}")
             self.redis_mlinks.delete(link_key)
             self.redis_mlinks.delete(user_key)
 
             # Check account exists
             account = AccountMethods.get_account(account_id=link.get("accountId"))
+            current_app.logger.info(f"[MagicLinksView] account details {account.email} and id {account.id}")
             if not account:
                 current_app.logger.error(
                     "Tried to use magic link for non-existent account_id %(account_id)s",
@@ -70,12 +73,13 @@ class MagicLinksView(MagicLinkMethods, MethodView):
 
             # Check link is not expired
             if link.get("exp") > int(datetime.now().timestamp()):
+                current_app.logger.info(f"[MagicLinksView] link is not expired")
                 if round_data.has_eligibility:
                     search_params = {
                         "account_id": link.get("accountId"),
                     }
                     has_previous_applicaitons = get_applications_for_account(**search_params)
-
+                    current_app.logger.info(f"[MagicLinksView] has eligible applications: {has_previous_applicaitons}")
                     if not has_previous_applicaitons:
                         return AuthSessionBase.create_session_and_redirect(
                             account=account,
@@ -96,6 +100,7 @@ class MagicLinksView(MagicLinkMethods, MethodView):
                     fund=fund_short_name,
                     round=round_short_name,
                 )
+            current_app.logger.info(f"[MagicLinksView] link is expired")
             return redirect(
                 url_for(
                     "magic_links_bp.invalid",
@@ -123,7 +128,9 @@ class MagicLinksView(MagicLinkMethods, MethodView):
                 " '%(frontend_account_url)s'.",
                 dict(link_hash=link_hash, account_id=g.account_id, frontend_account_url=frontend_account_url),
             )
+            current_app.logger.info(f"[MagicLinksView] user is logged in")
             return redirect(frontend_account_url)
+        current_app.logger.info(f"[MagicLinksView] link is expired")
         return redirect(
             url_for(
                 "magic_links_bp.invalid",
