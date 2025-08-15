@@ -92,7 +92,7 @@ class MagicLinksView(MagicLinkMethods, MethodView):
                             fund=fund_short_name,
                             round=round_short_name,
                         )
-
+                current_app.logger.info(f"[MagicLinksView] L 95")
                 return AuthSessionBase.create_session_and_redirect(
                     account=account,
                     is_via_magic_link=True,

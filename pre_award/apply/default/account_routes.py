@@ -138,6 +138,7 @@ def dashboard():
     fund_short_name = request.args.get("fund", None)
     round_short_name = request.args.get("round", None)
     render_lang = get_lang()
+    current_app.logger.info("[ACCOUNT_DASHBOARD] L 141")
     if fund_short_name and round_short_name:
         # find and display applications with this
         # fund and round else return 404
@@ -145,6 +146,7 @@ def dashboard():
         fund_details, round_details = get_fund_and_round(
             fund_short_name=fund_short_name, round_short_name=round_short_name
         )
+        current_app.logger.info("[ACCOUNT_DASHBOARD] L 149")
         welsh_available = fund_details.welsh_available
         search_params = {
             "fund_id": round_details.fund_id,
@@ -163,22 +165,28 @@ def dashboard():
             "account_id": account_id,
         }
         welsh_available = fund_details.welsh_available
+        current_app.logger.info("[ACCOUNT_DASHBOARD] L 168")
 
     else:
         # Without a fund in the URL we don't know what to show. Theoretically we should design around this, but
         # currently we're getting errors from `search_params` being undefined if this page is hit, and it happens
         # as an edge case, so we're not designing to fix it.
         raise abort(404)
-
+    current_app.logger.info("[ACCOUNT_DASHBOARD] L 175")
     applications = search_applications(search_params=search_params, as_dict=False)
-
+    current_app.logger.info("[ACCOUNT_DASHBOARD] L 177")
     show_language_column = determine_show_language_column(applications)
     change_requested = check_change_requested_for_applications(applications)
+    current_app.logger.info("[ACCOUNT_DASHBOARD] L 180")
     display_data = build_application_data_for_display(applications, fund_short_name, round_short_name)
+    current_app.logger.info("[ACCOUNT_DASHBOARD] L 182")
     current_app.logger.info("Setting up applicant dashboard for: '{%(account_id)s'", dict(account_id=account_id))
     if not welsh_available and template_name == TEMPLATE_SINGLE_FUND:
         render_lang = "en"
+    current_app.logger.info("[ACCOUNT_DASHBOARD] L 186")
     with force_locale(render_lang):
+        current_app.logger.info("[ACCOUNT_DASHBOARD] L 188")
+        current_app.logger.info(f"[ACCOUNT_DASHBOARD] {template_name}")
         response = make_response(
             render_template(
                 template_name,
@@ -192,7 +200,9 @@ def dashboard():
                 migration_banner_enabled=Config.MIGRATION_BANNER_ENABLED,
             )
         )
+    current_app.logger.info("[ACCOUNT_DASHBOARD] L 203")
     LanguageSelector.set_language_cookie(locale=render_lang, response=response)
+    current_app.logger.info("[ACCOUNT_DASHBOARD] L 205")
     return response
 
 
