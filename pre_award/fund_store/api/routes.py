@@ -30,6 +30,7 @@ from pre_award.fund_store.db.schemas.round import RoundSchema
 from pre_award.fund_store.db.schemas.section import SECTION_SCHEMA_MAP
 from pre_award.fund_store.decorators import development_only
 from pre_award.fund_store.services.fund_config_service import process_fund_config
+from pre_award.fund_store.services.fund_configuration_service import prepare_fund_data_for_processing
 
 fund_store_bp = Blueprint("fund_store_bp", __name__)
 
@@ -437,11 +438,11 @@ def update_application_reminder_sent_status(round_id):
         )
 
 
-@fund_store_bp.post("/fund-config")
+@fund_store_bp.post("/import-config")
 @development_only
-def create_fund_config():
+def import_fund_config():
     """
-    API endpoint to accept fund configuration from FAB and process it.
+    API endpoint to import fund configuration from FAB and process it.
     Replaces the manual process of copying Python files and running scripts.
     """
     try:
@@ -449,22 +450,26 @@ def create_fund_config():
         fund_config_data = request.json
         if not fund_config_data:
             return jsonify({"error": "No JSON data provided"}), 400
-        # Validate required fields
-        required_fields = ["rounds", "short_name"]
+
+        fund_short_name = fund_config_data.get("fund_config", {}).get("short_name", "")
+        current_app.logger.info("Received fund config import request for: %s", fund_short_name)
+
+        # Validate required fields for FAB export format
+        required_fields = ["sections_config", "fund_config", "round_config", "base_path"]
         for field in required_fields:
             if field not in fund_config_data:
+                current_app.logger.warning("Missing required field '%s' for fund: %s", field, fund_short_name)
                 return jsonify({"error": f"Missing required field: {field}"}), 400
-        print(f"Received fund config request for: {fund_config_data['short_name']}")
 
-        result = process_fund_config(fund_config_data)
+        # Convert FAB export format to internal format
+        current_app.logger.info("Converting FAB export format to internal format for fund: %s", fund_short_name)
+        processed_fund_data = prepare_fund_data_for_processing(fund_config_data)
+        result = process_fund_config(processed_fund_data)
         if result["success"]:
-            return jsonify(
-                {
-                    "message": result["message"],
-                    "fund_short_name": fund_config_data["short_name"],
-                }
-            ), 201
+            current_app.logger.info("Successfully processed fund config for: %s", fund_short_name)
+            return jsonify({"message": result["message"]}), 201
         else:
+            current_app.logger.error("Failed to process fund config for %s: %s", fund_short_name, result["message"])
             return jsonify({"error": result["message"]}), 500
     except Exception as e:
         current_app.logger.error("Error processing fund config: %s", str(e))
