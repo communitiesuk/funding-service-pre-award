@@ -145,7 +145,7 @@
     {# Display multiple flag banner #}
     <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        {% if g.access_controller.has_any_assessor_role and is_qa_complete %}
+        {% if g.access_controller.has_any_assessor_role and is_qa_complete and not state.is_deleted %}
             {{ qa_complete_flag(qa_complete["date_created"], accounts_list[qa_complete["user_id"]], form.csrf_token, application_id, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
         {% endif %}
 
@@ -167,7 +167,7 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        {% if all_uploaded_documents_section_available %}
+        {% if all_uploaded_documents_section_available and not state.is_deleted %}
         <h2 class="govuk-heading-l govuk-!-margin-top-8">All uploaded documents</h2>
         {{ section_element(
             "",

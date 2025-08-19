@@ -1,7 +1,8 @@
 import copy
+from http import HTTPStatus
 from typing import Dict
 
-from flask import current_app, flash, g, redirect, render_template, request, url_for
+from flask import abort, current_app, flash, g, redirect, render_template, request, url_for
 
 from pre_award.assess.authentication.validation import check_access_application_id, check_access_fund_id_round_id
 from pre_award.assess.config.display_value_mappings import search_params_tag
@@ -47,6 +48,9 @@ tagging_bp = Blueprint(
 @tagging_bp.route("/application/<application_id>/tags", methods=["GET", "POST"])
 @check_access_application_id(roles_required=["ASSESSOR"])
 def load_change_tags(application_id):
+    state = get_state_for_tasklist_banner(application_id)
+    if state.is_deleted:
+        abort(HTTPStatus.METHOD_NOT_ALLOWED)
     tag_association_form = TagAssociationForm()
     if request.method == "POST":
         associated_tags = get_associated_tags_for_application(application_id)
@@ -70,7 +74,6 @@ def load_change_tags(application_id):
             )
         )
 
-    state = get_state_for_tasklist_banner(application_id)
     all_tags = get_tags_for_fund_round(state.fund_id, state.round_id, "")
     associated_tags = get_associated_tags_for_application(application_id)
     associated_tag_ids = (

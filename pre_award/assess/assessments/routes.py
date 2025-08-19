@@ -8,6 +8,7 @@ import time
 import zipfile
 from collections import OrderedDict
 from datetime import datetime, timezone
+from http import HTTPStatus
 from urllib.parse import quote_plus, unquote_plus
 
 from flask import Response, abort, current_app, g, redirect, render_template, request, session, url_for
@@ -1143,7 +1144,10 @@ def display_sub_criteria(  # noqa: C901
     application_id,
     sub_criteria_id,
 ):
+    state = get_state_for_tasklist_banner(application_id)
     if sub_criteria_id == "all_uploaded_documents":
+        if state.is_deleted:
+            abort(HTTPStatus.METHOD_NOT_ALLOWED)
         return _handle_all_uploaded_documents(application_id)
 
     """
@@ -1184,7 +1188,6 @@ def display_sub_criteria(  # noqa: C901
             )
         )
 
-    state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
     change_requests_desc = AssessmentFlagSchema().dump(
         get_change_requests_for_application(application_id=application_id, sort_by_raised=True), many=True
@@ -1598,6 +1601,8 @@ def application(application_id):
     associated_tags = get_associated_tags_for_application(application_id)
     add_comment_argument = request.args.get("add_comment") == "1"
     edit_comment_argument = request.args.get("edit_comment") == "1"
+    if (add_comment_argument or edit_comment_argument) and state.is_deleted:
+        abort(HTTPStatus.METHOD_NOT_ALLOWED)
     comment_form = CommentsForm()
 
     if add_comment_argument and comment_form.validate_on_submit():
@@ -1908,6 +1913,8 @@ def view_entire_application(application_id):
     themes as per the application sub_criteria/themes.
     """
     state = get_state_for_tasklist_banner(application_id)
+    if state.is_deleted:
+        abort(HTTPStatus.METHOD_NOT_ALLOWED)
     fund_round_name = state.fund_short_name + state.round_short_name
 
     _data = get_application_json_and_sub_criterias(application_id)

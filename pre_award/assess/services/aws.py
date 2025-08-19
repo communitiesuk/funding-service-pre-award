@@ -57,12 +57,21 @@ def list_files_in_folder(prefix):
 
 def delete_file_from_aws(file_key: str):
     try:
-        current_app.logger.info("Deleting file %(file_key)s from S3 bucket", dict(file_key=file_key))
+        current_app.logger.info(
+            "Deleting file %(file_key)s from S3 bucket",
+            {"file_key": file_key},
+        )
         _S3_CLIENT.delete_object(Bucket=Config.AWS_BUCKET_NAME, Key=file_key)
-        current_app.logger.info("File %(file_key)s deleted successfully.", dict(file_key=file_key))
-    except ClientError as e:
-        current_app.logger.error(e)
-        raise Exception(e) from e
+        current_app.logger.info(
+            "File %(file_key)s deleted successfully.",
+            {"file_key": file_key},
+        )
+    except ClientError:
+        current_app.logger.exception(
+            "Failed to delete file %(file_key)s from S3 bucket",
+            {"file_key": file_key},
+        )
+        raise
 
 
 _KEY_PARTS = ("application_id", "form", "path", "component_id", "filename")
