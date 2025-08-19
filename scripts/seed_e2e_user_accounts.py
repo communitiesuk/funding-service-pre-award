@@ -4,8 +4,6 @@ import os
 from dataclasses import dataclass
 from typing import Iterable
 
-import click
-
 from app import create_app
 from pre_award.account_store.db.queries.queries import (
     upsert_account,
@@ -103,6 +101,7 @@ def upsert_roles_for_account(account, roles: Iterable[str]) -> None:
 
 # --------------------------- CLI ------------------------------------------- #
 
+
 def seed_e2e_user_accounts() -> None:
     """
     Seed end-to-end test accounts and roles.
@@ -135,6 +134,7 @@ def seed_e2e_user_accounts() -> None:
 
 
 # --------------------------- Entrypoint ------------------------------------- #
+
 
 def main() -> None:
     env = os.getenv("FLASK_ENV")
