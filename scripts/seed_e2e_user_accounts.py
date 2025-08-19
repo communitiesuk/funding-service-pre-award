@@ -11,6 +11,7 @@ from pre_award.account_store.db.queries.queries import (
     upsert_account,
     upsert_account_role,
 )
+from pre_award.db import db
 
 # --------------------------- Configuration --------------------------------- #
 
@@ -102,8 +103,6 @@ def upsert_roles_for_account(account, roles: Iterable[str]) -> None:
 
 # --------------------------- CLI ------------------------------------------- #
 
-
-@click.command()
 def seed_e2e_user_accounts() -> None:
     """
     Seed end-to-end test accounts and roles.
@@ -118,21 +117,24 @@ def seed_e2e_user_accounts() -> None:
     print(f"Prepared {len(plans)} account plan(s).")
 
     created_accounts = 0
+    try:
+        for plan in plans:
+            print(f"Processing {plan.grant} / {plan.base_role} -> {plan.email}")
 
-    for plan in plans:
-        print(f"Processing {plan.grant} / {plan.base_role} -> {plan.email}")
+            account = upsert_account(email=plan.email, full_name=plan.full_name)
+            created_accounts += 1
+            print(f"ensured account id={account.id} email={plan.email}")
 
-        account = upsert_account(email=plan.email, full_name=plan.full_name)
-        created_accounts += 1
-        print(f"ensured account id={account.id} email={plan.email}")
+            upsert_roles_for_account(account, plan.roles_to_assign)
 
-        upsert_roles_for_account(account, plan.roles_to_assign)
-
-    print(f"Done. {created_accounts} account(s) processed.")
+        db.session.commit()
+        print(f"Done. {created_accounts} account(s) processed.")
+    except Exception as ex:
+        print(f"Unexpected error: {ex}")
+        db.session.rollback()
 
 
 # --------------------------- Entrypoint ------------------------------------- #
-
 
 def main() -> None:
     env = os.getenv("FLASK_ENV")

@@ -10,7 +10,7 @@ def upsert_account(email: str, full_name: str):
     if existing_account:
         existing_account.email = email
         existing_account.full_name = full_name
-        db.session.commit()
+        db.session.flush()
         return existing_account
     else:
         new_account_row = Account(
@@ -18,7 +18,7 @@ def upsert_account(email: str, full_name: str):
             full_name=full_name,
         )
         db.session.add(new_account_row)
-        db.session.commit()
+        db.session.flush()
         return new_account_row
 
 
@@ -36,5 +36,5 @@ def upsert_account_role(account: Account, role: str):
             role=role,
         )
         db.session.add(new_role)
-        db.session.commit()
+        db.session.flush()
         return new_role
