@@ -30,6 +30,7 @@ def delete_grant_application_data(application_reference) -> None:
         for form in application.forms:
             db.session.delete(form)
         application.is_deleted = True
+        application.project_name = ""
         s3_files_list = list_files_in_folder(f"{application.id}/")
         print(f"Found {len(s3_files_list)} files in {application.id}")
         for file_key in s3_files_list:
@@ -40,6 +41,7 @@ def delete_grant_application_data(application_reference) -> None:
         assessment_record: AssessmentRecord = get_assessment_record(application.id)
         if assessment_record:
             assessment_record.is_deleted = True
+            assessment_record.project_name = ""
             assessment_record.jsonb_blob["forms"] = []
             assessment_record.jsonb_blob["is_deleted"] = True
             flag_modified(assessment_record, "jsonb_blob")
