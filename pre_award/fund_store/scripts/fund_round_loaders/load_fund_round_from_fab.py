@@ -5,7 +5,7 @@ import click
 
 from pre_award.db import db
 from pre_award.fund_store.config.fund_loader_config.FAB import FAB_FUND_ROUND_CONFIGS
-from pre_award.fund_store.services.fund_config_service import process_fund_config
+from pre_award.fund_store.services.save_fund_configuration import process_fund_config
 
 
 def load_fund_from_fab_impl(fund_short_code="", seed_all_funds=False):
