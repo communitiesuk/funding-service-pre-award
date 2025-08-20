@@ -1,9 +1,12 @@
-def _transform_fund_configuration(loader_config, fab_fund_round_configs):
+import copy
+
+
+def transform_fund_configuration(loader_config):
     """
     Transform a single fund configuration from FAB export format to internal structure.
     Organizes fund and round data for database processing.
     """
-    import copy
+    fab_fund_round_configs = {}
 
     if not loader_config.get("fund_config", None):
         print("No fund config found in the loader config.")
@@ -41,43 +44,5 @@ def _transform_fund_configuration(loader_config, fab_fund_round_configs):
                 tree_path = str(round_config["base_path"]) + "." + ".".join(tree_path)
                 section["tree_path"] = tree_path
             fab_fund_round_configs[fund_short_name]["rounds"][round_short_name]["sections_config"] = updated_sections
-
-
-def prepare_fund_data_for_processing(loader_config):
-    """
-    Prepare fund configuration data from FAB export for database processing.
-    Returns structured fund data ready for saving to database.
-    """
-    fab_fund_round_configs = {}
-    _transform_fund_configuration(loader_config, fab_fund_round_configs)
-    fund_short_name = loader_config["fund_config"]["short_name"]
-    return fab_fund_round_configs[fund_short_name]
-
-
-def load_fund_configurations_from_directory(fab_directory_path):
-    """
-    Load and consolidate all fund configurations from Python files in a directory.
-    Used by the existing loader scripts to bulk process fund setups.
-    """
-    import ast
-    import os
-
-    fab_fund_round_configs = {}
-
-    for file in os.listdir(fab_directory_path):
-        if file.startswith("__") or not file.endswith(".py"):
-            continue
-
-        with open(fab_directory_path / file, "r") as json_file:
-            content = json_file.read()
-            if content.startswith("LOADER_CONFIG = "):
-                content = content.split("LOADER_CONFIG = ")[1]
-            elif content.startswith("LOADER_CONFIG="):
-                content = content.split("LOADER_CONFIG=")[1]
-            else:
-                raise ValueError(f"fund config file {file.title()} does not start with 'LOADER_CONFIG='")
-
-            loader_config = ast.literal_eval(content)
-            _transform_fund_configuration(loader_config, fab_fund_round_configs)
 
     return fab_fund_round_configs

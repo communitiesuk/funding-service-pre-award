@@ -29,8 +29,8 @@ from pre_award.fund_store.db.schemas.fund import FundSchema
 from pre_award.fund_store.db.schemas.round import RoundSchema
 from pre_award.fund_store.db.schemas.section import SECTION_SCHEMA_MAP
 from pre_award.fund_store.decorators import development_only
-from pre_award.fund_store.services.fund_config_service import process_fund_config
-from pre_award.fund_store.services.fund_configuration_service import prepare_fund_data_for_processing
+from pre_award.fund_store.services.fab_import_service import transform_fund_configuration
+from pre_award.fund_store.services.save_fund_configuration import process_fund_config
 
 fund_store_bp = Blueprint("fund_store_bp", __name__)
 
@@ -448,6 +448,7 @@ def import_fund_config():
     try:
         # Get JSON data from request
         fund_config_data = request.json
+
         if not fund_config_data:
             return jsonify({"error": "No JSON data provided"}), 400
 
@@ -463,14 +464,21 @@ def import_fund_config():
 
         # Convert FAB export format to internal format
         current_app.logger.info("Converting FAB export format to internal format for fund: %s", fund_short_name)
-        processed_fund_data = prepare_fund_data_for_processing(fund_config_data)
-        result = process_fund_config(processed_fund_data)
+        processed_fund_data = transform_fund_configuration(fund_config_data)
+
+        # Get the fund data from the transformed structure
+        fund_short_name = list(processed_fund_data.keys())[0]
+        fund_data = processed_fund_data[fund_short_name]
+
+        result = process_fund_config(fund_data)
         if result["success"]:
-            current_app.logger.info("Successfully processed fund config for: %s", fund_short_name)
+            current_app.logger.info("Successfully processed fund config for fund: %s", fund_short_name)
             return jsonify({"message": result["message"]}), 201
         else:
-            current_app.logger.error("Failed to process fund config for %s: %s", fund_short_name, result["message"])
+            current_app.logger.error(
+                "Failed to process fund config for fund %s: %s", fund_short_name, result["message"]
+            )
             return jsonify({"error": result["message"]}), 500
     except Exception as e:
         current_app.logger.error("Error processing fund config: %s", str(e))
-        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
+        return jsonify({"error": "Internal server error occurred while processing fund configuration"}), 500
