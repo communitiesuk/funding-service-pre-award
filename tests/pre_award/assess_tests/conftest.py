@@ -485,6 +485,40 @@ def mock_get_assessor_tasklist_state(request, mocker):
 
 
 @pytest.fixture
+def mock_get_assessor_tasklist_state_deleted_application(request, mocker):
+    application_id = request.node.get_closest_marker("application_id").args[0]
+    # Load the mock dict from your test data
+    mock_tasklist_state = mock_api_results[f"assessment_store/application_overviews/{application_id}"]
+
+    # Patch the raw dict-returning function
+    patch_1 = mocker.patch(
+        "pre_award.assess.services.shared_data_helpers.get_assessor_task_list_state",
+        return_value=mock_tasklist_state,
+    )
+
+    # Convert the dict into an AssessorTaskList object
+    mock_tasklist_object = AssessorTaskList.from_json(
+        {
+            **mock_tasklist_state,
+            "fund_name": "Test Fund",
+            "fund_short_name": "TF",
+            "round_short_name": "R1",
+            "fund_guidance_url": "https://example.com",
+            "is_eoi_round": False,
+            "is_deleted": True,
+        }
+    )
+
+    # Patch the object-returning function
+    patch_2 = mocker.patch(
+        "pre_award.assess.authentication.validation.get_state_for_tasklist_banner",
+        return_value=mock_tasklist_object,
+    )
+
+    yield patch_1, patch_2
+
+
+@pytest.fixture
 def expect_flagging():
     return False
 

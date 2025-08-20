@@ -1,6 +1,8 @@
 import urllib
 from collections import namedtuple
+from types import SimpleNamespace
 from unittest import mock
+from unittest.mock import patch
 
 import pytest
 from bs4 import BeautifulSoup
@@ -729,6 +731,111 @@ class TestRoutes:
         assert b"Rescore" in response.data
         assert b"Lead assessor" in response.data
         assert b"This is a comment" in response.data
+
+    @pytest.mark.parametrize(
+        "method, patch_target, route_template",
+        [
+            pytest.param(
+                "POST",
+                "pre_award.assess.scoring.routes.get_state_for_tasklist_banner",
+                "/assess/application_id/{application_id}/sub_criteria_id/{sub_criteria_id}/score",
+                id="score-sub-criteria",
+                marks=[pytest.mark.application_id("resolved_app"), pytest.mark.sub_criteria_id("test_sub_criteria_id")],
+            ),
+            pytest.param(
+                "POST",
+                "pre_award.assess.assessments.routes.get_state_for_tasklist_banner",
+                "/assess/application_id/{application_id}/sub_criteria_id/all_uploaded_documents",
+                id="all-uploaded-docs",
+                marks=[pytest.mark.application_id("resolved_app"), pytest.mark.sub_criteria_id("test_sub_criteria_id")],
+            ),
+            pytest.param(
+                "POST",
+                "pre_award.assess.assessments.routes.get_state_for_tasklist_banner",
+                "/assess/entire_application/{application_id}",
+                id="entire-application",
+                marks=[pytest.mark.application_id("resolved_app"), pytest.mark.sub_criteria_id("test_sub_criteria_id")],
+            ),
+            pytest.param(
+                "POST",
+                "pre_award.assess.assessments.routes.get_state_for_tasklist_banner",
+                "/assess/application/{application_id}?add_comment=1",
+                id="application-add-comment",
+                marks=[pytest.mark.application_id("resolved_app"), pytest.mark.sub_criteria_id("test_sub_criteria_id")],
+            ),
+            pytest.param(
+                "GET",
+                "pre_award.assess.flagging.routes.get_state_for_tasklist_banner",
+                "assess/resolve_flag/{application_id}?flag_id={flag_id}",
+                id="resolve-flag",
+                marks=[
+                    pytest.mark.application_id("resolved_app"),
+                    pytest.mark.sub_criteria_id("test_sub_criteria_id"),
+                    pytest.mark.flag_id("flagged_qa_completed_app"),
+                ],
+            ),
+            pytest.param(
+                "GET",
+                "pre_award.assess.flagging.routes.get_state_for_tasklist_banner",
+                "assess/flag/{application_id}?flag_id={flag_id}",
+                id="flag-application",
+                marks=[
+                    pytest.mark.application_id("resolved_app"),
+                    pytest.mark.sub_criteria_id("test_sub_criteria_id"),
+                    pytest.mark.flag_id("flagged_qa_completed_app"),
+                ],
+            ),
+            pytest.param(
+                "GET",
+                "pre_award.assess.tagging.routes.get_state_for_tasklist_banner",
+                "assess/application/{application_id}/tags",
+                id="application-tags",
+                marks=[pytest.mark.application_id("resolved_app"), pytest.mark.sub_criteria_id("test_sub_criteria_id")],
+            ),
+        ],
+    )
+    @pytest.mark.usefixtures(
+        "mock_get_assessor_tasklist_state_deleted_application",
+        "mock_get_fund",
+        "mock_get_sub_criteria",
+        "mock_get_funds",
+        "mock_get_round",
+        "mock_get_application_metadata",
+        "mock_get_comments",
+        "mock_get_scores",
+        "mock_get_bulk_accounts",
+        "mock_get_scoring_system",
+        "mock_competed_cof_fund",
+    )
+    def test_access_denied_when_application_marked_deleted(
+        self,
+        method,
+        patch_target,
+        route_template,
+        assess_test_client,
+        request,
+    ):
+        # Auth
+        token = create_valid_token(test_lead_assessor_claims)
+        assess_test_client.set_cookie("fsd_user_token", token)
+
+        # Collect marker values for url formatting
+        context = {}
+        for key in ("application_id", "sub_criteria_id", "flag_id"):
+            m = request.node.get_closest_marker(key)
+            if m:
+                context[key] = m.args[0]
+
+        url = route_template.format(**context)
+
+        with patch(patch_target, return_value=SimpleNamespace(is_deleted=True)) as mocked_state:
+            if method == "POST":
+                resp = assess_test_client.post(url, follow_redirects=True)
+            else:
+                resp = assess_test_client.get(url, follow_redirects=True)
+
+            assert resp.status_code == 403, "Wrong status code on response"
+            mocked_state.assert_called_once()
 
     @pytest.mark.application_id("resolved_app")
     @pytest.mark.sub_criteria_id("test_sub_criteria_id")

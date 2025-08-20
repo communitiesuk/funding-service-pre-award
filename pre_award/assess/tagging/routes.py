@@ -1,5 +1,4 @@
 import copy
-from http import HTTPStatus
 from typing import Dict
 
 from flask import abort, current_app, flash, g, redirect, render_template, request, url_for
@@ -50,7 +49,7 @@ tagging_bp = Blueprint(
 def load_change_tags(application_id):
     state = get_state_for_tasklist_banner(application_id)
     if state.is_deleted:
-        abort(HTTPStatus.METHOD_NOT_ALLOWED)
+        abort(403)
     tag_association_form = TagAssociationForm()
     if request.method == "POST":
         associated_tags = get_associated_tags_for_application(application_id)

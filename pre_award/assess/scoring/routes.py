@@ -1,5 +1,3 @@
-from http import HTTPStatus
-
 from flask import abort, current_app, g, render_template, request
 
 from pre_award.assess.authentication.validation import check_access_application_id, restrict_uncompeted_actions
@@ -42,7 +40,7 @@ def score(
 ):
     state = get_state_for_tasklist_banner(application_id)
     if state.is_deleted:
-        abort(HTTPStatus.METHOD_NOT_ALLOWED)
+        abort(403)
     sub_criteria: SubCriteria = get_sub_criteria(application_id, sub_criteria_id)
 
     if not sub_criteria.is_scored:
