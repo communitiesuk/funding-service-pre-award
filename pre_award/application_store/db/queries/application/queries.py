@@ -4,7 +4,7 @@ import string
 from datetime import datetime, timezone
 from io import BytesIO
 from itertools import groupby
-from typing import Optional
+from typing import Dict, Iterable, List, Optional
 
 from flask import current_app
 from fsd_utils import extract_questions_and_answers, generate_text_of_application
@@ -48,10 +48,22 @@ def get_application(app_id, include_forms=False, as_json=False) -> dict | Applic
         return row
 
 
-def get_application_by_reference(app_ref) -> dict | Applications:
-    stmt: Select = select(Applications).filter(Applications.reference == app_ref and Applications.is_deleted == false())
-    stmt.options(noload(Applications.forms))
-    return db.session.scalars(stmt).unique().one()
+def get_applications_by_references(app_refs: Iterable[str]) -> Dict[str, Applications]:
+    app_refs = list(app_refs)
+    if not app_refs:
+        return {}
+
+    stmt = (
+        select(Applications)
+        .where(
+            Applications.reference.in_(app_refs),
+            Applications.is_deleted == false(),
+        )
+        .options(noload(Applications.forms))
+    )
+
+    rows: List[Applications] = list(db.session.execute(stmt).scalars())
+    return {app.reference: app for app in rows}
 
 
 def get_applications(filters=None, include_forms=False, as_json=False) -> list[dict] | list[Applications]:
