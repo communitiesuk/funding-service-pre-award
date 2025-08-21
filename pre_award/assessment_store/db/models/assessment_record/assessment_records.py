@@ -51,6 +51,8 @@ class AssessmentRecord(BaseModel):
         Computed(func.md5(cast(jsonb_blob, TEXT)), persisted=True),
     )
 
+    is_deleted = Column(Boolean, nullable=False, default=False)
+
     scores = relationship("Score")
 
     comments = relationship("Comment")

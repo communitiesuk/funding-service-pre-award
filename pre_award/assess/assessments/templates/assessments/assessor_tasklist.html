@@ -38,7 +38,7 @@
         state.fund_name,
         state.fund_short_name,
         state.short_id,
-        state.project_name,
+        state.project_name if not state.is_deleted else state.project_name + " [PROJECT DELETED]",
         state.funding_amount_requested,
         assessment_status,
         flag_status,
@@ -54,10 +54,10 @@
 {# djlint:on #}
     <div class="govuk-grid-column-one-quarter">
         {% if g.access_controller.is_assessor %}
-            {{ assessment_actions(application_id, fund.short_name, round.short_name) }}
+            {{ assessment_actions(application_id, fund.short_name, round.short_name, state) }}
         {% endif %}
 
-        {{ comment(comments, application_id, True, display_comment_box, display_comment_edit_box) }}
+        {{ comment(comments, application_id, True, display_comment_box, display_comment_edit_box, state) }}
 
         {% if display_comment_box %}
             {{ comment_box(comment_form = comment_form, application_id = application_id) }}
@@ -86,6 +86,7 @@
                         There are no tags on this assessment
                     </span>
                 {% endif %}
+                {% if not state.is_deleted %}
                     <span class="govuk-body-s govuk-!-margin-top-2">
                         <a class="govuk-link"
                             data-qa="add-change-tags"
@@ -93,6 +94,7 @@
                             {{ "Change" if tags else "Add" }} tags
                         </a>
                     </span>
+                {% endif %}
             </div>
             <div class="govuk-grid-column-full govuk-!-margin-top-4">
                 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0">
@@ -121,7 +123,7 @@
             </span>
 
             <span class="left govuk-!-padding-right-4">
-                {% if is_flaggable %}
+                {% if is_flaggable and not state.is_deleted %}
                 {{ flag_application_button(application_id) }}
                 {% endif %}
             </span>
@@ -143,7 +145,7 @@
     {# Display multiple flag banner #}
     <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        {% if g.access_controller.has_any_assessor_role and is_qa_complete %}
+        {% if g.access_controller.has_any_assessor_role and is_qa_complete and not state.is_deleted %}
             {{ qa_complete_flag(qa_complete["date_created"], accounts_list[qa_complete["user_id"]], form.csrf_token, application_id, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
         {% endif %}
 
@@ -158,14 +160,14 @@
             {% endif %}
         {% endfor %}
 
-    {% if sub_criteria_status_completed and g.access_controller.has_any_assessor_role and (not is_qa_complete) and (not flag_status) and not is_expression_of_interest %}
+    {% if not state.is_deleted and sub_criteria_status_completed and g.access_controller.has_any_assessor_role and (not is_qa_complete) and (not flag_status) and not is_expression_of_interest %}
         {{ assessment_complete(state, form.csrf_token, application_id, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
     {% endif %}
 </div>
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        {% if all_uploaded_documents_section_available %}
+        {% if all_uploaded_documents_section_available and not state.is_deleted %}
         <h2 class="govuk-heading-l govuk-!-margin-top-8">All uploaded documents</h2>
         {{ section_element(
             "",

@@ -21,6 +21,7 @@ def test_match_forms_to_state_all_forms_complete(apply_test_client):
             {"name": "form_1", "status": ApplicationStatus.COMPLETED.name},
             {"name": "form_2", "status": ApplicationStatus.COMPLETED.name},
         ],
+        is_deleted=False,
     )
 
     display_config = [
@@ -81,6 +82,7 @@ def test_match_forms_to_state_not_complete(apply_test_client):
             {"name": "form_1", "status": ApplicationStatus.COMPLETED.name},
             {"name": "form_2", "status": ApplicationStatus.NOT_STARTED.name},
         ],
+        is_deleted=False,
     )
 
     display_config = [

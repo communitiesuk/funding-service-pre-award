@@ -4,11 +4,11 @@ import string
 from datetime import datetime, timezone
 from io import BytesIO
 from itertools import groupby
-from typing import Optional
+from typing import Dict, Iterable, List, Optional
 
 from flask import current_app
 from fsd_utils import extract_questions_and_answers, generate_text_of_application
-from sqlalchemy import exc, func, select
+from sqlalchemy import exc, false, func, select
 from sqlalchemy.dialects.postgresql import insert as postgres_insert
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload, load_only, noload
@@ -30,7 +30,7 @@ from pre_award.db import db
 
 
 def get_application(app_id, include_forms=False, as_json=False) -> dict | Applications:
-    stmt: Select = select(Applications).filter(Applications.id == app_id)
+    stmt: Select = select(Applications).filter(Applications.id == app_id and Applications.is_deleted == false())
 
     if include_forms:
         stmt.options(joinedload(Applications.forms))
@@ -48,10 +48,28 @@ def get_application(app_id, include_forms=False, as_json=False) -> dict | Applic
         return row
 
 
+def get_applications_by_references(app_refs: Iterable[str]) -> Dict[str, Applications]:
+    app_refs = list(app_refs)
+    if not app_refs:
+        return {}
+
+    stmt = (
+        select(Applications)
+        .where(
+            Applications.reference.in_(app_refs),
+            Applications.is_deleted == false(),
+        )
+        .options(noload(Applications.forms))
+    )
+
+    rows: List[Applications] = list(db.session.execute(stmt).scalars())
+    return {app.reference: app for app in rows}
+
+
 def get_applications(filters=None, include_forms=False, as_json=False) -> list[dict] | list[Applications]:
     if filters is None:
         filters = []
-    stmt: Select = select(Applications)
+    stmt: Select = select(Applications).filter(Applications.is_deleted == false())
 
     if len(filters) > 0:
         stmt = stmt.where(*filters)
@@ -143,7 +161,7 @@ def create_application(account_id, fund_id, round_id, language) -> Applications:
 
 
 def get_all_applications() -> list:
-    application_list = db.session.query(Applications).all()
+    application_list = db.session.query(Applications).filter(Applications.is_deleted == false()).all()
     return application_list
 
 
@@ -153,7 +171,7 @@ def get_count_by_status(round_ids: Optional[list] = None, fund_ids: Optional[lis
         Applications.round_id,
         Applications.status,
         func.count(Applications.status),
-    )
+    ).filter(Applications.is_deleted == false())
 
     if round_ids:
         query = query.filter(Applications.round_id.in_(round_ids))
@@ -223,7 +241,7 @@ def search_applications(**params):
     application_id = params.get("application_id")
     forms = params.get("forms")
 
-    filters = []
+    filters = [Applications.is_deleted == false()]
     if fund_id:
         filters.append(Applications.fund_id == fund_id)
     if round_id:

@@ -96,7 +96,7 @@ sort_column, sort_order, tag_option_groups, tags, tagging_purpose_config, users,
       <td class="govuk-table__cell">{{ overview.short_id[-6:] }}</td>
       <td class="govuk-table__cell"><a class="govuk-link" data-qa="project_name" id="project-name-{{ loop.index }}"
           href="{{ url_for('assessment_bp.application',application_id=overview.application_id) }}">{{
-          overview.project_name }}</a></td>
+              overview.project_name ~ (' [PROJECT DELETED]' if overview.is_deleted else '') }}</a></td>
       <td class="govuk-table__cell">£{{ "{:,.2f}".format(overview.funding_amount_requested|int|round) }}</td>
       <td class="govuk-table__cell">{{ asset_types[overview.asset_type] }}</td>
       <td class="govuk-table__cell">{{ overview.location_json_blob.get('country') or "Not found" }}</td>

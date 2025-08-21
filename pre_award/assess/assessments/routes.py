@@ -249,7 +249,6 @@ def _get_fund_dashboard_data(fund: Fund, round: Round, request):
     tag_types = future_tag_types.result()
 
     thread_executor.executor.shutdown()
-
     unfiltered_stats = process_assessments_stats(all_applications_metadata)
     all_application_locations = LocationData.from_json_blob(all_applications_metadata)
 
@@ -1144,7 +1143,10 @@ def display_sub_criteria(  # noqa: C901
     application_id,
     sub_criteria_id,
 ):
+    state = get_state_for_tasklist_banner(application_id)
     if sub_criteria_id == "all_uploaded_documents":
+        if state.is_deleted:
+            abort(403)
         return _handle_all_uploaded_documents(application_id)
 
     """
@@ -1185,7 +1187,6 @@ def display_sub_criteria(  # noqa: C901
             )
         )
 
-    state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
     change_requests_desc = AssessmentFlagSchema().dump(
         get_change_requests_for_application(application_id=application_id, sort_by_raised=True), many=True
@@ -1558,7 +1559,7 @@ def application(application_id):
     :param application_id:
     :return:
     """
-
+    add_comment_argument, edit_comment_argument = validate_actions(application_id)
     handle_application_post_request(application_id)
 
     state = get_state_for_tasklist_banner(application_id)
@@ -1597,8 +1598,6 @@ def application(application_id):
     sub_criteria_status_completed = all_status_completed(state)
     form = AssessmentCompleteForm()
     associated_tags = get_associated_tags_for_application(application_id)
-    add_comment_argument = request.args.get("add_comment") == "1"
-    edit_comment_argument = request.args.get("edit_comment") == "1"
     comment_form = CommentsForm()
 
     if add_comment_argument and comment_form.validate_on_submit():
@@ -1712,6 +1711,16 @@ def application(application_id):
         round=fund_round,
         percentage_score=percentage_score,
     )
+
+
+def validate_actions(application_id):
+    add_comment_argument = request.args.get("add_comment") == "1"
+    edit_comment_argument = request.args.get("edit_comment") == "1"
+    if add_comment_argument or edit_comment_argument:
+        state = get_state_for_tasklist_banner(application_id)
+        if state.is_deleted:
+            abort(403)
+    return add_comment_argument, edit_comment_argument
 
 
 @assessment_bp.route("/activity_trail/<application_id>", methods=["GET"])
@@ -1909,6 +1918,8 @@ def view_entire_application(application_id):
     themes as per the application sub_criteria/themes.
     """
     state = get_state_for_tasklist_banner(application_id)
+    if state.is_deleted:
+        abort(403)
     fund_round_name = state.fund_short_name + state.round_short_name
 
     _data = get_application_json_and_sub_criterias(application_id)
