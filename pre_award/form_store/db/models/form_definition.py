@@ -35,3 +35,16 @@ class FormDefinition(BaseModel):
     name = Column(Text, unique=True, nullable=False)
     draft_json = Column(JSONB, nullable=False)
     published_json = Column(JSONB, nullable=False, default="{}")
+
+    def as_dict(self):
+        """Convert the FormDefinition to a dictionary representation."""
+        return {
+            "id": str(self.id),
+            "name": self.name,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "published_at": self.published_at.isoformat() if self.published_at else None,
+            "draft_json": self.draft_json,
+            "published_json": self.published_json,
+            "is_published": bool(self.published_json and self.published_json != {}),
+        }
