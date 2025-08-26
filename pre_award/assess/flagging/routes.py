@@ -35,6 +35,8 @@ flagging_bp = Blueprint(
 def flag(application_id):
     # Get assessor tasks list
     state = get_state_for_tasklist_banner(application_id)
+    if state.is_deleted:
+        abort(403)
     choices = [(item["sub_section_id"], item["sub_section_name"]) for item in state.get_sub_sections_metadata()]
 
     teams_available = get_available_teams(
@@ -89,6 +91,9 @@ def flag(application_id):
 @flagging_bp.route("/resolve_flag/<application_id>", methods=["GET", "POST"])
 @check_access_application_id(roles_required=["LEAD_ASSESSOR"])
 def resolve_flag(application_id):
+    state = get_state_for_tasklist_banner(application_id)
+    if state.is_deleted:
+        abort(403)
     form = ResolveFlagForm()
     flag_id = request.args.get("flag_id")
 
@@ -96,7 +101,6 @@ def resolve_flag(application_id):
         current_app.logger.error("No flag id found in query params")
         abort(404)
     flag_data = get_flag(flag_id)
-    state = get_state_for_tasklist_banner(application_id)
     section = flag_data.sections_to_flag
     return resolve_application(
         form=form,

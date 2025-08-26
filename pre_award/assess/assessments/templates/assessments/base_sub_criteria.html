@@ -54,13 +54,13 @@ Error:
   {{ sub_criteria_heading(sub_criteria)}}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-      {{ navbar(application_id, sub_criteria, current_theme.id, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
+      {{ navbar(application_id, sub_criteria, current_theme.id, state, is_uncompeted_flow_flag=is_uncompeted_flow(fund)) }}
     </div>
     <div class="govuk-grid-column-two-thirds">
       <div class="assessment-reponses">
         {% block sub_criteria_content %}{% endblock sub_criteria_content %}
 
-        {{ comment(comments, application_id, False, display_comment_box, display_comment_edit_box, sub_criteria, current_theme) }}
+        {{ comment(comments, application_id, False, display_comment_box, display_comment_edit_box, state, sub_criteria, current_theme) }}
 
         {% if display_comment_box == True %}
           {{ comment_box(comment_form) }}

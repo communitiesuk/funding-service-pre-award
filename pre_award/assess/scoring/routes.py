@@ -38,12 +38,14 @@ def score(
     application_id,
     sub_criteria_id,
 ):
+    state = get_state_for_tasklist_banner(application_id)
+    if state.is_deleted:
+        abort(403)
     sub_criteria: SubCriteria = get_sub_criteria(application_id, sub_criteria_id)
 
     if not sub_criteria.is_scored:
         abort(404)
 
-    state = get_state_for_tasklist_banner(application_id)
     flags_list = get_flags(application_id)
 
     score_form = get_scoring_class(state.round_id)()

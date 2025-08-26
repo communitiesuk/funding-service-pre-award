@@ -76,6 +76,7 @@ def test_find_assessor_task_list_ui_metadata(seed_application_records):
         "date_submitted": "2022-10-27T08:32:13.383999",
         "funding_amount_requested": 4600.00,
         "language": "en",
+        "is_deleted": False,
     }
 
 
