@@ -12,6 +12,7 @@ import data.models  # noqa
 import pre_award.account_store.db.models  # noqa
 import pre_award.application_store.db.models  # noqa
 import pre_award.assessment_store.db.models  # noqa
+import pre_award.form_store.db.models  # noqa
 from pre_award.assessment_store.db.models.assessment_record.db_utils import pg_trgm_extension
 
 # Comment this out if the functions/trigs refer to tables
