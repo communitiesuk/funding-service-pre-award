@@ -1,5 +1,6 @@
 import hashlib
 import json
+import re
 
 from flask import current_app, request
 from flask.views import MethodView
@@ -15,6 +16,13 @@ from pre_award.form_store.db.queries import (
 )
 
 form_store_bp = Blueprint("form_store_bp", __name__)
+
+
+def _sanitise_for_logging(value):
+    """Sanitise user input for safe logging by removing potentially dangerous characters"""
+    if not isinstance(value, str):
+        value = str(value)
+    return re.sub(r"[^\w\-_.]", "", value)
 
 
 class FormsView(MethodView):
@@ -51,7 +59,7 @@ class FormsView(MethodView):
                     return {"error": "Invalid JSON in form_json field"}, 400
 
             form = create_or_update_form(name, form_json)
-            current_app.logger.info("Form %s created/updated successfully", name)
+            current_app.logger.info("Form %s created/updated successfully", _sanitise_for_logging(name))
 
             return form.as_dict(), 201
 
@@ -71,7 +79,7 @@ class FormDraftView(MethodView):
         except NoResultFound:
             return {"error": f"Form '{name}' not found"}, 404
         except Exception as e:
-            current_app.logger.error("Error retrieving draft for form %s: %s", name, str(e))
+            current_app.logger.error("Error retrieving draft for form %s: %s", _sanitise_for_logging(name), str(e))
             return {"error": "Failed to retrieve form draft"}, 500
 
 
@@ -88,7 +96,7 @@ class FormPublishedView(MethodView):
         except NoResultFound:
             return {"error": f"Form '{name}' not found"}, 404
         except Exception as e:
-            current_app.logger.error("Error retrieving published form %s: %s", name, str(e))
+            current_app.logger.error("Error retrieving published form %s: %s", _sanitise_for_logging(name), str(e))
             return {"error": "Failed to retrieve published form"}, 500
 
 
@@ -110,7 +118,7 @@ class FormHashView(MethodView):
         except NoResultFound:
             return {"error": f"Form '{name}' not found"}, 404
         except Exception as e:
-            current_app.logger.error("Error retrieving hash for form %s: %s", name, str(e))
+            current_app.logger.error("Error retrieving hash for form %s: %s", _sanitise_for_logging(name), str(e))
             return {"error": "Failed to retrieve form hash"}, 500
 
 
@@ -121,14 +129,14 @@ class FormPublishView(MethodView):
         """PUT /forms/{name}/publish - Publishes a form (copies draft to published)"""
         try:
             form = publish_form(name)
-            current_app.logger.info("Form %s published successfully", name)
+            current_app.logger.info("Form %s published successfully", _sanitise_for_logging(name))
             return form.as_dict(), 200
         except NoResultFound:
             return {"error": f"Form '{name}' not found"}, 404
         except ValueError as e:
             return {"error": str(e)}, 400
         except Exception as e:
-            current_app.logger.error("Error publishing form %s: %s", name, str(e))
+            current_app.logger.error("Error publishing form %s: %s", _sanitise_for_logging(name), str(e))
             return {"error": "Failed to publish form"}, 500
 
 
