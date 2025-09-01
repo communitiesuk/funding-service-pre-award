@@ -1,7 +1,7 @@
 import ast
 import os
 from pathlib import Path
-from pre_award.fund_store.services.fab_import_service import transform_fund_configuration
+from pre_award.fund_store.services.fab_transform_service import transform_fund_configuration
 
 """
 Goes through all the files in config/fund_loader_config/FAB and adds each round to FAB_FUND_ROUND_CONFIGS
@@ -45,5 +45,6 @@ for file in os.listdir(this_dir):
             raise ValueError(f"fund config file {file.title()} does not start with 'LOADER_CONFIG='")
 
         loader_config = ast.literal_eval(content)
-        result = transform_fund_configuration(loader_config)
-        FAB_FUND_ROUND_CONFIGS.update(result)
+        fund_data = transform_fund_configuration(loader_config)
+        fund_short_name = loader_config["fund_config"]["short_name"]
+        FAB_FUND_ROUND_CONFIGS[fund_short_name] = fund_data

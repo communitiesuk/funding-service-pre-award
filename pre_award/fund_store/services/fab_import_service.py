@@ -1,48 +1,68 @@
-import copy
+"""
+Service for handling fund configuration data from FAB.
+This service contains the core business logic for processing fund store config data.
+"""
+
+from flask import current_app
+
+from pre_award.db import db
+from pre_award.fund_store.db.queries import (
+    insert_base_sections,
+    insert_fund_data,
+    insert_or_update_application_sections,
+    upsert_round_data,
+)
 
 
-def transform_fund_configuration(loader_config):
+def process_fund_config(converted_config):
     """
-    Transform a single fund configuration from FAB export format to internal structure.
-    Organizes fund and round data for database processing.
+    Process fund configuration data and save to database.
+    Extracted from load_fund_round_from_fab script.
+    Args:
+        converted_config (dict): Fund configuration dictionary from FAB
+    Returns:
+        dict: Result of the operation with success status and any error messages
     """
-    fab_fund_round_configs = {}
+    try:
+        print(f"Preparing fund data for the {converted_config['short_name']} fund.")
 
-    if not loader_config.get("fund_config", None):
-        print("No fund config found in the loader config.")
-        raise ValueError("No fund_config found in loader config")
-    if not loader_config.get("round_config", None):
-        print("No round config found in the loader config.")
-        raise ValueError("No round_config found in loader config")
+        # Add required default values if missing or None from FAB
+        if not converted_config.get("owner_organisation_name"):
+            converted_config["owner_organisation_name"] = ""
+        if not converted_config.get("owner_organisation_shortname"):
+            converted_config["owner_organisation_shortname"] = ""
+        if not converted_config.get("owner_organisation_logo_uri"):
+            converted_config["owner_organisation_logo_uri"] = ""
 
-    fund_short_name = loader_config["fund_config"]["short_name"]
+        insert_fund_data(converted_config, commit=False)
 
-    # Ensure the fund exists in the main config
-    if fund_short_name not in fab_fund_round_configs:
-        fab_fund_round_configs[fund_short_name] = loader_config["fund_config"]
-        fab_fund_round_configs[fund_short_name]["rounds"] = {}
+        for round_short_name, round in converted_config["rounds"].items():
+            round_base_path = round["base_path"]
 
-    if isinstance(loader_config["round_config"], dict):
-        round_short_name = loader_config["round_config"]["short_name"]
-        fab_fund_round_configs[fund_short_name]["rounds"][round_short_name] = loader_config["round_config"]
-        fab_fund_round_configs[fund_short_name]["rounds"][round_short_name]["sections_config"] = loader_config[
-            "sections_config"
-        ]
-        fab_fund_round_configs[fund_short_name]["rounds"][round_short_name]["base_path"] = loader_config["base_path"]
+            APPLICATION_BASE_PATH = ".".join([str(round_base_path), str(1)])
+            ASSESSMENT_BASE_PATH = ".".join([str(round_base_path), str(2)])
 
-    # Allows for one file per fund and not redefining the fund information each time
-    if isinstance(loader_config["round_config"], list):
-        for round_config in loader_config["round_config"]:
-            round_short_name = round_config["short_name"]
-            fab_fund_round_configs[fund_short_name]["rounds"][round_short_name] = round_config
-            # assumes the same section config for each round but updates with a fresh base path each time
-            updated_sections = copy.deepcopy(loader_config["sections_config"])
-            for section in updated_sections:
-                tree_path = section["tree_path"]
-                path_elements = str(tree_path).split(".")
-                tree_path = path_elements[1:]
-                tree_path = str(round_config["base_path"]) + "." + ".".join(tree_path)
-                section["tree_path"] = tree_path
-            fab_fund_round_configs[fund_short_name]["rounds"][round_short_name]["sections_config"] = updated_sections
+            print(f"Preparing round data for the '{round_short_name}' round.")
+            upsert_round_data([round], commit=False)
 
-    return fab_fund_round_configs
+            # Section config is per round, not per fund
+            print(f"Preparing base sections for {round_short_name}.")
+            insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round["id"])
+
+            print(f"Preparing application sections for {round_short_name}.")
+            insert_or_update_application_sections(round["id"], round["sections_config"])
+
+        print("All config has been successfully prepared, now committing to the database.")
+        db.session.commit()
+        print("Config has now been committed to the database.")
+        return {
+            "success": True,
+            "message": f"Successfully processed fund configuration for {converted_config['short_name']}",
+        }
+    except Exception as e:
+        current_app.logger.error("Error processing fund config: %s", str(e))
+        try:
+            db.session.rollback()
+        except RuntimeError as rollback_error:
+            current_app.logger.error("Error during db rollback: %s", str(rollback_error))
+        return {"success": False, "message": f"Error processing fund configuration: {str(e)}"}

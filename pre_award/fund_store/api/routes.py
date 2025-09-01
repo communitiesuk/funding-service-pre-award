@@ -29,8 +29,8 @@ from pre_award.fund_store.db.schemas.fund import FundSchema
 from pre_award.fund_store.db.schemas.round import RoundSchema
 from pre_award.fund_store.db.schemas.section import SECTION_SCHEMA_MAP
 from pre_award.fund_store.decorators import development_only
-from pre_award.fund_store.services.fab_import_service import transform_fund_configuration
-from pre_award.fund_store.services.save_fund_configuration import process_fund_config
+from pre_award.fund_store.services.fab_import_service import process_fund_config
+from pre_award.fund_store.services.fab_transform_service import transform_fund_configuration
 
 fund_store_bp = Blueprint("fund_store_bp", __name__)
 
@@ -445,15 +445,15 @@ def import_fund_config():
     API endpoint to import fund configuration from FAB and process it.
     Replaces the manual process of copying Python files and running scripts.
     """
-    try:
-        # Get JSON data from request
-        fund_config_data = request.json
 
+    # Get JSON data from request
+    fund_config_data = request.json
+    # Get fund name directly from input data
+    fund_short_name = fund_config_data["fund_config"]["short_name"]
+    try:
         if not fund_config_data:
             return jsonify({"error": "No JSON data provided"}), 400
-
-        fund_short_name = fund_config_data.get("fund_config", {}).get("short_name", "")
-        current_app.logger.info("Received fund config import request for: %s", fund_short_name)
+        current_app.logger.info("Received fund config import request for fund: %s", fund_short_name)
 
         # Validate required fields for FAB export format
         required_fields = ["sections_config", "fund_config", "round_config", "base_path"]
@@ -464,11 +464,7 @@ def import_fund_config():
 
         # Convert FAB export format to internal format
         current_app.logger.info("Converting FAB export format to internal format for fund: %s", fund_short_name)
-        processed_fund_data = transform_fund_configuration(fund_config_data)
-
-        # Get the fund data from the transformed structure
-        fund_short_name = list(processed_fund_data.keys())[0]
-        fund_data = processed_fund_data[fund_short_name]
+        fund_data = transform_fund_configuration(fund_config_data)
 
         result = process_fund_config(fund_data)
         if result["success"]:
@@ -479,6 +475,6 @@ def import_fund_config():
                 "Failed to process fund config for fund %s: %s", fund_short_name, result["message"]
             )
             return jsonify({"error": result["message"]}), 500
-    except Exception as e:
-        current_app.logger.error("Error processing fund config: %s", str(e))
+    except Exception:
+        current_app.logger.error("Error processing fund config for fund: %s", fund_short_name)
         return jsonify({"error": "Internal server error occurred while processing fund configuration"}), 500

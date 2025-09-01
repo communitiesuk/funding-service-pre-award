@@ -30,7 +30,7 @@ def test_fund_config_endpoint_success(flask_test_client, app):
         patch("pre_award.fund_store.api.routes.transform_fund_configuration") as mock_convert,
         patch("pre_award.fund_store.api.routes.process_fund_config") as mock_process,
     ):
-        mock_convert.return_value = {"TEST": {"short_name": "TEST"}}
+        mock_convert.return_value = {"short_name": "TEST"}
         mock_process.return_value = {"success": True, "message": "Fund config processed successfully"}
 
         response = flask_test_client.post("/fund/import-config", json=test_data)
@@ -57,7 +57,7 @@ def test_fund_config_endpoint_service_error(flask_test_client, app):
         patch("pre_award.fund_store.api.routes.transform_fund_configuration") as mock_convert,
         patch("pre_award.fund_store.api.routes.process_fund_config") as mock_process,
     ):
-        mock_convert.return_value = {"TEST": {"short_name": "TEST"}}
+        mock_convert.return_value = {"short_name": "TEST"}
         mock_process.return_value = {"success": False, "message": "Database error"}
 
         response = flask_test_client.post("/fund/import-config", json=test_data)
