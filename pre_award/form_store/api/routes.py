@@ -51,6 +51,10 @@ class FormsView(MethodView):
             name = data["name"]
             form_json = data["form_json"]
 
+            # Validate that name is not empty or whitespace-only
+            if not name or not name.strip():
+                return {"error": "Form name cannot be empty"}, 400
+
             # Validate that form_json is valid JSON if it's a string
             if isinstance(form_json, str):
                 try:

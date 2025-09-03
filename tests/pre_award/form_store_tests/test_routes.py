@@ -112,6 +112,22 @@ class TestFormsView:
             assert response.status_code == 500
             assert response.json == {"error": "Failed to create/update form"}
 
+    def test_post_empty_name(self, flask_test_client):
+        """Test POST /forms with empty or whitespace-only name."""
+        # Test empty string
+        response = flask_test_client.post(
+            "/forms", data=json.dumps({"name": "", "form_json": {"test": "data"}}), content_type="application/json"
+        )
+        assert response.status_code == 400
+        assert response.json["error"] == "Form name cannot be empty"
+
+        # Test whitespace-only string
+        response = flask_test_client.post(
+            "/forms", data=json.dumps({"name": "   ", "form_json": {"test": "data"}}), content_type="application/json"
+        )
+        assert response.status_code == 400
+        assert response.json["error"] == "Form name cannot be empty"
+
 
 class TestFormDraftView:
     """Tests for the /forms/{name}/draft endpoint."""
