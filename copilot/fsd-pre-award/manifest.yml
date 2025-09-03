@@ -98,7 +98,8 @@ environments:
     variables:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
     count:
-      spot: 2
+      min: 1
+      spot: 1
     sidecars:
       nginx:
         port: 8087
