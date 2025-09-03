@@ -5,12 +5,7 @@ import click
 
 from pre_award.db import db
 from pre_award.fund_store.config.fund_loader_config.FAB import FAB_FUND_ROUND_CONFIGS
-from pre_award.fund_store.db.queries import (
-    insert_base_sections,
-    insert_fund_data,
-    insert_or_update_application_sections,
-    upsert_round_data,
-)
+from pre_award.fund_store.services.fab_import_service import process_fund_config
 
 
 def load_fund_from_fab_impl(fund_short_code="", seed_all_funds=False):
@@ -49,28 +44,10 @@ def load_fund_from_fab_impl(fund_short_code="", seed_all_funds=False):
             raise ValueError(f"Config for fund {fund_to_seed} does not exist")
 
         if FUND_CONFIG:
-            print(f"Preparing fund data for the {fund_to_seed} fund.")
-            insert_fund_data(FUND_CONFIG, commit=False)
-
-            for round_short_name, round in FUND_CONFIG["rounds"].items():
-                round_base_path = round["base_path"]
-
-                APPLICATION_BASE_PATH = ".".join([str(round_base_path), str(1)])
-                ASSESSMENT_BASE_PATH = ".".join([str(round_base_path), str(2)])
-
-                print(f"Preparing round data for the '{round_short_name}' round.")
-                upsert_round_data([round], commit=False)
-
-                # Section config is per round, not per fund
-                print(f"Preparing base sections for {round_short_name}.")
-                insert_base_sections(APPLICATION_BASE_PATH, ASSESSMENT_BASE_PATH, round["id"])
-
-                print(f"Preparing application sections for {round_short_name}.")
-                insert_or_update_application_sections(round["id"], round["sections_config"])
-
-        print(f"All config has been successfully prepared, now committing to the database.")
-        db.session.commit()
-        print(f"Config has now been committed to the database.")
+            # Use the new service function
+            result = process_fund_config(FUND_CONFIG)
+            if not result["success"]:
+                raise Exception(result["message"])
 
 
 @click.command()
