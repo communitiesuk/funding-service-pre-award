@@ -136,6 +136,8 @@ environments:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
     count:
       spot: 2
+    cpu: 1024
+    memory: 2048
     sidecars:
       nginx:
         port: 8087
