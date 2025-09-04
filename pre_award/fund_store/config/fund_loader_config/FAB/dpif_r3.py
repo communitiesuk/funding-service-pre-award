@@ -4,7 +4,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Name your application", "cy": ""},
             "tree_path": "1047.1.1.1",
-            "form_name_json": {"en": "dpif-name-your-application", "cy": ""},
+            "form_name_json": {"en": "dpif-r3-name-your-application", "cy": ""},
         },
         {
             "section_name": {"en": "2. About your organisation", "cy": ""},
@@ -14,7 +14,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "2.1 Organisation information", "cy": ""},
             "tree_path": "1047.1.2.1",
-            "form_name_json": {"en": "dpif-organisation-information", "cy": ""},
+            "form_name_json": {"en": "dpif-r3-organisation-information", "cy": ""},
         },
         {
             "section_name": {"en": "3. Your skills and experience", "cy": ""},
@@ -24,40 +24,40 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "3.1 Your skills and experience", "cy": ""},
             "tree_path": "1047.1.3.1",
-            "form_name_json": {"en": "dpif-your-skills-and-experience", "cy": ""},
+            "form_name_json": {"en": "dpif-r3-your-skills-and-experience", "cy": ""},
         },
         {
             "section_name": {"en": "3.2 Roles and recruitment", "cy": ""},
             "tree_path": "1047.1.3.2",
-            "form_name_json": {"en": "dpif-roles-and-recruitment", "cy": ""},
+            "form_name_json": {"en": "dpif-r3-roles-and-recruitment", "cy": ""},
         },
         {"section_name": {"en": "4. About your project", "cy": ""}, "tree_path": "1047.1.4", "requires_feedback": None},
         {
             "section_name": {"en": "4.1 Engaging the ODP (Open Digital Planning) community", "cy": ""},
             "tree_path": "1047.1.4.1",
-            "form_name_json": {"en": "dpif-engaging-the-odp-community", "cy": ""},
+            "form_name_json": {"en": "dpif-r3-engaging-the-odp-community", "cy": ""},
         },
         {
             "section_name": {"en": "4.2 Engaging the organisation", "cy": ""},
             "tree_path": "1047.1.4.2",
-            "form_name_json": {"en": "dpif-engaging-the-organisation", "cy": ""},
+            "form_name_json": {"en": "dpif-r3-engaging-the-organisation", "cy": ""},
         },
         {
             "section_name": {"en": "4.3 Dataset information", "cy": ""},
             "tree_path": "1047.1.4.3",
-            "form_name_json": {"en": "dpif-dataset-information", "cy": ""},
+            "form_name_json": {"en": "dpif-r3-dataset-information", "cy": ""},
         },
         {"section_name": {"en": "5. Future work", "cy": ""}, "tree_path": "1047.1.5", "requires_feedback": None},
         {
             "section_name": {"en": "5.1 Future work", "cy": ""},
             "tree_path": "1047.1.5.1",
-            "form_name_json": {"en": "dpif-future-work", "cy": ""},
+            "form_name_json": {"en": "dpif-r3-future-work", "cy": ""},
         },
         {"section_name": {"en": "6. Declarations", "cy": ""}, "tree_path": "1047.1.6", "requires_feedback": None},
         {
             "section_name": {"en": "6.1 Declarations", "cy": ""},
             "tree_path": "1047.1.6.1",
-            "form_name_json": {"en": "dpif-declarations", "cy": ""},
+            "form_name_json": {"en": "dpif-r3-declarations", "cy": ""},
         },
     ],
     "fund_config": {

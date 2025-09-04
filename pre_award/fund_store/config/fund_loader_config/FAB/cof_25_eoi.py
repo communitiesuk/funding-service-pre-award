@@ -15,8 +15,8 @@ LOADER_CONFIG = {
             },
             "tree_path": "1037.1.1.1",
             "form_name_json": {
-                "en": "organisation-details-25",
-                "cy": "manylion-y-sefydliad-25",
+                "en": "cof25-eoi-r1-organisation-details",
+                "cy": "cof25-eoi-r1-manylion-y-sefydliad",
             },
         },
         {
@@ -26,8 +26,8 @@ LOADER_CONFIG = {
             },
             "tree_path": "1037.1.1.2",
             "form_name_json": {
-                "en": "about-your-asset-25",
-                "cy": "ynglyn-ach-ased-25",
+                "en": "cof25-eoi-r1-about-your-asset",
+                "cy": "cof25-eoi-r1-ynglyn-ach-ased",
             },
         },
         {
@@ -37,8 +37,8 @@ LOADER_CONFIG = {
             },
             "tree_path": "1037.1.1.3",
             "form_name_json": {
-                "en": "your-funding-request-25",
-                "cy": "eich-cais-am-gyllid-25",
+                "en": "cof25-eoi-r1-your-funding-request",
+                "cy": "cof25-eoi-r1-eich-cais-am-gyllid",
             },
         },
         {
@@ -48,8 +48,8 @@ LOADER_CONFIG = {
             },
             "tree_path": "1037.1.1.4",
             "form_name_json": {
-                "en": "development-support-provider-25",
-                "cy": "darparwr-cymorth-datblygu-25",
+                "en": "cof25-eoi-r1-development-support-provider",
+                "cy": "cof25-eoi-r1-darparwr-cymorth-datblygu",
             },
         },
         {
@@ -59,8 +59,8 @@ LOADER_CONFIG = {
             },
             "tree_path": "1037.1.1.5",
             "form_name_json": {
-                "en": "declaration-25",
-                "cy": "datganiad-25",
+                "en": "cof25-eoi-r1-declaration",
+                "cy": "cof25-eoi-r1-datganiad",
             },
         },
     ],

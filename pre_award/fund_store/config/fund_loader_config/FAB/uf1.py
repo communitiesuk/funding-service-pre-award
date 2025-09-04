@@ -8,7 +8,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Project details", "cy": ""},
             "tree_path": "2210.1.1.1",
-            "form_name_json": {"en": "uf1-project-details", "cy": ""},
+            "form_name_json": {"en": "uf1-r1-project-details", "cy": ""},
         },
         {
             "section_name": {"en": "2. Section B", "cy": ""},
@@ -18,7 +18,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "2.1 Organisation information", "cy": ""},
             "tree_path": "2210.1.2.1",
-            "form_name_json": {"en": "uf1-organisation-information", "cy": ""},
+            "form_name_json": {"en": "uf1-r1-organisation-information", "cy": ""},
         },
     ],
     "fund_config": {

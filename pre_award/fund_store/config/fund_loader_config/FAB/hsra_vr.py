@@ -8,7 +8,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Application name", "cy": ""},
             "tree_path": "1049.1.1.1",
-            "form_name_json": {"en": "application-name-hsra-vr", "cy": ""},
+            "form_name_json": {"en": "hsra-vr-application-name", "cy": ""},
         },
         {
             "section_name": {"en": "2. About your organisation", "cy": ""},
@@ -18,12 +18,12 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "2.1 Organisation information", "cy": ""},
             "tree_path": "1049.1.2.1",
-            "form_name_json": {"en": "organisation-information-hsra-vr", "cy": ""},
+            "form_name_json": {"en": "hsra-vr-organisation-information", "cy": ""},
         },
         {
             "section_name": {"en": "2.2 Applicant information", "cy": ""},
             "tree_path": "1049.1.2.2",
-            "form_name_json": {"en": "applicant-information-hsra-vr", "cy": ""},
+            "form_name_json": {"en": "hsra-vr-applicant-information", "cy": ""},
         },
         {
             "section_name": {"en": "3. About your project", "cy": ""},
@@ -33,17 +33,17 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "3.1 Designated area details", "cy": ""},
             "tree_path": "1049.1.3.1",
-            "form_name_json": {"en": "designated-area-details-hsra-vr", "cy": ""},
+            "form_name_json": {"en": "hsra-vr-designated-area-details", "cy": ""},
         },
         {
             "section_name": {"en": "3.2 Milestones", "cy": ""},
             "tree_path": "1049.1.3.2",
-            "form_name_json": {"en": "milestones-hsra-vr", "cy": ""},
+            "form_name_json": {"en": "hsra-vr-milestones", "cy": ""},
         },
         {
             "section_name": {"en": "3.3 Project costs", "cy": ""},
             "tree_path": "1049.1.3.3",
-            "form_name_json": {"en": "project-costs-hsra-vr", "cy": ""},
+            "form_name_json": {"en": "hsra-vr-project-costs", "cy": ""},
         },
         {
             "section_name": {"en": "4. Declaration", "cy": ""},
@@ -53,7 +53,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "4.1 Declaration", "cy": ""},
             "tree_path": "1049.1.4.1",
-            "form_name_json": {"en": "declaration-hsra-vr", "cy": ""},
+            "form_name_json": {"en": "hsra-vr-declaration", "cy": ""},
         },
     ],
     "fund_config": {

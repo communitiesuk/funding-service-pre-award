@@ -8,7 +8,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Name your application", "cy": ""},
             "tree_path": "1064.1.1.1",
-            "form_name_json": {"en": "name-your-application", "cy": ""},
+            "form_name_json": {"en": "dpif-r4-name-your-application", "cy": ""},
         },
         {
             "section_name": {"en": "2. About your organisation", "cy": ""},
@@ -18,7 +18,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "2.1 Organisation information", "cy": ""},
             "tree_path": "1064.1.2.1",
-            "form_name_json": {"en": "organisation-information", "cy": ""},
+            "form_name_json": {"en": "dpif-r4-organisation-information", "cy": ""},
         },
         {
             "section_name": {"en": "3. Your skills and experience", "cy": ""},
@@ -28,12 +28,12 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "3.1 Your skills and experience", "cy": ""},
             "tree_path": "1064.1.3.1",
-            "form_name_json": {"en": "your-skills-and-experience", "cy": ""},
+            "form_name_json": {"en": "dpif-r4-your-skills-and-experience", "cy": ""},
         },
         {
             "section_name": {"en": "3.2 Roles and recruitment", "cy": ""},
             "tree_path": "1064.1.3.2",
-            "form_name_json": {"en": "roles-and-recruitment", "cy": ""},
+            "form_name_json": {"en": "dpif-r4-roles-and-recruitment", "cy": ""},
         },
         {
             "section_name": {"en": "4. About your project", "cy": ""},
@@ -47,19 +47,19 @@ LOADER_CONFIG = {
             },
             "tree_path": "1064.1.4.1",
             "form_name_json": {
-                "en": "engaging-the-odp-(open-digital-planning)-community",
+                "en": "dpif-r4-engaging-the-odp-(open-digital-planning)-community",
                 "cy": "",
             },
         },
         {
             "section_name": {"en": "4.2 Engaging the organisation", "cy": ""},
             "tree_path": "1064.1.4.2",
-            "form_name_json": {"en": "engaging-the-organisation", "cy": ""},
+            "form_name_json": {"en": "dpif-r4-engaging-the-organisation", "cy": ""},
         },
         {
             "section_name": {"en": "4.3 Dataset information", "cy": ""},
             "tree_path": "1064.1.4.3",
-            "form_name_json": {"en": "dataset-information", "cy": ""},
+            "form_name_json": {"en": "dpif-r4-dataset-information", "cy": ""},
         },
         {
             "section_name": {"en": "5. Future work", "cy": ""},
@@ -69,7 +69,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "5.1 Future work", "cy": ""},
             "tree_path": "1064.1.5.1",
-            "form_name_json": {"en": "future-work", "cy": ""},
+            "form_name_json": {"en": "dpif-r4-future-work", "cy": ""},
         },
         {
             "section_name": {"en": "6. Declarations", "cy": ""},
@@ -79,7 +79,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "6.1 Declarations", "cy": ""},
             "tree_path": "1064.1.6.1",
-            "form_name_json": {"en": "declarations", "cy": ""},
+            "form_name_json": {"en": "dpif-r4-declarations", "cy": ""},
         },
     ],
     "fund_config": {

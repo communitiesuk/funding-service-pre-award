@@ -11,7 +11,7 @@ def test_format_rehydrate_payload_test_change_request_filter(app: Flask) -> None
     }
 
     form_data = {
-        "name": "organisation-name-sample",
+        "name": "sf-r1-organisation-name-sample",
         "questions": [
             {
                 "category": "FabDefault",
@@ -54,7 +54,7 @@ def test_format_rehydrate_payload_test_change_request_filter(app: Flask) -> None
 
 def test_format_rehydrate_payload_test_change_request_filter_when_none(app: Flask) -> None:
     form_data = {
-        "name": "organisation-name-sample",
+        "name": "sf-r1-organisation-name-sample",
         "questions": [
             {
                 "category": "FabDefault",
@@ -99,7 +99,7 @@ def test_format_rehydrate_payload_test_all_change_requests_filtered_out(app: Fla
     }
 
     form_data = {
-        "name": "organisation-name-sample",
+        "name": "sf-r1-organisation-name-sample",
         "questions": [
             {
                 "category": "FabDefault",

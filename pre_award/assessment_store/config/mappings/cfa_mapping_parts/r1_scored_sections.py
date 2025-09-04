@@ -68,7 +68,7 @@ scored_sections = [
                         "answers": [
                             {
                                 "field_id": "SsbjgJ",
-                                "form_name": "organisation-name-sample",
+                                "form_name": "cfa-r1-skills-and-experience",
                                 "field_type": "freeTextField",
                                 "presentation_type": "text",
                                 "question": "What relevant experience do you have of working with local authorities, Devolved Administrations and Strategic Migration Partners?",

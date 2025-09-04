@@ -8,7 +8,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Project Name", "cy": "1.1 Enw'r prosiect"},
             "tree_path": "1052.1.1.1",
-            "form_name_json": {"en": "project-name-sample", "cy": "project-name-sample-cy"},
+            "form_name_json": {"en": "sf-r1-project-name-sample", "cy": "sf-r1-project-name-sample-cy"},
         },
         {
             "section_name": {"en": "2. Organisation Information", "cy": "2. Gwybodaeth Sefydliad"},
@@ -18,7 +18,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "2.1 Organisation Name", "cy": "2.1 Enw Sefydliad"},
             "tree_path": "1052.1.2.1",
-            "form_name_json": {"en": "organisation-name-sample", "cy": "organisation-name-sample-cy"},
+            "form_name_json": {"en": "sf-r1-organisation-name-sample", "cy": "sf-r1-organisation-name-sample-cy"},
         },
     ],
     "fund_config": {

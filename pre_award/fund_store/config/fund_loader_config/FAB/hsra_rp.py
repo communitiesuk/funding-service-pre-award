@@ -8,7 +8,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Application name", "cy": ""},
             "tree_path": "1053.1.1.1",
-            "form_name_json": {"en": "application-name-hsra-rp", "cy": ""},
+            "form_name_json": {"en": "hsra-rp-application-name", "cy": ""},
         },
         {
             "section_name": {"en": "2. About your organisation", "cy": ""},
@@ -18,39 +18,39 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "2.1 Organisation information", "cy": ""},
             "tree_path": "1053.1.2.1",
-            "form_name_json": {"en": "organisation-information-hsra-rp", "cy": ""},
+            "form_name_json": {"en": "hsra-rp-organisation-information", "cy": ""},
         },
         {
             "section_name": {"en": "2.2 Applicant information", "cy": ""},
             "tree_path": "1053.1.2.2",
-            "form_name_json": {"en": "applicant-information-hsra-rp", "cy": ""},
+            "form_name_json": {"en": "hsra-rp-applicant-information", "cy": ""},
         },
         {"section_name": {"en": "3. About your project", "cy": ""}, "tree_path": "1053.1.3", "requires_feedback": None},
         {
             "section_name": {"en": "3.1 Vacant property details", "cy": ""},
             "tree_path": "1053.1.3.1",
-            "form_name_json": {"en": "vacant-property-details-hsra-rp", "cy": ""},
+            "form_name_json": {"en": "hsra-rp-vacant-property-details", "cy": ""},
         },
         {
             "section_name": {"en": "3.2 Designated area details", "cy": ""},
             "tree_path": "1053.1.3.2",
-            "form_name_json": {"en": "designated-area-details-hsra-rp", "cy": ""},
+            "form_name_json": {"en": "hsra-rp-designated-area-details", "cy": ""},
         },
         {
             "section_name": {"en": "3.3 Milestones", "cy": ""},
             "tree_path": "1053.1.3.3",
-            "form_name_json": {"en": "milestones-hsra-rp", "cy": ""},
+            "form_name_json": {"en": "hsra-rp-milestones", "cy": ""},
         },
         {
             "section_name": {"en": "3.4 Project costs", "cy": ""},
             "tree_path": "1053.1.3.4",
-            "form_name_json": {"en": "project-costs-hsra-rp", "cy": ""},
+            "form_name_json": {"en": "hsra-rp-project-costs", "cy": ""},
         },
         {"section_name": {"en": "4. Declaration", "cy": ""}, "tree_path": "1053.1.4", "requires_feedback": None},
         {
             "section_name": {"en": "4.1 Declaration", "cy": ""},
             "tree_path": "1053.1.4.1",
-            "form_name_json": {"en": "declaration-hsra-rp", "cy": ""},
+            "form_name_json": {"en": "hsra-rp-declaration", "cy": ""},
         },
     ],
     "fund_config": {

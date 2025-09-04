@@ -4,13 +4,13 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Project Name Sample", "cy": ""},
             "tree_path": "1140.1.1.1",
-            "form_name_json": {"en": "project-name-sample", "cy": ""},
+            "form_name_json": {"en": "sf-r1-project-name-sample", "cy": ""},
         },
         {"section_name": {"en": "2. Section B", "cy": ""}, "tree_path": "1140.1.2", "requires_feedback": None},
         {
             "section_name": {"en": "2.1 Organisation Name Sample", "cy": ""},
             "tree_path": "1140.1.2.1",
-            "form_name_json": {"en": "organisation-name-sample", "cy": ""},
+            "form_name_json": {"en": "sf-r1-organisation-name-sample", "cy": ""},
         },
     ],
     "fund_config": {
