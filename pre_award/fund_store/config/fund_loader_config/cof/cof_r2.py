@@ -154,7 +154,7 @@ cof_r2_sections = [
         },
         "tree_path": f"{APPLICATION_BASE_PATH}.1.1",
         "form_name_json": {
-            "en": "organisation-information",
+            "en": "cof-r2-en-organisation-information",
             "cy": "gwybodaeth-am-y-sefydliad",
         },
     },
@@ -334,6 +334,6 @@ cof_r2_sections = [
     {
         "section_name": {"en": "Declarations", "cy": "Datganiadau"},
         "tree_path": f"{APPLICATION_BASE_PATH}.8.1",
-        "form_name_json": {"en": "declarations", "cy": "datganiadau"},
+        "form_name_json": {"en": "cof-r2-en-declarations", "cy": "datganiadau"},
     },
 ]
