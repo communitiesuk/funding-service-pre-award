@@ -47,4 +47,7 @@ for file in os.listdir(this_dir):
         loader_config = ast.literal_eval(content)
         fund_data = transform_fund_configuration(loader_config)
         fund_short_name = loader_config["fund_config"]["short_name"]
-        FAB_FUND_ROUND_CONFIGS[fund_short_name] = fund_data
+        if fund_short_name not in FAB_FUND_ROUND_CONFIGS:
+            FAB_FUND_ROUND_CONFIGS[fund_short_name] = fund_data
+        else:
+            FAB_FUND_ROUND_CONFIGS[fund_short_name]["rounds"].update(fund_data["rounds"])
