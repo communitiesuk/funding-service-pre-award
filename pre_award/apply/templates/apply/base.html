@@ -5,7 +5,7 @@
 {% set assetPath = url_for('static', filename='/apply').rstrip('/') %}
 {% set title = gettext("Access Funding") if is_error else service_title or get_service_title() %}
 
-{% block pageTitle %}{{ [pageHeading, title]|join(' - ') if pageHeading else title }}{% endblock pageTitle %}
+{% block pageTitle %}{{ [pageHeading, title]|join(' - ') if pageHeading else title }} - GOV.UK{% endblock pageTitle %}
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='fs/govuk-frontend-5.6.0.min.css' ) }}"> </link>
