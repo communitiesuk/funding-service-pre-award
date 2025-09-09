@@ -115,7 +115,7 @@ LOADER_CONFIG = {
         "privacy_notice": "https://www.gov.uk/guidance/digital-planning-improvement-fund-privacy-notice",
         "contact_email": "digitalplanningteam@communities.gov.uk",
         "instructions_json": {
-            "en": "<p class='govuk-body'>We have been accepting applications continuously and formally reviewing them in batches.<br><br>Applications submitted by 29 July 2025 at midday are being considered for our first cohort.<br><br>You can submit your application by midday on 30 October 2025 to be considered for our next cohort, with onboarding starting in February 2026.<br><br>This approach allows us to provide high-quality support, by onboarding councils in coordinated groups.<br><br>While this is not a competitive funding process, we will ask questions to assess your readiness to receive the funding and begin the work.</p>",
+            "en": "<p class='govuk-body'>We have been accepting applications continuously and formally reviewing them in batches.<br><br>Submit your application by midday on 30 October 2025 to be considered for our next cohort, with onboarding starting in February 2026.<br><br>This approach allows us to provide high-quality support, by onboarding councils in coordinated groups.<br><br>While this is not a competitive funding process, we will ask questions to assess your readiness to receive the funding and begin the work.</p>",
             "cy": None,
         },
         "feedback_link": "",
