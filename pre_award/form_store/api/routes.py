@@ -25,6 +25,12 @@ def _sanitise_for_logging(value):
     return re.sub(r"[^\w\-_.]", "", value)
 
 
+def generate_form_hash(form_json):
+    """Generate a consistent hash for form JSON data with sorted keys"""
+    json_string = json.dumps(form_json, sort_keys=True, separators=(",", ":"))
+    return hashlib.md5(json_string.encode()).hexdigest()
+
+
 class FormsView(MethodView):
     decorators = [login_required]
 
@@ -96,7 +102,10 @@ class FormPublishedView(MethodView):
             form = get_form_by_name(name)
             if not form.published_json or form.published_json == {}:
                 return {"error": f"Form '{name}' has not been published"}, 404
-            return form.published_json, 200
+            return {
+                "configuration": form.published_json,
+                "hash": generate_form_hash(form.published_json),
+            }, 200
         except NoResultFound:
             return {"error": f"Form '{name}' not found"}, 404
         except Exception as e:
@@ -113,12 +122,7 @@ class FormHashView(MethodView):
             form = get_form_by_name(name)
             if not form.published_json or form.published_json == {}:
                 return {"error": f"Form '{name}' has not been published"}, 404
-
-            # Create hash of published_json
-            json_string = json.dumps(form.published_json, sort_keys=True, separators=(",", ":"))
-            hash_value = hashlib.md5(json_string.encode()).hexdigest()
-
-            return {"hash": hash_value}, 200
+            return {"hash": generate_form_hash(form.published_json)}, 200
         except NoResultFound:
             return {"error": f"Form '{name}' not found"}, 404
         except Exception as e:
