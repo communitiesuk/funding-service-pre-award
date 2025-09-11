@@ -163,7 +163,11 @@ class TestFormPublishedView:
         response = flask_test_client.get(f"/forms/{published_form_record.name}/published")
 
         assert response.status_code == 200
-        assert response.json == published_form_record.published_json
+        assert "configuration" in response.json
+        assert "hash" in response.json
+        assert response.json["configuration"] == published_form_record.published_json
+        assert isinstance(response.json["hash"], str)
+        assert len(response.json["hash"]) == 32  # MD5 hash length
 
     def test_get_published_not_published(self, flask_test_client, sample_form_record):
         """Test GET /forms/{name}/published with unpublished form."""
