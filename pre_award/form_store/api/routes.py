@@ -35,7 +35,7 @@ class FormsView(MethodView):
         """GET /forms - Returns a list of all forms"""
         try:
             forms = get_all_forms()
-            return [form.as_dict() for form in forms], 200
+            return [form.as_dict(include_json=False) for form in forms], 200
         except Exception as e:
             current_app.logger.error("Error retrieving forms: %s", str(e))
             return {"error": "Failed to retrieve forms"}, 500
