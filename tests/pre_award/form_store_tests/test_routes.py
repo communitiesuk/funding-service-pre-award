@@ -34,8 +34,8 @@ class TestFormsView:
         for form in response.json:
             assert "id" in form
             assert "name" in form
-            assert "draft_json" in form
-            assert "published_json" in form
+            assert "draft_json" not in form
+            assert "published_json" not in form
             assert "is_published" in form
             assert "created_at" in form
             assert "updated_at" in form
