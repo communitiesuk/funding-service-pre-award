@@ -4,7 +4,6 @@ import re
 
 from flask import current_app, request
 from flask.views import MethodView
-from fsd_utils.authentication.decorators import login_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from pre_award.common.blueprints import Blueprint
@@ -32,8 +31,6 @@ def generate_form_hash(form_json):
 
 
 class FormsView(MethodView):
-    decorators = [login_required]
-
     def get(self):
         """GET /forms - Returns a list of all forms"""
         try:
@@ -79,8 +76,6 @@ class FormsView(MethodView):
 
 
 class FormDraftView(MethodView):
-    decorators = [login_required]
-
     def get(self, name):
         """GET /forms/{name}/draft - Returns the draft_json object"""
         try:
@@ -94,8 +89,6 @@ class FormDraftView(MethodView):
 
 
 class FormPublishedView(MethodView):
-    decorators = [login_required]
-
     def get(self, name):
         """GET /forms/{name}/published - Returns the published_json object"""
         try:
@@ -114,8 +107,6 @@ class FormPublishedView(MethodView):
 
 
 class FormHashView(MethodView):
-    decorators = [login_required]
-
     def get(self, name):
         """GET /forms/{name}/hash - Returns hash of published_json for cache validation"""
         try:
@@ -131,8 +122,6 @@ class FormHashView(MethodView):
 
 
 class FormPublishView(MethodView):
-    decorators = [login_required]
-
     def put(self, name):
         """PUT /forms/{name}/publish - Publishes a form (copies draft to published)"""
         try:
