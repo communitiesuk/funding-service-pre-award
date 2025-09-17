@@ -20,6 +20,9 @@ from pre_award.application_store.config.key_report_mappings.cyp_r1_key_report_ma
 from pre_award.application_store.config.key_report_mappings.dpif_r2_key_report_mapping import DPIF_R2_KEY_REPORT_MAPPING
 from pre_award.application_store.config.key_report_mappings.dpif_r4_key_report_mapping import DPIF_R4_KEY_REPORT_MAPPING
 from pre_award.application_store.config.key_report_mappings.gbrf_r1_key_report_mapping import GBRF_R1_KEY_REPORT_MAPPING
+from pre_award.application_store.config.key_report_mappings.lahf_lahftu_key_report_mapping import (
+    LAHF_LAHFTU_KEY_REPORT_MAPPING,
+)
 from pre_award.application_store.config.key_report_mappings.lpdf_r1_key_report_mapping import LPDF_R1_KEY_REPORT_MAPPING
 from pre_award.application_store.config.key_report_mappings.lpdf_r2_key_report_mapping import LPDF_R2_KEY_REPORT_MAPPING
 from pre_award.application_store.config.key_report_mappings.pfn_rp_key_report_mapping import PFN_RP_KEY_REPORT_MAPPING
@@ -41,6 +44,7 @@ ROUND_ID_TO_KEY_REPORT_MAPPING = defaultdict(
         CHAM_REG_KEY_REPORT_MAPPING.round_id: CHAM_REG_KEY_REPORT_MAPPING.mapping,
         CHAM_APPLY_KEY_REPORT_MAPPING.round_id: CHAM_APPLY_KEY_REPORT_MAPPING.mapping,
         PFN_RP_KEY_REPORT_MAPPING.round_id: PFN_RP_KEY_REPORT_MAPPING.mapping,
+        LAHF_LAHFTU_KEY_REPORT_MAPPING.round_id: LAHF_LAHFTU_KEY_REPORT_MAPPING.mapping,
         **({key: COF_KEY_REPORT_MAPPING.mapping for key in COF_KEY_REPORT_MAPPING.round_id}),
     },
 )

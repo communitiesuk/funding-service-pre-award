@@ -110,6 +110,12 @@ from pre_award.assessment_store.config.mappings.hsra_mapping_parts.vr_scored_cri
 from pre_award.assessment_store.config.mappings.hsra_mapping_parts.vr_unscored_sections import (
     unscored_sections as hsra_unscored_sections_vr,
 )
+from pre_award.assessment_store.config.mappings.lahf_mapping_parts.lahftu_scored_criteria import (
+    scored_sections as lahf_scored_criteria,
+)
+from pre_award.assessment_store.config.mappings.lahf_mapping_parts.lahftu_unscored_sections import (
+    unscored_sections as lahf_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.lpdf_mapping_parts.r1_unscored_criteria import (
     unscored_sections as lpdf_unscored_sections,
 )
@@ -191,6 +197,9 @@ CHAM_ROUND_APPLY_ID = "0ea715b0-8736-4621-9914-51410f9ccafb"
 
 PFN_FUND_ID = "26e831c1-8ae7-4f62-b230-6f409e2700fa"
 PFN_ROUND_RP_ID = "9217792e-d8c2-45c8-8170-eed4a8946184"
+
+LAHF_FUND_ID = "28c2f175-eda1-4ba6-9337-e05150708155"
+LAHF_ROUND_LAHFTU_ID = "6bb128c7-3ae9-4192-bee4-99b6b5b3b98f"
 
 # ASSESSMENT DISPLAY CONFIGURATION
 
@@ -339,6 +348,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "pfn_rp_assessment",
         "unscored_sections": pfn_unscored_sections,
         "scored_criteria": pfn_scored_sections,
+    },
+    f"{LAHF_FUND_ID}:{LAHF_ROUND_LAHFTU_ID}": {
+        "schema_id": "lahf_lahftu_assessment",
+        "unscored_sections": lahf_unscored_sections,
+        "scored_criteria": lahf_scored_criteria,
     },
 }
 
@@ -529,6 +543,12 @@ fund_round_data_key_mappings = {
         "funding_one": ["JoEKPs", "MaHzlK", "cSAvLl", "lXHVDo"],
         "funding_two": ["YQGJbm", "VmCcNW", "pCCkfZ", "aaOhAH"],
         "funding_field_type": "multiInputField",
+    },
+    "LAHFLAHFTU": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": "DdMauS",
+        "funding_two": None,
     },
 }
 
@@ -2497,6 +2517,24 @@ applicant_info_mapping = {
         },
         "OUTPUT_TRACKER": {},
     },
+    LAHF_FUND_ID: {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "svIchm": {"en": {"title": "Local authority name", "field_type": "textField"}},
+                "vDsLGm": {"en": {"title": "Lead contact full name", "field_type": "textField"}},
+                "gNJDlH": {"en": {"title": "Lead contact role", "field_type": "textField"}},
+                "saBdpT": {"en": {"title": "Lead contact email address", "field_type": "emailAddressField"}},
+                "qnaoFo": {"en": {"title": "Property address", "field_type": "ukAddressField"}},
+                "DdMauS": {"en": {"title": "Total funding requested", "field_type": "numberField"}},
+                "uvAgKD": {"en": {"title": "Adaptation requirements", "field_type": "textField"}},
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "DdMauS": {"en": {"title": "Total funding requested", "field_type": "numberField"}},
+            }
+        },
+    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
@@ -2631,6 +2669,11 @@ fund_round_mapping_config = {
         "fund_id": PFN_FUND_ID,
         "round_id": PFN_ROUND_RP_ID,
         "type_of_application": "PFN",
+    },
+    "LAHFLAHFTU": {
+        "fund_id": LAHF_FUND_ID,
+        "round_id": LAHF_ROUND_LAHFTU_ID,
+        "type_of_application": "LAHF",
     },
     "RANDOM_FUND_ROUND": {
         "fund_id": uuid4(),

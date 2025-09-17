@@ -205,6 +205,16 @@ def ordered_themes(fund_round_short_name):
             "will-appropriate-governance-arrangements-be-in-place-to-fully-realise-the-intended-role-of-the-neighbourhood-board-and-to-allow-the-board-to-work-in-partnership-with-the-accountable-body-to-deliver-the-programme-successfully",
             "will-appropriate-control-processes-will-be-in-place-for-management-of-public-funds",
         ],
+        "LAHFLAHFtu": [
+            "local_authority_details",
+            "occupational_therapy_report",
+            "property_details",
+            "additional_information",
+            "adaptation_suitability",
+            "cost_assessment",
+            "timeline_feasibility",
+            "declarations",
+        ],
     }
 
     if fund_round_short_name in [
