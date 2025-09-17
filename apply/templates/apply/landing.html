@@ -66,9 +66,11 @@
                 </p>
             {% endif %}
             {% if round.prospectus %}
-            <p class="govuk-body">
-                {% trans prospectus_link=round.prospectus %}<a class="govuk-link" target="_blank" href="{{ prospectus_link }}">Read the fund's prospectus</a> before you start.{% endtrans %}
-            </p>
+              {% if round.short_name not in ["LAHFtu"] %}
+                  <p class="govuk-body">
+                      {% trans prospectus_link=round.prospectus %}<a class="govuk-link" target="_blank" href="{{ prospectus_link }}">Read the fund's prospectus</a> before you start.{% endtrans %}
+                  </p>
+              {% endif %}
             {% endif %}
             {% if not round.is_expression_of_interest %}
                 <p class="govuk-body">

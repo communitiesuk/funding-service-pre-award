@@ -79,7 +79,7 @@ LOADER_CONFIG = {
         "privacy_notice": "https://www.not-available.com",
         "contact_email": "LAHFResettlementTopUps@Communities.gov.uk",
         "instructions_json": {
-            "en": "Read the Local authority housing fund top-up guidance before you apply.",
+            "en": "<a href='/assets/documents/lahf/LAHF-Top-Ups-Fund-Guidance.pdf' target='_blank' class='govuk-link'>Read the Local authority housing fund top-up guidance</a> (opens in new tab) before you apply.",
             "cy": None,
         },
         "feedback_link": "",
