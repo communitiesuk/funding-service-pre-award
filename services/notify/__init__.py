@@ -139,7 +139,7 @@ class NotificationService:
         "HighStreetRentalAuctions@communities.gov.uk": "0874cafb-a297-4f3c-bb3f-99bc578cce4a",
         "sponsorship@communities.gov.uk": "cc80c848-a9e6-432a-bd3a-cf6fe6b77b3d",
         "chambid@communities.gov.uk": "51b1b1bb-5c4e-4faa-bca2-3e17c118c446",
-        "LAHFResettlementTopUps@Communities.gov.uk": "4da4510-6116-480c-9fa8-8adcbc51e094",
+        "LAHFResettlementTopUps@Communities.gov.uk": "d4da4510-6116-480c-9fa8-8adcbc51e094",
     }
 
     def __init__(self) -> None:
