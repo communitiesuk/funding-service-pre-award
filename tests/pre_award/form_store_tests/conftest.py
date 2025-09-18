@@ -77,7 +77,8 @@ def cleanup_forms(db):
 def sample_form_data():
     """Sample form JSON data for testing."""
     return {
-        "name": "test-form",
+        "url_path": "test-form",
+        "display_name": "Test Form",
         "form_json": {
             "pages": [
                 {
@@ -94,7 +95,12 @@ def sample_form_data():
 @pytest.fixture(scope="function")
 def sample_form_record(db, sample_form_data):
     """Create a sample form record in the database."""
-    form = FormDefinition(name=sample_form_data["name"], draft_json=sample_form_data["form_json"], published_json={})
+    form = FormDefinition(
+        url_path=sample_form_data["url_path"],
+        display_name=sample_form_data["display_name"],
+        draft_json=sample_form_data["form_json"],
+        published_json={},
+    )
     db.session.add(form)
     db.session.commit()
     yield form
@@ -109,7 +115,8 @@ def published_form_record(db):
     }
 
     form = FormDefinition(
-        name="published-form",
+        url_path="published-form",
+        display_name="Published Form",
         draft_json=form_json,
         published_json=form_json,
         published_at=datetime.now(),
@@ -125,13 +132,24 @@ def multiple_form_records(db):
     forms = []
     form_data = [
         {
-            "name": "form-1",
+            "url_path": "form-1",
+            "display_name": "Form 1",
             "draft_json": {"title": "Form 1", "pages": []},
             "published_json": {"title": "Form 1", "pages": []},
             "published_at": datetime.now(),
         },
-        {"name": "form-2", "draft_json": {"title": "Form 2", "pages": []}, "published_json": {}},
-        {"name": "form-3", "draft_json": {"title": "Form 3", "pages": []}, "published_json": {}},
+        {
+            "url_path": "form-2",
+            "display_name": "Form 2",
+            "draft_json": {"title": "Form 2", "pages": []},
+            "published_json": {},
+        },
+        {
+            "url_path": "form-3",
+            "display_name": "Form 3",
+            "draft_json": {"title": "Form 3", "pages": []},
+            "published_json": {},
+        },
     ]
 
     for data in form_data:

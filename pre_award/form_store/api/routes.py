@@ -10,7 +10,7 @@ from pre_award.common.blueprints import Blueprint
 from pre_award.form_store.db.queries import (
     create_or_update_form,
     get_all_forms,
-    get_form_by_name,
+    get_form_by_url_path,
     publish_form,
 )
 
@@ -44,19 +44,20 @@ class FormsView(MethodView):
         """POST /forms - Creates or updates a form"""
         try:
             if not request.is_json:
-                return {"error": "Missing required fields: name, form_json"}, 400
+                return {"error": "Request must be JSON with Content-Type: application/json"}, 400
 
             data = request.get_json()
 
-            if not data or "name" not in data or "form_json" not in data:
-                return {"error": "Missing required fields: name, form_json"}, 400
+            if not data or "url_path" not in data or "form_json" not in data:
+                return {"error": "Missing required fields: url_path, form_json"}, 400
 
-            name = data["name"]
+            url_path = data["url_path"]
+            display_name = data.get("display_name")  # Optional field
             form_json = data["form_json"]
 
-            # Validate that name is not empty or whitespace-only
-            if not name or not name.strip():
-                return {"error": "Form name cannot be empty"}, 400
+            # Validate that url_path is not empty or whitespace-only
+            if not url_path or not url_path.strip():
+                return {"error": "Form URL path cannot be empty"}, 400
 
             # Validate that form_json is valid JSON if it's a string
             if isinstance(form_json, str):
@@ -65,8 +66,8 @@ class FormsView(MethodView):
                 except json.JSONDecodeError:
                     return {"error": "Invalid JSON in form_json field"}, 400
 
-            form = create_or_update_form(name, form_json)
-            current_app.logger.info("Form %s created/updated successfully", _sanitise_for_logging(name))
+            form = create_or_update_form(url_path, display_name, form_json)
+            current_app.logger.info("Form %s created/updated successfully", _sanitise_for_logging(url_path))
 
             return form.as_dict(), 201
 
@@ -76,70 +77,70 @@ class FormsView(MethodView):
 
 
 class FormDraftView(MethodView):
-    def get(self, name):
-        """GET /forms/{name}/draft - Returns the draft_json object"""
+    def get(self, url_path):
+        """GET /forms/{url_path}/draft - Returns the draft_json object"""
         try:
-            form = get_form_by_name(name)
+            form = get_form_by_url_path(url_path)
             return form.draft_json, 200
         except NoResultFound:
-            return {"error": f"Form '{name}' not found"}, 404
+            return {"error": f"Form '{url_path}' not found"}, 404
         except Exception as e:
-            current_app.logger.error("Error retrieving draft for form %s: %s", _sanitise_for_logging(name), str(e))
+            current_app.logger.error("Error retrieving draft for form %s: %s", _sanitise_for_logging(url_path), str(e))
             return {"error": "Failed to retrieve form draft"}, 500
 
 
 class FormPublishedView(MethodView):
-    def get(self, name):
-        """GET /forms/{name}/published - Returns the published_json object"""
+    def get(self, url_path):
+        """GET /forms/{url_path}/published - Returns the published_json object"""
         try:
-            form = get_form_by_name(name)
+            form = get_form_by_url_path(url_path)
             if not form.published_json or form.published_json == {}:
-                return {"error": f"Form '{name}' has not been published"}, 404
+                return {"error": f"Form '{url_path}' has not been published"}, 404
             return {
                 "configuration": form.published_json,
                 "hash": generate_form_hash(form.published_json),
             }, 200
         except NoResultFound:
-            return {"error": f"Form '{name}' not found"}, 404
+            return {"error": f"Form '{url_path}' not found"}, 404
         except Exception as e:
-            current_app.logger.error("Error retrieving published form %s: %s", _sanitise_for_logging(name), str(e))
+            current_app.logger.error("Error retrieving published form %s: %s", _sanitise_for_logging(url_path), str(e))
             return {"error": "Failed to retrieve published form"}, 500
 
 
 class FormHashView(MethodView):
-    def get(self, name):
-        """GET /forms/{name}/hash - Returns hash of published_json for cache validation"""
+    def get(self, url_path):
+        """GET /forms/{url_path}/hash - Returns hash of published_json for cache validation"""
         try:
-            form = get_form_by_name(name)
+            form = get_form_by_url_path(url_path)
             if not form.published_json or form.published_json == {}:
-                return {"error": f"Form '{name}' has not been published"}, 404
+                return {"error": f"Form '{url_path}' has not been published"}, 404
             return {"hash": generate_form_hash(form.published_json)}, 200
         except NoResultFound:
-            return {"error": f"Form '{name}' not found"}, 404
+            return {"error": f"Form '{url_path}' not found"}, 404
         except Exception as e:
-            current_app.logger.error("Error retrieving hash for form %s: %s", _sanitise_for_logging(name), str(e))
+            current_app.logger.error("Error retrieving hash for form %s: %s", _sanitise_for_logging(url_path), str(e))
             return {"error": "Failed to retrieve form hash"}, 500
 
 
 class FormPublishView(MethodView):
-    def put(self, name):
-        """PUT /forms/{name}/publish - Publishes a form (copies draft to published)"""
+    def put(self, url_path):
+        """PUT /forms/{url_path}/publish - Publishes a form (copies draft to published)"""
         try:
-            form = publish_form(name)
-            current_app.logger.info("Form %s published successfully", _sanitise_for_logging(name))
+            form = publish_form(url_path)
+            current_app.logger.info("Form %s published successfully", _sanitise_for_logging(url_path))
             return form.as_dict(), 200
         except NoResultFound:
-            return {"error": f"Form '{name}' not found"}, 404
+            return {"error": f"Form '{url_path}' not found"}, 404
         except ValueError as e:
             return {"error": str(e)}, 400
         except Exception as e:
-            current_app.logger.error("Error publishing form %s: %s", _sanitise_for_logging(name), str(e))
+            current_app.logger.error("Error publishing form %s: %s", _sanitise_for_logging(url_path), str(e))
             return {"error": "Failed to publish form"}, 500
 
 
 # Register URL rules
 form_store_bp.add_url_rule("", view_func=FormsView.as_view("forms"))
-form_store_bp.add_url_rule("/<name>/draft", view_func=FormDraftView.as_view("form_draft"))
-form_store_bp.add_url_rule("/<name>/published", view_func=FormPublishedView.as_view("form_published"))
-form_store_bp.add_url_rule("/<name>/hash", view_func=FormHashView.as_view("form_hash"))
-form_store_bp.add_url_rule("/<name>/publish", view_func=FormPublishView.as_view("form_publish"))
+form_store_bp.add_url_rule("/<url_path>/draft", view_func=FormDraftView.as_view("form_draft"))
+form_store_bp.add_url_rule("/<url_path>/published", view_func=FormPublishedView.as_view("form_published"))
+form_store_bp.add_url_rule("/<url_path>/hash", view_func=FormHashView.as_view("form_hash"))
+form_store_bp.add_url_rule("/<url_path>/publish", view_func=FormPublishView.as_view("form_publish"))
