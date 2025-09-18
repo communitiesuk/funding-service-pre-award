@@ -2670,7 +2670,7 @@ fund_round_mapping_config = {
         "round_id": PFN_ROUND_RP_ID,
         "type_of_application": "PFN",
     },
-    "LAHFLAHFTU": {
+    "LAHFLAHFtu": {
         "fund_id": LAHF_FUND_ID,
         "round_id": LAHF_ROUND_LAHFTU_ID,
         "type_of_application": "LAHF",

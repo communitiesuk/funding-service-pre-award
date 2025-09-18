@@ -12,7 +12,7 @@ LAHF_LAHFTU_KEY_REPORT_MAPPING = KeyReportMapping(
             return_field="organisation_name",
         ),
         FormMappingItem(
-            form_name="lahf-lahftu-local-authority-details.json",
+            form_name="lahf-lahftu-local-authority-details",
             key="saBdpT",
             return_field="email",
         ),
