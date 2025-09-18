@@ -411,7 +411,9 @@ def create_app() -> Flask:  # noqa: C901
                         "content_routes.privacy",
                         fund=fund.short_name,
                         round=round.short_name,
-                    ),
+                    )
+                    if round.short_name != "LAHFtu"
+                    else "",
                     feedback_url=url_for(
                         "content_routes.feedback",
                         fund=fund.short_name,

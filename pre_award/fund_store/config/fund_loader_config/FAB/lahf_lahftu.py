@@ -76,7 +76,7 @@ LOADER_CONFIG = {
         "reminder_date": "2026-02-27T12:00:00",
         "assessment_deadline": "2026-03-20T12:00:00",
         "prospectus": "https://www.gov.uk/government/collections/local-authority-housing-fund",
-        "privacy_notice": "https://www.not-available.com",
+        "privacy_notice": "",
         "contact_email": "LAHFResettlementTopUps@Communities.gov.uk",
         "instructions_json": {
             "en": "Read the <a href='/assets/documents/lahf/LAHF-Top-Ups-Fund-Guidance.pdf' target='_blank' class='govuk-link'>Local Authority Housing Fund top-up guidance (opens in new tab)</a> before you apply.",
