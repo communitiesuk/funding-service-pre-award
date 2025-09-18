@@ -4,6 +4,7 @@ the Postgres db.
 This table stores form configurations for both draft and published states.
 """
 
+import re
 import uuid
 from typing import Any
 
@@ -15,6 +16,10 @@ from sqlalchemy.sql import func
 from pre_award.db import db
 
 BaseModel: DefaultMeta = db.Model
+
+
+def url_path_to_display_name(text: str) -> str:
+    return re.sub(r"[-_]", " ", text).capitalize()
 
 
 class FormDefinition(BaseModel):
@@ -33,7 +38,8 @@ class FormDefinition(BaseModel):
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
     published_at = Column(DateTime, nullable=True)
-    name = Column(Text, unique=True, nullable=False)
+    url_path = Column(Text, unique=True, nullable=False)
+    display_name = Column(Text, nullable=True)
     draft_json = Column(JSONB, nullable=False)
     published_json = Column(JSONB, nullable=False, default="{}")
 
@@ -45,7 +51,10 @@ class FormDefinition(BaseModel):
         """
         ret = {
             "id": str(self.id),
-            "name": self.name,
+            "url_path": self.url_path,
+            "display_name": self.display_name
+            if self.display_name is not None
+            else url_path_to_display_name(self.url_path),
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
             "published_at": self.published_at.isoformat() if self.published_at else None,
