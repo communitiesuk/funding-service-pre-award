@@ -30,7 +30,7 @@
         <h1 class="govuk-heading-xl"> {{ application_meta_data["fund_title"]| replace("expression", "Expression") }}
         </h1>
         {% else %}
-        <span class="govuk-caption-l">{{ application_meta_data["fund_name"] }} {{ application_meta_data["round_name"]
+        <span class="govuk-caption-l">{{ application_meta_data["fund_name"] }} - {{ application_meta_data["round_name"]
             }}</span>
             <!-- TODO Assuming that this is the only round (PFN-RP) that is not going to need the hardcoded text
             "Application for ...". otherwise we need to find a better way to handle this -->
