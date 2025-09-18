@@ -27,7 +27,7 @@
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <span class="govuk-caption-xl">{{ fund.name}} {{ round.title }}</span>
+            <span class="govuk-caption-xl">{{ fund.name}} - {{ round.title }}</span>
             <!-- Reference: See the TODO above for handling hardcoded text "Start or continue an ..." -->
             {% if round.id|string == '9217792e-d8c2-45c8-8170-eed4a8946184' %}
             <h1 class="govuk-heading-xl">{%trans fund_title=fund.title%}{{ fund_title }}{%endtrans%}</h1>
@@ -38,7 +38,7 @@
             {% if round.is_past_submission_deadline %}
 
                 {% set closed_html %}
-                    <p class="govuk-notification-banner__heading">{%trans fund_round_names = fund.name + " " + round.title%}Window closed - {{fund_round_names}}{% endtrans %}</p>
+                    <p class="govuk-notification-banner__heading">{%trans fund_round_names = fund.name + " - " + round.title%}Window closed - {{fund_round_names}}{% endtrans %}</p>
                     <p class="govuk-body">
                         ({% trans closed_date = round.deadline|datetime_format_respect_lang %}Closed: {{ closed_date }}{% endtrans %})
                     </p>
@@ -66,9 +66,11 @@
                 </p>
             {% endif %}
             {% if round.prospectus %}
-            <p class="govuk-body">
-                {% trans prospectus_link=round.prospectus %}<a class="govuk-link" target="_blank" href="{{ prospectus_link }}">Read the fund's prospectus</a> before you start.{% endtrans %}
-            </p>
+              {% if round.short_name not in ["LAHFtu"] %}
+                  <p class="govuk-body">
+                      {% trans prospectus_link=round.prospectus %}<a class="govuk-link" target="_blank" href="{{ prospectus_link }}">Read the fund's prospectus</a> before you start.{% endtrans %}
+                  </p>
+              {% endif %}
             {% endif %}
             {% if not round.is_expression_of_interest %}
                 <p class="govuk-body">

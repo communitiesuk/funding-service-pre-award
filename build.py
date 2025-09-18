@@ -58,6 +58,13 @@ def build_apply_assets():
     os.makedirs("./static/apply/js")
     shutil.copyfile("pre_award/apply/static/src/js/fsd_cookies.js", "./static/apply/js/fsd_cookies.js")
 
+    # Copy LAHF PDF
+    os.makedirs("./static/documents/lahf", exist_ok=True)
+    shutil.copyfile(
+        "pre_award/apply/static/src/documents/lahf/LAHF-Top-Ups-Fund-Guidance.pdf",
+        "./static/documents/lahf/LAHF-Top-Ups-Fund-Guidance.pdf",
+    )
+
     print("Deleting temp files")
     # Deletes temp. files.
     shutil.rmtree("./static/apply/assets")
