@@ -544,7 +544,7 @@ fund_round_data_key_mappings = {
         "funding_two": ["YQGJbm", "VmCcNW", "pCCkfZ", "aaOhAH"],
         "funding_field_type": "multiInputField",
     },
-    "LAHFLAHFTU": {
+    "LAHFLAHFtu": {
         "location": None,
         "asset_type": None,
         "funding_one": "DdMauS",
