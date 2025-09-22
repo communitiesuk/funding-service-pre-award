@@ -105,7 +105,7 @@ environments:
       nginx:
         port: 8087
         image:
-          location: xscys/nginx-sidecar-basic-auth
+          location: ../../../../sidecars/nginx-sidecar-basic-auth
         variables:
           FORWARD_PORT: 8080
           CLIENT_MAX_BODY_SIZE: 10m
@@ -142,7 +142,7 @@ environments:
       nginx:
         port: 8087
         image:
-          location: xscys/nginx-sidecar-basic-auth
+          location: ../../../../sidecars/nginx-sidecar-basic-auth
         variables:
           FORWARD_PORT: 8080
           CLIENT_MAX_BODY_SIZE: 10m
@@ -187,7 +187,7 @@ environments:
       nginx:
         port: 8087
         image:
-          location: xscys/nginx-sidecar-basic-auth
+          location: ../../../../sidecars/nginx-sidecar-basic-auth
         variables:
           FORWARD_PORT: 8080
           CLIENT_MAX_BODY_SIZE: 10m
