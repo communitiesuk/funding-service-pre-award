@@ -12,7 +12,7 @@ LOADER_CONFIG = {
             "form_name_json": {"en": "lahf-lahftu-occupational-therapy-report", "cy": ""},
         },
         {
-            "section_name": {"en": "2. Property and adaptation requirements", "cy": ""},
+            "section_name": {"en": "2. Property details and funding requests", "cy": ""},
             "tree_path": "1068.1.2",
             "requires_feedback": None,
         },
@@ -22,9 +22,9 @@ LOADER_CONFIG = {
             "form_name_json": {"en": "lahf-lahftu-property-details", "cy": ""},
         },
         {
-            "section_name": {"en": "2.2 Adaptation requirements", "cy": ""},
+            "section_name": {"en": "2.2 Funding requests", "cy": ""},
             "tree_path": "1068.1.2.2",
-            "form_name_json": {"en": "lahf-lahftu-adaptation-requirements", "cy": ""},
+            "form_name_json": {"en": "lahf-lahftu-funding-requests", "cy": ""},
         },
         {"section_name": {"en": "3. Key dates", "cy": ""}, "tree_path": "1068.1.3", "requires_feedback": None},
         {
@@ -71,7 +71,7 @@ LOADER_CONFIG = {
         "short_name": "LAHFtu",
         "opens": "2025-09-24T12:00:00",
         "assessment_start": "2025-09-24T12:00:00",
-        "deadline": "2026-03-06T12:00:00",
+        "deadline": "2026-02-25T12:00:00",
         "application_reminder_sent": False,
         "reminder_date": "2026-02-27T12:00:00",
         "assessment_deadline": "2026-03-20T12:00:00",
