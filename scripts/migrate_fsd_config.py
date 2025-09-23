@@ -28,7 +28,7 @@ def strip_leading_digits(text: str) -> str:
     return text
 
 
-def get_display_name_from_section(url_path: str):
+def get_display_name_from_section(url_path: str) -> str | None:
     """Get display name from section table via form_name join, checking both English and Welsh."""
     # First try to match on English
     result = (
@@ -61,7 +61,7 @@ def get_display_name_from_section(url_path: str):
     return None
 
 
-def load_json_files():
+def load_json_files() -> dict[str, list[Path]]:
     """Load all JSON files from the form_jsons directory."""
     json_forms_dir = Path("../digital-form-builder-adapter/fsd_config/form_jsons")
     if not json_forms_dir.exists():
@@ -123,7 +123,7 @@ def update_or_create_form(url_path: str, json_content: dict = None) -> str:
         return "error"
 
 
-def process_forms(files_by_name: dict = None, update_orphans: bool = False):
+def process_forms(files_by_name: dict[str, list[Path]] | None = None, update_orphans: bool = False) -> None:
     """
     Process form definitions - either from JSON files or update orphaned forms in DB.
     """
@@ -185,7 +185,7 @@ def process_forms(files_by_name: dict = None, update_orphans: bool = False):
         sys.exit(1)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Load JSON form definitions into database")
     parser.add_argument("database_url", help="Database connection string")
     parser.add_argument(
