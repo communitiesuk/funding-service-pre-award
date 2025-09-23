@@ -16,7 +16,7 @@ unscored_sections = [
                             {
                                 "field_id": "svIchm",
                                 "form_name": "lahf-lahftu-local-authority-details",
-                                "field_type": "autocompleteField",
+                                "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "What is the name of your local authority?",
                             },
