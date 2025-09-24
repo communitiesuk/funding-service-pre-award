@@ -70,7 +70,7 @@ LOADER_CONFIG = {
         "fund_id": "28c2f175-eda1-4ba6-9337-e05150708155",
         "short_name": "LAHFtu",
         "opens": "2025-09-29T12:00:00",
-        "assessment_start": "2025-09-24T12:00:00",
+        "assessment_start": "2025-09-29T12:00:00",
         "deadline": "2026-02-25T12:00:00",
         "application_reminder_sent": False,
         "reminder_date": "2026-02-27T12:00:00",
