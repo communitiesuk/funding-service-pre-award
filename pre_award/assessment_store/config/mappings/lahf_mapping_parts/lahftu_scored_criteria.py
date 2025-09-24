@@ -70,6 +70,13 @@ scored_sections = [
                                 "question": "Number of Bathrooms",
                             },
                             {
+                                "field_id": "xRdqbq",
+                                "form_name": "lahf-lahftu-property-details",
+                                "field_type": "numberField",
+                                "presentation_type": "integer",
+                                "question": "Number of Floors",
+                            },
+                            {
                                 "field_id": "upqiVf",
                                 "form_name": "lahf-lahftu-property-details",
                                 "field_type": "radiosField",
