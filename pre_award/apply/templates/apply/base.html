@@ -3,7 +3,7 @@
 {% from "govuk_frontend_jinja/components/button/macro.html" import govukButton %}
 {% from "apply/partials/mhclg-header.html" import mhclgHeader %}
 {% set assetPath = url_for('static', filename='/apply').rstrip('/') %}
-{% set title = gettext("Access Funding") if is_error else service_title or get_service_title() %}
+{% set title = gettext("Access Funding") if is_error else get_page_title() %}
 
 {% block pageTitle %}{{ [pageHeading, title]|join(' - ') if pageHeading else title }}{% endblock pageTitle %}
 

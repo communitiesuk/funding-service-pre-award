@@ -354,42 +354,55 @@ def create_app() -> Flask:  # noqa: C901
 
         return {}
 
+    def _get_service_title():
+        fund, round = None, None
+        if request.view_args or request.args or request.form:
+            try:
+                fund = find_fund_in_request()
+                round = find_round_in_request()
+            except Exception as e:  # noqa
+                current_app.logger.warning(
+                    (
+                        "Exception: %(e)s, occured when trying to reach url: %(url)s, "
+                        "with view_args: %(view_args)s, and args: %(args)s"
+                    ),
+                    dict(e=e, url=request.url, view_args=request.view_args, args=request.args),
+                )
+        # TODO Assuming that this is the only round that is not going to need the hardcoded text
+        # "Apply for ...". otherwise we need to find a better way to handle this
+
+        # 1) If we got a fund AND it’s that special round (PFN-RP), show just the fund title
+        if fund and round and round.id == "9217792e-d8c2-45c8-8170-eed4a8946184":
+            return fund.title
+
+        # 2) If we got a fund (any other round or no round at all), show “Apply for …”
+        if fund:
+            return f"{gettext('Apply for')} {fund.title}"
+        elif (
+            request.args
+            and (return_app := request.args.get("return_app"))
+            and request.host == current_app.config["AUTH_HOST"]
+        ):
+            return Config.SAFE_RETURN_APPS[return_app].service_title
+
+        return gettext("Access Funding")
+
     @flask_app.context_processor
     def utility_processor():
-        def _get_service_title():
-            fund, round = None, None
-            if request.view_args or request.args or request.form:
-                try:
-                    fund = find_fund_in_request()
-                    round = find_round_in_request()
-                except Exception as e:  # noqa
-                    current_app.logger.warning(
-                        (
-                            "Exception: %(e)s, occured when trying to reach url: %(url)s, "
-                            "with view_args: %(view_args)s, and args: %(args)s"
-                        ),
-                        dict(e=e, url=request.url, view_args=request.view_args, args=request.args),
-                    )
-            # TODO Assuming that this is the only round that is not going to need the hardcoded text
-            # "Apply for ...". otherwise we need to find a better way to handle this
+        return {"get_service_title": _get_service_title}
 
-            # 1) If we got a fund AND it’s that special round (PFN-RP), show just the fund title
-            if fund and round and round.id == "9217792e-d8c2-45c8-8170-eed4a8946184":
-                return fund.title
+    @flask_app.context_processor
+    def get_page_title():
+        def _get_page_title():
+            # Use the get_service_title function already in the context
+            get_service_title = flask_app.jinja_env.globals.get("get_service_title")
+            # If not found in globals, fallback to calling the utility directly
+            if not get_service_title:
+                get_service_title = _get_service_title
+            base_title = get_service_title()
+            return f"{base_title} - GOV.UK"
 
-            # 2) If we got a fund (any other round or no round at all), show “Apply for …”
-            if fund:
-                return f"{gettext('Apply for')} {fund.title}"
-            elif (
-                request.args
-                and (return_app := request.args.get("return_app"))
-                and request.host == current_app.config["AUTH_HOST"]
-            ):
-                return Config.SAFE_RETURN_APPS[return_app].service_title
-
-            return gettext("Access Funding")
-
-        return dict(get_service_title=_get_service_title)
+        return {"get_page_title": _get_page_title}
 
     @flask_app.context_processor
     def inject_content_urls():

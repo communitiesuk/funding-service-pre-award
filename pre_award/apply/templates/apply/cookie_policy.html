@@ -3,7 +3,7 @@
 {%- from 'govuk_frontend_jinja/components/inset-text/macro.html' import govukInsetText -%}
 {% from "apply/partials/migration_banner.html" import migration_banner %}
 {%- from "govuk_frontend_jinja/components/radios/macro.html" import govukRadios %}
-{% set pageHeading %}Cookies{% endset %}
+{% set pageHeading %}{% trans %}Cookies{% endtrans %}{% endset %}
 {% block content %}
 
     <div class="govuk-grid-row">

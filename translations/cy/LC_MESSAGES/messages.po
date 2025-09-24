@@ -35,7 +35,7 @@ msgstr "Cael Mynediad at Gyllid"
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:73
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:73
 msgid "Get help with your application"
-msgstr ""
+msgstr "Cael cymorth gyda'ch cais"
 
 #: apply/templates/apply/contact-us.html:12
 #, python-format
@@ -379,7 +379,6 @@ msgid "if you have any questions."
 msgstr ""
 
 #: pre_award/apply/templates/apply/accessibility_statement.html:2
-#, fuzzy
 msgid "Accessibility statement"
 msgstr "Datganiad Hygyrchedd"
 
@@ -566,7 +565,11 @@ msgstr ""
 
 #: pre_award/apply/templates/apply/dashboard_single_fund.html:16
 msgid "Your applications for"
-msgstr ""
+msgstr "Eich ceisiadau yn"
+
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:21
+msgid "Your applications"
+msgstr "Eich ceisiadau"
 
 #: pre_award/apply/templates/apply/dashboard_single_fund.html:51
 msgid "Deadline for applications: "
@@ -797,6 +800,7 @@ msgstr "Preifatrwydd"
 
 #: pre_award/apply/templates/apply/footer.html:15
 #: pre_award/authenticator/frontend/templates/authenticator/footer.html:14
+#: pre_award/apply/templates/apply/cookie_policy.html:6
 msgid "Cookies"
 msgstr "Cwcis"
 
@@ -923,7 +927,7 @@ msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:11
 msgid "Task List"
-msgstr ""
+msgstr "Rhestr Tasgau"
 
 #: pre_award/apply/templates/apply/tasklist.html:35
 #, fuzzy
@@ -4805,7 +4809,7 @@ msgstr ""
 #~ " sgorio"
 
 #~ msgid "Task List"
-#~ msgstr ""
+#~ msgstr "Rhestr Tasgau"
 
 #~ msgid "Application for"
 #~ msgstr "Cais am"
