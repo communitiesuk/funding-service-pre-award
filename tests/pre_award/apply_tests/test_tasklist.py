@@ -98,6 +98,14 @@ def test_tasklist_for_submit_application_route(apply_test_client, mocker, mock_l
 def test_language_cookie_update_welsh_to_english(
     apply_test_client, mocker, mock_login, mock_applications, mock_tasklist_function_calls
 ):
+    mocker.patch(
+        "pre_award.apply.helpers.get_fund_data",
+        return_value=Fund.from_dict(TEST_FUNDS_DATA[0]),  # or [2] for Welsh
+    )
+    mocker.patch(
+        "pre_award.apply.helpers.get_application_data",
+        return_value=TEST_APPLICATION_EN,
+    )
     # set language cookie to welsh
     apply_test_client.set_cookie(domain="/", key="language", value="cy")
 
@@ -111,7 +119,7 @@ def test_language_cookie_update_welsh_to_english(
     assert current_set_language == "en"
 
     soup = BeautifulSoup(response.data, "html.parser")
-    assert soup.find("span", class_="govuk-header__service-name").text == "Apply for fund for testing"
+    assert soup.find("span", class_="govuk-header__service-name").text == "Apply for fund for testing - GOV.UK"
 
 
 def test_language_cookie_update_english_to_welsh(
@@ -122,12 +130,16 @@ def test_language_cookie_update_english_to_welsh(
 
     # return welsh fund
     mocker.patch(
-        "pre_award.apply.default.application_routes.get_fund_data",
+        "pre_award.apply.helpers.get_fund_data",
         return_value=Fund.from_dict(TEST_FUNDS_DATA[2]),
     )
     # return welsh application
     mocker.patch(
         "pre_award.apply.default.application_routes.get_application_data",
+        return_value=TEST_APPLICATION_CY,
+    )
+    mocker.patch(
+        "pre_award.apply.helpers.get_application_data",
         return_value=TEST_APPLICATION_CY,
     )
 
@@ -141,4 +153,5 @@ def test_language_cookie_update_english_to_welsh(
     assert current_set_language == "cy"
 
     soup = BeautifulSoup(response.data, "html.parser")
-    assert soup.find("span", class_="govuk-header__service-name").text == "Gwneud cais am gronfa cymraeg"
+    # breakpoint()
+    assert soup.find("span", class_="govuk-header__service-name").text == "Gwneud cais am gronfa cymraeg - GOV.UK"

@@ -51,6 +51,7 @@ def test_changes_requested_notification(apply_test_client, mocker, templates_ren
         return_value=True,
     )
     apply_test_client.application.jinja_env.globals["get_service_title"] = lambda: "Test Service Title"
+    apply_test_client.application.jinja_env.globals["get_page_title"] = lambda: "Test Service Title"
 
     response = apply_test_client.get("/account?fund=CTDF", follow_redirects=True)
     assert response.status_code == 200
@@ -78,6 +79,7 @@ def test_no_changes_requested_notification(apply_test_client, mocker, templates_
         return_value=False,
     )
     apply_test_client.application.jinja_env.globals["get_service_title"] = lambda: "Test Service Title"
+    apply_test_client.application.jinja_env.globals["get_page_title"] = lambda: "Test Service Title"
 
     # Change the status to SUBMITTED
     display_data["funds"][0]["rounds"][0]["applications"][0]["status"] = "SUBMITTED"

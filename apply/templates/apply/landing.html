@@ -17,7 +17,7 @@
     {% elif round and round.id|string == '9217792e-d8c2-45c8-8170-eed4a8946184' %}
     {% trans fund_title=fund.title%}{{ fund_title }}{%endtrans%}
     {% else %}
-        {% trans fund_title=fund.title%}Start or continue an application for {{ fund_title }}{%endtrans%}
+        {% trans fund_title=fund.title%}Start or continue an application for {{ fund_title }}{%endtrans%}{{ " - " ~ get_page_title() }}
     {% endif %}
   {% endif %}
 {% endblock pageTitle %}
