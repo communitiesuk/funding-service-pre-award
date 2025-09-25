@@ -101,6 +101,7 @@
                 </h2>
 
                 {{ fs_contact_details(support_desk_apply) }}
+                {% if round_short_name !='LAHFtu' %}
                 <h2 class="govuk-heading govuk-heading-s">
                     {% trans %}How we'll use your information{% endtrans %}
                 </h2>
@@ -108,6 +109,7 @@
                     {% trans %}Read how we'll use the information from your application in our{% endtrans %} <a
                         class="govuk-link" target="_blank" href="{{ privacy_url }}">{% trans %}privacy notice{% endtrans %}</a>.
                 </p>
+                {% endif %}
 
             </div>
         </details>

@@ -101,26 +101,30 @@
     {% endset %}
   {% endif %}
 
+  {% set footer_items = [
+    {
+      "href": url_for("content_routes.cookie_policy"),
+      "text": _("Cookies")
+    },
+    {
+      "href": url_for("content_routes.accessibility_statement"),
+      "text": _("Accessibility Statement")
+    },
+    {
+      "href": contactUsUrl,
+      "text": _("Contact us")
+    }
+  ] %}
+  {% if not (fund and fund.short_name == 'LAHF') %}
+    {% set _ = footer_items.insert(0, {
+      "href": privacyUrl,
+      "text": _("Privacy")
+    }) %}
+  {% endif %}
+
   {{ govukFooter({
     "meta": {
-      "items": [
-        {
-          "href": privacyUrl,
-          "text": _("Privacy")
-        },
-        {
-          "href": url_for("content_routes.cookie_policy"),
-          "text": _("Cookies")
-        },
-        {
-          "href": url_for("content_routes.accessibility_statement"),
-          "text": _("Accessibility Statement")
-        },
-        {
-          "href": contactUsUrl,
-          "text": _("Contact us")
-        }
-      ]
+      "items": footer_items
     }
   })
   }}

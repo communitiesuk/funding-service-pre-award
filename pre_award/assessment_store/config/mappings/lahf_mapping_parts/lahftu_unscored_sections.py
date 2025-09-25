@@ -112,7 +112,7 @@ unscored_sections = [
                         "name": "Declarations",
                         "answers": [
                             {
-                                "field_id": "CzMnku",
+                                "field_id": "MRbDfT",
                                 "form_name": "lahf-lahftu-declarations",
                                 "field_type": "checkboxesField",
                                 "presentation_type": "text",
