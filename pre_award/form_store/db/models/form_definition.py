@@ -43,13 +43,12 @@ class FormDefinition(BaseModel):
     draft_json = Column(JSONB, nullable=False)
     published_json = Column(JSONB, nullable=False, default="{}")
 
-    def as_dict(self, include_json: bool = True) -> dict[str, Any]:
+    def as_dict(self) -> dict[str, Any]:
         """
-        Convert the FormDefinition to a dictionary representation. The argument include_json is included so that the
-        draft_json and published_json attributes can be optionally excluded, to reduce the size of data objects being
-        sent over the network.
+        Convert FormDefinition to dictionary with metadata only (no JSON configurations).
+        Use this for list endpoints where you don't need the full form JSON.
         """
-        ret = {
+        return {
             "id": str(self.id),
             "url_path": self.url_path,
             "display_name": self.display_name
@@ -60,7 +59,21 @@ class FormDefinition(BaseModel):
             "published_at": self.published_at.isoformat() if self.published_at else None,
             "is_published": bool(self.published_json and self.published_json != {}),
         }
-        if include_json:
-            ret["draft_json"] = self.draft_json
-            ret["published_json"] = self.published_json
-        return ret
+
+    def as_dict_with_draft_json(self) -> dict[str, Any]:
+        """
+        Return form metadata with draft configuration.
+        Use this for GET /forms/{url_path}/draft endpoint.
+        """
+        result = self.as_dict()
+        result["draft_json"] = self.draft_json
+        return result
+
+    def as_dict_with_published_json(self) -> dict[str, Any]:
+        """
+        Return form metadata with published configuration.
+        Use this for GET /forms/{url_path}/published endpoint.
+        """
+        result = self.as_dict()
+        result["published_json"] = self.published_json
+        return result

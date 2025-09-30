@@ -156,32 +156,54 @@ class TestFormDefinitionModel:
     """Tests for FormDefinition model methods."""
 
     def test_as_dict_published_form(self, db, published_form_record):
-        """Test as_dict method for published form."""
+        """Test as_dict method for published form (metadata only)."""
         result = published_form_record.as_dict()
 
         assert result["id"] == str(published_form_record.id)
         assert result["url_path"] == published_form_record.url_path
         assert result["display_name"] == published_form_record.display_name
-        assert result["draft_json"] == published_form_record.draft_json
-        assert result["published_json"] == published_form_record.published_json
+        assert "draft_json" not in result
+        assert "published_json" not in result
         assert result["is_published"] is True
         assert result["created_at"] is not None
         assert result["updated_at"] is not None
         assert result["published_at"] is not None
 
     def test_as_dict_unpublished_form(self, db, sample_form_record):
-        """Test as_dict method for unpublished form."""
+        """Test as_dict method for unpublished form (metadata only)."""
         result = sample_form_record.as_dict()
 
         assert result["id"] == str(sample_form_record.id)
         assert result["url_path"] == sample_form_record.url_path
         assert result["display_name"] == sample_form_record.display_name
-        assert result["draft_json"] == sample_form_record.draft_json
-        assert result["published_json"] == {}
+        assert "draft_json" not in result
+        assert "published_json" not in result
         assert result["is_published"] is False
         assert result["created_at"] is not None
         assert result["updated_at"] is not None
         assert result["published_at"] is None
+
+    def test_as_dict_with_draft_json(self, db, sample_form_record):
+        """Test as_dict_with_draft_json includes draft configuration."""
+        result = sample_form_record.as_dict_with_draft_json()
+
+        assert result["id"] == str(sample_form_record.id)
+        assert result["url_path"] == sample_form_record.url_path
+        assert result["display_name"] == sample_form_record.display_name
+        assert result["draft_json"] == sample_form_record.draft_json
+        assert "published_json" not in result
+        assert result["is_published"] is False
+
+    def test_as_dict_with_published_json(self, db, published_form_record):
+        """Test as_dict_with_published_json includes published configuration."""
+        result = published_form_record.as_dict_with_published_json()
+
+        assert result["id"] == str(published_form_record.id)
+        assert result["url_path"] == published_form_record.url_path
+        assert result["display_name"] == published_form_record.display_name
+        assert result["published_json"] == published_form_record.published_json
+        assert "draft_json" not in result
+        assert result["is_published"] is True
 
     def test_as_dict_handles_none_timestamps(self, db):
         """Test as_dict handles None timestamps gracefully."""
