@@ -1,3 +1,14 @@
 <div class="assess-footer">
-    {{ govukFooter({}) }}
+
+    {% set footer_items = [
+        {'href': accessibility_statement_url, 'text': gettext('Accessibility Statement')}
+    ] %}
+
+
+    {{ govukFooter({
+        'meta': {
+            'items': footer_items
+        }
+    }) }}
+
 </div>
