@@ -35,7 +35,7 @@ class FormsView(MethodView):
         """GET /forms - Returns a list of all forms"""
         try:
             forms = get_all_forms()
-            return [form.as_dict(include_json=False) for form in forms], 200
+            return [form.as_dict() for form in forms], 200
         except Exception as e:
             current_app.logger.error("Error retrieving forms: %s", str(e))
             return {"error": "Failed to retrieve forms"}, 500
@@ -69,7 +69,7 @@ class FormsView(MethodView):
             form = create_or_update_form(url_path, display_name, form_json)
             current_app.logger.info("Form %s created/updated successfully", _sanitise_for_logging(url_path))
 
-            return form.as_dict(), 201
+            return form.as_dict_with_draft_json(), 201
 
         except Exception as e:
             current_app.logger.error("Error creating/updating form: %s", str(e))
@@ -81,7 +81,7 @@ class FormDraftView(MethodView):
         """GET /forms/{url_path}/draft - Returns the draft_json object"""
         try:
             form = get_form_by_url_path(url_path)
-            return form.draft_json, 200
+            return form.as_dict_with_draft_json(), 200
         except NoResultFound:
             return {"error": f"Form '{url_path}' not found"}, 404
         except Exception as e:
@@ -96,10 +96,9 @@ class FormPublishedView(MethodView):
             form = get_form_by_url_path(url_path)
             if not form.published_json or form.published_json == {}:
                 return {"error": f"Form '{url_path}' has not been published"}, 404
-            return {
-                "configuration": form.published_json,
-                "hash": generate_form_hash(form.published_json),
-            }, 200
+            response = form.as_dict_with_published_json()
+            response["hash"] = generate_form_hash(form.published_json)
+            return response, 200
         except NoResultFound:
             return {"error": f"Form '{url_path}' not found"}, 404
         except Exception as e:
@@ -128,7 +127,7 @@ class FormPublishView(MethodView):
         try:
             form = publish_form(url_path)
             current_app.logger.info("Form %s published successfully", _sanitise_for_logging(url_path))
-            return form.as_dict(), 200
+            return form.as_dict_with_published_json(), 200
         except NoResultFound:
             return {"error": f"Form '{url_path}' not found"}, 404
         except ValueError as e:

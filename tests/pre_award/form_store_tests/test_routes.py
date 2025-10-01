@@ -57,7 +57,7 @@ class TestFormsView:
         assert response.json["url_path"] == sample_form_data["url_path"]
         assert response.json["display_name"] == sample_form_data["display_name"]
         assert response.json["draft_json"] == sample_form_data["form_json"]
-        assert response.json["published_json"] == {}
+        assert "published_json" not in response.json
         assert response.json["is_published"] is False
 
     def test_post_update_existing_form(self, flask_test_client, sample_form_record):
@@ -139,11 +139,15 @@ class TestFormDraftView:
     """Tests for the /forms/{url_path}/draft endpoint."""
 
     def test_get_draft_success(self, flask_test_client, sample_form_record):
-        """Test GET /forms/{url_path}/draft returns draft JSON."""
+        """Test GET /forms/{url_path}/draft returns draft JSON with metadata."""
         response = flask_test_client.get(f"/forms/{sample_form_record.url_path}/draft")
 
         assert response.status_code == 200
-        assert response.json == sample_form_record.draft_json
+        assert response.json["draft_json"] == sample_form_record.draft_json
+        assert response.json["url_path"] == sample_form_record.url_path
+        assert response.json["display_name"] == sample_form_record.display_name
+        assert response.json["is_published"] is False
+        assert "published_json" not in response.json
 
     def test_get_draft_not_found(self, flask_test_client):
         """Test GET /forms/{url_path}/draft with non-existent form."""
@@ -165,15 +169,17 @@ class TestFormPublishedView:
     """Tests for the /forms/{url_path}/published endpoint."""
 
     def test_get_published_success(self, flask_test_client, published_form_record):
-        """Test GET /forms/{url_path}/published returns published JSON."""
+        """Test GET /forms/{url_path}/published returns published JSON with metadata."""
         response = flask_test_client.get(f"/forms/{published_form_record.url_path}/published")
 
         assert response.status_code == 200
-        assert "configuration" in response.json
-        assert "hash" in response.json
-        assert response.json["configuration"] == published_form_record.published_json
+        assert response.json["published_json"] == published_form_record.published_json
+        assert response.json["url_path"] == published_form_record.url_path
+        assert response.json["display_name"] == published_form_record.display_name
+        assert response.json["is_published"] is True
         assert isinstance(response.json["hash"], str)
         assert len(response.json["hash"]) == 32  # MD5 hash length
+        assert "draft_json" not in response.json
 
     def test_get_published_not_published(self, flask_test_client, sample_form_record):
         """Test GET /forms/{url_path}/published with unpublished form."""
@@ -206,7 +212,6 @@ class TestFormHashView:
         response = flask_test_client.get(f"/forms/{published_form_record.url_path}/hash")
 
         assert response.status_code == 200
-        assert "hash" in response.json
         assert isinstance(response.json["hash"], str)
         assert len(response.json["hash"]) == 32  # MD5 hash length
 

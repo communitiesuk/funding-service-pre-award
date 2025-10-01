@@ -33,7 +33,7 @@ def get_form_by_url_path(url_path: str) -> FormDefinition:
     return db.session.query(FormDefinition).filter(FormDefinition.url_path == url_path).one()
 
 
-def create_or_update_form(url_path: str, display_name: str, form_json: dict) -> FormDefinition:
+def create_or_update_form(url_path: str, display_name: str | None, form_json: dict) -> FormDefinition:
     """
     Create a new form or update an existing form's draft.
 
@@ -50,7 +50,8 @@ def create_or_update_form(url_path: str, display_name: str, form_json: dict) -> 
     if existing_form:
         # Update existing form's draft
         existing_form.draft_json = form_json
-        existing_form.display_name = display_name
+        if display_name is not None:
+            existing_form.display_name = display_name
         existing_form.updated_at = func.now()
         db.session.commit()
         return existing_form
