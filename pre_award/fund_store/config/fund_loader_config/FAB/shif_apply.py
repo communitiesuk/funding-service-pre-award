@@ -98,7 +98,7 @@ LOADER_CONFIG = {
         "prospectus": "tbc.com",
         "privacy_notice": "not-available.com",
         "contact_email": "socialhousinginnovationfund@communities.gov.uk",
-        "instructions_json": {"en": "Read the fund's prospectus before you apply.", "cy": None},
+        "instructions_json": {"en": "", "cy": None},
         "feedback_link": "",
         "project_name_field_id": "oEoIjK",
         "application_guidance_json": {
