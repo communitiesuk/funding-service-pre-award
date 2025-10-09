@@ -145,10 +145,10 @@ unscored_sections = [
                         "answers": [
                             {
                                 "field_id": "Ydztii",
-                                "form_name": "shif-apply-organisation-information",
+                                "form_name": "shif-apply-declarations",
                                 "field_type": "checkboxesField",
                                 "presentation_type": "text",
-                                "question": "I confirm that I have read and agree with the declarations",
+                                "question": "Declarations",
                             },
                         ],
                     },

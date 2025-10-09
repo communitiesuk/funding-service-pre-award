@@ -2,6 +2,60 @@
 
 scored_sections = [
     {
+        "id": "your_proposal",
+        "weighting": 0.35,
+        "name": "Your proposal",
+        "sub_criteria": [
+            {
+                "id": "your_proposal",
+                "name": "Your proposal",
+                "themes": [
+                    {
+                        "id": "your_proposal",
+                        "name": "Your proposal",
+                        "answers": [
+                            {
+                                "field_id": "RlFFTW",
+                                "form_name": "shif-apply-your-proposal",
+                                "field_type": "textField",
+                                "presentation_type": "text",
+                                "question": "What is the name of your project",
+                            },
+                            {
+                                "field_id": "lTFJnY",
+                                "form_name": "shif-apply-your-proposal",
+                                "field_type": "freeTextField",
+                                "presentation_type": "text",
+                                "question": "What challenges are you trying to address",
+                            },
+                            {
+                                "field_id": "FFNuZw",
+                                "form_name": "shif-apply-your-proposal",
+                                "field_type": "freeTextField",
+                                "presentation_type": "text",
+                                "question": "How will the proposal address the challenges specified in your problem statement",
+                            },
+                            {
+                                "field_id": "PdxtmT",
+                                "form_name": "shif-apply-your-proposal",
+                                "field_type": "clientSideFileUploadField",
+                                "presentation_type": "text",
+                                "question": "Upload your project plan",
+                            },
+                            {
+                                "field_id": "Fxpsiw",
+                                "form_name": "shif-apply-your-proposal",
+                                "field_type": "freeTextField",
+                                "presentation_type": "text",
+                                "question": "Who will be involved in implementing the proposal",
+                            },
+                        ],
+                    }
+                ],
+            },
+        ],
+    },
+    {
         "id": "co_production_with_tenants",
         "weighting": 0.2,
         "name": "Co-production with tenants",
@@ -28,17 +82,50 @@ scored_sections = [
         ],
     },
     {
-        "id": "costs_value_for_money_and_risk_management",
-        "weighting": 0.05,
-        "name": "Costs, value for money and risk management",
+        "id": "innovation_and_scalability",
+        "weighting": 0.2,
+        "name": "Innovation and scalability",
         "sub_criteria": [
             {
-                "id": "costs_value_for_money_and_risk_management",
-                "name": "Costs, value for money and risk management",
+                "id": "innovation_and_scalability",
+                "name": "Innovation and scalability",
                 "themes": [
                     {
-                        "id": "costs_value_for_money_and_risk_management",
-                        "name": "Costs, value for money and risk management",
+                        "id": "innovation_and_scalability",
+                        "name": "Innovation and scalability",
+                        "answers": [
+                            {
+                                "field_id": "WJTBzi",
+                                "form_name": "shif-apply-innovation-and-scalability",
+                                "field_type": "freeTextField",
+                                "presentation_type": "text",
+                                "question": "How is the proposed project innovative?",
+                            },
+                            {
+                                "field_id": "czkAFo",
+                                "form_name": "shif-apply-innovation-and-scalability",
+                                "field_type": "freeTextField",
+                                "presentation_type": "text",
+                                "question": "How does this project have the potential to be scaled up or replicated on a wider scale?",
+                            },
+                        ],
+                    }
+                ],
+            },
+        ],
+    },
+    {
+        "id": "costs_and_value_for_money",
+        "weighting": 0.1,
+        "name": "Costs and value for money",
+        "sub_criteria": [
+            {
+                "id": "costs_and_value_for_money",
+                "name": "Costs and value for money",
+                "themes": [
+                    {
+                        "id": "costs_and_value_for_money",
+                        "name": "Costs and value for money",
                         "answers": [
                             {
                                 "field_id": "BwHiiN",
@@ -104,37 +191,23 @@ scored_sections = [
                                 "question": "How will your project deliver value for money?",
                             },
                         ],
-                    }
+                    },
                 ],
             },
-        ],
-    },
-    {
-        "id": "innovation_and_scalability",
-        "weighting": 0.2,
-        "name": "Innovation and scalability",
-        "sub_criteria": [
             {
-                "id": "innovation_and_scalability",
-                "name": "Innovation and scalability",
+                "id": "risk_management",
+                "name": "Risk management",
                 "themes": [
                     {
-                        "id": "innovation_and_scalability",
-                        "name": "Innovation and scalability",
+                        "id": "risk_management",
+                        "name": "Risk management",
                         "answers": [
                             {
-                                "field_id": "WJTBzi",
-                                "form_name": "shif-apply-innovation-and-scalability",
+                                "field_id": "WkOXbJ",
+                                "form_name": "shif-apply-risk-management",
                                 "field_type": "freeTextField",
                                 "presentation_type": "text",
-                                "question": "How is the proposed project innovative?",
-                            },
-                            {
-                                "field_id": "czkAFo",
-                                "form_name": "shif-apply-innovation-and-scalability",
-                                "field_type": "freeTextField",
-                                "presentation_type": "text",
-                                "question": "How does this project have the potential to be scaled up or replicated on a wider scale?",
+                                "question": "What risks have you identified, and how will you manage and mitigate these risks",
                             },
                         ],
                     }
@@ -168,86 +241,6 @@ scored_sections = [
                                 "field_type": "freeTextField",
                                 "presentation_type": "text",
                                 "question": "What key performance indicators (KPIs) you will use to monitor the success of your project?",
-                            },
-                        ],
-                    }
-                ],
-            },
-        ],
-    },
-    {
-        "id": "risk_management",
-        "weighting": 0.05,
-        "name": "Risk management",
-        "sub_criteria": [
-            {
-                "id": "risk_management",
-                "name": "Risk management",
-                "themes": [
-                    {
-                        "id": "risk_management",
-                        "name": "Risk management",
-                        "answers": [
-                            {
-                                "field_id": "WkOXbJ",
-                                "form_name": "shif-apply-risk-management",
-                                "field_type": "freeTextField",
-                                "presentation_type": "text",
-                                "question": "What risks have you identified, and how will you manage and mitigate these risks",
-                            },
-                        ],
-                    }
-                ],
-            },
-        ],
-    },
-    {
-        "id": "your_proposal",
-        "weighting": 0.35,
-        "name": "Your proposal",
-        "sub_criteria": [
-            {
-                "id": "your_proposal",
-                "name": "Your proposal",
-                "themes": [
-                    {
-                        "id": "your_proposal",
-                        "name": "Your proposal",
-                        "answers": [
-                            {
-                                "field_id": "lTFJnY",
-                                "form_name": "shif-apply-your-proposal",
-                                "field_type": "freeTextField",
-                                "presentation_type": "text",
-                                "question": "What challenges are you trying to address",
-                            },
-                            {
-                                "field_id": "FFNuZw",
-                                "form_name": "shif-apply-your-proposal",
-                                "field_type": "freeTextField",
-                                "presentation_type": "text",
-                                "question": "How will the proposal address the challenges specified in your problem statement",
-                            },
-                            {
-                                "field_id": "PdxtmT",
-                                "form_name": "shif-apply-your-proposal",
-                                "field_type": "clientSideFileUploadField",
-                                "presentation_type": "text",
-                                "question": "Upload your project plan",
-                            },
-                            {
-                                "field_id": "Fxpsiw",
-                                "form_name": "shif-apply-your-proposal",
-                                "field_type": "freeTextField",
-                                "presentation_type": "text",
-                                "question": "Who will be involved in implementing the proposal",
-                            },
-                            {
-                                "field_id": "RlFFTW",
-                                "form_name": "shif-apply-your-proposal",
-                                "field_type": "textField",
-                                "presentation_type": "text",
-                                "question": "What is the name of your project",
                             },
                         ],
                     }

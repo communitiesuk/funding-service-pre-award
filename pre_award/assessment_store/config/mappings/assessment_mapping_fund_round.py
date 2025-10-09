@@ -134,6 +134,12 @@ from pre_award.assessment_store.config.mappings.pfn_mapping_parts.rp_scored_sect
 from pre_award.assessment_store.config.mappings.pfn_mapping_parts.rp_unscored_sections import (
     unscored_sections as pfn_unscored_sections,
 )
+from pre_award.assessment_store.config.mappings.shif_mapping_parts.apply_scored_sections import (
+    scored_sections as shif_apply_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.shif_mapping_parts.apply_unscored_sections import (
+    unscored_sections as shif_apply_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.uf1_mapping_parts.scored_sections import (
     scored_sections as uf1_scored_sections,
 )
@@ -200,6 +206,9 @@ PFN_ROUND_RP_ID = "9217792e-d8c2-45c8-8170-eed4a8946184"
 
 LAHF_FUND_ID = "28c2f175-eda1-4ba6-9337-e05150708155"
 LAHF_ROUND_LAHFTU_ID = "6bb128c7-3ae9-4192-bee4-99b6b5b3b98f"
+
+SHIF_FUND_ID = "217e185c-3bb9-4bd0-b210-fd8a70e0806f"
+SHIF_ROUND_APPLY_ID = "798ec042-1f64-4714-bde9-98bef1cb067c"
 
 # ASSESSMENT DISPLAY CONFIGURATION
 
@@ -353,6 +362,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "lahf_lahftu_assessment",
         "unscored_sections": lahf_unscored_sections,
         "scored_criteria": lahf_scored_criteria,
+    },
+    f"{SHIF_FUND_ID}:{SHIF_ROUND_APPLY_ID}": {
+        "schema_id": "shif_apply_assessment",
+        "unscored_sections": shif_apply_unscored_sections,
+        "scored_criteria": shif_apply_scored_sections,
     },
 }
 
@@ -548,6 +562,12 @@ fund_round_data_key_mappings = {
         "location": None,
         "asset_type": None,
         "funding_one": "DdMauS",
+        "funding_two": None,
+    },
+    "SHIFAPPLY": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": "UoneMB",
         "funding_two": None,
     },
 }
@@ -2535,6 +2555,24 @@ applicant_info_mapping = {
             }
         },
     },
+    SHIF_FUND_ID: {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "oEoIjK": {"en": {"title": "Organisation name", "field_type": "textField"}},
+                "WdapOj": {"en": {"title": "Lead contact full name", "field_type": "textField"}},
+                "SAcHge": {"en": {"title": "Lead contact role", "field_type": "textField"}},
+                "YaGHMI": {"en": {"title": "Lead contact email address", "field_type": "emailAddressField"}},
+                "HZkwbv": {"en": {"title": "Lead contact contact number", "field_type": "telephoneNumberField"}},
+                "RlFFTW": {"en": {"title": "Project name", "field_type": "textField"}},
+                "UoneMB": {"en": {"title": "Total funding requested", "field_type": "numberField"}},
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "UoneMB": {"en": {"title": "Total funding requested", "field_type": "numberField"}},
+            }
+        },
+    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
@@ -2674,6 +2712,11 @@ fund_round_mapping_config = {
         "fund_id": LAHF_FUND_ID,
         "round_id": LAHF_ROUND_LAHFTU_ID,
         "type_of_application": "LAHF",
+    },
+    "SHIFAPPLY": {
+        "fund_id": SHIF_FUND_ID,
+        "round_id": SHIF_ROUND_APPLY_ID,
+        "type_of_application": "SHIF",
     },
     "RANDOM_FUND_ROUND": {
         "fund_id": uuid4(),
