@@ -48,21 +48,22 @@ def get_application(app_id, include_forms=False, as_json=False) -> dict | Applic
         return row
 
 
-def get_applications_by_references(app_refs: Iterable[str]) -> Dict[str, Applications]:
+def get_applications_by_references(app_refs: Iterable[str], include_forms: bool = False) -> Dict[str, Applications]:
     app_refs = list(app_refs)
     if not app_refs:
         return {}
 
-    stmt = (
-        select(Applications)
-        .where(
-            Applications.reference.in_(app_refs),
-            Applications.is_deleted == false(),
-        )
-        .options(noload(Applications.forms))
+    stmt = select(Applications).where(
+        Applications.reference.in_(app_refs),
+        Applications.is_deleted == false(),
     )
 
-    rows: List[Applications] = list(db.session.execute(stmt).scalars())
+    if include_forms:
+        stmt = stmt.options(joinedload(Applications.forms))
+    else:
+        stmt = stmt.options(noload(Applications.forms))
+
+    rows: List[Applications] = db.session.execute(stmt).unique().scalars().all()
     return {app.reference: app for app in rows}
 
 
