@@ -1,9 +1,12 @@
 import json
 import random
+import uuid
 
 import pytest
 import sqlalchemy
 
+from pre_award.application_store.db.models.application.applications import Applications
+from pre_award.application_store.db.models.forms.forms import Forms
 from pre_award.assessment_store.config.mappings.assessment_mapping_fund_round import COF_FUND_ID, applicant_info_mapping
 from pre_award.assessment_store.db.models import Comment, Score
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
@@ -537,3 +540,44 @@ def test_get_cof_r4w1_export_data_cy(seed_application_records):
     assert result[0]["Cod post o ased"] == "PL11RN"
     assert result[0]["Cais cyllido cyfalaf"] == "234234"
     assert result[0]["Costau refeniw (dewisol)"] == ""
+
+
+def test_application_forms_relationship(db):
+    """Unit test to verify that the forms relationship on the Applications model returns the
+    correct forms for a given application"""
+
+    # Create an application
+    app_id = str(uuid.uuid4())
+    unique_reference = f"TEST-REF-{uuid.uuid4()}"
+    application = Applications(
+        id=app_id,
+        account_id="test-account",
+        fund_id="test-fund",
+        round_id="test-round",
+        key="test-key",
+        language=None,
+        reference=unique_reference,
+        project_name="Test Project",
+        status="NOT_STARTED",
+        is_deleted=False,
+    )
+    db.session.add(application)
+    db.session.commit()
+
+    # Create two forms linked to this application
+    form1 = Forms(application_id=app_id, name="Test Form 10")
+    form2 = Forms(application_id=app_id, name="Test Form 11")
+    db.session.add_all([form1, form2])
+    db.session.commit()
+
+    # Fetch the application from the DB and check forms relationship
+    test_app = Applications.query.get(app_id)
+    assert len(test_app.forms) == 2
+    form_ids = {f.id for f in test_app.forms}
+    assert form1.id in form_ids
+    assert form2.id in form_ids
+
+    db.session.delete(form1)
+    db.session.delete(form2)
+    db.session.delete(test_app)
+    db.session.commit()

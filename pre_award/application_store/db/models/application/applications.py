@@ -37,7 +37,7 @@ class Applications(BaseModel):
     date_submitted = Column("date_submitted", DateTime())
     last_edited = Column("last_edited", DateTime(), server_default=func.now())
     is_deleted = Column(Boolean, nullable=False, default=False)
-    forms = relationship("Forms")
+    forms = relationship("Forms", back_populates="application", lazy=True)
     feedbacks = relationship("Feedback")
     end_of_application_survey = relationship("EndOfApplicationSurveyFeedback")
 

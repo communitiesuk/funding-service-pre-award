@@ -21,6 +21,7 @@ class Forms(BaseModel):
         nullable=False,
     )
     application_id = db.Column("application_id", db.ForeignKey(Applications.id), nullable=False)
+    application = db.relationship("Applications", back_populates="forms")
     json = db.Column("json", NestedMutableJson)
     status = db.Column("status", db.Enum(Status), default="NOT_STARTED", nullable=False)
     name = db.Column("name", db.String(), nullable=False)

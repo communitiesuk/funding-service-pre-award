@@ -39,7 +39,7 @@ def delete_grant_application_data(application_references: list[str]) -> None:
         print("Initialise application data deletion for reference(s): NONE PROVIDED")
         return
 
-    applications: dict[str, Applications] = get_applications_by_references(application_references)
+    applications: dict[str, Applications] = get_applications_by_references(application_references, include_forms=True)
     if not applications:
         print("No application found with reference")
         return
