@@ -1,4 +1,5 @@
 import base64
+import uuid
 from unittest.mock import ANY
 from uuid import uuid4
 
@@ -33,6 +34,7 @@ from pre_award.application_store.db.queries.application import (
     mark_application_with_requested_changes,
     process_files,
 )
+from pre_award.application_store.db.queries.application.queries import get_applications_by_references
 from pre_award.application_store.db.queries.reporting.queries import (
     export_application_statuses_to_csv,
     map_application_key_fields,
@@ -725,3 +727,56 @@ def test_check_change_requested_for_applications(application_with_forms, db):
 
     result = check_change_requested_for_applications(applications)
     assert result is True
+
+
+def test_get_applications_by_references_forms_toggle(db):
+    """
+    Test that get_applications_by_references returns applications with or without forms
+    depending on the include_forms parameter.
+    """
+
+    # Create an application
+    app_id = str(uuid.uuid4())
+    unique_reference = f"TEST-REF-{uuid.uuid4()}"
+    application = Applications(
+        id=app_id,
+        account_id="test-account",
+        fund_id="test-fund",
+        round_id="test-round",
+        key="test-key",
+        language=None,
+        reference=unique_reference,
+        project_name="Test Project",
+        status="NOT_STARTED",
+        is_deleted=False,
+    )
+    db.session.add(application)
+    db.session.commit()
+
+    # Create two forms linked to this application
+    form1 = Forms(application_id=app_id, name="Test Form 20")
+    form2 = Forms(application_id=app_id, name="Test Form 21")
+    db.session.add_all([form1, form2])
+    db.session.commit()
+
+    # Test with include_forms=False (default)
+    apps_no_forms = get_applications_by_references([unique_reference])
+    assert unique_reference in apps_no_forms
+    assert hasattr(apps_no_forms[unique_reference], "forms")
+    # forms should not be loaded (should be an empty list or not loaded)
+    assert apps_no_forms[unique_reference].forms == []
+    db.session.expire(apps_no_forms[unique_reference])
+
+    # Test with include_forms=True
+    apps_with_forms = get_applications_by_references([unique_reference], include_forms=True)
+    assert unique_reference in apps_with_forms
+    assert hasattr(apps_with_forms[unique_reference], "forms")
+    assert len(apps_with_forms[unique_reference].forms) == 2
+    form_ids = {f.id for f in apps_with_forms[unique_reference].forms}
+    assert form1.id in form_ids
+    assert form2.id in form_ids
+
+    db.session.delete(form1)
+    db.session.delete(form2)
+    db.session.delete(application)
+    db.session.commit()
