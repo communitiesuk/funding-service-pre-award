@@ -1,0 +1,1323 @@
+
+{% extends "apply/base.html" %}
+{%- from 'govuk_frontend_jinja/components/inset-text/macro.html' import govukInsetText -%}
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
+{% from "apply/partials/file-formats.html" import file_formats %}
+{% set pageHeading %}{% trans %}Full list of application questions{% endtrans %}{% endset %}
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{% trans %}{{ fund_title }}{% endtrans %}&nbsp;
+        {% trans %}{{ round_title }}{% endtrans %}
+        </span>
+        <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-m">
+    Table of contents
+  </h2>
+  <ol class="govuk-list govuk-list--number">
+    <li>
+      <a class="govuk-link" href="#organisation-details">
+        Organisation details
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#applicant-information">
+        Applicant information
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#proposal">
+        Proposal
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#risks">
+        Risks
+      </a>
+    </li>
+  </ol>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="organisation-details">
+    1. Organisation details
+  </h2>
+  <h3 class="govuk-heading-m">
+    Organisation details
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give the official name registered with companies house or trading standards.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give any alternative names that your organisation is known by.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Provide a summary or mission statement for your organisation.
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation type?
+  </h4>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Charity
+      </li>
+      <li>
+        Limited company
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Do you have a charity number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your charity number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are the names of your trustees?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Do you have a company registration number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your company registration number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are the names of your directors?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is there a parent or holding organisation?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of the parent or holding organisation?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the structure of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Upload a PDF document that shows the structure of the company, such as an organogram.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's address?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's main purpose?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    When was your organisation created?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your VAT registration number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your insurance details?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Upload a copy of your insurance details.
+    </p>
+    <p class="govuk-body">
+      The file must be a PDF.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's website?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your organisation's social media accounts?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What professional associations is your organisation a member of?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="applicant-information">
+    2. Applicant information
+  </h2>
+  <h3 class="govuk-heading-m">
+    Applicant information
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the accountable officer for your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      They must be senior to the lead officer, for example a finance director.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Role
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the lead officer for your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Role
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      A summary of the lead officer's experience and qualifications.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is the primary contact the same as the accountable officer or the lead officer?
+  </h4>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Accountable officer
+      </li>
+      <li>
+        Lead officer
+      </li>
+      <li>
+        No
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the primary contact?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Role
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Consortium information
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is this application on behalf of a consortium?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Consortium members
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can add multiple consortium members
+    </p>
+    <p class="govuk-body">
+      Consortium organisation name
+    </p>
+    <p class="govuk-body">
+      Is this organisation the lead organisation?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will this consortium generate efficiencies?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="proposal">
+    3. Proposal
+  </h2>
+  <h3 class="govuk-heading-m">
+    Proposal
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Are you applying for Pillar 1 - Foundations funding?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Are you applying for Pillar 1 - Foundations funding?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about your proposal for Pillar 1 - Foundations.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give a brief summary of what you hope to achieve.
+Refer to the prospectus for guidance.
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about stakeholders for pillar 1 - foundations
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Who are your main stakeholders?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What are you expecting stakeholders to contribute to this project?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you engage with stakeholders?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What outcomes are you expecting?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your objectives for Pillar 1 - Foundations?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Objective
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your milestones for Pillar 1 - Foundations?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Milestone
+    </p>
+    <p class="govuk-body">
+      When will you reach this milestone?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Key performance indicators (KPIs) for Pillar 1 - Foundations
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us your proposed annual target for the following KPIs.
+See the prospectus for help to answer this section.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Workforce data
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Annual qualitative and quantitative data set (Target: 1)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Response rate to annual workforce survey (Target: 50%)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Annual analysis report (Target: 1)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      National homelessness skills framework
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Consultation focus groups to develop content and design (Target: 4)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Page views
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Qualification development
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Number of new accredited courses developed
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Number of students enrolled on new accredited courses
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Learner feedback quality rating of excellent or good for level 3, 4 and 7 courses (Target: 95%)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    List any additional KPIs for Pillar 1 - Foundations
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      If you want to list additional annual KPIs, list them here.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can add multiple additional kpis
+    </p>
+    <p class="govuk-body">
+      Output
+    </p>
+    <p class="govuk-body">
+      Proposed annual target
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much Pillar 1 funding are you applying for?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 1 - workforce data?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 2 - National Homelessness Skills Framework?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 3 - qualification development?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Are you applying for Pillar 2 - Training funding?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about your proposal for Pillar 2 - Training.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give a brief summary of what you hope to achieve.  Refer to the prospectus for guidance.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your objectives for Pillar 2 - Training?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Objective
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your milestones for Pillar 2 - Training?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Milestone
+    </p>
+    <p class="govuk-body">
+      When will you reach this milestone?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Key performance indicators (KPIs) for Pillar 2 - Training
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us your proposed annual target for the following KPIs.
+See the prospectus for help to answer this section.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      National funded  training and  qualification package (essential learning)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Training sessions
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total number of online and pre-recorded training sessions (Target: 930)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Stand-alone e-learning courses (Target: 24)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Number of learners online (Target: 16,000)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Online training content
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Number of page views (Target: 16,400)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Learning pathways
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Number of learning pathways developed
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Learner feedback
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Learner feedback on training: Quality rating of excellent, very good or good (Target: 95%)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Learner feedback on training: Able to apply the knowledge gained in their role (Target: 75%)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Sector practice support
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Resources, publications and good practice support
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Information published or revised (Target: 32)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Information sessions, for example meetings, conferences and visits. Include both internal and with other National Workforce Programme grantees. (Target: 20)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Convening the sector
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total number of groups convened to develop resources and co-design training, content and sector insight reports (Target: 32)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    List any additional KPIs for Pillar 2 - Training
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      If you want to list additional annual KPIs, list them here.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Output
+    </p>
+    <p class="govuk-body">
+      Proposed annual target
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much Pillar 2 funding are you applying for?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 1 - national funded training and qualification package?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 2 - sector practice support?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about stakeholders for pillar 2 - training
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Who are your main stakeholders?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What are you expecting stakeholders to contribute to this project?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you engage with stakeholders?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What outcomes are you expecting?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Are you applying for Pillar 3 - Advice funding?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Are you applying for Pillar 3 - Advice funding?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about stakeholders for pillar 3 - advice
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Who are your main stakeholders?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What are you expecting stakeholders to contribute to this project?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you engage with stakeholders?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What outcomes are you expecting?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about your proposal for Pillar 3 - Advice.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give a brief summary of what you hope to achieve.  Refer to the prospectus for guidance.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your objectives for Pillar 3 - Advice?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Objective
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your milestones for Pillar 3 - Advice?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Milestone
+    </p>
+    <p class="govuk-body">
+      When will you reach this milestone?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Key performance indicators (KPIs) for Pillar 3 - Advice
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us your proposed annual target for the following KPIs.
+See the prospectus for help to answer this section.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Specialist housing and homelessness advice service
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Enquiries to the specialist housing and homelessness advice service
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total number of enquires by webchat or telephone (Target: 13,400)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total number of repeat enquiries by webchat or telephone (Target: 750)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total number of digital sessions based on 30 minutes window of users navigating digital content (Target: 1,000,000)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      % of all enquiries answered within specific timescale (Target: 95%)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      User feedback surveys
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      User feedback: Feel more confident in advising on the topic in the future (Target: 80%)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      End outcome: Advice led to improved or successful outcome for example, a delayed eviction or resolution of homeless application query (Target: 60%)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    List any additional KPIs for Pillar 3 - Advice
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      If you want to list additional annual KPIs, list them here.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Output
+    </p>
+    <p class="govuk-body">
+      Proposed annual target
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much Pillar 3 funding are you applying for?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 1 - specialist housing and homelessness advice service?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 2 - advice service expansion?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Are you applying for Pillar 4 - Community funding?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about your proposal for Pillar 4 - Community.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give a brief summary of what you hope to achieve.
+Refer to the prospectus for guidance.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 4 - night shelter interventions?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 5 - community intervention models?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 6 - supporting the Ending Homelessness in Communities Fund?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about stakeholders for Pillar 4 - Communities
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Who are your main stakeholders?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What are you expecting stakeholders to contribute to this project?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you engage with stakeholders?
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What outcomes are you expecting?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your objectives for Pillar 4 - Community?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Objective
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your milestones for Pillar 4 - Community?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Milestone
+    </p>
+    <p class="govuk-body">
+      When will you reach this milestone?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Key performance indicators (KPIs) for Pillar 4 - Communities
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us your proposed annual target for the following KPIs.
+See the prospectus for help to answer this section.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Training and support for homelessness and rough sleeping services
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Training
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total number of training sessions (Target: 20)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total number of regional network sessions/events (Target: 6)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Resources
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total number of best practice resources (Target: 6)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Accreditation scheme
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Number of projects engaging in the accreditation scheme (Target: 18)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Number of projects successfully completed the accreditation scheme (Target: 9)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Community recovery
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Provide a set up toolkit for new providers of community re-integration (Target: 1)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total number of projects worked with (Target: 20)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+       Total number of Local Authority areas (Target: 20)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    List any additional KPIs for Pillar 4 - Communities
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      If you want to list additional annual KPIs, list them here.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can add multiple additional kpis
+    </p>
+    <p class="govuk-body">
+      Output
+    </p>
+    <p class="govuk-body">
+      Description
+    </p>
+    <p class="govuk-body">
+      Benefit
+    </p>
+    <p class="govuk-body">
+      Proposed annual target
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much Pillar 4 funding are you applying for?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 1 - training and support?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 2 - community recovery?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 3 - organisation development?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Are you applying for multiple pillars?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will multiple pillars improve your delivery, efficiency and effectiveness?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will multiple pillars improve your delivery, efficiency and effectiveness?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you adapt your service to meet changing demands?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us how you will will work with MHCLG and other stakeholders to provide a flexible service that adapts to homelessness and rough sleeping changes.
+    </p>
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you use technology to improve and expand your service?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you use technology to improve and expand your service?
+    </p>
+    <p class="govuk-body">
+      Tell us about online, digital and other technologies.
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What outputs will you achieve?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Output description
+    </p>
+    <p class="govuk-body">
+      Anticipated outcome
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="risks">
+    4. Risks
+  </h2>
+  <h3 class="govuk-heading-m">
+    Risks
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Risks
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, recruitment timeframes, staffing capacity, public health emergency planning.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+</div>
+    </div>
+</div>
+{% endblock content %}
