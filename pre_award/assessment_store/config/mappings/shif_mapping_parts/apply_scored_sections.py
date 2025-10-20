@@ -117,7 +117,7 @@ scored_sections = [
     {
         "id": "costs_and_value_for_money",
         "weighting": 0.1,
-        "name": "Costs and value for money",
+        "name": "Costs, value for money and risk management",
         "sub_criteria": [
             {
                 "id": "costs_and_value_for_money",
