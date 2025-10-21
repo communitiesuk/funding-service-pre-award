@@ -136,6 +136,9 @@ class DevelopmentConfig(Config):
             "LAHF_LEAD_ASSESSOR",
             "LAHF_ASSESSOR",
             "LAHF_COMMENTER",
+            "SHIF_LEAD_ASSESSOR",
+            "SHIF_ASSESSOR",
+            "SHIF_COMMENTER",
         ],
         "highest_role_map": {
             "FFW": DEBUG_USER_ROLE,
@@ -154,6 +157,7 @@ class DevelopmentConfig(Config):
             "CHAM": DEBUG_USER_ROLE,
             "PFN": DEBUG_USER_ROLE,
             "LAHF": DEBUG_USER_ROLE,
+            "SHIF": DEBUG_USER_ROLE,
         },
     }
     DEBUG_USER_ACCOUNT_ID = "00000000-0000-0000-0000-000000000000"

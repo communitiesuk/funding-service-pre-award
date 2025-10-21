@@ -1,0 +1,547 @@
+
+{% extends "apply/base.html" %}
+{%- from 'govuk_frontend_jinja/components/inset-text/macro.html' import govukInsetText -%}
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
+{% from "apply/partials/file-formats.html" import file_formats %}
+{% set pageHeading %}{% trans %}Full list of application questions{% endtrans %}{% endset %}
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{% trans %}{{ fund_title }}{% endtrans %}&nbsp;
+        {% trans %}{{ round_title }}{% endtrans %}
+        </span>
+        <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-m">
+    Table of contents
+  </h2>
+  <ol class="govuk-list govuk-list--number">
+    <li>
+      <a class="govuk-link" href="#organisation-information">
+        Organisation information
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#your-proposal">
+        Your proposal
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#co-production-with-tenants">
+        Co-production with tenants
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#innovation-and-scalability">
+        Innovation and scalability
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#costs,-value-for-money-and-risk-management">
+        Costs, value for money and risk management
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#outcomes-and-measuring-impact">
+        Outcomes and measuring impact
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#declarations">
+        Declarations
+      </a>
+    </li>
+  </ol>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="organisation-information">
+    1. Organisation information
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's name?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      If the organisation is known by more than one name, this should be the official name registered with Companies House or the Charity Commission
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the lead contact in your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This will be the main point of contact for any queries we may have about your application.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Organisation
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Role
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Contact number
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Does your organisation have alternative names?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Does your organisation have alternative names
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us any alternative names for your organisation
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can add multiple tell us any alternative names for your organisation
+    </p>
+    <p class="govuk-body">
+      Alternative organisation name
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is your organisation controlled by another entity?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Is your organisation controlled by another entity
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of the entity that controls your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the name of the entity that controls your organisation
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Are you submitting a consortium bid for funding with one or more organisations?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Are you submitting a consortium bid for funding with one or more organisations
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us the details of all the other organisations involved in the consortium bid or partnership
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can add multiple tell us the details of all the other organisations involved in the consortium bid or partnership
+    </p>
+    <p class="govuk-body">
+      Organisation name
+    </p>
+    <p class="govuk-body">
+      Alternative name (optional)
+    </p>
+    <p class="govuk-body">
+      Organisation address
+    </p>
+    <p class="govuk-body">
+      Parent organisation or holding company name (if applicable)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="your-proposal">
+    2. Your proposal
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of your project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the name of your project
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What challenges are you trying to address?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is your problem statement. Provide any supporting evidence you may have, including evidence from tenants.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will the proposal address the challenges specified in your problem statement?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        the objectives of your project and they align with the grant's objectives as set out in the prospectus
+      </li>
+      <li>
+        planned activities and how they will benefit tenants
+      </li>
+      <li>
+        key milestones and timescales (more detail can be set out in a separate project plan)
+      </li>
+    </ul>
+    <p class="govuk-body">
+      For consortium bids, clearly outline each partner's role in delivering the projects.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 700 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload your project plan (optional)
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      The document must be no more than 3 pages.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      PDF or Excel files only, maximum 10MB
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who will be involved in implementing the proposal?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This can include consortium members, tenant representatives, public sector partners, voluntary and community sector organisations (VCSOs) and technology companies.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="co-production-with-tenants">
+    3. Co-production with tenants
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How, and to what extent, have tenants been involved in co-producing your proposal?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include details on how will they be involved in:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        the design and delivery of the project
+      </li>
+      <li>
+        monitoring the outcomes of the project
+      </li>
+    </ul>
+    <p class="govuk-body">
+      Applicants will score higher if they can demonstrate projects are tenant-led, or a high level of tenant involvement at all stages of the design and delivery of the project.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 350 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="innovation-and-scalability">
+    4. Innovation and scalability
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How is the proposed project innovative?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      To be deemed 'innovative', the project must:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        introduce new or significantly improved approaches, technologies or partnerships to enhance tenant outcomes and improve overall resident experience
+      </li>
+      <li>
+        challenge conventional practices across the sector more widely and respond creatively to tenant needs
+      </li>
+    </ul>
+    <p class="govuk-body">
+      The grant can be used to expand or build upon an existing project, but cannot be used to fund business as usual activities.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How does this project have the potential to be scaled up or replicated on a wider scale?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Describe how the learnings from this project could have benefits for social housing tenants more broadly across the country.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="costs,-value-for-money-and-risk-management">
+    5. Costs, value for money and risk management
+  </h2>
+  <h4 class="govuk-heading-s">
+    Are you seeking funding to cover the total cost of the project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Are you seeking funding to cover the total cost of the project
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much funding are you seeking and what is the total cost of your project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is the total amount of funding you are applying for from the Social Housing Innovation Fund. Include any non-recoverable VAT within your project total cost.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total funding requested
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Total cost of project
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you fund the outstanding costs of the project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you fund the outstanding costs of the project?
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much funding are you seeking for your project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is the total amount of funding you are applying for from the Social Housing Innovation Fund.
+    </p>
+    <p class="govuk-body">
+      The indicative range of funding per project will be £60,000 to £100,000, with the latter being the maximum amount awarded. Bids under £60,000 will still be considered.
+    </p>
+    <p class="govuk-body">
+      Include any non-recoverable VAT within your project total cost.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Does this include non-recoverable VAT costs?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe your project budget and assumptions
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This should include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        the key costs for your project
+      </li>
+      <li>
+        your assumptions
+      </li>
+      <li>
+        how you have assessed budget lines of expenditure
+      </li>
+    </ul>
+    <p class="govuk-body">
+      For example, if you are setting out staffing costs, provide a breakdown of each staff member and their role. If you are setting out supply costs, set out how you have estimated these costs.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload your project budget with a breakdown of the key costs of your project
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      The document must be no more than 3 pages.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      PDF or Excel files only, maximum 10MB
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will your project deliver value for money?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 200 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What risks have you identified, and how will you manage and mitigate these risks?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 200 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="outcomes-and-measuring-impact">
+    6. Outcomes and measuring impact
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe the positive impacts your project is expected to have
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This should include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        who and how many people will benefit
+      </li>
+      <li>
+        when you expect to see these benefits
+      </li>
+      <li>
+        how will the project improve tenants’ experience of social housing
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What key performance indicators (KPIs) you will use to monitor the success of your project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Describe how you will use both quantitative and qualitative data to measure success. Finalised KPIs and targets must be agreed with MHCLG if your application is successful.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="declarations">
+    7. Declarations
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Confirm that you have read and agree with the following declarations
+  </h4>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        My organisation will not make a profit from activities supported by grant funding
+      </li>
+      <li>
+        Any awarded funding will not be used to undertake political activity nor support ideological or extremist causes ('extremism' is defined in the 2011 Prevent strategy (opens in new tab) as vocal or active opposition to fundamental British values, including democracy, the rule of law, individual liberty and mutual respect and tolerance of different faiths and beliefs)
+      </li>
+      <li>
+        The information provided in this application is accurate to the best of my knowledge on the date of submission
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        I confirm that I have read and agree with the declarations
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+</div>
+    </div>
+</div>
+{% endblock content %}

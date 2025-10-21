@@ -214,6 +214,16 @@ def ordered_themes(fund_round_short_name):
             "key_dates",
             "declarations",
         ],
+        "SHIFAPPLY": [
+            "organisation_information",
+            "declarations",
+            "your_proposal",
+            "co_production_with_tenants",
+            "innovation_and_scalability",
+            "costs_and_value_for_money",
+            "risk_management",
+            "outcomes_and_measuring_impact",
+        ],
     }
 
     if fund_round_short_name in [
