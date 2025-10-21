@@ -39,8 +39,9 @@ scored_sections = [
                                 "field_id": "PdxtmT",
                                 "form_name": "shif-apply-your-proposal",
                                 "field_type": "clientSideFileUploadField",
-                                "presentation_type": "text",
+                                "presentation_type": "s3bucketPath",
                                 "question": "Upload your project plan",
+                                "path": "upload-your-project-plan-optional",
                             },
                             {
                                 "field_id": "Fxpsiw",

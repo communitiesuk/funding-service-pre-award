@@ -77,7 +77,7 @@ LOADER_CONFIG = {
         "owner_organisation_name": None,
         "owner_organisation_shortname": None,
         "owner_organisation_logo_uri": None,
-        "name_json": {"en": "Social housing innovation fund", "cy": ""},
+        "name_json": {"en": "Social Housing Innovation Fund", "cy": ""},
         "title_json": {"en": "funding to improve social housing quality and strengthen tenants' voices", "cy": ""},
         "description_json": {
             "en": "Improving the quality of social housing and strengthening ‘tenant voice’ are key ambitions for this government. Strengthening tenant voice means creating meaningful opportunities for tenants to share their ideas and tell their landlords what they think about how their homes are managed. It also means that landlords listen to tenants’ views and make changes based on what their tenants think.   ",
