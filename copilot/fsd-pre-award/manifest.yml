@@ -252,3 +252,4 @@ environments:
       POST_AWARD_SUBMIT_HOST: "https://submit-monitoring-data.access-funding.communities.gov.uk"
       SENTRY_TRACES_SAMPLE_RATE: 0.1
       FUND_APPLICATION_BUILDER_HOST: "https://fund-application-builder.access-funding.communities.gov.uk"
+      FORM_DESIGNER_HOST: "https://form-designer.access-funding.communities.gov.uk"
