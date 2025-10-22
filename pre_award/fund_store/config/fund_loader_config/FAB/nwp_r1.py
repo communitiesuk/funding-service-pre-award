@@ -20,13 +20,21 @@ LOADER_CONFIG = {
             "tree_path": "1070.1.2.1",
             "form_name_json": {"en": "nwp-r1-applicant-information", "cy": ""},
         },
-        {"section_name": {"en": "3. Proposal", "cy": ""}, "tree_path": "1070.1.3", "requires_feedback": None},
+        {
+            "section_name": {"en": "3. Proposal", "cy": ""},
+            "tree_path": "1070.1.3",
+            "requires_feedback": None,
+        },
         {
             "section_name": {"en": "3.1 Proposal", "cy": ""},
             "tree_path": "1070.1.3.1",
             "form_name_json": {"en": "nwp-r1-proposal", "cy": ""},
         },
-        {"section_name": {"en": "4. Risks", "cy": ""}, "tree_path": "1070.1.4", "requires_feedback": None},
+        {
+            "section_name": {"en": "4. Risks", "cy": ""},
+            "tree_path": "1070.1.4",
+            "requires_feedback": None,
+        },
         {
             "section_name": {"en": "4.1 Risk", "cy": ""},
             "tree_path": "1070.1.4.1",
@@ -44,7 +52,7 @@ LOADER_CONFIG = {
         "owner_organisation_logo_uri": "",
         "name_json": {"en": "National Workforce Programme", "cy": ""},
         "title_json": {
-            "en": "funding to develop the expertise, skills and capacity of the frontline homeless workforce",
+            "en": "funding to develop the expertise, skills and capacity of the homelessness workforce",
             "cy": "",
         },
         "description_json": {
