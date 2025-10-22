@@ -135,7 +135,16 @@ environments:
     variables:
       ALLOW_ASSESSMENT_LOGIN_VIA_MAGIC_LINK: true
     count:
-      spot: 2
+      range: 2-4
+      cooldown:
+        in: 60s
+        out: 30s
+      cpu_percentage:
+        value: 70
+      memory_percentage:
+        value: 80
+      requests: 30
+      response_time: 2s
     cpu: 1024
     memory: 2048
     sidecars:
