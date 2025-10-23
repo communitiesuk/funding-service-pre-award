@@ -224,6 +224,12 @@ def ordered_themes(fund_round_short_name):
             "risk_management",
             "outcomes_and_measuring_impact",
         ],
+        "NWP_R1": [
+            # "organisation_details",
+            # "applicant_information",
+            # "proposal",
+            # "risk",
+        ],
     }
 
     if fund_round_short_name in [

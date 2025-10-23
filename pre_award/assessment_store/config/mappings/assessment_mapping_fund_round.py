@@ -128,6 +128,12 @@ from pre_award.assessment_store.config.mappings.nstf_mapping_parts.r2_scored_cri
 from pre_award.assessment_store.config.mappings.nstf_mapping_parts.r2_unscored_sections import (
     unscored_sections as nstf_unscored_sections,
 )
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.r1_scored_sections import (
+    scored_sections as nwp_r1_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.r1_unscored_sections import (
+    unscored_sections as nwp_r1_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.pfn_mapping_parts.rp_scored_sections import (
     scored_sections as pfn_scored_sections,
 )
@@ -209,6 +215,9 @@ LAHF_ROUND_LAHFTU_ID = "6bb128c7-3ae9-4192-bee4-99b6b5b3b98f"
 
 SHIF_FUND_ID = "217e185c-3bb9-4bd0-b210-fd8a70e0806f"
 SHIF_ROUND_APPLY_ID = "798ec042-1f64-4714-bde9-98bef1cb067c"
+
+NWP_FUND_ID = "44676f65-616d-4819-af7a-a457f693f008"
+NWP_ROUND_R1_ID = "e87283ae-e514-4a5e-bcaa-b32526fad721"
 
 # ASSESSMENT DISPLAY CONFIGURATION
 
@@ -367,6 +376,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "shif_apply_assessment",
         "unscored_sections": shif_apply_unscored_sections,
         "scored_criteria": shif_apply_scored_sections,
+    },
+    f"{NWP_FUND_ID}:{NWP_ROUND_R1_ID}": {
+        "schema_id": "nwp_r1_assessment",
+        "unscored_sections": nwp_r1_unscored_sections,
+        "scored_criteria": nwp_r1_scored_sections,
     },
 }
 
