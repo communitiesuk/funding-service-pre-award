@@ -107,10 +107,10 @@ def update_or_create_form(url_path: str, json_content: dict = None) -> str:
 
             form_def = FormDefinition(
                 url_path=url_path,
-                display_name=display_name,
+                display_name=display_name or url_path.replace("-", " ").capitalize(),
                 published_at=func.now(),
                 draft_json=json_content,
-                published_json=json_content,
+                published_json=json_content if not url_path.startswith("nwp-r1") else {},
             )
             db.session.add(form_def)
             print(
