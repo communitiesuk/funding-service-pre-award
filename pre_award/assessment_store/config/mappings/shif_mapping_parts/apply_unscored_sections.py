@@ -28,13 +28,6 @@ unscored_sections = [
                                 "question": "Full name",
                             },
                             {
-                                "field_id": "qOyurP",
-                                "form_name": "shif-apply-organisation-information",
-                                "field_type": "textField",
-                                "presentation_type": "text",
-                                "question": "Organisation",
-                            },
-                            {
                                 "field_id": "SAcHge",
                                 "form_name": "shif-apply-organisation-information",
                                 "field_type": "textField",
@@ -56,6 +49,13 @@ unscored_sections = [
                                 "question": "Contact number",
                             },
                             {
+                                "field_id": "wzawYs",
+                                "form_name": "shif-apply-organisation-information",
+                                "field_type": "ukAddressField",
+                                "presentation_type": "text",
+                                "question": "What is your organisation address?",
+                            },
+                            {
                                 "field_id": "Hdpmjk",
                                 "form_name": "shif-apply-organisation-information",
                                 "field_type": "yesNoField",
@@ -68,7 +68,7 @@ unscored_sections = [
                                 "field_type": "multiInputField",
                                 "presentation_type": "table",
                                 "question": [
-                                    "Tell us any alternative names for your organisation",
+                                    "",
                                     {
                                         "UWIOHw": {
                                             "column_title": "Alternative organisation names",
@@ -76,6 +76,48 @@ unscored_sections = [
                                         },
                                     },
                                 ],
+                            },
+                            {
+                                "field_id": "xCuiwp",
+                                "form_name": "shif-apply-organisation-information",
+                                "field_type": "radiosField",
+                                "presentation_type": "text",
+                                "question": "What is the legal status of your organisation?",
+                            },
+                            {
+                                "field_id": "FAxOez",
+                                "form_name": "shif-apply-organisation-information",
+                                "field_type": "yesNoField",
+                                "presentation_type": "text",
+                                "question": "Is your organisation a charity?",
+                            },
+                            {
+                                "field_id": "jWNmMa",
+                                "form_name": "shif-apply-organisation-information",
+                                "field_type": "radiosField",
+                                "presentation_type": "text",
+                                "question": "Where is the charity registered?",
+                            },
+                            {
+                                "field_id": "fidvDS",
+                                "form_name": "shif-apply-organisation-information",
+                                "field_type": "textField",
+                                "presentation_type": "text",
+                                "question": "What is your charity number?",
+                            },
+                            {
+                                "field_id": "XutYBr",
+                                "form_name": "shif-apply-organisation-information",
+                                "field_type": "yesNoField",
+                                "presentation_type": "text",
+                                "question": "Do you have a company registration number?",
+                            },
+                            {
+                                "field_id": "siMJHb",
+                                "form_name": "shif-apply-organisation-information",
+                                "field_type": "textField",
+                                "presentation_type": "text",
+                                "question": "What is your company registration number?",
                             },
                             {
                                 "field_id": "RIIeoh",
