@@ -19,21 +19,21 @@ scored_sections = [
                                 "form_name": "shif-apply-your-proposal",
                                 "field_type": "textField",
                                 "presentation_type": "text",
-                                "question": "What is the name of your project",
+                                "question": "What is the name of your project?",
                             },
                             {
                                 "field_id": "lTFJnY",
                                 "form_name": "shif-apply-your-proposal",
                                 "field_type": "freeTextField",
                                 "presentation_type": "text",
-                                "question": "What challenges are you trying to address",
+                                "question": "What challenges are you trying to address?",
                             },
                             {
                                 "field_id": "FFNuZw",
                                 "form_name": "shif-apply-your-proposal",
                                 "field_type": "freeTextField",
                                 "presentation_type": "text",
-                                "question": "How will the proposal address the challenges specified in your problem statement",
+                                "question": "How will the proposal address the challenges specified in your problem statement?",
                             },
                             {
                                 "field_id": "PdxtmT",
@@ -41,14 +41,14 @@ scored_sections = [
                                 "field_type": "clientSideFileUploadField",
                                 "presentation_type": "s3bucketPath",
                                 "question": "Upload your project plan",
-                                "path": "upload-your-project-plan-optional",
+                                "path": "upload-your-project-plan",
                             },
                             {
                                 "field_id": "Fxpsiw",
                                 "form_name": "shif-apply-your-proposal",
                                 "field_type": "freeTextField",
                                 "presentation_type": "text",
-                                "question": "Who will be involved in implementing the proposal",
+                                "question": "Who will be involved in implementing the proposal?",
                             },
                         ],
                     }
@@ -74,7 +74,7 @@ scored_sections = [
                                 "form_name": "shif-apply-co-production-with-tenants",
                                 "field_type": "freeTextField",
                                 "presentation_type": "text",
-                                "question": "How, and to what extent, have tenants been involved in co-producing your proposal",
+                                "question": "How, and to what extent, have tenants been involved in co-producing your proposal?",
                             },
                         ],
                     }
@@ -133,7 +133,7 @@ scored_sections = [
                                 "form_name": "shif-apply-costs-and-value-for-money",
                                 "field_type": "yesNoField",
                                 "presentation_type": "text",
-                                "question": "Are you seeking funding to cover the total cost of the project",
+                                "question": "Are you seeking funding to cover the total cost of the project?",
                             },
                             {
                                 "field_id": "UoneMB",
@@ -161,7 +161,7 @@ scored_sections = [
                                 "form_name": "shif-apply-costs-and-value-for-money",
                                 "field_type": "numberField",
                                 "presentation_type": "text",
-                                "question": "How much funding are you seeking for your project",
+                                "question": "How much funding are you seeking for your project?",
                             },
                             {
                                 "field_id": "eeNMwb",
@@ -181,8 +181,9 @@ scored_sections = [
                                 "field_id": "KVZvBK",
                                 "form_name": "shif-apply-costs-and-value-for-money",
                                 "field_type": "clientSideFileUploadField",
-                                "presentation_type": "text",
+                                "presentation_type": "s3bucketPath",
                                 "question": "Upload your project budget with a breakdown of the key costs of your project",
+                                "path": "upload-your-project-budget-with-a-breakdown-of-the-key-costs-of-your-project",
                             },
                             {
                                 "field_id": "gRddtf",
@@ -208,7 +209,7 @@ scored_sections = [
                                 "form_name": "shif-apply-risk-management",
                                 "field_type": "freeTextField",
                                 "presentation_type": "text",
-                                "question": "What risks have you identified, and how will you manage and mitigate these risks",
+                                "question": "What risks have you identified, and how will you manage and mitigate these risks?",
                             },
                         ],
                     }
