@@ -10,7 +10,11 @@ LOADER_CONFIG = {
             "tree_path": "1069.1.1.1",
             "form_name_json": {"en": "shif-apply-organisation-information", "cy": ""},
         },
-        {"section_name": {"en": "2. Your proposal", "cy": ""}, "tree_path": "1069.1.2", "requires_feedback": None},
+        {
+            "section_name": {"en": "2. Your proposal", "cy": ""},
+            "tree_path": "1069.1.2",
+            "requires_feedback": None,
+        },
         {
             "section_name": {"en": "2.1 Your proposal", "cy": ""},
             "tree_path": "1069.1.2.1",
@@ -37,7 +41,10 @@ LOADER_CONFIG = {
             "form_name_json": {"en": "shif-apply-innovation-and-scalability", "cy": ""},
         },
         {
-            "section_name": {"en": "5. Costs, value for money and risk management", "cy": ""},
+            "section_name": {
+                "en": "5. Costs, value for money and risk management",
+                "cy": "",
+            },
             "tree_path": "1069.1.5",
             "requires_feedback": None,
         },
@@ -61,7 +68,11 @@ LOADER_CONFIG = {
             "tree_path": "1069.1.6.1",
             "form_name_json": {"en": "shif-apply-outcomes-and-measuring-impact", "cy": ""},
         },
-        {"section_name": {"en": "7. Declarations", "cy": ""}, "tree_path": "1069.1.7", "requires_feedback": None},
+        {
+            "section_name": {"en": "7. Declarations", "cy": ""},
+            "tree_path": "1069.1.7",
+            "requires_feedback": None,
+        },
         {
             "section_name": {"en": "7.1 Declarations", "cy": ""},
             "tree_path": "1069.1.7.1",
@@ -78,7 +89,10 @@ LOADER_CONFIG = {
         "owner_organisation_shortname": None,
         "owner_organisation_logo_uri": None,
         "name_json": {"en": "Social Housing Innovation Fund", "cy": ""},
-        "title_json": {"en": "funding to improve social housing quality and strengthen tenants' voices", "cy": ""},
+        "title_json": {
+            "en": "funding to improve social housing quality and strengthen tenants' voices",
+            "cy": "",
+        },
         "description_json": {
             "en": "Improving the quality of social housing and strengthening ‘tenant voice’ are key ambitions for this government. Strengthening tenant voice means creating meaningful opportunities for tenants to share their ideas and tell their landlords what they think about how their homes are managed. It also means that landlords listen to tenants’ views and make changes based on what their tenants think.   ",
             "cy": "",
@@ -97,7 +111,10 @@ LOADER_CONFIG = {
         "prospectus": "https://www.gov.uk/government/publications/social-housing-innovation-fund-prospectus",
         "privacy_notice": "https://www.gov.uk/government/publications/social-housing-innovation-fund-prospectus/social-housing-resident-experience-innovation-fund-privacy-notice",
         "contact_email": "socialhousinginnovationfund@communities.gov.uk",
-        "instructions_json": {"en": "", "cy": None},
+        "instructions_json": {
+            "en": "Read the fund's prospectus before you apply.",
+            "cy": None,
+        },
         "feedback_link": "",
         "project_name_field_id": "oEoIjK",
         "application_guidance_json": {
