@@ -109,7 +109,7 @@ LOADER_CONFIG = {
         "reminder_date": "2026-01-05T12:00:00",
         "assessment_deadline": "2026-02-09T12:00:00",
         "prospectus": "https://www.gov.uk/government/publications/social-housing-innovation-fund-prospectus",
-        "privacy_notice": "https://www.gov.uk/government/publications/social-housing-innovation-fund-prospectus/social-housing-resident-experience-innovation-fund-privacy-notice",
+        "privacy_notice": "https://www.gov.uk/government/publications/social-housing-innovation-fund-prospectus/social-housing-innovation-fund-privacy-notice",
         "contact_email": "socialhousinginnovationfund@communities.gov.uk",
         "instructions_json": {
             "en": "Read the fund's prospectus before you apply.",
