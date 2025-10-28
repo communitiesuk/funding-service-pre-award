@@ -90,7 +90,7 @@ LOADER_CONFIG = {
         "owner_organisation_logo_uri": None,
         "name_json": {"en": "Social Housing Innovation Fund", "cy": ""},
         "title_json": {
-            "en": "funding to improve social housing quality and strengthen tenants' voices",
+            "en": "funding to strengthen social housing tenants’ voices",
             "cy": "",
         },
         "description_json": {
@@ -112,7 +112,7 @@ LOADER_CONFIG = {
         "privacy_notice": "https://www.gov.uk/government/publications/social-housing-innovation-fund-prospectus/social-housing-innovation-fund-privacy-notice",
         "contact_email": "socialhousinginnovationfund@communities.gov.uk",
         "instructions_json": {
-            "en": "Read the fund's prospectus before you apply.",
+            "en": "",
             "cy": None,
         },
         "feedback_link": "",
