@@ -1,0 +1,825 @@
+
+{% extends "apply/base.html" %}
+{%- from 'govuk_frontend_jinja/components/inset-text/macro.html' import govukInsetText -%}
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
+{% from "apply/partials/file-formats.html" import file_formats %}
+{% set pageHeading %}{% trans %}Full list of application questions{% endtrans %}{% endset %}
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{% trans %}{{ fund_title }}{% endtrans %}&nbsp;
+        {% trans %}{{ round_title }}{% endtrans %}
+        </span>
+        <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-m">
+    Table of contents
+  </h2>
+  <ol class="govuk-list govuk-list--number">
+    <li>
+      <a class="govuk-link" href="#organisation-information">
+        Organisation information
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#applicant-information">
+        Applicant information
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#skills-and-experience">
+        Skills and experience
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#proposal">
+        Proposal
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#outcomes-and-outputs">
+        Outcomes and outputs
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#cost-and-value-for-money">
+        Cost and value for money
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#stakeholders">
+        Stakeholders
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#risks">
+        Risks
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#declaration">
+        Declaration
+      </a>
+    </li>
+  </ol>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="organisation-information">
+    1. Organisation information
+  </h2>
+  <h3 class="govuk-heading-m">
+    Organisation information
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give the official name registered with companies house or trading standards.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give any alternative names that your organisation is known by.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Provide a summary or mission statement for your organisation.
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation type?
+  </h4>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Charity
+      </li>
+      <li>
+        Limited company
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Do you have a charity number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your charity number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are the names of your trustees?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Do you have a company registration number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your company registration number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are the names of your directors?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is there a parent or holding organisation?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the name of the parent or holding organisation?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the structure of your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      What is the structure of your organisation?
+    </p>
+    <p class="govuk-body">
+      Upload a PDF document that shows the structure of the company, such as an organogram.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's address?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's main purpose?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    When was your organisation created?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your VAT registration number?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your insurance details?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Upload your current insurance certificate.
+    </p>
+    <p class="govuk-body">
+      The file must be a PDF.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's website?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your organisation's social media accounts?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What professional associations is your organisation a member of?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="applicant-information">
+    2. Applicant information
+  </h2>
+  <h3 class="govuk-heading-m">
+    Applicant information
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the accountable officer for your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      They must be senior to the lead officer, for example a finance director.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Role
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the lead officer for your organisation?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Role
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      A summary of the lead officer's experience and qualifications.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is the primary contact the same as the accountable officer or the lead officer?
+  </h4>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Accountable officer
+      </li>
+      <li>
+        Lead officer
+      </li>
+      <li>
+        No
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the primary contact?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Role
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Consortium information
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is this application on behalf of a consortium?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Consortium members
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can add multiple consortium members
+    </p>
+    <p class="govuk-body">
+      Consortium organisation name
+    </p>
+    <p class="govuk-body">
+      Is this organisation the lead organisation?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will this consortium generate efficiencies?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="skills-and-experience">
+    3. Skills and experience
+  </h2>
+  <h3 class="govuk-heading-m">
+    Skills and experience
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about your recent contract experience in similar areas of work.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us about your recent contract experience in similar areas of work.
+    </p>
+    <p class="govuk-body">
+      Include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        a description of the work
+      </li>
+      <li>
+        roles
+      </li>
+      <li>
+        partnership working with key agencies and stakeholders
+      </li>
+      <li>
+        outcomes
+      </li>
+      <li>
+        value
+      </li>
+    </ul>
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What do you feel are the challenges for the professional and frontline workforce?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us about the challenges for the professional and frontline workforce.
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Reference 1
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give the names of two references. They should be representatives from organisations where you have carried out commissioned work or projects.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Reference 1
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Organisation
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Position
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Summary of commissioned work or projects
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Reference 2
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give the names of two references. They should be representatives from organisations where you have carried out commissioned work or projects.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Reference 2
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Organisation
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Position
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Summary of commissioned work or projects
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="proposal">
+    4. Proposal
+  </h2>
+  <h3 class="govuk-heading-m">
+    Proposal
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about your proposal.
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give a brief summary of what you hope to achieve.
+Refer to the prospectus for guidance.
+    </p>
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your objectives?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Objective
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your milestones?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Milestone
+    </p>
+    <p class="govuk-body">
+      When will you reach this milestone?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Are you applying for multiple pillars?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will multiple pillars improve your delivery, efficiency and effectiveness?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will multiple pillars improve your delivery, efficiency and effectiveness?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you adapt your service to meet changing demands?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us how you will will work with MHCLG and other stakeholders to provide a flexible service that adapts to homelessness and rough sleeping changes.
+    </p>
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you use technology to improve and expand your service?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      How will you use technology to improve and expand your service?
+    </p>
+    <p class="govuk-body">
+      Tell us about online, digital and other technologies.
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="outcomes-and-outputs">
+    5. Outcomes and outputs
+  </h2>
+  <h3 class="govuk-heading-m">
+    Outputs and outcomes
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Key performance indicators (KPIs) for workforce data
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us your proposed annual target for the following KPIs.
+See the prospectus for help to answer this section.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Annual qualitative and quantitative data set (Target: 1)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Response rate to annual workforce survey (Target: 50%)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Annual analysis report (Target: 1)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Key performance indicators (KPIs) for the national homelessness skills framework
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us your proposed annual target for the following KPIs.
+See the prospectus for help to answer this section.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Consultation focus groups to develop content and design (Target: 4)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Page views
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Key performance indicators (KPIs) for qualification development
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us your proposed annual target for the following KPIs.
+See the prospectus for help to answer this section.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Number of new accredited courses developed
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Number of students enrolled on new accredited courses
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Learner feedback quality rating of excellent or good for level 3, 4 and 7 courses (Target: 95%)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Additional KPIs
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can add multiple additional kpis
+    </p>
+    <p class="govuk-body">
+      Output
+    </p>
+    <p class="govuk-body">
+      Proposed annual target
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What outputs will you achieve?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="cost-and-value-for-money">
+    6. Cost and value for money
+  </h2>
+  <h3 class="govuk-heading-m">
+    Cost and value for money
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much Pillar 1 funding are you applying for?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 1 - workforce data?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 2 - National Homelessness Skills Framework?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 3 - qualification development?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much do you plan to spend on output 4 - recruitment?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Description of spending
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1 (April 2026 to March 2027)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2 (April 2027 to March 2028)
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3 (April 2028 to March 2029)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="stakeholders">
+    7. Stakeholders
+  </h2>
+  <h3 class="govuk-heading-m">
+    Stakeholders
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who are your main stakeholders?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are you expecting stakeholders to contribute to this project?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will you engage with stakeholders?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What outcomes are you expecting?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="risks">
+    8. Risks
+  </h2>
+  <h3 class="govuk-heading-m">
+    Risks
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Risks
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, recruitment timeframes, staffing capacity, public health emergency planning.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="declaration">
+    9. Declaration
+  </h2>
+  <h3 class="govuk-heading-m">
+    What we need to know
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Confirm that you have read and agree with the following declarations
+  </h4>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        My organisation has a UK based business bank account in the name of the organisation
+The information I've provided in this application is accurate to the best of my knowledge on the date of submission
+My organisation has a safeguarding, data protection and health and safety policy
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        I confirm that I have read and agree with the declarations
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+</div>
+    </div>
+</div>
+{% endblock content %}
