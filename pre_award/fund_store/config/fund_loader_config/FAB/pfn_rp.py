@@ -122,7 +122,7 @@ LOADER_CONFIG = {
         "assessment_deadline": "2025-12-30T23:59:00",
         "prospectus": "https://www.gov.uk/government/publications/plan-for-neighbourhoods-prospectus-and-tools/plan-for-neighbourhoods-prospectus",
         "privacy_notice": "https://www.gov.uk/government/publications/plan-for-neighbourhoods-regeneration-plan-guidance/plan-for-neighbourhoods-privacy-notice-for-regeneration-plan-submissions-form",
-        "contact_email": "PfNcorrespondence@communities.gov.uk",
+        "contact_email": "pippcorrespondence@communities.gov.uk",
         "instructions_json": {
             "en": "",
             "cy": None,
