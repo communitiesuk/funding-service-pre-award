@@ -128,6 +128,30 @@ from pre_award.assessment_store.config.mappings.nstf_mapping_parts.r2_scored_cri
 from pre_award.assessment_store.config.mappings.nstf_mapping_parts.r2_unscored_sections import (
     unscored_sections as nstf_unscored_sections,
 )
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.pill1_scored_sections import (
+    scored_sections as nwp_pill1_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.pill1_unscored_sections import (
+    unscored_sections as nwp_pill1_unscored_sections,
+)
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.pill2_scored_sections import (
+    scored_sections as nwp_pill2_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.pill2_unscored_sections import (
+    unscored_sections as nwp_pill2_unscored_sections,
+)
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.pill3_scored_sections import (
+    scored_sections as nwp_pill3_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.pill3_unscored_sections import (
+    unscored_sections as nwp_pill3_unscored_sections,
+)
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.pill4_scored_sections import (
+    scored_sections as nwp_pill4_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.nwp_mapping_parts.pill4_unscored_sections import (
+    unscored_sections as nwp_pill4_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.pfn_mapping_parts.rp_scored_sections import (
     scored_sections as pfn_scored_sections,
 )
@@ -209,6 +233,12 @@ LAHF_ROUND_LAHFTU_ID = "6bb128c7-3ae9-4192-bee4-99b6b5b3b98f"
 
 SHIF_FUND_ID = "217e185c-3bb9-4bd0-b210-fd8a70e0806f"
 SHIF_ROUND_APPLY_ID = "798ec042-1f64-4714-bde9-98bef1cb067c"
+
+NWP_FUND_ID = "44676f65-616d-4819-af7a-a457f693f008"
+NWP_ROUND_PILL1_ID = "e87283ae-e514-4a5e-bcaa-b32526fad721"
+NWP_ROUND_PILL2_ID = "8b48609f-8f2f-4646-95b9-735175b90fc5"
+NWP_ROUND_PILL3_ID = "1cdc93fb-1133-4cb9-b791-ca277715fe54"
+NWP_ROUND_PILL4_ID = "7f7fb87b-7336-4c2a-b83c-98c7830e835c"
 
 # ASSESSMENT DISPLAY CONFIGURATION
 
@@ -367,6 +397,26 @@ fund_round_to_assessment_mapping = {
         "schema_id": "shif_apply_assessment",
         "unscored_sections": shif_apply_unscored_sections,
         "scored_criteria": shif_apply_scored_sections,
+    },
+    f"{NWP_FUND_ID}:{NWP_ROUND_PILL1_ID}": {
+        "schema_id": "nwp_pill1_assessment",
+        "unscored_sections": nwp_pill1_unscored_sections,
+        "scored_criteria": nwp_pill1_scored_sections,
+    },
+    f"{NWP_FUND_ID}:{NWP_ROUND_PILL2_ID}": {
+        "schema_id": "nwp_pill2_assessment",
+        "unscored_sections": nwp_pill2_unscored_sections,
+        "scored_criteria": nwp_pill2_scored_sections,
+    },
+    f"{NWP_FUND_ID}:{NWP_ROUND_PILL3_ID}": {
+        "schema_id": "nwp_pill3_assessment",
+        "unscored_sections": nwp_pill3_unscored_sections,
+        "scored_criteria": nwp_pill3_scored_sections,
+    },
+    f"{NWP_FUND_ID}:{NWP_ROUND_PILL4_ID}": {
+        "schema_id": "nwp_pill4_assessment",
+        "unscored_sections": nwp_pill4_unscored_sections,
+        "scored_criteria": nwp_pill4_scored_sections,
     },
 }
 
@@ -568,6 +618,30 @@ fund_round_data_key_mappings = {
         "location": None,
         "asset_type": None,
         "funding_one": "UoneMB",
+        "funding_two": None,
+    },
+    "NWPPILL1": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": "fZBaXW",
+        "funding_two": None,
+    },
+    "NWPPILL2": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": "BmmObA",
+        "funding_two": None,
+    },
+    "NWPPILL3": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": "tNAMxP",
+        "funding_two": None,
+    },
+    "NWPPILL4": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": "mhpCON",
         "funding_two": None,
     },
 }
@@ -2573,6 +2647,74 @@ applicant_info_mapping = {
             }
         },
     },
+    f"{NWP_FUND_ID}:{NWP_ROUND_PILL1_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "GtoolQ": {"en": {"title": "Organisation name", "field_type": "textField"}},
+                "GEyQSq": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
+                "Owsgne": {"en": {"title": "Primary contact role", "field_type": "textField"}},
+                "WOWWfM": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
+                "oExeYu": {"en": {"title": "Primary contact contact number", "field_type": "telephoneNumberField"}},
+                "fZBaXW": {"en": {"title": "Total Pillar 1 funding requested", "field_type": "numberField"}},
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "fZBaXW": {"en": {"title": "Total Pillar 1 funding requested", "field_type": "numberField"}},
+            }
+        },
+    },
+    f"{NWP_FUND_ID}:{NWP_ROUND_PILL2_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "GtoolQ": {"en": {"title": "Organisation name", "field_type": "textField"}},
+                "GEyQSq": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
+                "Owsgne": {"en": {"title": "Primary contact role", "field_type": "textField"}},
+                "WOWWfM": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
+                "oExeYu": {"en": {"title": "Primary contact contact number", "field_type": "telephoneNumberField"}},
+                "BmmObA": {"en": {"title": "Total Pillar 2 funding requested", "field_type": "numberField"}},
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "BmmObA": {"en": {"title": "Total Pillar 2 funding requested", "field_type": "numberField"}},
+            }
+        },
+    },
+    f"{NWP_FUND_ID}:{NWP_ROUND_PILL3_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "GtoolQ": {"en": {"title": "Organisation name", "field_type": "textField"}},
+                "GEyQSq": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
+                "Owsgne": {"en": {"title": "Primary contact role", "field_type": "textField"}},
+                "WOWWfM": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
+                "oExeYu": {"en": {"title": "Primary contact contact number", "field_type": "telephoneNumberField"}},
+                "tNAMxP": {"en": {"title": "Total Pillar 3 funding requested", "field_type": "numberField"}},
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "tNAMxP": {"en": {"title": "Total Pillar 3 funding requested", "field_type": "numberField"}},
+            }
+        },
+    },
+    f"{NWP_FUND_ID}:{NWP_ROUND_PILL4_ID}": {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "GtoolQ": {"en": {"title": "Organisation name", "field_type": "textField"}},
+                "GEyQSq": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
+                "Owsgne": {"en": {"title": "Primary contact role", "field_type": "textField"}},
+                "WOWWfM": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
+                "oExeYu": {"en": {"title": "Primary contact contact number", "field_type": "telephoneNumberField"}},
+                "mhpCON": {"en": {"title": "Total Pillar 4 funding requested", "field_type": "numberField"}},
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "mhpCON": {"en": {"title": "Total Pillar 4 funding requested", "field_type": "numberField"}},
+            }
+        },
+    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
@@ -2717,6 +2859,26 @@ fund_round_mapping_config = {
         "fund_id": SHIF_FUND_ID,
         "round_id": SHIF_ROUND_APPLY_ID,
         "type_of_application": "SHIF",
+    },
+    "NWPPILL1": {
+        "fund_id": NWP_FUND_ID,
+        "round_id": NWP_ROUND_PILL1_ID,
+        "type_of_application": "NWP",
+    },
+    "NWPPILL2": {
+        "fund_id": NWP_FUND_ID,
+        "round_id": NWP_ROUND_PILL2_ID,
+        "type_of_application": "NWP",
+    },
+    "NWPPILL3": {
+        "fund_id": NWP_FUND_ID,
+        "round_id": NWP_ROUND_PILL3_ID,
+        "type_of_application": "NWP",
+    },
+    "NWPPILL4": {
+        "fund_id": NWP_FUND_ID,
+        "round_id": NWP_ROUND_PILL4_ID,
+        "type_of_application": "NWP",
     },
     "RANDOM_FUND_ROUND": {
         "fund_id": uuid4(),
