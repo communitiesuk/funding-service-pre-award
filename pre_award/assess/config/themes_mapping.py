@@ -227,7 +227,7 @@ def ordered_themes(fund_round_short_name):
         "NWPPILL1": [
             "applicant_information",
             "cost_and_value_for_money",
-            "declarations",
+            "declaration",
             "organisation_information",
             "outcomes_and_outputs",
             "proposal",
@@ -238,7 +238,7 @@ def ordered_themes(fund_round_short_name):
         "NWPPILL2": [
             "applicant_information",
             "cost_and_value_for_money",
-            "declarations",
+            "declaration",
             "organisation_information",
             "outcomes_and_outputs",
             "proposal",
@@ -249,7 +249,7 @@ def ordered_themes(fund_round_short_name):
         "NWPPILL3": [
             "applicant_information",
             "cost_and_value_for_money",
-            "declarations",
+            "declaration",
             "organisation_information",
             "outcomes_and_outputs",
             "proposal",
@@ -260,7 +260,7 @@ def ordered_themes(fund_round_short_name):
         "NWPPILL4": [
             "applicant_information",
             "cost_and_value_for_money",
-            "declarations",
+            "declaration",
             "organisation_information",
             "outcomes_and_outputs",
             "proposal",
