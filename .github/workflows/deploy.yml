@@ -131,7 +131,6 @@ jobs:
       run: |
         copilot ${{ matrix.command }} init --app pre-award --name fsd-${{ matrix.deployment }} || true
         copilot ${{ matrix.command }} deploy --env ${{ inputs.environment }} --app pre-award --name fsd-${{ matrix.deployment }}
-
   e2e_test:
     name: Run end-to-end (browser) tests
     if: ${{ inputs.environment == 'dev' || inputs.environment == 'test' || inputs.environment == 'uat' }}  # Do not run these against the prod environment without addressing the auth/JWT self-signing done by e2e tests.

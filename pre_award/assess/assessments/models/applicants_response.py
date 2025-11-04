@@ -403,6 +403,16 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
     elif presentation_type == "s3bucketPath":
         folder_path = f"{application_id}/{item['form_name']}/{item['path']}/{item['field_id']}"
         file_keys = list_files_in_folder(folder_path) if answer else []
+
+        if isinstance(answer, str) and "," in answer:
+            answer_files = [f.strip() for f in answer.split(",")]
+        elif isinstance(answer, list):
+            answer_files = answer
+        elif answer:
+            answer_files = [answer]
+        else:
+            answer_files = []
+
         key_to_url_dict = {
             key: url_for(
                 "assessment_bp.get_file",
@@ -411,7 +421,7 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
                 quoted=True,
             )
             for key in file_keys
-            if answer == key.split("/")[-1]
+            if key.split("/")[-1] in answer_files
         }
         return QuestionAboveHrefAnswerList.from_dict(item, key_to_url_dict)
 

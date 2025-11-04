@@ -17,7 +17,8 @@ class QaComplete(BaseModel):
     application_id = Column(
         "application_id",
         UUID(as_uuid=True),
-        ForeignKey("assessment_records.application_id"),
+        ForeignKey("assessment_records.application_id", ondelete="CASCADE"),
     )
     user_id = Column("user_id", String, nullable=False)
     date_created = Column("date_created", db.DateTime(), server_default=func.now())
+    assessment_record = db.relationship("AssessmentRecord", back_populates="qa_complete")

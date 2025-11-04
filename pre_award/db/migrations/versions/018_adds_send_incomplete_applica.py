@@ -1,8 +1,8 @@
 """Adds 'send_incomplete_application_emails' property to Round model
 
-Revision ID: 017_adds_send_incomplete_applica
-Revises: 016_add_display_name_to_form_de
-Create Date: 2025-11-27 13:14:06.367884
+Revision ID: 018_adds_send_incomplete_applica
+Revises: 017_add_cascade_delete_to_applic
+Create Date: 2025-12-08 10:27:14.109764
 
 """
 
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = "017_adds_send_incomplete_applica"
-down_revision = "016_add_display_name_to_form_de"
+revision = "018_adds_send_incomplete_applica"
+down_revision = "017_add_cascade_delete_to_applic"
 branch_labels = None
 depends_on = None
 

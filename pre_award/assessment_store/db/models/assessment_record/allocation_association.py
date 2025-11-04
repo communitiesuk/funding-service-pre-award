@@ -32,6 +32,7 @@ class AllocationAssociation(BaseModel):
         UUID(as_uuid=True),
         ForeignKey(
             "assessment_records.application_id",
+            ondelete="CASCADE",
         ),
         nullable=False,
     )
@@ -41,3 +42,4 @@ class AllocationAssociation(BaseModel):
     active = db.Column(db.Boolean(), nullable=False, default=True)
     log = db.Column(JSONB, nullable=False)
     __table_args__ = (db.PrimaryKeyConstraint("application_id", "user_id"),)
+    assessment_record = db.relationship("AssessmentRecord", back_populates="user_associations")

@@ -19,7 +19,7 @@ class CommentsUpdate(db.Model):
     comment_id = Column(
         "comment_id",
         UUID(as_uuid=True),
-        ForeignKey("comments.comment_id"),
+        ForeignKey("comments.comment_id", ondelete="CASCADE"),
     )
 
     comment = Column("comment", db.Text(), nullable=False)
