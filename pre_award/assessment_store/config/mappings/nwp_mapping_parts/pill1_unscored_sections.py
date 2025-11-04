@@ -10,7 +10,7 @@ unscored_sections = [
                 "name": "Organisation information",
                 "themes": [
                     {
-                        "id": "organisation_information_theme",
+                        "id": "organisation_information",
                         "name": "Organisation information",
                         "answers": [
                             {
@@ -18,7 +18,7 @@ unscored_sections = [
                                 "form_name": "nwp-pill1-organisation-information",
                                 "field_type": "textField",
                                 "presentation_type": "text",
-                                "question": "Give the official name registered with companies house or trading standards.",
+                                "question": "<h3>What is the name of your organisation?</h3>Give the official name registered with companies house or trading standards.",
                             },
                             {
                                 "field_id": "JwFyrI",
@@ -164,7 +164,7 @@ unscored_sections = [
                 "name": "Applicant information",
                 "themes": [
                     {
-                        "id": "applicant_information_theme",
+                        "id": "applicant_information",
                         "name": "Applicant information",
                         "answers": [
                             {
@@ -315,7 +315,7 @@ unscored_sections = [
                 "name": "Stakeholders",
                 "themes": [
                     {
-                        "id": "stakeholders_theme",
+                        "id": "stakeholders",
                         "name": "Stakeholders",
                         "answers": [
                             {
@@ -355,7 +355,7 @@ unscored_sections = [
                 "name": "Risks",
                 "themes": [
                     {
-                        "id": "risks_theme",
+                        "id": "risks",
                         "name": "Risks",
                         "answers": [
                             {
@@ -386,7 +386,7 @@ unscored_sections = [
                 "name": "Declaration",
                 "themes": [
                     {
-                        "id": "declaration_theme",
+                        "id": "declaration",
                         "name": "Declaration",
                         "answers": [
                             {

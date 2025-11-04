@@ -11,7 +11,7 @@ scored_sections = [
                 "name": "Skills and experience",
                 "themes": [
                     {
-                        "id": "skills_and_experience_theme",
+                        "id": "skills_and_experience",
                         "name": "Skills and experience",
                         "answers": [
                             {
@@ -142,7 +142,7 @@ scored_sections = [
                 "name": "Proposal",
                 "themes": [
                     {
-                        "id": "proposal_theme",
+                        "id": "proposal",
                         "name": "Proposal",
                         "answers": [
                             {
@@ -234,7 +234,7 @@ scored_sections = [
                 "name": "Outcomes and outputs",
                 "themes": [
                     {
-                        "id": "outcomes_and_outputs_theme",
+                        "id": "outcomes_and_outputs",
                         "name": "Outcomes and outputs",
                         "answers": [
                             {
@@ -362,7 +362,7 @@ scored_sections = [
                 "name": "Cost and value for money",
                 "themes": [
                     {
-                        "id": "cost_and_value_for_money_theme",
+                        "id": "cost_and_value_for_money",
                         "name": "Cost and value for money",
                         "answers": [
                             {

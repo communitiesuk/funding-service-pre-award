@@ -97,7 +97,7 @@ LOADER_CONFIG = {
     "round_config": {
         "id": "7f7fb87b-7336-4c2a-b83c-98c7830e835c",
         "fund_id": "44676f65-616d-4819-af7a-a457f693f008",
-        "short_name": "Pill4",
+        "short_name": "PILL4",
         # "opens": "2025-11-10T12:00:00",
         "opens": "2025-10-20T12:00:00",
         # "assessment_start": "2025-12-09T09:00:00",
