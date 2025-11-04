@@ -184,7 +184,7 @@ scored_sections = [
                                             "type": "textField",
                                         },
                                         "GRSXLZ": {
-                                            "column_title": "When will you reach this milestone?",
+                                            "column_title": "Date",
                                             "type": "datePartsField",
                                         },
                                     },
