@@ -28,7 +28,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "3.1 Skills and experience", "cy": ""},
             "tree_path": "1071.1.3.1",
-            "form_name_json": {"en": "nwp-pill2-skills-and-experience", "cy": ""},
+            "form_name_json": {"en": "nwp-shared-skills-and-experience", "cy": ""},
         },
         {"section_name": {"en": "4. Proposal", "cy": ""}, "tree_path": "1071.1.4", "requires_feedback": None},
         {
