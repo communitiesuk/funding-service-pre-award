@@ -122,7 +122,7 @@ unscored_sections = [
                             {
                                 "field_id": "yzcfRk",
                                 "form_name": "nwp-shared-organisation-information",
-                                "field_type": "numberField",
+                                "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "What is your company registration number?",
                             },
