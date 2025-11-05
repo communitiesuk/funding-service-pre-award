@@ -8,7 +8,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "1.1 Organisation information", "cy": ""},
             "tree_path": "1071.1.1.1",
-            "form_name_json": {"en": "nwp-pill2-organisation-information", "cy": ""},
+            "form_name_json": {"en": "nwp-shared-organisation-information", "cy": ""},
         },
         {
             "section_name": {"en": "2. Applicant information", "cy": ""},
@@ -18,7 +18,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "2.1 Applicant information", "cy": ""},
             "tree_path": "1071.1.2.1",
-            "form_name_json": {"en": "nwp-pill2-applicant-information", "cy": ""},
+            "form_name_json": {"en": "nwp-shared-applicant-information", "cy": ""},
         },
         {
             "section_name": {"en": "3. Skills and experience", "cy": ""},
@@ -34,7 +34,7 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "4.1 Proposal", "cy": ""},
             "tree_path": "1071.1.4.1",
-            "form_name_json": {"en": "nwp-pill2-proposal", "cy": ""},
+            "form_name_json": {"en": "nwp-shared-proposal", "cy": ""},
         },
         {
             "section_name": {"en": "5. Outcomes and outputs", "cy": ""},
@@ -60,19 +60,19 @@ LOADER_CONFIG = {
         {
             "section_name": {"en": "7.1 Stakeholders", "cy": ""},
             "tree_path": "1071.1.7.1",
-            "form_name_json": {"en": "nwp-pill2-stakeholders", "cy": ""},
+            "form_name_json": {"en": "nwp-shared-stakeholders", "cy": ""},
         },
         {"section_name": {"en": "8. Risks", "cy": ""}, "tree_path": "1071.1.8", "requires_feedback": None},
         {
             "section_name": {"en": "8.1 Risks", "cy": ""},
             "tree_path": "1071.1.8.1",
-            "form_name_json": {"en": "nwp-pill2-risks", "cy": ""},
+            "form_name_json": {"en": "nwp-shared-risks", "cy": ""},
         },
         {"section_name": {"en": "9. Declaration", "cy": ""}, "tree_path": "1071.1.9", "requires_feedback": None},
         {
             "section_name": {"en": "9.1 Declaration", "cy": ""},
             "tree_path": "1071.1.9.1",
-            "form_name_json": {"en": "nwp-pill2-declaration", "cy": ""},
+            "form_name_json": {"en": "nwp-shared-declaration", "cy": ""},
         },
     ],
     "fund_config": {

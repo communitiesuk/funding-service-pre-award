@@ -147,14 +147,14 @@ scored_sections = [
                         "answers": [
                             {
                                 "field_id": "QxyRhj",
-                                "form_name": "nwp-pill2-proposal",
+                                "form_name": "nwp-shared-proposal",
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
                                 "question": "Tell us about your proposal",
                             },
                             {
                                 "field_id": "TxulKg",
-                                "form_name": "nwp-pill2-proposal",
+                                "form_name": "nwp-shared-proposal",
                                 "field_type": "multiInputField",
                                 "presentation_type": "table",
                                 "question": [
@@ -173,7 +173,7 @@ scored_sections = [
                             },
                             {
                                 "field_id": "iYAEgj",
-                                "form_name": "nwp-pill2-proposal",
+                                "form_name": "nwp-shared-proposal",
                                 "field_type": "multiInputField",
                                 "presentation_type": "table",
                                 "question": [
@@ -192,28 +192,28 @@ scored_sections = [
                             },
                             {
                                 "field_id": "nxfZNl",
-                                "form_name": "nwp-pill2-proposal",
+                                "form_name": "nwp-shared-proposal",
                                 "field_type": "yesNoField",
                                 "presentation_type": "text",
                                 "question": "Are you applying for multiple pillars?",
                             },
                             {
                                 "field_id": "CDDxlF",
-                                "form_name": "nwp-pill2-proposal",
+                                "form_name": "nwp-shared-proposal",
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
                                 "question": "How will multiple pillars improve your delivery, efficiency and effectiveness?",
                             },
                             {
                                 "field_id": "changingdemands",
-                                "form_name": "nwp-pill2-proposal",
+                                "form_name": "nwp-shared-proposal",
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
                                 "question": "How will you adapt your service to meet changing demands?",
                             },
                             {
                                 "field_id": "vjKUYK",
-                                "form_name": "nwp-pill2-proposal",
+                                "form_name": "nwp-shared-proposal",
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
                                 "question": "How will you use technology to improve and expand your service?",
@@ -239,70 +239,70 @@ scored_sections = [
                         "answers": [
                             {
                                 "field_id": "EODlmu",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "<h3>Key performance indicators (KPIs) for national funded training package</h3>Total number of online and pre-recorded training sessions (Target: 930)",
                             },
                             {
                                 "field_id": "eDrKop",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "Stand-alone e-learning courses (Target: 24)",
                             },
                             {
                                 "field_id": "VaSKsb",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "Number of learners live online (Target: 16,000)",
                             },
                             {
                                 "field_id": "CHhjbf",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "<h3>Online training content</h3>Number of page views (Target: 16,400)",
                             },
                             {
                                 "field_id": "xNoJnV",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "<h3>Learner feedback</h3>Learner feedback on training: Quality rating of excellent, very good or good (Target: 95%)",
                             },
                             {
                                 "field_id": "SMUmDe",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "Learner feedback on training: Able to apply the knowledge gained in their role (Target: 75%)",
                             },
                             {
                                 "field_id": "HSvzPg",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "<h3>Key performance indicators (KPIs) for sector practice support</h3><h4>Resources, publications and good practice support</h4>Information published or revised (Target: 32)",
                             },
                             {
                                 "field_id": "yASiJm",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "Information sessions, for example meetings, conferences and visits. Include both internal and with other National Workforce Programme grantees (Target: 20)",
                             },
                             {
                                 "field_id": "tREfFP",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "<h4>Convening the sector</h4>Total number of groups convened to develop resources and co-design training, content and sector insight reports (Target: 32)",
                             },
                             {
                                 "field_id": "pvQfsB",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "multiInputField",
                                 "presentation_type": "table",
                                 "question": [
@@ -329,7 +329,7 @@ scored_sections = [
                             },
                             {
                                 "field_id": "uffYpC",
-                                "form_name": "nwp-pill2-outcomes-and-outputs",
+                                "form_name": "nwp-pill2-outputs-and-outcomes",
                                 "field_type": "multiInputField",
                                 "presentation_type": "table",
                                 "question": [
