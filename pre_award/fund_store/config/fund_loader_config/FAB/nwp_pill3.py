@@ -37,7 +37,7 @@ LOADER_CONFIG = {
             "form_name_json": {"en": "nwp-shared-proposal", "cy": ""},
         },
         {
-            "section_name": {"en": "5. Outcomes and outputs", "cy": ""},
+            "section_name": {"en": "5. Outputs and outcomes", "cy": ""},
             "tree_path": "1072.1.5",
             "requires_feedback": None,
         },

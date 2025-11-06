@@ -54,7 +54,7 @@ unscored_sections = [
                                 "field_type": "clientSideFileUploadField",
                                 "presentation_type": "s3bucketPath",
                                 "question": "Upload your current insurance certificate.",
-                                "path": "what-are-your-insurance-details",
+                                "path": "what-are-your-relevant-insurance-details",
                             },
                             {
                                 "field_id": "JiaoiU",
@@ -224,13 +224,6 @@ unscored_sections = [
                                 "question": "Telephone number",
                             },
                             {
-                                "field_id": "NuvvyU",
-                                "form_name": "nwp-shared-applicant-information",
-                                "field_type": "multilineTextField",
-                                "presentation_type": "text",
-                                "question": "A summary of the lead officer's experience and qualifications.",
-                            },
-                            {
                                 "field_id": "rsiytx",
                                 "form_name": "nwp-shared-applicant-information",
                                 "field_type": "radiosField",
@@ -345,6 +338,20 @@ unscored_sections = [
                                 "field_type": "multilineTextField",
                                 "presentation_type": "text",
                                 "question": "What outcomes are you expecting?",
+                            },
+                            {
+                                "field_id": "ijqUSn",
+                                "form_name": "nwp-shared-stakeholders",
+                                "field_type": "multilineTextField",
+                                "presentation_type": "text",
+                                "question": "How will you involve those with a lived experience of homelessness and rough sleeping throughout the grant?",
+                            },
+                            {
+                                "field_id": "APcEQP",
+                                "form_name": "nwp-shared-stakeholders",
+                                "field_type": "multilineTextField",
+                                "presentation_type": "text",
+                                "question": "How will you involve those working within the homelessness and rough sleeping workforce throughout the grant?",
                             },
                         ],
                     }

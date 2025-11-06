@@ -227,15 +227,15 @@ scored_sections = [
     {
         "id": "outcomes_and_outputs",
         "weighting": 0.15,
-        "name": "Outcomes and outputs",
+        "name": "Outputs and outcomes",
         "sub_criteria": [
             {
                 "id": "outcomes_and_outputs",
-                "name": "Outcomes and outputs",
+                "name": "Outputs and outcomes",
                 "themes": [
                     {
                         "id": "outcomes_and_outputs",
-                        "name": "Outcomes and outputs",
+                        "name": "Outputs and outcomes",
                         "answers": [
                             {
                                 "field_id": "EODlmu",
@@ -292,6 +292,13 @@ scored_sections = [
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "Learner feedback quality rating of excellent or good for level 3, 4 and 7 courses (Target: 95%)",
+                            },
+                            {
+                                "field_id": "wwLaiQ",
+                                "form_name": "nwp-pill1-outputs-and-outcomes",
+                                "field_type": "yesNoField",
+                                "presentation_type": "text",
+                                "question": "Do you have any additional KPIs?",
                             },
                             {
                                 "field_id": "pvQfsB",
@@ -472,6 +479,34 @@ scored_sections = [
                             },
                             {
                                 "field_id": "SgLeEX",
+                                "form_name": "nwp-pill1-cost-and-value-for-money",
+                                "field_type": "numberField",
+                                "presentation_type": "text",
+                                "question": "Year 3 (April 2028 to March 2029)",
+                            },
+                            {
+                                "field_id": "uoulSv",
+                                "form_name": "nwp-pill1-cost-and-value-for-money",
+                                "field_type": "multilineTextField",
+                                "presentation_type": "text",
+                                "question": "<h3>How much do you plan to spend on output 5 - national homelessness database?</h3>Description of spending",
+                            },
+                            {
+                                "field_id": "sNNZJx",
+                                "form_name": "nwp-pill1-cost-and-value-for-money",
+                                "field_type": "numberField",
+                                "presentation_type": "text",
+                                "question": "Year 1 (April 2026 to March 2027)",
+                            },
+                            {
+                                "field_id": "LJtkcP",
+                                "form_name": "nwp-pill1-cost-and-value-for-money",
+                                "field_type": "numberField",
+                                "presentation_type": "text",
+                                "question": "Year 2 (April 2027 to March 2028)",
+                            },
+                            {
+                                "field_id": "nqQYXx",
                                 "form_name": "nwp-pill1-cost-and-value-for-money",
                                 "field_type": "numberField",
                                 "presentation_type": "text",

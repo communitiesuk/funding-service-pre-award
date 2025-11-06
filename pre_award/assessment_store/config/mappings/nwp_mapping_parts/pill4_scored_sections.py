@@ -227,15 +227,15 @@ scored_sections = [
     {
         "id": "outcomes_and_outputs",
         "weighting": 0.15,
-        "name": "Outcomes and outputs",
+        "name": "Outputs and outcomes",
         "sub_criteria": [
             {
                 "id": "outcomes_and_outputs",
-                "name": "Outcomes and outputs",
+                "name": "Outputs and outcomes",
                 "themes": [
                     {
                         "id": "outcomes_and_outputs",
-                        "name": "Outcomes and outputs",
+                        "name": "Outputs and outcomes",
                         "answers": [
                             {
                                 "field_id": "aSCUsd",
@@ -294,12 +294,19 @@ scored_sections = [
                                 "question": "Total number of Local Authority areas (Target: 20)",
                             },
                             {
+                                "field_id": "zDAQdq",
+                                "form_name": "nwp-pill4-outputs-and-outcomes",
+                                "field_type": "yesNoField",
+                                "presentation_type": "text",
+                                "question": "Do you have any additional KPIs?",
+                            },
+                            {
                                 "field_id": "bUmxnK",
                                 "form_name": "nwp-pill4-outputs-and-outcomes",
                                 "field_type": "multiInputField",
                                 "presentation_type": "table",
                                 "question": [
-                                    "List any additional KPIs for Pillar 4 - Communitie",
+                                    "List any additional KPIs for Pillar 4 - Communities",
                                     {
                                         "HrGkQZ": {
                                             "column_title": "Output",
