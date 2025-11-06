@@ -57,9 +57,9 @@ unscored_sections = [
                                 "path": "what-are-your-relevant-insurance-details",
                             },
                             {
-                                "field_id": "JiaoiU",
+                                "field_id": "UJPZaz",
                                 "form_name": "nwp-shared-organisation-information",
-                                "field_type": "websiteField",
+                                "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "What is your organisation's website?",
                             },
