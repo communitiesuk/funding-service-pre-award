@@ -63,9 +63,11 @@
             {% if latest_score %}
             <h2 class="govuk-heading-m govuk-!-margin-top-4">Rescore</h2>
             {% endif %}
+            {% if round_guidance_url %}
             <p class="govuk-body">Score this sub criteria against the
                 <a class="govuk-link govuk-link--no-visited-state" href={{ round_guidance_url }}>assessment
                     criteria</a>.</p>
+            {% endif %}
             <p class="govuk-body">You can use the comments about this subcriteria from other assessors to inform your score.</p>
             {{ scores(score_form) }}
             {{ justification(score_form, round_guidance_url) }}
