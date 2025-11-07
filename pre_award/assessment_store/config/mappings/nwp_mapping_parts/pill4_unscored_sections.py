@@ -99,7 +99,7 @@ unscored_sections = [
                                 "question": "Do you have a charity number?",
                             },
                             {
-                                "field_id": "ZIIeJF",
+                                "field_id": "EXzwff",
                                 "form_name": "nwp-shared-organisation-information",
                                 "field_type": "textField",
                                 "presentation_type": "text",
@@ -120,7 +120,7 @@ unscored_sections = [
                                 "question": "Do you have a company registration number?",
                             },
                             {
-                                "field_id": "yzcfRk",
+                                "field_id": "JniYtl",
                                 "form_name": "nwp-shared-organisation-information",
                                 "field_type": "textField",
                                 "presentation_type": "text",
