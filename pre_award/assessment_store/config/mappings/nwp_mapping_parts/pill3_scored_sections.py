@@ -227,15 +227,15 @@ scored_sections = [
     {
         "id": "outcomes_and_outputs",
         "weighting": 0.15,
-        "name": "Outcomes and outputs",
+        "name": "Outputs and outcomes",
         "sub_criteria": [
             {
                 "id": "outcomes_and_outputs",
-                "name": "Outcomes and outputs",
+                "name": "Outputs and outcomes",
                 "themes": [
                     {
                         "id": "outcomes_and_outputs",
-                        "name": "Outcomes and outputs",
+                        "name": "Outputs and outcomes",
                         "answers": [
                             {
                                 "field_id": "kLOGdG",
@@ -278,6 +278,13 @@ scored_sections = [
                                 "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "End outcome: Advice led to successful outcome of homelessness situation (Target 60%)",
+                            },
+                            {
+                                "field_id": "jyKXTW",
+                                "form_name": "nwp-pill3-outputs-and-outcomes",
+                                "field_type": "yesNoField",
+                                "presentation_type": "text",
+                                "question": "Do you have any additional KPIs?",
                             },
                             {
                                 "field_id": "YtBIdI",

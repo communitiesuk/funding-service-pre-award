@@ -37,12 +37,12 @@ LOADER_CONFIG = {
             "form_name_json": {"en": "nwp-shared-proposal", "cy": ""},
         },
         {
-            "section_name": {"en": "5. Outcomes and outputs", "cy": ""},
+            "section_name": {"en": "5. Outputs and outcomes", "cy": ""},
             "tree_path": "1070.1.5",
             "requires_feedback": None,
         },
         {
-            "section_name": {"en": "5.1 Outcomes and outputs", "cy": ""},
+            "section_name": {"en": "5.1 Outputs and outcomes", "cy": ""},
             "tree_path": "1070.1.5.1",
             "form_name_json": {"en": "nwp-pill1-outcomes-and-outputs", "cy": ""},
         },
