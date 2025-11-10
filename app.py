@@ -276,7 +276,8 @@ def create_app() -> Flask:  # noqa: C901
     csrf.exempt(application_store_bp)
     csrf.exempt(assessment_store_bp)
     csrf.exempt(form_store_bp)
-    csrf.exempt(utils_bp)
+    # Note: utils_bp CSRF exemption removed for security
+    # E2E cleanup endpoint should be called from authenticated workflows only
 
     for bp, _ in assessment_store_bp._blueprints:
         csrf.exempt(bp)

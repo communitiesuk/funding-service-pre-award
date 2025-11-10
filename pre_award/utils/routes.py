@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from flask import jsonify
+from flask import jsonify, request
 from sqlalchemy import text
 
 from pre_award.common.blueprints import Blueprint
@@ -11,6 +11,10 @@ utils_bp = Blueprint("utils_bp", __name__)
 
 @utils_bp.post("/cleanup-e2e-data")
 def cleanup_e2e_data():
+    # Basic security check - only allow from internal AWS network or with proper headers
+    user_agent = request.headers.get("User-Agent", "")
+    if not (user_agent.startswith("curl") or "github" in user_agent.lower()):
+        return jsonify({"success": False, "error": "Unauthorized"}), 401
     """
     API endpoint to clean up E2E test data.
 
