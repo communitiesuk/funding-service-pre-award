@@ -229,6 +229,7 @@ def create_app() -> Flask:  # noqa: C901
     from pre_award.authenticator.frontend.sso.routes import sso_bp
     from pre_award.authenticator.frontend.user.routes import user_bp
     from pre_award.common.error_routes import internal_server_error, not_found
+    from pre_award.utils.routes import utils_bp
 
     flask_app.register_error_handler(404, not_found)
     flask_app.register_error_handler(500, internal_server_error)
@@ -268,11 +269,13 @@ def create_app() -> Flask:  # noqa: C901
     flask_app.register_blueprint(application_store_bp, url_prefix="/application", host=Config.API_HOST)
     flask_app.register_blueprint(assessment_store_bp, url_prefix="/assessment", host=Config.API_HOST)
     flask_app.register_blueprint(form_store_bp, url_prefix="/forms", host=Config.API_HOST)
+    flask_app.register_blueprint(utils_bp, url_prefix="/utils", host=Config.APPLY_HOST)
     csrf.exempt(account_core_bp)
     csrf.exempt(fund_store_bp)
     csrf.exempt(application_store_bp)
     csrf.exempt(assessment_store_bp)
     csrf.exempt(form_store_bp)
+    csrf.exempt(utils_bp)
     for bp, _ in assessment_store_bp._blueprints:
         csrf.exempt(bp)
 
