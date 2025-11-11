@@ -81,7 +81,9 @@ class FormDraftView(MethodView):
         """GET /forms/{url_path}/draft - Returns the draft_json object"""
         try:
             form = get_form_by_url_path(url_path)
-            return form.as_dict_with_draft_json(), 200
+            response = form.as_dict_with_draft_json()
+            response["hash"] = generate_form_hash(form.draft_json)
+            return response, 200
         except NoResultFound:
             return {"error": f"Form '{url_path}' not found"}, 404
         except Exception as e:
@@ -106,9 +108,24 @@ class FormPublishedView(MethodView):
             return {"error": "Failed to retrieve published form"}, 500
 
 
-class FormHashView(MethodView):
+class FormDraftHashView(MethodView):
     def get(self, url_path):
-        """GET /forms/{url_path}/hash - Returns hash of published_json for cache validation"""
+        """GET /forms/{url_path}/draft/hash - Returns hash of draft_json for cache validation"""
+        try:
+            form = get_form_by_url_path(url_path)
+            return {"hash": generate_form_hash(form.draft_json)}, 200
+        except NoResultFound:
+            return {"error": f"Form '{url_path}' not found"}, 404
+        except Exception as e:
+            current_app.logger.error(
+                "Error retrieving draft hash for form %s: %s", _sanitise_for_logging(url_path), str(e)
+            )
+            return {"error": "Failed to retrieve form draft hash"}, 500
+
+
+class FormPublishedHashView(MethodView):
+    def get(self, url_path):
+        """GET /forms/{url_path}/published/hash - Returns hash of published_json for cache validation"""
         try:
             form = get_form_by_url_path(url_path)
             if not form.published_json or form.published_json == {}:
@@ -117,8 +134,10 @@ class FormHashView(MethodView):
         except NoResultFound:
             return {"error": f"Form '{url_path}' not found"}, 404
         except Exception as e:
-            current_app.logger.error("Error retrieving hash for form %s: %s", _sanitise_for_logging(url_path), str(e))
-            return {"error": "Failed to retrieve form hash"}, 500
+            current_app.logger.error(
+                "Error retrieving published hash for form %s: %s", _sanitise_for_logging(url_path), str(e)
+            )
+            return {"error": "Failed to retrieve form published hash"}, 500
 
 
 class FormPublishView(MethodView):
@@ -141,5 +160,6 @@ class FormPublishView(MethodView):
 form_store_bp.add_url_rule("", view_func=FormsView.as_view("forms"))
 form_store_bp.add_url_rule("/<url_path>/draft", view_func=FormDraftView.as_view("form_draft"))
 form_store_bp.add_url_rule("/<url_path>/published", view_func=FormPublishedView.as_view("form_published"))
-form_store_bp.add_url_rule("/<url_path>/hash", view_func=FormHashView.as_view("form_hash"))
+form_store_bp.add_url_rule("/<url_path>/draft/hash", view_func=FormDraftHashView.as_view("form_draft_hash"))
+form_store_bp.add_url_rule("/<url_path>/published/hash", view_func=FormPublishedHashView.as_view("form_published_hash"))
 form_store_bp.add_url_rule("/<url_path>/publish", view_func=FormPublishView.as_view("form_publish"))
