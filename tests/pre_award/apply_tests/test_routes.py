@@ -25,7 +25,7 @@ def test_dodgy_url_returns_404(apply_test_client):
 
 
 def test_page_footer_includes_correct_title_and_link_text(apply_test_client):
-    response = apply_test_client.get("/", follow_redirects=True)
+    response = apply_test_client.get("/funding-round/COF/r2w2", follow_redirects=True)
     soup = BeautifulSoup(response.data, "html.parser")
     assert all(
         [

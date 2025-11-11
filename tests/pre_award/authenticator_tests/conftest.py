@@ -1,3 +1,4 @@
+import types
 from contextlib import contextmanager
 from typing import Any, Generator
 from unittest import mock
@@ -97,6 +98,21 @@ def configure_mock_fund_and_round(mock_get_fund, mock_get_round_data):
     mock_round.configure_mock(is_expression_of_interest=False)
     mock_round.configure_mock(has_eligibility=True)
     mock_get_round_data.return_value = mock_round
+
+
+@pytest.fixture(autouse=True)
+def patch_app_find_round(mocker):
+    stub_round = types.SimpleNamespace(
+        id="Test_fund_round_id",
+        short_name="r2w2",
+        fund_short_name="cof",
+        privacy_notice="https://privacy.com",
+        title="r2w2",
+        deadline="2050-01-01T00:00:01",
+    )
+    mocker.patch("app.find_round_in_request", return_value=stub_round)
+
+    yield
 
 
 @pytest.fixture

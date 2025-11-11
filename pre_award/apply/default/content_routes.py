@@ -98,23 +98,6 @@ def cookie_policy():
     )
 
 
-@content_bp.route("/privacy", methods=["GET"])
-def privacy():
-    privacy_notice_url = None
-    fund, round = find_fund_and_round_in_request()
-
-    privacy_notice_url = getattr(round, "privacy_notice", None) if round else None
-
-    if privacy_notice_url:
-        current_app.logger.info(
-            "Privacy notice loading for fund %(fund_short_name)s round %(round_short_name)s.",
-            dict(fund_short_name=fund.short_name, round_short_name=round.short_name),
-        )
-        return redirect(privacy_notice_url)
-
-    return abort(404)
-
-
 @content_bp.route("/feedback", methods=["GET"])
 def feedback():
     round = find_round_in_request()
