@@ -269,16 +269,13 @@ def create_app() -> Flask:  # noqa: C901
     flask_app.register_blueprint(application_store_bp, url_prefix="/application", host=Config.API_HOST)
     flask_app.register_blueprint(assessment_store_bp, url_prefix="/assessment", host=Config.API_HOST)
     flask_app.register_blueprint(form_store_bp, url_prefix="/forms", host=Config.API_HOST)
-    flask_app.register_blueprint(utils_bp, url_prefix="/utils", host=Config.API_HOST)
-
+    flask_app.register_blueprint(utils_bp, url_prefix="/utils", host=Config.APPLY_HOST)
     csrf.exempt(account_core_bp)
     csrf.exempt(fund_store_bp)
     csrf.exempt(application_store_bp)
     csrf.exempt(assessment_store_bp)
     csrf.exempt(form_store_bp)
-    # Note: utils_bp CSRF exemption removed for security
-    # E2E cleanup endpoint should be called from authenticated workflows only
-
+    csrf.exempt(utils_bp)
     for bp, _ in assessment_store_bp._blueprints:
         csrf.exempt(bp)
 
