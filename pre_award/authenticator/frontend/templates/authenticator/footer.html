@@ -1,26 +1,21 @@
 {% from "govuk_frontend_jinja/components/footer/macro.html" import govukFooter -%}
+
+
+{% set footer_items = [] -%}
+{% if privacy_url -%}
+    {% set _ = footer_items.append({'href': privacy_url, 'text': gettext('Privacy')}) -%}
+{% endif -%}
+
+{% set _ = footer_items.extend([
+    {'href': cookie_policy_url, 'text': gettext('Cookies')},
+    {'href': accessibility_statement_url, 'text': gettext('Accessibility Statement')},
+    {'href': contact_us_url, 'text': gettext('Contact us')}
+]) -%}
+
 {{ govukFooter(
     {
         'meta': {
             'visuallyHiddenTitle': 'Support links',
-            'items': [
-                {
-                    'href': privacy_url,
-                    'text': gettext('Privacy')
-
-                },
-                {
-                    'href': cookie_policy_url,
-                    'text': gettext('Cookies')
-                },
-                {
-                    'href': accessibility_statement_url,
-                    'text': gettext('Accessibility Statement')
-                },
-                {
-                    'href': contact_us_url,
-                    'text': gettext('Contact us')
-                },
-            ]
+            'items': footer_items
     }
     }) }}

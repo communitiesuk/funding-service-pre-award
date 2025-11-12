@@ -86,7 +86,7 @@
       {{ url_for("apply_routes.contact_us") }}
     {% endset %}
     {% set privacyUrl%}
-      {{ url_for("content_routes.privacy") }}
+        {{ privacy_url }}
     {% endset %}
   {% endif %}
 
@@ -97,7 +97,7 @@
   {% endif %}
   {% if fund and round %}
     {% set privacyUrl%}
-      {{ url_for("content_routes.privacy", fund_short_name=fund.short_name, round_short_name=round.short_name) }}
+      {{ privacy_url }}
     {% endset %}
   {% endif %}
 
@@ -115,7 +115,7 @@
       "text": _("Contact us")
     }
   ] %}
-  {% if not (fund and fund.short_name == 'LAHF') %}
+  {% if privacy_url %}
     {% set _ = footer_items.insert(0, {
       "href": privacyUrl,
       "text": _("Privacy")

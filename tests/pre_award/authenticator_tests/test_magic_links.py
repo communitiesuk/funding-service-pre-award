@@ -137,8 +137,12 @@ class TestMagicLinks(AuthSessionBase):
             mock.patch(
                 "pre_award.authenticator.frontend.magic_links.routes.MagicLinkMethods.redis_mlinks", create=True
             ) as mock_redis_mlinks,
+            mock.patch("app.find_fund_and_round_in_request") as mock_find_fund_and_round,
         ):
             configure_mock_fund_and_round(mock_get_fund, mock_get_round_data)
+
+            mock_get_round_data.return_value.privacy_notice = "https://privacy.com"
+            mock_find_fund_and_round.return_value = (mock_get_fund.return_value, mock_get_round_data.return_value)
 
             mock_redis_mlinks.get.return_value = json.dumps(
                 {"accountId": "usera", "iat": 1736312454, "exp": 1736316114}

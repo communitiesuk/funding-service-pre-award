@@ -387,6 +387,15 @@ def create_app() -> Flask:  # noqa: C901
 
         return gettext("Access Funding")
 
+    def _privacy_for_round(round_obj):
+        """Return the privacy_notice URL string for a round object, or None."""
+        if not round_obj:
+            return None
+        privacy_val = getattr(round_obj, "privacy_notice", None)
+        if isinstance(privacy_val, str) and privacy_val.strip():
+            return privacy_val.strip()
+        return None
+
     @flask_app.context_processor
     def utility_processor():
         return {"get_service_title": _get_service_title}
@@ -406,9 +415,11 @@ def create_app() -> Flask:  # noqa: C901
 
     @flask_app.context_processor
     def inject_content_urls():
+        privacy_url = ""
         try:
             fund, round = find_fund_and_round_in_request()
             if fund and round:
+                privacy_url = _privacy_for_round(round) or ""
                 return dict(
                     accessibility_statement_url=url_for(
                         "content_routes.accessibility_statement",
@@ -420,13 +431,7 @@ def create_app() -> Flask:  # noqa: C901
                         fund_short_name=fund.short_name,
                         round=round.short_name,
                     ),
-                    privacy_url=url_for(
-                        "content_routes.privacy",
-                        fund=fund.short_name,
-                        round=round.short_name,
-                    )
-                    if round.short_name != "LAHFtu"
-                    else "",
+                    privacy_url=privacy_url,
                     feedback_url=url_for(
                         "content_routes.feedback",
                         fund=fund.short_name,
@@ -444,7 +449,7 @@ def create_app() -> Flask:  # noqa: C901
         return dict(
             accessibility_statement_url=url_for("content_routes.accessibility_statement"),
             contact_us_url=url_for("apply_routes.contact_us"),
-            privacy_url=url_for("content_routes.privacy"),
+            privacy_url=privacy_url,
             feedback_url=url_for("content_routes.feedback"),
         )
 

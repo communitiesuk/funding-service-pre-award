@@ -111,6 +111,7 @@ def mock_get_fund_round(mocker):
         "pre_award.apply.default.application_routes.get_fund_and_round",
         return_value=(Fund.from_dict(TEST_FUNDS_DATA[0]), TEST_ROUNDS_DATA[0]),
     )
+    mocker.patch("app.find_round_in_request", return_value=TEST_ROUNDS_DATA[0])
 
 
 @pytest.fixture(scope="function")
