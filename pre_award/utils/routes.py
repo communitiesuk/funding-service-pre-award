@@ -13,17 +13,15 @@ utils_bp = Blueprint("utils_bp", __name__)
 
 
 def check_basic_auth():
-    """Verify basic authentication credentials using existing system."""
+    """Verify basic auth credentials"""
     auth = request.authorization
     if not auth:
         return False
-
-    # Use environment variables that match GitHub Actions secrets
-    expected_username = os.environ.get("FS_BASIC_AUTH_USERNAME")
-    expected_password = os.environ.get("FS_BASIC_AUTH_PASSWORD")
+    expected_username = os.environ.get("BASIC_AUTH_USERNAME")
+    expected_password = os.environ.get("BASIC_AUTH_PASSWORD")
     if not expected_username or not expected_password:
         current_app.logger.error(
-            "Basic auth credentials not configured in environment (FS_BASIC_AUTH_USERNAME/FS_BASIC_AUTH_PASSWORD)"
+            "Basic auth credentials not configured in environment (BASIC_AUTH_USERNAME/BASIC_AUTH_PASSWORD)"
         )
         return False
 
@@ -33,7 +31,7 @@ def check_basic_auth():
 def check_user_agent():
     """Validate User-Agent header."""
     user_agent = request.headers.get("User-Agent", "").lower()
-    allowed_agents = ["curl", "github-actions", "python-requests", "postman"]
+    allowed_agents = ["curl", "github-actions", "python-requests"]
     return any(agent in user_agent for agent in allowed_agents)
 
 
@@ -49,7 +47,7 @@ def cleanup_e2e_data():
     Secure API endpoint to clean up E2E test data.
 
     Security layers:
-    - Basic authentication
+    - Basic auth
     - User-Agent validation
     - GitHub Actions header verification
     - Environment restriction
