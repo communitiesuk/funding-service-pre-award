@@ -5,6 +5,9 @@ from flask import current_app, jsonify, request
 from sqlalchemy import or_
 
 from pre_award.application_store.db.models.application.applications import Applications
+from pre_award.application_store.db.models.feedback.end_of_application_survey import EndOfApplicationSurveyFeedback
+from pre_award.application_store.db.models.feedback.feedback import Feedback
+from pre_award.application_store.db.models.forms.forms import Forms
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
 from pre_award.common.blueprints import Blueprint
 from pre_award.db import db
@@ -93,67 +96,87 @@ def cleanup_e2e_data():
         )
         return jsonify({"success": False, "error": "Invalid request source"}), 403
 
+    BATCH_SIZE = 200  # Adjust based on DB performance
     try:
-        # Time-based safety (1-hour cutoff)
         cutoff_time = datetime.now() - timedelta(hours=1)
 
-        # E2E test data filter
-        e2e_filter = or_(
-            Applications.project_name.ilike("%e2e%"),
-            Applications.project_name.ilike("%Project e2e%"),
-            Applications.project_name.ilike("%Community Ownership Fund E2E Journey%"),
-            Applications.project_name.ilike("%COF EOI Automated E2E Test%"),
+        # E2E test filters
+        e2e_filters = [
+            "%e2e%",
+            "%Project e2e%",
+            "%Community Ownership Fund E2E Journey%",
+            "%COF EOI Automated E2E Test%",
+        ]
+        e2e_filter_apps = or_(*[Applications.project_name.ilike(f) for f in e2e_filters])
+        e2e_filter_assessments = or_(*[AssessmentRecord.project_name.ilike(f) for f in e2e_filters])
+
+        # Count total records for logging
+        apps_found = (
+            db.session.query(Applications).filter(e2e_filter_apps, Applications.started_at < cutoff_time).count()
         )
+        assessments_found = db.session.query(AssessmentRecord).filter(e2e_filter_assessments).count()
 
-        assessment_e2e_filter = or_(
-            AssessmentRecord.project_name.ilike("%e2e%"),
-            AssessmentRecord.project_name.ilike("%Project e2e%"),
-            AssessmentRecord.project_name.ilike("%Community Ownership Fund E2E Journey%"),
-            AssessmentRecord.project_name.ilike("%COF EOI Automated E2E Test%"),
-        )
-
-        # Get applications to delete
-        applications = db.session.query(Applications).filter(e2e_filter, Applications.started_at < cutoff_time).all()
-
-        # Get assessment records to delete
-        assessment_records = db.session.query(AssessmentRecord).filter(assessment_e2e_filter).all()
-
-        # Count found records
-        apps_found = len(applications)
-        assessments_found = len(assessment_records)
-
-        # Delete child records first to avoid foreign key violations
-        for app in applications:
-            for survey in app.end_of_application_survey:
-                db.session.delete(survey)
-            for feedback in app.feedbacks:
-                db.session.delete(feedback)
-            for form in app.forms:
-                db.session.delete(form)
-
-        # Delete assessment records
-        for record in assessment_records:
-            db.session.delete(record)
-
-        # delete applications
-        for app in applications:
-            db.session.delete(app)
-
-        db.session.commit()
-
-        # Log successful cleanup
         current_app.logger.info(
-            "E2E Cleanup completed successfully: Found and deleted %(apps)s applications, %(assessments)s assessments",
+            "E2E Cleanup started: Found %(apps)s applications, %(assessments)s assessments",
             dict(apps=apps_found, assessments=assessments_found),
+        )
+
+        # Delete applications and child records in batches (first)
+        apps_deleted = 0
+        while True:
+            apps_batch = (
+                db.session.query(Applications)
+                .filter(e2e_filter_apps, Applications.started_at < cutoff_time)
+                .limit(BATCH_SIZE)
+                .all()
+            )
+            if not apps_batch:
+                break
+
+            app_ids = [app.id for app in apps_batch]
+
+            # Delete child records directly via SQL
+            db.session.query(EndOfApplicationSurveyFeedback).filter(
+                EndOfApplicationSurveyFeedback.application_id.in_(app_ids)
+            ).delete(synchronize_session=False)
+            db.session.query(Feedback).filter(Feedback.application_id.in_(app_ids)).delete(synchronize_session=False)
+            db.session.query(Forms).filter(Forms.application_id.in_(app_ids)).delete(synchronize_session=False)
+
+            # Delete applications
+            db.session.query(Applications).filter(Applications.id.in_(app_ids)).delete(synchronize_session=False)
+            db.session.commit()
+            apps_deleted += len(apps_batch)
+
+        # Delete assessment records in batches (after applications)
+        assessments_deleted = 0
+        while True:
+            batch = db.session.query(AssessmentRecord).filter(e2e_filter_assessments).limit(BATCH_SIZE).all()
+            if not batch:
+                break
+            db.session.query(AssessmentRecord).filter(AssessmentRecord.id.in_([r.id for r in batch])).delete(
+                synchronize_session=False
+            )
+            db.session.commit()
+            assessments_deleted += len(batch)
+
+        current_app.logger.info(
+            "E2E Cleanup completed: Found %(apps_found)d applications, deleted %(apps_deleted)d; "
+            "Found %(assessments_found)d assessments, deleted %(assessments_deleted)d",
+            dict(
+                apps_found=apps_found,
+                apps_deleted=apps_deleted,
+                assessments_found=assessments_found,
+                assessments_deleted=assessments_deleted,
+            ),
         )
 
         return jsonify(
             {
                 "success": True,
                 "applications_found": apps_found,
-                "applications_deleted": apps_found,
+                "applications_deleted": apps_deleted,
                 "assessments_found": assessments_found,
-                "assessments_deleted": assessments_found,
+                "assessments_deleted": assessments_deleted,
                 "timestamp": datetime.now().isoformat(),
             }
         ), 200
