@@ -37,9 +37,34 @@ class Applications(BaseModel):
     date_submitted = Column("date_submitted", DateTime())
     last_edited = Column("last_edited", DateTime(), server_default=func.now())
     is_deleted = Column(Boolean, nullable=False, default=False)
-    forms = relationship("Forms", back_populates="application", lazy=True)
-    feedbacks = relationship("Feedback")
-    end_of_application_survey = relationship("EndOfApplicationSurveyFeedback")
+
+    # ====== Relationships with cascade and passive deletes ======
+    forms = relationship(
+        "Forms",
+        back_populates="application",
+        lazy=True,
+        passive_deletes=True,
+    )
+    feedbacks = relationship(
+        "Feedback",
+        back_populates="application",
+        passive_deletes=True,
+    )
+    end_of_application_survey = relationship(
+        "EndOfApplicationSurveyFeedback",
+        back_populates="application",
+        passive_deletes=True,
+    )
+    research_surveys = relationship(
+        "ResearchSurvey",
+        back_populates="application",
+        passive_deletes=True,
+    )
+    eligibility = relationship(
+        "Eligibility",
+        back_populates="application",
+        passive_deletes=True,
+    )
 
     __table_args__ = (db.UniqueConstraint("fund_id", "round_id", "key", name="_reference"),)
 
