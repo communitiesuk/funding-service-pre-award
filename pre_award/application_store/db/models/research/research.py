@@ -1,4 +1,3 @@
-# =================== research_survey.py ===================
 from flask_sqlalchemy.model import DefaultMeta
 from sqlalchemy import DateTime
 from sqlalchemy.dialects.postgresql import UUID

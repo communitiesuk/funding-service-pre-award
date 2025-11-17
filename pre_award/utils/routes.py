@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from flask import current_app, jsonify, request
-from sqlalchemy import DateTime, cast, or_
+from sqlalchemy import DateTime, cast, or_, text
 
 from pre_award.application_store.db.models.application.applications import Applications
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
@@ -78,10 +78,19 @@ def cleanup_e2e_logic():
     # Get applications to delete
     applications = db.session.query(Applications).filter(e2e_filter_apps, Applications.started_at < cutoff_time).all()
 
-    # Get assessment records to delete
+    # Get assessment records to delete safely
     assessment_records = (
         db.session.query(AssessmentRecord)
-        .filter(e2e_filter_assessments, cast(AssessmentRecord.date_submitted, DateTime) < cutoff_time)
+        .filter(
+            e2e_filter_assessments,
+            text(
+                """
+                jsonb_typeof(jsonb_path_query_first(assessment_records.jsonb_blob, '$.date_submitted')) = 'string'
+                """
+            ),
+            cast(text("jsonb_path_query_first(assessment_records.jsonb_blob, '$.date_submitted')::text"), DateTime)
+            < cutoff_time,
+        )
         .all()
     )
 
