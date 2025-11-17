@@ -24,7 +24,7 @@ class FlagUpdate(BaseModel):
     assessment_flag_id = Column(
         "assessment_flag_id",
         UUID(as_uuid=True),
-        ForeignKey("assessment_flag.id"),
+        ForeignKey("assessment_flag.id", ondelete="CASCADE"),
     )
     user_id = Column("user_id", String, nullable=False)
     date_created = Column("date_created", db.DateTime(), server_default=func.now())
