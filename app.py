@@ -275,6 +275,8 @@ def create_app() -> Flask:  # noqa: C901
     csrf.exempt(application_store_bp)
     csrf.exempt(assessment_store_bp)
     csrf.exempt(form_store_bp)
+    # CSRF protection is disabled for utils_bp endpoint because it is only
+    # accessible internally via GitHub Actions with Basic Auth and environment checks
     csrf.exempt(utils_bp)
     for bp, _ in assessment_store_bp._blueprints:
         csrf.exempt(bp)
