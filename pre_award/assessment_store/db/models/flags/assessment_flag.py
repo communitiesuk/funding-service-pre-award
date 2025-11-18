@@ -39,11 +39,12 @@ class AssessmentFlag(BaseModel):
     application_id = Column(
         "application_id",
         UUID(as_uuid=True),
-        ForeignKey("assessment_records.application_id"),
+        ForeignKey("assessment_records.application_id", ondelete="CASCADE"),
     )
     latest_status = Column("latest_status", ENUM(FlagStatus))
     latest_allocation = Column("latest_allocation", String)
     sections_to_flag = db.Column("sections_to_flag", ARRAY(db.String(256)), nullable=True)
     field_ids = db.Column("field_ids", ARRAY(db.String(256)), nullable=True)
-    updates = relationship("FlagUpdate", lazy="selectin")
+    updates = relationship("FlagUpdate", passive_deletes=True, lazy="selectin")
     is_change_request = Column("is_change_request", db.Boolean, default=False)
+    assessment_record = db.relationship("AssessmentRecord", back_populates="flags")
