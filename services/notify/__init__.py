@@ -142,6 +142,7 @@ class NotificationService:
         "LAHFResettlementTopUps@Communities.gov.uk": "d4da4510-6116-480c-9fa8-8adcbc51e094",
         "socialhousinginnovationfund@communities.gov.uk": "4816bd27-e73d-489b-91fd-daaae17eaec1",
         "nwpgrant@communities.gov.uk": "c1556459-6189-46d6-9973-a76512fc7cc0",
+        "pippcorrespondence@communities.gov.uk": "4e1200b9-cf79-4cbb-8266-f86ed1a5daa7",
     }
 
     def __init__(self) -> None:
