@@ -59,9 +59,15 @@ Your applications
                     {{ round["round_details"]["title"] }}
                 </h2>
                 {% if round["round_details"]["deadline"]|length %}
-                <p class="govuk-body">
-                    {% trans %}Deadline for applications: {% endtrans %} {{ round["round_details"]["deadline"]|string_to_datetime|datetime_format_full_month }}
-                </p>
+                    {% if is_pfn_fund_round %}
+                        <p class="govuk-body">
+                            {% trans %}Deadline for applications: {% endtrans %} 28 November 2025 at midday
+                        </p>
+                    {% else %}
+                        <p class="govuk-body">
+                            {% trans %}Deadline for applications: {% endtrans %} {{ round["round_details"]["deadline"]|string_to_datetime|datetime_format_full_month }}
+                        </p>
+                    {% endif %}
                 {% endif %}
                 {% if round["is_past_submission_deadline"] %}
                     {{ round_closed_warning(fund["fund_data"]["name"], round["round_details"]["title"], round["round_details"]["deadline"]) }}

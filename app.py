@@ -354,7 +354,7 @@ def create_app() -> Flask:  # noqa: C901
 
         return {}
 
-    def _get_service_title():
+    def get_fund_and_round_in_request():
         fund, round = None, None
         if request.view_args or request.args or request.form:
             try:
@@ -368,6 +368,10 @@ def create_app() -> Flask:  # noqa: C901
                     ),
                     dict(e=e, url=request.url, view_args=request.view_args, args=request.args),
                 )
+        return fund, round
+
+    def _get_service_title():
+        fund, round = get_fund_and_round_in_request()
         # TODO Assuming that this is the only round that is not going to need the hardcoded text
         # "Apply for ...". otherwise we need to find a better way to handle this
 
@@ -467,6 +471,15 @@ def create_app() -> Flask:  # noqa: C901
             )
 
         return dict(is_uncompeted_flow=_is_uncompeted_flow)
+
+    @flask_app.context_processor
+    def is_pfn_fund_round():
+        fund, round = get_fund_and_round_in_request()
+        is_pfn = (
+            getattr(fund, "short_name", None) == "PFN"
+            and getattr(round, "id", None) == "9217792e-d8c2-45c8-8170-eed4a8946184"
+        )
+        return {"is_pfn_fund_round": is_pfn}
 
     @flask_app.after_request
     def after_request(response):

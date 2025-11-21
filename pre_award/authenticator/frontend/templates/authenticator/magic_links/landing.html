@@ -17,10 +17,15 @@
     <h1 class="govuk-heading-xl">
       {{ base_title }}
     </h1>
-    <p class="govuk-heading-s">
-      {% trans %}Submission deadline:{% endtrans %} <span class="govuk-body">{{ submission_deadline|string_to_datetime|datetime_format_respect_lang }}</span>
-    </p>
-
+    {% if is_pfn_fund_round %}
+        <p class="govuk-heading-s">
+        {% trans %}Submission deadline:{% endtrans %} <span class="govuk-body">28 November 2025 at midday</span>
+        </p>
+    {% else %}
+        <p class="govuk-heading-s">
+        {% trans %}Submission deadline:{% endtrans %} <span class="govuk-body">{{ submission_deadline|string_to_datetime|datetime_format_respect_lang }}</span>
+        </p>
+    {% endif %}
     <div data-qa="claim_magic_link">
         {{ govukButton({
         "text": gettext("Start a new application") if (has_eligibility and not has_previous_applications) else gettext("Continue"),

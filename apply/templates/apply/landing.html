@@ -73,9 +73,15 @@
               {% endif %}
             {% endif %}
             {% if not round.is_expression_of_interest %}
-                <p class="govuk-body">
-                    <strong>{% trans %}Submission deadline:{% endtrans %} </strong>{{round.deadline|datetime_format_respect_lang}}
-                </p>
+                {% if is_pfn_fund_round %}
+                  <p class="govuk-body">
+                        <strong>{% trans %}Submission deadline:{% endtrans %} </strong>28 November 2025 at midday
+                    </p>
+                {% else %}
+                    <p class="govuk-body">
+                        <strong>{% trans %}Submission deadline:{% endtrans %} </strong>{{round.deadline|datetime_format_respect_lang}}
+                    </p>
+                {% endif %}
             {% endif %}
             {{ govukButton({
                 "isStartButton": true,

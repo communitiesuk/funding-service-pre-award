@@ -116,7 +116,7 @@ LOADER_CONFIG = {
         # NOTE: The agreed opening time is 2025-06-16T12:00:00 local time (BST), but since we store times in UTC, we need to save it as 2025-06-16T11:00:00.
         "opens": "2025-06-16T11:00:00",
         "assessment_start": "2025-07-16T09:00:00",
-        "deadline": "2025-11-28T12:00:00",
+        "deadline": "2026-12-31T12:00:00",
         "application_reminder_sent": False,
         "reminder_date": "2025-11-17T12:00:00",
         "assessment_deadline": "2025-12-30T23:59:00",
