@@ -200,16 +200,20 @@ class NewAddAnotherTable(ApplicantResponseComponent):
             headings.append({"text": column_name, "format": column_format})
 
         rows = []
-        num_columns = len(answer[0][1])  # Assuming all rows have the same number of values
-        for j in range(num_columns):
+        # Use max column count instead of assuming length
+        max_columns = max((len(values) for _, values, _ in answer), default=0)
+
+        for j in range(max_columns):
             columns = []
             for _i, (_, values, fmt) in enumerate(answer):
                 render_type = "html" if fmt == "html" else "text"
-                render_val = values[j]
                 format_val = ""
 
+                # Safe access to avoid IndexError
+                render_val = values[j] if j < len(values) else ""
+
                 if fmt == "currency":
-                    render_val = f"£{render_val:.2f}"
+                    render_val = f"£{float(render_val):.2f}" if render_val else ""
                     format_val = "numeric"
 
                 columns.append({render_type: render_val, "format": format_val})
