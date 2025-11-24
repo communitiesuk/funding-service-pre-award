@@ -355,11 +355,11 @@ def create_app() -> Flask:  # noqa: C901
         return {}
 
     def get_fund_and_round_in_request():
-        fund, round = None, None
+        fd, rnd = None, None
         if request.view_args or request.args or request.form:
             try:
-                fund = find_fund_in_request()
-                round = find_round_in_request()
+                fd = find_fund_in_request()
+                rnd = find_round_in_request()
             except Exception as e:  # noqa
                 current_app.logger.warning(
                     (
@@ -368,15 +368,15 @@ def create_app() -> Flask:  # noqa: C901
                     ),
                     dict(e=e, url=request.url, view_args=request.view_args, args=request.args),
                 )
-        return fund, round
+        return fd, rnd
 
     def _get_service_title():
-        fund, round = get_fund_and_round_in_request()
+        fund, rnd = get_fund_and_round_in_request()
         # TODO Assuming that this is the only round that is not going to need the hardcoded text
         # "Apply for ...". otherwise we need to find a better way to handle this
 
         # 1) If we got a fund AND it’s that special round (PFN-RP), show just the fund title
-        if fund and round and round.id == "9217792e-d8c2-45c8-8170-eed4a8946184":
+        if fund and rnd and rnd.id == "9217792e-d8c2-45c8-8170-eed4a8946184":
             return fund.title
 
         # 2) If we got a fund (any other round or no round at all), show “Apply for …”
@@ -474,11 +474,8 @@ def create_app() -> Flask:  # noqa: C901
 
     @flask_app.context_processor
     def is_pfn_fund_round():
-        fund, round = get_fund_and_round_in_request()
-        is_pfn = (
-            getattr(fund, "short_name", None) == "PFN"
-            and getattr(round, "id", None) == "9217792e-d8c2-45c8-8170-eed4a8946184"
-        )
+        fd, rnd = get_fund_and_round_in_request()
+        is_pfn = getattr(fd, "short_name", None) == "PFN" and getattr(rnd, "short_name", None) == "RP"
         return {"is_pfn_fund_round": is_pfn}
 
     @flask_app.after_request
