@@ -30,9 +30,9 @@ msgid "Access Funding"
 msgstr "Cael Mynediad at Gyllid"
 
 #: apply/templates/apply/contact-us.html:6
-#: apply/templates/apply/landing.html:74
+#: apply/templates/apply/landing.html:91
 #: pre_award/apply/templates/apply/tasklist.html:94
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:73
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:78
 #: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing_eoi.html:73
 msgid "Get help with your application"
 msgstr ""
@@ -102,9 +102,12 @@ msgstr ""
 "<a class=\"govuk-link\" href=\"%(prospectus_link)s\">Darllenwch "
 "brosbectws y gronfa</a> cyn dechrau."
 
-#: apply/templates/apply/landing.html:66
-#: pre_award/apply/templates/apply/tasklist.html:113
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:21
+#: apply/templates/apply/landing.html:78
+#: apply/templates/apply/landing.html:82
+#: pre_award/apply/templates/apply/tasklist.html:122
+#: pre_award/apply/templates/apply/tasklist.html:125
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:22
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:26
 msgid "Submission deadline:"
 msgstr "Dyddiad cau cyflwyno:"
 
@@ -498,15 +501,15 @@ msgstr "Beth sy'n digwydd nesaf"
 msgid "You do not need to do anything else at this time."
 msgstr ""
 
-#: pre_award/apply/templates/apply/application_submitted.html:31
+#: pre_award/apply/templates/apply/application_submitted.html:33
 msgid "The assessors will start reviewing applications from"
 msgstr ""
 
-#: pre_award/apply/templates/apply/application_submitted.html:34
+#: pre_award/apply/templates/apply/application_submitted.html:37
 msgid "We’ll email you if the assessor needs additional information or has any questions about your application for"
 msgstr ""
 
-#: pre_award/apply/templates/apply/application_submitted.html:37
+#: pre_award/apply/templates/apply/application_submitted.html:40
 msgid "Go to your applications"
 msgstr ""
 
@@ -559,7 +562,7 @@ msgstr "Nodwch eich cyfeirad e-bost"
 
 #: pre_award/apply/templates/apply/dashboard_all.html:36
 #: pre_award/apply/templates/apply/dashboard_single_fund.html:18
-#: pre_award/apply/templates/apply/dashboard_single_fund.html:43
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:55
 #: pre_award/apply/templates/apply/tasklist.html:27
 msgid "Expression of interest"
 msgstr ""
@@ -568,7 +571,8 @@ msgstr ""
 msgid "Your applications for"
 msgstr ""
 
-#: pre_award/apply/templates/apply/dashboard_single_fund.html:51
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:64
+#: pre_award/apply/templates/apply/dashboard_single_fund.html:68
 msgid "Deadline for applications: "
 msgstr ""
 
@@ -628,8 +632,8 @@ msgstr ""
 #: pre_award/apply/templates/apply/end_of_application_feedback_page_3.html:21
 #: pre_award/apply/templates/apply/end_of_application_feedback_page_4.html:23
 #: pre_award/apply/templates/apply/end_of_application_survey.html:20
-#: pre_award/apply/templates/apply/tasklist.html:184
-#: pre_award/apply/templates/apply/tasklist.html:193
+#: pre_award/apply/templates/apply/tasklist.html:197
+#: pre_award/apply/templates/apply/tasklist.html:206
 msgid "Applicant feedback survey"
 msgstr ""
 
@@ -935,17 +939,17 @@ msgid "Help with filling out your application"
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:47
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:37
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:42
 msgid "Moving through the form"
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:50
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:40
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:45
 msgid "This form is split into sections based on how it will be assessed."
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:53
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:43
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:48
 msgid "You do not have to complete it in order, or all at once."
 msgstr ""
 
@@ -958,12 +962,12 @@ msgid ""
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:60
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:50
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:55
 msgid "Saving progress and making changes"
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:63
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:53
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:58
 msgid ""
 "Your work will not save automatically. To make sure you do not lose "
 "anything, select \"Save and continue\" regularly, and always before you "
@@ -971,17 +975,17 @@ msgid ""
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:67
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:56
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:61
 msgid "If you need to edit or revisit any sections, use the browser back button."
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:70
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:59
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:64
 msgid "You can edit your responses as many times as you like before you submit."
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:74
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:63
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:68
 msgid "Submitting your application"
 msgstr ""
 
@@ -998,26 +1002,26 @@ msgid ""
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:85
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:66
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:71
 msgid ""
 "When you have completed all sections, you'll be able to submit your "
 "application."
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:89
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:69
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:74
 msgid ""
 "Once you have submitted your application, you'll not be able to edit, add"
 " or change any sections."
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:99
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:78
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:84
 msgid "How we'll use your information"
 msgstr ""
 
 #: pre_award/apply/templates/apply/tasklist.html:102
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:81
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:87
 msgid "Read how we'll use the information from your application in our"
 msgstr ""
 
@@ -1055,22 +1059,22 @@ msgstr ""
 msgid "Applicant feedback survey (not scored)"
 msgstr ""
 
-#: pre_award/apply/templates/apply/tasklist.html:173
+#: pre_award/apply/templates/apply/tasklist.html:186
 msgid ""
 "You must complete all other sections before starting the feedback survey."
 " This section is optional and should take approximately 1 minute to "
 "complete."
 msgstr ""
 
-#: pre_award/apply/templates/apply/tasklist.html:177
+#: pre_award/apply/templates/apply/tasklist.html:190
 msgid ""
 "You must complete all other sections before starting the feedback survey."
 " This section should take approximately 1 minute to complete."
 msgstr ""
 
 #: pre_award/apply/templates/apply/partials/tasklist_section.html:53
-#: pre_award/apply/templates/apply/tasklist.html:187
-#: pre_award/apply/templates/apply/tasklist.html:245
+#: pre_award/apply/templates/apply/tasklist.html:200
+#: pre_award/apply/templates/apply/tasklist.html:258
 msgid "Cannot start yet"
 msgstr ""
 
@@ -1078,26 +1082,26 @@ msgstr ""
 msgid "Applicant feedback submitted"
 msgstr ""
 
-#: pre_award/apply/templates/apply/tasklist.html:226
+#: pre_award/apply/templates/apply/tasklist.html:239
 msgid "Applicant research survey (not scored)"
 msgstr ""
 
-#: pre_award/apply/templates/apply/tasklist.html:231
+#: pre_award/apply/templates/apply/tasklist.html:244
 msgid ""
 "You must complete all other sections before starting the research survey."
 " This section is optional and should take approximately 1 minute to "
 "complete."
 msgstr ""
 
-#: pre_award/apply/templates/apply/tasklist.html:235
+#: pre_award/apply/templates/apply/tasklist.html:248
 msgid ""
 "You must complete all other sections before starting the research survey."
 " This section should take approximately 1 minute to complete."
 msgstr ""
 
-#: pre_award/apply/templates/apply/tasklist.html:242
-#: pre_award/apply/templates/apply/tasklist.html:251
-#: pre_award/apply/templates/apply/tasklist.html:272
+#: pre_award/apply/templates/apply/tasklist.html:255
+#: pre_award/apply/templates/apply/tasklist.html:264
+#: pre_award/apply/templates/apply/tasklist.html:285
 msgid "Applicant research survey"
 msgstr ""
 
@@ -4050,7 +4054,7 @@ msgstr ""
 msgid "Request a new link"
 msgstr "cais am linc arall"
 
-#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:32
+#: pre_award/authenticator/frontend/templates/authenticator/magic_links/landing.html:37
 msgid "How to complete your application"
 msgstr ""
 

@@ -118,8 +118,13 @@
         {% endif %}
         <dl class="govuk-!-margin-bottom-0">
             {% if not is_expression_of_interest %}
-                <dt class="govuk-heading-s dl-inline">{% trans %}Submission deadline:{% endtrans %}</dt>
-                <dd class="govuk-body govuk-!-margin-bottom-2"> {{ submission_deadline|string_to_datetime|datetime_format_full_month }}</dd>
+                {% if is_pfn_fund_round %}
+                    <dt class="govuk-heading-s dl-inline">{% trans %}Submission deadline:{% endtrans %}</dt>
+                    <dd class="govuk-body govuk-!-margin-bottom-2"> 28 November 2025 at midday</dd>
+                {% else %}
+                    <dt class="govuk-heading-s dl-inline">{% trans %}Submission deadline:{% endtrans %}</dt>
+                    <dd class="govuk-body govuk-!-margin-bottom-2"> {{ submission_deadline|string_to_datetime|datetime_format_full_month }}</dd>
+                {% endif %}
             {% endif %}
 
             <dt class="govuk-heading-s dl-inline">{% trans %}Reference:{% endtrans %}</dt>
