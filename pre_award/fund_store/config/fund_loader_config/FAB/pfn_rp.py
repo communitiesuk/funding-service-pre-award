@@ -117,7 +117,7 @@ LOADER_CONFIG = {
         "opens": "2025-06-16T11:00:00",
         "assessment_start": "2025-07-16T09:00:00",
         "deadline": "2026-12-31T12:00:00",
-        "application_reminder_sent": False,
+        "application_reminder_sent": True,
         "reminder_date": "2025-11-17T12:00:00",
         "assessment_deadline": "2025-12-30T23:59:00",
         "prospectus": "https://www.gov.uk/government/publications/plan-for-neighbourhoods-prospectus-and-tools/plan-for-neighbourhoods-prospectus",
