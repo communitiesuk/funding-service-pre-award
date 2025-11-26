@@ -171,6 +171,20 @@ def format_add_another_component_contents(  # noqa: C901
         title, table_config = field["question"]
         field["question"] = title
 
+        rows = field.get("answer", [])
+
+        # Step 1: gather all column names used across any row
+        all_column_keys = set()
+        for row in rows:
+            for column_key in row.keys():
+                all_column_keys.add(column_key)
+
+        # Step 2: ensure each row has all column names (fill missing with None)
+        for row in rows:
+            for key in all_column_keys:
+                row.setdefault(key, None)
+
+        field["answer"] = rows
         component_id_to_answer_list = {}
         # In some cases (optional or path based questions) there is no answer provided
         for answer_container in field.get("answer", []):
