@@ -23,7 +23,12 @@ class Score(db.Model):
 
     justification = db.Column("justification", db.Text(), nullable=False)
 
-    application_id = db.Column("application_id", UUID, ForeignKey("assessment_records.application_id"))
+    application_id = db.Column(
+        "application_id",
+        UUID,
+        ForeignKey("assessment_records.application_id", ondelete="CASCADE"),
+    )
+    assessment_record = db.relationship("AssessmentRecord", back_populates="scores")
 
     date_created = db.Column("date_created", db.DateTime(), server_default=func.now())
 

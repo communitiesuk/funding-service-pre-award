@@ -19,7 +19,11 @@ class Comment(db.Model):
 
     id = db.Column("comment_id", UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
 
-    application_id = db.Column("application_id", UUID, ForeignKey("assessment_records.application_id"))
+    application_id = db.Column(
+        "application_id",
+        UUID,
+        ForeignKey("assessment_records.application_id", ondelete="CASCADE"),
+    )
 
     user_id = db.Column("user_id", db.String(), nullable=False)
 
@@ -31,4 +35,5 @@ class Comment(db.Model):
 
     theme_id = db.Column("theme_id", db.String(), nullable=True)
 
-    updates = relationship("CommentsUpdate", lazy="selectin")
+    updates = relationship("CommentsUpdate", passive_deletes=True, lazy="selectin")
+    assessment_record = relationship("AssessmentRecord", back_populates="comments")
