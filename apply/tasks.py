@@ -10,7 +10,7 @@ from data.crud.applications import get_applications_for_round_by_status
 from data.crud.fund_round_queries import (
     create_event,
     get_rounds_for_application_deadline_reminders,
-    get_rounds_with_passed_deadline,
+    get_rounds_for_incomplete_application_emails,
     set_application_reminder_sent,
 )
 from pre_award.application_store.db.models.application.enums import Status
@@ -80,7 +80,7 @@ def send_application_deadline_reminders(c: Context) -> None:
 
 
 def send_incomplete_application_emails_impl() -> None:
-    rounds_with_passed_deadline = get_rounds_with_passed_deadline()
+    rounds_with_passed_deadline = get_rounds_for_incomplete_application_emails()
     incomplete_statuses = [Status.NOT_STARTED, Status.IN_PROGRESS, Status.COMPLETED]
 
     for round in rounds_with_passed_deadline:
