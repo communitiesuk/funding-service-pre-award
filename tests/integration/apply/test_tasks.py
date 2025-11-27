@@ -6,14 +6,14 @@ from tests.integration.seeding import seed_account, seed_application, seed_fund,
 from tests.pre_award.utils import AnyStringMatching
 
 
-class TestSendIncompleteApplicationReminderTask:
+class TestSendApplicationDeadlineReminderTask:
     def _seed_round(self, session, fund, reminder_date, deadline):
         round = seed_round(session, fund, reminder_date=reminder_date, deadline=deadline)
         fund.rounds.append(round)
         session.flush()
         return round
 
-    def test_send_incomplete_application_reminder_task_nothing_to_do(
+    def test_send_application_deadline_reminder_task_nothing_to_do(
         self, app, session, caplog, mock_notification_service_calls
     ):
         with app.app_context():
@@ -24,7 +24,7 @@ class TestSendIncompleteApplicationReminderTask:
             "Finished sending incomplete application reminders",
         ]
 
-    def test_send_incomplete_application_reminder_task_emails(
+    def test_send_application_deadline_reminder_task_emails(
         self, app, session, caplog, mock_notification_service_calls
     ):
         with app.app_context():
@@ -52,7 +52,7 @@ class TestSendIncompleteApplicationReminderTask:
                 "Finished sending incomplete application reminders",
             ]
 
-    def test_send_incomplete_application_reminder_task_only_sends_one_email_per_account(
+    def test_send_application_deadline_reminder_task_only_sends_one_email_per_account(
         self, app, session, caplog, mock_notification_service_calls
     ):
         with app.app_context():
@@ -79,7 +79,7 @@ class TestSendIncompleteApplicationReminderTask:
                 "Finished sending incomplete application reminders",
             ]
 
-    def test_send_incomplete_application_reminder_task_does_not_send_before_reminder_date(
+    def test_send_application_deadline_reminder_task_does_not_send_before_reminder_date(
         self, app, session, caplog, mock_notification_service_calls
     ):
         with app.app_context():
@@ -102,7 +102,7 @@ class TestSendIncompleteApplicationReminderTask:
                 "Finished sending incomplete application reminders",
             ]
 
-    def test_send_incomplete_application_reminder_task_does_not_send_for_submitted_applications(
+    def test_send_application_deadline_reminder_task_does_not_send_for_submitted_applications(
         self, app, session, caplog, mock_notification_service_calls
     ):
         with app.app_context():
