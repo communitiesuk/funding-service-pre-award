@@ -32,7 +32,7 @@ def seed_fund(session, **kwargs):
     return fund
 
 
-def seed_round(session, fund, **kwargs):
+def seed_round(session, fund, send_incomplete_application_emails, **kwargs):
     round_kwargs = (
         dict(
             fund_id=fund.id,
@@ -44,6 +44,7 @@ def seed_round(session, fund, **kwargs):
             assessment_start=datetime(2020, 3, 1),
             assessment_deadline=datetime(2020, 3, 31),
             application_reminder_sent=False,
+            send_incomplete_application_emails=send_incomplete_application_emails,
             prospectus="",
             privacy_notice="",
             project_name_field_id="",
