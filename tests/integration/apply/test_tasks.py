@@ -9,16 +9,16 @@ from tests.pre_award.utils import AnyStringMatching
 
 class TestSendApplicationDeadlineReminderTask:
     def _seed_round(self, session, fund, reminder_date, deadline, send_incomplete_application_emails=True):
-        round = seed_round(
+        rnd = seed_round(
             session,
             fund,
             reminder_date=reminder_date,
             deadline=deadline,
             send_incomplete_application_emails=send_incomplete_application_emails,
         )
-        fund.rounds.append(round)
+        fund.rounds.append(rnd)
         session.flush()
-        return round
+        return rnd
 
     def test_send_application_deadline_reminder_task_nothing_to_do(
         self, app, session, caplog, mock_notification_service_calls
@@ -141,16 +141,16 @@ class TestSendApplicationDeadlineReminderTask:
 
 class TestSendIncompleteApplicationEmailTask:
     def _seed_round(self, session, fund, reminder_date, deadline, send_incomplete_application_emails):
-        round = seed_round(
+        rnd = seed_round(
             session,
             fund,
             reminder_date=reminder_date,
             deadline=deadline,
             send_incomplete_application_emails=send_incomplete_application_emails,
         )
-        fund.rounds.append(round)
+        fund.rounds.append(rnd)
         session.flush()
-        return round
+        return rnd
 
     def test_send_incomplete_application_emails_enabled(
         self, app, session, caplog, mock_notification_service_calls, mocker
@@ -200,6 +200,7 @@ class TestSendIncompleteApplicationEmailTask:
             send_incomplete_application_emails_impl()
             # Email should NOT be sent
             assert len(mock_notification_service_calls) == 0
+            assert all("Sent incomplete application notification" not in message for message in caplog.messages)
 
     def test_send_incomplete_application_emails_enabled_deadline_not_yet_passed(
         self, app, session, caplog, mock_notification_service_calls, mocker

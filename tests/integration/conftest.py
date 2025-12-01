@@ -26,15 +26,6 @@ def session(db):
 
 
 def mock_get_data(endpoint, *args, **kwargs):
-    """
-    Mock function for get_data used in tests.
-
-    Returns a dictionary representing either a round or a fund, depending on the endpoint.
-    If the endpoint contains '/rounds/', returns a minimal round-like dictionary.
-    Otherwise, returns a minimal fund-like dictionary.
-
-    This allows tests to run without accessing external data sources.
-    """
     if "/rounds/" in endpoint:
         return {
             "id": "test-round-id",
