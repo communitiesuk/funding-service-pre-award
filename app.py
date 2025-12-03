@@ -275,7 +275,7 @@ def create_app() -> Flask:  # noqa: C901
     csrf.exempt(application_store_bp)
     csrf.exempt(assessment_store_bp)
     csrf.exempt(form_store_bp)
-    csrf.exempt(utils_bp)
+    csrf.exempt(utils_bp)  # NOSONAR: S4502 - API blueprint, consistent with other exemptions
     for bp, _ in assessment_store_bp._blueprints:
         csrf.exempt(bp)
 

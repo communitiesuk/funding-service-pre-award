@@ -131,13 +131,11 @@ jobs:
       run: |
         copilot ${{ matrix.command }} init --app pre-award --name fsd-${{ matrix.deployment }} || true
         copilot ${{ matrix.command }} deploy --env ${{ inputs.environment }} --app pre-award --name fsd-${{ matrix.deployment }}
-
-
   e2e_test:
     name: Run end-to-end (browser) tests
     if: ${{ inputs.environment == 'dev' || inputs.environment == 'test' || inputs.environment == 'uat' }}  # Do not run these against the prod environment without addressing the auth/JWT self-signing done by e2e tests.
     needs: [ deploy ]
-    uses: communitiesuk/funding-service-design-workflows/.github/workflows/run-shared-tests.yml@cleanUp-e2e-test-date
+    uses: communitiesuk/funding-service-design-workflows/.github/workflows/run-shared-tests.yml@b48a7835f22cc33507bb32ae49117c362a98380a
     with:
       run_e2e_tests_assessment: ${{ inputs.run_e2e_tests_assessment }}
       run_e2e_tests_application: ${{ inputs.run_e2e_tests_application }}

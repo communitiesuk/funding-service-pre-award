@@ -53,14 +53,12 @@ class AssessmentRecord(BaseModel):
 
     is_deleted = Column(Boolean, nullable=False, default=False)
 
-    # ===== Updated relationships with cascade =====
     scores = relationship("Score", back_populates="assessment_record", passive_deletes=True)
     comments = relationship("Comment", back_populates="assessment_record", passive_deletes=True)
     flags = relationship("AssessmentFlag", back_populates="assessment_record", passive_deletes=True)
     tag_associations = relationship("TagAssociation", back_populates="assessment_record", passive_deletes=True)
     qa_complete = relationship("QaComplete", back_populates="assessment_record", passive_deletes=True)
     user_associations = relationship("AllocationAssociation", back_populates="assessment_record", passive_deletes=True)
-    # JSONB helper properties
     location_json_blob = Column("location_json_blob", JSONB, nullable=True)
     is_withdrawn = Column("is_withdrawn", Boolean, default=False, nullable=False)
 
@@ -70,6 +68,8 @@ class AssessmentRecord(BaseModel):
         "AssessmentFlag.is_change_request == True)",
         viewonly=True,  # this is a subset relationship; the unfiltered `flags` should be used for writes/deletes
     )
+    # These are defined as column_properties not as hybrid_property due to performance
+    # Using column_property below forces the json parsing to be done on the DB side which is quicker than in python
     organisation_name = column_property(
         func.coalesce(
             func.jsonb_path_query_first(
@@ -173,19 +173,18 @@ Index(
     },
     postgresql_using="gin",
 )
-
+# This is very fast for "=" in WHERE clauses.
 Index(
     "ix_application_id_hash",
     AssessmentRecord.application_id,
     postgresql_using="hash",
 )
-
+# Links the round_id and fund_id columns by an index.
 Index(
     "ix_application_round_fund_id",
     AssessmentRecord.round_id,
     AssessmentRecord.fund_id,
 )
-
 Index(
     "ix_project_name",
     AssessmentRecord.project_name,
