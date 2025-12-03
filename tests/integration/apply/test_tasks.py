@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from apply.tasks import send_application_deadline_reminders_impl, send_incomplete_application_emails_impl
 from pre_award.application_store.db.models.application.enums import Status
+from pre_award.fund_store.db.models.event import Event, EventType
 from tests.integration.conftest import mock_get_data
 from tests.integration.seeding import seed_account, seed_application, seed_fund, seed_round
 from tests.pre_award.utils import AnyStringMatching
@@ -212,7 +213,7 @@ class TestSendIncompleteApplicationEmailTask:
 
         with app.app_context():
             fund = seed_fund(session)
-            round_disabled = self._seed_round(
+            round_enabled = self._seed_round(
                 session,
                 fund,
                 reminder_date=datetime.today() - timedelta(days=2),
@@ -220,7 +221,67 @@ class TestSendIncompleteApplicationEmailTask:
                 send_incomplete_application_emails=True,
             )
             account = seed_account(session)
-            _ = seed_application(session, fund, round_disabled, account, status=Status.NOT_STARTED)
+            _ = seed_application(session, fund, round_enabled, account, status=Status.NOT_STARTED)
+
+            send_incomplete_application_emails_impl()
+            # Email should NOT be sent
+            assert len(mock_notification_service_calls) == 0
+            assert all("Sent incomplete application notification" not in message for message in caplog.messages)
+
+    def test_send_incomplete_application_emails_enabled_deadline_passed_more_than_a_month_ago(
+        self, app, session, caplog, mock_notification_service_calls, mocker
+    ):
+        mocker.patch(
+            "pre_award.application_store.external_services.data.get_data",
+            side_effect=mock_get_data,
+        )
+
+        with app.app_context():
+            fund = seed_fund(session)
+            round_enabled = self._seed_round(
+                session,
+                fund,
+                reminder_date=datetime.today() - timedelta(days=47),
+                deadline=datetime.today() - timedelta(days=40),
+                send_incomplete_application_emails=True,
+            )
+            account = seed_account(session)
+            _ = seed_application(session, fund, round_enabled, account, status=Status.NOT_STARTED)
+
+            send_incomplete_application_emails_impl()
+            # Email should NOT be sent
+            assert len(mock_notification_service_calls) == 0
+            assert all("Sent incomplete application notification" not in message for message in caplog.messages)
+
+    def test_send_incomplete_application_emails_event_already_processed(
+        self, app, session, caplog, mock_notification_service_calls, mocker
+    ):
+        mocker.patch(
+            "pre_award.application_store.external_services.data.get_data",
+            side_effect=mock_get_data,
+        )
+
+        with app.app_context():
+            fund = seed_fund(session)
+            round_with_event = self._seed_round(
+                session,
+                fund,
+                reminder_date=datetime.today() - timedelta(days=9),
+                deadline=datetime.today() - timedelta(days=2),
+                send_incomplete_application_emails=True,
+            )
+            account = seed_account(session)
+            _ = seed_application(session, fund, round_with_event, account, status=Status.NOT_STARTED)
+
+            # Create an Event for this round with type=SEND_INCOMPLETE_APPLICATIONS,
+            event = Event(
+                round_id=round_with_event.id,
+                type=EventType.SEND_INCOMPLETE_APPLICATIONS,
+                activation_date=datetime.today() - timedelta(days=1),
+                processed=datetime.today() - timedelta(days=1),
+            )
+            session.add(event)
+            session.commit()
 
             send_incomplete_application_emails_impl()
             # Email should NOT be sent
