@@ -54,19 +54,20 @@ def set_application_reminder_sent(round: Round) -> None:
     db.session.commit()
 
 
-def get_rounds_with_passed_deadline() -> Sequence[Round]:
+def get_rounds_for_incomplete_application_emails() -> Sequence[Round]:
     """
-    Retrieve rounds that have passed their deadline but have not yet had an event
-    created for sending incomplete applications.
+    Retrieve rounds that have passed their deadline, have not yet had an event
+    created for sending incomplete applications, and have 'send_incomplete_application_emails' enabled.
     """
     now = datetime.now()
     one_month_ago = now - timedelta(days=30)
 
-    rounds_without_event = (
+    rounds = (
         db.session.query(Round)
         .filter(
             Round.deadline < now,
             Round.deadline >= one_month_ago,
+            Round.send_incomplete_application_emails.is_(True),
             Round.id.notin_(
                 select(Event.round_id).filter(
                     Event.type == EventType.SEND_INCOMPLETE_APPLICATIONS, Event.processed.isnot(None)
@@ -76,7 +77,7 @@ def get_rounds_with_passed_deadline() -> Sequence[Round]:
         .all()
     )
 
-    return rounds_without_event
+    return rounds
 
 
 def create_event(round_id: UUID, event_type: EventType, activation_date: datetime, is_processed: bool) -> None:

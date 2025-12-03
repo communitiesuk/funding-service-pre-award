@@ -36,6 +36,7 @@ def test_get_rounds_for_application_deadline_reminders(
         reminder_date=reminder_date,
         deadline=deadline,
         application_reminder_sent=reminder_sent,
+        send_incomplete_application_emails=True,
     )
 
     mock_now = mocker.patch("sqlalchemy.func.now")
