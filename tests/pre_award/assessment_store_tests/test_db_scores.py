@@ -39,7 +39,7 @@ def test_create_scores_for_application_sub_crit(db, seed_application_records):
     }
     score_metadata = create_score_for_app_sub_crit(**assessment_payload)
 
-    assert len(score_metadata) == 7
+    assert len(score_metadata) == 8
     assert score_metadata["date_created"]
     assert score_metadata["score"] == 3
 

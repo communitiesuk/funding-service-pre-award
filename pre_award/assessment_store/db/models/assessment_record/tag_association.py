@@ -17,6 +17,7 @@ class TagAssociation(BaseModel):
         UUID(as_uuid=True),
         ForeignKey(
             "assessment_records.application_id",
+            ondelete="CASCADE",
         ),
     )
     associated = db.Column(db.Boolean(), nullable=False, default=True)
@@ -24,3 +25,4 @@ class TagAssociation(BaseModel):
     user_id = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     tag = relationship("Tag")
+    assessment_record = db.relationship("AssessmentRecord", back_populates="tag_associations")
