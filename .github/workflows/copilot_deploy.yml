@@ -44,7 +44,7 @@ jobs:
     services:
       postgres:
         # Docker Hub image
-        image: postgres:16.9@sha256:64d54200dec0cb9d2d3e43f094e9aa47e7e6c8c246828a512969cccc39b5afb2
+        image: postgres:16.11@sha256:cf2a05fe40887b721e4b3dbac8fd32673c08292dcc8ba6b62b52b7f640433bd0
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: password  # pragma: allowlist secret
