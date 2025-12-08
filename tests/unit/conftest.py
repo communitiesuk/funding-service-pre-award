@@ -10,7 +10,6 @@ from werkzeug.test import TestResponse
 from data.models import Fund, Round
 from pre_award.config.envs.unit_test import UnitTestConfig
 from pre_award.fund_store.config.fund_loader_config.FAB.ctdf import LOADER_CONFIG as ctdf_config
-from pre_award.fund_store.config.fund_loader_config.FAB.ctdf_closed import LOADER_CONFIG as ctdf_config_closed
 
 
 def _convert_fab_config_into_format_from_db(config_values: dict) -> dict:
@@ -26,7 +25,16 @@ def _convert_fab_config_into_format_from_db(config_values: dict) -> dict:
 
 mock_fund = Fund(**ctdf_config["fund_config"])
 mock_round_open = Round(fund=mock_fund, **_convert_fab_config_into_format_from_db(ctdf_config["round_config"]))
-mock_round_closed = Round(fund=mock_fund, **_convert_fab_config_into_format_from_db(ctdf_config_closed["round_config"]))
+
+mock_round_closed = Round(
+    fund=mock_fund,
+    title_json={"en": "Crash Round Closed", "cy": None},
+    deadline=datetime(2024, 12, 31, 11, 58, 0),  # Deadline in the past to trigger "Window closed"
+    instructions_json={
+        "en": "This is a fake fund for testing so will not result in you getting any money!",
+        "cy": None,
+    },
+)
 
 
 # this is temp copied from apply_tests while the new routes are piggy backing on the apply

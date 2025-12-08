@@ -64,6 +64,28 @@ def ordered_themes(fund_round_short_name):
             "value-for-money",
         ],
         "CTDFCR1": ["project_name", "organisation_name"],
+        "CTDFCR2": [
+            # Unscored - Organisation Information
+            "general_details",
+            "org_type_info",
+            # Scored - Strategic Case
+            "project_overview",
+            "project_details_specifics",
+            "engagement_activity",
+            "engagement_outcomes",
+            # Scored - Financial Case
+            "project_costs",
+            "funding_package",
+            "staffing",
+            # Scored - Management Case
+            "dates",
+            "planning_permission",
+            "risk_management",
+            "project_team",
+            # Unscored - Declarations & Documents
+            "all_declarations",
+            "uploads",
+        ],
         "CF1R1": ["project_name", "organisation_name"],
         "CF1EOI": ["project_name", "organisation_name"],
         "UFR1": ["project_name", "organisation_name"],
