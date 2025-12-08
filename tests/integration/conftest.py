@@ -23,3 +23,22 @@ def session(db):
         connection.close()
 
     db.session = old_session
+
+
+def mock_get_data(endpoint, *args, **kwargs):
+    if "/rounds/" in endpoint:
+        return {
+            "id": "test-round-id",
+            "title_json": {"en": "Test Round Name"},
+            "fund_id": "test-fund-id",
+        }
+    else:
+        return {
+            "name": "Test Fund Name",
+            "id": "test-fund-id",
+            "short_name": "TEST",
+            "description": "Test fund description",
+            "welsh_available": False,
+            "name_json": {"en": "Test Fund Name"},
+            "funding_type": "TEST_TYPE",
+        }

@@ -79,6 +79,8 @@ class Round(Model):
     assessment_start: Mapped[Optional[datetime]]  # In Europe/London timezone, stored without tzinfo
     application_reminder_sent: Mapped[bool] = mapped_column(default=False)
     reminder_date: Mapped[Optional[datetime]]  # In Europe/London timezone, stored without tzinfo
+    send_incomplete_application_emails: Mapped[bool] = mapped_column(default=True, nullable=False)
+
     assessment_deadline: Mapped[Optional[datetime]]  # In Europe/London timezone, stored without tzinfo
     prospectus: Mapped[str]
     privacy_notice: Mapped[str]
