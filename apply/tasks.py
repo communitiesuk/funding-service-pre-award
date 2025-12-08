@@ -80,10 +80,10 @@ def send_application_deadline_reminders(c: Context) -> None:
 
 
 def send_incomplete_application_emails_impl() -> None:
-    rounds_with_passed_deadline = get_rounds_for_incomplete_application_emails()
+    rounds_for_incomplete_emails = get_rounds_for_incomplete_application_emails()
     incomplete_statuses = [Status.NOT_STARTED, Status.IN_PROGRESS, Status.COMPLETED]
 
-    for round in rounds_with_passed_deadline:
+    for round in rounds_for_incomplete_emails:
         applications = get_applications_for_round_by_status(round.id, incomplete_statuses)
 
         for application in applications:

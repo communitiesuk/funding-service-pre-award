@@ -8,7 +8,7 @@ from tests.integration.seeding import seed_account, seed_application, seed_fund,
 from tests.pre_award.utils import AnyStringMatching
 
 
-class TestSendApplicationDeadlineReminderTask:
+class BaseRoundTest:
     def _seed_round(self, session, fund, reminder_date, deadline, send_incomplete_application_emails=True):
         rnd = seed_round(
             session,
@@ -21,6 +21,8 @@ class TestSendApplicationDeadlineReminderTask:
         session.flush()
         return rnd
 
+
+class TestSendApplicationDeadlineReminderTask(BaseRoundTest):
     def test_send_application_deadline_reminder_task_nothing_to_do(
         self, app, session, caplog, mock_notification_service_calls
     ):
@@ -140,19 +142,7 @@ class TestSendApplicationDeadlineReminderTask:
             ]
 
 
-class TestSendIncompleteApplicationEmailTask:
-    def _seed_round(self, session, fund, reminder_date, deadline, send_incomplete_application_emails):
-        rnd = seed_round(
-            session,
-            fund,
-            reminder_date=reminder_date,
-            deadline=deadline,
-            send_incomplete_application_emails=send_incomplete_application_emails,
-        )
-        fund.rounds.append(rnd)
-        session.flush()
-        return rnd
-
+class TestSendIncompleteApplicationEmailTask(BaseRoundTest):
     def test_send_incomplete_application_emails_enabled(
         self, app, session, caplog, mock_notification_service_calls, mocker
     ):
