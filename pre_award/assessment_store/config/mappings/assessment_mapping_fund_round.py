@@ -2625,6 +2625,213 @@ applicant_info_mapping = {
                         },
                     }
                 },
+                # Question 2 - MP Consulted
+                "cRASmW": {
+                    "en": {
+                        "title": "Has the MP for your place been consulted during development of this plan and reviewed it prior to submission?",
+                        "field_type": "yesNoField",
+                    }
+                },
+                "nfJFsF": {
+                    "en": {
+                        "title": "MP Full name",
+                        "field_type": "textField",
+                    }
+                },
+                "CCRPQy": {
+                    "en": {
+                        "title": "MP Constituency",
+                        "field_type": "textField",
+                    }
+                },
+                # Question 2 - MCA Consulted
+                "IvRZON": {
+                    "en": {
+                        "title": "Have you consulted with the relevant Mayoral Combined Authority on the content of your Regeneration Plan?",
+                        "field_type": "yesNoField",
+                    }
+                },
+                # Question 3.3 - Individual Interventions
+                "WFRgIa": {
+                    "en": {
+                        "title": "Which categories of pre-approved interventions do you plan to fund?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                "xFBFbU": {
+                    "en": {
+                        "title": "Which interventions relating to 'Cohesion' do you plan to fund in the first investment period?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                "AHJYFi": {
+                    "en": {
+                        "title": "Which interventions relating to 'Education and opportunity' do you plan to fund in the first investment period?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                "vUIIVo": {
+                    "en": {
+                        "title": "Which interventions relating to 'Health and wellbeing' do you plan to fund in the first investment period?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                "EqLMxj": {
+                    "en": {
+                        "title": "Which interventions relating to 'Housing' do you plan to fund in the first investment period?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                "GrBsow": {
+                    "en": {
+                        "title": "Which interventions relating to 'Regeneration, high streets and heritage' do you plan to fund in the first investment period?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                "NwlpeY": {
+                    "en": {
+                        "title": "Which interventions relating to 'Safety and security' do you plan to fund in the first investment period?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                "RsMYwj": {
+                    "en": {
+                        "title": "Which interventions relating to 'Transport' do you plan to fund in the first investment period?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                "RAcQRK": {
+                    "en": {
+                        "title": "Which interventions relating to 'Work, productivity and skills' do you plan to fund in the first investment period?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                # Question 3.3 - Off Menu Proposals
+                "DgNaHl": {
+                    "en": {
+                        "title": "Does your Neighbourhood Board wish to deliver off-menu interventions?",
+                        "field_type": "yesNoField",
+                    }
+                },
+                "cpsPOw": {
+                    "en": {
+                        "title": "Describe the proposed intervention.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "iSuQcm": "Brief description",
+                            "vhDdtP": "Estimated cost",
+                            "Urvfex": "Why the proposed intervention cannot be delivered through pre-approved interventions",
+                            "hjOHaG": "How the proposed intervention will support delivery of one or more of the strategic objectives",
+                            "eyyfUI": "How the proposed intervention will be value for money and the outcomes and outputs that you aim to deliver through the investment",
+                            "FiPgJD": "How you have consulted with relevant bodies, where relevant, when developing this proposal",
+                        },
+                    }
+                },
+                # Question 4.2 - Projects
+                "wmpvjb": {
+                    "en": {
+                        "title": "Can you provide details of any projects you have identified for funding?",
+                        "field_type": "yesNoField",
+                    }
+                },
+                "dEyfRq": {
+                    "en": {
+                        "title": "Tell us about your project.",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "AeuWAj": "Project name",
+                            "tXQbHW": "Brief description of project",
+                            "ojLAmd": "Primary intervention",
+                            "YzhoTC": "Project status",
+                            "qaHSDG": "Name of delivery organisation",
+                            "GeundE": "Type of organisation",
+                            "nYQcxZ": "Amount of funding allocated from the Plan for Neighbourhoods programme",
+                            "EhzAeB": "Other sources of project funding",
+                            "HbiXPn": "Total project budget",
+                        },
+                    }
+                },
+                # Question 5.4 - Areas of Support Interested In
+                "NKLAZE": {
+                    "en": {
+                        "title": "Tell us which areas of support you may be interested in.",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                # Question 5.1 - Milestone data
+                "ZRERCV": {
+                    "en": {
+                        "title": "Which milestones are relevant for your place?",
+                        "field_type": "checkboxesField",
+                    }
+                },
+                "rrPXVD": {
+                    "en": {
+                        "title": "Consulting the community - key activities and dates",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "wllxCG": "Summary of activities",
+                            "WYTlBX": "Estimated start date",
+                            "ljJuGk": "Estimated completion date",
+                        },
+                    }
+                },
+                "POAlfg": {
+                    "en": {
+                        "title": "Running a feasibility study - key activities and dates",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "itoWXB": "Summary of activities",
+                            "guCDSi": "Estimated start date",
+                            "gJRNzf": "Estimated completion date",
+                        },
+                    }
+                },
+                "PHFgHg": {
+                    "en": {
+                        "title": "Call for projects and project selection round - key activities and dates",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "AqETPA": "Summary of activities",
+                            "ZLZXdp": "Estimated start date",
+                            "RbGxAS": "Estimated completion date",
+                        },
+                    }
+                },
+                "mFpuWM": {
+                    "en": {
+                        "title": "Commissioning services - key activities and dates",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "teTxKx": "Summary of activities",
+                            "yzJgwQ": "Estimated start date",
+                            "icvTMw": "Estimated completion date",
+                        },
+                    }
+                },
+                "wnHKSa": {
+                    "en": {
+                        "title": "Project procurement - key activities and dates",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "fOrPxA": "Summary of activities",
+                            "GbzGDA": "Estimated start date",
+                            "DCINPC": "Estimated completion date",
+                        },
+                    }
+                },
+                "cfiJyU": {
+                    "en": {
+                        "title": "Additional milestones",
+                        "field_type": "MultiInputField",
+                        "formatted_children": {
+                            "ZWYplj": "Brief description of milestone",
+                            "HYGqTl": "Summary of activities",
+                            "WBbwfO": "Estimated start date",
+                            "HZuYud": "Estimated completion date",
+                        },
+                    }
+                },
             }
         },
         "OUTPUT_TRACKER": {},
