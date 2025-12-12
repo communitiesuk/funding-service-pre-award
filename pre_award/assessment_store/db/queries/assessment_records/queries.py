@@ -864,17 +864,6 @@ def get_export_data(  # noqa: C901 - historical sadness
     return final_list
 
 
-# adds missing elements for use in the csv
-def add_missing_elements_with_empty_values(applicant_info, form_fields, language):
-    result_data = applicant_info.copy()
-
-    for _key, value in form_fields.items():
-        title = value[language]["title"]
-        if title not in result_data:
-            result_data[title] = ""
-    return result_data
-
-
 def format_lists(answer):
     formatted_elements = []
     indent = " " * 5
