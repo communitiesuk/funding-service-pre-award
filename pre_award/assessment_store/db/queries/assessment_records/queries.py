@@ -822,7 +822,7 @@ def get_export_data(  # noqa: C901 - historical sadness
                         answer = 0
                         field_to_sum = form_fields[field["key"]][language].get("field_to_sum", None)
                         if not field_to_sum:
-                            applicant_info[title] = ""
+                            applicant_info[title] = "Not Provided"
                             continue
                         for sum_item in field["answer"]:
                             answer += int(sum_item[field_to_sum])
@@ -840,7 +840,7 @@ def get_export_data(  # noqa: C901 - historical sadness
                         applicant_info[title].strip()
                         continue
                     else:
-                        applicant_info[title] = str(answer)
+                        applicant_info[title] = answer
                 else:
                     applicant_info[title] = "Not Provided"
             # Move Application ID, Short ID, Date Submitted to front
