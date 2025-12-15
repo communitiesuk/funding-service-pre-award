@@ -66,10 +66,16 @@ from pre_award.assessment_store.config.mappings.cof_mapping_parts.r4w2_unscored_
     unscored_sections as cof_unscored_sections_r4w2,
 )
 from pre_award.assessment_store.config.mappings.ctdf_mapping_parts.r1_scored_sections import (
-    scored_sections as ctdf_scored_sections,
+    scored_sections as ctdf_scored_sections_r1,
 )
 from pre_award.assessment_store.config.mappings.ctdf_mapping_parts.r1_unscored_sections import (
-    unscored_sections as ctdf_unscored_sections,
+    unscored_sections as ctdf_unscored_sections_r1,
+)
+from pre_award.assessment_store.config.mappings.ctdf_mapping_parts.r2_scored_sections import (
+    scored_sections as ctdf_scored_sections_r2,
+)
+from pre_award.assessment_store.config.mappings.ctdf_mapping_parts.r2_unscored_sections import (
+    unscored_sections as ctdf_unscored_sections_r2,
 )
 from pre_award.assessment_store.config.mappings.cyp_mapping_parts.r1_scored_criteria import (
     scored_criteria as cyp_scored_criteria_r1,
@@ -201,6 +207,7 @@ HSRA_ROUND_RP_ID = "bae275aa-86a5-4d3e-bcc7-0a25d040910d"
 
 CTDF_FUND_ID = "3dcfa617-cff8-4c2c-9edd-9568aa367d13"
 CTDF_ROUND_1_ID = "7ecd7d64-1854-44ab-a10c-a7af4b8d68e1"
+CTDF_ROUND_2_ID = "8ecd7d64-1854-44ab-a10c-a7af4b8d68e2"
 
 FFW_FUND_ID = "8b5c5dad-21a4-4ed1-970e-02d8a47dc49c"
 FFW_ROUND_1_ID = "c27a5693-50f9-47fa-b5c2-c43b14d74af1"
@@ -335,23 +342,28 @@ fund_round_to_assessment_mapping = {
     },
     f"{FFW_FUND_ID}:{FFW_ROUND_1_ID}": {
         "schema_id": "ctdf_r1_assessment",
-        "unscored_sections": ctdf_unscored_sections,
-        "scored_criteria": ctdf_scored_sections,
+        "unscored_sections": ctdf_unscored_sections_r1,
+        "scored_criteria": ctdf_scored_sections_r1,
     },
     f"{CTDF_FUND_ID}:{CTDF_ROUND_1_ID}": {
         "schema_id": "ctdf_r1_assessment",
-        "unscored_sections": ctdf_unscored_sections,
-        "scored_criteria": ctdf_scored_sections,
+        "unscored_sections": ctdf_unscored_sections_r1,
+        "scored_criteria": ctdf_scored_sections_r1,
+    },
+    f"{CTDF_FUND_ID}:{CTDF_ROUND_2_ID}": {
+        "schema_id": "ctdf_r2_assessment",
+        "unscored_sections": ctdf_unscored_sections_r2,
+        "scored_criteria": ctdf_scored_sections_r2,
     },
     f"{CF1_FUND_ID}:{CF1_ROUND_1_ID}": {
         "schema_id": "ctdf_r1_assessment",
-        "unscored_sections": ctdf_unscored_sections,
-        "scored_criteria": ctdf_scored_sections,
+        "unscored_sections": ctdf_unscored_sections_r1,
+        "scored_criteria": ctdf_scored_sections_r1,
     },
     f"{CF1_FUND_ID}:{CF1_ROUND_EOI_ID}": {
         "schema_id": "ctdf_r1_assessment",
-        "unscored_sections": ctdf_unscored_sections,
-        "scored_criteria": ctdf_scored_sections,
+        "unscored_sections": ctdf_unscored_sections_r1,
+        "scored_criteria": ctdf_scored_sections_r1,
     },
     f"{UF1_FUND__ID}:{UF1_ROUND_1_ID}": {
         "schema_id": "uf1_r1_assessment",
@@ -464,6 +476,12 @@ fund_round_data_key_mappings = {
         "funding_two": None,
     },
     "CTDFCR1": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": None,
+        "funding_two": None,
+    },
+    "CTDFCR2": {
         "location": None,
         "asset_type": None,
         "funding_one": None,
@@ -2715,6 +2733,32 @@ applicant_info_mapping = {
             }
         },
     },
+    CTDF_FUND_ID: {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "orgName": {"en": {"title": "Organisation Name", "field_type": "textField"}},
+                "projectName": {"en": {"title": "Project Name", "field_type": "textField"}},
+                "projectDescription": {"en": {"title": "Project Description", "field_type": "freeTextField"}},
+                "orgAddress": {"en": {"title": "Organisation Address", "field_type": "ukAddressField"}},
+                "fundingRequested": {"en": {"title": "Funding Requested", "field_type": "numberField"}},
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "orgName": {"en": {"title": "Organisation Name", "field_type": "textField"}},
+                "projectName": {"en": {"title": "Project Name", "field_type": "textField"}},
+                "fundingRequested": {"en": {"title": "Funding Requested", "field_type": "numberField"}},
+            },
+            "score_fields": {
+                "Application ID",
+                "Short ID",
+                "Score",
+                "Score Subcriteria",
+                "Score Date",
+                "Score Time",
+            },
+        },
+    },
 }
 
 # APPLICATION SEEDING CONFIGURATION
@@ -2753,6 +2797,11 @@ fund_round_mapping_config = {
     "CTDFCR1": {
         "fund_id": CTDF_FUND_ID,
         "round_id": CTDF_ROUND_1_ID,
+        "type_of_application": "CTDF",
+    },
+    "CTDFCR2": {
+        "fund_id": CTDF_FUND_ID,
+        "round_id": CTDF_ROUND_2_ID,
         "type_of_application": "CTDF",
     },
     "COFR2W2": {
