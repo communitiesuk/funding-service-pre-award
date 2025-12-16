@@ -331,6 +331,9 @@ def upsert_round_data(round_configs, commit: bool = True):
             round_record.mark_as_complete_enabled = round_config["mark_as_complete_enabled"]
             round_record.is_expression_of_interest = round_config["is_expression_of_interest"]
             round_record.eligibility_config = round_config["eligibility_config"]
+            round_record.send_incomplete_application_emails = round_config.get(
+                "send_incomplete_application_emails", True
+            )
             round_record.eoi_decision_schema = round_config["eoi_decision_schema"]
 
             updated_rounds[round_config["id"]] = round_record
