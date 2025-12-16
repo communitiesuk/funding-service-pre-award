@@ -762,7 +762,6 @@ def get_export_data(  # noqa: C901 - historical sadness
     language: str,  # noqa
 ) -> List[Dict]:  # noqa
     form_fields = list_of_fields.get(report_type, {}).get("form_fields", {})
-    field_ids = form_fields.keys()
     final_list = []
 
     for assessment in assessment_metadatas:
@@ -787,11 +786,12 @@ def get_export_data(  # noqa: C901 - historical sadness
                         field_lookup[field["key"]] = field
 
             # Process fields in the order they appear in field_ids (from list_of_fields)
-            for field_id in field_ids:
-                title = form_fields[field_id][language]["title"]
+            for field_id in form_fields:
+                field_data = form_fields[field_id][language]
+                title = field_data["title"]
                 if field_id in field_lookup:
                     field = field_lookup[field_id]
-                    field_type = form_fields[field["key"]][language].get("field_type", field["type"])
+                    field_type = field_data.get("field_type", field["type"])
 
                     if (
                         "answer" not in field
@@ -820,7 +820,7 @@ def get_export_data(  # noqa: C901 - historical sadness
 
                     if field_type == "sum_list" and isinstance(field["answer"], list):
                         answer = 0
-                        field_to_sum = form_fields[field["key"]][language].get("field_to_sum", None)
+                        field_to_sum = field_data.get("field_to_sum", None)
                         if not field_to_sum:
                             applicant_info[title] = "Not Provided"
                             continue
@@ -828,7 +828,7 @@ def get_export_data(  # noqa: C901 - historical sadness
                             answer += int(sum_item[field_to_sum])
 
                     if field_type == "MultiInputField" and isinstance(answer, list):
-                        child_map = form_fields[field["key"]][language].get("formatted_children", {})
+                        child_map = field_data.get("formatted_children", {})
                         if title not in applicant_info:
                             applicant_info[title] = ""
                         for child in answer:
@@ -837,20 +837,12 @@ def get_export_data(  # noqa: C901 - historical sadness
                                 # Append each child value as a new line in the same column
                                 applicant_info[title] += f"({child_title}): {child_value}\n"
 
-                        applicant_info[title].strip()
+                        applicant_info[title] = applicant_info[title].strip()
                         continue
                     else:
                         applicant_info[title] = answer
                 else:
                     applicant_info[title] = "Not Provided"
-            # Move Application ID, Short ID, Date Submitted to front
-            ordered_info = {
-                "Application ID": applicant_info.pop("Application ID"),
-                "Short ID": applicant_info.pop("Short ID"),
-                "Date Submitted": applicant_info.pop("Date Submitted"),
-            }
-            ordered_info.update(applicant_info)
-            applicant_info = ordered_info
         final_list.append(applicant_info)
 
     if report_type == "OUTPUT_TRACKER":
