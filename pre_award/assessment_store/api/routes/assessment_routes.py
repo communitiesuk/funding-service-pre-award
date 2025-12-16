@@ -326,7 +326,7 @@ def get_application_json(application_id):
 
 
 @assessment_assessment_bp.get("/application_fields_export/<fund_id>/<round_id>/<report_type>")
-def get_application_data_for_export(fund_id: str, round_id: str, report_type: str) -> List[Dict]:
+def get_application_data_for_export(fund_id: str, round_id: str, report_type: str):
     """Fetch application data for export, prioritizing round-specific data if available."""
 
     round_data = applicant_info_mapping.get(f"{fund_id}:{round_id}") or applicant_info_mapping.get(fund_id, {})
@@ -338,4 +338,4 @@ def get_application_data_for_export(fund_id: str, round_id: str, report_type: st
         list_of_fields=round_data,
     )
 
-    return app_list
+    return compress_response(app_list)

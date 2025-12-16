@@ -510,7 +510,7 @@ def test_get_cof_r4w1_export_data_en(seed_application_records):
     assert result[0]["Name of lead contact"] == "test lead person"
     assert result[0]["Type of organisation"] == "CIO"
     assert result[0]["Asset type"] == "community-centre"
-    assert result[0]["Type of asset (other)"] == ""
+    assert result[0]["Type of asset (other)"] == "Not Provided"
     assert result[0]["Charity number"] == "786786"
     assert result[0]["Organisation address"] == "test, test, test, test, ss12ss"
     assert result[0]["Postcode of asset"] == "NP10 8QQ"
@@ -535,11 +535,11 @@ def test_get_cof_r4w1_export_data_cy(seed_application_records):
     assert result[0]["Math o sefydliad"] == "Cwmni cydweithredol, fel cymdeithas budd cymunedol"
     assert result[0]["Math o ased"] == "Arall"
     assert result[0]["Math o eiddo (arall)"] == "other asset type"
-    assert result[0]["Rhif elusen"] == ""
+    assert result[0]["Rhif elusen"] == "Not Provided"
     assert result[0]["Cyfeiriad y sefydliad"] == "line 1, town, county, PL11RN"
     assert result[0]["Cod post o ased"] == "PL11RN"
     assert result[0]["Cais cyllido cyfalaf"] == "234234"
-    assert result[0]["Costau refeniw (dewisol)"] == ""
+    assert result[0]["Costau refeniw (dewisol)"] == "Not Provided"
 
 
 def test_application_forms_relationship(db):

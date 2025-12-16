@@ -762,7 +762,6 @@ def get_export_data(  # noqa: C901 - historical sadness
     language: str,  # noqa
 ) -> List[Dict]:  # noqa
     form_fields = list_of_fields.get(report_type, {}).get("form_fields", {})
-    field_ids = form_fields.keys()
     final_list = []
 
     for assessment in assessment_metadatas:
@@ -776,63 +775,74 @@ def get_export_data(  # noqa: C901 - historical sadness
         }
         if len(form_fields) != 0:
             forms = assessment.jsonb_blob["forms"]
+
+            # Create a lookup dictionary for faster field access
+            field_lookup = {}
             for form in forms:
                 questions = form["questions"]
                 for question in questions:
                     fields = question["fields"]
                     for field in fields:
-                        if field["key"] in field_ids:
-                            title = form_fields[field["key"]][language]["title"]
-                            field_type = form_fields[field["key"]][language].get("field_type", field["type"])
+                        field_lookup[field["key"]] = field
 
-                            if "answer" not in field:  # we use a blank string is there's no answer.
-                                applicant_info[title] = ""
-                                continue
+            # Process fields in the order they appear in field_ids (from list_of_fields)
+            for field_id in form_fields:
+                field_data = form_fields[field_id][language]
+                title = field_data["title"]
+                if field_id in field_lookup:
+                    field = field_lookup[field_id]
+                    field_type = field_data.get("field_type", field["type"])
 
-                            # filter 'null' values from the address field
-                            # TODO: Remove this filter after FS-4021
-                            if field["answer"] and field_type == "ukAddressField":
-                                address_parts = field["answer"].split(", ")
-                                answer = ", ".join([part for part in address_parts if part != "null"])
-                            elif field["answer"] and field_type == "uk_postcode":
-                                answer = field["answer"].split(", ")[-1]
-                            else:
-                                answer = field["answer"]
+                    if (
+                        "answer" not in field
+                    ):  # Using Not Provided when there's a blank entry to be consistent with assessment
+                        applicant_info[title] = "Not Provided"
+                        continue
 
-                            if answer and field_type == "freeText":  # for `freeText` type, extract the plain text
-                                answer = BeautifulSoup(answer, "html.parser").get_text(
-                                    strip=True
-                                )  # Extract text, strip extra whitespace
-                            if field_type == "list" and not isinstance(
-                                answer, bool
-                            ):  # Adding check for bool since yesno fields are considered lists
-                                answer = format_lists(answer)
+                    # filter 'null' values from the address field
+                    # TODO: Remove this filter after FS-4021
+                    if field["answer"] and field_type == "ukAddressField":
+                        address_parts = field["answer"].split(", ")
+                        answer = ", ".join([part for part in address_parts if part != "null"])
+                    elif field["answer"] and field_type == "uk_postcode":
+                        answer = field["answer"].split(", ")[-1]
+                    else:
+                        answer = field["answer"]
 
-                            if field_type == "sum_list" and isinstance(field["answer"], list):
-                                answer = 0
-                                field_to_sum = form_fields[field["key"]][language].get("field_to_sum", None)
-                                if not field_to_sum:
-                                    applicant_info[title] = ""
-                                    continue
-                                for sum_item in field["answer"]:
-                                    answer += int(sum_item[field_to_sum])
+                    if answer and field_type == "freeText":  # for `freeText` type, extract the plain text
+                        answer = BeautifulSoup(answer, "html.parser").get_text(
+                            strip=True
+                        )  # Extract text, strip extra whitespace
+                    if field_type == "list" and not isinstance(
+                        answer, bool
+                    ):  # Adding check for bool since yesno fields are considered lists
+                        answer = format_lists(answer)
 
-                            if field_type == "MultiInputField" and isinstance(answer, list):
-                                child_map = form_fields[field["key"]][language].get("formatted_children", "")
-                                if title not in applicant_info:
-                                    applicant_info[title] = ""
-                                for child in answer:
-                                    for child_key, child_value in child.items():
-                                        child_title = child_map.get(child_key, child_key)
-                                        # Append each child value as a new line in the same column
-                                        applicant_info[title] += f"({child_title}): {child_value}\n"
+                    if field_type == "sum_list" and isinstance(field["answer"], list):
+                        answer = 0
+                        field_to_sum = field_data.get("field_to_sum", None)
+                        if not field_to_sum:
+                            applicant_info[title] = "Not Provided"
+                            continue
+                        for sum_item in field["answer"]:
+                            answer += int(sum_item[field_to_sum])
 
-                                applicant_info[title].strip()
-                                continue
-                            else:
-                                applicant_info[title] = str(answer)
-                            applicant_info[title] = answer
-            applicant_info = add_missing_elements_with_empty_values(applicant_info, form_fields, language)
+                    if field_type == "MultiInputField" and isinstance(answer, list):
+                        child_map = field_data.get("formatted_children", {})
+                        if title not in applicant_info:
+                            applicant_info[title] = ""
+                        for child in answer:
+                            for child_key, child_value in child.items():
+                                child_title = child_map.get(child_key, child_key)
+                                # Append each child value as a new line in the same column
+                                applicant_info[title] += f"({child_title}): {child_value}\n"
+
+                        applicant_info[title] = applicant_info[title].strip()
+                        continue
+                    else:
+                        applicant_info[title] = answer
+                else:
+                    applicant_info[title] = "Not Provided"
         final_list.append(applicant_info)
 
     if report_type == "OUTPUT_TRACKER":
@@ -844,17 +854,6 @@ def get_export_data(  # noqa: C901 - historical sadness
         final_list = combine_dicts(final_list, score_info_output)
 
     return final_list
-
-
-# adds missing elements for use in the csv
-def add_missing_elements_with_empty_values(applicant_info, form_fields, language):
-    result_data = applicant_info.copy()
-
-    for _key, value in form_fields.items():
-        title = value[language]["title"]
-        if title not in result_data:
-            result_data[title] = ""
-    return result_data
 
 
 def format_lists(answer):
