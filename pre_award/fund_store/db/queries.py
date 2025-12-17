@@ -366,6 +366,7 @@ def upsert_round_data(round_configs, commit: bool = True):
                 mark_as_complete_enabled=round_config["mark_as_complete_enabled"],
                 is_expression_of_interest=round_config["is_expression_of_interest"],
                 eligibility_config=round_config["eligibility_config"],
+                send_incomplete_application_emails=round_config.get("send_incomplete_application_emails", True),
                 eoi_decision_schema=round_config["eoi_decision_schema"],
             )
             db.session.add(new_round)
