@@ -21,7 +21,7 @@ LOADER_CONFIG = {
         "owner_organisation_shortname": "None",
         "owner_organisation_logo_uri": "None",
         "ggis_scheme_reference_number": "123-abc-456-def",
-        "funding_type": "UNCOMPETED",
+        "funding_type": "COMPETITIVE",
         "name_json": {"en": "Crash Test Dummy Fund", "cy": ""},
         "title_json": {"en": "funding for crash test dummies", "cy": ""},
         "description_json": {"en": "crash test dummies", "cy": ""},
