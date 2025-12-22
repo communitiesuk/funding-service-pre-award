@@ -2,8 +2,34 @@
 
 scored_sections = [
     {
+        "id": "problem_statement",
+        "weighting": 0.05,
+        "name": "Problem statement",
+        "sub_criteria": [
+            {
+                "id": "problem_statement",
+                "name": "Problem statement",
+                "themes": [
+                    {
+                        "id": "problem_statement",
+                        "name": "Problem statement",
+                        "answers": [
+                            {
+                                "field_id": "lTFJnY",
+                                "form_name": "shif-apply-your-proposal",
+                                "field_type": "freeTextField",
+                                "presentation_type": "text",
+                                "question": "What challenges are you trying to address?",
+                            },
+                        ],
+                    }
+                ],
+            },
+        ],
+    },
+    {
         "id": "your_proposal",
-        "weighting": 0.35,
+        "weighting": 0.25,
         "name": "Your proposal",
         "sub_criteria": [
             {
@@ -22,13 +48,6 @@ scored_sections = [
                                 "question": "What is the name of your project?",
                             },
                             {
-                                "field_id": "lTFJnY",
-                                "form_name": "shif-apply-your-proposal",
-                                "field_type": "freeTextField",
-                                "presentation_type": "text",
-                                "question": "What challenges are you trying to address?",
-                            },
-                            {
                                 "field_id": "FFNuZw",
                                 "form_name": "shif-apply-your-proposal",
                                 "field_type": "freeTextField",
@@ -43,6 +62,25 @@ scored_sections = [
                                 "question": "Upload your project plan",
                                 "path": "upload-your-project-plan",
                             },
+                        ],
+                    }
+                ],
+            },
+        ],
+    },
+    {
+        "id": "others_involved",
+        "weighting": 0.05,
+        "name": "Who is involved in implementation",
+        "sub_criteria": [
+            {
+                "id": "others_involved",
+                "name": "Who is involved in implementation",
+                "themes": [
+                    {
+                        "id": "others_involved",
+                        "name": "Who is involved in implementation",
+                        "answers": [
                             {
                                 "field_id": "Fxpsiw",
                                 "form_name": "shif-apply-your-proposal",
@@ -83,17 +121,17 @@ scored_sections = [
         ],
     },
     {
-        "id": "innovation_and_scalability",
-        "weighting": 0.2,
-        "name": "Innovation and scalability",
+        "id": "innovation",
+        "weighting": 0.1,
+        "name": "Innovation",
         "sub_criteria": [
             {
-                "id": "innovation_and_scalability",
-                "name": "Innovation and scalability",
+                "id": "innovation",
+                "name": "Innovation",
                 "themes": [
                     {
-                        "id": "innovation_and_scalability",
-                        "name": "Innovation and scalability",
+                        "id": "innovation",
+                        "name": "Innovation",
                         "answers": [
                             {
                                 "field_id": "WJTBzi",
@@ -102,6 +140,25 @@ scored_sections = [
                                 "presentation_type": "text",
                                 "question": "How is the proposed project innovative?",
                             },
+                        ],
+                    }
+                ],
+            },
+        ],
+    },
+    {
+        "id": "scalability",
+        "weighting": 0.1,
+        "name": "Scalability",
+        "sub_criteria": [
+            {
+                "id": "scalability",
+                "name": "Scalability",
+                "themes": [
+                    {
+                        "id": "scalability",
+                        "name": "Scalability",
+                        "answers": [
                             {
                                 "field_id": "czkAFo",
                                 "form_name": "shif-apply-innovation-and-scalability",
@@ -117,8 +174,8 @@ scored_sections = [
     },
     {
         "id": "costs_and_value_for_money",
-        "weighting": 0.1,
-        "name": "Costs, value for money and risk management",
+        "weighting": 0.05,
+        "name": "Costs and value for money",
         "sub_criteria": [
             {
                 "id": "costs_and_value_for_money",
@@ -196,6 +253,13 @@ scored_sections = [
                     },
                 ],
             },
+        ],
+    },
+    {
+        "id": "risk_management",
+        "weighting": 0.05,
+        "name": "Risk management",
+        "sub_criteria": [
             {
                 "id": "risk_management",
                 "name": "Risk management",
@@ -218,17 +282,17 @@ scored_sections = [
         ],
     },
     {
-        "id": "outcomes_and_measuring_impact",
-        "weighting": 0.15,
-        "name": "Outcomes and measuring impact",
+        "id": "outcomes_and_impact",
+        "weighting": 0.1,
+        "name": "Outcomes and impact",
         "sub_criteria": [
             {
-                "id": "outcomes_and_measuring_impact",
-                "name": "Outcomes and measuring impact",
+                "id": "outcomes_and_impact",
+                "name": "Outcomes and impact",
                 "themes": [
                     {
-                        "id": "outcomes_and_measuring_impact",
-                        "name": "Outcomes and measuring impact",
+                        "id": "outcomes_and_impact",
+                        "name": "Outcomes and impact",
                         "answers": [
                             {
                                 "field_id": "PHcUVY",
@@ -237,6 +301,25 @@ scored_sections = [
                                 "presentation_type": "text",
                                 "question": "Describe the positive impacts your project is expected to have",
                             },
+                        ],
+                    }
+                ],
+            },
+        ],
+    },
+    {
+        "id": "proposed_kpis",
+        "weighting": 0.05,
+        "name": "Proposed KPIs",
+        "sub_criteria": [
+            {
+                "id": "proposed_kpis",
+                "name": "Proposed KPIs",
+                "themes": [
+                    {
+                        "id": "proposed_kpis",
+                        "name": "Proposed KPIs",
+                        "answers": [
                             {
                                 "field_id": "oRkpsw",
                                 "form_name": "shif-apply-outcomes-and-measuring-impact",
