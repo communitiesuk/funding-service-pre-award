@@ -119,7 +119,7 @@ LOADER_CONFIG = {
         "deadline": "2026-12-31T12:00:00",
         "application_reminder_sent": True,
         "reminder_date": "2025-11-17T12:00:00",
-        "assessment_deadline": "2025-12-30T23:59:00",
+        "assessment_deadline": "2026-12-31T12:00:00",
         "prospectus": "https://www.gov.uk/government/publications/plan-for-neighbourhoods-prospectus-and-tools/plan-for-neighbourhoods-prospectus",
         "privacy_notice": "https://www.gov.uk/government/publications/plan-for-neighbourhoods-regeneration-plan-guidance/plan-for-neighbourhoods-privacy-notice-for-regeneration-plan-submissions-form",
         "contact_email": "pippcorrespondence@communities.gov.uk",
