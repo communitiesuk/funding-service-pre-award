@@ -171,12 +171,6 @@ unscored_sections = [
                     }
                 ],
             },
-        ],
-    },
-    {
-        "id": "declarations",
-        "name": "Declarations",
-        "sub_criteria": [
             {
                 "id": "declarations",
                 "name": "Declarations",
