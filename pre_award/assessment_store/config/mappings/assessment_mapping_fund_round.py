@@ -635,8 +635,11 @@ fund_round_data_key_mappings = {
     "SHIFAPPLY": {
         "location": None,
         "asset_type": None,
-        "funding_one": "UoneMB",
-        "funding_two": None,
+        "funding_one": "UoneMB",  # used when applying for partial project cost funding
+        "funding_two": "OdMILX",  # used when applying for total project cost funding
+        # shouldn't be done like this, but SHIF have two different questions for total funding,
+        # depending on whether the applicant is applying funding to cover the total cost of
+        # the project or only part of the cost
     },
     "NWPPILL1": {
         "location": None,
