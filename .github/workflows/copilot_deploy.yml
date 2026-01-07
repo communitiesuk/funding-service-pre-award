@@ -13,17 +13,7 @@ on:
         - test
         - uat
         - prod
-      run_e2e_tests_assessment:
-        required: false
-        default: true
-        type: boolean
-        description: Run assess (node) e2e tests
-      run_e2e_tests_application:
-        required: false
-        default: true
-        type: boolean
-        description: Run apply (node) e2e tests
-      run_e2e_tests_python:
+      run_e2e_tests:
         required: false
         default: true
         type: boolean
@@ -151,9 +141,7 @@ jobs:
       image_location: ${{ needs.paketo_build.outputs.image_location }}
       alert_slack_on_failure: false
       notify_slack_on_deployment: false
-      run_e2e_tests_assessment: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_assessment }}
-      run_e2e_tests_application: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_application }}
-      run_e2e_tests_python: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_python }}
+      run_e2e_tests: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests }}
 
   test_deploy:
     needs: [ setup, unit_tests, type_checking, paketo_build ]
@@ -176,9 +164,7 @@ jobs:
       image_location: ${{ needs.paketo_build.outputs.image_location }}
       alert_slack_on_failure: true
       notify_slack_on_deployment: false
-      run_e2e_tests_assessment: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_assessment }}
-      run_e2e_tests_application: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_application }}
-      run_e2e_tests_python: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_python }}
+      run_e2e_tests: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests }}
 
   uat_deploy:
     needs: [ setup, unit_tests, type_checking, paketo_build, test_deploy ]
@@ -201,9 +187,7 @@ jobs:
       image_location: ${{ needs.paketo_build.outputs.image_location }}
       alert_slack_on_failure: true
       notify_slack_on_deployment: false
-      run_e2e_tests_assessment: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_assessment }}
-      run_e2e_tests_application: ${{ (github.event_name == 'push' && true) || inputs.run_e2e_tests_application }}
-      run_e2e_tests_python: false  # Never been turned on for UAT yet
+      run_e2e_tests: false  # Never been turned on for UAT yet
 
   prod_deploy:
     needs: [ setup, unit_tests, type_checking, paketo_build, test_deploy, uat_deploy ]
@@ -226,6 +210,4 @@ jobs:
       image_location: ${{ needs.paketo_build.outputs.image_location }}
       alert_slack_on_failure: true
       notify_slack_on_deployment: true
-      run_e2e_tests_assessment: false
-      run_e2e_tests_application: false
-      run_e2e_tests_python: false
+      run_e2e_tests: false

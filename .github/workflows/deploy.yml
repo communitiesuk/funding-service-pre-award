@@ -18,17 +18,7 @@ on:
         description: "Send messages to the deployments channel when deploys start+finish."
         default: false
         type: boolean
-      run_e2e_tests_assessment:
-        required: false
-        default: true
-        type: boolean
-        description: Run assess (node) e2e tests
-      run_e2e_tests_application:
-        required: false
-        default: true
-        type: boolean
-        description: Run apply (node) e2e tests
-      run_e2e_tests_python:
+      run_e2e_tests:
         required: false
         default: true
         type: boolean
@@ -137,7 +127,7 @@ jobs:
     needs: [ deploy ]
     uses: communitiesuk/funding-service-design-workflows/.github/workflows/run-shared-tests.yml@remove-js-e2e-tests
     with:
-      run_e2e_tests: true
+      run_e2e_tests: ${{ inputs.run_e2e_tests || false }}
       env_name: ${{ inputs.environment }}
     secrets:
       FSD_GH_APP_ID: ${{ secrets.FSD_GH_APP_ID }}
