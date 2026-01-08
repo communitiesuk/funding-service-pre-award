@@ -187,7 +187,7 @@ jobs:
       image_location: ${{ needs.paketo_build.outputs.image_location }}
       alert_slack_on_failure: true
       notify_slack_on_deployment: false
-      run_e2e_tests: false  # Never been turned on for UAT yet
+      run_e2e_tests: true
 
   prod_deploy:
     needs: [ setup, unit_tests, type_checking, paketo_build, test_deploy, uat_deploy ]
