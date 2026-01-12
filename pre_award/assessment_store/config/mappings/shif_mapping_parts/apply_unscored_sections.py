@@ -18,14 +18,25 @@ unscored_sections = [
                                 "form_name": "shif-apply-organisation-information",
                                 "field_type": "textField",
                                 "presentation_type": "text",
-                                "question": "What is your organisation's name?",
+                                "question": """What is your organisation's name?
+                                    <p>
+                                        If the organisation is known by more than one name, this should be the official name
+                                        registered with Companies House or the Charity Commission
+                                    </p>
+                                """,
                             },
                             {
                                 "field_id": "WdapOj",
                                 "form_name": "shif-apply-organisation-information",
                                 "field_type": "textField",
                                 "presentation_type": "text",
-                                "question": "Full name",
+                                "question": """Who is the lead contact in your organisation?
+                                    <p>
+                                        This will be the main point of contact for any queries we may have about your application.
+                                    </p>
+                                    <p>Full name</p>
+
+                                """,
                             },
                             {
                                 "field_id": "SAcHge",
@@ -68,7 +79,7 @@ unscored_sections = [
                                 "field_type": "multiInputField",
                                 "presentation_type": "table",
                                 "question": [
-                                    "",
+                                    "Alternative organisation name",
                                     {
                                         "UWIOHw": {
                                             "column_title": "Alternative organisation names",
@@ -184,7 +195,27 @@ unscored_sections = [
                                 "form_name": "shif-apply-declarations",
                                 "field_type": "checkboxesField",
                                 "presentation_type": "text",
-                                "question": "Declarations",
+                                "question": """Declarations
+                                <p>
+                                    Confirm that you have read and agree with the following declarations
+                                </p>
+                                <ul>
+                                    <li>
+                                        My organisation will not make a profit from activities supported by grant funding
+                                    </li>
+                                    <li>
+                                        Any awarded funding will not be used to undertake political activity nor support ideological or
+                                        extremist causes ('extremism' is defined in the 2011 Prevent strategy (opens in new tab) as vocal
+                                        or active opposition to fundamental British values, including democracy, the rule of law, individual
+                                        liberty and mutual respect and tolerance of different faiths and beliefs)
+                                    </li>
+                                    <li>
+                                        The information provided in this application is accurate to the best of my knowledge on the date
+                                        of submission
+                                    </li>
+                                </ul>
+
+                                """,
                             },
                         ],
                     },
