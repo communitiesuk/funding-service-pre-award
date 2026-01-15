@@ -43,6 +43,7 @@ def get_rounds_for_application_deadline_reminders() -> Sequence[Round]:
         .join(Round.fund)
         .where(
             Round.application_reminder_sent.is_(False),
+            Round.send_deadline_reminder_emails.is_(True),
             func.timezone("Europe/London", Round.reminder_date) <= func.now(),
             func.timezone("Europe/London", Round.deadline) > func.now(),
         )

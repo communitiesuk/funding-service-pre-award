@@ -9,13 +9,22 @@ from tests.pre_award.utils import AnyStringMatching
 
 
 class BaseRoundTest:
-    def _seed_round(self, session, fund, reminder_date, deadline, send_incomplete_application_emails=True):
+    def _seed_round(
+        self,
+        session,
+        fund,
+        reminder_date,
+        deadline,
+        send_incomplete_application_emails=True,
+        send_deadline_reminder_emails=True,
+    ):
         rnd = seed_round(
             session,
             fund,
             reminder_date=reminder_date,
             deadline=deadline,
             send_incomplete_application_emails=send_incomplete_application_emails,
+            send_deadline_reminder_emails=send_deadline_reminder_emails,
         )
         fund.rounds.append(rnd)
         session.flush()
@@ -158,6 +167,7 @@ class TestSendIncompleteApplicationEmailTask(BaseRoundTest):
                 fund,
                 reminder_date=datetime.today() - timedelta(days=2),
                 deadline=datetime.today() - timedelta(days=1),
+                send_deadline_reminder_emails=True,
                 send_incomplete_application_emails=True,
             )
             account = seed_account(session)
@@ -183,6 +193,7 @@ class TestSendIncompleteApplicationEmailTask(BaseRoundTest):
                 fund,
                 reminder_date=datetime.today() - timedelta(days=2),
                 deadline=datetime.today() - timedelta(days=1),
+                send_deadline_reminder_emails=True,
                 send_incomplete_application_emails=False,
             )
             account = seed_account(session)
@@ -208,6 +219,7 @@ class TestSendIncompleteApplicationEmailTask(BaseRoundTest):
                 fund,
                 reminder_date=datetime.today() - timedelta(days=2),
                 deadline=datetime.today() + timedelta(days=1),
+                send_deadline_reminder_emails=True,
                 send_incomplete_application_emails=True,
             )
             account = seed_account(session)
@@ -233,6 +245,7 @@ class TestSendIncompleteApplicationEmailTask(BaseRoundTest):
                 fund,
                 reminder_date=datetime.today() - timedelta(days=47),
                 deadline=datetime.today() - timedelta(days=40),
+                send_deadline_reminder_emails=True,
                 send_incomplete_application_emails=True,
             )
             account = seed_account(session)
@@ -258,6 +271,7 @@ class TestSendIncompleteApplicationEmailTask(BaseRoundTest):
                 fund,
                 reminder_date=datetime.today() - timedelta(days=9),
                 deadline=datetime.today() - timedelta(days=2),
+                send_deadline_reminder_emails=True,
                 send_incomplete_application_emails=True,
             )
             account = seed_account(session)
