@@ -333,6 +333,7 @@ def upsert_round_data(round_configs, commit: bool = True):
             round_record.send_incomplete_application_emails = round_config.get(
                 "send_incomplete_application_emails", True
             )
+            round_record.send_deadline_reminder_emails = round_config.get("send_deadline_reminder_emails", True)
             round_record.eoi_decision_schema = round_config["eoi_decision_schema"]
 
             updated_rounds[round_config["id"]] = round_record
@@ -365,6 +366,7 @@ def upsert_round_data(round_configs, commit: bool = True):
                 is_expression_of_interest=round_config["is_expression_of_interest"],
                 eligibility_config=round_config["eligibility_config"],
                 send_incomplete_application_emails=round_config.get("send_incomplete_application_emails", True),
+                send_deadline_reminder_emails=round_config.get("send_deadline_reminder_emails", True),
                 eoi_decision_schema=round_config["eoi_decision_schema"],
             )
             db.session.add(new_round)
