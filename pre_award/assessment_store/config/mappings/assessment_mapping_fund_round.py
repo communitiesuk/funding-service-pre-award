@@ -2865,8 +2865,34 @@ applicant_info_mapping = {
                 "SAcHge": {"en": {"title": "Lead contact role", "field_type": "textField"}},
                 "YaGHMI": {"en": {"title": "Lead contact email address", "field_type": "emailAddressField"}},
                 "HZkwbv": {"en": {"title": "Lead contact contact number", "field_type": "telephoneNumberField"}},
+                "wzawYs": {"en": {"title": "Organisation address", "field_type": "ukAddressField"}},
+                "fidvDS": {"en": {"title": "Charity number", "field_type": "textField"}},
+                "siMJHb": {"en": {"title": "Company registration number", "field_type": "textField"}},
                 "RlFFTW": {"en": {"title": "Project name", "field_type": "textField"}},
-                "UoneMB": {"en": {"title": "Total funding requested", "field_type": "numberField"}},
+                "OdMILX": {"en": {"title": "Funding requested (Full funding request)", "field_type": "numberField"}},
+                "UoneMB": {"en": {"title": "Funding requested (Partial funding request)", "field_type": "numberField"}},
+                "lTFJnY": {
+                    "en": {"title": "What challenges are you trying to address?", "field_type": "freeTextField"}
+                },
+                "FFNuZw": {
+                    "en": {
+                        "title": "How will the proposal address the challenges specified in your problem statement?",
+                        "field_type": "freeTextField",
+                    }
+                },
+                "WJTBzi": {"en": {"title": "How is the proposed project innovative?", "field_type": "freeTextField"}},
+                "czkAFo": {
+                    "en": {
+                        "title": "How does this project have the potential to be scaled up or replicated on a wider scale?",
+                        "field_type": "freeTextField",
+                    }
+                },
+                "PHcUVY": {
+                    "en": {
+                        "title": "Describe the positive impacts your project is expected to have",
+                        "field_type": "freeTextField",
+                    }
+                },
             }
         },
         "OUTPUT_TRACKER": {
