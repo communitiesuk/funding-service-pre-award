@@ -277,20 +277,41 @@ def test_generate_csv_for_fields():
             "Charity number ": "00123456",
             "Company registration number": "AK123456",
         },
+        {
+            "AppId": "special-bullets-and-bold",
+            "Charity number ": "12121212",
+            "Do you need to do any further feasibility work?": True,
+            "Project name": "Test with bullets and bold",
+            "Doc Name": "sample2.doc",
+            "What challenges are you trying to address?": (
+                "<p>The Challenge<br>Widening the reach of tenants&rsquo; perspectives at a strategic level.<br>"
+                "Who we are<br>&middot; &nbsp; &nbsp; &nbsp; The A001 is the group of Bristol&rsquo;s largest housing"
+                " associations<br>&middot; &nbsp; &nbsp; &nbsp; The A001 Residents&rsquo; Group (A001RG) is a forum "
+                "of involved A001 residents<br><strong>This is bold text</strong><br>This is normal text.</p>"
+            ),
+        },
     ]
 
     expected_result = (
         '"AppId","Charity number ","Do you need to do any further feasibility work?",'
-        '"Project name","Doc Name","Company registration number"\r\n"9a8b6c00-e461-466c-acb3-2519621b3a38",'
-        '"Test","False","Save the humble pub in Bangor","sample1.doc",""\r\n'
-        '"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","Test","False","Save the humble pub in Bangor",'
-        '"sample1.doc",""\r\n"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","Test missing keys","","","",'
-        '""\r\n"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","01234567","","","","01112222"\r\n'
-        '"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","00123456","","","","AK123456"\r\n'
+        '"Project name","Doc Name","Company registration number","What challenges are you trying to address?"\r\n'
+        '"9a8b6c00-e461-466c-acb3-2519621b3a38","Test","False","Save the humble pub in Bangor","sample1.doc","",""\r\n'
+        '"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","Test","False","Save the humble pub in Bangor","sample1.doc","",""\r\n'
+        '"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","Test missing keys","","","","",""\r\n'
+        '"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","01234567","","","","01112222",""\r\n'
+        '"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","00123456","","","","AK123456",""\r\n'
+        '"special-bullets-and-bold","12121212","True","Test with bullets and bold","sample2.doc","","<p>The Challenge'
+        "<br>Widening the reach of tenants&rsquo; perspectives at a strategic level.<br>Who we are<br>&middot; &nbsp;"
+        " &nbsp; &nbsp; The A001 is the group of Bristol&rsquo;s largest housing associations<br>&middot; &nbsp; "
+        "&nbsp; &nbsp; The A001 Residents&rsquo; Group (A001RG) is a forum of involved A001 residents<br><strong>"
+        'This is bold text</strong><br>This is normal text.</p>"\r\n'
     )
 
     result = generate_assessment_info_csv(test_data)
-    assert result == expected_result
+    assert result.startswith("\ufeff")
+    assert result[1:] == expected_result
+    assert "&middot;" in result
+    assert "<strong>This is bold text</strong>" in result
 
 
 def test_generate_maps_from_form_names_simple_case():
