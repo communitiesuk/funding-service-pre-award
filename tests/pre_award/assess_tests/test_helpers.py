@@ -280,7 +280,7 @@ def test_generate_csv_for_fields():
     ]
 
     expected_result = (
-        '"AppId","Charity number ","Do you need to do any further feasibility work?",'
+        '\ufeff"AppId","Charity number ","Do you need to do any further feasibility work?",'
         '"Project name","Doc Name","Company registration number"\r\n"9a8b6c00-e461-466c-acb3-2519621b3a38",'
         '"Test","False","Save the humble pub in Bangor","sample1.doc",""\r\n'
         '"de36ae35-9ef6-4dc5-a2bf-de9ee481c8af","Test","False","Save the humble pub in Bangor",'
