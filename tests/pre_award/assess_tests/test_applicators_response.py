@@ -4,6 +4,7 @@ import pytest  # noqa
 from flask import Flask
 
 import pre_award.assess
+from pre_award.assess.assessments import models
 from pre_award.assess.assessments.models.applicants_response import ANSWER_NOT_PROVIDED_DEFAULT, ResponseLabel
 from pre_award.assess.assessments.models.applicants_response import (
     AboveQuestionAnswerPair,
@@ -513,6 +514,28 @@ class TestApplicatorsResponseComponentFactory:
             # Check that dates are formatted as expected
             assert result.rows[0][0]["text"] == expected_dates[0]
             assert result.rows[0][1]["text"] == expected_dates[1]
+
+    def test_s3bucketpath_answer_with_comma_in_name(self, monkeypatch):
+        """Test s3bucketPath answer with a comma in the filename"""
+        item = {
+            "presentation_type": "s3bucketPath",
+            "answer": "file1.pdf,file2,with,comma.pdf",
+            "question": "Upload your documents",
+            "form_name": "mock_form_name",
+            "path": "mock_path",
+            "field_id": "mock_field_id",
+        }
+
+        # Simulate S3 returning all possible file keys
+        s3_files = ["file1.pdf", "file2", "with", "comma.pdf", "file1.pdf,file2,with,comma.pdf"]
+        monkeypatch.setattr(models.applicants_response, "list_files_in_folder", lambda folder_path: s3_files)
+
+        with self.test_app.app_context():
+            result = _ui_component_from_factory(item, "app_123")
+
+            expected = set(s3_files)
+            actual = set(result.key_to_url_dict.keys())
+            assert expected == actual
 
 
 class TestConvertHeadingDescriptionAmountToGroupedFields:
