@@ -620,6 +620,35 @@ class TestApplicatorsResponseComponentFactory:
                 assert itm in result.key_to_url_dict
             assert len(result.key_to_url_dict) == 3
 
+    def test_s3bucketpath_answer_with_three_files_one_with_multiple_commas(self, monkeypatch):
+        """Test s3bucketPath answer with three files, one containing a single comma and one with
+        multiple commas in the filename"""
+        filename_1 = "file_1.pdf"
+        filename_with_comma = "This filename, has a comma.pdf"
+        filename_with_multiple_commas = "This filename, has multiple, commas.pdf"
+        answer = f"{filename_1},{filename_with_comma},{filename_with_multiple_commas}"
+        item = {
+            "presentation_type": "s3bucketPath",
+            "answer": answer,
+            "question": "Upload your documents",
+            "form_name": "mock_form_name",
+            "path": "mock_path",
+            "field_id": "mock_field_id",
+        }
+
+        s3_files = [filename_1, filename_with_comma, filename_with_multiple_commas]
+        monkeypatch.setattr(models.applicants_response, "list_files_in_folder", lambda folder_path: s3_files)
+
+        with self.test_app.app_context():
+            answer_files = parse_answer_files(answer)
+            for itm in [filename_1, filename_with_comma, filename_with_multiple_commas]:
+                assert itm in answer_files
+
+            result = _ui_component_from_factory(item, "app_123")
+            for itm in [filename_1, filename_with_comma, filename_with_multiple_commas]:
+                assert itm in result.key_to_url_dict
+            assert len(result.key_to_url_dict) == 3
+
 
 class TestConvertHeadingDescriptionAmountToGroupedFields:
     @pytest.mark.parametrize(
