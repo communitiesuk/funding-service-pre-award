@@ -5,7 +5,11 @@ from flask import Flask
 
 import pre_award.assess
 from pre_award.assess.assessments import models
-from pre_award.assess.assessments.models.applicants_response import ANSWER_NOT_PROVIDED_DEFAULT, ResponseLabel
+from pre_award.assess.assessments.models.applicants_response import (
+    ANSWER_NOT_PROVIDED_DEFAULT,
+    ResponseLabel,
+    parse_answer_files,
+)
 from pre_award.assess.assessments.models.applicants_response import (
     AboveQuestionAnswerPair,
 )
@@ -515,27 +519,106 @@ class TestApplicatorsResponseComponentFactory:
             assert result.rows[0][0]["text"] == expected_dates[0]
             assert result.rows[0][1]["text"] == expected_dates[1]
 
-    def test_s3bucketpath_answer_with_comma_in_name(self, monkeypatch):
-        """Test s3bucketPath answer with a comma in the filename"""
+    def test_s3bucketpath_answer_with_one_uploaded_file(self, monkeypatch):
+        """Test s3bucketPath answer with a single file"""
+        filename = "file_1.pdf"
         item = {
             "presentation_type": "s3bucketPath",
-            "answer": "file1.pdf,file2,with,comma.pdf",
+            "answer": filename,
             "question": "Upload your documents",
             "form_name": "mock_form_name",
             "path": "mock_path",
             "field_id": "mock_field_id",
         }
 
-        # Simulate S3 returning all possible file keys
-        s3_files = ["file1.pdf", "file2", "with", "comma.pdf", "file1.pdf,file2,with,comma.pdf"]
+        s3_files = [filename]
         monkeypatch.setattr(models.applicants_response, "list_files_in_folder", lambda folder_path: s3_files)
 
         with self.test_app.app_context():
-            result = _ui_component_from_factory(item, "app_123")
+            answer_files = parse_answer_files(filename)
+            assert answer_files == ["file_1.pdf"]
 
-            expected = set(s3_files)
-            actual = set(result.key_to_url_dict.keys())
-            assert expected == actual
+            result = _ui_component_from_factory(item, "app_123")
+            assert filename in result.key_to_url_dict
+            assert len(result.key_to_url_dict) == 1
+
+    def test_s3bucketpath_answer_with_filename_with_comma(self, monkeypatch):
+        """Test s3bucketPath answer with a single file that contains a comma in the filename"""
+        filename_with_comma = "This filename, has a comma.pdf"
+        item = {
+            "presentation_type": "s3bucketPath",
+            "answer": filename_with_comma,
+            "question": "Upload your documents",
+            "form_name": "mock_form_name",
+            "path": "mock_path",
+            "field_id": "mock_field_id",
+        }
+
+        s3_files = [filename_with_comma]
+        monkeypatch.setattr(models.applicants_response, "list_files_in_folder", lambda folder_path: s3_files)
+
+        with self.test_app.app_context():
+            answer_files = parse_answer_files(filename_with_comma)
+            assert filename_with_comma in answer_files
+
+            result = _ui_component_from_factory(item, "app_123")
+            assert filename_with_comma in result.key_to_url_dict
+            assert len(result.key_to_url_dict) == 1
+
+    def test_s3bucketpath_answer_with_two_files(self, monkeypatch):
+        """Test s3bucketPath answer with two files"""
+        filename_1 = "file_1.pdf"
+        filename_2 = "file_2.pdf"
+        answer = f"{filename_1},{filename_2}"
+        item = {
+            "presentation_type": "s3bucketPath",
+            "answer": answer,
+            "question": "Upload your documents",
+            "form_name": "mock_form_name",
+            "path": "mock_path",
+            "field_id": "mock_field_id",
+        }
+
+        s3_files = [filename_1, filename_2]
+        monkeypatch.setattr(models.applicants_response, "list_files_in_folder", lambda folder_path: s3_files)
+
+        with self.test_app.app_context():
+            answer_files = parse_answer_files(answer)
+            for itm in [filename_1, filename_2]:
+                assert itm in answer_files
+
+            result = _ui_component_from_factory(item, "app_123")
+            for itm in [filename_1, filename_2]:
+                assert itm in result.key_to_url_dict
+            assert len(result.key_to_url_dict) == 2
+
+    def test_s3bucketpath_answer_with_three_files_one_with_comma(self, monkeypatch):
+        """Test s3bucketPath answer with three files, one containing a comma in the filename"""
+        filename_1 = "file_1.pdf"
+        filename_2 = "file_2.pdf"
+        filename_with_comma = "This filename, has a comma.pdf"
+        answer = f"{filename_1},{filename_2},{filename_with_comma}"
+        item = {
+            "presentation_type": "s3bucketPath",
+            "answer": answer,
+            "question": "Upload your documents",
+            "form_name": "mock_form_name",
+            "path": "mock_path",
+            "field_id": "mock_field_id",
+        }
+
+        s3_files = [filename_1, filename_2, filename_with_comma]
+        monkeypatch.setattr(models.applicants_response, "list_files_in_folder", lambda folder_path: s3_files)
+
+        with self.test_app.app_context():
+            answer_files = parse_answer_files(answer)
+            for itm in [filename_1, filename_2, filename_with_comma]:
+                assert itm in answer_files
+
+            result = _ui_component_from_factory(item, "app_123")
+            for itm in [filename_1, filename_2, filename_with_comma]:
+                assert itm in result.key_to_url_dict
+            assert len(result.key_to_url_dict) == 3
 
 
 class TestConvertHeadingDescriptionAmountToGroupedFields:
