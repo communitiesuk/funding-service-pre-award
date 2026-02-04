@@ -404,14 +404,7 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
         folder_path = f"{application_id}/{item['form_name']}/{item['path']}/{item['field_id']}"
         file_keys = list_files_in_folder(folder_path) if answer else []
 
-        if isinstance(answer, str) and "," in answer:
-            answer_files = [f.strip() for f in answer.split(",")]
-        elif isinstance(answer, list):
-            answer_files = answer
-        elif answer:
-            answer_files = [answer]
-        else:
-            answer_files = []
+        answer_files = parse_answer_files(answer)
 
         key_to_url_dict = {
             key: url_for(
@@ -432,6 +425,29 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
     # here because they are grouped together in the "grouped_fields" type
     # in a pre-processing step
     raise NotImplementedError(f"Unknown presentation type: {presentation_type} for item: {item}")
+
+
+def parse_answer_files(answer):
+    if isinstance(answer, str):
+        parts = [f.rstrip() for f in answer.split(",")]
+        results = []
+        n = len(parts)
+        seen = set()
+        # Generate all contiguous combinations - to allow for multiple commas in filenames
+        for i in range(n):
+            for j in range(i + 1, n + 1):
+                combined = ",".join(parts[i:j])
+                combined = combined.strip()
+                if combined and combined not in seen:
+                    results.append(combined)
+                    seen.add(combined)
+        return results
+    elif isinstance(answer, list):
+        return answer
+    elif answer:
+        return [answer]
+    else:
+        return []
 
 
 def _convert_heading_description_amount(
