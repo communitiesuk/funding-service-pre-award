@@ -429,14 +429,18 @@ def _ui_component_from_factory(item: dict, application_id: str):  # noqa: C901
 
 def parse_answer_files(answer):
     if isinstance(answer, str):
-        parts = [f.strip() for f in answer.split(",")]
+        parts = [f.rstrip() for f in answer.split(",")]
         results = []
         n = len(parts)
+        seen = set()
         # Generate all contiguous combinations - to allow for multiple commas in filenames
         for i in range(n):
             for j in range(i + 1, n + 1):
-                combined = ", ".join(parts[i:j])
-                results.append(combined)
+                combined = ",".join(parts[i:j])
+                combined = combined.strip()
+                if combined and combined not in seen:
+                    results.append(combined)
+                    seen.add(combined)
         return results
     elif isinstance(answer, list):
         return answer

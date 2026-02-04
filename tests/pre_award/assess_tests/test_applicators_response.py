@@ -649,6 +649,34 @@ class TestApplicatorsResponseComponentFactory:
                 assert itm in result.key_to_url_dict
             assert len(result.key_to_url_dict) == 3
 
+    def test_s3bucketpath_answer_with_file_comma_at_the_end(self, monkeypatch):
+        """Test s3bucketPath answer one file, with a comma at the end of the filename,
+        right before the extension"""
+        filename_with_comma_at_the_end = "This filename, has a comma at the end,.pdf"
+
+        answer = f"{filename_with_comma_at_the_end}"
+        item = {
+            "presentation_type": "s3bucketPath",
+            "answer": answer,
+            "question": "Upload your documents",
+            "form_name": "mock_form_name",
+            "path": "mock_path",
+            "field_id": "mock_field_id",
+        }
+
+        s3_files = [filename_with_comma_at_the_end]
+        monkeypatch.setattr(models.applicants_response, "list_files_in_folder", lambda folder_path: s3_files)
+
+        with self.test_app.app_context():
+            answer_files = parse_answer_files(answer)
+            for itm in [filename_with_comma_at_the_end]:
+                assert itm in answer_files
+
+            result = _ui_component_from_factory(item, "app_123")
+            for itm in [filename_with_comma_at_the_end]:
+                assert itm in result.key_to_url_dict
+            assert len(result.key_to_url_dict) == 1
+
 
 class TestConvertHeadingDescriptionAmountToGroupedFields:
     @pytest.mark.parametrize(
