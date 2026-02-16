@@ -305,7 +305,7 @@ scored_sections = [
                             {
                                 "field_id": "tTYUMj",
                                 "form_name": "ehcf-apply-cost-and-value-for-money",
-                                "field_type": "selectField",
+                                "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "Which year are you applying for?",
                             },
@@ -344,7 +344,7 @@ scored_sections = [
                             {
                                 "field_id": "ZlklVZ",
                                 "form_name": "ehcf-apply-cost-and-value-for-money",
-                                "field_type": "selectField",
+                                "field_type": "textField",
                                 "presentation_type": "text",
                                 "question": "Which year are you applying for?",
                             },
