@@ -296,6 +296,15 @@ def ordered_themes(fund_round_short_name):
             "skills_and_experience",
             "stakeholders",
         ],
+        "EHCFAPPLY": [
+            "your-organisation",
+            "declarations",
+            "skills-and-experience",
+            "ehcf-proposal",
+            "deliverability-and-risks",
+            "cost-and-value-for-money",
+            "outcomes-and-measuring-impact",
+        ],
     }
 
     if fund_round_short_name in [
