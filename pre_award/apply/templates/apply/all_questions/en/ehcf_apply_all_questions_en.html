@@ -1,0 +1,701 @@
+
+{% extends "apply/base.html" %}
+{%- from 'govuk_frontend_jinja/components/inset-text/macro.html' import govukInsetText -%}
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
+{% from "apply/partials/file-formats.html" import file_formats %}
+{% set pageHeading %}{% trans %}Full list of application questions{% endtrans %}{% endset %}
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{% trans %}{{ fund_title }}{% endtrans %}&nbsp;
+        {% trans %}{{ round_title }}{% endtrans %}
+        </span>
+        <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-m">
+    Table of contents
+  </h2>
+  <ol class="govuk-list govuk-list--number">
+    <li>
+      <a class="govuk-link" href="#your-organisation">
+        Your organisation
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#skills-and-experience">
+        Skills and experience
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#proposal">
+        Proposal
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#deliverability-and-risks">
+        Deliverability and risks
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#cost-and-value-for-money">
+        Cost and value for money
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#outcomes-and-measuring-impact">
+        Outcomes and measuring impact
+      </a>
+    </li>
+    <li>
+      <a class="govuk-link" href="#letter-of-support-and-declaration">
+        Letter of support and declaration
+      </a>
+    </li>
+  </ol>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="your-organisation">
+    1. Your organisation
+  </h2>
+  <h3 class="govuk-heading-m">
+    Your organisation
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's name?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Give the official name registered with Companies House, the Charity Commission or the Financial Conduct Authority if relevant.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Does your organisation have an alternative name?
+    </p>
+    <p class="govuk-body">
+      Give any alternative names that your organisation is known by.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is your organisation's address?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the primary contact for this grant?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This will be the main point of contact for any queries we may have.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Telephone number
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Job title
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is the primary contact also an authorised signatory?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the authorised signatory?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Full name
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Email address
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Job title
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Is your application a joint bid in partnership with other organisations?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      A partnership means you are expecting to give grant money to another organisation to deliver this project.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who are the partnership members?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can add multiple who are the partnership members?
+    </p>
+    <p class="govuk-body">
+      Partnership organisation name
+    </p>
+    <p class="govuk-body">
+      Lead contact name
+    </p>
+    <p class="govuk-body">
+      What is this organisation's role?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload a document that shows the other partnership organisations support this bid
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, a letter of confirmation.
+    </p>
+    <p class="govuk-body">
+      The file must be a PDF.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="skills-and-experience">
+    2. Skills and experience
+  </h2>
+  <h3 class="govuk-heading-m">
+    Skills and experience
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your organisation's objectives?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, what your organisation exists to do.
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your organisation's key activities?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about your experience and skills delivering similar work
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us about:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        the scope of the project (for example, goals, outputs and outcomes)
+      </li>
+      <li>
+        the value of the project (for example, cost savings)
+      </li>
+      <li>
+        who was involved
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="proposal">
+    3. Proposal
+  </h2>
+  <h3 class="govuk-heading-m">
+    Proposal
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What challenges are you trying to address?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This is your problem statement
+    </p>
+    <p class="govuk-body">
+      (Max 300 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about your project
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        the objectives of your project and how they align with the fund's objectives as set out in the prospectus
+      </li>
+      <li>
+        planned activities
+      </li>
+      <li>
+        any partner's activities
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 700 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="deliverability-and-risks">
+    4. Deliverability and risks
+  </h2>
+  <h3 class="govuk-heading-m">
+    Deliverability and risks
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What are your milestones?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      You can add multiple what are your milestones?
+    </p>
+    <p class="govuk-body">
+      What will you achieve?
+    </p>
+    <p class="govuk-body">
+      When will you achieve this?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload your project plan showing key milestones
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Upload your project plan showing key milestones
+    </p>
+    <p class="govuk-body">
+      This could be a Gantt chart. It must not be more than 3 pages. It must be a PDF.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will your project be managed?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us what governance arrangements will be in place for your proposed project.
+Include who will be responsible for oversight and decision making, and how these decisions will be made and documented.
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What risks are there to delivering your proposed project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us about your top five risks
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, recruitment timeframes, staffing capacity or delivery timelines
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Does your proposed project include building works?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This involves using the funding to carry out works to a building so it can be used to help prevent rough sleeping
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What is the ownership of the property?
+  </h4>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Owner
+      </li>
+      <li>
+        Tenant
+      </li>
+      <li>
+        Prospective owner
+      </li>
+      <li>
+        Prospective tenant
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Who is the landlord?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Who is the landlord?
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    When does the lease or licence expire?
+  </h4>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about the purchase
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, tell us if you have agreed a price, when you expect to complete the purchase and any other relevant information.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Tell us about the lease
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, tell us who the landlord is, if you have agreed heads of terms, when you expect to take occupation and any other relevant information.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Have you engaged professional advisors on this project?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For example, a quantity surveyor, architect or designer
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="cost-and-value-for-money">
+    5. Cost and value for money
+  </h2>
+  <h3 class="govuk-heading-m">
+    Cost and value for money
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much total funding are you applying for?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Include both revenue and capital funding, for all 3 years
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    What type of funding are you applying for?
+  </h4>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Revenue only
+      </li>
+      <li>
+        Capital only
+      </li>
+      <li>
+        Both revenue and capital
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much revenue funding are you applying for?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For revenue funding include things like staffing, premises, overheads and training.
+    </p>
+    <p class="govuk-body">
+      You can apply for a minimum of £50,000 and a maximum of £200,000 per year.
+Enter 0 if you are not applying for revenue funding in that year.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much capital funding are you applying for?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For capital funding include things like costs associated with building works, property acquisition, IT equipment and systems, vehicles and valuable pieces of equipment.
+    </p>
+    <p class="govuk-body">
+      You can apply for a minimum of £50,000 and a maximum of £200,000.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Which year are you applying for?
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Year 1
+      </li>
+      <li>
+        Year 2
+      </li>
+      <li>
+        Year 3
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How much funding are you applying for?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Revenue
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For revenue funding include things like staffing, premises, overheads and training.
+    </p>
+    <p class="govuk-body">
+      You can apply for a minimum of £50,000 and a maximum of £200,000.
+Enter 0 if you are not applying for revenue funding in that year.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 1
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 2
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Year 3
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Capital
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      For capital funding include things like costs associated with building works, property acquisition, IT equipment and systems, vehicles and valuable pieces of equipment.
+    </p>
+    <p class="govuk-body">
+      You can apply for a minimum of £50,000 and a maximum of £200,000.
+    </p>
+  </div>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Which year are you applying for?
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        Year 1
+      </li>
+      <li>
+        Year 2
+      </li>
+      <li>
+        Year 3
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload a budget for your project
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Upload an Excel budget that includes the total costs of delivering your project across the three years of the programme.
+    </p>
+    <p class="govuk-body">
+      See
+    </p>
+    <p class="govuk-body">
+      the prospectus
+    </p>
+    <p class="govuk-body">
+      for information on how to complete your budget and to download the budget template.
+    </p>
+    <p class="govuk-body">
+      For each item, tell us how much you will spend both each year and each quarter.
+    </p>
+    <p class="govuk-body">
+      Tell us about capital and revenue spending separately.
+    </p>
+    <p class="govuk-body">
+      Revenue
+    </p>
+    <p class="govuk-body">
+      For revenue funding tell us about things like staffing, premises, overheads and training.
+    </p>
+    <p class="govuk-body">
+      Capital
+    </p>
+    <p class="govuk-body">
+      For capital funding include things like costs associated with building works, property acquisition, IT equipment and systems, vehicles and valuable pieces of equipment.
+    </p>
+    <p class="govuk-body">
+      Match funding
+    </p>
+    <p class="govuk-body">
+      If your project includes match funding or in‑kind contributions, tell us where this funding comes from and whether it is confirmed or expected.
+    </p>
+    <p class="govuk-body">
+      The file must be in Excel format.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="outcomes-and-measuring-impact">
+    6. Outcomes and measuring impact
+  </h2>
+  <h3 class="govuk-heading-m">
+    Outcomes and measuring impact
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    How will this project improve how partners work together to respond to local need?
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Tell us how the project will improve outcomes for people experiencing or at risk of homelessness and rough sleeping
+    </p>
+    <p class="govuk-body">
+      (Max 250 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Describe the measurable positive impacts your project is expected to have
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      This could include:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        how many unique individuals will be supported each year
+how many will be assisted into accommodation
+how many will be prevented from returning into homelessness
+when you expect to see these benefits
+      </li>
+    </ul>
+    <p class="govuk-body">
+      (Max 500 words)
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h2 class="govuk-heading-l" id="letter-of-support-and-declaration">
+    7. Letter of support and declaration
+  </h2>
+  <h3 class="govuk-heading-m">
+    Letter of support and declaration
+  </h3>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Upload your letter of support
+  </h4>
+  <div class="govuk-body">
+    <p class="govuk-body">
+      Upload a letter of support for your proposed activities.
+    </p>
+    <p class="govuk-body">
+      It must be from the lead officer with responsibility for homelessness and rough sleeping from the local authority where your services are being delivered.
+    </p>
+    <p class="govuk-body">
+      The file must be a PDF.
+    </p>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <h4 class="govuk-heading-s">
+    Confirm you have read and agree with the declarations
+  </h4>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        My organisation has a UK bank account
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        My organisation agrees to reporting requirements
+      </li>
+    </ul>
+  </div>
+  <div class="govuk-body">
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        I confirm that the information provided is accurate
+      </li>
+    </ul>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+</div>
+    </div>
+</div>
+{% endblock content %}

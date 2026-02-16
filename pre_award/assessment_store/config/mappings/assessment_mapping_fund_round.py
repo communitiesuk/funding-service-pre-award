@@ -101,6 +101,12 @@ from pre_award.assessment_store.config.mappings.dpif_mappping_parts.r4_scored_cr
 from pre_award.assessment_store.config.mappings.dpif_mappping_parts.r4_unscored_criteria import (
     unscored_sections as dpif_unscored_sections_r4,
 )
+from pre_award.assessment_store.config.mappings.ehcf_mapping_parts.apply_scored_sections import (
+    scored_sections as ehcf_apply_scored_sections,
+)
+from pre_award.assessment_store.config.mappings.ehcf_mapping_parts.apply_unscored_sections import (
+    unscored_sections as ehcf_apply_unscored_sections,
+)
 from pre_award.assessment_store.config.mappings.gbrf_mapping_parts.r1_unscored_criteria import (
     unscored_sections as gbrf_unscored_sections,
 )
@@ -246,6 +252,9 @@ NWP_ROUND_PILL1_ID = "e87283ae-e514-4a5e-bcaa-b32526fad721"
 NWP_ROUND_PILL2_ID = "8b48609f-8f2f-4646-95b9-735175b90fc5"
 NWP_ROUND_PILL3_ID = "1cdc93fb-1133-4cb9-b791-ca277715fe54"
 NWP_ROUND_PILL4_ID = "7f7fb87b-7336-4c2a-b83c-98c7830e835c"
+
+EHCF_FUND_ID = "01f3a07a-1ea8-46d2-9286-d6bf06f4a831"
+EHCF_ROUND_APPLY_ID = "e3a99e8c-e5ef-4d40-844d-38e27bf4042f"
 
 # ASSESSMENT DISPLAY CONFIGURATION
 
@@ -429,6 +438,11 @@ fund_round_to_assessment_mapping = {
         "schema_id": "nwp_pill4_assessment",
         "unscored_sections": nwp_pill4_unscored_sections,
         "scored_criteria": nwp_pill4_scored_sections,
+    },
+    f"{EHCF_FUND_ID}:{EHCF_ROUND_APPLY_ID}": {
+        "schema_id": "ehcf_apply_assessment",
+        "unscored_sections": ehcf_apply_unscored_sections,
+        "scored_criteria": ehcf_apply_scored_sections,
     },
 }
 
@@ -663,6 +677,12 @@ fund_round_data_key_mappings = {
         "location": None,
         "asset_type": None,
         "funding_one": "mhpCON",
+        "funding_two": None,
+    },
+    "EHCFAPPLY": {
+        "location": None,
+        "asset_type": None,
+        "funding_one": "ddPcod",
         "funding_two": None,
     },
 }
@@ -2969,6 +2989,24 @@ applicant_info_mapping = {
             }
         },
     },
+    EHCF_FUND_ID: {
+        "ASSESSOR_EXPORT": {
+            "form_fields": {
+                "WwxTJv": {"en": {"title": "Organisation name", "field_type": "textField"}},
+                "iXAfvh": {"en": {"title": "Organisation address", "field_type": "ukAddressField"}},
+                "elhXgA": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
+                "hduWVY": {"en": {"title": "Primary contact job title", "field_type": "textField"}},
+                "sHxRrj": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
+                "sLHzMy": {"en": {"title": "Primary contact phone number", "field_type": "telephoneNumberField"}},
+                "ddPcod": {"en": {"title": "Total funding requested", "field_type": "numberField"}},
+            }
+        },
+        "OUTPUT_TRACKER": {
+            "form_fields": {
+                "ddPcod": {"en": {"title": "Total funding requested", "field_type": "numberField"}},
+            }
+        },
+    },
     CTDF_FUND_ID: {
         "ASSESSOR_EXPORT": {
             "form_fields": {
@@ -3164,6 +3202,11 @@ fund_round_mapping_config = {
         "fund_id": NWP_FUND_ID,
         "round_id": NWP_ROUND_PILL4_ID,
         "type_of_application": "NWP",
+    },
+    "EHCFAPPLY": {
+        "fund_id": EHCF_FUND_ID,
+        "round_id": EHCF_ROUND_APPLY_ID,
+        "type_of_application": "EHCF",
     },
     "RANDOM_FUND_ROUND": {
         "fund_id": uuid4(),

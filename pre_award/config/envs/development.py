@@ -142,6 +142,9 @@ class DevelopmentConfig(Config):
             "NWP_LEAD_ASSESSOR",
             "NWP_ASSESSOR",
             "NWP_COMMENTER",
+            "EHCF_LEAD_ASSESSOR",
+            "EHCF_ASSESSOR",
+            "EHCF_COMMENTER",
         ],
         "highest_role_map": {
             "FFW": DEBUG_USER_ROLE,
@@ -162,6 +165,7 @@ class DevelopmentConfig(Config):
             "LAHF": DEBUG_USER_ROLE,
             "SHIF": DEBUG_USER_ROLE,
             "NWP": DEBUG_USER_ROLE,
+            "EHCF": DEBUG_USER_ROLE,
         },
     }
     DEBUG_USER_ACCOUNT_ID = "00000000-0000-0000-0000-000000000000"

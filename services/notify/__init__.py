@@ -143,6 +143,7 @@ class NotificationService:
         "socialhousinginnovationfund@communities.gov.uk": "4816bd27-e73d-489b-91fd-daaae17eaec1",
         "nwpgrant@communities.gov.uk": "c1556459-6189-46d6-9973-a76512fc7cc0",
         "pippcorrespondence@communities.gov.uk": "4e1200b9-cf79-4cbb-8266-f86ed1a5daa7",
+        "ehcf@communities.gov.uk": "592dafca-ccaa-4877-8f2e-6f21f56253f2",
     }
 
     def __init__(self) -> None:
