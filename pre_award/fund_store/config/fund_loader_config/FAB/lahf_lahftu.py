@@ -71,7 +71,7 @@ LOADER_CONFIG = {
         "short_name": "LAHFtu",
         "opens": "2025-09-29T12:00:00",
         "assessment_start": "2025-09-29T12:00:00",
-        "deadline": "2026-02-25T12:00:00",
+        "deadline": "2026-03-10T12:00:00",
         "application_reminder_sent": False,
         "reminder_date": "2026-02-27T12:00:00",
         "assessment_deadline": "2026-03-20T12:00:00",
