@@ -97,7 +97,7 @@ LOADER_CONFIG = {
         "reminder_date": "2026-03-23T12:00:00",
         "assessment_deadline": "2026-06-30T12:00:00",
         "prospectus": "https://www.gov.uk/guidance/ending-homelessness-in-communities-fund-prospectus",
-        "privacy_notice": "www.notgotityet.com",
+        "privacy_notice": "",
         "contact_email": "",
         "instructions_json": {"en": None, "cy": None},
         "feedback_link": "",
