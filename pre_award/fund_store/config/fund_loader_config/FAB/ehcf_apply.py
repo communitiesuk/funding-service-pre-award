@@ -98,7 +98,7 @@ LOADER_CONFIG = {
         "assessment_deadline": "2026-06-30T12:00:00",
         "prospectus": "https://www.gov.uk/guidance/ending-homelessness-in-communities-fund-prospectus",
         "privacy_notice": "https://www.gov.uk/help/privacy-notice",
-        "contact_email": "",
+        "contact_email": "ehcf@communities.gov.uk",
         "instructions_json": {"en": None, "cy": None},
         "feedback_link": "",
         "project_name_field_id": "WwxTJv",
