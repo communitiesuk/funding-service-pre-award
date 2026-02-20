@@ -686,6 +686,118 @@ fund_round_data_key_mappings = {
         "funding_two": None,
     },
 }
+# used in applicant_info_mapping for all for pillars of NWP
+nwp_assessor_export_mapping = {
+    "GtoolQ": {"en": {"title": "Organisation name", "field_type": "textField"}},
+    "JwFyrI": {"en": {"title": "Alternative Organisation name", "field_type": "textField"}},
+    "wdsvxz": {"en": {"title": "Organisation's main purpose", "field_type": "textField"}},
+    "obNwIa": {"en": {"title": "VAT registration number", "field_type": "textField"}},
+    "zJJSsR": {"en": {"title": "Upload your current insurance certificate", "field_type": "textField"}},
+    "UJPZaz": {"en": {"title": "Organisation's website", "field_type": "textField"}},
+    "uPoAaU": {"en": {"title": "Organisation's social media accounts", "field_type": "textField"}},
+    "fFNPbo": {
+        "en": {"title": "What professional associations is your organisation a member of?", "field_type": "textField"}
+    },
+    "UstMrg": {
+        "en": {"title": "Provide a summary or mission statement for your organisation", "field_type": "textField"}
+    },
+    "org": {"en": {"title": "What is your organisation type?", "field_type": "textField"}},
+    "RlaAvC": {"en": {"title": "Do you have a charity number?", "field_type": "textField"}},
+    "EXzwff": {"en": {"title": "What is your charity number?", "field_type": "textField"}},
+    "dJqsly": {"en": {"title": "What are the names of your trustees?", "field_type": "textField"}},
+    "WuTLHg": {"en": {"title": "Do you have a company registration number?", "field_type": "textField"}},
+    "JniYtl": {"en": {"title": "What is your company registration number?", "field_type": "textField"}},
+    "EXdHkT": {"en": {"title": "What are the names of your directors?", "field_type": "textField"}},
+    "RInsJl": {"en": {"title": "Is there a parent or holding organisation?", "field_type": "textField"}},
+    "MKIpgA": {"en": {"title": "What is the name of the parent or holding organisation?", "field_type": "textField"}},
+    "YmiBVh": {"en": {"title": "What is the structure of your organisation", "field_type": "textField"}},
+    "HqzHaG": {"en": {"title": "Who is the accountable officer for your organisation?", "field_type": "textField"}},
+    "Role": {"en": {"title": "Role", "field_type": "textField"}},
+    "cKnBaI": {"en": {"title": "Email address", "field_type": "textField"}},
+    "Telephonenumber": {"en": {"title": "Telephone number", "field_type": "textField"}},
+    "VPYbgU": {"en": {"title": "Who is the lead officer for your organisation?", "field_type": "textField"}},
+    "zQeJlv": {"en": {"title": "Role", "field_type": "textField"}},
+    "ZjafAo": {"en": {"title": "Email address", "field_type": "textField"}},
+    "cmzQzX": {"en": {"title": "Telephone numbers", "field_type": "textField"}},
+    "rsiytx": {
+        "en": {
+            "title": "Is the primary contact the same as the accountable officer or the lead officer?",
+            "field_type": "textField",
+        }
+    },
+    "GEyQSq": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
+    "Owsgne": {"en": {"title": "Primary contact role", "field_type": "textField"}},
+    "WOWWfM": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
+    "oExeYu": {"en": {"title": "Primary contact contact number", "field_type": "telephoneNumberField"}},
+    "gXiZBO": {"en": {"title": "Is this application on behalf of a consortium?", "field_type": "textField"}},
+    "kmYykb": {"en": {"title": "Consortium name", "field_type": "textField"}},
+    "GoeFfx": {"en": {"title": "Organisation's Roles", "field_type": "textField"}},
+    "EDVRRq": {"en": {"title": "Roles and responsibilities", "field_type": "textField"}},
+    "IUOJJs": {"en": {"title": "Lead organisation?", "field_type": "textField"}},
+    "lBebsG": {"en": {"title": "How will this consortium generate efficiencies?", "field_type": "textField"}},
+    "ZAcTIF": {"en": {"title": "Who are your main stakeholders?", "field_type": "textField"}},
+    "vkQCZO": {
+        "en": {"title": "What are you expecting stakeholders to contribute to this project?", "field_type": "textField"}
+    },
+    "OUbunU": {"en": {"title": "How will you engage with stakeholders?", "field_type": "textField"}},
+    "SVGlsX": {"en": {"title": "What outcomes are you expecting?", "field_type": "textField"}},
+    "ijqUSn": {
+        "en": {
+            "title": "How will you involve those with a lived experience of homelessness and rough sleeping throughout the grant?",
+            "field_type": "textField",
+        }
+    },
+    "APcEQP": {
+        "en": {
+            "title": "How will you involve those working within the homelessness and rough sleeping workforce throughout the grant?",
+            "field_type": "textField",
+        }
+    },
+    "WTDdef": {"en": {"title": "Risks and Mitigations", "field_type": "multiInputField"}},
+    "MRbDfT": {"en": {"title": "Declaration", "field_type": "textField"}},
+    "nFwxGC": {
+        "en": {
+            "title": "Tell us about your recent contract experience in similar areas of work.",
+            "field_type": "textField",
+        }
+    },
+    "mDoVvo": {
+        "en": {
+            "title": "Tell us about the challenges for the professional and frontline workforce.",
+            "field_type": "textField",
+        }
+    },
+    "bkgTmL": {"en": {"title": "Reference 1 - name", "field_type": "textField"}},
+    "BnAFCx": {"en": {"title": "Reference 1 - Organisation", "field_type": "textField"}},
+    "DVShDW": {"en": {"title": "Reference 1 - Address", "field_type": "textField"}},
+    "YKafwb": {"en": {"title": "Reference 1 - Position", "field_type": "textField"}},
+    "xujtqC": {"en": {"title": "Reference 1 - Email address", "field_type": "textField"}},
+    "GKnmaE": {"en": {"title": "Reference 1 - Telephone number", "field_type": "textField"}},
+    "ZhObWm": {"en": {"title": "Reference 1 - Summary of commissioned work or projects", "field_type": "textField"}},
+    "pmMNbT": {"en": {"title": "Reference 2 - name", "field_type": "textField"}},
+    "mNCRQR": {"en": {"title": "Reference 2 - Organisation", "field_type": "textField"}},
+    "XvJkLl": {"en": {"title": "Reference 2 - Address", "field_type": "textField"}},
+    "wjzYCc": {"en": {"title": "Reference 2 - Position", "field_type": "textField"}},
+    "wiXjDW": {"en": {"title": "Reference 2 - Email address", "field_type": "textField"}},
+    "RNiqen": {"en": {"title": "Reference 2 - Telephone number", "field_type": "textField"}},
+    "WDowmM": {"en": {"title": "Reference 2 - Summary of commissioned work or projects", "field_type": "textField"}},
+    "QxyRhj": {"en": {"title": "Tell us about your proposal", "field_type": "textField"}},
+    "TxulKg": {"en": {"title": "What are your objectives?", "field_type": "textField"}},
+    "iYAEgj": {"en": {"title": "What are your milestones?", "field_type": "textField"}},
+    "nxfZNl": {"en": {"title": "Are you applying for multiple pillars?", "field_type": "textField"}},
+    "CDDxlF": {
+        "en": {
+            "title": "How will multiple pillars improve your delivery, efficiency and effectiveness?",
+            "field_type": "textField",
+        }
+    },
+    "changingdemands": {
+        "en": {"title": "How will you adapt your service to meet changing demands?", "field_type": "textField"}
+    },
+    "vjKUYK": {
+        "en": {"title": "How will you use technology to improve and expand your service?", "field_type": "textField"}
+    },
+}
 
 applicant_info_mapping = {
     NSTF_FUND_ID: {
@@ -2924,11 +3036,7 @@ applicant_info_mapping = {
     f"{NWP_FUND_ID}:{NWP_ROUND_PILL1_ID}": {
         "ASSESSOR_EXPORT": {
             "form_fields": {
-                "GtoolQ": {"en": {"title": "Organisation name", "field_type": "textField"}},
-                "GEyQSq": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
-                "Owsgne": {"en": {"title": "Primary contact role", "field_type": "textField"}},
-                "WOWWfM": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
-                "oExeYu": {"en": {"title": "Primary contact contact number", "field_type": "telephoneNumberField"}},
+                **nwp_assessor_export_mapping,
                 "fZBaXW": {"en": {"title": "Total Pillar 1 funding requested", "field_type": "numberField"}},
             }
         },
@@ -2941,11 +3049,7 @@ applicant_info_mapping = {
     f"{NWP_FUND_ID}:{NWP_ROUND_PILL2_ID}": {
         "ASSESSOR_EXPORT": {
             "form_fields": {
-                "GtoolQ": {"en": {"title": "Organisation name", "field_type": "textField"}},
-                "GEyQSq": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
-                "Owsgne": {"en": {"title": "Primary contact role", "field_type": "textField"}},
-                "WOWWfM": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
-                "oExeYu": {"en": {"title": "Primary contact contact number", "field_type": "telephoneNumberField"}},
+                **nwp_assessor_export_mapping,
                 "BmmObA": {"en": {"title": "Total Pillar 2 funding requested", "field_type": "numberField"}},
             }
         },
@@ -2958,11 +3062,7 @@ applicant_info_mapping = {
     f"{NWP_FUND_ID}:{NWP_ROUND_PILL3_ID}": {
         "ASSESSOR_EXPORT": {
             "form_fields": {
-                "GtoolQ": {"en": {"title": "Organisation name", "field_type": "textField"}},
-                "GEyQSq": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
-                "Owsgne": {"en": {"title": "Primary contact role", "field_type": "textField"}},
-                "WOWWfM": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
-                "oExeYu": {"en": {"title": "Primary contact contact number", "field_type": "telephoneNumberField"}},
+                **nwp_assessor_export_mapping,
                 "tNAMxP": {"en": {"title": "Total Pillar 3 funding requested", "field_type": "numberField"}},
             }
         },
@@ -2975,11 +3075,7 @@ applicant_info_mapping = {
     f"{NWP_FUND_ID}:{NWP_ROUND_PILL4_ID}": {
         "ASSESSOR_EXPORT": {
             "form_fields": {
-                "GtoolQ": {"en": {"title": "Organisation name", "field_type": "textField"}},
-                "GEyQSq": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
-                "Owsgne": {"en": {"title": "Primary contact role", "field_type": "textField"}},
-                "WOWWfM": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
-                "oExeYu": {"en": {"title": "Primary contact contact number", "field_type": "telephoneNumberField"}},
+                **nwp_assessor_export_mapping,
                 "mhpCON": {"en": {"title": "Total Pillar 4 funding requested", "field_type": "numberField"}},
             }
         },
