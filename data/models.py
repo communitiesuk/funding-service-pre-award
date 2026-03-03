@@ -100,6 +100,9 @@ class Round(Model):
     eligibility_config: Mapped[Optional[dict[str, Any]]]
     eoi_decision_schema: Mapped[Optional[dict[str, Any]]]
 
+    # flag to be set when PII deletion has been completed for a round, to prevent multiple deletion attempts:
+    pii_deletion_completed: Mapped[bool] = mapped_column(default=False, nullable=False)
+
     @hybrid_property
     def _is_past_submission_deadline(self) -> bool:
         if self.deadline:
