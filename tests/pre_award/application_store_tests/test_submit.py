@@ -7,7 +7,7 @@ from uuid import uuid4
 import pytest
 from click.testing import CliRunner
 from flask_session import Session
-from fsd_utils import Decision, NotifyConstants
+from fsd_utils import Decision, NotifyConstants, extract_questions_and_answers
 from pytest_mock import MockerFixture
 
 from pre_award.application_store._helpers.application import send_change_received_notification, send_submit_notification
@@ -904,3 +904,15 @@ def test_derive_application_values_pfn(pfn_application_json_extract, app):
     assert result["funding_amount_requested"] == 12000 + 18000
     assert result["language"] == "en"
     assert result["project_name"] == "Test Council"
+
+
+def test_pfn_submit_multi_input_zeros(pfn_application_json_extract, app):
+    """PFN/RP multiInput fields with first value 0 caused
+    'cannot unpack non-iterable NoneType' in fsd_utils map_multi_input_data."""
+
+    # This should NOT raise any error currently it logs errors
+    # and returns None for these fields when it has zero in starting
+    result = extract_questions_and_answers(pfn_application_json_extract["forms"], language="en")
+
+    title = "Tell us your indicative spend forecast for pre-approved interventions in year 3."
+    assert result["pfn-rp-payment-profile-and-spend-forecast"][title] is not None

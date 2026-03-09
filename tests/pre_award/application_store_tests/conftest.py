@@ -600,14 +600,14 @@ def pfn_application_json_extract():
                                 "type": "multiInput",
                                 "answer": [
                                     {
-                                        "FwurgE": 6000,
-                                        "tmOkiG": 6000,
-                                        "sSQLwH": 6000,
+                                        "FwurgE": 0,
+                                        "tmOkiG": 0,
+                                        "sSQLwH": 4000,
                                         "uUTyWH": 6000,
                                         "ZsNcbA": 6000,
                                         "iuTXHe": 6000,
-                                        "lXTtKN": 6000,
-                                        "FfSahl": 6000,
+                                        "lXTtKN": 0,
+                                        "FfSahl": 0,
                                     }
                                 ],
                             }
