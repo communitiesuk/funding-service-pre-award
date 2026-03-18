@@ -102,6 +102,11 @@ class Round(Model):
 
     # flag to be set when PII deletion has been completed for a round, to prevent multiple deletion attempts:
     pii_deletion_completed: Mapped[bool] = mapped_column(default=False, nullable=False)
+    pii_deletion_logs: Mapped[list["PiiDeletionLog"]] = relationship(
+        "PiiDeletionLog",
+        back_populates="round",
+        lazy=True,
+    )
 
     @hybrid_property
     def _is_past_submission_deadline(self) -> bool:
@@ -147,3 +152,22 @@ class Round(Model):
             return None
 
         return self.instructions_json.get(get_lang(), self.instructions_json.get("en"))
+
+
+class PiiDeletionLog(Model):
+    """
+    This model is a log of PII deletions for a round.
+    It can be used to track when PII deletion was done and by whom.
+    """
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        default=uuid.uuid4,
+        primary_key=True,
+    )
+    round_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("round.id"), index=True, nullable=False)
+    round: Mapped[Round] = relationship(
+        lazy=True,
+        back_populates="pii_deletion_logs",
+    )
+    deletion_timestamp: Mapped[datetime] = mapped_column(server_default=func.now(), nullable=False)
+    deleted_by_email: Mapped[str] = mapped_column(nullable=False)
