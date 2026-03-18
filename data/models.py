@@ -13,6 +13,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from common.utils.date_time_utils import get_now_UK_time_without_tzinfo
+from pre_award.application_store.db.models.application.enums import ApplicationsWithPiiDeleted
 from pre_award.common.locale_selector.get_lang import get_lang
 from pre_award.db import FundingType, db
 
@@ -170,4 +171,15 @@ class PiiDeletionLog(Model):
         back_populates="pii_deletion_logs",
     )
     deletion_timestamp: Mapped[datetime] = mapped_column(server_default=func.now(), nullable=False)
-    deleted_by_email: Mapped[str] = mapped_column(nullable=False)
+    deleted_by: Mapped[str] = mapped_column(nullable=False)
+
+    applications_with_pii_deleted: Mapped[ApplicationsWithPiiDeleted] = mapped_column(
+        Enum(
+            ApplicationsWithPiiDeleted,
+            name="applicationswithpiideleted",
+            create_constraint=True,
+            validate_strings=True,
+        ),
+        nullable=False,
+    )
+    applications_with_pii_deleted_count: Mapped[int] = mapped_column(nullable=False)
