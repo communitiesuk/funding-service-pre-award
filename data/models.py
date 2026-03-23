@@ -13,7 +13,10 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from common.utils.date_time_utils import get_now_UK_time_without_tzinfo
-from pre_award.application_store.db.models.application.enums import ApplicationsWithPiiDeleted
+from pre_award.application_store.db.models.application.enums import (
+    ApplicationsWithPiiDeleted,
+    PiiDeletionScope,
+)
 from pre_award.common.locale_selector.get_lang import get_lang
 from pre_award.db import FundingType, db
 
@@ -102,7 +105,15 @@ class Round(Model):
     eoi_decision_schema: Mapped[Optional[dict[str, Any]]]
 
     # flag to be set when PII deletion has been completed for a round, to prevent multiple deletion attempts:
-    pii_deletion_completed: Mapped[bool] = mapped_column(default=False, nullable=False)
+    pii_deleted_for_applications: Mapped[PiiDeletionScope] = mapped_column(
+        Enum(
+            PiiDeletionScope,
+            name="piideletedforapplications",
+            create_constraint=True,
+            validate_strings=True,
+        ),
+        nullable=True,
+    )
     pii_deletion_logs: Mapped[list["PiiDeletionLog"]] = relationship(
         "PiiDeletionLog",
         back_populates="round",
