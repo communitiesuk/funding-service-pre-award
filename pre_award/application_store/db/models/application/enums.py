@@ -17,4 +17,12 @@ class Status(Enum):
 
 class ApplicationsWithPiiDeleted(Enum):
     UN_SUBMITTED = "unsubmitted"
+    SUBMITTED = "submitted"
+    ALL = "all"
+
+
+class PiiDeletedForApplications(Enum):
+    NONE = "none"
+    UN_SUBMITTED = "unsubmitted"
+    SUBMITTED = "submitted"
     ALL = "all"
