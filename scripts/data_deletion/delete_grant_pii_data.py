@@ -173,18 +173,12 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         Applications.status.in_(UNSUBMITTED_STATUSES),
     )
     unsubmitted_count = unsubmitted_applications.count()
-    if unsubmitted_count == 0:
-        print("No unsubmitted applications found for this round.")
-        return
 
     if submitted_eligible:
         submitted_applications = all_applications.filter(
             Applications.status.in_(SUBMITTED_STATUSES),
         )
         submitted_count = submitted_applications.count()
-        if submitted_count == 0:
-            print("No submitted applications found for this round.")
-            return
 
     print(f"  Unsubmitted applications:  {unsubmitted_count}")
     if submitted_eligible:
@@ -196,19 +190,7 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         print(f"  Can delete submitted:     {submitted_eligible}")
     print(f"{'─' * 50}\n")
 
-    # step 6 — confirmation
-    if not dry_run:
-        print(f"You are about to delete PII for {fund_short_name}-{round_short_name}.")
-        confirmation = input(f"Type '{fund_short_name}-{round_short_name}' to confirm: ")
-        if confirmation != f"{fund_short_name}-{round_short_name}":
-            print("\nERROR: Confirmation did not match. Aborting.")
-            return
-        print("\nConfirmed. Proceeding with deletion...")
-    else:
-        print("\nDRY RUN — no data will be deleted")
-        print("Run with --no-dry-run to execute")
-
-    # step 7 — Confirm whether to delete data for SUBMITTED applications or only UNSUBMITTED applications
+    # step 6 — Confirm whether to delete data for SUBMITTED applications or only UNSUBMITTED applications
     delete_unsubmitted = False
     delete_submitted = False
 
@@ -221,24 +203,42 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         if choice.lower() == "b":
             delete_unsubmitted = True
             delete_submitted = True
-            applications_to_delete = all_applications
+            applications_to_delete = all_applications.all()
             print("\nChosen scope: ALL applications (submitted and unsubmitted)")
         elif choice.lower() == "s":
+            if submitted_count == 0:
+                print("No submitted applications found for this round.")
+                return
             delete_submitted = True
-            applications_to_delete = submitted_applications
+            applications_to_delete = submitted_applications.all()
             print("\nChosen scope: ONLY SUBMITTED applications")
         elif choice.lower() == "u":
+            if unsubmitted_count == 0:
+                print("No unsubmitted applications found for this round.")
+                return
             delete_unsubmitted = True
-            applications_to_delete = unsubmitted_applications
+            applications_to_delete = unsubmitted_applications.all()
             print("\nChosen scope: ONLY UNSUBMITTED applications")
     elif submitted_eligible and not unsubmitted_eligible:
         delete_submitted = True
-        applications_to_delete = submitted_applications
+        applications_to_delete = submitted_applications.all()
         print("\nChosen scope: ONLY submitted applications")
     elif unsubmitted_eligible and not submitted_eligible:
         delete_unsubmitted = True
-        applications_to_delete = unsubmitted_applications
+        applications_to_delete = unsubmitted_applications.all()
         print("\nChosen scope: ONLY unsubmitted applications")
+
+    # step 7 — confirmation
+    if not dry_run:
+        print(f"You are about to delete PII for {fund_short_name}-{round_short_name}.")
+        confirmation = input(f"Type '{fund_short_name}-{round_short_name}' to confirm: ")
+        if confirmation != f"{fund_short_name}-{round_short_name}":
+            print("\nERROR: Confirmation did not match. Aborting.")
+            return
+        print("\nConfirmed. Proceeding with deletion...")
+    else:
+        print("\nDRY RUN — no data will be deleted")
+        print("Run with --no-dry-run to execute")
 
     print(f"\n\nFinal decision — delete unsubmitted: {delete_unsubmitted}")
     print(f"Final decision — delete submitted:   {delete_submitted}")
