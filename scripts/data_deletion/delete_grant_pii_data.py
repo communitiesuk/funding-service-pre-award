@@ -287,7 +287,8 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
                     s3_files_list = list_files_in_folder(f"{application.id}/")
                     print(f"Found {len(s3_files_list)} files in {application.id}")
                     for file_key in s3_files_list:
-                        delete_file_from_aws(file_key)
+                        full_key = f"{application.id}/{file_key}"
+                        delete_file_from_aws(full_key)
                 except Exception as e:
                     print(f"An error occurred while deleting S3 files for application id {application.id}: {e}")
 
