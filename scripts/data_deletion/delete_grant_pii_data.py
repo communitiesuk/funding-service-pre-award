@@ -82,6 +82,14 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         return
     print(f"\nRound found: {round_obj.title_json.get('en')} | deadline: {round_obj.deadline}")
 
+    # exit if PII deletion already completed for all applications in this round
+    if round_obj.pii_deleted_for_applications == PiiDeletionScope.ALL:
+        print(
+            f"\nPII deletion already completed for ALL applications in {fund_short_name}-{round_short_name}. "
+            "Nothing to do."
+        )
+        return
+
     # step 2 — check round is closed
     if datetime.utcnow() > round_obj.deadline:
         print(f"Round is closed. Deadline was {round_obj.deadline}")
@@ -302,15 +310,23 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         )
 
         # save what has been deleted on the Round object to prevent double deletion attempts in the future
+        # combine the scope from this run with any existing scope on the round
+        existing_scope = round_obj.pii_deleted_for_applications
         if delete_unsubmitted and delete_submitted:
-            round_obj.pii_deleted_for_applications = PiiDeletionScope.ALL
-            status = "ALL"
+            new_scope = PiiDeletionScope.ALL
         elif delete_unsubmitted and not delete_submitted:
-            round_obj.pii_deleted_for_applications = PiiDeletionScope.UN_SUBMITTED
-            status = "UN_SUBMITTED"
+            if existing_scope == PiiDeletionScope.SUBMITTED:
+                new_scope = PiiDeletionScope.ALL
+            else:
+                new_scope = PiiDeletionScope.UN_SUBMITTED
         elif delete_submitted and not delete_unsubmitted:
-            round_obj.pii_deleted_for_applications = PiiDeletionScope.SUBMITTED
-            status = "SUBMITTED"
+            if existing_scope == PiiDeletionScope.UN_SUBMITTED:
+                new_scope = PiiDeletionScope.ALL
+            else:
+                new_scope = PiiDeletionScope.SUBMITTED
+
+        round_obj.pii_deleted_for_applications = new_scope
+        status = new_scope.name
         db.session.add(log_entry)
         db.session.add(round_obj)
         db.session.commit()
