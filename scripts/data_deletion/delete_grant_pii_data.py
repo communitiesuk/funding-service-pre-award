@@ -165,17 +165,26 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         Applications.round_id == str(round_obj.id),
         Applications.is_deleted.is_(False),
     )
+    if all_applications.count() == 0:
+        print("No applications found for this round. Nothing to delete.")
+        return
 
     unsubmitted_applications = all_applications.filter(
         Applications.status.in_(UNSUBMITTED_STATUSES),
     )
     unsubmitted_count = unsubmitted_applications.count()
+    if unsubmitted_count == 0:
+        print("No unsubmitted applications found for this round.")
+        return
 
     if submitted_eligible:
         submitted_applications = all_applications.filter(
             Applications.status.in_(SUBMITTED_STATUSES),
         )
         submitted_count = submitted_applications.count()
+        if submitted_count == 0:
+            print("No submitted applications found for this round.")
+            return
 
     print(f"  Unsubmitted applications:  {unsubmitted_count}")
     if submitted_eligible:
