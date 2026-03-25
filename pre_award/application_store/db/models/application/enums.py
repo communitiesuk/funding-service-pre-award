@@ -15,13 +15,13 @@ class Status(Enum):
     CHANGE_RECEIVED = 5
 
 
-class ApplicationsWithPiiDeleted(Enum):
+class ApplicationsWithPiiDeleted(str, Enum):
     UN_SUBMITTED = "unsubmitted"
     SUBMITTED = "submitted"
     ALL = "all"
 
 
-class PiiDeletionScope(Enum):
+class PiiDeletionScope(str, Enum):
     UN_SUBMITTED = "unsubmitted"
     SUBMITTED = "submitted"
     ALL = "all"
