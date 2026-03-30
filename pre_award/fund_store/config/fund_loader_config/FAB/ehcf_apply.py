@@ -92,7 +92,7 @@ LOADER_CONFIG = {
         "fund_id": "01f3a07a-1ea8-46d2-9286-d6bf06f4a831",
         "short_name": "APPLY",
         "opens": "2026-02-23T12:00:00",
-        "assessment_start": "2026-04-07T12:00:00",
+        "assessment_start": "2026-03-31T12:00:00",
         "deadline": "2026-03-31T12:00:00",
         "reminder_date": "2026-03-23T12:00:00",
         "assessment_deadline": "2026-06-30T12:00:00",

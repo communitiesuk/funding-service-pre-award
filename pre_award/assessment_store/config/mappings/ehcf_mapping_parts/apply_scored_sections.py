@@ -316,7 +316,7 @@ scored_sections = [
                                 "field_type": "numberField",
                                 "presentation_type": "text",
                                 "question": """<h3><u>BOTH REVENUE AND CAPITAL FUNDING</u></h3>
-                                                <h4>How much revenue and capital funding are you applying for?</h4>
+                                                <h4>How much revenue funding are you applying for?</h4>
                                                 Year 1
                                             """,
                             },

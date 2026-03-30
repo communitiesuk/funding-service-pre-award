@@ -3089,12 +3089,129 @@ applicant_info_mapping = {
         "ASSESSOR_EXPORT": {
             "form_fields": {
                 "WwxTJv": {"en": {"title": "Organisation name", "field_type": "textField"}},
+                "wqpbOz": {"en": {"title": "Organisation alternative name?", "field_type": "textField"}},
                 "iXAfvh": {"en": {"title": "Organisation address", "field_type": "ukAddressField"}},
-                "elhXgA": {"en": {"title": "Primary contact full name", "field_type": "textField"}},
-                "hduWVY": {"en": {"title": "Primary contact job title", "field_type": "textField"}},
-                "sHxRrj": {"en": {"title": "Primary contact email address", "field_type": "emailAddressField"}},
-                "sLHzMy": {"en": {"title": "Primary contact phone number", "field_type": "telephoneNumberField"}},
+                "DJZuCU": {"en": {"title": "Legal status of organisation", "field_type": "radiosField"}},
+                "siZmOt": {
+                    "en": {"title": "Charity number (CHARITABLE INCORPORATED ORGANISATION)", "field_type": "textField"}
+                },
+                "NsTZAN": {
+                    "en": {
+                        "title": "Charity number (CHARITABLE COMPANY LIMITED BY GUARANTEE)",
+                        "field_type": "textField",
+                    }
+                },
+                "AAbTDt": {"en": {"title": "Charity is exempt - no charity number", "field_type": "textField"}},
+                "fCXecZ": {"en": {"title": "Company registration number", "field_type": "textField"}},
+                "xTJyLj": {
+                    "en": {
+                        "title": "Company registration number (COMMUNITY INTEREST COMPANY)",
+                        "field_type": "textField",
+                    }
+                },
+                "mtXRXO": {"en": {"title": "Financial Conduct Authority reference number", "field_type": "textField"}},
+                "elhXgA": {"en": {"title": "Primary contact: Full name", "field_type": "textField"}},
+                "hduWVY": {"en": {"title": "Primary contact: Job title", "field_type": "textField"}},
+                "sHxRrj": {"en": {"title": "Primary contact: Email address", "field_type": "emailAddressField"}},
+                "sLHzMy": {"en": {"title": "Primary contact: Phone number", "field_type": "telephoneNumberField"}},
+                "LnKSXL": {
+                    "en": {"title": "Is the primary contact also an authorised signatory?", "field_type": "yesNoField"}
+                },
+                "KQDHpr": {"en": {"title": "Authorised signatory: Full name", "field_type": "textField"}},
+                "FVhlFB": {"en": {"title": "Authorised signatory: Job title", "field_type": "textField"}},
+                "byicLn": {"en": {"title": "Authorised signatory: Email address", "field_type": "textField"}},
+                "LNYBTt": {
+                    "en": {
+                        "title": "Is your application a joint bid in partnership with other organisations?",
+                        "field_type": "yesNoField",
+                    }
+                },
+                "uiRSYP": {"en": {"title": "What are your organisation's objectives?", "field_type": "textField"}},
+                "AznHmY": {"en": {"title": "What are your organisation's key activities?", "field_type": "textField"}},
+                "tTDkMm": {
+                    "en": {
+                        "title": "Tell us about how your organisation has worked on similar previous projects.",
+                        "field_type": "textField",
+                    }
+                },
+                "XCriZS": {"en": {"title": "What challenges are you trying to address?", "field_type": "textField"}},
+                "MLxEMD": {"en": {"title": "Tell us about your project.", "field_type": "textField"}},
+                "puuNXQ": {"en": {"title": "What are your milestones?", "field_type": "multiInputField"}},
+                "HpgEVW": {"en": {"title": "How will your project be managed?", "field_type": "textField"}},
                 "ddPcod": {"en": {"title": "Total funding requested", "field_type": "numberField"}},
+                "vwpHzc": {"en": {"title": "What type of funding are you applying for?", "field_type": "radiosField"}},
+                "AltolX": {
+                    "en": {
+                        "title": "REVENUE FUNDING ONLY - How much revenue funding are you applying for? - Year 1",
+                        "field_type": "numberField",
+                    }
+                },
+                "iFjBTZ": {
+                    "en": {
+                        "title": "REVENUE FUNDING ONLY - How much revenue funding are you applying for? - Year 2",
+                        "field_type": "numberField",
+                    }
+                },
+                "hDxhyT": {
+                    "en": {
+                        "title": "REVENUE FUNDING ONLY - How much revenue funding are you applying for? - Year 3",
+                        "field_type": "numberField",
+                    }
+                },
+                "XFFfSR": {
+                    "en": {
+                        "title": "CAPITAL FUNDING ONLY - How much capital funding are you applying for?",
+                        "field_type": "textField",
+                    }
+                },
+                "tTYUMj": {
+                    "en": {
+                        "title": "CAPITAL FUNDING ONLY - Which year are you applying for?",
+                        "field_type": "textField",
+                    }
+                },
+                "MqmNSK": {
+                    "en": {
+                        "title": "BOTH REVENUE AND CAPITAL FUNDING - How much revenue funding are you applying for? - Year 1",
+                        "field_type": "numberField",
+                    }
+                },
+                "ithfkK": {
+                    "en": {
+                        "title": "BOTH REVENUE AND CAPITAL FUNDING - How much revenue funding are you applying for? - Year 2",
+                        "field_type": "numberField",
+                    }
+                },
+                "UpaXDj": {
+                    "en": {
+                        "title": "BOTH REVENUE AND CAPITAL FUNDING - How much revenue funding are you applying for? - Year 3",
+                        "field_type": "numberField",
+                    }
+                },
+                "ANkbOG": {
+                    "en": {
+                        "title": "BOTH REVENUE AND CAPITAL FUNDING - How much capital funding are you applying for?",
+                        "field_type": "numberField",
+                    }
+                },
+                "ZlklVZ": {
+                    "en": {
+                        "title": "BOTH REVENUE AND CAPITAL FUNDING - Which year are you applying for? - Year 3",
+                        "field_type": "textField",
+                    }
+                },
+                "ffVtZC": {
+                    "en": {
+                        "title": "How will this project improve how partners work together to respond to local need?",
+                        "field_type": "textField",
+                    }
+                },
+                "WaRxZy": {
+                    "en": {
+                        "title": "Describe the measurable positive impacts your project is expected to have",
+                        "field_type": "textField",
+                    }
+                },
             }
         },
         "OUTPUT_TRACKER": {
