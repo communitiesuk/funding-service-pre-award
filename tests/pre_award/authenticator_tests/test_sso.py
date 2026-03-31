@@ -38,6 +38,28 @@ def test_sso_login_sets_return_app_in_session(authenticator_test_client):
     assert session.get("return_app") == return_app
 
 
+@pytest.mark.parametrize(
+    "malicious_path",
+    [
+        "@evil.com",
+        "//evil.com",
+        "https://evil.com",
+        "@evil.com/phishing",
+        "//evil.com/phishing",
+    ],
+)
+def test_sso_login_rejects_unsafe_return_path(authenticator_test_client, malicious_path):
+    endpoint = f"/sso/login?return_app=post-award-frontend&return_path={malicious_path}"
+    authenticator_test_client.get(endpoint)
+    assert session.get("return_path") is None
+
+
+def test_sso_login_allows_safe_return_path(authenticator_test_client):
+    endpoint = "/sso/login?return_app=post-award-frontend&return_path=/dashboard/overview"
+    authenticator_test_client.get(endpoint)
+    assert session.get("return_path") == "/dashboard/overview"
+
+
 def test_sso_login_sets_return_path_in_session(authenticator_test_client):
     return_app = "post-award-frontend"
 
