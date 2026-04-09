@@ -91,7 +91,7 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         return
 
     # step 2 — check round is closed
-    if datetime.utcnow() > round_obj.deadline:
+    if datetime.now(timezone.utc) > round_obj.deadline:
         print(f"Round is closed. Deadline was {round_obj.deadline}")
     else:
         print(f"ERROR: Round {fund_short_name}-{round_short_name} is still open. Deadline is {round_obj.deadline}")
