@@ -42,16 +42,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "ehcf-proposal-challenges",
+        "id": "proposal-challenges",
         "weighting": 0.1,
         "name": "Proposal - Challenges",
         "sub_criteria": [
             {
-                "id": "ehcf-proposal-challenges",
+                "id": "proposal-challenges",
                 "name": "Proposal - Challenges",
                 "themes": [
                     {
-                        "id": "ehcf-proposal-challenges",
+                        "id": "proposal-challenges",
                         "name": "Proposal - Challenges",
                         "answers": [
                             {
@@ -68,16 +68,16 @@ scored_sections = [
         ],
     },
     {
-        "id": "ehcf-proposal-project",
+        "id": "proposal-project",
         "weighting": 0.3,
         "name": "Proposal - Project",
         "sub_criteria": [
             {
-                "id": "ehcf-proposal-project",
+                "id": "proposal-project",
                 "name": "Proposal - Project",
                 "themes": [
                     {
-                        "id": "ehcf-proposal-project",
+                        "id": "proposal-project",
                         "name": "Proposal - Project",
                         "answers": [
                             {
