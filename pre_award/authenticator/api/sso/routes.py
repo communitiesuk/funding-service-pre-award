@@ -41,6 +41,10 @@ class SsoBase:
         parsed_uri = urlparse(url)
         return f"{parsed_uri.scheme}://{parsed_uri.netloc}"
 
+    @staticmethod
+    def _is_safe_return_path(path: str) -> bool:
+        return path.startswith("/") and not path.startswith("//") and "://" not in path and "@" not in path
+
     def build_auth_code_flow(self, authority=None, scopes=None):
         return self._build_msal_app(authority=authority).initiate_auth_code_flow(
             scopes or [], redirect_uri=Config.AZURE_AD_REDIRECT_URI
@@ -95,7 +99,8 @@ class SsoLoginView(SsoBase, MethodView):
 
         if return_app := request.args.get("return_app"):
             session["return_app"] = return_app
-            session["return_path"] = request.args.get("return_path")
+            return_path = request.args.get("return_path")
+            session["return_path"] = return_path if return_path and self._is_safe_return_path(return_path) else None
             current_app.logger.debug(
                 "Setting return app to %(return_app)s for this session", dict(return_app=return_app)
             )
