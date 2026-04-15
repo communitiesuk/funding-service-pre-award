@@ -20,7 +20,7 @@ _UK_COUNTRIES: list[str] = [
     "NORTHERNIRELAND",  # normalise locations
 ]
 
-_ROLES: list[str] = [
+ASSESS_ROLES: list[str] = [
     "LEAD_ASSESSOR",
     "ASSESSOR",
     "COMMENTER",
@@ -36,7 +36,7 @@ _HAS_DEVOLVED_AUTHORITY_VALIDATION: Mapping[str, bool] = defaultdict(
 
 
 def _get_access_roles(fund_short_name: str) -> frozenset[str]:
-    return frozenset(f"{fund_short_name}_{role}".casefold() for role in _ROLES)
+    return frozenset(f"{fund_short_name}_{role}".casefold() for role in ASSESS_ROLES)
 
 
 def _normalise_country(country: str) -> str:

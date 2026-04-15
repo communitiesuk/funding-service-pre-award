@@ -23,7 +23,6 @@ def not_found(error):
         check_auth()
 
         return auth_protect(
-            minimum_roles_required=["COMMENTER"],
             unprotected_routes=["/", "/healthcheck", "/cookie_policy"],
         ) or redirect("/")
 
