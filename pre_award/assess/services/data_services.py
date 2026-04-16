@@ -32,16 +32,25 @@ from services.notify import get_notification_service
 
 
 def get_data(endpoint: str, payload: Dict = None):
+    # Retry transient connection errors (e.g. RemoteDisconnected from the stale
+    # upstream sockets that Envoy occasionally reuses between Service Connect and
+    # gunicorn's 2s keepalive). GET is idempotent so retrying is safe.
     try:
-        if payload:
-            current_app.logger.info(
-                "Fetching data from '%(endpoint)s', with payload: %(payload)s.",
-                dict(endpoint=endpoint, payload=payload),
-            )
-            response = requests.get(endpoint, payload)
-        else:
-            current_app.logger.info("Fetching data from '%(endpoint)s'", dict(endpoint=endpoint))
-            response = requests.get(endpoint)
+        for attempt in range(3):
+            try:
+                if payload:
+                    current_app.logger.info(
+                        "Fetching data from '%(endpoint)s', with payload: %(payload)s.",
+                        dict(endpoint=endpoint, payload=payload),
+                    )
+                    response = requests.get(endpoint, params=payload)
+                else:
+                    current_app.logger.info("Fetching data from '%(endpoint)s'", dict(endpoint=endpoint))
+                    response = requests.get(endpoint)
+                break
+            except requests.exceptions.ConnectionError:
+                if attempt == 2:
+                    raise
         if response.status_code == 200:
             if "application/json" == response.headers["Content-Type"]:
                 return response.json()
