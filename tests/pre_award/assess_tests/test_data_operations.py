@@ -1,10 +1,14 @@
+from unittest.mock import Mock
+
 import pytest
+import requests
 from flask import Flask
 
 from pre_award.assess.services.data_services import (
     get_all_fund_short_codes,
     get_application_overviews,
     get_comments,
+    get_data,
     get_fund,
     get_round,
 )
@@ -126,3 +130,68 @@ def test_get_all_fund_short_codes(mock_get_all_funds_response, exp_result, mocke
     )
     result = get_all_fund_short_codes()
     assert result == exp_result
+
+
+_ENDPOINT = "http://example.test/x"
+
+
+def _json_response(payload, status=200):
+    response = Mock()
+    response.status_code = status
+    response.headers = {"Content-Type": "application/json"}
+    response.json.return_value = payload
+    return response
+
+
+class TestGetDataRetry:
+    test_app = Flask("app")
+
+    def test_returns_json_on_first_success(self, mocker):
+        get_mock = mocker.patch(
+            "pre_award.assess.services.data_services.requests.get",
+            return_value=_json_response({"ok": True}),
+        )
+        with self.test_app.app_context():
+            assert get_data(_ENDPOINT) == {"ok": True}
+        assert get_mock.call_count == 1
+
+    @pytest.mark.parametrize("failures_before_success", [1, 2])
+    def test_retries_connection_error_until_success(self, mocker, failures_before_success):
+        get_mock = mocker.patch(
+            "pre_award.assess.services.data_services.requests.get",
+            side_effect=[requests.exceptions.ConnectionError("stale")] * failures_before_success
+            + [_json_response({"ok": True})],
+        )
+        with self.test_app.app_context():
+            assert get_data(_ENDPOINT) == {"ok": True}
+        assert get_mock.call_count == failures_before_success + 1
+
+    def test_returns_none_after_three_connection_errors(self, mocker):
+        get_mock = mocker.patch(
+            "pre_award.assess.services.data_services.requests.get",
+            side_effect=requests.exceptions.ConnectionError("always"),
+        )
+        with self.test_app.app_context():
+            assert get_data(_ENDPOINT) is None
+        assert get_mock.call_count == 3
+
+    def test_does_not_retry_other_request_exceptions(self, mocker):
+        get_mock = mocker.patch(
+            "pre_award.assess.services.data_services.requests.get",
+            side_effect=requests.exceptions.ReadTimeout("read timed out"),
+        )
+        with self.test_app.app_context():
+            assert get_data(_ENDPOINT) is None
+        assert get_mock.call_count == 1
+
+    def test_payload_is_preserved_across_retry(self, mocker):
+        get_mock = mocker.patch(
+            "pre_award.assess.services.data_services.requests.get",
+            side_effect=[
+                requests.exceptions.ConnectionError("stale"),
+                _json_response({"ok": True}),
+            ],
+        )
+        with self.test_app.app_context():
+            assert get_data(_ENDPOINT, {"a": "b"}) == {"ok": True}
+        assert get_mock.call_args_list[0] == get_mock.call_args_list[1]
