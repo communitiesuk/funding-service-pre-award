@@ -31,23 +31,33 @@ from pre_award.db import db
 from services.notify import get_notification_service
 
 
+def _get_with_retry(endpoint: str, payload: Dict = None):
+    # Retry transient connection errors (e.g. RemoteDisconnected from the stale
+    # upstream sockets that Envoy occasionally reuses between Service Connect and
+    # gunicorn's 2s keepalive). GET is idempotent so retrying is safe.
+    for attempt in range(3):
+        try:
+            if payload:
+                current_app.logger.info(
+                    "Fetching data from '%(endpoint)s', with payload: %(payload)s.",
+                    dict(endpoint=endpoint, payload=payload),
+                )
+                return requests.get(endpoint, params=payload)
+            current_app.logger.info("Fetching data from '%(endpoint)s'", dict(endpoint=endpoint))
+            return requests.get(endpoint)
+        except requests.exceptions.ConnectionError:
+            if attempt == 2:
+                raise
+
+
 def get_data(endpoint: str, payload: Dict = None):
     try:
-        if payload:
-            current_app.logger.info(
-                "Fetching data from '%(endpoint)s', with payload: %(payload)s.",
-                dict(endpoint=endpoint, payload=payload),
-            )
-            response = requests.get(endpoint, payload)
-        else:
-            current_app.logger.info("Fetching data from '%(endpoint)s'", dict(endpoint=endpoint))
-            response = requests.get(endpoint)
+        response = _get_with_retry(endpoint, payload)
         if response.status_code == 200:
             if "application/json" == response.headers["Content-Type"]:
                 return response.json()
-            else:
-                return response.content
-        elif response.status_code in [204, 404]:
+            return response.content
+        if response.status_code in [204, 404]:
             current_app.logger.warning(
                 "Request successful but no resources returned for endpoint '%(endpoint)s'", dict(endpoint=endpoint)
             )
