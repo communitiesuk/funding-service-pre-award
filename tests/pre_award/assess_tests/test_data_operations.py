@@ -132,7 +132,7 @@ def test_get_all_fund_short_codes(mock_get_all_funds_response, exp_result, mocke
     assert result == exp_result
 
 
-_ENDPOINT = "http://example.test/x"
+_ENDPOINT = "https://example.test/x"
 
 
 def _json_response(payload, status=200):
@@ -144,7 +144,7 @@ def _json_response(payload, status=200):
 
 
 class TestGetDataRetry:
-    test_app = Flask("app")
+    test_app = TestDataOperations.test_app
 
     def test_returns_json_on_first_success(self, mocker):
         get_mock = mocker.patch(
