@@ -55,7 +55,7 @@
 {% if change_requests and not score %}
     {% for change_request in change_requests %}
         <h2 class="govuk-heading-s change-title">Change requested</h2>
-        {{ assessment_change_request(change_request, questions, accounts_list[change_request.latest_user_id], score) }}
+        {{ assessment_change_request(change_request, questions, accounts_list[change_request.raised_by_user_id], score) }}
     {% endfor %}
 {% endif %}
 
@@ -64,7 +64,7 @@
         {% for change_request in change_requests %}
             {% if change_request.latest_status.name == "RAISED" or change_request.latest_status.name == "RESOLVED" %}
                 <h2 class="govuk-heading-s change-title">Change requested</h2>
-                {{ assessment_change_request(change_request, questions, accounts_list[change_request.latest_user_id], score) }}
+                {{ assessment_change_request(change_request, questions, accounts_list[change_request.raised_by_user_id], score) }}
             {% endif %}
         {% endfor %}
     {% endif %}

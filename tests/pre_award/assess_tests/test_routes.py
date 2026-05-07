@@ -1435,6 +1435,120 @@ class TestRoutes:
             in soup.findAll("p", class_="govuk-body")[4].text
         )
 
+    @pytest.mark.application_id("uncompeted_app")
+    @pytest.mark.fund_id("UNCOMPETED_FUND")
+    @pytest.mark.sub_criteria_id("test_uncomp_sub_criteria_id")
+    def test_change_request_shows_original_requester_when_only_raised(
+        self,
+        request,
+        mocker,
+        assess_test_client,
+        mock_get_sub_criteria,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_sub_criteria_theme,
+        mock_get_assessor_tasklist_state,
+        mock_get_bulk_accounts,
+        mock_uncompeted_pfn_fund,
+    ):
+        change_request_dict = {
+            "application_id": "uncompeted_app",
+            "id": "cr-1",
+            "latest_status": "RAISED",
+            "latest_allocation": None,
+            "sections_to_flag": ["test_uncomp_sub_criteria_id"],
+            "field_ids": ["JCACTy"],
+            "is_change_request": True,
+            "updates": [
+                {
+                    "id": "u1",
+                    "user_id": "assessor",
+                    "date_created": "2024-02-20T10:00:00",
+                    "justification": "Please clarify",
+                    "status": "RAISED",
+                    "allocation": None,
+                },
+            ],
+        }
+        mocker.patch(
+            "pre_award.assess.assessments.routes.get_change_requests_for_application",
+            return_value=[mock.Mock()],
+        )
+        mock_schema = mocker.patch("pre_award.assess.assessments.routes.AssessmentFlagSchema")
+        mock_schema.return_value.dump.return_value = [change_request_dict]
+
+        soup = get_subcriteria_soup(request, assess_test_client)
+        change_request_box = soup.select_one(".change-request-box")
+        assert change_request_box is not None, "Change request box should be rendered"
+        text = change_request_box.get_text()
+        assert "This change was requested by assessor," in text
+        assert "Assessor User" in text
+        assert "assessor@test.com" in text
+
+    @pytest.mark.application_id("uncompeted_app")
+    @pytest.mark.fund_id("UNCOMPETED_FUND")
+    @pytest.mark.sub_criteria_id("test_uncomp_sub_criteria_id")
+    def test_change_request_shows_original_requester_after_applicant_response(
+        self,
+        request,
+        mocker,
+        assess_test_client,
+        mock_get_sub_criteria,
+        mock_get_fund,
+        mock_get_funds,
+        mock_get_round,
+        mock_get_application_metadata,
+        mock_get_sub_criteria_theme,
+        mock_get_assessor_tasklist_state,
+        mock_get_bulk_accounts,
+        mock_uncompeted_pfn_fund,
+    ):
+        change_request_dict = {
+            "application_id": "uncompeted_app",
+            "id": "cr-1",
+            "latest_status": "RAISED",
+            "latest_allocation": None,
+            "sections_to_flag": ["test_uncomp_sub_criteria_id"],
+            "field_ids": ["JCACTy"],
+            "is_change_request": True,
+            "updates": [
+                {
+                    "id": "u1",
+                    "user_id": "assessor",
+                    "date_created": "2024-02-20T10:00:00",
+                    "justification": "Please clarify",
+                    "status": "RAISED",
+                    "allocation": None,
+                },
+                {
+                    "id": "u2",
+                    "user_id": "lead",
+                    "date_created": "2024-02-21T10:00:00",
+                    "justification": "Applicant reply",
+                    "status": "RAISED",
+                    "allocation": None,
+                },
+            ],
+        }
+        mocker.patch(
+            "pre_award.assess.assessments.routes.get_change_requests_for_application",
+            return_value=[mock.Mock()],
+        )
+        mock_schema = mocker.patch("pre_award.assess.assessments.routes.AssessmentFlagSchema")
+        mock_schema.return_value.dump.return_value = [change_request_dict]
+
+        soup = get_subcriteria_soup(request, assess_test_client)
+        change_request_box = soup.select_one(".change-request-box")
+        assert change_request_box is not None, "Change request box should be rendered"
+        text = change_request_box.get_text()
+        assert "This change was requested by assessor," in text
+        assert "Assessor User" in text
+        assert "assessor@test.com" in text
+        assert "Lead User" not in text
+        assert "lead@test.com" not in text
+
     @pytest.mark.application_id("resolved_app")
     @pytest.mark.fund_id("DPIF")
     @pytest.mark.sub_criteria_id("test_sub_criteria_id")
