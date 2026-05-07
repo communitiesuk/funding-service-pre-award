@@ -32,6 +32,7 @@ class Flag:
             self.updates = sorted(self.updates, key=lambda x: x["date_created"])
 
         self.latest_user_id = self.updates[-1]["user_id"] if self.updates else ""
+        self.raised_by_user_id = self.updates[0]["user_id"] if self.updates else ""
         self.date_created = self.updates[0]["date_created"] if self.updates else ""
         self.sections_to_flag = [] if not self.sections_to_flag else self.sections_to_flag
 
