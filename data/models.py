@@ -194,3 +194,8 @@ class PiiDeletionLog(Model):
         nullable=False,
     )
     applications_with_pii_deleted_count: Mapped[int] = mapped_column(nullable=False)
+
+    # Number of applications that were intentionally retained (excluded) during this run, e.g. a
+    # successful applicant kept while unsuccessful ones are deleted. Recorded so the audit trail is
+    # honest about partial-retention deletions rather than implying the whole scope was deleted.
+    applications_retained_count: Mapped[int] = mapped_column(nullable=False, default=0, server_default="0")

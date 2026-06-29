@@ -46,12 +46,23 @@ def get_file_for_download_from_aws(file_name: str, application_id: str):
 
 
 def list_files_in_folder(prefix):
-    response = _S3_CLIENT.list_objects_v2(Bucket=Config.AWS_BUCKET_NAME, Prefix=prefix)
     keys = []
-    for obj in response.get("Contents") or []:
-        # we cut off the application id.
-        _, key = obj["Key"].split("/", 1)
-        keys.append(key)
+    continuation_token = None
+    # list_objects_v2 returns at most 1000 keys per call; page through all of them so callers
+    # (e.g. PII deletion) never silently miss files when a folder holds more than 1000 objects.
+    while True:
+        kwargs = {"Bucket": Config.AWS_BUCKET_NAME, "Prefix": prefix}
+        if continuation_token:
+            kwargs["ContinuationToken"] = continuation_token
+        response = _S3_CLIENT.list_objects_v2(**kwargs)
+        for obj in response.get("Contents") or []:
+            # we cut off the application id.
+            _, key = obj["Key"].split("/", 1)
+            keys.append(key)
+        if response.get("IsTruncated"):
+            continuation_token = response.get("NextContinuationToken")
+        else:
+            break
     return keys
 
 
