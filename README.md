@@ -1,4 +1,4 @@
-# funding-service-pre-award
+# funding-service-pre-award revamp
 
 A repository for pre-award frontends and stores (apply, assess, authenticator).
 
