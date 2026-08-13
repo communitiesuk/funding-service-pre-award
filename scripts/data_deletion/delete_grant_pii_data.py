@@ -13,6 +13,7 @@ from pre_award.application_store.db.models import Applications
 from pre_award.application_store.db.models.application.enums import ApplicationsWithPiiDeleted, PiiDeletionScope, Status
 from pre_award.assess.services.aws import delete_file_from_aws, list_files_in_folder
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
+from pre_award.assessment_store.db.queries.assessment_records._helpers import FIELD_DEFAULT_VALUE
 from pre_award.assessment_store.db.queries.assessment_records.queries import get_assessment_record
 from pre_award.db import db
 from scripts.data_deletion.data_retention_config import get_retention_config
@@ -133,7 +134,22 @@ def scrub_assessment_record(assessment_record: AssessmentRecord) -> None:
     assessment_record.jsonb_blob["is_deleted"] = True
     assessment_record.jsonb_blob["project_name"] = "deleted"
     flag_modified(assessment_record, "jsonb_blob")
-    assessment_record.location_json_blob = None
+    # Several assessment templates and sort lambdas read location_json_blob assuming it's always a dict with
+    # these exact keys (e.g. `overview.location_json_blob.get('country')`, and a raw
+    # `x["location_json_blob"]["country"]` subscript in a table-sort lambda) - setting it to None or
+    # {} would 500 those call sites and prevent key assessment templates (eg dashboard) from loading. Reuse the same
+    # "no location data available" shape the app already produces when a postcode lookup fails or a fund has no location
+    # mapping, so every downstream consumer sees an already-handled state instead of a novel one. It's worth us clearing
+    # out this data as for smaller orgs that may have applied for funding this could conceivably contain PII (eg. a home
+    # address postcode).
+    assessment_record.location_json_blob = {
+        "error": False,
+        "postcode": FIELD_DEFAULT_VALUE,
+        "county": FIELD_DEFAULT_VALUE,
+        "region": FIELD_DEFAULT_VALUE,
+        "country": FIELD_DEFAULT_VALUE,
+        "constituency": FIELD_DEFAULT_VALUE,
+    }
 
 
 @click.command()

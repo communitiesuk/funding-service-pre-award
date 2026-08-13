@@ -7,6 +7,7 @@ from pre_award.application_store.db.models import Applications, Eligibility, End
 from pre_award.application_store.db.models.application.enums import PiiDeletionScope, Status
 from pre_award.application_store.db.models.forms.forms import Forms
 from pre_award.application_store.db.models.research.research import ResearchSurvey
+from pre_award.assessment_store.db.queries.assessment_records._helpers import FIELD_DEFAULT_VALUE
 from pre_award.db import db
 from scripts.data_deletion.delete_grant_pii_data import delete_application_pii, delete_pii
 
@@ -125,7 +126,11 @@ class TestDeleteGrantPiiData:
         db.session.refresh(assessment_record)
         assert assessment_record.is_deleted is True
         assert assessment_record.jsonb_blob["forms"] == []
-        assert assessment_record.location_json_blob is None
+        # location_json_blob keeps its dict shape (several templates/sort lambdas read specific keys
+        # off it unconditionally) but the potential PII value is replaced with the app's existing placeholder, not left
+        # as the real postcode.
+        assert assessment_record.location_json_blob["postcode"] == FIELD_DEFAULT_VALUE
+        assert "AB1 2CD" not in assessment_record.location_json_blob.values()
 
         db.session.refresh(round_obj)
         # this round has zero submitted applications, so only the (non-empty) unsubmitted scope is
