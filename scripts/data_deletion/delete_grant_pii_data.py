@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 import boto3
 import click
+from pytz import timezone
 from sqlalchemy.orm.attributes import flag_modified
 
 from app import create_app
@@ -20,6 +21,8 @@ app = create_app()
 
 ENVIRONMENTS = ["local", "dev", "test", "uat", "production"]
 
+UK_TZ = timezone("Europe/London")
+
 SUBMITTED_STATUSES = [
     Status.SUBMITTED,
     Status.CHANGE_REQUESTED,
@@ -33,6 +36,15 @@ UNSUBMITTED_STATUSES = [
 ]
 
 
+def get_now_uk_naive() -> datetime:
+    """
+    Round.deadline (and the retention cutoffs derived from it) are datetimes stored in
+    Europe/London local time, not UTC. To compare correctly we need "now" expressed the same way:
+    naive, but representing the current Europe/London wall-clock time.
+    """
+    return datetime.now(UK_TZ).replace(tzinfo=None)
+
+
 def get_run_by() -> str | None:
     try:
         sts = boto3.client("sts")
@@ -40,6 +52,88 @@ def get_run_by() -> str | None:
         return identity.get("Arn")
     except Exception:
         return None
+
+
+def _org_name(application: Applications) -> str:
+    return application.project_name or "(no organisation name recorded)"
+
+
+def print_deletion_plan(to_delete: list[Applications], retained: list[Applications]) -> None:
+    """Print the explicit set of applications that would be deleted and those being retained, so an
+    operator can eyeball "deleting these N, keeping these M" before anything irreversible happens."""
+    print(f"\n{'=' * 60}")
+    print(f"APPLICATIONS THAT WOULD BE DELETED ({len(to_delete)}):")
+    print(f"{'=' * 60}")
+    if to_delete:
+        for application in to_delete:
+            print(f"  DELETE  {application.id}  [{application.status.name}]  {_org_name(application)}")
+    else:
+        print("  (none)")
+
+    print(f"\n{'=' * 60}")
+    print(f"APPLICATIONS BEING RETAINED / EXCLUDED ({len(retained)}):")
+    print(f"{'=' * 60}")
+    if retained:
+        for application in retained:
+            print(f"  RETAIN  {application.id}  [{application.status.name}]  {_org_name(application)}")
+    else:
+        print("  (none)")
+
+    print(f"\nSUMMARY: deleting {len(to_delete)} application(s), retaining {len(retained)}.")
+    print(f"{'=' * 60}")
+
+
+def delete_application_pii(application: Applications) -> str:
+    """
+    Delete every row of PII linked to this application (forms, feedback, eligibility answers,
+    research/end-of-application survey responses), then mark the application record itself as
+    deleted. Returns a one-line summary of what was removed, for the operator's log.
+
+    None of these child collections cascade automatically: the FKs are configured with
+    ondelete="CASCADE" at the DB level, but the relationships use passive_deletes=True, so the
+    cascade only fires on a real row delete of the parent - which we deliberately never do (the
+    Applications row itself is kept, scrubbed, and marked is_deleted). Each collection must
+    therefore be deleted explicitly here.
+    """
+    counts = {"forms": 0, "feedback": 0, "eligibility": 0, "research_surveys": 0, "end_of_application_survey": 0}
+
+    for form in application.forms:
+        db.session.delete(form)
+        counts["forms"] += 1
+    for feedback in application.feedbacks:
+        db.session.delete(feedback)
+        counts["feedback"] += 1
+    for eligibility in application.eligibility:
+        db.session.delete(eligibility)
+        counts["eligibility"] += 1
+    for survey in application.research_surveys:
+        db.session.delete(survey)
+        counts["research_surveys"] += 1
+    for eoas in application.end_of_application_survey:
+        db.session.delete(eoas)
+        counts["end_of_application_survey"] += 1
+
+    application.is_deleted = True
+    application.project_name = ""
+    # application is already persistent (loaded via a query), so no need to re-add it - and doing so
+    # would be actively harmful here: the default relationship cascade includes "save-update", so
+    # db.session.add(application) would cascade through the (still Python-side-populated) child
+    # collections above and try to re-attach the rows just marked for deletion, raising
+    # "Instance has been deleted".
+
+    return ", ".join(f"{count} {label}" for label, count in counts.items() if count)
+
+
+def scrub_assessment_record(assessment_record: AssessmentRecord) -> None:
+    # assessment_record is already persistent (loaded via get_assessment_record), so no need to
+    # re-add it to the session - mutating its attributes is enough for the unit of work to pick up.
+    assessment_record.is_deleted = True
+    assessment_record.project_name = "deleted"
+    assessment_record.jsonb_blob["forms"] = []
+    assessment_record.jsonb_blob["is_deleted"] = True
+    assessment_record.jsonb_blob["project_name"] = "deleted"
+    flag_modified(assessment_record, "jsonb_blob")
+    assessment_record.location_json_blob = None
 
 
 @click.command()
@@ -57,13 +151,37 @@ def get_run_by() -> str | None:
     type=click.Choice(ENVIRONMENTS, case_sensitive=False),
     help="Environment to run against e.g. local, dev, test, uat, production",
 )
-def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: str) -> None:  # noqa: C901
+@click.option(
+    "--exclude-application",
+    "exclude_application_ids",
+    multiple=True,
+    type=click.UUID,
+    help=(
+        "Application ID to EXCLUDE from deletion. Repeatable. Excluded applications are never "
+        "touched: not deleted, their S3 files are kept, and their assessment records are not "
+        "scrubbed. Use to retain specific applicants, e.g. a successful applicant. Pass multiple IDs as "
+        "repeated --exclude-application flags."
+    ),
+)
+def delete_pii(  # noqa: C901
+    fund_short_name: str,
+    round_short_name: str,
+    dry_run: bool,
+    env: str,
+    exclude_application_ids: tuple,
+) -> None:
     # get identity from aws for audit trail
     run_by = get_run_by()
     if not run_by:
         run_by = click.prompt("No AWS identity found. Enter your email to continue")
     print(f"\nRunning as: {run_by}")
     print(f"Environment: {env}")
+
+    # type=click.UUID on the option above already validated every value at argument-parsing time
+    # (before this function ran at all), so we just need the canonical string form here.
+    excluded_ids = {str(u) for u in exclude_application_ids}
+    if excluded_ids:
+        print(f"\nExcluding {len(excluded_ids)} application(s) from deletion: {', '.join(sorted(excluded_ids))}")
 
     # prod pairing check
     if env == "production":
@@ -91,7 +209,10 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         return
 
     # step 2 — check round is closed
-    if datetime.now(timezone.utc) > round_obj.deadline:
+    # round_obj.deadline is a naive timestamp in Europe/London local time, so "now" must be compared
+    # in the same naive Europe/London representation.
+    now = get_now_uk_naive()
+    if now > round_obj.deadline:
         print(f"Round is closed. Deadline was {round_obj.deadline}")
     else:
         print(f"ERROR: Round {fund_short_name}-{round_short_name} is still open. Deadline is {round_obj.deadline}")
@@ -105,9 +226,9 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
     print(f"  Submitted:           {submitted_days} days ({submitted_days // 365} years)")
     print(f"  Unsubmitted:         {unsubmitted_days} days ({unsubmitted_days // 365} years)")
 
-    now = datetime.now(timezone.utc)
-    submitted_cutoff = round_obj.deadline.replace(tzinfo=timezone.utc) + timedelta(days=submitted_days)
-    unsubmitted_cutoff = round_obj.deadline.replace(tzinfo=timezone.utc) + timedelta(days=unsubmitted_days)
+    # Cutoffs are computed in the same naive Europe/London space as the deadline and `now` above.
+    submitted_cutoff = round_obj.deadline + timedelta(days=submitted_days)
+    unsubmitted_cutoff = round_obj.deadline + timedelta(days=unsubmitted_days)
 
     print(f"\n  Submitted eligible after:   {submitted_cutoff.date()}")
     print(f"  Unsubmitted eligible after: {unsubmitted_cutoff.date()}")
@@ -122,10 +243,6 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
     elif round_obj.pii_deleted_for_applications == PiiDeletionScope.SUBMITTED:
         # Submitted applications were already processed in a previous run
         submitted_eligible = False
-    elif round_obj.pii_deleted_for_applications == PiiDeletionScope.ALL:
-        # Both submitted and unsubmitted applications were already processed
-        submitted_eligible = False
-        unsubmitted_eligible = False
 
     # If only unsubmitted are eligible, make that clear before inventory
     if not submitted_eligible and unsubmitted_eligible:
@@ -133,13 +250,7 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         print("Only unsubmitted applications can be deleted at this time.")
 
     # step 4 — check not already deleted
-    if round_obj.pii_deleted_for_applications == PiiDeletionScope.ALL:
-        print(
-            f"\nERROR: Either retention period has not passed or PII deletion already completed "
-            f"for ALL applications in {fund_short_name}-{round_short_name}.\n"
-        )
-        return
-    elif round_obj.pii_deleted_for_applications == PiiDeletionScope.SUBMITTED:
+    if round_obj.pii_deleted_for_applications == PiiDeletionScope.SUBMITTED:
         print(f"\nPII deletion already completed for SUBMITTED applications in {fund_short_name}-{round_short_name}.")
         print("Only unsubmitted applications will be eligible for deletion.")
     elif round_obj.pii_deleted_for_applications == PiiDeletionScope.UN_SUBMITTED:
@@ -148,6 +259,13 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
     else:
         print("\nPII deletion has not been completed for this round. ")
         print("All applications are eligible for deletion based on retention period.")
+
+    if not submitted_eligible and not unsubmitted_eligible:
+        print(
+            "\nNo applications are currently eligible for deletion (retention period has not passed, "
+            "or all eligible scopes have already been processed). Nothing to do."
+        )
+        return
 
     # step 5 — inventory
     print(f"\n{'─' * 50}")
@@ -168,6 +286,7 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
     )
     unsubmitted_count = unsubmitted_applications.count()
 
+    submitted_count = 0
     if submitted_eligible:
         submitted_applications = all_applications.filter(
             Applications.status.in_(SUBMITTED_STATUSES),
@@ -187,6 +306,7 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
     # step 6 — Confirm whether to delete data for SUBMITTED applications or only UNSUBMITTED applications
     delete_unsubmitted = False
     delete_submitted = False
+    applications_to_delete: list[Applications] = []
 
     if submitted_eligible and unsubmitted_eligible:
         # Both categories are eligible; let the user choose the scope
@@ -222,9 +342,29 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         applications_to_delete = unsubmitted_applications.all()
         print("\nChosen scope: ONLY unsubmitted applications")
 
+    # step 6b — apply exclusions (retain specific applications). Filtering here, at the single point
+    # where applications_to_delete is finalised, guarantees excluded applications are never deleted,
+    # never have their S3 files removed, and never have their assessment records scrubbed.
+    retained_applications = [a for a in applications_to_delete if str(a.id) in excluded_ids]
+    applications_to_delete = [a for a in applications_to_delete if str(a.id) not in excluded_ids]
+
+    retained_ids = {str(a.id) for a in retained_applications}
+    for missing_id in sorted(excluded_ids - retained_ids):
+        print(
+            f"\nWARNING: excluded application {missing_id} is not in the deletion scope for "
+            f"{fund_short_name}-{round_short_name} (wrong round, already deleted, or a status outside "
+            "the chosen scope). It has no effect on this run."
+        )
+
+    print_deletion_plan(applications_to_delete, retained_applications)
+
+    if not applications_to_delete:
+        print("\nAfter exclusions there are no applications left to delete. Nothing to do.")
+        return
+
     # step 7 — confirmation
     if not dry_run:
-        print(f"You are about to delete PII for {fund_short_name}-{round_short_name}.")
+        print(f"\nYou are about to delete PII for {fund_short_name}-{round_short_name}.")
         confirmation = input(f"Type '{fund_short_name}-{round_short_name}' to confirm: ")
         if confirmation != f"{fund_short_name}-{round_short_name}":
             print("\nERROR: Confirmation did not match. Aborting.")
@@ -234,108 +374,155 @@ def delete_pii(fund_short_name: str, round_short_name: str, dry_run: bool, env: 
         print("\nDRY RUN — no data will be deleted")
         print("Run with --no-dry-run to execute")
 
-    print(f"\n\nFinal decision — delete unsubmitted: {delete_unsubmitted}")
+    print(f"\nFinal decision — delete unsubmitted: {delete_unsubmitted}")
     print(f"Final decision — delete submitted:   {delete_submitted}")
 
-    # step 8 — deleting data
+    # step 8 — delete data (DB rows + assessment record + S3 files), one application at a time.
+    # Each application only gets ONE commit, issued after every step for it has succeeded — including
+    # S3 cleanup. If anything fails before that commit, db.session.rollback() discards all of this
+    # application's pending DB changes, leaving it exactly as it was (still is_deleted=False, still
+    # picked up by a future run's inventory query). This matters because is_deleted=True is what makes
+    # an application invisible to future runs: committing it before S3 cleanup has actually finished
+    # would risk permanently orphaning S3 files that no future run would ever revisit. A failure on
+    # one application never affects the others — each iteration is fully independent.
     if dry_run:
         print("\nDRY RUN — no data will be deleted. Skipping deletion step.")
-    else:
-        deletion_successful = True
-        for application in applications_to_delete:
-            try:
-                for form in application.forms:
-                    db.session.delete(form)
-                application.is_deleted = True
-                application.project_name = ""
-                db.session.add(application)
+        return
 
-                db.session.commit()
-                print("\n")
-                print(f"Application marked as deleted and application ID is:   {application.id}")
-                assessment_record: AssessmentRecord = get_assessment_record(application.id)
-                if assessment_record:
-                    assessment_record.is_deleted = True
-                    assessment_record.project_name = "deleted"
-                    assessment_record.jsonb_blob["forms"] = []
-                    assessment_record.jsonb_blob["is_deleted"] = True
-                    assessment_record.jsonb_blob["project_name"] = "deleted"
-                    flag_modified(assessment_record, "jsonb_blob")
-                    db.session.add(assessment_record)
-                    db.session.commit()
-                    print(f"Assessment Record marked as deleted and application ID is:   {application.id}")
+    deleted_unsubmitted = 0
+    deleted_submitted = 0
+    failed_unsubmitted = 0
+    failed_submitted = 0
+    deleted_ids: list[str] = []
+    failed_ids: list[str] = []
 
-            except Exception as e:
-                db.session.rollback()
-                deletion_successful = False
-                print(f"An error occurred: {e}")
+    for application in applications_to_delete:
+        is_unsubmitted = application.status in UNSUBMITTED_STATUSES
+        try:
+            deleted_summary = delete_application_pii(application)
 
-    # step 9 — delete s3 files
-    if dry_run:
-        print("\nDRY RUN — would delete S3 files associated with applications; skipping actual deletion.")
-    else:
-        if deletion_successful:
-            print("\nData deletion successful for applications. Proceeding to delete S3 files...")
-            for application in applications_to_delete:
-                try:
-                    s3_files_list = list_files_in_folder(f"{application.id}/")
-                    print(f"Found {len(s3_files_list)} files in {application.id}")
-                    for file_key in s3_files_list:
-                        full_key = f"{application.id}/{file_key}"
-                        delete_file_from_aws(full_key)
-                except Exception as e:
-                    print(f"An error occurred while deleting S3 files for application id {application.id}: {e}")
+            assessment_record: AssessmentRecord = get_assessment_record(application.id)
+            if assessment_record:
+                scrub_assessment_record(assessment_record)
 
-    # step 10 — create PiiDeletionLog instance for audit and set pii_deleted_for_applications on Round
-    # to prevent double deletion attempts in the future
-    if dry_run:
-        print("\nDRY RUN — would create PiiDeletionLog entry; skipping actual log creation.")
-    else:
-        print("\nCreating PiiDeletionLog entry for audit trail...")
-        if delete_unsubmitted and delete_submitted:
-            applications_scope = ApplicationsWithPiiDeleted.ALL
-            total_deleted = submitted_count + unsubmitted_count
-        elif delete_unsubmitted and not delete_submitted:
-            applications_scope = ApplicationsWithPiiDeleted.UN_SUBMITTED
-            total_deleted = unsubmitted_count
-        elif delete_submitted and not delete_unsubmitted:
-            applications_scope = ApplicationsWithPiiDeleted.SUBMITTED
-            total_deleted = submitted_count
-        else:
-            # Nothing was selected for deletion; do not log
-            print("\nNo applications selected for deletion; skipping PiiDeletionLog entry")
-            return
+            # S3 deletion happens before the commit below, on purpose: it's the step most likely to
+            # fail (network/permissions), and if it does, rolling back the DB session must still be
+            # possible - which it wouldn't be if the DB changes above were already committed.
+            s3_files_list = list_files_in_folder(f"{application.id}/")
+            for file_key in s3_files_list:
+                delete_file_from_aws(f"{application.id}/{file_key}")
 
-        log_entry = PiiDeletionLog(
-            round_id=round_obj.id,
-            deleted_by=run_by,
-            applications_with_pii_deleted=applications_scope,
-            applications_with_pii_deleted_count=total_deleted,
-        )
+            db.session.commit()
 
-        # save what has been deleted on the Round object to prevent double deletion attempts in the future
-        # combine the scope from this run with any existing scope on the round
-        existing_scope = round_obj.pii_deleted_for_applications
-        if delete_unsubmitted and delete_submitted:
-            new_scope = PiiDeletionScope.ALL
-        elif delete_unsubmitted and not delete_submitted:
-            if existing_scope == PiiDeletionScope.SUBMITTED:
-                new_scope = PiiDeletionScope.ALL
+            print(f"\nApplication fully deleted: {application.id} [{application.status.name}]")
+            if deleted_summary:
+                print(f"  Deleted: {deleted_summary}")
+            if assessment_record:
+                print(f"  Assessment record scrubbed for {application.id}")
+            print(f"  Deleted {len(s3_files_list)} S3 file(s) for {application.id}")
+
+            deleted_ids.append(str(application.id))
+            if is_unsubmitted:
+                deleted_unsubmitted += 1
             else:
-                new_scope = PiiDeletionScope.UN_SUBMITTED
-        elif delete_submitted and not delete_unsubmitted:
-            if existing_scope == PiiDeletionScope.UN_SUBMITTED:
-                new_scope = PiiDeletionScope.ALL
+                deleted_submitted += 1
+        except Exception as e:
+            db.session.rollback()
+            failed_ids.append(str(application.id))
+            if is_unsubmitted:
+                failed_unsubmitted += 1
             else:
-                new_scope = PiiDeletionScope.SUBMITTED
+                failed_submitted += 1
+            print(f"\nERROR: failed to fully delete application {application.id}: {e}")
 
+    total_deleted = deleted_unsubmitted + deleted_submitted
+    total_failed = failed_unsubmitted + failed_submitted
+    print(
+        f"\nDeletion complete. Deleted {total_deleted} application(s) "
+        f"(unsubmitted: {deleted_unsubmitted}, submitted: {deleted_submitted}); "
+        f"failed: {total_failed}; retained: {len(retained_applications)}."
+    )
+
+    # step 9 — create PiiDeletionLog instance for audit and set pii_deleted_for_applications on Round,
+    # reflecting what was ACTUALLY deleted, not what was intended. The id lists let anyone reading
+    # this row later see exactly what changed/stayed/needs retrying, without needing the console output.
+    if total_deleted == 0:
+        print("\nNo applications were successfully deleted; skipping PiiDeletionLog entry and round flag update.")
+        return
+
+    print("\nCreating PiiDeletionLog entry for audit trail...")
+    if deleted_unsubmitted and deleted_submitted:
+        applications_scope = ApplicationsWithPiiDeleted.ALL
+    elif deleted_unsubmitted:
+        applications_scope = ApplicationsWithPiiDeleted.UN_SUBMITTED
+    else:
+        applications_scope = ApplicationsWithPiiDeleted.SUBMITTED
+
+    log_entry = PiiDeletionLog(
+        round_id=round_obj.id,
+        deleted_by=run_by,
+        applications_with_pii_deleted=applications_scope,
+        applications_with_pii_deleted_count=total_deleted,
+        deleted_application_ids=deleted_ids,
+        retained_application_ids=[str(a.id) for a in retained_applications],
+        failed_application_ids=failed_ids,
+    )
+    db.session.add(log_entry)
+
+    # Only advance the round completion flag for a scope deleted IN FULL — i.e. it was in scope this
+    # run, it actually contained applications, nothing in it was retained, and nothing in it failed.
+    # This keeps the flag (and therefore future gating) honest: it never claims a retained/failed
+    # application was deleted, and a scope with zero applications is left untouched rather than
+    # vacuously marked complete (which would otherwise mask a genuine failure/retention in the other
+    # scope when both are selected in the same run).
+    unsubmitted_complete = (
+        delete_unsubmitted
+        and unsubmitted_count > 0
+        and failed_unsubmitted == 0
+        and not any(a.status in UNSUBMITTED_STATUSES for a in retained_applications)
+    )
+    submitted_complete = (
+        delete_submitted
+        and submitted_count > 0
+        and failed_submitted == 0
+        and not any(a.status in SUBMITTED_STATUSES for a in retained_applications)
+    )
+
+    existing_scope = round_obj.pii_deleted_for_applications
+    completed_scopes: set[str] = set()
+    if existing_scope == PiiDeletionScope.UN_SUBMITTED:
+        completed_scopes.add("unsubmitted")
+    elif existing_scope == PiiDeletionScope.SUBMITTED:
+        completed_scopes.add("submitted")
+    elif existing_scope == PiiDeletionScope.ALL:
+        completed_scopes.update({"unsubmitted", "submitted"})
+    if unsubmitted_complete:
+        completed_scopes.add("unsubmitted")
+    if submitted_complete:
+        completed_scopes.add("submitted")
+
+    if completed_scopes == {"unsubmitted", "submitted"}:
+        new_scope = PiiDeletionScope.ALL
+    elif completed_scopes == {"unsubmitted"}:
+        new_scope = PiiDeletionScope.UN_SUBMITTED
+    elif completed_scopes == {"submitted"}:
+        new_scope = PiiDeletionScope.SUBMITTED
+    else:
+        new_scope = existing_scope  # unchanged (may be None)
+
+    if new_scope != existing_scope:
         round_obj.pii_deleted_for_applications = new_scope
-        status = new_scope.name
-        db.session.add(log_entry)
         db.session.add(round_obj)
-        db.session.commit()
 
-        print(f"\nPiiDeletionLog entry created and round pii_deleted_for_applications field marked as: {status}")
+    db.session.commit()
+
+    flag_status = new_scope.name if new_scope is not None else "unchanged (scope not fully completed)"
+    print(f"\nPiiDeletionLog entry created. Round pii_deleted_for_applications: {flag_status}")
+    if retained_applications or total_failed:
+        print(
+            "Note: the round was NOT marked fully complete for the retained/failed scope(s), so those "
+            "applications remain and can be handled in a future run."
+        )
 
 
 if __name__ == "__main__":
