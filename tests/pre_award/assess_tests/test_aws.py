@@ -62,3 +62,34 @@ def test_list_files_in_folder(monkeypatch):
         "form_name/path/name/filename12.xlsx",
         "form_name/path/name/filename13.ods",
     ]
+
+
+def test_list_files_in_folder_pages_through_truncated_results(monkeypatch):
+    """list_objects_v2 caps at 1000 keys per call; list_files_in_folder must page through
+    ContinuationToken/IsTruncated until exhausted rather than silently dropping the rest."""
+    calls = []
+
+    def mock_list_objects_v2(**kwargs):
+        calls.append(kwargs)
+        if kwargs.get("ContinuationToken") is None:
+            return {
+                "Contents": [{"Key": "app_id/file1.png"}],
+                "IsTruncated": True,
+                "NextContinuationToken": "token-1",
+            }
+        assert kwargs["ContinuationToken"] == "token-1"
+        return {
+            "Contents": [{"Key": "app_id/file2.png"}],
+            "IsTruncated": False,
+        }
+
+    monkeypatch.setattr(
+        pre_award.assess.services.aws._S3_CLIENT,
+        "list_objects_v2",
+        mock_list_objects_v2,
+    )
+
+    files = list_files_in_folder("app_id/")
+
+    assert files == ["file1.png", "file2.png"]
+    assert len(calls) == 2
