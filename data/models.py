@@ -7,7 +7,7 @@ from fsd_utils.simple_utils.date_utils import (
     current_datetime_after_given_iso_string,
     current_datetime_before_given_iso_string,
 )
-from sqlalchemy import ColumnElement, Enum, ForeignKey, UniqueConstraint, func
+from sqlalchemy import JSON, ColumnElement, Enum, ForeignKey, UniqueConstraint, func
 from sqlalchemy.dialects.postgresql import CITEXT
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -194,3 +194,11 @@ class PiiDeletionLog(Model):
         nullable=False,
     )
     applications_with_pii_deleted_count: Mapped[int] = mapped_column(nullable=False)
+
+    # Application IDs (as strings) affected by this run, so a single row shows at a glance what
+    # changed and what stayed without needing the script's console output. `deleted` is what was
+    # actually removed; `retained` is what was excluded via --exclude-application; `failed` is what
+    # was attempted but errored (and so remains untouched, to be retried later).
+    deleted_application_ids: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list, server_default="[]")
+    retained_application_ids: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list, server_default="[]")
+    failed_application_ids: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list, server_default="[]")
