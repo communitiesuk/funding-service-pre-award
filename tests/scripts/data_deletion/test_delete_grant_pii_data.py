@@ -85,6 +85,31 @@ class TestDeleteGrantPiiData:
         result, _ = invoke(app, mocker, ["--fund", "LOTR", "--round", "FRESH1", "--env", "dev"])
         assert result.exit_code == 0
         assert "No applications are currently eligible for deletion" in result.output
+        # the "nothing eligible" message must be the only eligibility-related output - printing "All
+        # applications are eligible..." immediately before it would be self-contradictory.
+        assert "All applications are eligible for deletion" not in result.output
+
+    def test_round_with_no_deadline_exits_cleanly_without_crash(self, app, mocker, make_fund_round):
+        round_obj = make_fund_round("LOTR", "NODEADLINE1", deadline=PAST_DEADLINE)
+        round_obj.deadline = None
+        db.session.commit()
+        result, _ = invoke(app, mocker, ["--fund", "LOTR", "--round", "NODEADLINE1", "--env", "dev"])
+        assert result.exit_code == 0
+        assert "has no deadline set" in result.output
+
+    def test_fund_round_case_mismatch_still_applies_correct_retention_config(self, app, mocker, make_fund_round):
+        """
+        CYP-R1 has a configured submitted retention of 3650 days (10 years), well above the 2190-day
+        (6 year) default. Fund/Round.short_name are CITEXT (case-insensitive) so get_round() matches
+        regardless of case, but get_retention_config() does a case-sensitive dict lookup - passing a
+        different case at the CLI than what's stored in the DB must not silently fall through to the
+        default retention period.
+        """
+        make_fund_round("CYP", "R1", deadline=PAST_DEADLINE)
+        result, _ = invoke(app, mocker, ["--fund", "cyp", "--round", "r1", "--env", "dev"])
+        assert result.exit_code == 0, result.output
+        assert "Source:              privacy_notice" in result.output
+        assert "Submitted:           3650 days (10 years)" in result.output
 
     def test_dry_run_makes_no_changes(self, app, mocker, make_fund_round, make_application):
         round_obj = make_fund_round("LOTR", "DRY1", deadline=PAST_DEADLINE)
@@ -225,6 +250,30 @@ class TestDeleteGrantPiiData:
         assert_application_pii_retained(keep_2.id)
         assert_application_pii_deleted(delete.id)
 
+    def test_inventory_shows_excluded_count_before_scope_prompt(self, app, mocker, make_fund_round, make_application):
+        round_obj = make_fund_round("LOTR", "EXCLCOUNT1", deadline=PAST_DEADLINE)
+        excluded = make_application(round_obj, Status.SUBMITTED, project_name="Excluded")
+        make_application(round_obj, Status.SUBMITTED, project_name="Not Excluded")
+
+        result, _ = invoke(
+            app,
+            mocker,
+            [
+                "--fund",
+                "LOTR",
+                "--round",
+                "EXCLCOUNT1",
+                "--env",
+                "dev",
+                "--exclude-application",
+                str(excluded.id),
+            ],
+            input="S\n",
+        )
+
+        assert result.exit_code == 0, result.output
+        assert "Submitted applications:    2 (1 excluded)" in result.output
+
     def test_exclude_application_not_in_scope_warns_but_continues(self, app, mocker, make_fund_round, make_application):
         round_obj = make_fund_round("LOTR", "EXCLWARN1", deadline=PAST_DEADLINE)
         application = make_application(round_obj, Status.NOT_STARTED)
@@ -350,3 +399,41 @@ class TestDeleteGrantPiiData:
         assert log_entry.deleted_application_ids == [str(ok_application.id)]
         assert log_entry.retained_application_ids == []
         assert log_entry.failed_application_ids == [str(s3_bad_application.id)]
+
+    def test_all_applications_failing_still_writes_a_pii_deletion_log(
+        self, app, mocker, make_fund_round, make_application
+    ):
+        """
+        If every application in a run fails, a PiiDeletionLog row must still be written -
+        failed_application_ids is the whole reason failures are tracked, and skipping the log entry in
+        exactly the all-failure case would silently lose that record.
+        """
+        round_obj = make_fund_round("LOTR", "ALLFAIL1", deadline=PAST_DEADLINE)
+        bad_application = make_application(round_obj, Status.NOT_STARTED)
+
+        mocker.patch("scripts.data_deletion.delete_grant_pii_data.get_run_by", return_value="test-runner@example.com")
+        mocker.patch("scripts.data_deletion.delete_grant_pii_data.list_files_in_folder", return_value=[])
+        mocker.patch("scripts.data_deletion.delete_grant_pii_data.delete_file_from_aws")
+        mocker.patch(
+            "scripts.data_deletion.delete_grant_pii_data.delete_application_pii",
+            side_effect=RuntimeError("simulated failure"),
+        )
+
+        runner = CliRunner()
+        result = runner.invoke(
+            delete_pii,
+            ["--fund", "LOTR", "--round", "ALLFAIL1", "--env", "dev", "--no-dry-run"],
+            input="B\nLOTR-ALLFAIL1\n",
+        )
+
+        assert result.exit_code == 0, result.output
+        assert_application_pii_retained(bad_application.id)
+
+        db.session.refresh(round_obj)
+        assert round_obj.pii_deleted_for_applications is None
+
+        log_entry = get_latest_pii_deletion_log(round_obj.id)
+        assert log_entry is not None
+        assert log_entry.applications_with_pii_deleted_count == 0
+        assert log_entry.deleted_application_ids == []
+        assert log_entry.failed_application_ids == [str(bad_application.id)]

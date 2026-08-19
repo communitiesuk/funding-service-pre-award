@@ -1,100 +1,93 @@
-import uuid
-from datetime import datetime, timedelta
-
 import pytest
+from sqlalchemy.orm import scoped_session, sessionmaker
 
-from data.models import Fund, Round
 from pre_award.application_store.db.models import Applications, Eligibility, EndOfApplicationSurveyFeedback, Feedback
-from pre_award.application_store.db.models.application.enums import Status
 from pre_award.application_store.db.models.forms.forms import Forms
 from pre_award.application_store.db.models.research.research import ResearchSurvey
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
-from pre_award.db import FundingType
+from tests.integration.seeding import seed_account, seed_application, seed_fund, seed_round
 
 
-@pytest.fixture()
-def make_fund_round(app, db):
+@pytest.fixture(autouse=True)
+def session(db):
+    """
+    Wrap each test in its own DB transaction (via a savepoint) that's rolled back afterwards, matching
+    the pattern already used in tests/integration/conftest.py. Without this, every test in this
+    directory shares one long-lived session against the same test DB with no isolation between tests.
+    """
+    old_session = db.session
+
+    connection = db.engine.connect()
+    transaction = connection.begin()
+
+    db.session = session = scoped_session(
+        session_factory=sessionmaker(bind=connection, join_transaction_mode="create_savepoint")
+    )
+
+    try:
+        yield session
+    finally:
+        session.remove()
+        transaction.rollback()
+        connection.close()
+
+    db.session = old_session
+
+
+@pytest.fixture
+def make_fund_round(app, db, session):
     """
     Creates a real Fund + Round row so that data.crud.fund_round_queries.get_round(fund_short_name,
     round_short_name) - the lookup the PII deletion script depends on - can find it. Round.opens must
     be in the past for Round.is_not_yet_open to evaluate to False in SQL (a NULL opens value would
-    make that comparison NULL, not False, and the round would never be found).
+    make that comparison NULL, not False, and the round would never be found) - seed_round's default
+    opens=datetime(2020, 1, 1) already satisfies this.
     """
 
-    def _make(
-        fund_short_name: str,
-        round_short_name: str,
-        deadline: datetime,
-        pii_deleted_for_applications=None,
-    ) -> Round:
-        # Fund.short_name is globally unique and this fixture is called from many tests sharing the
-        # same test DB (no per-test transaction rollback), so reuse an existing fund with this
-        # short_name rather than always inserting a new one.
-        fund = db.session.query(Fund).filter(Fund.short_name == fund_short_name).one_or_none()
-        if fund is None:
-            fund = Fund(
-                id=uuid.uuid4(),
-                name_json={"en": "Test fund"},
-                title_json={"en": "Test fund"},
-                short_name=fund_short_name,
-                description_json={"en": "Test fund"},
-                welsh_available=False,
-                owner_organisation_name="Test department",
-                owner_organisation_shortname="TD",
-                owner_organisation_logo_uri=None,
-                funding_type=FundingType.COMPETITIVE,
-            )
-            db.session.add(fund)
-            db.session.commit()
-
-        round_obj = Round(
-            id=uuid.uuid4(),
-            fund_id=fund.id,
-            title_json={"en": "Test round"},
+    def _make(fund_short_name, round_short_name, deadline, pii_deleted_for_applications=None):
+        fund = seed_fund(session, short_name=fund_short_name)
+        round_obj = seed_round(
+            session,
+            fund,
+            send_incomplete_application_emails=True,
+            send_deadline_reminder_emails=True,
             short_name=round_short_name,
-            opens=datetime.now() - timedelta(days=365),
             deadline=deadline,
-            prospectus="http://example.com/prospectus",
-            privacy_notice="http://example.com/privacy",
-            project_name_field_id="project_name_field",
             pii_deleted_for_applications=pii_deleted_for_applications,
         )
-        db.session.add(fund)
-        db.session.add(round_obj)
-        db.session.commit()
+        # seed_fund/seed_round only flush (send the INSERTs, don't commit). Under the savepoint-backed
+        # `session` fixture above, an uncommitted flush is not yet a durable savepoint boundary - so
+        # the *first* db.session.rollback() the script itself performs (e.g. one application failing)
+        # would silently wipe out this fixture data too, not just the failed application's changes.
+        # Committing here first establishes the fund/round as a baseline the script's own
+        # commits/rollbacks can't touch.
+        session.commit()
         return round_obj
 
     return _make
 
 
-@pytest.fixture()
-def make_application(app, db):
+@pytest.fixture
+def make_application(app, db, session):
     """
-    Directly constructs an Applications row (plus a form, and one row in each of the
-    application-store PII child tables: Feedback, Eligibility, ResearchSurvey,
-    EndOfApplicationSurveyFeedback) linked to it by application_id. Bypasses the HTTP-backed
-    create_application()/add_new_forms() query helpers (which require mocking an external fund/round
-    service) since Applications/Forms are plain declarative models we can populate directly.
+    Seeds an Applications row (via the shared seed_application helper) plus one row in each of the
+    application-store PII child tables: Forms, Feedback, Eligibility, ResearchSurvey,
+    EndOfApplicationSurveyFeedback - the tables the PII deletion script is expected to clear.
     """
 
-    def _make(round_obj: Round, status: Status, project_name: str = "Test Org") -> Applications:
-        application = Applications(
-            id=uuid.uuid4(),
-            account_id=str(uuid.uuid4()),
-            fund_id=str(round_obj.fund_id),
-            round_id=str(round_obj.id),
-            key=str(uuid.uuid4())[:8],
-            language="en",
-            reference=f"TEST-{uuid.uuid4()}",
+    def _make(round_obj, status, project_name: str = "Test Org") -> Applications:
+        account = seed_account(session)
+        application = seed_application(
+            session,
+            round_obj.fund,
+            round_obj,
+            account,
             project_name=project_name,
             status=status,
-            is_deleted=False,
         )
-        db.session.add(application)
-        db.session.commit()
 
-        db.session.add(Forms(application_id=application.id, json=[{"some": "answer"}], name="a-form"))
-        db.session.add(
+        session.add(Forms(application_id=application.id, json=[{"some": "answer"}], name="a-form"))
+        session.add(
             Feedback(
                 application_id=application.id,
                 fund_id=str(round_obj.fund_id),
@@ -103,7 +96,7 @@ def make_application(app, db):
                 feedback_json={"comment": "some feedback"},
             )
         )
-        db.session.add(
+        session.add(
             Eligibility(
                 form_id="eligibility-form",
                 answers={"question": "answer"},
@@ -111,7 +104,7 @@ def make_application(app, db):
                 application_id=application.id,
             )
         )
-        db.session.add(
+        session.add(
             ResearchSurvey(
                 application_id=application.id,
                 fund_id=str(round_obj.fund_id),
@@ -119,7 +112,7 @@ def make_application(app, db):
                 data={"survey": "answer"},
             )
         )
-        db.session.add(
+        session.add(
             EndOfApplicationSurveyFeedback(
                 application_id=application.id,
                 fund_id=str(round_obj.fund_id),
@@ -128,15 +121,17 @@ def make_application(app, db):
                 data={"more_detail": "some detail"},
             )
         )
-        db.session.commit()
+        # see the comment in make_fund_round above: commit so this fixture data survives the script's
+        # own later rollbacks, rather than just flushing.
+        session.commit()
         return application
 
     return _make
 
 
-@pytest.fixture()
-def make_assessment_record(app, db):
-    def _make(application: Applications, round_obj: Round) -> AssessmentRecord:
+@pytest.fixture
+def make_assessment_record(app, db, session):
+    def _make(application: Applications, round_obj) -> AssessmentRecord:
         assessment_record = AssessmentRecord(
             application_id=str(application.id),
             short_id="A123",
@@ -149,8 +144,8 @@ def make_assessment_record(app, db):
             jsonb_blob={"forms": [{"name": "a-form"}], "project_name": application.project_name},
             location_json_blob={"postcode": "AB1 2CD"},
         )
-        db.session.add(assessment_record)
-        db.session.commit()
+        session.add(assessment_record)
+        session.commit()
         return assessment_record
 
     return _make

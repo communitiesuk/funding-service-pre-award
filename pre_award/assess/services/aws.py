@@ -46,22 +46,15 @@ def get_file_for_download_from_aws(file_name: str, application_id: str):
 
 
 def list_files_in_folder(prefix):
-    keys = []
-    continuation_token = None
-    # list_objects_v2 returns at most 1000 keys per call so page through all of them so callers never silently miss
+    # list_objects_v2 returns at most 1000 keys per call. Use boto3's built-in paginator so callers never silently miss
     # files in a folder with more than 1000 objects.
-    while True:
-        list_kwargs = {"Bucket": Config.AWS_BUCKET_NAME, "Prefix": prefix}
-        if continuation_token:
-            list_kwargs["ContinuationToken"] = continuation_token
-        response = _S3_CLIENT.list_objects_v2(**list_kwargs)
-        for obj in response.get("Contents") or []:
+    keys = []
+    paginator = _S3_CLIENT.get_paginator("list_objects_v2")
+    for page in paginator.paginate(Bucket=Config.AWS_BUCKET_NAME, Prefix=prefix):
+        for obj in page.get("Contents") or []:
             # we cut off the application id.
             _, key = obj["Key"].split("/", 1)
             keys.append(key)
-        if not response.get("IsTruncated"):
-            break
-        continuation_token = response.get("NextContinuationToken")
     return keys
 
 

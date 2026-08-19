@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-from datetime import datetime, timedelta
+from datetime import timedelta
+from typing import NamedTuple
 
 import boto3
 import click
-from pytz import timezone
 from sqlalchemy.orm.attributes import flag_modified
 
 from app import create_app
+from common.utils.date_time_utils import get_now_UK_time_without_tzinfo
 from data.crud.fund_round_queries import get_round
 from data.models import PiiDeletionLog
 from pre_award.application_store.db.models import Applications
 from pre_award.application_store.db.models.application.enums import ApplicationsWithPiiDeleted, PiiDeletionScope, Status
 from pre_award.assess.services.aws import delete_file_from_aws, list_files_in_folder
 from pre_award.assessment_store.db.models.assessment_record.assessment_records import AssessmentRecord
-from pre_award.assessment_store.db.queries.assessment_records._helpers import FIELD_DEFAULT_VALUE
+from pre_award.assessment_store.db.queries.assessment_records._helpers import NO_LOCATION_DATA
 from pre_award.assessment_store.db.queries.assessment_records.queries import get_assessment_record
 from pre_award.db import db
 from scripts.data_deletion.data_retention_config import get_retention_config
@@ -21,8 +22,6 @@ from scripts.data_deletion.data_retention_config import get_retention_config
 app = create_app()
 
 ENVIRONMENTS = ["local", "dev", "test", "uat", "production"]
-
-UK_TZ = timezone("Europe/London")
 
 SUBMITTED_STATUSES = [
     Status.SUBMITTED,
@@ -37,13 +36,21 @@ UNSUBMITTED_STATUSES = [
 ]
 
 
-def get_now_uk_naive() -> datetime:
+class ApplicationToDelete(NamedTuple):
     """
-    Round.deadline (and the retention cutoffs derived from it) are datetimes stored in
-    Europe/London local time, not UTC. To compare correctly we need "now" expressed the same way:
-    naive, but representing the current Europe/London wall-clock time.
+    One application queued for deletion, plus metadata captured once up front - see the comment where
+    this is built, in delete_pii. `application_id`/`status_name`/`is_unsubmitted` mean the loop's
+    print statements and bookkeeping never need to re-read those attributes off the ORM object (which
+    risks a DB round-trip on an object expired by an earlier commit/rollback). `application` itself is
+    still the live ORM object, and delete_application_pii(application) does read/mutate its attributes
+    on every iteration - that's fine because it happens inside the loop's try/except, so an expiry
+    refresh failing there is caught and recorded as that one application's failure, not a crash.
     """
-    return datetime.now(UK_TZ).replace(tzinfo=None)
+
+    application: Applications
+    application_id: str
+    status_name: str
+    is_unsubmitted: bool
 
 
 def get_run_by() -> str | None:
@@ -139,17 +146,11 @@ def scrub_assessment_record(assessment_record: AssessmentRecord) -> None:
     # `x["location_json_blob"]["country"]` subscript in a table-sort lambda) - setting it to None or
     # {} would 500 those call sites and prevent key assessment templates (eg dashboard) from loading. Reuse the same
     # "no location data available" shape the app already produces when a postcode lookup fails or a fund has no location
-    # mapping, so every downstream consumer sees an already-handled state instead of a novel one. It's worth us clearing
-    # out this data as for smaller orgs that may have applied for funding this could conceivably contain PII (eg. a home
-    # address postcode).
-    assessment_record.location_json_blob = {
-        "error": False,
-        "postcode": FIELD_DEFAULT_VALUE,
-        "county": FIELD_DEFAULT_VALUE,
-        "region": FIELD_DEFAULT_VALUE,
-        "country": FIELD_DEFAULT_VALUE,
-        "constituency": FIELD_DEFAULT_VALUE,
-    }
+    # mapping (NO_LOCATION_DATA - a single shared definition, so this stays in sync with that shape rather than
+    # drifting as a second hand-copied literal), so every downstream consumer sees an already-handled state instead
+    # of a novel one. It's worth us clearing out this data as for smaller orgs that may have applied for funding this
+    # could conceivably contain PII (eg. a home address postcode).
+    assessment_record.location_json_blob = NO_LOCATION_DATA.copy()
 
 
 @click.command()
@@ -214,7 +215,17 @@ def delete_pii(  # noqa: C901
     if not round_obj:
         print(f"\nERROR: No round found for {fund_short_name}-{round_short_name}. Check the short names and try again.")
         return
+    # Fund.short_name/Round.short_name are CITEXT but get_retention_config() below does a
+    # plain, case-sensitive dict lookup keyed on "{fund}-{round}" - use the DB values from here on out so every
+    # subsequent use (retention lookup, prints, confirmation string) is consistent regardless
+    fund_short_name = round_obj.fund.short_name
+    round_short_name = round_obj.short_name
     print(f"\nRound found: {round_obj.title_json.get('en')} | deadline: {round_obj.deadline}")
+
+    if round_obj.deadline is None:
+        print(f"\nERROR: Round {fund_short_name}-{round_short_name} has no deadline set.")
+        print("Cannot determine if it is closed.")
+        return
 
     # exit if PII deletion already completed for all applications in this round
     if round_obj.pii_deleted_for_applications == PiiDeletionScope.ALL:
@@ -227,7 +238,7 @@ def delete_pii(  # noqa: C901
     # step 2 — check round is closed
     # round_obj.deadline is a naive timestamp in Europe/London local time, so "now" must be compared
     # in the same naive Europe/London representation.
-    now = get_now_uk_naive()
+    now = get_now_UK_time_without_tzinfo()
     if now > round_obj.deadline:
         print(f"Round is closed. Deadline was {round_obj.deadline}")
     else:
@@ -260,6 +271,17 @@ def delete_pii(  # noqa: C901
         # Submitted applications were already processed in a previous run
         submitted_eligible = False
 
+    # Bail out here, before printing anything about what's "eligible", if nothing actually is - the
+    # step 4 messaging below assumes at least one scope is eligible, and printing e.g. "All
+    # applications are eligible for deletion" immediately followed by "No applications are currently
+    # eligible" is contradictory, confusing output for the operator.
+    if not submitted_eligible and not unsubmitted_eligible:
+        print(
+            "\nNo applications are currently eligible for deletion (retention period has not passed, "
+            "or all eligible scopes have already been processed). Nothing to do."
+        )
+        return
+
     # If only unsubmitted are eligible, make that clear before inventory
     if not submitted_eligible and unsubmitted_eligible:
         print(f"\nSubmitted applications not yet eligible until {submitted_cutoff.date()}")
@@ -275,13 +297,6 @@ def delete_pii(  # noqa: C901
     else:
         print("\nPII deletion has not been completed for this round. ")
         print("All applications are eligible for deletion based on retention period.")
-
-    if not submitted_eligible and not unsubmitted_eligible:
-        print(
-            "\nNo applications are currently eligible for deletion (retention period has not passed, "
-            "or all eligible scopes have already been processed). Nothing to do."
-        )
-        return
 
     # step 5 — inventory
     print(f"\n{'─' * 50}")
@@ -301,17 +316,27 @@ def delete_pii(  # noqa: C901
         Applications.status.in_(UNSUBMITTED_STATUSES),
     )
     unsubmitted_count = unsubmitted_applications.count()
+    unsubmitted_excluded_count = (
+        unsubmitted_applications.filter(Applications.id.in_(excluded_ids)).count() if excluded_ids else 0
+    )
 
     submitted_count = 0
+    submitted_excluded_count = 0
     if submitted_eligible:
         submitted_applications = all_applications.filter(
             Applications.status.in_(SUBMITTED_STATUSES),
         )
         submitted_count = submitted_applications.count()
+        submitted_excluded_count = (
+            submitted_applications.filter(Applications.id.in_(excluded_ids)).count() if excluded_ids else 0
+        )
 
-    print(f"  Unsubmitted applications:  {unsubmitted_count}")
+    def _count_display(count: int, excluded_count: int) -> str:
+        return f"{count} ({excluded_count} excluded)" if excluded_count else str(count)
+
+    print(f"  Unsubmitted applications:  {_count_display(unsubmitted_count, unsubmitted_excluded_count)}")
     if submitted_eligible:
-        print(f"  Submitted applications:    {submitted_count}")
+        print(f"  Submitted applications:    {_count_display(submitted_count, submitted_excluded_count)}")
         print(f"  Total:                     {submitted_count + unsubmitted_count}")
 
     print(f"\n  Can delete unsubmitted:   {unsubmitted_eligible}")
@@ -364,7 +389,13 @@ def delete_pii(  # noqa: C901
     retained_applications = [a for a in applications_to_delete if str(a.id) in excluded_ids]
     applications_to_delete = [a for a in applications_to_delete if str(a.id) not in excluded_ids]
 
+    # Captured now, before the deletion loop runs any commit/rollback that would expire these
+    # objects' attributes (see the comment on applications_to_delete_with_metadata below for why that
+    # matters).
     retained_ids = {str(a.id) for a in retained_applications}
+    retained_has_unsubmitted = any(a.status in UNSUBMITTED_STATUSES for a in retained_applications)
+    retained_has_submitted = any(a.status in SUBMITTED_STATUSES for a in retained_applications)
+
     for missing_id in sorted(excluded_ids - retained_ids):
         print(
             f"\nWARNING: excluded application {missing_id} is not in the deletion scope for "
@@ -405,71 +436,102 @@ def delete_pii(  # noqa: C901
         print("\nDRY RUN — no data will be deleted. Skipping deletion step.")
         return
 
-    deleted_unsubmitted = 0
-    deleted_submitted = 0
-    failed_unsubmitted = 0
-    failed_submitted = 0
+    # Capture the id/status we need for logging up front, while every object here is still freshly
+    # loaded (nothing in this run has committed or rolled back yet). Flask-SQLAlchemy's session
+    # expires ALL tracked objects' attributes after any commit/rollback, not just the one just
+    # touched - so reading application.id/application.status again later (e.g. in a print statement
+    # after that application's own commit, or for the *next* application at the top of the loop)
+    # would trigger a fresh DB query outside of any try/except. During a sustained DB outage that
+    # query could itself raise, crashing the whole loop (and skipping step 9's audit log entirely)
+    # instead of being caught and recorded as a single application's failure.
+    applications_to_delete_with_metadata = [
+        ApplicationToDelete(
+            application=application,
+            application_id=str(application.id),
+            status_name=application.status.name,
+            is_unsubmitted=application.status in UNSUBMITTED_STATUSES,
+        )
+        for application in applications_to_delete
+    ]
+
+    unsubmitted_deleted_count = 0
+    submitted_deleted_count = 0
+    unsubmitted_failed_count = 0
+    submitted_failed_count = 0
     deleted_ids: list[str] = []
     failed_ids: list[str] = []
 
-    for application in applications_to_delete:
-        is_unsubmitted = application.status in UNSUBMITTED_STATUSES
+    for application, application_id, status_name, is_unsubmitted in applications_to_delete_with_metadata:
         try:
             deleted_summary = delete_application_pii(application)
 
-            assessment_record: AssessmentRecord = get_assessment_record(application.id)
+            # Suppress autoflush for this lookup: AssessmentRecord has no FK/join relationship to
+            # Applications (a leftover of the pre-merge separate databases), so it doesn't need the
+            # pending Applications/Forms/etc changes above flushed first. Without this, the implicit
+            # flush sends those DELETE/UPDATE statements early and holds their row locks open for the
+            # rest of this iteration - including the slow, serial S3 network calls below - for no
+            # benefit.
+            with db.session.no_autoflush:
+                assessment_record: AssessmentRecord = get_assessment_record(application_id)
             if assessment_record:
                 scrub_assessment_record(assessment_record)
 
             # S3 deletion happens before the commit below, on purpose: it's the step most likely to
             # fail (network/permissions), and if it does, rolling back the DB session must still be
             # possible - which it wouldn't be if the DB changes above were already committed.
-            s3_files_list = list_files_in_folder(f"{application.id}/")
+            s3_files_list = list_files_in_folder(f"{application_id}/")
             for file_key in s3_files_list:
-                delete_file_from_aws(f"{application.id}/{file_key}")
+                delete_file_from_aws(f"{application_id}/{file_key}")
 
             db.session.commit()
 
-            print(f"\nApplication fully deleted: {application.id} [{application.status.name}]")
+            print(f"\nApplication fully deleted: {application_id} [{status_name}]")
             if deleted_summary:
                 print(f"  Deleted: {deleted_summary}")
             if assessment_record:
-                print(f"  Assessment record scrubbed for {application.id}")
-            print(f"  Deleted {len(s3_files_list)} S3 file(s) for {application.id}")
+                print(f"  Assessment record scrubbed for {application_id}")
+            print(f"  Deleted {len(s3_files_list)} S3 file(s) for {application_id}")
 
-            deleted_ids.append(str(application.id))
+            deleted_ids.append(application_id)
             if is_unsubmitted:
-                deleted_unsubmitted += 1
+                unsubmitted_deleted_count += 1
             else:
-                deleted_submitted += 1
+                submitted_deleted_count += 1
         except Exception as e:
             db.session.rollback()
-            failed_ids.append(str(application.id))
+            failed_ids.append(application_id)
             if is_unsubmitted:
-                failed_unsubmitted += 1
+                unsubmitted_failed_count += 1
             else:
-                failed_submitted += 1
-            print(f"\nERROR: failed to fully delete application {application.id}: {e}")
+                submitted_failed_count += 1
+            print(f"\nERROR: failed to fully delete application {application_id}: {e}")
 
-    total_deleted = deleted_unsubmitted + deleted_submitted
-    total_failed = failed_unsubmitted + failed_submitted
+    total_deleted = unsubmitted_deleted_count + submitted_deleted_count
+    total_failed = unsubmitted_failed_count + submitted_failed_count
     print(
         f"\nDeletion complete. Deleted {total_deleted} application(s) "
-        f"(unsubmitted: {deleted_unsubmitted}, submitted: {deleted_submitted}); "
+        f"(unsubmitted: {unsubmitted_deleted_count}, submitted: {submitted_deleted_count}); "
         f"failed: {total_failed}; retained: {len(retained_applications)}."
     )
 
     # step 9 — create PiiDeletionLog instance for audit and set pii_deleted_for_applications on Round,
     # reflecting what was ACTUALLY deleted, not what was intended. The id lists let anyone reading
-    # this row later see exactly what changed/stayed/needs retrying, without needing the console output.
-    if total_deleted == 0:
-        print("\nNo applications were successfully deleted; skipping PiiDeletionLog entry and round flag update.")
-        return
-
+    # this row later see exactly what changed/stayed/needs retrying, without needing the console
+    # output. Always write this entry when applications were attempted this run - including when
+    # every single one failed.
     print("\nCreating PiiDeletionLog entry for audit trail...")
-    if deleted_unsubmitted and deleted_submitted:
+    if unsubmitted_deleted_count and submitted_deleted_count:
         applications_scope = ApplicationsWithPiiDeleted.ALL
-    elif deleted_unsubmitted:
+    elif unsubmitted_deleted_count:
+        applications_scope = ApplicationsWithPiiDeleted.UN_SUBMITTED
+    elif submitted_deleted_count:
+        applications_scope = ApplicationsWithPiiDeleted.SUBMITTED
+    elif delete_unsubmitted and delete_submitted:
+        # Nothing succeeded this run - fall back to the scope that was attempted so the (required,
+        # non-nullable) enum still reflects something meaningful. applications_with_pii_deleted_count
+        # is 0 and failed_application_ids is populated, so the row is still honest about the outcome.
+        applications_scope = ApplicationsWithPiiDeleted.ALL
+    elif delete_unsubmitted:
         applications_scope = ApplicationsWithPiiDeleted.UN_SUBMITTED
     else:
         applications_scope = ApplicationsWithPiiDeleted.SUBMITTED
@@ -480,7 +542,7 @@ def delete_pii(  # noqa: C901
         applications_with_pii_deleted=applications_scope,
         applications_with_pii_deleted_count=total_deleted,
         deleted_application_ids=deleted_ids,
-        retained_application_ids=[str(a.id) for a in retained_applications],
+        retained_application_ids=sorted(retained_ids),
         failed_application_ids=failed_ids,
     )
     db.session.add(log_entry)
@@ -492,16 +554,10 @@ def delete_pii(  # noqa: C901
     # vacuously marked complete (which would otherwise mask a genuine failure/retention in the other
     # scope when both are selected in the same run).
     unsubmitted_complete = (
-        delete_unsubmitted
-        and unsubmitted_count > 0
-        and failed_unsubmitted == 0
-        and not any(a.status in UNSUBMITTED_STATUSES for a in retained_applications)
+        delete_unsubmitted and unsubmitted_count > 0 and unsubmitted_failed_count == 0 and not retained_has_unsubmitted
     )
     submitted_complete = (
-        delete_submitted
-        and submitted_count > 0
-        and failed_submitted == 0
-        and not any(a.status in SUBMITTED_STATUSES for a in retained_applications)
+        delete_submitted and submitted_count > 0 and submitted_failed_count == 0 and not retained_has_submitted
     )
 
     existing_scope = round_obj.pii_deleted_for_applications
