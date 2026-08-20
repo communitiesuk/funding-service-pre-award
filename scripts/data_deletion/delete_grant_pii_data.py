@@ -169,6 +169,13 @@ def scrub_assessment_record(assessment_record: AssessmentRecord) -> None:
     help="Environment to run against e.g. local, dev, test, uat, production",
 )
 @click.option(
+    "--ignore-retention/--no-ignore-retention",
+    "ignore_retention",
+    default=False,
+    show_default=True,
+    help="Ignore round retention periods to delete submitted but unsuccessful applications",
+)
+@click.option(
     "--exclude-application",
     "exclude_application_ids",
     multiple=True,
@@ -185,6 +192,7 @@ def delete_pii(  # noqa: C901
     round_short_name: str,
     dry_run: bool,
     env: str,
+    ignore_retention: bool,
     exclude_application_ids: tuple,
 ) -> None:
     # get identity from aws for audit trail
@@ -270,6 +278,14 @@ def delete_pii(  # noqa: C901
     elif round_obj.pii_deleted_for_applications == PiiDeletionScope.SUBMITTED:
         # Submitted applications were already processed in a previous run
         submitted_eligible = False
+
+    if ignore_retention:
+        submitted_eligible = True
+        unsubmitted_eligible = True
+        print(
+            "You have chosen to override the retention period cutoff in order to delete applications before the end "
+            "of the retention period (eg. to delete submitted but unsucessful applications)."
+        )
 
     # Bail out here, before printing anything about what's "eligible", if nothing actually is - the
     # step 4 messaging below assumes at least one scope is eligible, and printing e.g. "All
