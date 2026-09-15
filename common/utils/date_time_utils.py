@@ -15,4 +15,4 @@ def get_now_UK_time_without_tzinfo() -> datetime:
     Returns the current date and time, using London time, but without timezone info so it can be compared
     to a date from the db.
     """
-    return get_now_from_utc_time_without_tzinfo().astimezone(ZoneInfo("Europe/London")).replace(tzinfo=None)
+    return datetime.now(ZoneInfo("Europe/London")).replace(tzinfo=None)

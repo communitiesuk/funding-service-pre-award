@@ -12,6 +12,20 @@ from pre_award.assessment_store.db.models.assessment_record import TagAssociatio
 
 FIELD_DEFAULT_VALUE = "Not Available"
 
+# The "no location data available" shape - used both when a postcode lookup fails / a fund has no
+# location mapping (below), and reused as-is by the PII deletion script when scrubbing an
+# assessment_record's location_json_blob, so both places stay in sync with a single definition rather
+# than two copies of the same literal. Callers should .copy() this before mutating it or assigning it
+# onto an object.
+NO_LOCATION_DATA = {
+    "error": False,
+    "postcode": FIELD_DEFAULT_VALUE,
+    "county": FIELD_DEFAULT_VALUE,
+    "region": FIELD_DEFAULT_VALUE,
+    "country": FIELD_DEFAULT_VALUE,
+    "constituency": FIELD_DEFAULT_VALUE,
+}
+
 
 def get_answer_value(application_json, answer_key):
     try:
@@ -159,14 +173,9 @@ def derive_application_values(application_json):  # noqa: C901 - historical sadn
         "funding_amount_requested": 0,
         "asset_type": "No asset type specified.",
         "language": application_json["language"],
-        "location_json_blob": {
-            "error": False,
-            "postcode": FIELD_DEFAULT_VALUE,
-            "county": FIELD_DEFAULT_VALUE,
-            "region": FIELD_DEFAULT_VALUE,
-            "country": FIELD_DEFAULT_VALUE,
-            "constituency": FIELD_DEFAULT_VALUE,
-        },
+        # NO_LOCATION_DATA is a shared module-level dict - copy it, since it's mutated below
+        # (derived_values["location_json_blob"]["error"] = ...) and must not corrupt the shared constant.
+        "location_json_blob": NO_LOCATION_DATA.copy(),
     }
 
     field_mappings = fund_round_data_key_mappings.get(fund_round_shortname, None)
