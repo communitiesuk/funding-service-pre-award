@@ -105,7 +105,7 @@ environments:
       nginx:
         port: 8087
         image:
-          location: xscys/nginx-sidecar-basic-auth
+          location: ghcr.io/communitiesuk/nginx-basic-auth@sha256:6abfd169c46df9abdb61c257ad77f91d8ee620637fb853ef5c92de2383b9afed
         variables:
           FORWARD_PORT: 8080
           CLIENT_MAX_BODY_SIZE: 10m
