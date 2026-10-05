@@ -35,6 +35,17 @@ test_lead_assessor_claims = {
     "roles": ["TF_LEAD_ASSESSOR", "TF_ASSESSOR", "TF_COMMENTER", "UF_LEAD_ASSESSOR", "UF_ASSESSOR", "UF_COMMENTER"],
 }
 
+# A user who only has LEAD_ASSESSOR roles (no ASSESSOR or COMMENTER). This is
+# what happens when Azure AD provisioning grants the lead assessor group only.
+# They should still get past the entry gate: any recognised assess role on any
+# fund is enough, regardless of which role it is.
+test_lead_assessor_only_claims = {
+    "accountId": "lead-only",
+    "email": "lead-only@test.com",
+    "fullName": "Test User",
+    "roles": ["TF_LEAD_ASSESSOR", "UF_LEAD_ASSESSOR"],
+}
+
 test_assessor_claims = {
     "accountId": "assessor",
     "email": "assessor@test.com",

@@ -9,6 +9,7 @@ from tests.pre_award.assess_tests.conftest import (
     test_assessor_claims,
     test_commenter_claims,
     test_lead_assessor_claims,
+    test_lead_assessor_only_claims,
     test_roleless_user_claims,
 )
 
@@ -95,7 +96,12 @@ class TestAuthorisation:
         assert response.status_code == 302
         assert response.location == (
             "https://authenticator.communities.gov.localhost:4004/service/user?"
-            "roles_required=TF_COMMENTER%7CNSTF_COMMENTER%7CCYP_COMMENTER%7CCOF_COMMENTER%7CDPIF_COMMENTER"
+            "roles_required="
+            "TF_LEAD_ASSESSOR%7CTF_ASSESSOR%7CTF_COMMENTER"
+            "%7CNSTF_LEAD_ASSESSOR%7CNSTF_ASSESSOR%7CNSTF_COMMENTER"
+            "%7CCYP_LEAD_ASSESSOR%7CCYP_ASSESSOR%7CCYP_COMMENTER"
+            "%7CCOF_LEAD_ASSESSOR%7CCOF_ASSESSOR%7CCOF_COMMENTER"
+            "%7CDPIF_LEAD_ASSESSOR%7CDPIF_ASSESSOR%7CDPIF_COMMENTER"
         )
 
     @pytest.mark.mock_parameters(
@@ -114,6 +120,9 @@ class TestAuthorisation:
             (test_commenter_claims),
             (test_assessor_claims),
             (test_lead_assessor_claims),
+            # A user provisioned with only LEAD_ASSESSOR (no COMMENTER) should
+            # still get past the gate: any recognised assess role is enough.
+            (test_lead_assessor_only_claims),
         ],
     )
     def test_authorised_roles_redirected_to_dashboard(

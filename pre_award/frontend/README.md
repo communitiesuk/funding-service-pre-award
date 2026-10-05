@@ -178,7 +178,7 @@ The role types are created in Azure AD, and assigned to groups. Users can be mad
 ### Who needs what roles?
 *Applicants* do not require any roles at all currently nor do they need to use Azure AD to sign in (they can just use a magic link).
 
-Those using the *Assessment* frontend must be registered on the DLUHC FSD Azure AD tenant and also must have at least the role of "COMMENTER" (i.e. be in the "Commenters" group on Azure AD).
+Those using the *Assessment* frontend must be registered on the DLUHC FSD Azure AD tenant and must hold at least one assess role (COMMENTER, ASSESSOR, or LEAD_ASSESSOR) on at least one fund. Specific actions within the service (e.g. scoring, flag resolution) may require a higher role on the fund in question; those checks are enforced per-route.
 
 ### Permission denied error messages
 If an applicant user tried to access the assessment frontend (for assessment processes) they would be redirected to the [`/service/user`](https://github.com/communitiesuk/funding-service-design-authenticator/blob/453d03123f681a33ed836b7d370bf3d974c6a030/frontend/user/routes.py#L18) endpoint with a `?roles_required=COMMENTER` query string argument.

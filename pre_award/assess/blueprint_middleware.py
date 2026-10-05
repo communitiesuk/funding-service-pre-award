@@ -81,6 +81,5 @@ def assess_ensure_minimum_required_roles():
     check_auth()
 
     return auth_protect(
-        minimum_roles_required=["COMMENTER"],
         unprotected_routes=["/", "/healthcheck", "/cookie_policy"],
     )
