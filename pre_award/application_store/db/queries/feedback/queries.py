@@ -126,8 +126,9 @@ def retrieve_all_feedbacks_and_surveys(fund_id, round_id, status):
                 mapping_report,
                 round_id,
             )
-            applicant_email = result["applicant_email"]
-            applicant_organisation = result["organisation_name"]
+            # Not every round's key report mapping defines these fields, so default to empty strings
+            applicant_email = result.get("applicant_email") or ""
+            applicant_organisation = result.get("organisation_name") or ""
         except Exception as e:
             current_app.logger.error(
                 "Coudn't extract applicant email & organisation. Exception: %(error)s",
