@@ -88,6 +88,9 @@ class ApplicationsView(MethodView):
         round_id = args["round_id"]
         fund_id = args["fund_id"]
         language = args["language"]
+        missing = [name for name, val in [("account_id", account_id), ("round_id", round_id), ("fund_id", fund_id), ("language", language)] if not val]
+        if missing:
+            return jsonify({"code": 400, "message": f"Missing required fields: {', '.join(missing)}"}), 400
         fund = get_fund(fund_id=fund_id)
         if language == "cy" and not fund.welsh_available:
             language = "en"
