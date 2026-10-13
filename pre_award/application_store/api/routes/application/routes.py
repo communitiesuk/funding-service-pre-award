@@ -123,7 +123,7 @@ class ApplicationsKeyApplicationMetricsView(MethodView):
         try:
             report_data = get_report_for_applications(application_ids=[application_id])
             if not report_data:
-                return {"code": 404, "message": f"Application {application_id} not found"}, 404
+                return {"code": 404, "message": "Application not found"}, 404
             return send_file(
                 export_json_to_csv(report_data),
                 "text/csv",
