@@ -54,7 +54,7 @@ def export_json_to_csv(return_data, headers=None):
     output = io.StringIO()
     if isinstance(return_data, list):
         if not headers:
-            headers = return_data[0].keys()
+            headers = return_data[0].keys() if return_data else []
         w = csv.DictWriter(output, headers)
         w.writeheader()
         w.writerows(return_data)
