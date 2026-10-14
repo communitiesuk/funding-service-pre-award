@@ -250,8 +250,8 @@ class AuthSessionUserView(AuthSessionBase, MethodView):
                 valid_token = validate_token(token)
                 return make_response(valid_token), 200
             except jwt.PyJWTError:
-                error_response(404, "Session token expired or invalid")
-        error_response(404, "No session token found")
+                return error_response(404, "Session token expired or invalid")
+        return error_response(404, "No session token found")
 
 
 api_sessions_bp.add_url_rule("/sessions/user", view_func=AuthSessionUserView.as_view("user"))
