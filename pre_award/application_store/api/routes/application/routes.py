@@ -1,4 +1,5 @@
 import time
+import uuid
 from distutils.util import strtobool
 
 from flask import current_app, jsonify, request, send_file
@@ -104,6 +105,10 @@ class ApplicationsView(MethodView):
 
 class ApplicationByIdView(MethodView):
     def get(self, application_id):
+        try:
+            uuid.UUID(application_id)
+        except ValueError:
+            return {"code": 404, "message": f"Application not found: {application_id}"}, 404
         with_questions_file = strtobool(request.args.get("with_questions_file", "false"))
         try:
             return_dict = get_application(application_id, as_json=True, include_forms=True)
