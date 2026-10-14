@@ -390,7 +390,8 @@ def create_app() -> Flask:  # noqa: C901
             and (return_app := request.args.get("return_app"))
             and request.host == current_app.config["AUTH_HOST"]
         ):
-            return Config.SAFE_RETURN_APPS[return_app].service_title
+            if safe_app := Config.SAFE_RETURN_APPS.get(return_app):
+                return safe_app.service_title
 
         return gettext("Access Funding")
 
