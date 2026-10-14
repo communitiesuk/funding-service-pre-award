@@ -108,7 +108,7 @@ class ApplicationByIdView(MethodView):
         try:
             uuid.UUID(application_id)
         except ValueError:
-            return {"code": 404, "message": f"Application not found: {application_id}"}, 404
+            return {"code": 404, "message": "Application not found"}, 404
         with_questions_file = strtobool(request.args.get("with_questions_file", "false"))
         try:
             return_dict = get_application(application_id, as_json=True, include_forms=True)
