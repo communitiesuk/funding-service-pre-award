@@ -43,6 +43,15 @@ def is_valid_uuid(value):
         return False
 
 
+def contains_nul(value: str) -> bool:
+    """Return True if value contains a NUL byte (0x00).
+
+    psycopg2 raises ValueError when NUL bytes appear in SQL string literals,
+    so we must reject such inputs before they reach the database layer.
+    """
+    return "\x00" in value
+
+
 def is_valid_isoformat_datetime(datetime_str):
     try:
         datetime.fromisoformat(datetime_str)
@@ -124,6 +133,9 @@ def get_fund(fund_id):
 
 
 def get_round_from_db(fund_id, round_id) -> Round:
+    if contains_nul(fund_id) or contains_nul(round_id):
+        return None
+
     short_name_arg = request.args.get("use_short_name")
     use_short_name = short_name_arg and strtobool(short_name_arg)
 
@@ -164,7 +176,9 @@ def get_rounds_for_fund(fund_id):
     short_name_arg = request.args.get("use_short_name")
     use_short_name = short_name_arg and strtobool(short_name_arg)
 
-    if use_short_name:
+    if contains_nul(fund_id):
+        rounds = None
+    elif use_short_name:
         rounds = get_rounds_for_fund_by_short_name(fund_id)
     else:
         rounds = get_rounds_for_fund_by_id(fund_id) if is_valid_uuid(fund_id) else None
