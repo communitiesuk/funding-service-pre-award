@@ -1,3 +1,4 @@
+import uuid
 from distutils.util import strtobool
 from typing import Dict, List
 
@@ -16,19 +17,20 @@ from pre_award.common.blueprints import Blueprint
 assessment_score_bp = Blueprint("assessment_score_bp", __name__)
 
 
-@assessment_score_bp.get("/scoring-system/<round_id>")
-def get_scoring_system_name_for_round_id(round_id: str) -> dict:
+@assessment_score_bp.get("/scoring-system/<uuid:round_id>")
+def get_scoring_system_name_for_round_id(round_id: uuid.UUID) -> dict:
     """get_scoring_system_for_round_id Function used by the get endpoint
     `/scoring_systems/{round_id}`.
 
-    :param round_id: The stringified round UUID.
+    :param round_id: The round UUID (non-UUID values are rejected with a 404 by the route converter).
     :return: A dictionary.
 
     """
 
-    scoring_system = get_scoring_system_for_round_id(round_id)
+    round_id_str = str(round_id)
+    scoring_system = get_scoring_system_for_round_id(round_id_str)
     return {
-        "round_id": round_id,
+        "round_id": round_id_str,
         "scoring_system": scoring_system["scoring_system_name"].name,
     }
 
