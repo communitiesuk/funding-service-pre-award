@@ -35,6 +35,8 @@ def get_fund_short_name(fund_id: str) -> str:
 def get_fund_by_short_name(
     fund_short_name: str,
 ) -> Fund:
+    if "\x00" in fund_short_name:
+        return None
     fund = db.session.scalar(select(Fund).filter(func.lower(Fund.short_name) == func.lower(fund_short_name)))
     return fund
 
@@ -58,6 +60,8 @@ def get_round_by_short_name(
     fund_short_name: str,
     round_short_name: str,
 ) -> Round:
+    if "\x00" in fund_short_name or "\x00" in round_short_name:
+        return None
     round = db.session.scalar(
         select(Round)
         .filter(func.lower(Round.short_name) == func.lower(round_short_name))
@@ -70,6 +74,8 @@ def get_round_by_short_name(
 def get_rounds_for_fund_by_short_name(
     fund_short_name,
 ):
+    if "\x00" in fund_short_name:
+        return []
     rounds = db.session.scalars(
         select(Round).join(Fund).filter(func.lower(Fund.short_name) == func.lower(fund_short_name))
     ).all()
