@@ -1,3 +1,6 @@
+> [!WARNING]
+> This repository is no longer in use
+
 # funding-service-pre-award
 
 A repository for pre-award frontends and stores (apply, assess, authenticator).
